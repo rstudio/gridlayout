@@ -2,6 +2,9 @@
 
 S3method(to_css,default)
 S3method(to_css,gridlayout)
+S3method(to_md,default)
+S3method(to_md,gridlayout)
 export(md_to_gridlayout)
 export(new_gridlayout)
 export(to_css)
+export(to_md)
