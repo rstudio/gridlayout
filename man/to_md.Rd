@@ -4,10 +4,13 @@
 \alias{to_md}
 \title{Convert layout to markdown table}
 \usage{
-to_md(layout)
+to_md(layout, include_gap_size = TRUE)
 }
 \arguments{
 \item{layout}{Object of class `"gridlayout"`.}
+
+\item{include_gap_size}{Should the gap size for the layout be added in
+upper-left of table?}
 }
 \value{
 Markdown table as constructed by `knitr::kable()` that defines the
@@ -28,7 +31,7 @@ start_table <- "
 |1fr   |sidebar |plot_a |plot_c |
 |1fr   |sidebar |plot_b |plot_b |"
 
-my_layout <- grid_layout_from_md(layout_table = start_table)
-to_md(my_layout)
+my_layout <- md_to_gridlayout(layout_table = start_table)
+table_text <- to_md(my_layout)
 
 }

@@ -4,6 +4,8 @@
 #' table
 #'
 #' @param layout Object of class `"gridlayout"`.
+#' @param include_gap_size Should the gap size for the layout be added in
+#'   upper-left of table?
 #'
 #' @return Markdown table as constructed by `knitr::kable()` that defines the
 #'   grid layout. This can be used with the function `grid_layout_from_md()` to
@@ -23,22 +25,22 @@
 #' my_layout <- md_to_gridlayout(layout_table = start_table)
 #' table_text <- to_md(my_layout)
 #'
-to_md <- function(layout) {
+to_md <- function(layout, include_gap_size = TRUE) {
   UseMethod("to_md")
 }
 
 #' @export
-to_md.default <- function(layout){
+to_md.default <- function(layout, include_gap_size = TRUE){
   cat("to_md generic")
 }
 
 #' @export
-to_md.gridlayout <- function(layout){
+to_md.gridlayout <- function(layout, include_gap_size = TRUE){
 
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell
-  first_row <- c(attr(layout, "gap"), attr(layout, "col_sizes"))
+  first_row <- c(if(include_gap_size) attr(layout, "gap") else "", attr(layout, "col_sizes"))
   layout_w_size_row <- rbind(
     first_row,
     cbind(
