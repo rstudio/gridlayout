@@ -66,3 +66,28 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap){
   )
 }
 
+#' @export
+#' @importFrom crayon %+%
+print.gridlayout <- function(layout){
+
+  no_header <- paste(
+    strsplit(
+      to_md(layout, include_gap_size = FALSE),
+      "\n"
+    )[[1]][-c(1,2)],
+    collapse = "\n"
+  )
+
+  color_sizings <- crayon::cyan
+  emph <- crayon::bold
+  no_pipes <- stringr::str_remove_all(no_header, "\\|")
+  cat(
+    emph("gridlayout") %+% " object with " %+%
+      emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
+      emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
+      "gap size: " %+% emph(attr(layout, 'gap')),
+    "\n",
+    stringr::str_replace_all(no_pipes, "[1-9]+.+?(?=\\s)", color_sizings)
+  )
+}
+

@@ -15,4 +15,5 @@ Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Imports: 
     glue,
-    knitr
+    knitr,
+    crayon
