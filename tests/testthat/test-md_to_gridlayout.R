@@ -2,7 +2,7 @@ test_that("Basic table works", {
   my_layout <- md_to_gridlayout(
     layout_table = "
       |      |120px   |1fr    |1fr    |
-      |:-----|:-------|:------|:------|
+      |------|--------|-------|-------|
       |100px |header  |header |header |
       |1fr   |sidebar |plot_a |plot_c |
       |1fr   |sidebar |plot_b |plot_b |"
@@ -24,7 +24,7 @@ test_that("Can put gap size in upper left", {
   my_layout <- md_to_gridlayout(
     layout_table = "
       | 2rem |120px   |1fr    |1fr    |
-      |:-----|:-------|:------|:------|
+      |------|--------|-------|-------|
       |100px |header  |header |header |
       |1fr   |sidebar |plot_a |plot_c |
       |1fr   |sidebar |plot_b |plot_b |"
@@ -32,6 +32,29 @@ test_that("Can put gap size in upper left", {
 
   expect_equal(attr(my_layout, "gap"),
                "2rem")
+})
+
+test_that("Doesn't matter if col sizes are given in table header or simply first row", {
+  my_layout <-
+
+    expect_equal(
+      md_to_gridlayout(
+        layout_table = "
+      | 2rem |120px   |1fr    |1fr    |
+      |------|--------|-------|-------|
+      |100px |header  |header |header |
+      |1fr   |sidebar |plot_a |plot_c |
+      |1fr   |sidebar |plot_b |plot_b |"
+      ),
+      md_to_gridlayout(
+        layout_table = "
+      |      |        |       |       |
+      |------|--------|-------|-------|
+      | 2rem |120px   |1fr    |1fr    |
+      |100px |header  |header |header |
+      |1fr   |sidebar |plot_a |plot_c |
+      |1fr   |sidebar |plot_b |plot_b |"
+      ))
 })
 
 test_that("No sizes will give you constant sizes rows and cols", {

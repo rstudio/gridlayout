@@ -20,8 +20,8 @@
 #' |1fr   |sidebar |plot_a |plot_c |
 #' |1fr   |sidebar |plot_b |plot_b |"
 #'
-#' my_layout <- grid_layout_from_md(layout_table = start_table)
-#' to_md(my_layout)
+#' my_layout <- md_to_gridlayout(layout_table = start_table)
+#' table_text <- to_md(my_layout)
 #'
 to_md <- function(layout) {
   UseMethod("to_md")
@@ -51,5 +51,11 @@ to_md.gridlayout <- function(layout){
   colnames(layout_w_size_row) <- NULL
 
   md_table <- knitr::kable(layout_w_size_row, col.names = rep("", length(first_row)))
-  paste(as.character(md_table), collapse = "\n")
+
+  # knitr::kable() likes to insert alignment colons but let's remove them so the
+  # table looks cleaner
+  stringr::str_replace_all(
+    paste(as.character(md_table), collapse = "\n"),
+    ":", "-"
+  )
 }

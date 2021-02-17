@@ -3,7 +3,7 @@ test_that("multiplication works", {
   grid_obj <- md_to_gridlayout(
     layout_table = "
       |      |120px   |1fr    |1fr    |
-      |:-----|:-------|:------|:------|
+      |------|--------|-------|-------|
       |100px |header  |header |header |
       |1fr   |sidebar |plot_a |plot_a |
       |1fr   |sidebar |plot_b |plot_c |"
