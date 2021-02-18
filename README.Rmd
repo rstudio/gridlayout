@@ -1,0 +1,135 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# gridlayout
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+A package to making building weblayouts using CSS-Grid easy.
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("rstudio/gridlayout")
+```
+
+## Setting up your `gridlayout`
+
+The most basic way of making a grid layout is with `new_gridlayout` (This is not how you will typically make a layout.)
+
+```{r new_gridlayout}
+library(gridlayout)
+
+my_layout <- new_gridlayout(
+  layout_mat = matrix(c(
+    "header", "header",
+    "plota",  "plotb"
+  ), ncol = 2, byrow = TRUE),
+  col_sizes = c("1fr", "2fr"),
+  row_sizes = c("100px", "1fr"),
+  gap = "2rem"
+)
+my_layout
+```
+
+
+More typically you will be specifying your layouts using a table syntax. This allows you to use any markdown table editor of your choice to configure your layout.
+
+```{r md_to_gridlayout}
+my_layout <- md_to_gridlayout(
+  layout_table = "
+    |      |120px   |1fr    |1fr    |
+    |------|--------|-------|-------|
+    |100px |header  |header |header |
+    |1fr   |sidebar |plot_a |plot_c |
+    |1fr   |sidebar |plot_b |plot_b |"
+)
+
+my_layout
+```
+
+You can also use the top left cell of your table to specify the gap size.
+
+```{r md_to_gridlayout_w_gap}
+my_layout <- md_to_gridlayout(
+  layout_table = "
+    | 25px |120px   |1fr    |1fr    |
+    |------|--------|-------|-------|
+    |100px |header  |header |header |
+    |1fr   |sidebar |plot_a |plot_c |
+    |1fr   |sidebar |plot_b |plot_b |"
+)
+
+my_layout
+```
+
+You can also build a layout from a markdown document that contains a code-chunk with the labels `.layout .grid`. This is useful for updating existing applications layouts without copying and pasting your layout table.
+
+
+__`my_app.rmd`__
+````
+``` {.layout .grid}
+| sidebar | main |
+|---------|------|
+| sidebar | main |
+```
+
+## Sidebar title here {#sidebar}
+
+Here's a sentence at the top of the sidebar.
+
+``` {.r .ui}
+tagList(
+  sliderInput('x', 'X:', 1, 10, 5),
+  textInput('txt', 'Input text')
+)
+```
+
+------------------------------------------------------------------------
+
+More text in the sidebar.
+...
+````
+
+````{r}
+my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
+my_layout <- shinymd_to_gridlayout(my_app_loc)
+my_layout
+````
+
+
+## Working with layout object
+
+Once you have your `gridlayout` object, you can convert it to a markdown table spec or to the CSS that generates the given grid.
+
+```{r to_md}
+cat(to_md(my_layout))
+```
+
+```{r to_css}
+cat(to_css(my_layout))
+```
+
+If you want to get at the individual components or "elements" stored in your grid you can use `get_elements()`.
+
+```{r get_elements}
+head(get_elements(my_layout), 2)
+
+```
+
