@@ -1,0 +1,8 @@
+template:
+  package: quillt
+
+development:
+  mode: auto
+
+home:
+  strip_header: false

@@ -1,12 +1,10 @@
 Package: gridlayout
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Build Layouts For R-Webapps Using CSS-Grid
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(person("Nick", "Strayer", role = c("aut", "cre"), email = "nick.strayer@rstudio.com"))
+Description: Makes it easy to layout your Shiny app or other R-derived HTML documents using CSS grid.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
