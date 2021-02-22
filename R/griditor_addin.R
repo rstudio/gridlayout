@@ -53,7 +53,11 @@ griditor_addin <- function() {
     ),
     shiny::div(id = "header",
                shiny::h2("Griditor: Build a grid layout for your Shiny app"),
-               shiny::actionButton("get_code", "Update selected layout")
+               shiny::div(
+                 class = "code_btns",
+                  shiny::actionButton("updated_code", "Update selected layout"),
+                  shiny::actionButton("show_code", "Show code for layout")
+               )
     ),
     shiny::div(
       id = "settings",
@@ -110,7 +114,7 @@ griditor_addin <- function() {
       )
     )
 
-    shiny::bindEvent(shiny::observe({
+    layout_table <- reactive({
       req(input$elements)
 
       grid_mat <- matrix(".",
@@ -127,9 +131,24 @@ griditor_addin <- function() {
                                    gap = input$grid_sizing$gap
         )
       )
-      rstudioapi::modifyRange(selected_range, layout_table, id = NULL)
+    })
+
+    shiny::bindEvent(shiny::observe({
+      req(input$elements)
+
+      rstudioapi::modifyRange(selected_range, layout_table(), id = NULL)
       shiny::stopApp()
-    }), input$get_code)
+    }), input$updated_code)
+
+    shiny::bindEvent(shiny::observe({
+      req(input$elements)
+
+      layout_call <- glue::glue(
+        "layout <- grid_layout_from_md(layout_table = \"",
+        "    {layout_table()}\")")
+
+      session$sendCustomMessage("code_modal", layout_call)
+    }), input$show_code)
   }
 
   # We'll use a pane viwer, and set the minimum height at

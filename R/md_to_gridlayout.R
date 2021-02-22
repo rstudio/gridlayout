@@ -19,7 +19,6 @@
 #' )
 #'
 md_to_gridlayout <- function(layout_table){
-
   by_row <- strsplit(layout_table, "\n")[[1]]
   is_header_divider <- grepl("^[\\| \\- :]+$", by_row, perl = TRUE)
   is_empty_row <- by_row == ""
@@ -33,6 +32,10 @@ md_to_gridlayout <- function(layout_table){
     strsplit(clean_rows, "\\s*\\|\\s*", perl = TRUE),
     function(row){row[-1]}
   ))
+
+  if(!is.character(raw_mat[1,1])){
+    stop("The provided text does not appear to be a markdown table.")
+  }
 
   if(has_sizes){
     new_gridlayout(

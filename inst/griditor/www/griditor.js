@@ -12,7 +12,6 @@ const colors = [
 // Keep track of the grid controls here. Tradeoff of a global variable
 // feels worth it for direct access to the values without doing a dom query
 const grid_controls = { rows: [], cols: [] };
-
 const grid_settings = {};
 
 window.onload = function () {

@@ -73,3 +73,15 @@ test_that("No sizes will give you constant sizes rows and cols", {
   expect_equal(attr(my_layout, "row_sizes"),
                c("1fr", "1fr", "1fr"))
 })
+
+test_that("Nonsense will give a usefull error message", {
+  my_layout <-
+
+    expect_error(
+      md_to_gridlayout(
+        layout_table = "## THis was an accidentally
+    selected chunk of text
+    that is not a table at all"
+      ),
+    "The provided text does not appear to be a markdown table.")
+})

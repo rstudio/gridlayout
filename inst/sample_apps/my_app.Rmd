@@ -1,7 +1,10 @@
 ``` {.layout .grid}
-| sidebar | main |
-|---------|------|
-| sidebar | main |
+|     |        |       |
+|-----|--------|-------|
+|1rem |1fr     |1fr    |
+|1fr  |sidebar |main   |
+|1fr  |sidebar |main   |
+|1fr  |footer  |footer |
 ```
 
 ## Sidebar title here {#sidebar}
