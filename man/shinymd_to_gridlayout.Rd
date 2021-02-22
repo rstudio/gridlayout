@@ -16,3 +16,10 @@ Object of class `"gridlayout"`
 \description{
 Extract gridlayout from shinymd file
 }
+\examples{
+
+my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
+my_layout <- shinymd_to_gridlayout(my_app_loc)
+my_layout
+
+}
