@@ -13,8 +13,41 @@ const colors = [
 // feels worth it for direct access to the values without doing a dom query
 const grid_controls = { rows: [], cols: [] };
 
+const grid_settings = {};
+
 window.onload = function () {
   draw_browser_header();
+
+  const settings_panel = document.querySelector("#settings .card-body");
+
+  grid_settings.num_rows = make_incrementer({
+    parent_el: settings_panel,
+    id: "num_rows",
+    start_val: 2,
+    label: "Number of rows",
+    on_increment: (x) => rowcol_updater("rows", x),
+  });
+
+  grid_settings.num_cols = make_incrementer({
+    parent_el: settings_panel,
+    id: "num_cols",
+    start_val: 2,
+    label: "Number of cols",
+    on_increment: (x) => rowcol_updater("cols", x),
+  });
+
+  grid_settings.gap = make_css_unit_input({
+    parent_el: maybe_make_el(
+      settings_panel,
+      "div#gap_size_chooser.plus_minus_input",
+      {
+        innerHTML: `<span class = "label">Panel gap size</span>`,
+      }
+    ),
+    selector: "#gap_size_chooser",
+    on_change: (x) => update_grid({ gap: x }),
+  });
+
 };
 
 window.onresize = function () {
@@ -246,43 +279,16 @@ function update_grid({ rows, cols, gap }) {
   const new_gap = gap || old_gap;
   const new_num_rows = rows ? rows.length : old_num_rows;
   const new_num_cols = cols ? cols.length : old_num_cols;
+  
+  // Make sure settings panel is up-to-date
+  grid_settings.num_rows.update_value(new_num_rows);
+  grid_settings.num_cols.update_value(new_num_cols);
+  grid_settings.gap.update_value(new_gap);
 
   const grid_numbers_changed =
-    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
+  old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
   if (grid_numbers_changed) {
-
-      const settings_panel = document.querySelector("#settings .card-body");
-
-    make_incrementer({
-      parent_el: settings_panel,
-      id: "num_rows",
-      start_val: new_num_rows,
-      label: "Number of rows",
-      on_increment: (x) => rowcol_updater("rows", x),
-    });
-
-    make_incrementer({
-      parent_el: settings_panel,
-      id: "num_cols",
-      start_val: new_num_cols,
-      label: "Number of cols",
-      on_increment: (x) => rowcol_updater("cols", x),
-    });
-
-    make_css_unit_input({
-      parent_el: maybe_make_el(
-        settings_panel,
-        "div#gap_size_chooser.plus_minus_input",
-        {
-          innerHTML: `<span class = "label">Panel gap size</span>`,
-        }
-      ),
-      selector: "#gap_size_chooser",
-      start_val: get_css_value(new_gap),
-      start_unit: get_css_unit(new_gap),
-      on_change: (x) => update_grid({ gap: x }),
-    });
-
+    
     // Check for elements that may get dropped
     const all_els = current_elements();
     let in_danger_els = [];
@@ -485,7 +491,19 @@ function make_css_unit_input({
     on_change(current_value());
   }
 
-  return { form, current_value };
+  function update_value(new_value) {
+    value_input.value = get_css_value(new_value);
+    const new_unit = get_css_unit(new_value);
+    [...unit_selector.children].forEach((opt) => {
+      if (opt.value === new_unit) {
+        opt.selected = true;
+      } else {
+        opt.selected = false;
+      }
+    });
+  }
+
+  return { form, current_value, update_value };
 }
 
 function get_layout_from_controls(){
@@ -928,21 +946,25 @@ function make_incrementer({
     },
   });
 
+  function update_value(new_value){
+    current_value.innerHTML = new_value;
+
+    if (new_value === 1) {
+      minus_btn.classList.add("disabled");
+    } else {
+      minus_btn.classList.remove("disabled");
+    }
+  }
   function increment_counter(amount) {
     return function () {
       const new_value = +current_value.innerHTML + amount;
 
-      current_value.innerHTML = new_value;
-
-      if (new_value === 1) {
-        minus_btn.classList.add("disabled");
-      } else {
-        minus_btn.classList.remove("disabled");
-      }
-
+      update_value(new_value);
       on_increment(new_value);
     };
   }
+
+  return {update_value};
 }
 
 // Passing an undefined value to a compare like min or max will always give undefined
