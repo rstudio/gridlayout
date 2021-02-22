@@ -1,0 +1,4 @@
+Name: Edit selected layout
+Description: Takes a gridlayout markdown table and opens interactive editor
+Binding: griditor_addin
+Interactive: true

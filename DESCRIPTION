@@ -8,10 +8,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    shiny
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Imports: 
     glue,
     knitr,
-    crayon
+    crayon,
+    miniUI
