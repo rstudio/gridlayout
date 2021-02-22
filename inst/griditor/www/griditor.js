@@ -142,10 +142,11 @@ function rowcol_updater(dir, new_count) {
 
 function fill_grid_cells() {
   const grid_holder = get_grid_holder();
-  const rows = get_current_rows();
-  const cols = get_current_cols();
-  const num_rows = rows.length;
-  const num_cols = cols.length;
+  const grid_dims = {rows: get_current_rows(), cols: get_current_cols()};
+  // const grid_dims.rows = get_current_rows();
+  // const grid_dims.cols = get_current_cols();
+  const num_rows = grid_dims.rows.length;
+  const num_cols = grid_dims.cols.length;
   // Grab currently drawn cells (if any) so we can check if we need to redraw
   // or if this was simply a column/row sizing update
   const current_cells = [];
@@ -165,8 +166,30 @@ function fill_grid_cells() {
       }
     }
 
-    // Update controls for sizing of grid
-    setup_grid_controls({ rows, cols });
+    // Build each column and row's sizing controler
+    for (let type in grid_controls) {
+      // Get rid of old ones to start with fresh slate
+      remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
+  
+      grid_controls[type] = grid_dims[type].map(function (size, i) {
+        // The i + 1 is because grid is indexed at 1, not zero
+        const grid_i = i + 1;
+  
+        return make_css_unit_input({
+          parent_el: grid_holder,
+          selector: `#control_${type}${grid_i}.${type}-controls`,
+          start_val: get_css_value(size),
+          start_unit: get_css_unit(size),
+          on_change: () => update_grid(get_layout_from_controls()),
+          form_styles: {
+            [`grid${
+              type === "rows" ? "Row" : "Column"
+            }`]: make_template_start_end([grid_i]),
+          },
+          drag_dir: type === "rows" ? "y" : "x",
+        });
+      });
+    }
 
     const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
       event_listener: [
@@ -406,31 +429,6 @@ function update_grid({ rows, cols, gap }) {
 
 }
 
-function setup_grid_controls(vals) {
-  const grid_holder = get_grid_holder();
-
-  for (let type in grid_controls) {
-    remove_elements(grid_holder.querySelectorAll(`form.${type}-controls`));
-
-    grid_controls[type] = vals[type].map(function (size, i) {
-      // The i + 1 is because grid is indexed at 1, not zero
-      const grid_i = i + 1;
-
-      return make_css_unit_input({
-        parent_el: grid_holder,
-        selector: `#control_${type}${grid_i}.css-unit-input.${type}-controls`,
-        start_val: get_css_value(size),
-        start_unit: get_css_unit(size),
-        on_change: () => update_grid(get_layout_from_controls()),
-        form_styles: {
-          [`grid${
-            type === "rows" ? "Row" : "Column"
-          }`]: make_template_start_end([grid_i]),
-        },
-      });
-    });
-  }
-}
 
 function make_css_unit_input({
   parent_el,
@@ -440,14 +438,20 @@ function make_css_unit_input({
   on_change = (x) => console.log("css unit change", x),
   allowed_units = ["fr", "px", "rem"],
   form_styles = {},
+  drag_dir = "none"
 }) {
-  const form = maybe_make_el(parent_el, `form${selector}`, {
-    event_listener: { event: "change", func: on_update },
-    styles: {
-      display: "flex",
-      flexWrap: "wrap",
-      ...form_styles,
-    },
+  
+  const allow_drag = drag_dir !== "none";
+
+  const input_holder = maybe_make_el(
+    parent_el, 
+    `div${selector}.input-holder.css-unit-input`,
+    {
+      styles: form_styles
+    });
+
+  const form = maybe_make_el(input_holder, `form`, {
+    event_listener: { event: "change", func: on_update }
   });
 
   const value_input = maybe_make_el(form, "input", {
@@ -473,6 +477,49 @@ function make_css_unit_input({
     },
   });
 
+  const drag_info = {
+    baseline: 0,
+    start: 0
+  };
+
+  const resizing_dragger = maybe_make_el(input_holder, "div.css-dragger", {
+    props: { draggable: true },
+    innerHTML: `<i class="fa fa-arrows-${drag_dir === "y" ? "v": "h"}" aria-hidden="true"></i>`,
+    event_listener: [
+      {
+        event: "dragstart",
+        func: function(event){
+          console.log("Drag start!");
+          drag_info.baseline = +value_input.value;
+          drag_info.start = event[drag_dir];
+        }
+      },
+      {
+      event: "drag",
+      func: function(event){
+        console.log("Dragging");
+        const drag_pos = event[drag_dir];
+        // At the end of the drag we get a drag event with 0 values that throws stuff off
+        if(drag_pos === 0) return;
+        const new_value = Math.max(
+          0,
+          drag_info.baseline + (event[drag_dir] - drag_info.start)
+        );
+        value_input.value = new_value;
+        on_change(current_value());
+      }
+    },
+    {
+      event: "dragend",
+      func: function(event){
+        console.log("Dragging");
+        drag_info.baseline = 0;
+        drag_info.start = 0;
+      }
+    }
+  ]
+  });
+  
   allowed_units.forEach(function (unit_type) {
     const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
       props: { value: unit_type },
@@ -487,10 +534,13 @@ function make_css_unit_input({
     return `${value_input.value}${unit_selector.value}`;
   }
   function on_update() {
-    on_change(current_value());
+    const val =current_value(); 
+    update_value(val)
+    on_change(val);
   }
 
   function update_value(new_value) {
+    console.log("update_value has triggered")
     value_input.value = get_css_value(new_value);
     const new_unit = get_css_unit(new_value);
     [...unit_selector.children].forEach((opt) => {
@@ -500,7 +550,15 @@ function make_css_unit_input({
         opt.selected = false;
       }
     });
+
+    if(new_unit === "px" && allow_drag){
+      resizing_dragger.style.display = "block";
+    } else {
+      resizing_dragger.style.display = "none";
+    }
   }
+
+  update_value(`${start_val}${start_unit}`);
 
   return { form, current_value, update_value };
 }
