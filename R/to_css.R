@@ -58,7 +58,7 @@ to_css.gridlayout <- function(layout, container_query = "body"){
 {container_query} {{
   grid-template-rows: {collapse_w_space(attr(layout, 'row_sizes'))};
   grid-template-columns: {collapse_w_space(attr(layout, 'col_sizes'))};
-  grid-template-gap: {attr(layout, 'gap')};
+  grid-gap: {attr(layout, 'gap')};
   padding: {attr(layout, 'gap')};
   grid-template-areas:{template_areas};
 }}
