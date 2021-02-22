@@ -110,7 +110,7 @@ griditor_addin <- function() {
       )
     )
 
-    bindEvent(observe({
+    shiny::bindEvent(shiny::observe({
       req(input$elements)
 
       grid_mat <- matrix(".",
