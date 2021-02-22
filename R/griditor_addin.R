@@ -46,10 +46,10 @@ griditor_addin <- function() {
       shiny::tags$link(href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap", rel="stylesheet"),
     ),
     shiny::includeScript(
-      system.file("griditor/griditor.js", package = "gridlayout")
+      system.file("griditor/www/griditor.js", package = "gridlayout")
     ),
     shiny::includeCSS(
-      system.file("griditor/styles.css", package = "gridlayout")
+      system.file("griditor/www/styles.css", package = "gridlayout")
     ),
     shiny::div(id = "header",
                shiny::h2("Griditor: Build a grid layout for your Shiny app"),
