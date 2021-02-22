@@ -63,6 +63,10 @@ to_css.gridlayout <- function(layout, container_query = "body"){
   grid-template-areas:{template_areas};
 }}
 
+{container_query} > * {{
+  box-sizing: border-box;
+}}
+
 {element_grid_areas}
 "))
 }
