@@ -25,6 +25,12 @@
 #' )
 #'
 new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap){
+
+  # Default is a 2x2 layout with no elements added
+  if(missing(layout_mat)){
+    layout_mat <- matrix(rep(".", times = 4), ncol = 2)
+  }
+
   # If no sizing is given just make every row and column the same size as other
   # rows and columns
   if(missing(col_sizes)){
