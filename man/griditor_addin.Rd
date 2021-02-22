@@ -6,9 +6,6 @@
 \usage{
 griditor_addin()
 }
-\value{
-
-}
 \description{
 Edit a grid layout as selected
 }

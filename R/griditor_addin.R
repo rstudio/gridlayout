@@ -1,7 +1,7 @@
 #' Edit a grid layout as selected
 #'
-#' @return
-#' @export NULL
+#' @return NULL
+#' @export
 griditor_addin <- function() {
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
