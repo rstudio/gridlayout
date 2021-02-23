@@ -248,10 +248,22 @@ button.minus_btn.disabled {
 .added-element .dragger.top-left {
   top: -2px;
   left: -2px;
+  cursor: nw-resize;
 }
 .added-element .dragger.bottom-right {
   bottom: -2px;
   right: -2px;
+  cursor: se-resize;
+}
+
+.added-element .dragger.center {
+  top: calc(50% - var(--radius)/2);
+  right: calc(50% - var(--radius)/2);
+  border-radius: var(--element_roundness);
+  cursor: grab;
+}
+.added-element .dragger.center:active {
+  cursor: grabbing;
 }
 
 .added-element .dragger i {
@@ -269,24 +281,6 @@ button.minus_btn.disabled {
 .added-element .dragger.bottom-right {
   border-radius: var(--element_roundness) 0;
 }
-
-.added-element .dragger.center {
-  top: calc(50% - var(--radius)/2);
-  right: calc(50% - var(--radius)/2);
-  border-radius: var(--element_roundness);
-}
-
-/* #grid_holder .added-element::after {
-  content: "+";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
-  top: calc(50% - 7px);
-  right: 0;
-  outline: 1px solid green;
-  cursor: grab;
-} */
 
 
 #current_selection_box.added-element {
