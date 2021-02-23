@@ -200,7 +200,7 @@ button.minus_btn.disabled {
 
 #grid_holder .added-element {
   background: none;
-  pointer-events: none; /* So the cells beneath the elements can be selected still */
+  /* pointer-events: none; So the cells beneath the elements can be selected still */
   position: relative;
 }
 
@@ -247,6 +247,7 @@ button.minus_btn.disabled {
 #current_selection_box.added-element {
   border-style: dashed;
   display: none;
+  pointer-events: none;
 }
 
 .css-unit-input {

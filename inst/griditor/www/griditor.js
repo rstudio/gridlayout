@@ -1,19 +1,9 @@
-const colors = [
-  "#e41a1c",
-  "#377eb8",
-  "#4daf4a",
-  "#984ea3",
-  "#ff7f00",
-  "#ffff33",
-  "#a65628",
-  "#f781bf",
-];
-
 // Keep track of the grid controls here. Tradeoff of a global variable
 // feels worth it for direct access to the values without doing a dom query
 const grid_controls = { rows: [], cols: [] };
 const grid_settings = {};
-
+// All the currently existing cells making up the grid
+let current_cells = []; 
 window.onload = function () {
   draw_browser_header();
 
@@ -150,7 +140,7 @@ function fill_grid_cells() {
   const num_cols = grid_dims.cols.length;
   // Grab currently drawn cells (if any) so we can check if we need to redraw
   // or if this was simply a column/row sizing update
-  const current_cells = [];
+  current_cells = [];
   const need_to_reset_cells = current_cells.length != num_rows * num_cols;
 
   if (need_to_reset_cells) {
@@ -219,7 +209,7 @@ function fill_grid_cells() {
     // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
     // We need the absolute position to continue calculating drag after mouse has left editor
     const drag_start = { rel: {}, abs: {} };
-    const sel_bounds = { col: [null, null], row: [null, null] };
+    let sel_bounds;
 
     function drag_started(event) {
       user_dragging = true;
@@ -244,9 +234,36 @@ function fill_grid_cells() {
         y: [sel_top, sel_bottom],
       };
 
+      sel_bounds = get_drag_extent_on_grid(selection_rect);
+
+      current_selection_box.style.display = "block";
+      set_element_in_grid(current_selection_box, sel_bounds);
+    }
+
+    function drag_ended(event) {
+      // Trigger naming dialog modal
+      name_new_element({
+        grid_rows: sel_bounds.row,
+        grid_cols: sel_bounds.col,
+        selection_box: current_selection_box,
+      });
+
+      user_dragging = false;
+    }
+
+    // Make sure any added elements sit on top by re-appending them to grid holder
+    // Make sure that the drag detector sits over everything
+    [
+      drag_detector,
+      ...grid_holder.querySelectorAll(".added-element"),
+    ].forEach((el) => grid_holder.appendChild(el));
+  } else {
+  }
+}
+
+function get_drag_extent_on_grid(selection_rect){
       // Reset bounding box definitions so we only use current selection extent
-      sel_bounds.col = [null, null];
-      sel_bounds.row = [null, null];
+      const sel_bounds = {col: [null, null], row: [null, null]};
 
       [...current_cells].forEach(function (el) {
         // Cell is overlapped by selection box
@@ -264,35 +281,9 @@ function fill_grid_cells() {
         }
       });
 
-      current_selection_box.style.display = "block";
-      current_selection_box.style.gridRow = make_template_start_end(
-        sel_bounds.row
-      );
-      current_selection_box.style.gridColumn = make_template_start_end(
-        sel_bounds.col
-      );
-    }
-
-    function drag_ended(event) {
-      // Trigger naming dialog modal
-      name_new_element({
-        grid_rows: sel_bounds.row,
-        grid_cols: sel_bounds.col,
-        selection_box: current_selection_box,
-      });
-
-      user_dragging = false;
-    }
-
-    // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
-    [
-      ...grid_holder.querySelectorAll(".added-element"),
-      drag_detector,
-    ].forEach((el) => grid_holder.appendChild(el));
-  } else {
-  }
+      return sel_bounds;
 }
+
 
 function update_grid({ rows, cols, gap }) {
   const grid_holder = get_grid_holder();
@@ -677,15 +668,62 @@ function name_new_element({ grid_rows, grid_cols, selection_box }) {
 }
 
 function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
+  const grid_holder = get_grid_holder();
   const element_in_grid = maybe_make_el(
-    get_grid_holder(),
+    grid_holder,
     `div#${id}.el_${id}.added-element`,
     {
       grid_cols,
       grid_rows,
       styles: {
         borderColor: color,
+        position: "relative"
       },
+    }
+  );
+
+  const drag_handle_r = 10;
+  const drag_info = {
+    start_rect: {},
+    start_loc: {},
+  }
+  
+  maybe_make_el(
+    element_in_grid,
+    "div.drag-right",
+    {
+      props: {draggable: true},
+      styles: {
+        position: "absolute",
+        bottom: `-2px`,
+        right: `-2px`,
+        height: `${drag_handle_r*2}px`,
+        width: `${drag_handle_r*2}px`,
+        borderRadius: `var(--element_roundness) 0`,
+        background: color,
+      },
+      event_listener: [
+        {
+          event: "dragstart",
+          func: function(event){
+            // make sure dragged element is on top
+            grid_holder.appendChild(this.parentElement);
+            drag_info.start_rect = get_bounding_rect(this.parentElement);
+            drag_info.start_loc = {x: event.x, y: event.y};
+          }
+        },
+        {
+          event: "drag",
+          func: function(event){
+            const bad_drag_event = event.x === 0 && event.y === 0;
+            if(bad_drag_event) return;
+            const drag_delta = get_delta(drag_info.start_loc, event);
+            const new_bounding_rect = update_rect_by_delta(drag_info.start_rect, drag_delta);
+            const grid_extent = get_drag_extent_on_grid(new_bounding_rect);
+            set_element_in_grid(this.parentElement, grid_extent);
+          }
+        }
+      ]
     }
   );
 
@@ -728,6 +766,11 @@ function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
 
   // Let shiny know we have a new element
   send_elements_to_shiny();
+}
+
+function set_element_in_grid(el, grid_bounds) {
+  el.style.gridRow = make_template_start_end(grid_bounds.row);
+  el.style.gridColumn = make_template_start_end(grid_bounds.col);
 }
 
 function current_elements() {
@@ -842,6 +885,16 @@ function draw_browser_header() {
 
 // Get the next color in our list of colors.
 function get_next_color() {
+  const colors = [
+    "#e41a1c",
+    "#377eb8",
+    "#4daf4a",
+    "#984ea3",
+    "#ff7f00",
+    "#ffff33",
+    "#a65628",
+    "#f781bf",
+  ];
   const all_elements = get_grid_holder().querySelectorAll(".added-element");
   // If we have more elements than colors we simply recycle
   return colors[all_elements.length % colors.length];
@@ -1055,6 +1108,22 @@ function get_bounding_rect({
   offsetWidth: width,
 }) {
   return { x: [left, left + width], y: [top, top + height] };
+}
+
+
+function get_delta({x:start_x, y: start_y}, {x: end_x, y: end_y}){
+  return {
+    x: start_x - end_x,
+    y: start_y - end_y
+  };
+}
+
+function update_rect_by_delta({x: [x_start, x_end], y: [y_start, y_end]}, {x: delta_x, y: delta_y}){
+  const num_sort = (a, b) => a - b;
+  return {
+    x: [x_start, x_end - delta_x].sort(num_sort),
+    y: [y_start, y_end - delta_y].sort(num_sort),
+  }
 }
 
 function boxes_overlap(box_a, box_b) {
