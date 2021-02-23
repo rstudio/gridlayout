@@ -263,7 +263,7 @@ function fill_grid_cells() {
 
 function get_drag_extent_on_grid(selection_rect){
       // Reset bounding box definitions so we only use current selection extent
-      const sel_bounds = {col: [null, null], row: [null, null]};
+      const sel_bounds = {col: [1, 1], row: [1, 1]};
 
       [...current_cells].forEach(function (el) {
         // Cell is overlapped by selection box
@@ -701,6 +701,7 @@ function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
         width: `${drag_handle_r*2}px`,
         borderRadius: `var(--element_roundness) 0`,
         background: color,
+        cursor: "grab"
       },
       event_listener: [
         {
