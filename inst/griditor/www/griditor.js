@@ -1,13 +1,17 @@
-// Keep track of the grid controls here. Tradeoff of a global variable
-// feels worth it for direct access to the values without doing a dom query
-const grid_controls = { rows: [], cols: [] };
-const grid_settings = {};
-// All the currently existing cells making up the grid
-let current_cells = [];
-let grid_holder;
 window.onload = function () {
   draw_browser_header();
-  grid_holder = document.querySelector("#grid_holder");
+
+  // Keep track of the grid controls here. Tradeoff of a global variable
+  // feels worth it for direct access to the values without doing a dom query
+  const grid_controls = { rows: [], cols: [] };
+  const grid_settings = {};
+  // All the currently existing cells making up the grid
+  let current_cells = [];
+
+  // This holds the grid element dom node. Gets filled in the onload callback
+  // I am using a global variable here because we query inside this so much that
+  // it felt silly to regrab it every time as it never moves.
+  const grid_holder = document.querySelector("#grid_holder");
   const settings_panel = document.querySelector("#settings .card-body");
 
   grid_settings.num_rows = make_incrementer({
@@ -15,7 +19,7 @@ window.onload = function () {
     id: "num_rows",
     start_val: 2,
     label: "Number of rows",
-    on_increment: (x) => rowcol_updater("rows", x),
+    on_increment: (x) => update_num_rows_or_cols("rows", x),
   });
 
   grid_settings.num_cols = make_incrementer({
@@ -23,7 +27,7 @@ window.onload = function () {
     id: "num_cols",
     start_val: 2,
     label: "Number of cols",
-    on_increment: (x) => rowcol_updater("cols", x),
+    on_increment: (x) => update_num_rows_or_cols("cols", x),
   });
 
   grid_settings.gap = make_css_unit_input({
@@ -38,297 +42,295 @@ window.onload = function () {
     on_change: (x) => update_grid({ gap: x }),
     allowed_units: ["px", "rem"],
   });
-};
 
-window.onresize = function () {
-  draw_browser_header();
-};
+  function update_num_rows_or_cols(dir, new_count) {
+    const current_vals =
+      dir === "rows" ? get_current_rows() : get_current_cols();
 
-Shiny.addCustomMessageHandler("update-grid", function (opts) {
-  update_grid(opts);
-});
-
-Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-  elements_to_add.forEach((el) => {
-    add_element({
-      id: el.id,
-      grid_rows: [el.start_row, el.end_row],
-      grid_cols: [el.start_col, el.end_col],
-    });
-  });
-});
-
-Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-  const css_for_layout = current_layout_in_css();
-  const code_modal = focused_modal({
-    modal_contents:
-      "Paste the following code into your app to update the layout",
-    modal_callbacks: {
-      event: "click",
-      func: function (event) {
-        // This is needed to stop clicks on modal from triggering the cancel
-        // event that is attached to the background
-        event.stopPropagation();
-      },
-    },
-    styles: {
-      marginLeft: "1rem",
-    },
-    background_callbacks: {
-      event: "click",
-      func: close_modal,
-    },
-  });
-
-  const code_text = maybe_make_el(code_modal.modal, "pre#code_for_layout", {
-    innerHTML: code_to_show,
-    styles: {
-      background: "#f3f2f2",
-      padding: "0.75rem",
-      borderRadius: "5px",
-    },
-  });
-
-  const action_buttons = maybe_make_el(code_modal.modal, "div#action_buttons", {
-    styles: {
-      display: "flex",
-      justifyContent: "space-around",
-    },
-  });
-  maybe_make_el(action_buttons, "button#copy_code", {
-    innerHTML: "Copy to clipboard",
-    event_listener: {
-      event: "click",
-      func: function () {
-        code_text.select();
-        document.execCommand("copy");
-      },
-    },
-  });
-  maybe_make_el(action_buttons, "button#close_code_model", {
-    innerHTML: "Close",
-    event_listener: {
-      event: "click",
-      func: close_modal,
-    },
-  });
-
-  function close_modal() {
-    code_modal.remove();
-  }
-});
-
-function rowcol_updater(dir, new_count) {
-  const current_vals = dir === "rows" ? get_current_rows() : get_current_cols();
-
-  if (new_count > current_vals.length) {
-    current_vals.push("1fr");
-  } else if (new_count < current_vals.length) {
-    current_vals.pop();
-  } else {
-    // No change, shouldn't happen but maybe...
-  }
-  update_grid({ [dir]: current_vals });
-}
-
-function fill_grid_cells() {
-  const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
-  // const grid_dims.rows = get_current_rows();
-  // const grid_dims.cols = get_current_cols();
-  const num_rows = grid_dims.rows.length;
-  const num_cols = grid_dims.cols.length;
-  // Grab currently drawn cells (if any) so we can check if we need to redraw
-  // or if this was simply a column/row sizing update
-  current_cells = [];
-  const need_to_reset_cells = current_cells.length != num_rows * num_cols;
-
-  if (need_to_reset_cells) {
-    remove_elements(grid_holder.querySelectorAll(".grid-cell"));
-    for (let row_i = 1; row_i <= num_rows; row_i++) {
-      for (let col_i = 1; col_i <= num_cols; col_i++) {
-        current_cells.push(
-          maybe_make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
-            data_props: { row: row_i, col: col_i },
-            grid_rows: [row_i],
-            grid_cols: [col_i],
-          })
-        );
-      }
+    if (new_count > current_vals.length) {
+      current_vals.push("1fr");
+    } else if (new_count < current_vals.length) {
+      current_vals.pop();
+    } else {
+      // No change, shouldn't happen but maybe...
     }
+    update_grid({ [dir]: current_vals });
+  }
 
-    // Build each column and row's sizing controler
-    for (let type in grid_controls) {
-      // Get rid of old ones to start with fresh slate
-      remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
+  Shiny.addCustomMessageHandler("update-grid", function (opts) {
+    update_grid(opts);
+  });
 
-      grid_controls[type] = grid_dims[type].map(function (size, i) {
-        // The i + 1 is because grid is indexed at 1, not zero
-        const grid_i = i + 1;
-
-        return make_css_unit_input({
-          parent_el: grid_holder,
-          selector: `#control_${type}${grid_i}.${type}-controls`,
-          start_val: get_css_value(size),
-          start_unit: get_css_unit(size),
-          on_change: () => update_grid(get_layout_from_controls()),
-          form_styles: {
-            [`grid${
-              type === "rows" ? "Row" : "Column"
-            }`]: make_template_start_end([grid_i]),
-          },
-          drag_dir: type === "rows" ? "y" : "x",
-        });
+  Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
+    elements_to_add.forEach((el) => {
+      add_element({
+        id: el.id,
+        grid_rows: [el.start_row, el.end_row],
+        grid_cols: [el.start_col, el.end_col],
       });
-    }
-
-    const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
-      event_listener: [
-        {
-          event: "mousedown",
-          func: drag_started,
-        },
-        {
-          event: "mouseup",
-          func: drag_ended,
-        },
-      ],
     });
-    // Adding the dragging event to the whole page means we dont lose the drag
-    // the second the user's cursor goes off of the main grid div
-    document.querySelector("#editor").addEventListener("mousemove", dragging);
+  });
 
-    const current_selection_box = maybe_make_el(
-      grid_holder,
-      "div#current_selection_box.added-element"
+  Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
+    const css_for_layout = current_layout_in_css();
+    const code_modal = focused_modal({
+      modal_contents:
+        "Paste the following code into your app to update the layout",
+      modal_callbacks: {
+        event: "click",
+        func: function (event) {
+          // This is needed to stop clicks on modal from triggering the cancel
+          // event that is attached to the background
+          event.stopPropagation();
+        },
+      },
+      styles: {
+        marginLeft: "1rem",
+      },
+      background_callbacks: {
+        event: "click",
+        func: close_modal,
+      },
+    });
+
+    const code_text = maybe_make_el(code_modal.modal, "pre#code_for_layout", {
+      innerHTML: code_to_show,
+      styles: {
+        background: "#f3f2f2",
+        padding: "0.75rem",
+        borderRadius: "5px",
+      },
+    });
+
+    const action_buttons = maybe_make_el(
+      code_modal.modal,
+      "div#action_buttons",
+      {
+        styles: {
+          display: "flex",
+          justifyContent: "space-around",
+        },
+      }
     );
+    maybe_make_el(action_buttons, "button#copy_code", {
+      innerHTML: "Copy to clipboard",
+      event_listener: {
+        event: "click",
+        func: function () {
+          code_text.select();
+          document.execCommand("copy");
+        },
+      },
+    });
+    maybe_make_el(action_buttons, "button#close_code_model", {
+      innerHTML: "Close",
+      event_listener: {
+        event: "click",
+        func: close_modal,
+      },
+    });
 
-    // Lets the mousemove event listener know when to do stuff
-    let user_dragging = false;
-
-    // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
-    // We need the absolute position to continue calculating drag after mouse has left editor
-    const drag_start = { rel: {}, abs: {} };
-    let sel_bounds;
-
-    function drag_started(event) {
-      user_dragging = true;
-      drag_start.rel = { x: event.offsetX, y: event.offsetY };
-      drag_start.abs = { x: event.clientX, y: event.clientY };
-      current_selection_box.style.borderColor = get_next_color();
-    }
-
-    function dragging(event) {
-      if (!user_dragging) return;
-
-      const d_x = event.clientX - drag_start.abs.x;
-      const d_y = event.clientY - drag_start.abs.y;
-
-      const sel_left = drag_start.rel.x + (d_x < 0 ? d_x : 0);
-      const sel_right = sel_left + Math.abs(d_x);
-      const sel_top = drag_start.rel.y + (d_y < 0 ? d_y : 0);
-      const sel_bottom = sel_top + Math.abs(d_y);
-
-      const selection_rect = {
-        x: [sel_left, sel_right],
-        y: [sel_top, sel_bottom],
-      };
-
-      sel_bounds = get_drag_extent_on_grid(selection_rect);
-
-      current_selection_box.style.display = "block";
-      set_element_in_grid(current_selection_box, sel_bounds);
-    }
-
-    function drag_ended(event) {
-      // Trigger naming dialog modal
-      name_new_element({
-        grid_rows: sel_bounds.row,
-        grid_cols: sel_bounds.col,
-        selection_box: current_selection_box,
-      });
-
-      user_dragging = false;
-    }
-
-    // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
-    [
-      drag_detector,
-      ...grid_holder.querySelectorAll(".added-element"),
-    ].forEach((el) => grid_holder.appendChild(el));
-  } else {
-  }
-}
-
-function get_drag_extent_on_grid(selection_rect) {
-  // Reset bounding box definitions so we only use current selection extent
-  const sel_bounds = { col: [null, null], row: [null, null] };
-
-  [...current_cells].forEach(function (el) {
-    // Cell is overlapped by selection box
-    if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
-      const el_row = +el.dataset.row;
-      const el_col = +el.dataset.col;
-      sel_bounds.row = [
-        min_w_missing(sel_bounds.row[0], el_row),
-        max_w_missing(sel_bounds.row[1], el_row),
-      ];
-      sel_bounds.col = [
-        min_w_missing(sel_bounds.col[0], el_col),
-        max_w_missing(sel_bounds.col[1], el_col),
-      ];
+    function close_modal() {
+      code_modal.remove();
     }
   });
 
-  return sel_bounds;
-}
+  function fill_grid_cells() {
+    const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
+    const num_rows = grid_dims.rows.length;
+    const num_cols = grid_dims.cols.length;
+    // Grab currently drawn cells (if any) so we can check if we need to redraw
+    // or if this was simply a column/row sizing update
+    current_cells = [];
+    const need_to_reset_cells = current_cells.length != num_rows * num_cols;
 
-function update_grid({ rows, cols, gap }) {
-  const old_num_rows = get_current_rows().length;
-  const old_num_cols = get_current_cols().length;
-  const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
-  const new_gap = gap || old_gap;
-  const new_num_rows = rows ? rows.length : old_num_rows;
-  const new_num_cols = cols ? cols.length : old_num_cols;
+    if (need_to_reset_cells) {
+      remove_elements(grid_holder.querySelectorAll(".grid-cell"));
+      for (let row_i = 1; row_i <= num_rows; row_i++) {
+        for (let col_i = 1; col_i <= num_cols; col_i++) {
+          current_cells.push(
+            maybe_make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
+              data_props: { row: row_i, col: col_i },
+              grid_rows: [row_i],
+              grid_cols: [col_i],
+            })
+          );
+        }
+      }
 
-  // Make sure settings panel is up-to-date
-  grid_settings.num_rows.update_value(new_num_rows);
-  grid_settings.num_cols.update_value(new_num_cols);
-  grid_settings.gap.update_value(new_gap);
+      // Build each column and row's sizing controler
+      for (let type in grid_controls) {
+        // Get rid of old ones to start with fresh slate
+        remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
 
-  const grid_numbers_changed =
-    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
-  if (grid_numbers_changed) {
-    // Check for elements that may get dropped
-    const all_els = current_elements();
-    let in_danger_els = [];
-    let auto_removed_el_ids = [];
+        grid_controls[type] = grid_dims[type].map(function (size, i) {
+          // The i + 1 is because grid is indexed at 1, not zero
+          const grid_i = i + 1;
 
-    Object.values(all_els).forEach((el) => {
-      const sits_outside_grid =
-        el.end_row > new_num_rows || el.end_col > new_num_cols;
-      const completely_outside_grid =
-        el.start_row > new_num_rows || el.start_col > new_num_cols;
+          return make_css_unit_input({
+            parent_el: grid_holder,
+            selector: `#control_${type}${grid_i}.${type}-controls`,
+            start_val: get_css_value(size),
+            start_unit: get_css_unit(size),
+            on_change: () => update_grid(get_layout_from_controls()),
+            form_styles: {
+              [`grid${
+                type === "rows" ? "Row" : "Column"
+              }`]: make_template_start_end([grid_i]),
+            },
+            drag_dir: type === "rows" ? "y" : "x",
+          });
+        });
+      }
 
-      if (completely_outside_grid) {
-        auto_removed_el_ids.push(el.id);
-      } else if (sits_outside_grid) {
-        in_danger_els.push(el);
+      const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
+        event_listener: [
+          {
+            event: "mousedown",
+            func: drag_started,
+          },
+          {
+            event: "mouseup",
+            func: drag_ended,
+          },
+        ],
+      });
+      // Adding the dragging event to the whole page means we dont lose the drag
+      // the second the user's cursor goes off of the main grid div
+      document.querySelector("#editor").addEventListener("mousemove", dragging);
+
+      const current_selection_box = maybe_make_el(
+        grid_holder,
+        "div#current_selection_box.added-element"
+      );
+
+      // Lets the mousemove event listener know when to do stuff
+      let user_dragging = false;
+
+      // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
+      // We need the absolute position to continue calculating drag after mouse has left editor
+      const drag_start = { rel: {}, abs: {} };
+      let sel_bounds;
+
+      function drag_started(event) {
+        user_dragging = true;
+        drag_start.rel = { x: event.offsetX, y: event.offsetY };
+        drag_start.abs = { x: event.clientX, y: event.clientY };
+        current_selection_box.style.borderColor = get_next_color();
+      }
+
+      function dragging(event) {
+        if (!user_dragging) return;
+
+        const d_x = event.clientX - drag_start.abs.x;
+        const d_y = event.clientY - drag_start.abs.y;
+
+        const sel_left = drag_start.rel.x + (d_x < 0 ? d_x : 0);
+        const sel_right = sel_left + Math.abs(d_x);
+        const sel_top = drag_start.rel.y + (d_y < 0 ? d_y : 0);
+        const sel_bottom = sel_top + Math.abs(d_y);
+
+        const selection_rect = {
+          x: [sel_left, sel_right],
+          y: [sel_top, sel_bottom],
+        };
+
+        sel_bounds = get_drag_extent_on_grid(selection_rect);
+
+        current_selection_box.style.display = "block";
+        set_element_in_grid(current_selection_box, sel_bounds);
+      }
+
+      function drag_ended(event) {
+        // Trigger naming dialog modal
+        name_new_element({
+          grid_rows: sel_bounds.row,
+          grid_cols: sel_bounds.col,
+          selection_box: current_selection_box,
+        });
+
+        user_dragging = false;
+      }
+
+      // Make sure any added elements sit on top by re-appending them to grid holder
+      // Make sure that the drag detector sits over everything
+      [
+        drag_detector,
+        ...grid_holder.querySelectorAll(".added-element"),
+      ].forEach((el) => grid_holder.appendChild(el));
+    } else {
+    }
+  }
+
+  function get_drag_extent_on_grid(selection_rect) {
+    // Reset bounding box definitions so we only use current selection extent
+    const sel_bounds = { col: [null, null], row: [null, null] };
+
+    current_cells.forEach(function (el) {
+      // Cell is overlapped by selection box
+      if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
+        const el_row = +el.dataset.row;
+        const el_col = +el.dataset.col;
+        sel_bounds.row = [
+          min_w_missing(sel_bounds.row[0], el_row),
+          max_w_missing(sel_bounds.row[1], el_row),
+        ];
+        sel_bounds.col = [
+          min_w_missing(sel_bounds.col[0], el_col),
+          max_w_missing(sel_bounds.col[1], el_col),
+        ];
       }
     });
-    remove_added_elements(auto_removed_el_ids);
 
-    if (in_danger_els.length > 0) {
-      const fix_els_modal = focused_modal({
-        modal_contents: `
+    return sel_bounds;
+  }
+
+  function update_grid({ rows, cols, gap }) {
+    const old_num_rows = get_current_rows().length;
+    const old_num_cols = get_current_cols().length;
+    const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
+    const new_gap = gap || old_gap;
+    const new_num_rows = rows ? rows.length : old_num_rows;
+    const new_num_cols = cols ? cols.length : old_num_cols;
+
+    // Make sure settings panel is up-to-date
+    grid_settings.num_rows.update_value(new_num_rows);
+    grid_settings.num_cols.update_value(new_num_cols);
+    grid_settings.gap.update_value(new_gap);
+
+    const grid_numbers_changed =
+      old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
+    if (grid_numbers_changed) {
+      // Check for elements that may get dropped
+      const all_els = current_elements();
+      let in_danger_els = [];
+      let auto_removed_el_ids = [];
+
+      Object.values(all_els).forEach((el) => {
+        const sits_outside_grid =
+          el.end_row > new_num_rows || el.end_col > new_num_cols;
+        const completely_outside_grid =
+          el.start_row > new_num_rows || el.start_col > new_num_cols;
+
+        if (completely_outside_grid) {
+          auto_removed_el_ids.push(el.id);
+        } else if (sits_outside_grid) {
+          in_danger_els.push(el);
+        }
+      });
+      remove_added_elements(auto_removed_el_ids);
+
+      if (in_danger_els.length > 0) {
+        const fix_els_modal = focused_modal({
+          modal_contents: `
         <h2>The following elements dont fit on the new grid layout.</h2>
         <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
         `,
-      });
+        });
 
-      const radio_inputs_html = in_danger_els.reduce(
-        (radio_group, el) =>
-          `
+        const radio_inputs_html = in_danger_els.reduce(
+          (radio_group, el) =>
+            `
           ${radio_group}
           <div class = "radio-set-group">
             <div class = "radio-set-label"> ${el.id} </div>
@@ -340,469 +342,328 @@ function update_grid({ rows, cols, gap }) {
             </div>
           </div>
         `,
-        ""
-      );
+          ""
+        );
 
-      const delete_or_edit_form = maybe_make_el(
-        fix_els_modal.modal,
-        "form#delete_or_fix_list",
-        {
-          innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
-          event_listener: {
-            event: "submit",
-            func: function () {
-              const form = this;
-              const to_delete = in_danger_els.filter(
-                (d) => form[d.id].value === "delete"
-              );
+        const delete_or_edit_form = maybe_make_el(
+          fix_els_modal.modal,
+          "form#delete_or_fix_list",
+          {
+            innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
+            event_listener: {
+              event: "submit",
+              func: function () {
+                const form = this;
+                const to_delete = in_danger_els.filter(
+                  (d) => form[d.id].value === "delete"
+                );
 
-              remove_added_elements(to_delete.map((d) => d.id));
-              const to_edit = in_danger_els.filter(
-                (d) => form[d.id].value === "shrink"
-              );
-              to_edit.forEach((el) => {
-                const el_node = grid_holder.querySelector(`#${el.id}`);
-                el_node.style.gridRow = make_template_start_end([
-                  el.start_row,
-                  Math.min(el.end_row, new_num_rows),
-                ]);
-                el_node.style.gridColumn = make_template_start_end([
-                  el.start_col,
-                  Math.min(el.end_col, new_num_cols),
-                ]);
-              });
+                remove_added_elements(to_delete.map((d) => d.id));
+                const to_edit = in_danger_els.filter(
+                  (d) => form[d.id].value === "shrink"
+                );
+                to_edit.forEach((el) => {
+                  const el_node = grid_holder.querySelector(`#${el.id}`);
+                  el_node.style.gridRow = make_template_start_end([
+                    el.start_row,
+                    Math.min(el.end_row, new_num_rows),
+                  ]);
+                  el_node.style.gridColumn = make_template_start_end([
+                    el.start_col,
+                    Math.min(el.end_col, new_num_cols),
+                  ]);
+                });
 
-              fix_els_modal.remove();
-              // Now that we've updated elements properly, we should be able to
-              // just recall the function and it won't spit an error
-              update_grid({ rows, cols, gap });
+                fix_els_modal.remove();
+                // Now that we've updated elements properly, we should be able to
+                // just recall the function and it won't spit an error
+                update_grid({ rows, cols, gap });
+              },
             },
-          },
-        }
-      );
+          }
+        );
 
-      maybe_make_el(delete_or_edit_form, "input#name_submit", {
-        props: { type: "submit" },
-      });
+        maybe_make_el(delete_or_edit_form, "input#name_submit", {
+          props: { type: "submit" },
+        });
 
-      maybe_make_el(fix_els_modal.modal, "p.notice-text", {
-        innerHTML:
-          "Note that elements residing completely in the removed row or column are automatically deleted.",
-      });
+        maybe_make_el(fix_els_modal.modal, "p.notice-text", {
+          innerHTML:
+            "Note that elements residing completely in the removed row or column are automatically deleted.",
+        });
 
-      return;
-    }
-  }
-
-  if (rows) {
-    grid_holder.style.gridTemplateRows = sizes_to_template_def(rows);
-  }
-  if (cols) {
-    grid_holder.style.gridTemplateColumns = sizes_to_template_def(cols);
-  }
-  if (gap) {
-    // To give a consistant gap around everything we also add margin of same size
-    grid_holder.style.setProperty("--grid-gap", gap);
-  }
-
-  if (grid_numbers_changed) fill_grid_cells();
-
-  Shiny.setInputValue("grid_sizing", {
-    rows: grid_holder.style.gridTemplateRows.split(" "),
-    cols: grid_holder.style.gridTemplateColumns.split(" "),
-    gap: grid_holder.style.getPropertyValue("--grid-gap"),
-  });
-
-  return grid_holder;
-}
-
-function make_css_unit_input({
-  parent_el,
-  selector = "",
-  start_val = 1,
-  start_unit = "fr",
-  on_change = (x) => console.log("css unit change", x),
-  allowed_units = ["fr", "px", "rem"],
-  form_styles = {},
-  drag_dir = "none",
-}) {
-  const allow_drag = drag_dir !== "none";
-
-  const input_holder = maybe_make_el(
-    parent_el,
-    `div${selector}.input-holder.css-unit-input`,
-    {
-      styles: form_styles,
-    }
-  );
-
-  const form = maybe_make_el(input_holder, `form`, {
-    event_listener: { event: "change", func: on_update },
-  });
-
-  const value_input = maybe_make_el(form, "input", {
-    props: {
-      type: "number",
-      min: 0,
-      value: start_val,
-      step: 1,
-      "aria-live": "polite",
-    },
-    styles: {
-      minWidth: "30px",
-      width: "100%",
-      maxWidth: "55px",
-    },
-  });
-
-  const unit_selector = maybe_make_el(form, "select", {
-    props: { name: "units" },
-    styles: {
-      minWidth: "20px",
-      marginLeft: "3px",
-    },
-  });
-
-  const drag_info = {
-    baseline: 0,
-    start: 0,
-  };
-
-  const resizer = maybe_make_el(input_holder, "div.css-dragger", {
-    innerHTML: `<i class="fa fa-arrows-${
-      drag_dir === "y" ? "v" : "h"
-    }" aria-hidden="true"></i>`,
-  });
-
-  // Place an invisible div over the main one that we let be dragged. This means
-  // we can use the nice drag interaction callbacks without the ugly default
-  // drag behavior of two copies of the div and zooming back to the start pos etc.
-  maybe_make_el(resizer, "div.detector", {
-    props: { draggable: true },
-    event_listener: [
-      {
-        event: "dragstart",
-        func: function (event) {
-          console.log("Drag start!");
-          drag_info.baseline = +value_input.value;
-          drag_info.start = event[drag_dir];
-        },
-      },
-      {
-        event: "drag",
-        func: function (event) {
-          console.log("Dragging");
-          const drag_pos = event[drag_dir];
-          // At the end of the drag we get a drag event with 0 values that throws stuff off
-          if (drag_pos === 0) return;
-          const new_value = Math.max(
-            0,
-            drag_info.baseline + (event[drag_dir] - drag_info.start)
-          );
-          value_input.value = new_value;
-          on_change(current_value());
-        },
-      },
-      {
-        event: "dragend",
-        func: function (event) {
-          console.log("Dragging");
-          drag_info.baseline = 0;
-          drag_info.start = 0;
-        },
-      },
-    ],
-  });
-
-  allowed_units.forEach(function (unit_type) {
-    const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
-      props: { value: unit_type },
-      innerHTML: unit_type,
-    });
-
-    if (unit_type === start_unit) {
-      unit_option.selected = true;
-    }
-  });
-  function current_value() {
-    return `${value_input.value}${unit_selector.value}`;
-  }
-  function on_update() {
-    const val = current_value();
-    update_value(val);
-    on_change(val);
-  }
-
-  function update_value(new_value) {
-    console.log("update_value has triggered");
-    value_input.value = get_css_value(new_value);
-    const new_unit = get_css_unit(new_value);
-    [...unit_selector.children].forEach((opt) => {
-      if (opt.value === new_unit) {
-        opt.selected = true;
-      } else {
-        opt.selected = false;
+        return;
       }
+    }
+
+    if (rows) {
+      grid_holder.style.gridTemplateRows = sizes_to_template_def(rows);
+    }
+    if (cols) {
+      grid_holder.style.gridTemplateColumns = sizes_to_template_def(cols);
+    }
+    if (gap) {
+      // To give a consistant gap around everything we also add margin of same size
+      grid_holder.style.setProperty("--grid-gap", gap);
+    }
+
+    if (grid_numbers_changed) fill_grid_cells();
+
+    Shiny.setInputValue("grid_sizing", {
+      rows: grid_holder.style.gridTemplateRows.split(" "),
+      cols: grid_holder.style.gridTemplateColumns.split(" "),
+      gap: grid_holder.style.getPropertyValue("--grid-gap"),
     });
 
-    if (new_unit === "px" && allow_drag) {
-      resizer.style.display = "block";
-      // resizing_dragger.style.display = "auto";
-    } else {
-      resizer.style.display = "none";
-      // resizing_dragger.style.display = "none";
+    return grid_holder;
+  }
+
+  function get_layout_from_controls() {
+    const sizes = {};
+    for (let type in grid_controls) {
+      sizes[type] = grid_controls[type].map((unit_input) =>
+        unit_input.current_value()
+      );
     }
+    return sizes;
   }
 
-  update_value(`${start_val}${start_unit}`);
-
-  return { form, current_value, update_value };
-}
-
-function get_layout_from_controls() {
-  const sizes = {};
-  for (let type in grid_controls) {
-    sizes[type] = grid_controls[type].map((unit_input) =>
-      unit_input.current_value()
-    );
-  }
-  return sizes;
-}
-
-function name_new_element({ grid_rows, grid_cols, selection_box }) {
-  const modal_divs = focused_modal({
-    background_callbacks: {
-      // Clicking outside of the modal will cancel the naming. Seems natural
-      event: "click",
-      func: reset_el_creation,
-    },
-    modal_contents: `
+  function name_new_element({ grid_rows, grid_cols, selection_box }) {
+    const modal_divs = focused_modal({
+      background_callbacks: {
+        // Clicking outside of the modal will cancel the naming. Seems natural
+        event: "click",
+        func: reset_el_creation,
+      },
+      modal_contents: `
     <h2>Name your element:</h2>
     <p>This name will be used to place items in your app.
     For instance if you want to place a plot in this element,
     this name will match the label of the plot output
     </p>
     `,
-    modal_callbacks: {
-      event: "click",
-      func: function (event) {
-        // This is needed to stop clicks on modal from triggering the cancel
-        // event that is attached to the background
-        event.stopPropagation();
+      modal_callbacks: {
+        event: "click",
+        func: function (event) {
+          // This is needed to stop clicks on modal from triggering the cancel
+          // event that is attached to the background
+          event.stopPropagation();
+        },
       },
-    },
-  });
-
-  const modal_div = modal_divs.modal;
-
-  const name_form = maybe_make_el(modal_div, "form#name_form", {
-    event_listener: {
-      event: "submit",
-      func: function () {
-        const id = this["name_input"].value.replace(/\s/g, "_");
-
-        if (current_elements()[id]) {
-          // Cant have duplicate ids!
-          warn_about_bad_id(
-            `You already have an element with the id ${id}, all ids need to be unique.`
-          );
-          return;
-        }
-        if (id.match(/^[^a-zA-Z]/g)) {
-          warn_about_bad_id(`Valid ids need to start with a character.`);
-          return;
-        }
-
-        // Add the new element in to grid
-        add_element({
-          id,
-          color: selection_box.style.borderColor,
-          grid_rows,
-          grid_cols,
-        });
-
-        reset_el_creation();
-      },
-    },
-  });
-  maybe_make_el(name_form, "input#cancel_btn", {
-    props: { type: "button", value: "cancel" },
-    event_listener: { event: "click", func: reset_el_creation },
-  });
-
-  maybe_make_el(name_form, "input#name_input", {
-    props: { type: "text" },
-    event_listener: {
-      // Don't leave warning message up while user is typing
-      event: "input",
-      func: hide_warning_msg,
-    },
-  }).focus(); // So user can immediately type in id
-
-  maybe_make_el(name_form, "input#name_submit", { props: { type: "submit" } });
-
-  function warn_about_bad_id(msg) {
-    maybe_make_el(modal_div, "span#bad_id_msg.notice-text", {
-      innerHTML: msg,
-      styles: { color: "orangered" },
     });
-  }
-  function hide_warning_msg() {
-    const warn_msg = modal_div.querySelector("span#bad_id_msg");
-    if (warn_msg) {
-      warn_msg.remove();
-    }
-  }
-  function reset_el_creation() {
-    // All done here so get rid of the whole interface.
-    modal_divs.remove();
-    // Remove the temporary dragged element
-    selection_box.style.display = "none";
-  }
-}
 
-function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
-  const element_in_grid = maybe_make_el(
-    grid_holder,
-    `div#${id}.el_${id}.added-element`,
-    {
-      grid_cols,
-      grid_rows,
-      styles: {
-        borderColor: color,
-        position: "relative",
-      },
-    }
-  );
+    const modal_div = modal_divs.modal;
 
-  ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
-    maybe_make_el(element_in_grid, `div.dragger.${handle_type}`, {
-      props: { draggable: true },
-      data_props: { handle_type },
-      styles: { background: color },
-      innerHTML:
-        handle_type === "center"
-          ? `<i class="fas fa-arrows-alt"></i>`
-          : `<i class="fas fa-long-arrow-alt-up"></i>`,
-      event_listener: [
-        {
-          event: "dragstart",
-          func: function (event) {
-            // make sure dragged element is on top
-            grid_holder.appendChild(this.parentElement);
-            // Storing this info in the dom to avoid global variables
-            // The speed tradeoffs of the tiny json serialization are worth it imo
-            this.dataset.start_rect = JSON.stringify(
-              get_bounding_rect(this.parentElement)
+    const name_form = maybe_make_el(modal_div, "form#name_form", {
+      event_listener: {
+        event: "submit",
+        func: function () {
+          const id = this["name_input"].value.replace(/\s/g, "_");
+
+          if (current_elements()[id]) {
+            // Cant have duplicate ids!
+            warn_about_bad_id(
+              `You already have an element with the id ${id}, all ids need to be unique.`
             );
-            this.dataset.start_loc = JSON.stringify({ x: event.x, y: event.y });
-          },
-        },
-        {
-          event: "drag",
-          func: function (event) {
-            // Sometimes the drag event gets fired with nonsense zeros
-            if (event.x === 0 && event.y === 0) return;
+            return;
+          }
+          if (id.match(/^[^a-zA-Z]/g)) {
+            warn_about_bad_id(`Valid ids need to start with a character.`);
+            return;
+          }
 
-            const new_bounding_rect = update_rect_by_delta({
-              start_rect: JSON.parse(this.dataset.start_rect),
-              deltas: get_delta(JSON.parse(this.dataset.start_loc), event),
-              direction: this.dataset.handle_type,
-            });
-            const grid_extent = get_drag_extent_on_grid(new_bounding_rect);
+          // Add the new element in to grid
+          add_element({
+            id,
+            color: selection_box.style.borderColor,
+            grid_rows,
+            grid_cols,
+          });
 
-            set_element_in_grid(this.parentElement, grid_extent);
-          },
+          reset_el_creation();
         },
-      ],
+      },
     });
-  });
+    maybe_make_el(name_form, "input#cancel_btn", {
+      props: { type: "button", value: "cancel" },
+      event_listener: { event: "click", func: reset_el_creation },
+    });
 
-  const element_in_list = maybe_make_el(
-    document.querySelector("#added_elements"),
-    `div.el_${id}.added-element`,
-    {
-      innerHTML: id,
-      styles: {
-        borderColor: color,
+    maybe_make_el(name_form, "input#name_input", {
+      props: { type: "text" },
+      event_listener: {
+        // Don't leave warning message up while user is typing
+        event: "input",
+        func: hide_warning_msg,
       },
-      event_listener: [
-        {
-          event: "mouseover",
-          func: function () {
-            this.classList.add("hovered");
-            element_in_grid.classList.add("hovered");
-          },
-        },
-        {
-          event: "mouseout",
-          func: function () {
-            this.classList.remove("hovered");
-            element_in_grid.classList.remove("hovered");
-          },
-        },
-      ],
+    }).focus(); // So user can immediately type in id
+
+    maybe_make_el(name_form, "input#name_submit", {
+      props: { type: "submit" },
+    });
+
+    function warn_about_bad_id(msg) {
+      maybe_make_el(modal_div, "span#bad_id_msg.notice-text", {
+        innerHTML: msg,
+        styles: { color: "orangered" },
+      });
     }
-  );
+    function hide_warning_msg() {
+      const warn_msg = modal_div.querySelector("span#bad_id_msg");
+      if (warn_msg) {
+        warn_msg.remove();
+      }
+    }
+    function reset_el_creation() {
+      // All done here so get rid of the whole interface.
+      modal_divs.remove();
+      // Remove the temporary dragged element
+      selection_box.style.display = "none";
+    }
+  }
 
-  maybe_make_el(element_in_list, "button.remove_el", {
-    innerHTML: `<i class="fa fa-trash" aria-hidden="true"></i>`,
-    event_listener: {
-      event: "click",
-      func: function () {
-        remove_added_elements(id);
+  // Adds a new element of a given id to the app. Both in the grid window
+  // and the addeded elements panel
+  function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
+    const element_in_grid = maybe_make_el(
+      grid_holder,
+      `div#${id}.el_${id}.added-element`,
+      {
+        grid_cols,
+        grid_rows,
+        styles: {
+          borderColor: color,
+          position: "relative",
+        },
+      }
+    );
+
+    ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
+      maybe_make_el(element_in_grid, `div.dragger.${handle_type}`, {
+        props: { draggable: true },
+        data_props: { handle_type },
+        styles: { background: color },
+        innerHTML:
+          handle_type === "center"
+            ? `<i class="fas fa-arrows-alt"></i>`
+            : `<i class="fas fa-long-arrow-alt-up"></i>`,
+        event_listener: [
+          {
+            event: "dragstart",
+            func: function (event) {
+              // make sure dragged element is on top
+              grid_holder.appendChild(this.parentElement);
+              // Storing this info in the dom to avoid global variables
+              // The speed tradeoffs of the tiny json serialization are worth it imo
+              this.dataset.start_rect = JSON.stringify(
+                get_bounding_rect(this.parentElement)
+              );
+              this.dataset.start_loc = JSON.stringify({
+                x: event.x,
+                y: event.y,
+              });
+            },
+          },
+          {
+            event: "drag",
+            func: function (event) {
+              // Sometimes the drag event gets fired with nonsense zeros
+              if (event.x === 0 && event.y === 0) return;
+
+              const new_bounding_rect = update_rect_by_delta({
+                start_rect: JSON.parse(this.dataset.start_rect),
+                deltas: get_delta(JSON.parse(this.dataset.start_loc), event),
+                direction: this.dataset.handle_type,
+              });
+              const grid_extent = get_drag_extent_on_grid(new_bounding_rect);
+
+              set_element_in_grid(this.parentElement, grid_extent);
+            },
+          },
+        ],
+      });
+    });
+
+    const element_in_list = maybe_make_el(
+      document.querySelector("#added_elements"),
+      `div.el_${id}.added-element`,
+      {
+        innerHTML: id,
+        styles: {
+          borderColor: color,
+        },
+        event_listener: [
+          {
+            event: "mouseover",
+            func: function () {
+              this.classList.add("hovered");
+              element_in_grid.classList.add("hovered");
+            },
+          },
+          {
+            event: "mouseout",
+            func: function () {
+              this.classList.remove("hovered");
+              element_in_grid.classList.remove("hovered");
+            },
+          },
+        ],
+      }
+    );
+
+    maybe_make_el(element_in_list, "button.remove_el", {
+      innerHTML: `<i class="fa fa-trash" aria-hidden="true"></i>`,
+      event_listener: {
+        event: "click",
+        func: function () {
+          remove_added_elements(id);
+        },
       },
-    },
-  });
+    });
 
-  // Let shiny know we have a new element
-  send_elements_to_shiny();
-}
+    // Let shiny know we have a new element
+    send_elements_to_shiny();
+  }
 
-function set_element_in_grid(el, grid_bounds) {
-  el.style.gridRow = make_template_start_end(grid_bounds.row);
-  el.style.gridColumn = make_template_start_end(grid_bounds.col);
-}
+  function current_elements() {
+    const all_elements = grid_holder.querySelectorAll(".added-element");
 
-function current_elements() {
-  const all_elements = grid_holder.querySelectorAll(".added-element");
+    const element_info = {};
+    all_elements.forEach(function (el) {
+      // Ignore the selection box
+      if (el.id === "current_selection_box") return;
+      const grid_area = el.style.gridArea.split(" / ");
+      element_info[el.id] = {
+        id: el.id,
+        start_row: +grid_area[0],
+        start_col: +grid_area[1],
+        // Subtract one here because the end in css is the end line, not row
+        end_row: +grid_area[2] - 1,
+        end_col: +grid_area[3] - 1,
+      };
+    });
 
-  const element_info = {};
-  all_elements.forEach(function (el) {
-    // Ignore the selection box
-    if (el.id === "current_selection_box") return;
-    const grid_area = el.style.gridArea.split(" / ");
-    element_info[el.id] = {
-      id: el.id,
-      start_row: +grid_area[0],
-      start_col: +grid_area[1],
-      // Subtract one here because the end in css is the end line, not row
-      end_row: +grid_area[2] - 1,
-      end_col: +grid_area[3] - 1,
-    };
-  });
+    return element_info;
+  }
 
-  return element_info;
-}
+  function send_elements_to_shiny() {
+    Shiny.setInputValue("elements", current_elements());
+  }
 
-function send_elements_to_shiny() {
-  Shiny.setInputValue("elements", current_elements());
-}
-
-function current_layout_in_css() {
-  const container_selector = "#container";
-  const elements_defs = Object.values(current_elements()).reduce(
-    (el_css, el) => `${el_css}
+  function current_layout_in_css() {
+    const container_selector = "#container";
+    const elements_defs = Object.values(current_elements()).reduce(
+      (el_css, el) => `${el_css}
 
 ${container_selector} #${el.id} {
   grid-column: ${make_template_start_end([el.start_col, el.end_col])};
   grid-row: ${make_template_start_end([el.start_row, el.end_row])};
 }
 `,
-    ""
-  );
+      ""
+    );
 
-  return `
+    return `
 ${container_selector} {
   display: grid;
   grid-template-columns: ${grid_holder.style.gridTemplateColumns};
@@ -811,84 +672,49 @@ ${container_selector} {
 }
 ${elements_defs}
 `;
-}
-
-function get_current_rows() {
-  return grid_holder.style.gridTemplateRows.split(" ");
-}
-
-function get_current_cols() {
-  return grid_holder.style.gridTemplateColumns.split(" ");
-}
-
-function draw_browser_header() {
-  const header_svg = document.getElementById("editor-browser-header");
-  const {
-    width: width_of_bar,
-    height: height_of_bar,
-  } = header_svg.getBoundingClientRect();
-
-  // Clear out anything that may be in the svg already
-  header_svg.innerHTML = "";
-  // First make the buttons for closing, minimizing and maximizing window
-  const button_r = height_of_bar / 4.5;
-  for (let i = 1; i <= 3; i++) {
-    header_svg.innerHTML += `
-      <circle cx=${i * button_r * 3}px
-              cy = 50%
-              r = ${button_r}px
-      > </circle>`;
   }
 
-  // Next make the browser url bar
-  const url_bar_start = 4 * button_r * 3;
-  // Bar is takes up middle 65% of header area
-  const url_bar_rel_height = 0.65;
-  const url_bar_height = height_of_bar * url_bar_rel_height;
-  const url_bar_margin = (height_of_bar - url_bar_height) / 2;
-  header_svg.innerHTML += `
-    <rect x = ${url_bar_start}px
-          y = ${url_bar_margin}px
-          width = ${width_of_bar - url_bar_start - 10}px
-          height = ${height_of_bar * url_bar_rel_height}px
-          stroke = "black"
-          stroke-width: 3px
-          fill = "none"
-          rx = ${url_bar_height / 2}px
-          ry = ${url_bar_height / 2}px
-    ></rect>`;
+  function get_current_rows() {
+    return grid_holder.style.gridTemplateRows.split(" ");
+  }
 
-  header_svg.innerHTML += `
-    <text x = ${url_bar_start + 13}px
-          y = ${height_of_bar / 2}px
-          alignment-baseline = "central"
-    >
-      www.myShinyApp.com
-    </text>
-  `;
-}
+  function get_current_cols() {
+    return grid_holder.style.gridTemplateColumns.split(" ");
+  }
 
-// Get the next color in our list of colors.
-function get_next_color() {
-  const colors = [
-    "#e41a1c",
-    "#377eb8",
-    "#4daf4a",
-    "#984ea3",
-    "#ff7f00",
-    "#ffff33",
-    "#a65628",
-    "#f781bf",
-  ];
-  const all_elements = grid_holder.querySelectorAll(".added-element");
-  // If we have more elements than colors we simply recycle
-  return colors[all_elements.length % colors.length];
-}
+  // Get the next color in our list of colors.
+  function get_next_color() {
+    const colors = [
+      "#e41a1c",
+      "#377eb8",
+      "#4daf4a",
+      "#984ea3",
+      "#ff7f00",
+      "#ffff33",
+      "#a65628",
+      "#f781bf",
+    ];
+    const all_elements = grid_holder.querySelectorAll(".added-element");
+    // If we have more elements than colors we simply recycle
+    return colors[all_elements.length % colors.length];
+  }
 
+  // Removes elements the user has added to the grid by id
+  function remove_added_elements(ids) {
+    const ids_to_remove = ids instanceof Array ? ids : [ids];
+
+    ids_to_remove.forEach((el_id) => {
+      remove_elements(
+        document.querySelectorAll(`div.el_${el_id}.added-element`)
+      );
+    });
+
+    send_elements_to_shiny();
+  }
+}; // End of the window.onload callback
 // =============================================================================
 // From here on are a series of general purpose helper functions not
 // specifically related to the app and its state
-
 // This is a heavy-lifter that takes care of building elements and placing them
 // on the grid etc.. It only create's an element if it needs to, which means
 // that we dont get dom leaks caused by recalling stuff over and over again.
@@ -976,20 +802,14 @@ function make_template_start_end([start, end]) {
   return `${start} / ${end}`;
 }
 
+function set_element_in_grid(el, grid_bounds) {
+  el.style.gridRow = make_template_start_end(grid_bounds.row);
+  el.style.gridColumn = make_template_start_end(grid_bounds.col);
+}
+
 // Given a list of elements from a query selector, remove them all
 function remove_elements(els_to_remove) {
   els_to_remove.forEach((e) => e.remove());
-}
-
-// Removes elements the user has added to the grid by id
-function remove_added_elements(ids) {
-  const ids_to_remove = ids instanceof Array ? ids : [ids];
-
-  ids_to_remove.forEach((el_id) => {
-    remove_elements(document.querySelectorAll(`div.el_${el_id}.added-element`));
-  });
-
-  send_elements_to_shiny();
 }
 
 function focused_modal({
@@ -1071,6 +891,133 @@ function make_incrementer({
   }
 
   return { update_value };
+}
+
+// Input with value text box on left and unit selector dropdown on right
+// Used to make valid css sizes
+function make_css_unit_input({
+  parent_el,
+  selector = "",
+  start_val = 1,
+  start_unit = "fr",
+  on_change = (x) => console.log("css unit change", x),
+  allowed_units = ["fr", "px", "rem"],
+  form_styles = {},
+  drag_dir = "none",
+}) {
+  const allow_drag = drag_dir !== "none";
+
+  const input_holder = maybe_make_el(
+    parent_el,
+    `div${selector}.input-holder.css-unit-input`,
+    {
+      styles: form_styles,
+    }
+  );
+
+  const form = maybe_make_el(input_holder, `form`, {
+    event_listener: { event: "change", func: on_update },
+  });
+
+  const value_input = maybe_make_el(form, "input", {
+    props: {
+      type: "number",
+      min: 0,
+      value: start_val,
+      step: 1,
+      "aria-live": "polite",
+    },
+    styles: {
+      minWidth: "30px",
+      width: "100%",
+      maxWidth: "55px",
+    },
+  });
+
+  const unit_selector = maybe_make_el(form, "select", {
+    props: { name: "units" },
+    styles: {
+      minWidth: "20px",
+      marginLeft: "3px",
+    },
+  });
+
+  const resizer = maybe_make_el(input_holder, "div.css-dragger", {
+    innerHTML: `<i class="fa fa-arrows-${
+      drag_dir === "y" ? "v" : "h"
+    }" aria-hidden="true"></i>`,
+  });
+
+  // Place an invisible div over the main one that we let be dragged. This means
+  // we can use the nice drag interaction callbacks without the ugly default
+  // drag behavior of two copies of the div and zooming back to the start pos etc.
+  maybe_make_el(resizer, "div.detector", {
+    props: { draggable: true },
+    event_listener: [
+      {
+        event: "dragstart",
+        func: function (event) {
+          this.dataset.baseline = value_input.value;
+          this.dataset.start = event[drag_dir];
+        },
+      },
+      {
+        event: "drag",
+        func: function (event) {
+          const drag_pos = event[drag_dir];
+          // At the end of the drag we get a drag event with 0 values that throws stuff off
+          if (drag_pos === 0) return;
+          const new_value = Math.max(
+            0,
+            +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
+          );
+          value_input.value = new_value;
+          on_change(current_value());
+        },
+      },
+    ],
+  });
+
+  allowed_units.forEach(function (unit_type) {
+    const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
+      props: { value: unit_type },
+      innerHTML: unit_type,
+    });
+
+    if (unit_type === start_unit) {
+      unit_option.selected = true;
+    }
+  });
+  function current_value() {
+    return `${value_input.value}${unit_selector.value}`;
+  }
+  function on_update() {
+    const val = current_value();
+    update_value(val);
+    on_change(val);
+  }
+
+  function update_value(new_value) {
+    value_input.value = get_css_value(new_value);
+    const new_unit = get_css_unit(new_value);
+    [...unit_selector.children].forEach((opt) => {
+      if (opt.value === new_unit) {
+        opt.selected = true;
+      } else {
+        opt.selected = false;
+      }
+    });
+
+    if (new_unit === "px" && allow_drag) {
+      resizer.style.display = "block";
+    } else {
+      resizer.style.display = "none";
+    }
+  }
+
+  update_value(`${start_val}${start_unit}`);
+
+  return { form, current_value, update_value };
 }
 
 // Passing an undefined value to a compare like min or max will always give undefined
@@ -1164,4 +1111,54 @@ function get_css_unit(css_size) {
 
 function get_css_value(css_size) {
   return +css_size.match(/^[\d | \.]+/g);
+}
+
+window.onresize = function () {
+  draw_browser_header();
+};
+function draw_browser_header() {
+  const header_svg = document.getElementById("editor-browser-header");
+  const {
+    width: width_of_bar,
+    height: height_of_bar,
+  } = header_svg.getBoundingClientRect();
+
+  // Clear out anything that may be in the svg already
+  header_svg.innerHTML = "";
+  // First make the buttons for closing, minimizing and maximizing window
+  const button_r = height_of_bar / 4.5;
+  for (let i = 1; i <= 3; i++) {
+    header_svg.innerHTML += `
+    <circle cx=${i * button_r * 3}px
+            cy = 50%
+            r = ${button_r}px
+    > </circle>`;
+  }
+
+  // Next make the browser url bar
+  const url_bar_start = 4 * button_r * 3;
+  // Bar is takes up middle 65% of header area
+  const url_bar_rel_height = 0.65;
+  const url_bar_height = height_of_bar * url_bar_rel_height;
+  const url_bar_margin = (height_of_bar - url_bar_height) / 2;
+  header_svg.innerHTML += `
+  <rect x = ${url_bar_start}px
+        y = ${url_bar_margin}px
+        width = ${width_of_bar - url_bar_start - 10}px
+        height = ${height_of_bar * url_bar_rel_height}px
+        stroke = "black"
+        stroke-width: 3px
+        fill = "none"
+        rx = ${url_bar_height / 2}px
+        ry = ${url_bar_height / 2}px
+  ></rect>`;
+
+  header_svg.innerHTML += `
+  <text x = ${url_bar_start + 13}px
+        y = ${height_of_bar / 2}px
+        alignment-baseline = "central"
+  >
+    www.myShinyApp.com
+  </text>
+`;
 }
