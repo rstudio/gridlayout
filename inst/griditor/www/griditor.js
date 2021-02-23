@@ -45,6 +45,7 @@ window.onload = function () {
     ),
     selector: "#gap_size_chooser",
     on_change: (x) => update_grid({ gap: x }),
+    allowed_units: ["px", "rem"]
   });
 
 };
