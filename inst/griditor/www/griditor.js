@@ -482,42 +482,50 @@ function make_css_unit_input({
     start: 0
   };
 
-  const resizing_dragger = maybe_make_el(input_holder, "div.css-dragger", {
+  const resizer = maybe_make_el(input_holder, "div.css-dragger", {
+    innerHTML: `<i class="fa fa-arrows-${
+      drag_dir === "y" ? "v" : "h"
+    }" aria-hidden="true"></i>`
+  });
+
+  // Place an invisible div over the main one that we let be dragged. This means
+  // we can use the nice drag interaction callbacks without the ugly default
+  // drag behavior of two copies of the div and zooming back to the start pos etc.
+  maybe_make_el(resizer, "div.detector", {
     props: { draggable: true },
-    innerHTML: `<i class="fa fa-arrows-${drag_dir === "y" ? "v": "h"}" aria-hidden="true"></i>`,
     event_listener: [
       {
         event: "dragstart",
-        func: function(event){
+        func: function (event) {
           console.log("Drag start!");
           drag_info.baseline = +value_input.value;
           drag_info.start = event[drag_dir];
-        }
+        },
       },
       {
-      event: "drag",
-      func: function(event){
-        console.log("Dragging");
-        const drag_pos = event[drag_dir];
-        // At the end of the drag we get a drag event with 0 values that throws stuff off
-        if(drag_pos === 0) return;
-        const new_value = Math.max(
-          0,
-          drag_info.baseline + (event[drag_dir] - drag_info.start)
-        );
-        value_input.value = new_value;
-        on_change(current_value());
-      }
-    },
-    {
-      event: "dragend",
-      func: function(event){
-        console.log("Dragging");
-        drag_info.baseline = 0;
-        drag_info.start = 0;
-      }
-    }
-  ]
+        event: "drag",
+        func: function (event) {
+          console.log("Dragging");
+          const drag_pos = event[drag_dir];
+          // At the end of the drag we get a drag event with 0 values that throws stuff off
+          if (drag_pos === 0) return;
+          const new_value = Math.max(
+            0,
+            drag_info.baseline + (event[drag_dir] - drag_info.start)
+          );
+          value_input.value = new_value;
+          on_change(current_value());
+        },
+      },
+      {
+        event: "dragend",
+        func: function (event) {
+          console.log("Dragging");
+          drag_info.baseline = 0;
+          drag_info.start = 0;
+        },
+      },
+    ],
   });
   
   allowed_units.forEach(function (unit_type) {
@@ -552,9 +560,11 @@ function make_css_unit_input({
     });
 
     if(new_unit === "px" && allow_drag){
-      resizing_dragger.style.display = "block";
+      resizer.style.display = "block";
+      // resizing_dragger.style.display = "auto";
     } else {
-      resizing_dragger.style.display = "none";
+      resizer.style.display = "none";
+      // resizing_dragger.style.display = "none";
     }
   }
 
