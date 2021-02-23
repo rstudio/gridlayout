@@ -263,7 +263,7 @@ function fill_grid_cells() {
 
 function get_drag_extent_on_grid(selection_rect){
       // Reset bounding box definitions so we only use current selection extent
-      const sel_bounds = {col: [1, 1], row: [1, 1]};
+      const sel_bounds = {col: [null, null], row: [null, null]};
 
       [...current_cells].forEach(function (el) {
         // Cell is overlapped by selection box
@@ -682,51 +682,48 @@ function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
     }
   );
 
-  const drag_handle_r = 10;
-  const drag_info = {
-    start_rect: {},
-    start_loc: {},
-  }
-  
-  maybe_make_el(
-    element_in_grid,
-    "div.drag-right",
-    {
-      props: {draggable: true},
-      styles: {
-        position: "absolute",
-        bottom: `-2px`,
-        right: `-2px`,
-        height: `${drag_handle_r*2}px`,
-        width: `${drag_handle_r*2}px`,
-        borderRadius: `var(--element_roundness) 0`,
-        background: color,
-        cursor: "grab"
-      },
+  ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
+    maybe_make_el(element_in_grid, `div.dragger.${handle_type}`, {
+      props: { draggable: true },
+      data_props: { handle_type },
+      styles: { background: color },
+      innerHTML:
+        handle_type === "center"
+          ? `<i class="fas fa-arrows-alt"></i>`
+          : `<i class="fas fa-long-arrow-alt-up"></i>`,
       event_listener: [
         {
           event: "dragstart",
-          func: function(event){
+          func: function (event) {
             // make sure dragged element is on top
             grid_holder.appendChild(this.parentElement);
-            drag_info.start_rect = get_bounding_rect(this.parentElement);
-            drag_info.start_loc = {x: event.x, y: event.y};
-          }
+            // Storing this info in the dom to avoid global variables
+            // The speed tradeoffs of the tiny json serialization are worth it imo
+            this.dataset.start_rect = JSON.stringify(
+              get_bounding_rect(this.parentElement)
+            );
+            this.dataset.start_loc = JSON.stringify({ x: event.x, y: event.y });
+          },
         },
         {
           event: "drag",
-          func: function(event){
-            const bad_drag_event = event.x === 0 && event.y === 0;
-            if(bad_drag_event) return;
-            const drag_delta = get_delta(drag_info.start_loc, event);
-            const new_bounding_rect = update_rect_by_delta(drag_info.start_rect, drag_delta);
+          func: function (event) {
+            // Sometimes the drag event gets fired with nonsense zeros
+            if (event.x === 0 && event.y === 0) return;
+
+            const new_bounding_rect = update_rect_by_delta({
+              start_rect: JSON.parse(this.dataset.start_rect),
+              deltas: get_delta(JSON.parse(this.dataset.start_loc), event),
+              direction: this.dataset.handle_type,
+            });
             const grid_extent = get_drag_extent_on_grid(new_bounding_rect);
+
             set_element_in_grid(this.parentElement, grid_extent);
-          }
-        }
-      ]
-    }
-  );
+          },
+        },
+      ],
+    });
+  });
 
   const element_in_list = maybe_make_el(
     document.querySelector("#added_elements"),
@@ -1114,16 +1111,32 @@ function get_bounding_rect({
 
 function get_delta({x:start_x, y: start_y}, {x: end_x, y: end_y}){
   return {
-    x: start_x - end_x,
-    y: start_y - end_y
+    x: end_x - start_x,
+    y: end_y - start_y
   };
 }
 
-function update_rect_by_delta({x: [x_start, x_end], y: [y_start, y_end]}, {x: delta_x, y: delta_y}){
-  const num_sort = (a, b) => a - b;
-  return {
-    x: [x_start, x_end - delta_x].sort(num_sort),
-    y: [y_start, y_end - delta_y].sort(num_sort),
+function update_rect_by_delta({
+  start_rect: {x: [x_start, x_end], y: [y_start, y_end]},
+  deltas :{x: delta_x, y: delta_y},
+  direction
+}){
+  if(direction === "bottom-right"){
+    return {
+      x: [x_start, Math.max(x_end + delta_x, x_start)],
+      y: [y_start, Math.max(y_end + delta_y, y_start)],
+    };
+  } else if (direction === "top-left"){
+    return {
+      x: [Math.min(x_start + delta_x, x_end), x_end],
+      y: [Math.min(y_start + delta_y, y_end), y_end],
+    };
+  } else {
+    // This is just shifting the whole rectangle. Aka dragging to a new place
+    return {
+      x: [x_start + delta_x, x_end + delta_x],
+      y: [y_start + delta_y, y_end + delta_y],
+    };
   }
 }
 
@@ -1139,8 +1152,8 @@ function boxes_overlap(box_a, box_b) {
     // bbbbbb
     //         bbbbbb
     const a_contains_b_endpoint =
-      (a_start > b_start && a_start < b_end) ||
-      (a_end > b_start && a_end < b_end);
+      (a_start >= b_start && a_start <= b_end) ||
+      (a_end >= b_start && a_end <= b_end);
 
     //   aaaaaa
     // bbbbbbbbbb
