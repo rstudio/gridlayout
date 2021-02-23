@@ -3,7 +3,7 @@
 const grid_controls = { rows: [], cols: [] };
 const grid_settings = {};
 // All the currently existing cells making up the grid
-let current_cells = []; 
+let current_cells = [];
 window.onload = function () {
   draw_browser_header();
 
@@ -35,9 +35,8 @@ window.onload = function () {
     ),
     selector: "#gap_size_chooser",
     on_change: (x) => update_grid({ gap: x }),
-    allowed_units: ["px", "rem"]
+    allowed_units: ["px", "rem"],
   });
-
 };
 
 window.onresize = function () {
@@ -133,7 +132,7 @@ function rowcol_updater(dir, new_count) {
 
 function fill_grid_cells() {
   const grid_holder = get_grid_holder();
-  const grid_dims = {rows: get_current_rows(), cols: get_current_cols()};
+  const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
   // const grid_dims.rows = get_current_rows();
   // const grid_dims.cols = get_current_cols();
   const num_rows = grid_dims.rows.length;
@@ -161,11 +160,11 @@ function fill_grid_cells() {
     for (let type in grid_controls) {
       // Get rid of old ones to start with fresh slate
       remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
-  
+
       grid_controls[type] = grid_dims[type].map(function (size, i) {
         // The i + 1 is because grid is indexed at 1, not zero
         const grid_i = i + 1;
-  
+
         return make_css_unit_input({
           parent_el: grid_holder,
           selector: `#control_${type}${grid_i}.${type}-controls`,
@@ -261,29 +260,28 @@ function fill_grid_cells() {
   }
 }
 
-function get_drag_extent_on_grid(selection_rect){
-      // Reset bounding box definitions so we only use current selection extent
-      const sel_bounds = {col: [null, null], row: [null, null]};
+function get_drag_extent_on_grid(selection_rect) {
+  // Reset bounding box definitions so we only use current selection extent
+  const sel_bounds = { col: [null, null], row: [null, null] };
 
-      [...current_cells].forEach(function (el) {
-        // Cell is overlapped by selection box
-        if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
-          const el_row = +el.dataset.row;
-          const el_col = +el.dataset.col;
-          sel_bounds.row = [
-            min_w_missing(sel_bounds.row[0], el_row),
-            max_w_missing(sel_bounds.row[1], el_row),
-          ];
-          sel_bounds.col = [
-            min_w_missing(sel_bounds.col[0], el_col),
-            max_w_missing(sel_bounds.col[1], el_col),
-          ];
-        }
-      });
+  [...current_cells].forEach(function (el) {
+    // Cell is overlapped by selection box
+    if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
+      const el_row = +el.dataset.row;
+      const el_col = +el.dataset.col;
+      sel_bounds.row = [
+        min_w_missing(sel_bounds.row[0], el_row),
+        max_w_missing(sel_bounds.row[1], el_row),
+      ];
+      sel_bounds.col = [
+        min_w_missing(sel_bounds.col[0], el_col),
+        max_w_missing(sel_bounds.col[1], el_col),
+      ];
+    }
+  });
 
-      return sel_bounds;
+  return sel_bounds;
 }
-
 
 function update_grid({ rows, cols, gap }) {
   const grid_holder = get_grid_holder();
@@ -293,16 +291,15 @@ function update_grid({ rows, cols, gap }) {
   const new_gap = gap || old_gap;
   const new_num_rows = rows ? rows.length : old_num_rows;
   const new_num_cols = cols ? cols.length : old_num_cols;
-  
+
   // Make sure settings panel is up-to-date
   grid_settings.num_rows.update_value(new_num_rows);
   grid_settings.num_cols.update_value(new_num_cols);
   grid_settings.gap.update_value(new_gap);
 
   const grid_numbers_changed =
-  old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
+    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
   if (grid_numbers_changed) {
-    
     // Check for elements that may get dropped
     const all_els = current_elements();
     let in_danger_els = [];
@@ -418,9 +415,7 @@ function update_grid({ rows, cols, gap }) {
   });
 
   return grid_holder;
-
 }
-
 
 function make_css_unit_input({
   parent_el,
@@ -430,20 +425,20 @@ function make_css_unit_input({
   on_change = (x) => console.log("css unit change", x),
   allowed_units = ["fr", "px", "rem"],
   form_styles = {},
-  drag_dir = "none"
+  drag_dir = "none",
 }) {
-  
   const allow_drag = drag_dir !== "none";
 
   const input_holder = maybe_make_el(
-    parent_el, 
+    parent_el,
     `div${selector}.input-holder.css-unit-input`,
     {
-      styles: form_styles
-    });
+      styles: form_styles,
+    }
+  );
 
   const form = maybe_make_el(input_holder, `form`, {
-    event_listener: { event: "change", func: on_update }
+    event_listener: { event: "change", func: on_update },
   });
 
   const value_input = maybe_make_el(form, "input", {
@@ -471,13 +466,13 @@ function make_css_unit_input({
 
   const drag_info = {
     baseline: 0,
-    start: 0
+    start: 0,
   };
 
   const resizer = maybe_make_el(input_holder, "div.css-dragger", {
     innerHTML: `<i class="fa fa-arrows-${
       drag_dir === "y" ? "v" : "h"
-    }" aria-hidden="true"></i>`
+    }" aria-hidden="true"></i>`,
   });
 
   // Place an invisible div over the main one that we let be dragged. This means
@@ -519,7 +514,7 @@ function make_css_unit_input({
       },
     ],
   });
-  
+
   allowed_units.forEach(function (unit_type) {
     const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
       props: { value: unit_type },
@@ -534,13 +529,13 @@ function make_css_unit_input({
     return `${value_input.value}${unit_selector.value}`;
   }
   function on_update() {
-    const val =current_value(); 
-    update_value(val)
+    const val = current_value();
+    update_value(val);
     on_change(val);
   }
 
   function update_value(new_value) {
-    console.log("update_value has triggered")
+    console.log("update_value has triggered");
     value_input.value = get_css_value(new_value);
     const new_unit = get_css_unit(new_value);
     [...unit_selector.children].forEach((opt) => {
@@ -551,7 +546,7 @@ function make_css_unit_input({
       }
     });
 
-    if(new_unit === "px" && allow_drag){
+    if (new_unit === "px" && allow_drag) {
       resizer.style.display = "block";
       // resizing_dragger.style.display = "auto";
     } else {
@@ -565,7 +560,7 @@ function make_css_unit_input({
   return { form, current_value, update_value };
 }
 
-function get_layout_from_controls(){
+function get_layout_from_controls() {
   const sizes = {};
   for (let type in grid_controls) {
     sizes[type] = grid_controls[type].map((unit_input) =>
@@ -677,7 +672,7 @@ function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
       grid_rows,
       styles: {
         borderColor: color,
-        position: "relative"
+        position: "relative",
       },
     }
   );
@@ -810,7 +805,7 @@ ${container_selector} #${el.id} {
     ""
   );
 
-return `
+  return `
 ${container_selector} {
   display: grid;
   grid-template-columns: ${grid_holder.style.gridTemplateColumns};
@@ -1065,7 +1060,7 @@ function make_incrementer({
     },
   });
 
-  function update_value(new_value){
+  function update_value(new_value) {
     current_value.innerHTML = new_value;
 
     if (new_value === 1) {
@@ -1083,7 +1078,7 @@ function make_incrementer({
     };
   }
 
-  return {update_value};
+  return { update_value };
 }
 
 // Passing an undefined value to a compare like min or max will always give undefined
@@ -1108,25 +1103,27 @@ function get_bounding_rect({
   return { x: [left, left + width], y: [top, top + height] };
 }
 
-
-function get_delta({x:start_x, y: start_y}, {x: end_x, y: end_y}){
+function get_delta({ x: start_x, y: start_y }, { x: end_x, y: end_y }) {
   return {
     x: end_x - start_x,
-    y: end_y - start_y
+    y: end_y - start_y,
   };
 }
 
 function update_rect_by_delta({
-  start_rect: {x: [x_start, x_end], y: [y_start, y_end]},
-  deltas :{x: delta_x, y: delta_y},
-  direction
-}){
-  if(direction === "bottom-right"){
+  start_rect: {
+    x: [x_start, x_end],
+    y: [y_start, y_end],
+  },
+  deltas: { x: delta_x, y: delta_y },
+  direction,
+}) {
+  if (direction === "bottom-right") {
     return {
       x: [x_start, Math.max(x_end + delta_x, x_start)],
       y: [y_start, Math.max(y_end + delta_y, y_start)],
     };
-  } else if (direction === "top-left"){
+  } else if (direction === "top-left") {
     return {
       x: [Math.min(x_start + delta_x, x_end), x_end],
       y: [Math.min(y_start + delta_y, y_end), y_end],
@@ -1169,11 +1166,10 @@ function sizes_to_template_def(defs) {
   return defs.reduce((css, curr) => `${css} ${curr}`, "");
 }
 
-
-function get_css_unit(css_size){
+function get_css_unit(css_size) {
   return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
 }
 
-function get_css_value(css_size){
+function get_css_value(css_size) {
   return +css_size.match(/^[\d | \.]+/g);
 }
