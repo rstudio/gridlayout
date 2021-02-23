@@ -4,9 +4,10 @@ const grid_controls = { rows: [], cols: [] };
 const grid_settings = {};
 // All the currently existing cells making up the grid
 let current_cells = [];
+let grid_holder;
 window.onload = function () {
   draw_browser_header();
-
+  grid_holder = document.querySelector("#grid_holder");
   const settings_panel = document.querySelector("#settings .card-body");
 
   grid_settings.num_rows = make_incrementer({
@@ -131,7 +132,6 @@ function rowcol_updater(dir, new_count) {
 }
 
 function fill_grid_cells() {
-  const grid_holder = get_grid_holder();
   const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
   // const grid_dims.rows = get_current_rows();
   // const grid_dims.cols = get_current_cols();
@@ -284,7 +284,6 @@ function get_drag_extent_on_grid(selection_rect) {
 }
 
 function update_grid({ rows, cols, gap }) {
-  const grid_holder = get_grid_holder();
   const old_num_rows = get_current_rows().length;
   const old_num_cols = get_current_cols().length;
   const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
@@ -663,7 +662,6 @@ function name_new_element({ grid_rows, grid_cols, selection_box }) {
 }
 
 function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
-  const grid_holder = get_grid_holder();
   const element_in_grid = maybe_make_el(
     grid_holder,
     `div#${id}.el_${id}.added-element`,
@@ -767,7 +765,7 @@ function set_element_in_grid(el, grid_bounds) {
 }
 
 function current_elements() {
-  const all_elements = get_grid_holder().querySelectorAll(".added-element");
+  const all_elements = grid_holder.querySelectorAll(".added-element");
 
   const element_info = {};
   all_elements.forEach(function (el) {
@@ -793,7 +791,6 @@ function send_elements_to_shiny() {
 
 function current_layout_in_css() {
   const container_selector = "#container";
-  const grid_holder = get_grid_holder();
   const elements_defs = Object.values(current_elements()).reduce(
     (el_css, el) => `${el_css}
 
@@ -816,17 +813,12 @@ ${elements_defs}
 `;
 }
 
-function get_grid_holder() {
-  // Putting this into its own function in case we change the id
-  return document.querySelector("#grid_holder");
-}
-
 function get_current_rows() {
-  return get_grid_holder().style.gridTemplateRows.split(" ");
+  return grid_holder.style.gridTemplateRows.split(" ");
 }
 
 function get_current_cols() {
-  return get_grid_holder().style.gridTemplateColumns.split(" ");
+  return grid_holder.style.gridTemplateColumns.split(" ");
 }
 
 function draw_browser_header() {
@@ -888,7 +880,7 @@ function get_next_color() {
     "#a65628",
     "#f781bf",
   ];
-  const all_elements = get_grid_holder().querySelectorAll(".added-element");
+  const all_elements = grid_holder.querySelectorAll(".added-element");
   // If we have more elements than colors we simply recycle
   return colors[all_elements.length % colors.length];
 }
