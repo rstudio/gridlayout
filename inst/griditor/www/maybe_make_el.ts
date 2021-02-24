@@ -1,6 +1,6 @@
 import { make_template_start_end } from "./grid-helpers";
 
-interface Event_Listener {
+export interface Event_Listener {
   event: string,
   func: (event: DocumentEvent) => void
 }
