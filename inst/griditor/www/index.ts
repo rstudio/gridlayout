@@ -120,9 +120,6 @@ window.onload = function () {
           event.stopPropagation();
         },
       },
-      styles: {
-        marginLeft: "1rem",
-      },
       background_callbacks: {
         event: "click",
         func: close_modal,
@@ -321,13 +318,18 @@ window.onload = function () {
     return sel_bounds;
   }
 
-  function update_grid({ rows, cols, gap }) {
+  interface Grid_Update_Options {
+    rows?: Array<string>;
+    cols?: Array<string>;
+    gap?: string;
+  }
+  function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
     const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
-    const new_gap = gap || old_gap;
-    const new_num_rows = rows ? rows.length : old_num_rows;
-    const new_num_cols = cols ? cols.length : old_num_cols;
+    const new_gap = opts.gap || old_gap;
+    const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
+    const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
 
     // Make sure settings panel is up-to-date
     grid_settings.num_rows(new_num_rows);
@@ -413,7 +415,7 @@ window.onload = function () {
                 fix_els_modal.remove();
                 // Now that we've updated elements properly, we should be able to
                 // just recall the function and it won't spit an error
-                update_grid({ rows, cols, gap });
+                update_grid({ rows: opts.rows, cols: opts.cols, gap: opts.gap });
               },
             },
           }
@@ -432,15 +434,15 @@ window.onload = function () {
       }
     }
 
-    if (rows) {
-      grid_holder.style.gridTemplateRows = sizes_to_template_def(rows);
+    if (opts.rows) {
+      grid_holder.style.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
-    if (cols) {
-      grid_holder.style.gridTemplateColumns = sizes_to_template_def(cols);
+    if (opts.cols) {
+      grid_holder.style.gridTemplateColumns = sizes_to_template_def(opts.cols);
     }
-    if (gap) {
+    if (opts.gap) {
       // To give a consistant gap around everything we also add margin of same size
-      grid_holder.style.setProperty("--grid-gap", gap);
+      grid_holder.style.setProperty("--grid-gap", opts.gap);
     }
 
     if (grid_numbers_changed) fill_grid_cells();

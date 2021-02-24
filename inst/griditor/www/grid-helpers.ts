@@ -15,13 +15,13 @@ export function make_template_start_end(pos: Array<number>): string {
   return `${start} / ${end}`;
 }
 
-export function set_element_in_grid(el, grid_bounds) {
+export function set_element_in_grid(el: HTMLElement, grid_bounds) {
   el.style.gridRow = make_template_start_end(grid_bounds.row);
   el.style.gridColumn = make_template_start_end(grid_bounds.col);
 }
 
 // grid-template-{column,row}: ...
 // Take a vector of css sizes and turn into the format for the css argument for
-export function sizes_to_template_def(defs) {
+export function sizes_to_template_def(defs: Array<string>) {
   return defs.reduce((css, curr) => `${css} ${curr}`, "");
 }
