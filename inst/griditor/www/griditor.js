@@ -538,15 +538,29 @@ window.onload = function () {
       }
     );
 
+    let drag_feedback_rect;
+    const feedback_border_w = 3;
+    // The shifting by border and padding here is hacky and probably a result
+    // of me not using the right event positions
+    const bounding_rect_to_pos = ({ x: [left, right], y: [top, bottom] }) => ({
+      left: `calc(${left}px - var(--side-gaps) - ${2 * feedback_border_w}px)`,
+      top: `calc(${top}px - var(--side-gaps) - ${2 * feedback_border_w}px)`,
+      width: `${right - left}px`,
+      height: `${bottom - top}px`,
+    });
+
     ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
-      maybe_make_el(element_in_grid, `div.dragger.${handle_type}`, {
-        props: { draggable: true },
-        data_props: { handle_type },
-        styles: { background: color },
+      // First we draw the handle that people see
+      maybe_make_el(element_in_grid, `div.dragger.visible.${handle_type}`, {
+        styles: { background: color, pointerEvents: "none" },
         innerHTML:
           handle_type === "center"
             ? `<i class="fas fa-arrows-alt"></i>`
             : `<i class="fas fa-long-arrow-alt-up"></i>`,
+      });
+      maybe_make_el(element_in_grid, `div.dragger.invisible.${handle_type}`, {
+        props: { draggable: true },
+        data_props: { handle_type },
         event_listener: [
           {
             event: "dragstart",
@@ -555,13 +569,25 @@ window.onload = function () {
               grid_holder.appendChild(this.parentElement);
               // Storing this info in the dom to avoid global variables
               // The speed tradeoffs of the tiny json serialization are worth it imo
-              this.dataset.start_rect = JSON.stringify(
-                get_bounding_rect(this.parentElement)
-              );
+              const starting_bound_box = get_bounding_rect(this.parentElement);
+              this.dataset.start_rect = JSON.stringify(starting_bound_box);
               this.dataset.start_loc = JSON.stringify({
                 x: event.x,
                 y: event.y,
               });
+
+              drag_feedback_rect = maybe_make_el(
+                grid_holder.querySelector("#drag_detector"),
+                "div.drag-feedback-rect",
+                {
+                  styles: {
+                    border: `${feedback_border_w}px dashed var(--dark-gray)`,
+                    pointerEvents: "none",
+                    position: "absolute",
+                    ...bounding_rect_to_pos(starting_bound_box),
+                  },
+                }
+              );
             },
           },
           {
@@ -570,14 +596,53 @@ window.onload = function () {
               // Sometimes the drag event gets fired with nonsense zeros
               if (event.x === 0 && event.y === 0) return;
 
-              const new_bounding_rect = update_rect_by_delta({
-                start_rect: JSON.parse(this.dataset.start_rect),
-                deltas: get_delta(JSON.parse(this.dataset.start_loc), event),
-                direction: this.dataset.handle_type,
-              });
-              const grid_extent = get_drag_extent_on_grid(new_bounding_rect);
+              const { x: start_x, y: start_y } = JSON.parse(
+                this.dataset.start_loc
+              );
+              const x_delta = event.x - start_x;
+              const y_delta = event.y - start_y;
 
+              const new_rect = JSON.parse(this.dataset.start_rect);
+
+              // The bounding here means that we dont let the user drag the box "inside-out"
+              if (this.dataset.handle_type === "top-left") {
+                new_rect.x[0] = Math.min(
+                  new_rect.x[0] + x_delta,
+                  new_rect.x[1]
+                );
+                new_rect.y[0] = Math.min(
+                  new_rect.y[0] + y_delta,
+                  new_rect.y[1]
+                );
+              } else if (this.dataset.handle_type === "bottom-right") {
+                new_rect.x[1] = Math.max(
+                  new_rect.x[1] + x_delta,
+                  new_rect.x[0]
+                );
+                new_rect.y[1] = Math.max(
+                  new_rect.y[1] + y_delta,
+                  new_rect.y[0]
+                );
+              } else {
+                // Just move the box
+                new_rect.x[0] += x_delta;
+                new_rect.y[0] += y_delta;
+                new_rect.x[1] += x_delta;
+                new_rect.y[1] += y_delta;
+              }
+
+              Object.assign(
+                drag_feedback_rect.style,
+                bounding_rect_to_pos(new_rect)
+              );
+              const grid_extent = get_drag_extent_on_grid(new_rect);
               set_element_in_grid(this.parentElement, grid_extent);
+            },
+          },
+          {
+            event: "dragend",
+            func: function (event) {
+              drag_feedback_rect.remove();
             },
           },
         ],
@@ -1040,40 +1105,6 @@ function get_bounding_rect({
   offsetWidth: width,
 }) {
   return { x: [left, left + width], y: [top, top + height] };
-}
-
-function get_delta({ x: start_x, y: start_y }, { x: end_x, y: end_y }) {
-  return {
-    x: end_x - start_x,
-    y: end_y - start_y,
-  };
-}
-
-function update_rect_by_delta({
-  start_rect: {
-    x: [x_start, x_end],
-    y: [y_start, y_end],
-  },
-  deltas: { x: delta_x, y: delta_y },
-  direction,
-}) {
-  if (direction === "bottom-right") {
-    return {
-      x: [x_start, Math.max(x_end + delta_x, x_start)],
-      y: [y_start, Math.max(y_end + delta_y, y_start)],
-    };
-  } else if (direction === "top-left") {
-    return {
-      x: [Math.min(x_start + delta_x, x_end), x_end],
-      y: [Math.min(y_start + delta_y, y_end), y_end],
-    };
-  } else {
-    // This is just shifting the whole rectangle. Aka dragging to a new place
-    return {
-      x: [x_start + delta_x, x_end + delta_x],
-      y: [y_start + delta_y, y_end + delta_y],
-    };
-  }
 }
 
 function boxes_overlap(box_a, box_b) {
