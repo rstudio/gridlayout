@@ -1,3 +1,4 @@
+const shiny_exists = typeof Shiny !== "undefined";
 window.onload = function () {
   draw_browser_header();
 
@@ -57,25 +58,44 @@ window.onload = function () {
     update_grid({ [dir]: current_vals });
   }
 
-  Shiny.addCustomMessageHandler("update-grid", function (opts) {
-    update_grid(opts);
-  });
+  if (shiny_exists) {
+    Shiny.addCustomMessageHandler("update-grid", function (opts) {
+      update_grid(opts);
+    });
 
-  Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-    elements_to_add.forEach((el) => {
-      add_element({
-        id: el.id,
-        grid_rows: [el.start_row, el.end_row],
-        grid_cols: [el.start_col, el.end_col],
+    Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
+      elements_to_add.forEach((el) => {
+        add_element({
+          id: el.id,
+          grid_rows: [el.start_row, el.end_row],
+          grid_cols: [el.start_col, el.end_col],
+        });
       });
     });
-  });
 
-  Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-    const css_for_layout = current_layout_in_css();
-    const code_modal = focused_modal({
-      modal_contents:
+    Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
+      show_code(
         "Paste the following code into your app to update the layout",
+        code_to_show
+      );
+    });
+  } else {
+    // If in pure-client-side mode we need to provide a default grid and also wireup the code button
+    update_grid({
+      rows: ["1fr", "1fr"],
+      cols: ["1fr", "1fr"],
+      gap: "1rem",
+    });
+
+    document.getElementById("get_code").addEventListener("click", function () {
+      const css_for_layout = current_layout_in_css();
+      show_code("Place the following in your CSS:", css_for_layout);
+    });
+  }
+
+  function show_code(message, code_to_show) {
+    const code_modal = focused_modal({
+      modal_contents: message,
       modal_callbacks: {
         event: "click",
         func: function (event) {
@@ -133,7 +153,7 @@ window.onload = function () {
     function close_modal() {
       code_modal.remove();
     }
-  });
+  }
 
   function fill_grid_cells() {
     const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
@@ -409,11 +429,13 @@ window.onload = function () {
 
     if (grid_numbers_changed) fill_grid_cells();
 
-    Shiny.setInputValue("grid_sizing", {
-      rows: grid_holder.style.gridTemplateRows.split(" "),
-      cols: grid_holder.style.gridTemplateColumns.split(" "),
-      gap: grid_holder.style.getPropertyValue("--grid-gap"),
-    });
+    if (shiny_exists) {
+      Shiny.setInputValue("grid_sizing", {
+        rows: grid_holder.style.gridTemplateRows.split(" "),
+        cols: grid_holder.style.gridTemplateColumns.split(" "),
+        gap: grid_holder.style.getPropertyValue("--grid-gap"),
+      });
+    }
 
     return grid_holder;
   }
@@ -712,7 +734,9 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    Shiny.setInputValue("elements", current_elements());
+    if (shiny_exists) {
+      Shiny.setInputValue("elements", current_elements());
+    }
   }
 
   function current_layout_in_css() {
@@ -728,15 +752,13 @@ ${container_selector} #${el.id} {
       ""
     );
 
-    return `
-${container_selector} {
+    return `${container_selector} {
   display: grid;
   grid-template-columns: ${grid_holder.style.gridTemplateColumns};
   grid-template-rows: ${grid_holder.style.gridTemplateRows};
   grid-gap: ${grid_holder.style.getPropertyValue("--grid-gap")}
 }
-${elements_defs}
-`;
+${elements_defs}`;
   }
 
   function get_current_rows() {
@@ -1184,12 +1206,13 @@ function draw_browser_header() {
         ry = ${url_bar_height / 2}px
   ></rect>`;
 
+  const url_address = shiny_exists ? "www.myShinyApp.com" : "www.myGridApp.com";
   header_svg.innerHTML += `
   <text x = ${url_bar_start + 13}px
         y = ${height_of_bar / 2}px
         alignment-baseline = "central"
   >
-    www.myShinyApp.com
+    ${url_address}
   </text>
 `;
 }
