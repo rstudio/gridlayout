@@ -18,7 +18,6 @@ interface Grid_Settings {
 
 window.onload = function () {
   draw_browser_header();
-  
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
   const grid_controls = { rows: [], cols: [] };
@@ -126,11 +125,17 @@ window.onload = function () {
       },
     });
 
-    const code_text = maybe_make_el(code_modal.modal, "pre#code_for_layout", {
+    const num_of_lines: number = code_to_show.match(/\n/g).length;
+    const code_text = maybe_make_el(code_modal.modal, "textarea#code_for_layout", {
       innerHTML: code_to_show,
+      props: {rows: num_of_lines+3},
       styles: {
+        width: "100%",
         background: "#f3f2f2",
+        fontFamily: "monospace",
+        display: "block",
         padding: "0.75rem",
+        marginBottom: "10px",
         borderRadius: "5px",
       },
     });
