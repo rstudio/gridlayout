@@ -17,8 +17,8 @@ ui <- tags$body(
   tags$head(
     tags$link(rel="preconnect", href="https://fonts.gstatic.com"),
     tags$link(href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap", rel="stylesheet"),
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
-    tags$script(src = "griditor.js")
+    tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
+    tags$script(src = "dist/bundle.js")
   ),
   div(id = "header",
       h2("Griditor: Build a grid layout for your Shiny app"),

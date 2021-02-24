@@ -1,48 +1,64 @@
-const shiny_exists = typeof Shiny !== "undefined";
+// JS entry point
+import { maybe_make_el, remove_elements} from "./maybe_make_el";
+import { draw_browser_header } from "./draw_browser_header";
+import { make_incrementer } from "./make_incrementer";
+import { focused_modal } from "./focused_modal";
+import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
+import { make_template_start_end, sizes_to_template_def, set_element_in_grid } from "./grid-helpers";
+
+const Shiny = (window as any).Shiny;
+
+export const shiny_exists: boolean = typeof Shiny !== "undefined";
+
+interface Grid_Settings {
+  num_rows: (new_value: number) => void,
+  num_cols: (new_value: number) => void,
+  gap: CSS_Input
+};
+
 window.onload = function () {
   draw_browser_header();
-
+  
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
   const grid_controls = { rows: [], cols: [] };
-  const grid_settings = {};
   // All the currently existing cells making up the grid
   let current_cells = [];
 
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder = document.querySelector("#grid_holder");
-  const settings_panel = document.querySelector("#settings .card-body");
+  const grid_holder : HTMLElement = document.querySelector("#grid_holder");
+  const settings_panel : HTMLElement = document.querySelector("#settings .card-body");
 
-  grid_settings.num_rows = make_incrementer({
-    parent_el: settings_panel,
-    id: "num_rows",
-    start_val: 2,
-    label: "Number of rows",
-    on_increment: (x) => update_num_rows_or_cols("rows", x),
-  });
-
-  grid_settings.num_cols = make_incrementer({
-    parent_el: settings_panel,
-    id: "num_cols",
-    start_val: 2,
-    label: "Number of cols",
-    on_increment: (x) => update_num_rows_or_cols("cols", x),
-  });
-
-  grid_settings.gap = make_css_unit_input({
-    parent_el: maybe_make_el(
-      settings_panel,
-      "div#gap_size_chooser.plus_minus_input",
-      {
-        innerHTML: `<span class = "label">Panel gap size</span>`,
-      }
-    ),
-    selector: "#gap_size_chooser",
-    on_change: (x) => update_grid({ gap: x }),
-    allowed_units: ["px", "rem"],
-  });
+  const grid_settings: Grid_Settings = {
+    num_rows: make_incrementer({
+      parent_el: settings_panel,
+      id: "num_rows",
+      start_val: 2,
+      label: "Number of rows",
+      on_increment: (x) => update_num_rows_or_cols("rows", x),
+    }),
+    num_cols: make_incrementer({
+      parent_el: settings_panel,
+      id: "num_cols",
+      start_val: 2,
+      label: "Number of cols",
+      on_increment: (x) => update_num_rows_or_cols("cols", x),
+    }),
+    gap: make_css_unit_input({
+      parent_el: maybe_make_el(
+        settings_panel,
+        "div#gap_size_chooser.plus_minus_input",
+        {
+          innerHTML: `<span class = "label">Panel gap size</span>`,
+        }
+      ),
+      selector: "#gap_size_chooser",
+      on_change: (x) => update_grid({ gap: x }),
+      allowed_units: ["px", "rem"],
+    })
+  };
 
   function update_num_rows_or_cols(dir, new_count) {
     const current_vals =
@@ -314,8 +330,8 @@ window.onload = function () {
     const new_num_cols = cols ? cols.length : old_num_cols;
 
     // Make sure settings panel is up-to-date
-    grid_settings.num_rows.update_value(new_num_rows);
-    grid_settings.num_cols.update_value(new_num_cols);
+    grid_settings.num_rows(new_num_rows);
+    grid_settings.num_cols(new_num_cols);
     grid_settings.gap.update_value(new_gap);
 
     const grid_numbers_changed =
@@ -799,314 +815,6 @@ ${elements_defs}`;
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-// =============================================================================
-// From here on are a series of general purpose helper functions not
-// specifically related to the app and its state
-// This is a heavy-lifter that takes care of building elements and placing them
-// on the grid etc.. It only create's an element if it needs to, which means
-// that we dont get dom leaks caused by recalling stuff over and over again.
-function maybe_make_el(
-  parent,
-  sel_txt,
-  {
-    event_listener,
-    styles,
-    innerHTML,
-    data_props,
-    grid_rows,
-    grid_cols,
-    props,
-  } = {}
-) {
-  const get_tag_regex = /^([^#\.]+)+/g;
-  const get_id_regex = /(?<=#)([^\.]+)/g;
-  const get_class_regex = /(?<=\.)([^\.#]+)/g;
-
-  const tag_type = sel_txt.match(get_tag_regex);
-  const el_id = sel_txt.match(get_id_regex);
-  const class_list = sel_txt.match(get_class_regex);
-
-  let el = parent.querySelector(sel_txt);
-  if (!el) {
-    // Element doesn't exists so we need to make it
-    el = document.createElement(tag_type);
-    if (el_id) {
-      el.id = el_id[0];
-    }
-
-    if (class_list) {
-      class_list.forEach((x) => el.classList.add(x));
-    }
-
-    if (props) {
-      Object.assign(el, props);
-    }
-
-    parent.appendChild(el);
-  }
-
-  if (event_listener) {
-    const listeners =
-      event_listener instanceof Array ? event_listener : [event_listener];
-
-    listeners.forEach(
-      (listener) => (el["on" + listener.event] = listener.func)
-    );
-  }
-
-  if (styles) {
-    Object.assign(el.style, styles);
-  }
-
-  if (innerHTML) {
-    el.innerHTML = innerHTML;
-  }
-
-  if (data_props) {
-    Object.assign(el.dataset, data_props);
-  }
-
-  if (grid_rows) {
-    el.style.gridRow = make_template_start_end(grid_rows);
-  }
-  if (grid_cols) {
-    el.style.gridColumn = make_template_start_end(grid_cols);
-  }
-
-  return el;
-}
-
-// Builds the start/end css string for a grid-{row,column}
-function make_template_start_end([start, end]) {
-  // If we only have a single value just assume we take up one row
-  // If single index is a negative one, we need to subtract instead of add to it
-  const negative_index = start < 0;
-
-  // Grid works with lines so if we want an element to end at the 4th column we
-  // need to tell it to end at the (4+1)5th line, so we add one
-  end = end ? +end + 1 : start + (negative_index ? -1 : 1);
-
-  return `${start} / ${end}`;
-}
-
-function set_element_in_grid(el, grid_bounds) {
-  el.style.gridRow = make_template_start_end(grid_bounds.row);
-  el.style.gridColumn = make_template_start_end(grid_bounds.col);
-}
-
-// Given a list of elements from a query selector, remove them all
-function remove_elements(els_to_remove) {
-  els_to_remove.forEach((e) => e.remove());
-}
-
-function focused_modal({
-  background_callbacks,
-  modal_contents,
-  modal_callbacks,
-}) {
-  const background = maybe_make_el(
-    document.querySelector("body"),
-    "div.background-blurrer",
-    {
-      event_listener: background_callbacks,
-    }
-  );
-
-  return {
-    background,
-    modal: maybe_make_el(background, "div.modal", {
-      innerHTML: modal_contents,
-      event_listener: modal_callbacks,
-    }),
-    remove: () => background.remove(),
-  };
-}
-
-// Builds an up down button and value input
-function make_incrementer({
-  parent_el,
-  start_val = 2,
-  id = "incrementer",
-  label = "my incrementer",
-  on_increment = (x) => console.log(x),
-}) {
-  const plus_minus_div = maybe_make_el(
-    parent_el,
-    `div#${id}_incrementer.plus_minus_input`,
-    {
-      innerHTML: `<span>${label}</span>`,
-    }
-  );
-
-  const inputs_div = maybe_make_el(plus_minus_div, "div.controls");
-
-  const minus_btn = maybe_make_el(inputs_div, "button.minus_btn", {
-    innerHTML: `<i class="fa fa-minus" aria-hidden="true"></i>`,
-    event_listener: {
-      event: "click",
-      func: increment_counter(-1),
-    },
-  });
-  const current_value = maybe_make_el(inputs_div, "span.value", {
-    innerHTML: start_val,
-  });
-
-  maybe_make_el(inputs_div, "button.plus_btn", {
-    innerHTML: `<i class="fa fa-plus" aria-hidden="true"></i>`,
-    event_listener: {
-      event: "click",
-      func: increment_counter(1),
-    },
-  });
-
-  function update_value(new_value) {
-    current_value.innerHTML = new_value;
-
-    if (new_value === 1) {
-      minus_btn.classList.add("disabled");
-    } else {
-      minus_btn.classList.remove("disabled");
-    }
-  }
-  function increment_counter(amount) {
-    return function () {
-      const new_value = +current_value.innerHTML + amount;
-
-      update_value(new_value);
-      on_increment(new_value);
-    };
-  }
-
-  return { update_value };
-}
-
-// Input with value text box on left and unit selector dropdown on right
-// Used to make valid css sizes
-function make_css_unit_input({
-  parent_el,
-  selector = "",
-  start_val = 1,
-  start_unit = "fr",
-  on_change = (x) => console.log("css unit change", x),
-  allowed_units = ["fr", "px", "rem"],
-  form_styles = {},
-  drag_dir = "none",
-}) {
-  const allow_drag = drag_dir !== "none";
-
-  const input_holder = maybe_make_el(
-    parent_el,
-    `div${selector}.input-holder.css-unit-input`,
-    {
-      styles: form_styles,
-    }
-  );
-
-  const form = maybe_make_el(input_holder, `form`, {
-    event_listener: { event: "change", func: on_update },
-  });
-
-  const value_input = maybe_make_el(form, "input", {
-    props: {
-      type: "number",
-      min: 0,
-      value: start_val,
-      step: 1,
-      "aria-live": "polite",
-    },
-    styles: {
-      minWidth: "30px",
-      width: "100%",
-      maxWidth: "55px",
-    },
-  });
-
-  const unit_selector = maybe_make_el(form, "select", {
-    props: { name: "units" },
-    styles: {
-      minWidth: "20px",
-      marginLeft: "3px",
-    },
-  });
-
-  const resizer = maybe_make_el(input_holder, "div.css-dragger", {
-    innerHTML: `<i class="fa fa-arrows-${
-      drag_dir === "y" ? "v" : "h"
-    }" aria-hidden="true"></i>`,
-  });
-
-  // Place an invisible div over the main one that we let be dragged. This means
-  // we can use the nice drag interaction callbacks without the ugly default
-  // drag behavior of two copies of the div and zooming back to the start pos etc.
-  maybe_make_el(resizer, "div.detector", {
-    props: { draggable: true },
-    event_listener: [
-      {
-        event: "dragstart",
-        func: function (event) {
-          this.dataset.baseline = value_input.value;
-          this.dataset.start = event[drag_dir];
-        },
-      },
-      {
-        event: "drag",
-        func: function (event) {
-          const drag_pos = event[drag_dir];
-          // At the end of the drag we get a drag event with 0 values that throws stuff off
-          if (drag_pos === 0) return;
-          const new_value = Math.max(
-            0,
-            +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
-          );
-          value_input.value = new_value;
-          on_change(current_value());
-        },
-      },
-    ],
-  });
-
-  allowed_units.forEach(function (unit_type) {
-    const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
-      props: { value: unit_type },
-      innerHTML: unit_type,
-    });
-
-    if (unit_type === start_unit) {
-      unit_option.selected = true;
-    }
-  });
-  function current_value() {
-    return `${value_input.value}${unit_selector.value}`;
-  }
-  function on_update() {
-    const val = current_value();
-    update_value(val);
-    on_change(val);
-  }
-
-  function update_value(new_value) {
-    value_input.value = get_css_value(new_value);
-    const new_unit = get_css_unit(new_value);
-    [...unit_selector.children].forEach((opt) => {
-      if (opt.value === new_unit) {
-        opt.selected = true;
-      } else {
-        opt.selected = false;
-      }
-    });
-
-    if (new_unit === "px" && allow_drag) {
-      resizer.style.display = "block";
-    } else {
-      resizer.style.display = "none";
-    }
-  }
-
-  update_value(`${start_val}${start_unit}`);
-
-  return { form, current_value, update_value };
-}
-
 // Passing an undefined value to a compare like min or max will always give undefined
 // These functions let you default to the second option in the case the first is falsy
 function compare_w_missing(compare_fn, maybe_a, b) {
@@ -1152,67 +860,14 @@ function boxes_overlap(box_a, box_b) {
   }
 }
 
-// Take a vector of css sizes and turn into the format for the css argument for
-// grid-template-{column,row}: ...
-function sizes_to_template_def(defs) {
-  return defs.reduce((css, curr) => `${css} ${curr}`, "");
-}
-
-function get_css_unit(css_size) {
+export function get_css_unit(css_size) {
   return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
 }
 
-function get_css_value(css_size) {
+export function get_css_value(css_size) {
   return +css_size.match(/^[\d | \.]+/g);
 }
 
 window.onresize = function () {
   draw_browser_header();
 };
-function draw_browser_header() {
-  const header_svg = document.getElementById("editor-browser-header");
-  const {
-    width: width_of_bar,
-    height: height_of_bar,
-  } = header_svg.getBoundingClientRect();
-
-  // Clear out anything that may be in the svg already
-  header_svg.innerHTML = "";
-  // First make the buttons for closing, minimizing and maximizing window
-  const button_r = height_of_bar / 4.5;
-  for (let i = 1; i <= 3; i++) {
-    header_svg.innerHTML += `
-    <circle cx=${i * button_r * 3}px
-            cy = 50%
-            r = ${button_r}px
-    > </circle>`;
-  }
-
-  // Next make the browser url bar
-  const url_bar_start = 4 * button_r * 3;
-  // Bar is takes up middle 65% of header area
-  const url_bar_rel_height = 0.65;
-  const url_bar_height = height_of_bar * url_bar_rel_height;
-  const url_bar_margin = (height_of_bar - url_bar_height) / 2;
-  header_svg.innerHTML += `
-  <rect x = ${url_bar_start}px
-        y = ${url_bar_margin}px
-        width = ${width_of_bar - url_bar_start - 10}px
-        height = ${height_of_bar * url_bar_rel_height}px
-        stroke = "black"
-        stroke-width: 3px
-        fill = "none"
-        rx = ${url_bar_height / 2}px
-        ry = ${url_bar_height / 2}px
-  ></rect>`;
-
-  const url_address = shiny_exists ? "www.myShinyApp.com" : "www.myGridApp.com";
-  header_svg.innerHTML += `
-  <text x = ${url_bar_start + 13}px
-        y = ${height_of_bar / 2}px
-        alignment-baseline = "central"
-  >
-    ${url_address}
-  </text>
-`;
-}
