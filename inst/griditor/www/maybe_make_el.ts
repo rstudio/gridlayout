@@ -2,7 +2,7 @@ import { make_template_start_end } from "./grid-helpers";
 
 export interface Event_Listener {
   event: string,
-  func: (event: DocumentEvent) => void
+  func: (event: Event) => void
 }
 
 interface Element_Opts {
