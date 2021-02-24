@@ -16,6 +16,16 @@ interface Grid_Settings {
   gap: CSS_Input
 };
 
+interface Selection_Rect {
+  x: [number, number],
+  y: [number, number]
+};
+
+interface Grid_Extent {
+  col: [number, number],
+  row: [number, number]
+};
+
 window.onload = function () {
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
@@ -138,7 +148,7 @@ window.onload = function () {
         marginBottom: "10px",
         borderRadius: "5px",
       },
-    });
+    }) as HTMLInputElement;
 
     const action_buttons = maybe_make_el(
       code_modal.modal,
@@ -247,28 +257,36 @@ window.onload = function () {
 
       // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
       // We need the absolute position to continue calculating drag after mouse has left editor
-      const drag_start = { rel: {}, abs: {} };
+      interface XY_Pos {
+        x: number;
+        y: number;
+      };
+
+      let drag_start_rel: XY_Pos;
+      let drag_start_abs: XY_Pos;
       let sel_bounds;
+
+      console.log("new code!2");
 
       function drag_started(event) {
         user_dragging = true;
-        drag_start.rel = { x: event.offsetX, y: event.offsetY };
-        drag_start.abs = { x: event.clientX, y: event.clientY };
+        drag_start_rel = { x: event.offsetX, y: event.offsetY };
+        drag_start_abs = { x: event.clientX, y: event.clientY };
         current_selection_box.style.borderColor = get_next_color();
       }
 
       function dragging(event) {
         if (!user_dragging) return;
 
-        const d_x = event.clientX - drag_start.abs.x;
-        const d_y = event.clientY - drag_start.abs.y;
+        const d_x = event.clientX - drag_start_abs.x;
+        const d_y = event.clientY - drag_start_abs.y;
 
-        const sel_left = drag_start.rel.x + (d_x < 0 ? d_x : 0);
+        const sel_left = drag_start_rel.x + (d_x < 0 ? d_x : 0);
         const sel_right = sel_left + Math.abs(d_x);
-        const sel_top = drag_start.rel.y + (d_y < 0 ? d_y : 0);
+        const sel_top = drag_start_rel.y + (d_y < 0 ? d_y : 0);
         const sel_bottom = sel_top + Math.abs(d_y);
 
-        const selection_rect = {
+        const selection_rect: Selection_Rect = {
           x: [sel_left, sel_right],
           y: [sel_top, sel_bottom],
         };
@@ -300,15 +318,16 @@ window.onload = function () {
     }
   }
 
-  function get_drag_extent_on_grid(selection_rect) {
+
+  function get_drag_extent_on_grid(selection_rect: Selection_Rect): Grid_Extent {
     // Reset bounding box definitions so we only use current selection extent
-    const sel_bounds = { col: [null, null], row: [null, null] };
+    const sel_bounds: Grid_Extent = { col: [null, null], row: [null, null] };
 
     current_cells.forEach(function (el) {
       // Cell is overlapped by selection box
       if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
-        const el_row = +el.dataset.row;
-        const el_col = +el.dataset.col;
+        const el_row: number = +el.dataset.row;
+        const el_col: number = +el.dataset.col;
         sel_bounds.row = [
           min_w_missing(sel_bounds.row[0], el_row),
           max_w_missing(sel_bounds.row[1], el_row),
@@ -349,18 +368,19 @@ window.onload = function () {
       let in_danger_els = [];
       let auto_removed_el_ids = [];
 
-      Object.values(all_els).forEach((el) => {
+      all_els.forEach(function(el){
         const sits_outside_grid =
           el.end_row > new_num_rows || el.end_col > new_num_cols;
         const completely_outside_grid =
           el.start_row > new_num_rows || el.start_col > new_num_cols;
-
+  
         if (completely_outside_grid) {
           auto_removed_el_ids.push(el.id);
         } else if (sits_outside_grid) {
           in_danger_els.push(el);
         }
       });
+
       remove_added_elements(auto_removed_el_ids);
 
       if (in_danger_els.length > 0) {
@@ -505,7 +525,8 @@ window.onload = function () {
         func: function () {
           const id = this["name_input"].value.replace(/\s/g, "_");
 
-          if (current_elements()[id]) {
+          const element_exists: boolean = !!current_elements().find(el => el.id === id);
+          if (element_exists) {
             // Cant have duplicate ids!
             warn_about_bad_id(
               `You already have an element with the id ${id}, all ids need to be unique.`
@@ -735,36 +756,49 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 
-  function current_elements() {
+  interface Element_Info {
+    id: string;
+    start_row: number;
+    end_row: number;
+    start_col: number;
+    end_col: number;
+  };
+
+  function current_elements(): Array<Element_Info> {
     const all_elements = grid_holder.querySelectorAll(".added-element");
 
-    const element_info = {};
+    let elements = Array<Element_Info>;
+    
     all_elements.forEach(function (el) {
       // Ignore the selection box
       if (el.id === "current_selection_box") return;
       const grid_area = el.style.gridArea.split(" / ");
-      element_info[el.id] = {
+      elements.push({
         id: el.id,
         start_row: +grid_area[0],
         start_col: +grid_area[1],
         // Subtract one here because the end in css is the end line, not row
         end_row: +grid_area[2] - 1,
         end_col: +grid_area[3] - 1,
-      };
+      });
     });
 
-    return element_info;
+    return elements;
   }
 
   function send_elements_to_shiny() {
     if (shiny_exists) {
-      Shiny.setInputValue("elements", current_elements());
+      const elements_by_id = {};
+      current_elements().forEach(function(el){
+        elements_by_id[el.id] = el;
+      })
+      Shiny.setInputValue("elements", elements_by_id);
     }
   }
 
   function current_layout_in_css() {
     const container_selector = "#container";
-    const elements_defs = Object.values(current_elements()).reduce(
+    const elements_defs = current_elements().reduce(
       (el_css, el) => `${el_css}
 
 ${container_selector} #${el.id} {
@@ -840,11 +874,11 @@ function get_bounding_rect({
   offsetLeft: left,
   offsetHeight: height,
   offsetWidth: width,
-}) {
+}) : Selection_Rect {
   return { x: [left, left + width], y: [top, top + height] };
 }
 
-function boxes_overlap(box_a, box_b) {
+function boxes_overlap(box_a: Selection_Rect, box_b: Selection_Rect) {
   const horizontal_overlap = intervals_overlap(box_a.x, box_b.x);
   const vertical_overlap = intervals_overlap(box_a.y, box_b.y);
 
