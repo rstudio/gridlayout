@@ -6,9 +6,7 @@ import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
 import { make_template_start_end, sizes_to_template_def, set_element_in_grid } from "./grid-helpers";
 
-const Shiny = (window as any).Shiny;
-
-export const shiny_exists: boolean = typeof Shiny !== "undefined";
+export const Shiny = (window as any).Shiny;
 
 interface Grid_Settings {
   num_rows: (new_value: number) => void,
@@ -27,6 +25,7 @@ interface Grid_Extent {
 };
 
 window.onload = function () {
+  console.log("new code!")
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -83,7 +82,7 @@ window.onload = function () {
     update_grid({ [dir]: current_vals });
   }
 
-  if (shiny_exists) {
+  if (Shiny) {
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
@@ -470,7 +469,7 @@ window.onload = function () {
 
     if (grid_numbers_changed) fill_grid_cells();
 
-    if (shiny_exists) {
+    if (Shiny) {
       Shiny.setInputValue("grid_sizing", {
         rows: grid_holder.style.gridTemplateRows.split(" "),
         cols: grid_holder.style.gridTemplateColumns.split(" "),
@@ -784,7 +783,7 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (shiny_exists) {
+    if (Shiny) {
       const elements_by_id = {};
       current_elements().forEach(function(el){
         elements_by_id[el.id] = el;

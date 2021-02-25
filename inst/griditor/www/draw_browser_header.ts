@@ -1,4 +1,4 @@
-import { shiny_exists } from "./index";
+import { Shiny } from "./index";
 
 export function draw_browser_header() {
   const header_svg = document.getElementById("editor-browser-header");
@@ -37,7 +37,7 @@ export function draw_browser_header() {
         ry = ${url_bar_height / 2}px
   ></rect>`;
 
-  const url_address = shiny_exists ? "www.myShinyApp.com" : "www.myGridApp.com";
+  const url_address = Shiny ? "www.myShinyApp.com" : "www.myGridApp.com";
   header_svg.innerHTML += `
   <text x = ${url_bar_start + 13}px
         y = ${height_of_bar / 2}px
