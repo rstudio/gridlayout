@@ -4,7 +4,7 @@ import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
-import { make_template_start_end, sizes_to_template_def, set_element_in_grid } from "./grid-helpers";
+import { make_template_start_end, sizes_to_template_def, set_element_in_grid, concat, concat_nl } from "./grid-helpers";
 
 export const Shiny = (window as any).Shiny;
 
@@ -25,7 +25,6 @@ interface Grid_Extent {
 };
 
 window.onload = function () {
-  console.log("new code!")
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -112,7 +111,8 @@ window.onload = function () {
     });
 
     document.getElementById("get_code").addEventListener("click", function () {
-      const css_for_layout = current_layout_in_css();
+      const current_layout = gen_code_for_layout();
+      const css_for_layout = current_layout.css;
       show_code("Place the following in your CSS:", css_for_layout);
     });
   }
@@ -209,7 +209,6 @@ window.onload = function () {
       for (let type in grid_controls) {
         // Get rid of old ones to start with fresh slate
         remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
-
         grid_controls[type] = grid_dims[type].map(function (size:string, i: number) {
           // The i + 1 is because grid is indexed at 1, not zero
           const grid_i = i + 1;
@@ -792,26 +791,41 @@ window.onload = function () {
     }
   }
 
-  function current_layout_in_css() {
+  function gen_code_for_layout() : {css: string, html: string}{
     const container_selector = "#container";
-    const elements_defs = current_elements().reduce(
-      (el_css, el) => `${el_css}
+    const elements = current_elements();
 
-${container_selector} #${el.id} {
-  grid-column: ${make_template_start_end([el.start_col, el.end_col])};
-  grid-row: ${make_template_start_end([el.start_row, el.end_row])};
-}
-`,
-      ""
+    const element_defs = elements.map(el => concat_nl(
+      `#${el.id} {`,
+      `  grid-column: ${make_template_start_end([el.start_col, el.end_col])};`,
+      `  grid-row: ${make_template_start_end([el.start_row, el.end_row])};`,
+      `}`
+      )
     );
 
-    return `${container_selector} {
-  display: grid;
-  grid-template-columns: ${grid_holder.style.gridTemplateColumns};
-  grid-template-rows: ${grid_holder.style.gridTemplateRows};
-  grid-gap: ${grid_holder.style.getPropertyValue("--grid-gap")}
-}
-${elements_defs}`;
+    const css_code = concat_nl(
+      `${container_selector} {`,
+      `  display: grid;`,
+      `  grid-template-columns: ${grid_holder.style.gridTemplateColumns};`,
+      `  grid-template-rows: ${grid_holder.style.gridTemplateRows};`,
+      `  grid-gap: ${grid_holder.style.getPropertyValue("--grid-gap")}`,
+      `}`,
+      ...element_defs
+    );
+
+    const html_code = concat_nl(
+      `<div id = ${container_selector}>`,
+      ...elements.map(el => concat_nl(
+        `  <div id = "#${el.id}">`,
+        `  </div>`
+      )),
+      `</div>`
+    );
+
+    return {
+      css: css_code,
+      html: html_code
+    }
   }
 
   function get_current_rows() {

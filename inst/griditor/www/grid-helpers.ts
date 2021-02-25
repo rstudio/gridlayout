@@ -27,5 +27,15 @@ export function sizes_to_template_def(defs: Array<string>) {
 }
 
 export function concat(string_vec: Array<string>, collapse_char: string = " "): string {
-  return string_vec.reduce((concatted, current) => concatted + collapse_char + current, "");
+  return string_vec.reduce((concatted, current, i) => concatted + (i > 0 ? collapse_char : "") + current, "");
 }
+
+export function concat_nl(...component_strings: string[]){
+  return concat(component_strings, "\n");
+}
+
+export function concat_sp(...component_strings: string[]){
+  return concat(component_strings, " ");
+}
+
+Math.max()
