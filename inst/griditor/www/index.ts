@@ -12,7 +12,12 @@ import {
   concat_nl,
   as_array,
   max_w_missing,
-  min_w_missing
+  min_w_missing,
+  boxes_overlap,
+  get_bounding_rect,
+  get_css_unit,
+  get_css_value,
+  Selection_Rect
 } from "./misc-helpers";
 
 export const Shiny = (window as any).Shiny;
@@ -22,10 +27,7 @@ interface Grid_Settings {
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
 }
-interface Selection_Rect {
-  x: [number, number];
-  y: [number, number];
-}
+
 
 interface Grid_Extent {
   col: [number, number];
@@ -932,48 +934,6 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-
-
-// Produce bounding rectangle relative to parent of any element
-function get_bounding_rect({
-  offsetTop: top,
-  offsetLeft: left,
-  offsetHeight: height,
-  offsetWidth: width,
-}): Selection_Rect {
-  return { x: [left, left + width], y: [top, top + height] };
-}
-
-function boxes_overlap(box_a: Selection_Rect, box_b: Selection_Rect): boolean{
-  const horizontal_overlap = intervals_overlap(box_a.x, box_b.x);
-  const vertical_overlap = intervals_overlap(box_a.y, box_b.y);
-
-  return horizontal_overlap && vertical_overlap;
-
-  // Figure out of two intervals overlap eachother
-  function intervals_overlap([a_start, a_end], [b_start, b_end]) {
-    //   aaaaaaaaaa
-    // bbbbbb
-    //         bbbbbb
-    const a_contains_b_endpoint =
-      (a_start >= b_start && a_start <= b_end) ||
-      (a_end >= b_start && a_end <= b_end);
-
-    //   aaaaaa
-    // bbbbbbbbbb
-    const b_covers_a = a_start <= b_start && a_end >= b_end;
-
-    return a_contains_b_endpoint || b_covers_a;
-  }
-}
-
-export function get_css_unit(css_size: string): string {
-  return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
-}
-
-export function get_css_value(css_size: string): number {
-  return Number(css_size.match(/^[\d | \.]+/g)[0]);
-}
 
 window.onresize = function () {
   draw_browser_header();

@@ -46,12 +46,12 @@ export function concat_sp(...component_strings: string[]) {
 }
 
 export function as_array<T>(content: T | Array<T>): Array<T> {
-  if(content instanceof Array){
+  if (content instanceof Array) {
     return content;
   } else {
     return [content];
   }
-};
+}
 
 // Passing an undefined value to a compare like min or max will always give undefined
 // These functions let you default to the second option in the case the first is falsy
@@ -67,4 +67,53 @@ export function min_w_missing(maybe_a: number | null, b: number) {
 }
 export function max_w_missing(maybe_a: number | null, b: number) {
   return compare_w_missing(Math.max, maybe_a, b);
+}
+
+export interface Selection_Rect {
+  x: [number, number];
+  y: [number, number];
+}
+
+// Produce bounding rectangle relative to parent of any element
+export function get_bounding_rect({
+  offsetTop: top,
+  offsetLeft: left,
+  offsetHeight: height,
+  offsetWidth: width,
+}): Selection_Rect {
+  return { x: [left, left + width], y: [top, top + height] };
+}
+
+export function boxes_overlap(
+  box_a: Selection_Rect,
+  box_b: Selection_Rect
+): boolean {
+  const horizontal_overlap = intervals_overlap(box_a.x, box_b.x);
+  const vertical_overlap = intervals_overlap(box_a.y, box_b.y);
+
+  return horizontal_overlap && vertical_overlap;
+
+  // Figure out of two intervals overlap eachother
+  function intervals_overlap([a_start, a_end], [b_start, b_end]) {
+    //   aaaaaaaaaa
+    // bbbbbb
+    //         bbbbbb
+    const a_contains_b_endpoint =
+      (a_start >= b_start && a_start <= b_end) ||
+      (a_end >= b_start && a_end <= b_end);
+
+    //   aaaaaa
+    // bbbbbbbbbb
+    const b_covers_a = a_start <= b_start && a_end >= b_end;
+
+    return a_contains_b_endpoint || b_covers_a;
+  }
+}
+
+export function get_css_unit(css_size: string): string {
+  return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
+}
+
+export function get_css_value(css_size: string): number {
+  return Number(css_size.match(/^[\d | \.]+/g)[0]);
 }

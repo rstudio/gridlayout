@@ -1,5 +1,5 @@
 import { maybe_make_el } from "./maybe_make_el";
-import { get_css_value, get_css_unit } from "./index";
+import { get_css_value, get_css_unit } from "./misc-helpers";
 
 export interface CSS_Input {
   form: HTMLElement;
