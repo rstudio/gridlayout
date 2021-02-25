@@ -26,7 +26,7 @@ export function make_incrementer({
     },
   });
   const current_value = maybe_make_el(inputs_div, "span.value", {
-    innerHTML: start_val,
+    innerHTML: start_val.toString(),
   });
 
   maybe_make_el(inputs_div, "button.plus_btn", {
@@ -38,7 +38,7 @@ export function make_incrementer({
   });
 
   function update_value(new_value: number) {
-    current_value.innerHTML = new_value;
+    current_value.innerHTML = new_value.toString();
 
     if (new_value === 1) {
       minus_btn.classList.add("disabled");
