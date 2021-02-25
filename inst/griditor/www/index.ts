@@ -8,7 +8,7 @@ import {
   make_template_start_end,
   sizes_to_template_def,
   set_element_in_grid,
-  concat,
+  // concat,
   concat_nl,
 } from "./grid-helpers";
 
@@ -19,7 +19,6 @@ interface Grid_Settings {
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
 }
-
 interface Selection_Rect {
   x: [number, number];
   y: [number, number];
@@ -107,7 +106,7 @@ window.onload = function () {
     Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
       show_code(
         "Paste the following code into your app to update the layout",
-        code_to_show
+        {type: "R", code: code_to_show}
       );
     });
   } else {
@@ -120,14 +119,16 @@ window.onload = function () {
 
     document.getElementById("get_code").addEventListener("click", function () {
       const current_layout = gen_code_for_layout();
-      const css_for_layout = current_layout.css;
-      show_code("Place the following in your CSS:", css_for_layout);
+      show_code("Place the following in your CSS:",current_layout);
     });
   }
-
-  function show_code(message: string, code_to_show: string) {
+  type Code_Text {
+    type: string,
+    code: string,
+  };
+  function show_code(message: string, code_blocks: Code_Text|Array<Code_Text>) {
     const code_modal = focused_modal({
-      modal_contents: message,
+      header_text: `${message}`,
       modal_callbacks: {
         event: "click",
         func: function (event) {
@@ -142,24 +143,67 @@ window.onload = function () {
       },
     });
 
-    const num_of_lines: number = code_to_show.match(/\n/g).length;
-    const code_text = maybe_make_el(
-      code_modal.modal,
-      "textarea#code_for_layout",
-      {
-        innerHTML: code_to_show,
-        props: { rows: num_of_lines + 3 },
-        styles: {
-          width: "100%",
-          background: "#f3f2f2",
-          fontFamily: "monospace",
-          display: "block",
-          padding: "0.75rem",
-          marginBottom: "10px",
-          borderRadius: "5px",
+    as_array(code_blocks).forEach(function(code_to_show){
+
+      const num_of_lines: number = code_to_show.code.match(/\n/g).length;
+
+      const code_section = maybe_make_el(
+        code_modal.modal,
+        `div#${code_to_show.type}.code_chunk`,
+        {
+      styles: {
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gridTemplateRows: "1fr, auto",
+          gridGap: "4px",
+          gridTemplateAreas: concat_nl(
+            `"code_type copy_btn"`,
+            `"code_text code_text"`
+          )
+      }}
+      );
+
+      let code_text: HTMLInputElement;
+
+      maybe_make_el(
+        code_section, 
+        "strong", 
+        {
+          innerHTML: code_to_show.type,
+          styles: {gridArea: "code_type"}
+        });
+
+      maybe_make_el(code_section, "button#copy_code", {
+        innerHTML: "Copy to clipboard",
+        styles: {gridArea: "copy_btn"},
+        event_listener: {
+          event: "click",
+          func: function () {
+            code_text.select();
+            document.execCommand("copy");
+          },
         },
-      }
-    ) as HTMLInputElement;
+      });
+
+      code_text = maybe_make_el(
+        code_section,
+        "textarea#code_for_layout",
+        {
+          innerHTML: code_to_show.code,
+          props: { rows: num_of_lines + 3 },
+          styles: {
+            width: "100%",
+            background: "#f3f2f2",
+            fontFamily: "monospace",
+            display: "block",
+            padding: "0.75rem",
+            marginBottom: "10px",
+            borderRadius: "5px",
+            gridArea: "code_text"
+          },
+        }
+      ) as HTMLInputElement;
+    });
 
     const action_buttons = maybe_make_el(
       code_modal.modal,
@@ -171,16 +215,6 @@ window.onload = function () {
         },
       }
     );
-    maybe_make_el(action_buttons, "button#copy_code", {
-      innerHTML: "Copy to clipboard",
-      event_listener: {
-        event: "click",
-        func: function () {
-          code_text.select();
-          document.execCommand("copy");
-        },
-      },
-    });
     maybe_make_el(action_buttons, "button#close_code_model", {
       innerHTML: "Close",
       event_listener: {
@@ -193,6 +227,14 @@ window.onload = function () {
       code_modal.remove();
     }
   }
+
+  function as_array<T>(content: T | Array<T>): Array<T> {
+    if(content instanceof Array){
+      return content;
+    } else {
+      return [content];
+    }
+  };
 
   function fill_grid_cells() {
     const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
@@ -328,7 +370,6 @@ window.onload = function () {
     } else {
     }
   }
-
   function get_drag_extent_on_grid(
     selection_rect: Selection_Rect
   ): Grid_Extent {
@@ -397,7 +438,7 @@ window.onload = function () {
 
       if (in_danger_els.length > 0) {
         const fix_els_modal = focused_modal({
-          modal_contents: `
+          header_text: `
         <h2>The following elements dont fit on the new grid layout.</h2>
         <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
         `,
@@ -518,13 +559,6 @@ window.onload = function () {
         event: "click",
         func: reset_el_creation,
       },
-      modal_contents: `
-    <h2>Name your element:</h2>
-    <p>This name will be used to place items in your app.
-    For instance if you want to place a plot in this element,
-    this name will match the label of the plot output
-    </p>
-    `,
       modal_callbacks: {
         event: "click",
         func: function (event) {
@@ -536,6 +570,16 @@ window.onload = function () {
     });
 
     const modal_div = modal_divs.modal;
+
+    maybe_make_el(modal_div,"div.instructions", {
+      innerHTML: `
+      <h2>Name your element:</h2>
+      <p>This name will be used to place items in your app.
+      For instance if you want to place a plot in this element,
+      this name will match the label of the plot output
+      </p>
+      `
+    });
 
     const name_form = maybe_make_el(modal_div, "form#name_form", {
       event_listener: {
@@ -815,7 +859,7 @@ window.onload = function () {
     }
   }
 
-  function gen_code_for_layout(): { css: string; html: string } {
+  function gen_code_for_layout(): Array<Code_Text> {
     const container_selector = "#container";
     const elements = current_elements();
 
@@ -849,10 +893,10 @@ window.onload = function () {
       `</div>`
     );
 
-    return {
-      css: css_code,
-      html: html_code,
-    };
+    return [
+      {type: "css", code: css_code},
+      {type: "html", code: html_code}
+    ];
   }
 
   function get_current_rows() {
@@ -893,6 +937,8 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
+
+
 // Passing an undefined value to a compare like min or max will always give undefined
 // These functions let you default to the second option in the case the first is falsy
 function compare_w_missing(
@@ -919,7 +965,7 @@ function get_bounding_rect({
   return { x: [left, left + width], y: [top, top + height] };
 }
 
-function boxes_overlap(box_a: Selection_Rect, box_b: Selection_Rect) {
+function boxes_overlap(box_a: Selection_Rect, box_b: Selection_Rect): boolean{
   const horizontal_overlap = intervals_overlap(box_a.x, box_b.x);
   const vertical_overlap = intervals_overlap(box_a.y, box_b.y);
 
