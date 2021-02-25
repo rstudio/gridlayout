@@ -17,7 +17,7 @@ export function make_css_unit_input({
   selector = "",
   start_val = 1,
   start_unit = "fr",
-  on_change = (x) => console.log("css unit change", x),
+  on_change = (x: string) => console.log("css unit change", x),
   allowed_units = ["fr", "px", "rem"],
   form_styles = {},
   drag_dir = "none",
@@ -113,7 +113,7 @@ export function make_css_unit_input({
     on_change(val);
   }
 
-  function update_value(new_value) {
+  function update_value(new_value: string) {
     value_input.value = get_css_value(new_value).toString();
     const new_unit = get_css_unit(new_value);
 
