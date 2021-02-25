@@ -266,8 +266,6 @@ window.onload = function () {
       let drag_start_abs: XY_Pos;
       let sel_bounds;
 
-      console.log("new code!2");
-
       function drag_started(event) {
         user_dragging = true;
         drag_start_rel = { x: event.offsetX, y: event.offsetY };
@@ -426,7 +424,7 @@ window.onload = function () {
                   (d) => form[d.id].value === "shrink"
                 );
                 to_edit.forEach((el) => {
-                  const el_node = grid_holder.querySelector(`#${el.id}`);
+                  const el_node: HTMLElement = grid_holder.querySelector(`#${el.id}`);
                   el_node.style.gridRow = make_template_start_end([
                     el.start_row,
                     Math.min(el.end_row, new_num_rows),
@@ -631,16 +629,14 @@ window.onload = function () {
           {
             event: "dragstart",
             func: function (event) {
+              const {x, y} = event as DragEvent;
               // make sure dragged element is on top
               grid_holder.appendChild(this.parentElement);
               // Storing this info in the dom to avoid global variables
               // The speed tradeoffs of the tiny json serialization are worth it imo
               const starting_bound_box = get_bounding_rect(this.parentElement);
               this.dataset.start_rect = JSON.stringify(starting_bound_box);
-              this.dataset.start_loc = JSON.stringify({
-                x: event.x,
-                y: event.y,
-              });
+              this.dataset.start_loc = JSON.stringify({ x, y, });
 
               drag_feedback_rect = maybe_make_el(
                 grid_holder.querySelector("#drag_detector"),
@@ -659,14 +655,15 @@ window.onload = function () {
           {
             event: "drag",
             func: function (event) {
+              const {x, y} = event as DragEvent;
               // Sometimes the drag event gets fired with nonsense zeros
-              if (event.x === 0 && event.y === 0) return;
+              if (x === 0 && y === 0) return;
 
               const { x: start_x, y: start_y } = JSON.parse(
                 this.dataset.start_loc
               );
-              const x_delta = event.x - start_x;
-              const y_delta = event.y - start_y;
+              const x_delta = x - start_x;
+              const y_delta = y - start_y;
 
               const new_rect = JSON.parse(this.dataset.start_rect);
 
@@ -765,23 +762,23 @@ window.onload = function () {
   };
 
   function current_elements(): Array<Element_Info> {
-    const all_elements = grid_holder.querySelectorAll(".added-element");
 
-    let elements = Array<Element_Info>;
-    
-    all_elements.forEach(function (el) {
-      // Ignore the selection box
-      if (el.id === "current_selection_box") return;
-      const grid_area = el.style.gridArea.split(" / ");
-      elements.push({
-        id: el.id,
-        start_row: +grid_area[0],
-        start_col: +grid_area[1],
-        // Subtract one here because the end in css is the end line, not row
-        end_row: +grid_area[2] - 1,
-        end_col: +grid_area[3] - 1,
+    let elements: Array<Element_Info> = [];
+   
+    (grid_holder.querySelectorAll(".added-element") as NodeListOf<HTMLElement>)
+      .forEach(function (el: HTMLElement) {
+        // Ignore the selection box
+        if (el.id === "current_selection_box") return;
+        const grid_area = el.style.gridArea.split(" / ");
+        elements.push({
+          id: el.id,
+          start_row: +grid_area[0],
+          start_col: +grid_area[1],
+          // Subtract one here because the end in css is the end line, not row
+          end_row: +grid_area[2] - 1,
+          end_col: +grid_area[3] - 1,
+        });
       });
-    });
 
     return elements;
   }
