@@ -3,9 +3,9 @@ import { get_css_value, get_css_unit } from "./index";
 
 
 export interface CSS_Input {
-  form: HTMLElement, 
+  form: HTMLElement,
   current_value: () => string,
-  update_value: (new_value: string) => void 
+  update_value: (new_value: string) => void
 };
 // =============================================================================
 // From here on are a series of general purpose helper functions not
@@ -36,7 +36,7 @@ export function make_css_unit_input({
     event_listener: { event: "change", func: on_update },
   });
 
-  const value_input = maybe_make_el(form, "input", {
+  const value_input = <HTMLInputElement>maybe_make_el(form, "input", {
     props: {
       type: "number",
       min: 0,
@@ -51,7 +51,7 @@ export function make_css_unit_input({
     },
   });
 
-  const unit_selector = maybe_make_el(form, "select", {
+  const unit_selector = <HTMLSelectElement>maybe_make_el(form, "select", {
     props: { name: "units" },
     styles: {
       minWidth: "20px",
@@ -60,9 +60,8 @@ export function make_css_unit_input({
   });
 
   const resizer = maybe_make_el(input_holder, "div.css-dragger", {
-    innerHTML: `<i class="fa fa-arrows-${
-      drag_dir === "y" ? "v" : "h"
-    }" aria-hidden="true"></i>`,
+    innerHTML: `<i class="fa fa-arrows-${drag_dir === "y" ? "v" : "h"
+      }" aria-hidden="true"></i>`,
   });
 
   // Place an invisible div over the main one that we let be dragged. This means
@@ -88,7 +87,7 @@ export function make_css_unit_input({
             0,
             +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
           );
-          value_input.value = new_value;
+          value_input.value = new_value.toString();
           on_change(current_value());
         },
       },
@@ -96,7 +95,7 @@ export function make_css_unit_input({
   });
 
   allowed_units.forEach(function (unit_type) {
-    const unit_option = maybe_make_el(unit_selector, `option.${unit_type}`, {
+    const unit_option = <HTMLOptionElement>maybe_make_el(unit_selector, `option.${unit_type}`, {
       props: { value: unit_type },
       innerHTML: unit_type,
     });
@@ -115,15 +114,12 @@ export function make_css_unit_input({
   }
 
   function update_value(new_value) {
-    value_input.value = get_css_value(new_value);
+    value_input.value = get_css_value(new_value).toString();
     const new_unit = get_css_unit(new_value);
-    [...unit_selector.children].forEach((opt) => {
-      if (opt.value === new_unit) {
-        opt.selected = true;
-      } else {
-        opt.selected = false;
-      }
-    });
+
+    for (let opt of (unit_selector.children as HTMLCollectionOf<HTMLOptionElement>)) {
+      opt.selected = opt.value === new_unit;
+    }
 
     if (new_unit === "px" && allow_drag) {
       resizer.style.display = "block";
