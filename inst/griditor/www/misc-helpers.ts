@@ -44,3 +44,27 @@ export function concat_nl(...component_strings: string[]) {
 export function concat_sp(...component_strings: string[]) {
   return concat(component_strings, " ");
 }
+
+export function as_array<T>(content: T | Array<T>): Array<T> {
+  if(content instanceof Array){
+    return content;
+  } else {
+    return [content];
+  }
+};
+
+// Passing an undefined value to a compare like min or max will always give undefined
+// These functions let you default to the second option in the case the first is falsy
+export function compare_w_missing(
+  compare_fn: (...values: number[]) => number,
+  maybe_a: number | null,
+  b: number
+) {
+  return maybe_a ? compare_fn(maybe_a, b) : b;
+}
+export function min_w_missing(maybe_a: number | null, b: number) {
+  return compare_w_missing(Math.min, maybe_a, b);
+}
+export function max_w_missing(maybe_a: number | null, b: number) {
+  return compare_w_missing(Math.max, maybe_a, b);
+}

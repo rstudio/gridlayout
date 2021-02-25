@@ -1,12 +1,11 @@
 import { maybe_make_el } from "./maybe_make_el";
 import { get_css_value, get_css_unit } from "./index";
 
-
 export interface CSS_Input {
-  form: HTMLElement,
-  current_value: () => string,
-  update_value: (new_value: string) => void
-};
+  form: HTMLElement;
+  current_value: () => string;
+  update_value: (new_value: string) => void;
+}
 // =============================================================================
 // From here on are a series of general purpose helper functions not
 // specifically related to the app and its state
@@ -60,8 +59,9 @@ export function make_css_unit_input({
   });
 
   const resizer = maybe_make_el(input_holder, "div.css-dragger", {
-    innerHTML: `<i class="fa fa-arrows-${drag_dir === "y" ? "v" : "h"
-      }" aria-hidden="true"></i>`,
+    innerHTML: `<i class="fa fa-arrows-${
+      drag_dir === "y" ? "v" : "h"
+    }" aria-hidden="true"></i>`,
   });
 
   // Place an invisible div over the main one that we let be dragged. This means
@@ -95,10 +95,12 @@ export function make_css_unit_input({
   });
 
   allowed_units.forEach(function (unit_type) {
-    const unit_option = <HTMLOptionElement>maybe_make_el(unit_selector, `option.${unit_type}`, {
-      props: { value: unit_type },
-      innerHTML: unit_type,
-    });
+    const unit_option = <HTMLOptionElement>(
+      maybe_make_el(unit_selector, `option.${unit_type}`, {
+        props: { value: unit_type },
+        innerHTML: unit_type,
+      })
+    );
 
     if (unit_type === start_unit) {
       unit_option.selected = true;
@@ -117,7 +119,9 @@ export function make_css_unit_input({
     value_input.value = get_css_value(new_value).toString();
     const new_unit = get_css_unit(new_value);
 
-    for (let opt of (unit_selector.children as HTMLCollectionOf<HTMLOptionElement>)) {
+    for (let opt of unit_selector.children as HTMLCollectionOf<
+      HTMLOptionElement
+    >) {
       opt.selected = opt.value === new_unit;
     }
 

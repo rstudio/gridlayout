@@ -1,4 +1,4 @@
-import { make_template_start_end } from "./grid-helpers";
+import { as_array, make_template_start_end } from "./misc-helpers";
 
 export interface Event_Listener {
   event: string,
@@ -51,10 +51,8 @@ export function maybe_make_el(
   }
 
   if (opts.event_listener) {
-    const listeners =
-      opts.event_listener instanceof Array ? opts.event_listener : [opts.event_listener];
-
-    listeners.forEach(
+    
+    as_array(opts.event_listener).forEach(
       (listener) => (el["on" + listener.event] = listener.func)
     );
   }

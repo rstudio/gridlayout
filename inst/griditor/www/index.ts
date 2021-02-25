@@ -10,7 +10,10 @@ import {
   set_element_in_grid,
   // concat,
   concat_nl,
-} from "./grid-helpers";
+  as_array,
+  max_w_missing,
+  min_w_missing
+} from "./misc-helpers";
 
 export const Shiny = (window as any).Shiny;
 
@@ -30,6 +33,7 @@ interface Grid_Extent {
 }
 
 window.onload = function () {
+  
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -122,7 +126,7 @@ window.onload = function () {
       show_code("Place the following in your CSS:",current_layout);
     });
   }
-  type Code_Text {
+  interface Code_Text {
     type: string,
     code: string,
   };
@@ -227,14 +231,6 @@ window.onload = function () {
       code_modal.remove();
     }
   }
-
-  function as_array<T>(content: T | Array<T>): Array<T> {
-    if(content instanceof Array){
-      return content;
-    } else {
-      return [content];
-    }
-  };
 
   function fill_grid_cells() {
     const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
@@ -926,9 +922,8 @@ window.onload = function () {
 
   // Removes elements the user has added to the grid by id
   function remove_added_elements(ids: string | Array<string>) {
-    const ids_to_remove = ids instanceof Array ? ids : [ids];
 
-    ids_to_remove.forEach((el_id) => {
+    as_array(ids).forEach((el_id) => {
       remove_elements(
         document.querySelectorAll(`div.el_${el_id}.added-element`)
       );
@@ -938,22 +933,6 @@ window.onload = function () {
   }
 }; // End of the window.onload callback
 
-
-// Passing an undefined value to a compare like min or max will always give undefined
-// These functions let you default to the second option in the case the first is falsy
-function compare_w_missing(
-  compare_fn: (...values: number[]) => number,
-  maybe_a: number | null,
-  b: number
-) {
-  return maybe_a ? compare_fn(maybe_a, b) : b;
-}
-function min_w_missing(maybe_a: number | null, b: number) {
-  return compare_w_missing(Math.min, maybe_a, b);
-}
-function max_w_missing(maybe_a: number | null, b: number) {
-  return compare_w_missing(Math.max, maybe_a, b);
-}
 
 // Produce bounding rectangle relative to parent of any element
 function get_bounding_rect({
