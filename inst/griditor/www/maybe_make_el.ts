@@ -70,10 +70,10 @@ export function maybe_make_el(
   }
 
   if (opts.grid_rows) {
-    el.style.gridRow = make_template_start_end(opts.grid_rows);
+    el.style.gridRow = make_template_start_end(opts.grid_rows[0], opts.grid_rows[1]);
   }
   if (opts.grid_cols) {
-    el.style.gridColumn = make_template_start_end(opts.grid_cols);
+    el.style.gridColumn = make_template_start_end(opts.grid_cols[0], opts.grid_cols[1]);
   }
 
   return el;

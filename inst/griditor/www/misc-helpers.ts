@@ -1,23 +1,30 @@
+import { Grid_Pos } from "./index";
 // Functions related to grid construction
 
 // Builds the start/end css string for a grid-{row,column}
-export function make_template_start_end(pos: Array<number>): string {
+export function make_template_start_end(start: number, end?: number): string {
   // If we only have a single value just assume we take up one row
   // If single index is a negative one, we need to subtract instead of add to it
-  const start: number = pos[0];
   const negative_index: boolean = start < 0;
 
   // Grid works with lines so if we want an element to end at the 4th column we
   // need to tell it to end at the (4+1)5th line, so we add one
-  const end: number = pos[1] ? pos[1] + 1 : start + (negative_index ? -1 : 1);
+  end = end ? end + 1 : start + (negative_index ? -1 : 1);
   // end = end ? +end + 1 : start + (negative_index ? -1 : 1);
 
   return `${start} / ${end}`;
 }
 
-export function set_element_in_grid(el: HTMLElement, grid_bounds) {
-  el.style.gridRow = make_template_start_end(grid_bounds.row);
-  el.style.gridColumn = make_template_start_end(grid_bounds.col);
+export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
+  el.style.gridRow = make_template_start_end(
+    grid_bounds.row_start,
+    grid_bounds.row_end
+  );
+  el.style.gridColumn = make_template_start_end(
+    grid_bounds.col_start,
+    grid_bounds.col_end
+  );
+  el.style.display = "block"; // make sure we can see the element
 }
 
 // grid-template-{column,row}: ...
@@ -70,26 +77,36 @@ export function max_w_missing(maybe_a: number | null, b: number) {
 }
 
 export interface Selection_Rect {
-  x: [number, number];
-  y: [number, number];
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
 }
 
 // Produce bounding rectangle relative to parent of any element
-export function get_bounding_rect({
-  offsetTop: top,
-  offsetLeft: left,
-  offsetHeight: height,
-  offsetWidth: width,
-}): Selection_Rect {
-  return { x: [left, left + width], y: [top, top + height] };
+export function get_bounding_rect(el: HTMLElement): Selection_Rect | null {
+  if (el.offsetParent === null) {
+    return null;
+  }
+  const top = el.offsetTop;
+  const left = el.offsetLeft;
+  const height = el.offsetHeight;
+  const width = el.offsetWidth;
+  return { left: left, right: left + width, top: top, bottom: top + height };
 }
 
 export function boxes_overlap(
   box_a: Selection_Rect,
   box_b: Selection_Rect
 ): boolean {
-  const horizontal_overlap = intervals_overlap(box_a.x, box_b.x);
-  const vertical_overlap = intervals_overlap(box_a.y, box_b.y);
+  const horizontal_overlap = intervals_overlap(
+    [box_a.left, box_a.right],
+    [box_b.left, box_b.right]
+  );
+  const vertical_overlap = intervals_overlap(
+    [box_a.top, box_a.bottom],
+    [box_b.top, box_b.bottom]
+  );
 
   return horizontal_overlap && vertical_overlap;
 

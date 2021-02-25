@@ -1,5 +1,9 @@
 // JS entry point
-import { maybe_make_el, remove_elements } from "./maybe_make_el";
+import {
+  Event_Listener,
+  maybe_make_el,
+  remove_elements,
+} from "./maybe_make_el";
 import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
@@ -17,7 +21,7 @@ import {
   get_bounding_rect,
   get_css_unit,
   get_css_value,
-  Selection_Rect
+  Selection_Rect,
 } from "./misc-helpers";
 
 export const Shiny = (window as any).Shiny;
@@ -28,14 +32,38 @@ interface Grid_Settings {
   gap: CSS_Input;
 }
 
+export interface Grid_Pos {
+  col_start: number;
+  col_end?: number;
+  row_start: number;
+  row_end?: number;
+}
 
-interface Grid_Extent {
-  col: [number, number];
-  row: [number, number];
+interface XY_Pos {
+  x: number;
+  y: number;
+}
+
+interface Drag_Res {
+  xy: XY_Pos;
+  grid: Grid_Pos;
+}
+
+enum Drag_Type {
+  top_left = "top-left",
+  bottom_right = "bottom-right",
+  center = "center",
+}
+
+interface Drag_Options {
+  drag_dir: Drag_Type;
+  grid_element?: HTMLElement;
+  on_start?: (start_loc: XY_Pos) => void;
+  on_drag?: (drag_info: Drag_Res) => void;
+  on_end?: (drag_info: Drag_Res) => void;
 }
 
 window.onload = function () {
-  
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -110,10 +138,10 @@ window.onload = function () {
     });
 
     Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-      show_code(
-        "Paste the following code into your app to update the layout",
-        {type: "R", code: code_to_show}
-      );
+      show_code("Paste the following code into your app to update the layout", {
+        type: "R",
+        code: code_to_show,
+      });
     });
   } else {
     // If in pure-client-side mode we need to provide a default grid and also wireup the code button
@@ -125,14 +153,17 @@ window.onload = function () {
 
     document.getElementById("get_code").addEventListener("click", function () {
       const current_layout = gen_code_for_layout();
-      show_code("Place the following in your CSS:",current_layout);
+      show_code("Place the following in your CSS:", current_layout);
     });
   }
   interface Code_Text {
-    type: string,
-    code: string,
-  };
-  function show_code(message: string, code_blocks: Code_Text|Array<Code_Text>) {
+    type: string;
+    code: string;
+  }
+  function show_code(
+    message: string,
+    code_blocks: Code_Text | Array<Code_Text>
+  ) {
     const code_modal = focused_modal({
       header_text: `${message}`,
       modal_callbacks: {
@@ -149,39 +180,36 @@ window.onload = function () {
       },
     });
 
-    as_array(code_blocks).forEach(function(code_to_show){
-
+    as_array(code_blocks).forEach(function (code_to_show) {
       const num_of_lines: number = code_to_show.code.match(/\n/g).length;
 
       const code_section = maybe_make_el(
         code_modal.modal,
         `div#${code_to_show.type}.code_chunk`,
         {
-      styles: {
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gridTemplateRows: "1fr, auto",
-          gridGap: "4px",
-          gridTemplateAreas: concat_nl(
-            `"code_type copy_btn"`,
-            `"code_text code_text"`
-          )
-      }}
+          styles: {
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateRows: "1fr, auto",
+            gridGap: "4px",
+            gridTemplateAreas: concat_nl(
+              `"code_type copy_btn"`,
+              `"code_text code_text"`
+            ),
+          },
+        }
       );
 
       let code_text: HTMLInputElement;
 
-      maybe_make_el(
-        code_section, 
-        "strong", 
-        {
-          innerHTML: code_to_show.type,
-          styles: {gridArea: "code_type"}
-        });
+      maybe_make_el(code_section, "strong", {
+        innerHTML: code_to_show.type,
+        styles: { gridArea: "code_type" },
+      });
 
       maybe_make_el(code_section, "button#copy_code", {
         innerHTML: "Copy to clipboard",
-        styles: {gridArea: "copy_btn"},
+        styles: { gridArea: "copy_btn" },
         event_listener: {
           event: "click",
           func: function () {
@@ -191,24 +219,20 @@ window.onload = function () {
         },
       });
 
-      code_text = maybe_make_el(
-        code_section,
-        "textarea#code_for_layout",
-        {
-          innerHTML: code_to_show.code,
-          props: { rows: num_of_lines + 3 },
-          styles: {
-            width: "100%",
-            background: "#f3f2f2",
-            fontFamily: "monospace",
-            display: "block",
-            padding: "0.75rem",
-            marginBottom: "10px",
-            borderRadius: "5px",
-            gridArea: "code_text"
-          },
-        }
-      ) as HTMLInputElement;
+      code_text = maybe_make_el(code_section, "textarea#code_for_layout", {
+        innerHTML: code_to_show.code,
+        props: { rows: num_of_lines + 3 },
+        styles: {
+          width: "100%",
+          background: "#f3f2f2",
+          fontFamily: "monospace",
+          display: "block",
+          padding: "0.75rem",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          gridArea: "code_text",
+        },
+      }) as HTMLInputElement;
     });
 
     const action_buttons = maybe_make_el(
@@ -277,47 +301,45 @@ window.onload = function () {
             form_styles: {
               [`grid${
                 type === "rows" ? "Row" : "Column"
-              }`]: make_template_start_end([grid_i]),
+              }`]: make_template_start_end(grid_i),
             },
             drag_dir: type === "rows" ? "y" : "x",
           });
         });
       }
-
-      const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
-        event_listener: [
-          {
-            event: "mousedown",
-            func: drag_started,
-          },
-          {
-            event: "mouseup",
-            func: drag_ended,
-          },
-        ],
-      });
-      // Adding the dragging event to the whole page means we dont lose the drag
-      // the second the user's cursor goes off of the main grid div
-      document.querySelector("#editor").addEventListener("mousemove", dragging);
-
       const current_selection_box = maybe_make_el(
         grid_holder,
         "div#current_selection_box.added-element"
       );
+      const new_element_drag = drag_on_grid({
+        drag_dir: Drag_Type.bottom_right,
+        grid_element: current_selection_box,
+        on_start: () => {
+          current_selection_box.style.borderColor = get_next_color();
+        },
+      });
+      const drag_canvas = maybe_make_el(grid_holder, "div#drag_canvas", {
+        event_listener: new_element_drag,
+      });
+
+      const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
+        event_listener: new_element_drag,
+        props: { draggable: true },
+        styles: { opacity: 0 },
+      });
+      // Adding the dragging event to the whole page means we dont lose the drag
+      // the second the user's cursor goes off of the main grid div
+      // document.querySelector("#editor").addEventListener("mousemove", dragging);
 
       // Lets the mousemove event listener know when to do stuff
       let user_dragging = false;
 
       // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
       // We need the absolute position to continue calculating drag after mouse has left editor
-      interface XY_Pos {
-        x: number;
-        y: number;
-      }
 
       let drag_start_rel: XY_Pos;
       let drag_start_abs: XY_Pos;
-      let sel_bounds: Grid_Extent;
+      let sel_bounds: Grid_Pos;
 
       function drag_started(event) {
         user_dragging = true;
@@ -338,8 +360,10 @@ window.onload = function () {
         const sel_bottom = sel_top + Math.abs(d_y);
 
         const selection_rect: Selection_Rect = {
-          x: [sel_left, sel_right],
-          y: [sel_top, sel_bottom],
+          left: sel_left,
+          right: sel_right,
+          top: sel_top,
+          bottom: sel_bottom,
         };
 
         sel_bounds = get_drag_extent_on_grid(selection_rect);
@@ -351,8 +375,8 @@ window.onload = function () {
       function drag_ended() {
         // Trigger naming dialog modal
         name_new_element({
-          grid_rows: sel_bounds.row,
-          grid_cols: sel_bounds.col,
+          grid_rows: [sel_bounds.row_start, sel_bounds.row_end],
+          grid_cols: [sel_bounds.col_start, sel_bounds.col_end],
           selection_box: current_selection_box,
         });
 
@@ -362,31 +386,26 @@ window.onload = function () {
       // Make sure any added elements sit on top by re-appending them to grid holder
       // Make sure that the drag detector sits over everything
       [
+        drag_canvas,
         drag_detector,
         ...grid_holder.querySelectorAll(".added-element"),
       ].forEach((el) => grid_holder.appendChild(el));
     } else {
     }
   }
-  function get_drag_extent_on_grid(
-    selection_rect: Selection_Rect
-  ): Grid_Extent {
+  function get_drag_extent_on_grid(selection_rect: Selection_Rect): Grid_Pos {
     // Reset bounding box definitions so we only use current selection extent
-    const sel_bounds: Grid_Extent = { col: [null, null], row: [null, null] };
+    const sel_bounds: Grid_Pos = { col_start: null, row_start: null };
 
     current_cells.forEach(function (el) {
       // Cell is overlapped by selection box
       if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
         const el_row: number = +el.dataset.row;
         const el_col: number = +el.dataset.col;
-        sel_bounds.row = [
-          min_w_missing(sel_bounds.row[0], el_row),
-          max_w_missing(sel_bounds.row[1], el_row),
-        ];
-        sel_bounds.col = [
-          min_w_missing(sel_bounds.col[0], el_col),
-          max_w_missing(sel_bounds.col[1], el_col),
-        ];
+        sel_bounds.row_start = min_w_missing(sel_bounds.row_start, el_row);
+        sel_bounds.row_end = max_w_missing(sel_bounds.row_end, el_row);
+        sel_bounds.col_start = min_w_missing(sel_bounds.col_start, el_col);
+        sel_bounds.col_end = max_w_missing(sel_bounds.col_end, el_col);
       }
     });
 
@@ -480,14 +499,14 @@ window.onload = function () {
                   const el_node: HTMLElement = grid_holder.querySelector(
                     `#${el.id}`
                   );
-                  el_node.style.gridRow = make_template_start_end([
+                  el_node.style.gridRow = make_template_start_end(
                     el.start_row,
-                    Math.min(el.end_row, new_num_rows),
-                  ]);
-                  el_node.style.gridColumn = make_template_start_end([
+                    Math.min(el.end_row, new_num_rows)
+                  );
+                  el_node.style.gridColumn = make_template_start_end(
                     el.start_col,
-                    Math.min(el.end_col, new_num_cols),
-                  ]);
+                    Math.min(el.end_col, new_num_cols)
+                  );
                 });
 
                 fix_els_modal.remove();
@@ -569,14 +588,14 @@ window.onload = function () {
 
     const modal_div = modal_divs.modal;
 
-    maybe_make_el(modal_div,"div.instructions", {
+    maybe_make_el(modal_div, "div.instructions", {
       innerHTML: `
       <h2>Name your element:</h2>
       <p>This name will be used to place items in your app.
       For instance if you want to place a plot in this element,
       this name will match the label of the plot output
       </p>
-      `
+      `,
     });
 
     const name_form = maybe_make_el(modal_div, "form#name_form", {
@@ -666,115 +685,26 @@ window.onload = function () {
       }
     );
 
-    let drag_feedback_rect: HTMLElement;
-    const feedback_border_w = 3;
-    // The shifting by border and padding here is hacky and probably a result
-    // of me not using the right event positions
-    const bounding_rect_to_pos = ({ x: [left, right], y: [top, bottom] }) => ({
-      left: `calc(${left}px - var(--side-gaps) - ${2 * feedback_border_w}px)`,
-      top: `calc(${top}px - var(--side-gaps) - ${2 * feedback_border_w}px)`,
-      width: `${right - left}px`,
-      height: `${bottom - top}px`,
-    });
+    [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
+      function (handle_type) {
+        // First we draw the handle that people see
+        maybe_make_el(element_in_grid, `div.dragger.visible.${handle_type}`, {
+          styles: { background: color, pointerEvents: "none" },
+          innerHTML:
+            handle_type === "center"
+              ? `<i class="fas fa-arrows-alt"></i>`
+              : `<i class="fas fa-long-arrow-alt-up"></i>`,
+        });
 
-    ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
-      // First we draw the handle that people see
-      maybe_make_el(element_in_grid, `div.dragger.visible.${handle_type}`, {
-        styles: { background: color, pointerEvents: "none" },
-        innerHTML:
-          handle_type === "center"
-            ? `<i class="fas fa-arrows-alt"></i>`
-            : `<i class="fas fa-long-arrow-alt-up"></i>`,
-      });
-      maybe_make_el(element_in_grid, `div.dragger.invisible.${handle_type}`, {
-        props: { draggable: true },
-        data_props: { handle_type },
-        event_listener: [
-          {
-            event: "dragstart",
-            func: function (event) {
-              const { x, y } = event as DragEvent;
-              // make sure dragged element is on top
-              grid_holder.appendChild(this.parentElement);
-              // Storing this info in the dom to avoid global variables
-              // The speed tradeoffs of the tiny json serialization are worth it imo
-              const starting_bound_box = get_bounding_rect(this.parentElement);
-              this.dataset.start_rect = JSON.stringify(starting_bound_box);
-              this.dataset.start_loc = JSON.stringify({ x, y });
+        const drag_behavior = drag_on_grid({ drag_dir: handle_type });
 
-              drag_feedback_rect = maybe_make_el(
-                grid_holder.querySelector("#drag_detector"),
-                "div.drag-feedback-rect",
-                {
-                  styles: {
-                    border: `${feedback_border_w}px dashed var(--dark-gray)`,
-                    pointerEvents: "none",
-                    position: "absolute",
-                    ...bounding_rect_to_pos(starting_bound_box),
-                  },
-                }
-              );
-            },
-          },
-          {
-            event: "drag",
-            func: function (event) {
-              const { x, y } = event as DragEvent;
-              // Sometimes the drag event gets fired with nonsense zeros
-              if (x === 0 && y === 0) return;
-
-              const { x: start_x, y: start_y } = JSON.parse(
-                this.dataset.start_loc
-              );
-              const x_delta = x - start_x;
-              const y_delta = y - start_y;
-
-              const new_rect = JSON.parse(this.dataset.start_rect);
-
-              // The bounding here means that we dont let the user drag the box "inside-out"
-              if (this.dataset.handle_type === "top-left") {
-                new_rect.x[0] = Math.min(
-                  new_rect.x[0] + x_delta,
-                  new_rect.x[1]
-                );
-                new_rect.y[0] = Math.min(
-                  new_rect.y[0] + y_delta,
-                  new_rect.y[1]
-                );
-              } else if (this.dataset.handle_type === "bottom-right") {
-                new_rect.x[1] = Math.max(
-                  new_rect.x[1] + x_delta,
-                  new_rect.x[0]
-                );
-                new_rect.y[1] = Math.max(
-                  new_rect.y[1] + y_delta,
-                  new_rect.y[0]
-                );
-              } else {
-                // Just move the box
-                new_rect.x[0] += x_delta;
-                new_rect.y[0] += y_delta;
-                new_rect.x[1] += x_delta;
-                new_rect.y[1] += y_delta;
-              }
-
-              Object.assign(
-                drag_feedback_rect.style,
-                bounding_rect_to_pos(new_rect)
-              );
-              const grid_extent = get_drag_extent_on_grid(new_rect);
-              set_element_in_grid(this.parentElement, grid_extent);
-            },
-          },
-          {
-            event: "dragend",
-            func: function () {
-              drag_feedback_rect.remove();
-            },
-          },
-        ],
-      });
-    });
+        maybe_make_el(element_in_grid, `div.dragger.invisible.${handle_type}`, {
+          props: { draggable: true },
+          data_props: { handle_type },
+          event_listener: drag_behavior,
+        });
+      }
+    );
 
     const element_in_list = maybe_make_el(
       document.querySelector("#added_elements"),
@@ -815,6 +745,123 @@ window.onload = function () {
 
     // Let shiny know we have a new element
     send_elements_to_shiny();
+  }
+
+  function get_grid_pos(grid_el: HTMLElement): Grid_Pos {
+    return {
+      row_start: +grid_el.style.gridRowStart,
+      col_start: +grid_el.style.gridColumnStart,
+      row_end: +grid_el.style.gridRowEnd + 1,
+      col_end: +grid_el.style.gridColumnEnd + 1,
+    };
+  }
+  function drag_on_grid(opts: Drag_Options): Array<Event_Listener> {
+    const feedback_border_w = 3;
+
+    let drag_feedback_rect: HTMLElement;
+    let start_rect: Selection_Rect;
+    let start_loc: XY_Pos;
+
+    function drag_start(event: DragEvent) {
+      const grid_element = opts.grid_element || this.parentElement;
+      start_loc = event as DragEvent;
+
+      // make sure dragged element is on top
+      grid_holder.appendChild(grid_element);
+      start_rect = get_bounding_rect(grid_element) || {
+        left: event.offsetX,
+        right: event.offsetX,
+        top: event.offsetY,
+        bottom: event.offsetY,
+      };
+
+      drag_feedback_rect = maybe_make_el(
+        grid_holder.querySelector("#drag_canvas"),
+        "div.drag-feedback-rect",
+        {
+          styles: {
+            border: `${feedback_border_w}px dashed var(--dark-gray)`,
+            pointerEvents: "none",
+            position: "absolute",
+            ...bounding_rect_to_css_pos(start_rect),
+          },
+        }
+      );
+
+      if (opts.on_start) opts.on_start(start_loc);
+    }
+
+    function drag(event: DragEvent) {
+      const curr_loc: XY_Pos = event as DragEvent;
+      // Sometimes the drag event gets fired with nonsense zeros
+      if (curr_loc.x === 0 && curr_loc.y === 0) return;
+
+      const x_delta = curr_loc.x - start_loc.x;
+      const y_delta = curr_loc.y - start_loc.y;
+
+      // Need to destructure down to numbers to avoid copy
+      const new_rect: Selection_Rect = { ...start_rect };
+
+      // The bounding here means that we dont let the user drag the box "inside-out"
+      if (opts.drag_dir === Drag_Type.top_left) {
+        new_rect.left = Math.min(new_rect.left + x_delta, new_rect.right);
+        new_rect.top = Math.min(new_rect.top + y_delta, new_rect.bottom);
+      } else if (opts.drag_dir === Drag_Type.bottom_right) {
+        new_rect.right = Math.max(new_rect.right + x_delta, new_rect.left);
+        new_rect.bottom = Math.max(new_rect.bottom + y_delta, new_rect.top);
+      } else {
+        // Just move the box
+        new_rect.left += x_delta;
+        new_rect.top += y_delta;
+        new_rect.right += x_delta;
+        new_rect.bottom += y_delta;
+      }
+
+      Object.assign(
+        drag_feedback_rect.style,
+        bounding_rect_to_css_pos(new_rect)
+      );
+      const grid_extent = get_drag_extent_on_grid(new_rect);
+      set_element_in_grid(opts.grid_element || this.parentElement, grid_extent);
+
+      if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
+    }
+
+    function drag_end(event) {
+      const end_loc: XY_Pos = event;
+      drag_feedback_rect.remove();
+      start_rect = null;
+      start_loc = null;
+      if (opts.on_end)
+        opts.on_end({
+          xy: end_loc,
+          grid: get_grid_pos(opts.grid_element || this.parentElement),
+        });
+    }
+
+    function bounding_rect_to_css_pos(rect: Selection_Rect) {
+      return {
+        left: `${rect.left}px`,
+        top: `${rect.top}px`,
+        width: `${rect.right - rect.left}px`,
+        height: `${rect.bottom - rect.top}px`,
+      };
+    }
+
+    return [
+      {
+        event: "dragstart",
+        func: drag_start,
+      },
+      {
+        event: "drag",
+        func: drag,
+      },
+      {
+        event: "dragend",
+        func: drag_end,
+      },
+    ];
   }
 
   interface Element_Info {
@@ -864,11 +911,8 @@ window.onload = function () {
     const element_defs = elements.map((el) =>
       concat_nl(
         `#${el.id} {`,
-        `  grid-column: ${make_template_start_end([
-          el.start_col,
-          el.end_col,
-        ])};`,
-        `  grid-row: ${make_template_start_end([el.start_row, el.end_row])};`,
+        `  grid-column: ${make_template_start_end(el.start_col, el.end_col)};`,
+        `  grid-row: ${make_template_start_end(el.start_row, el.end_row)};`,
         `}`
       )
     );
@@ -892,8 +936,8 @@ window.onload = function () {
     );
 
     return [
-      {type: "css", code: css_code},
-      {type: "html", code: html_code}
+      { type: "css", code: css_code },
+      { type: "html", code: html_code },
     ];
   }
 
@@ -924,7 +968,6 @@ window.onload = function () {
 
   // Removes elements the user has added to the grid by id
   function remove_added_elements(ids: string | Array<string>) {
-
     as_array(ids).forEach((el_id) => {
       remove_elements(
         document.querySelectorAll(`div.el_${el_id}.added-element`)
