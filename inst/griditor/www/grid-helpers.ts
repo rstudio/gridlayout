@@ -23,5 +23,9 @@ export function set_element_in_grid(el: HTMLElement, grid_bounds) {
 // grid-template-{column,row}: ...
 // Take a vector of css sizes and turn into the format for the css argument for
 export function sizes_to_template_def(defs: Array<string>) {
-  return defs.reduce((css, curr) => `${css} ${curr}`, "");
+  return concat(defs, " ");
+}
+
+export function concat(string_vec: Array<string>, collapse_char: string = " "): string {
+  return string_vec.reduce((concatted, current) => concatted + collapse_char + current, "");
 }
