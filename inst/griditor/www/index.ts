@@ -706,6 +706,7 @@ window.onload = function () {
   }
   function drag_on_grid(opts: Drag_Options): Array<Event_Listener> {
     const feedback_border_w = 3;
+    const border_offset = 2*feedback_border_w;
 
     let drag_feedback_rect: HTMLElement;
     let start_rect: Selection_Rect;
@@ -717,12 +718,23 @@ window.onload = function () {
 
       // make sure dragged element is on top
       grid_holder.appendChild(grid_element);
-      start_rect = get_bounding_rect(grid_element) || {
-        left: event.offsetX,
-        right: event.offsetX,
-        top: event.offsetY,
-        bottom: event.offsetY,
-      };
+
+      const element_bounds = get_bounding_rect(grid_element);
+      if(element_bounds){
+        // debugger;
+        start_rect = element_bounds ;
+        start_rect.left -= event.offsetX + border_offset;
+        start_rect.right -= event.offsetX + border_offset;
+        start_rect.top -= event.offsetY + border_offset;
+        start_rect.bottom -=event.offsetY + border_offset;
+      } else {
+        start_rect = {
+          left: event.offsetX,
+          right: event.offsetX,
+          top: event.offsetY,
+          bottom: event.offsetY,
+        }
+      }
 
       drag_feedback_rect = maybe_make_el(
         grid_holder.querySelector("#drag_canvas"),
