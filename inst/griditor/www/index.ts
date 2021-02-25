@@ -118,7 +118,7 @@ window.onload = function () {
     });
   }
 
-  function show_code(message, code_to_show) {
+  function show_code(message: string, code_to_show: string) {
     const code_modal = focused_modal({
       modal_contents: message,
       modal_callbacks: {
@@ -211,7 +211,7 @@ window.onload = function () {
         // Get rid of old ones to start with fresh slate
         remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
 
-        grid_controls[type] = grid_dims[type].map(function (size, i) {
+        grid_controls[type] = grid_dims[type].map(function (size:string, i: number) {
           // The i + 1 is because grid is indexed at 1, not zero
           const grid_i = i + 1;
 
@@ -264,7 +264,7 @@ window.onload = function () {
 
       let drag_start_rel: XY_Pos;
       let drag_start_abs: XY_Pos;
-      let sel_bounds;
+      let sel_bounds: Grid_Extent;
 
       function drag_started(event) {
         user_dragging = true;
@@ -295,7 +295,7 @@ window.onload = function () {
         set_element_in_grid(current_selection_box, sel_bounds);
       }
 
-      function drag_ended(event) {
+      function drag_ended() {
         // Trigger naming dialog modal
         name_new_element({
           grid_rows: sel_bounds.row,
@@ -602,7 +602,7 @@ window.onload = function () {
       }
     );
 
-    let drag_feedback_rect;
+    let drag_feedback_rect: HTMLElement;
     const feedback_border_w = 3;
     // The shifting by border and padding here is hacky and probably a result
     // of me not using the right event positions
@@ -704,7 +704,7 @@ window.onload = function () {
           },
           {
             event: "dragend",
-            func: function (event) {
+            func: function () {
               drag_feedback_rect.remove();
             },
           },
@@ -841,7 +841,7 @@ ${elements_defs}`;
   }
 
   // Removes elements the user has added to the grid by id
-  function remove_added_elements(ids) {
+  function remove_added_elements(ids: string | Array<string>) {
     const ids_to_remove = ids instanceof Array ? ids : [ids];
 
     ids_to_remove.forEach((el_id) => {
@@ -855,13 +855,17 @@ ${elements_defs}`;
 }; // End of the window.onload callback
 // Passing an undefined value to a compare like min or max will always give undefined
 // These functions let you default to the second option in the case the first is falsy
-function compare_w_missing(compare_fn, maybe_a, b) {
+function compare_w_missing(
+  compare_fn: (...values: number[]) => number,
+  maybe_a: number | null,
+  b: number
+) {
   return maybe_a ? compare_fn(maybe_a, b) : b;
 }
-function min_w_missing(maybe_a, b) {
+function min_w_missing(maybe_a: number | null, b: number) {
   return compare_w_missing(Math.min, maybe_a, b);
 }
-function max_w_missing(maybe_a, b) {
+function max_w_missing(maybe_a: number | null, b: number) {
   return compare_w_missing(Math.max, maybe_a, b);
 }
 
@@ -898,12 +902,12 @@ function boxes_overlap(box_a: Selection_Rect, box_b: Selection_Rect) {
   }
 }
 
-export function get_css_unit(css_size) {
+export function get_css_unit(css_size: string): string {
   return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
 }
 
-export function get_css_value(css_size) {
-  return +css_size.match(/^[\d | \.]+/g);
+export function get_css_value(css_size: string): number {
+  return Number(css_size.match(/^[\d | \.]+/g)[0]);
 }
 
 window.onresize = function () {
