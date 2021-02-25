@@ -16,14 +16,19 @@ export function make_template_start_end(start: number, end?: number): string {
 }
 
 export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
-  el.style.gridRow = make_template_start_end(
-    grid_bounds.row_start,
-    grid_bounds.row_end
-  );
-  el.style.gridColumn = make_template_start_end(
-    grid_bounds.col_start,
-    grid_bounds.col_end
-  );
+  
+  if(grid_bounds.row_start){
+    el.style.gridRow = make_template_start_end(
+      grid_bounds.row_start,
+      grid_bounds.row_end
+    );
+  }
+  if(grid_bounds.col_start){
+    el.style.gridColumn = make_template_start_end(
+      grid_bounds.col_start,
+      grid_bounds.col_end
+    );
+  }
   el.style.display = "block"; // make sure we can see the element
 }
 

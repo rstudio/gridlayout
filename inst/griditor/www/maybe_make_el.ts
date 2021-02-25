@@ -1,4 +1,5 @@
-import { as_array, make_template_start_end } from "./misc-helpers";
+import { Grid_Pos } from ".";
+import { as_array, make_template_start_end, set_element_in_grid } from "./misc-helpers";
 
 export interface Event_Listener {
   event: string,
@@ -10,8 +11,7 @@ interface Element_Opts {
   styles?: object;
   innerHTML?: string;
   data_props?: object;
-  grid_rows?: Array<number>;
-  grid_cols?: Array<number>;
+  grid_pos?: Grid_Pos;
   props?: object;
 }
 
@@ -69,11 +69,8 @@ export function maybe_make_el(
     Object.assign(el.dataset, opts.data_props);
   }
 
-  if (opts.grid_rows) {
-    el.style.gridRow = make_template_start_end(opts.grid_rows[0], opts.grid_rows[1]);
-  }
-  if (opts.grid_cols) {
-    el.style.gridColumn = make_template_start_end(opts.grid_cols[0], opts.grid_cols[1]);
+  if(opts.grid_pos){
+    set_element_in_grid(el, opts.grid_pos);
   }
 
   return el;

@@ -33,9 +33,9 @@ interface Grid_Settings {
 }
 
 export interface Grid_Pos {
-  col_start: number;
+  col_start?: number;
   col_end?: number;
-  row_start: number;
+  row_start?: number;
   row_end?: number;
 }
 
@@ -131,8 +131,7 @@ window.onload = function () {
       elements_to_add.forEach((el) => {
         add_element({
           id: el.id,
-          grid_rows: [el.start_row, el.end_row],
-          grid_cols: [el.start_col, el.end_col],
+          grid_pos: el
         });
       });
     });
@@ -274,8 +273,7 @@ window.onload = function () {
           current_cells.push(
             maybe_make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
-              grid_rows: [row_i],
-              grid_cols: [col_i],
+              grid_pos: {row_start: row_i, col_start: col_i}
             })
           );
         }
@@ -317,6 +315,13 @@ window.onload = function () {
         on_start: () => {
           current_selection_box.style.borderColor = get_next_color();
         },
+        on_end: ({grid}) => {
+          debugger;
+          name_new_element({
+            grid_pos: grid,
+            selection_box:current_selection_box
+          })
+        }
       });
       const drag_canvas = maybe_make_el(grid_holder, "div#drag_canvas", {
         event_listener: new_element_drag,
@@ -327,61 +332,7 @@ window.onload = function () {
         props: { draggable: true },
         styles: { opacity: 0 },
       });
-      // Adding the dragging event to the whole page means we dont lose the drag
-      // the second the user's cursor goes off of the main grid div
-      // document.querySelector("#editor").addEventListener("mousemove", dragging);
-
-      // Lets the mousemove event listener know when to do stuff
-      let user_dragging = false;
-
-      // Drag start rel(ative) to grid editor div and positioned abs(olutely) on the whole page
-      // We need the absolute position to continue calculating drag after mouse has left editor
-
-      let drag_start_rel: XY_Pos;
-      let drag_start_abs: XY_Pos;
-      let sel_bounds: Grid_Pos;
-
-      function drag_started(event) {
-        user_dragging = true;
-        drag_start_rel = { x: event.offsetX, y: event.offsetY };
-        drag_start_abs = { x: event.clientX, y: event.clientY };
-        current_selection_box.style.borderColor = get_next_color();
-      }
-
-      function dragging(event) {
-        if (!user_dragging) return;
-
-        const d_x = event.clientX - drag_start_abs.x;
-        const d_y = event.clientY - drag_start_abs.y;
-
-        const sel_left = drag_start_rel.x + (d_x < 0 ? d_x : 0);
-        const sel_right = sel_left + Math.abs(d_x);
-        const sel_top = drag_start_rel.y + (d_y < 0 ? d_y : 0);
-        const sel_bottom = sel_top + Math.abs(d_y);
-
-        const selection_rect: Selection_Rect = {
-          left: sel_left,
-          right: sel_right,
-          top: sel_top,
-          bottom: sel_bottom,
-        };
-
-        sel_bounds = get_drag_extent_on_grid(selection_rect);
-
-        current_selection_box.style.display = "block";
-        set_element_in_grid(current_selection_box, sel_bounds);
-      }
-
-      function drag_ended() {
-        // Trigger naming dialog modal
-        name_new_element({
-          grid_rows: [sel_bounds.row_start, sel_bounds.row_end],
-          grid_cols: [sel_bounds.col_start, sel_bounds.col_end],
-          selection_box: current_selection_box,
-        });
-
-        user_dragging = false;
-      }
+  
 
       // Make sure any added elements sit on top by re-appending them to grid holder
       // Make sure that the drag detector sits over everything
@@ -569,7 +520,7 @@ window.onload = function () {
     return sizes;
   }
 
-  function name_new_element({ grid_rows, grid_cols, selection_box }) {
+  function name_new_element({ grid_pos, selection_box }) {
     const modal_divs = focused_modal({
       background_callbacks: {
         // Clicking outside of the modal will cancel the naming. Seems natural
@@ -623,8 +574,7 @@ window.onload = function () {
           add_element({
             id,
             color: selection_box.style.borderColor,
-            grid_rows,
-            grid_cols,
+            grid_pos,
           });
 
           reset_el_creation();
@@ -671,13 +621,12 @@ window.onload = function () {
 
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
-  function add_element({ id, color = get_next_color(), grid_cols, grid_rows }) {
+  function add_element({ id, color = get_next_color(), grid_pos }) {
     const element_in_grid = maybe_make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
       {
-        grid_cols,
-        grid_rows,
+        grid_pos,
         styles: {
           borderColor: color,
           position: "relative",
@@ -751,8 +700,8 @@ window.onload = function () {
     return {
       row_start: +grid_el.style.gridRowStart,
       col_start: +grid_el.style.gridColumnStart,
-      row_end: +grid_el.style.gridRowEnd + 1,
-      col_end: +grid_el.style.gridColumnEnd + 1,
+      row_end: +grid_el.style.gridRowEnd - 1,
+      col_end: +grid_el.style.gridColumnEnd - 1,
     };
   }
   function drag_on_grid(opts: Drag_Options): Array<Event_Listener> {
@@ -827,7 +776,7 @@ window.onload = function () {
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
 
-    function drag_end(event) {
+    function drag_end(event: DragEvent) {
       const end_loc: XY_Pos = event;
       drag_feedback_rect.remove();
       start_rect = null;
