@@ -1,28 +1,34 @@
 // JS entry point
-import { maybe_make_el, remove_elements} from "./maybe_make_el";
+import { maybe_make_el, remove_elements } from "./maybe_make_el";
 import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
-import { make_template_start_end, sizes_to_template_def, set_element_in_grid, concat, concat_nl } from "./grid-helpers";
+import {
+  make_template_start_end,
+  sizes_to_template_def,
+  set_element_in_grid,
+  concat,
+  concat_nl,
+} from "./grid-helpers";
 
 export const Shiny = (window as any).Shiny;
 
 interface Grid_Settings {
-  num_rows: (new_value: number) => void,
-  num_cols: (new_value: number) => void,
-  gap: CSS_Input
-};
+  num_rows: (new_value: number) => void;
+  num_cols: (new_value: number) => void;
+  gap: CSS_Input;
+}
 
 interface Selection_Rect {
-  x: [number, number],
-  y: [number, number]
-};
+  x: [number, number];
+  y: [number, number];
+}
 
 interface Grid_Extent {
-  col: [number, number],
-  row: [number, number]
-};
+  col: [number, number];
+  row: [number, number];
+}
 
 window.onload = function () {
   draw_browser_header();
@@ -35,8 +41,10 @@ window.onload = function () {
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder : HTMLElement = document.querySelector("#grid_holder");
-  const settings_panel : HTMLElement = document.querySelector("#settings .card-body");
+  const grid_holder: HTMLElement = document.querySelector("#grid_holder");
+  const settings_panel: HTMLElement = document.querySelector(
+    "#settings .card-body"
+  );
 
   const grid_settings: Grid_Settings = {
     num_rows: make_incrementer({
@@ -64,7 +72,7 @@ window.onload = function () {
       selector: "#gap_size_chooser",
       on_change: (x) => update_grid({ gap: x }),
       allowed_units: ["px", "rem"],
-    })
+    }),
   };
 
   function update_num_rows_or_cols(dir, new_count) {
@@ -135,19 +143,23 @@ window.onload = function () {
     });
 
     const num_of_lines: number = code_to_show.match(/\n/g).length;
-    const code_text = maybe_make_el(code_modal.modal, "textarea#code_for_layout", {
-      innerHTML: code_to_show,
-      props: {rows: num_of_lines+3},
-      styles: {
-        width: "100%",
-        background: "#f3f2f2",
-        fontFamily: "monospace",
-        display: "block",
-        padding: "0.75rem",
-        marginBottom: "10px",
-        borderRadius: "5px",
-      },
-    }) as HTMLInputElement;
+    const code_text = maybe_make_el(
+      code_modal.modal,
+      "textarea#code_for_layout",
+      {
+        innerHTML: code_to_show,
+        props: { rows: num_of_lines + 3 },
+        styles: {
+          width: "100%",
+          background: "#f3f2f2",
+          fontFamily: "monospace",
+          display: "block",
+          padding: "0.75rem",
+          marginBottom: "10px",
+          borderRadius: "5px",
+        },
+      }
+    ) as HTMLInputElement;
 
     const action_buttons = maybe_make_el(
       code_modal.modal,
@@ -209,7 +221,10 @@ window.onload = function () {
       for (let type in grid_controls) {
         // Get rid of old ones to start with fresh slate
         remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
-        grid_controls[type] = grid_dims[type].map(function (size:string, i: number) {
+        grid_controls[type] = grid_dims[type].map(function (
+          size: string,
+          i: number
+        ) {
           // The i + 1 is because grid is indexed at 1, not zero
           const grid_i = i + 1;
 
@@ -258,7 +273,7 @@ window.onload = function () {
       interface XY_Pos {
         x: number;
         y: number;
-      };
+      }
 
       let drag_start_rel: XY_Pos;
       let drag_start_abs: XY_Pos;
@@ -314,8 +329,9 @@ window.onload = function () {
     }
   }
 
-
-  function get_drag_extent_on_grid(selection_rect: Selection_Rect): Grid_Extent {
+  function get_drag_extent_on_grid(
+    selection_rect: Selection_Rect
+  ): Grid_Extent {
     // Reset bounding box definitions so we only use current selection extent
     const sel_bounds: Grid_Extent = { col: [null, null], row: [null, null] };
 
@@ -364,12 +380,12 @@ window.onload = function () {
       let in_danger_els = [];
       let auto_removed_el_ids = [];
 
-      all_els.forEach(function(el){
+      all_els.forEach(function (el) {
         const sits_outside_grid =
           el.end_row > new_num_rows || el.end_col > new_num_cols;
         const completely_outside_grid =
           el.start_row > new_num_rows || el.start_col > new_num_cols;
-  
+
         if (completely_outside_grid) {
           auto_removed_el_ids.push(el.id);
         } else if (sits_outside_grid) {
@@ -422,7 +438,9 @@ window.onload = function () {
                   (d) => form[d.id].value === "shrink"
                 );
                 to_edit.forEach((el) => {
-                  const el_node: HTMLElement = grid_holder.querySelector(`#${el.id}`);
+                  const el_node: HTMLElement = grid_holder.querySelector(
+                    `#${el.id}`
+                  );
                   el_node.style.gridRow = make_template_start_end([
                     el.start_row,
                     Math.min(el.end_row, new_num_rows),
@@ -436,7 +454,11 @@ window.onload = function () {
                 fix_els_modal.remove();
                 // Now that we've updated elements properly, we should be able to
                 // just recall the function and it won't spit an error
-                update_grid({ rows: opts.rows, cols: opts.cols, gap: opts.gap });
+                update_grid({
+                  rows: opts.rows,
+                  cols: opts.cols,
+                  gap: opts.gap,
+                });
               },
             },
           }
@@ -521,7 +543,9 @@ window.onload = function () {
         func: function () {
           const id = this["name_input"].value.replace(/\s/g, "_");
 
-          const element_exists: boolean = !!current_elements().find(el => el.id === id);
+          const element_exists: boolean = !!current_elements().find(
+            (el) => el.id === id
+          );
           if (element_exists) {
             // Cant have duplicate ids!
             warn_about_bad_id(
@@ -627,14 +651,14 @@ window.onload = function () {
           {
             event: "dragstart",
             func: function (event) {
-              const {x, y} = event as DragEvent;
+              const { x, y } = event as DragEvent;
               // make sure dragged element is on top
               grid_holder.appendChild(this.parentElement);
               // Storing this info in the dom to avoid global variables
               // The speed tradeoffs of the tiny json serialization are worth it imo
               const starting_bound_box = get_bounding_rect(this.parentElement);
               this.dataset.start_rect = JSON.stringify(starting_bound_box);
-              this.dataset.start_loc = JSON.stringify({ x, y, });
+              this.dataset.start_loc = JSON.stringify({ x, y });
 
               drag_feedback_rect = maybe_make_el(
                 grid_holder.querySelector("#drag_detector"),
@@ -653,7 +677,7 @@ window.onload = function () {
           {
             event: "drag",
             func: function (event) {
-              const {x, y} = event as DragEvent;
+              const { x, y } = event as DragEvent;
               // Sometimes the drag event gets fired with nonsense zeros
               if (x === 0 && y === 0) return;
 
@@ -757,26 +781,26 @@ window.onload = function () {
     end_row: number;
     start_col: number;
     end_col: number;
-  };
+  }
 
   function current_elements(): Array<Element_Info> {
-
     let elements: Array<Element_Info> = [];
-   
-    (grid_holder.querySelectorAll(".added-element") as NodeListOf<HTMLElement>)
-      .forEach(function (el: HTMLElement) {
-        // Ignore the selection box
-        if (el.id === "current_selection_box") return;
-        const grid_area = el.style.gridArea.split(" / ");
-        elements.push({
-          id: el.id,
-          start_row: +grid_area[0],
-          start_col: +grid_area[1],
-          // Subtract one here because the end in css is the end line, not row
-          end_row: +grid_area[2] - 1,
-          end_col: +grid_area[3] - 1,
-        });
+
+    (grid_holder.querySelectorAll(".added-element") as NodeListOf<
+      HTMLElement
+    >).forEach(function (el: HTMLElement) {
+      // Ignore the selection box
+      if (el.id === "current_selection_box") return;
+      const grid_area = el.style.gridArea.split(" / ");
+      elements.push({
+        id: el.id,
+        start_row: +grid_area[0],
+        start_col: +grid_area[1],
+        // Subtract one here because the end in css is the end line, not row
+        end_row: +grid_area[2] - 1,
+        end_col: +grid_area[3] - 1,
       });
+    });
 
     return elements;
   }
@@ -784,22 +808,26 @@ window.onload = function () {
   function send_elements_to_shiny() {
     if (Shiny) {
       const elements_by_id = {};
-      current_elements().forEach(function(el){
+      current_elements().forEach(function (el) {
         elements_by_id[el.id] = el;
-      })
+      });
       Shiny.setInputValue("elements", elements_by_id);
     }
   }
 
-  function gen_code_for_layout() : {css: string, html: string}{
+  function gen_code_for_layout(): { css: string; html: string } {
     const container_selector = "#container";
     const elements = current_elements();
 
-    const element_defs = elements.map(el => concat_nl(
-      `#${el.id} {`,
-      `  grid-column: ${make_template_start_end([el.start_col, el.end_col])};`,
-      `  grid-row: ${make_template_start_end([el.start_row, el.end_row])};`,
-      `}`
+    const element_defs = elements.map((el) =>
+      concat_nl(
+        `#${el.id} {`,
+        `  grid-column: ${make_template_start_end([
+          el.start_col,
+          el.end_col,
+        ])};`,
+        `  grid-row: ${make_template_start_end([el.start_row, el.end_row])};`,
+        `}`
       )
     );
 
@@ -815,17 +843,16 @@ window.onload = function () {
 
     const html_code = concat_nl(
       `<div id = ${container_selector}>`,
-      ...elements.map(el => concat_nl(
-        `  <div id = "#${el.id}">`,
-        `  </div>`
-      )),
+      ...elements.map((el) =>
+        concat_nl(`  <div id = "#${el.id}">`, `  </div>`)
+      ),
       `</div>`
     );
 
     return {
       css: css_code,
-      html: html_code
-    }
+      html: html_code,
+    };
   }
 
   function get_current_rows() {
@@ -888,7 +915,7 @@ function get_bounding_rect({
   offsetLeft: left,
   offsetHeight: height,
   offsetWidth: width,
-}) : Selection_Rect {
+}): Selection_Rect {
   return { x: [left, left + width], y: [top, top + height] };
 }
 

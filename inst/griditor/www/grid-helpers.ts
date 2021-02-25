@@ -4,8 +4,8 @@
 export function make_template_start_end(pos: Array<number>): string {
   // If we only have a single value just assume we take up one row
   // If single index is a negative one, we need to subtract instead of add to it
-  const start : number = pos[0];
-  const negative_index : boolean = start < 0;
+  const start: number = pos[0];
+  const negative_index: boolean = start < 0;
 
   // Grid works with lines so if we want an element to end at the 4th column we
   // need to tell it to end at the (4+1)5th line, so we add one
@@ -26,16 +26,21 @@ export function sizes_to_template_def(defs: Array<string>) {
   return concat(defs, " ");
 }
 
-export function concat(string_vec: Array<string>, collapse_char: string = " "): string {
-  return string_vec.reduce((concatted, current, i) => concatted + (i > 0 ? collapse_char : "") + current, "");
+export function concat(
+  string_vec: Array<string>,
+  collapse_char: string = " "
+): string {
+  return string_vec.reduce(
+    (concatted, current, i) =>
+      concatted + (i > 0 ? collapse_char : "") + current,
+    ""
+  );
 }
 
-export function concat_nl(...component_strings: string[]){
+export function concat_nl(...component_strings: string[]) {
   return concat(component_strings, "\n");
 }
 
-export function concat_sp(...component_strings: string[]){
+export function concat_sp(...component_strings: string[]) {
   return concat(component_strings, " ");
 }
-
-Math.max()
