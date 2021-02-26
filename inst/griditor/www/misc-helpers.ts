@@ -1,6 +1,17 @@
 import { Grid_Pos } from "./index";
 // Functions related to grid construction
 
+export interface XY_Pos {
+  x: number;
+  y: number;
+}
+
+export enum Drag_Type {
+  top_left = "top-left",
+  bottom_right = "bottom-right",
+  center = "center",
+}
+
 // Builds the start/end css string for a grid-{row,column}
 export function make_template_start_end(start: number, end?: number): string {
   // If we only have a single value just assume we take up one row
@@ -16,14 +27,13 @@ export function make_template_start_end(start: number, end?: number): string {
 }
 
 export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
-  
-  if(grid_bounds.row_start){
+  if (grid_bounds.row_start) {
     el.style.gridRow = make_template_start_end(
       grid_bounds.row_start,
       grid_bounds.row_end
     );
   }
-  if(grid_bounds.col_start){
+  if (grid_bounds.col_start) {
     el.style.gridColumn = make_template_start_end(
       grid_bounds.col_start,
       grid_bounds.col_end
@@ -130,6 +140,44 @@ export function boxes_overlap(
 
     return a_contains_b_endpoint || b_covers_a;
   }
+}
+
+export function update_rect_with_delta(
+  rect: Selection_Rect,
+  delta: XY_Pos,
+  dir: Drag_Type
+): Selection_Rect {
+  // Need to destructure down to numbers to avoid copy
+  const new_rect: Selection_Rect = { ...rect };
+
+  // The bounding here means that we dont let the user drag the box "inside-out"
+  if (dir === Drag_Type.top_left) {
+    new_rect.left = new_rect.left + delta.x;
+    new_rect.top = new_rect.top + delta.y;
+  } else if (dir === Drag_Type.bottom_right) {
+    (new_rect.right = new_rect.right + delta.x), new_rect.left;
+    (new_rect.bottom = new_rect.bottom + delta.y), new_rect.top;
+  } else {
+    // Just move the box
+    new_rect.left += delta.x;
+    new_rect.top += delta.y;
+    new_rect.right += delta.x;
+    new_rect.bottom += delta.y;
+  }
+
+  // Make sure positions are proper for bounding box (in case box was flipped inside out)
+  if (new_rect.left > new_rect.right) {
+    const { left, right } = new_rect;
+    new_rect.right = left;
+    new_rect.left = right;
+  }
+  if (new_rect.top > new_rect.bottom) {
+    const { top, bottom } = new_rect;
+    new_rect.bottom = top;
+    new_rect.top = bottom;
+  }
+
+  return new_rect;
 }
 
 export function get_css_unit(css_size: string): string {

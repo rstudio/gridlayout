@@ -22,6 +22,9 @@ import {
   get_css_unit,
   get_css_value,
   Selection_Rect,
+  update_rect_with_delta,
+  XY_Pos,
+  Drag_Type,
 } from "./misc-helpers";
 
 export const Shiny = (window as any).Shiny;
@@ -39,20 +42,9 @@ export interface Grid_Pos {
   row_end?: number;
 }
 
-interface XY_Pos {
-  x: number;
-  y: number;
-}
-
 interface Drag_Res {
   xy: XY_Pos;
   grid: Grid_Pos;
-}
-
-enum Drag_Type {
-  top_left = "top-left",
-  bottom_right = "bottom-right",
-  center = "center",
 }
 
 interface Drag_Options {
@@ -711,7 +703,7 @@ window.onload = function () {
 
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
-      // of the drag 
+      // of the drag
       start_rect = get_bounding_rect(opts.grid_element) || {
         left: event.offsetX,
         right: event.offsetX,
@@ -741,26 +733,11 @@ window.onload = function () {
       // Sometimes the drag event gets fired with nonsense zeros
       if (curr_loc.x === 0 && curr_loc.y === 0) return;
 
-      const x_delta = curr_loc.x - start_loc.x;
-      const y_delta = curr_loc.y - start_loc.y;
-
-      // Need to destructure down to numbers to avoid copy
-      const new_rect: Selection_Rect = { ...start_rect };
-
-      // The bounding here means that we dont let the user drag the box "inside-out"
-      if (opts.drag_dir === Drag_Type.top_left) {
-        new_rect.left = Math.min(new_rect.left + x_delta, new_rect.right);
-        new_rect.top = Math.min(new_rect.top + y_delta, new_rect.bottom);
-      } else if (opts.drag_dir === Drag_Type.bottom_right) {
-        new_rect.right = Math.max(new_rect.right + x_delta, new_rect.left);
-        new_rect.bottom = Math.max(new_rect.bottom + y_delta, new_rect.top);
-      } else {
-        // Just move the box
-        new_rect.left += x_delta;
-        new_rect.top += y_delta;
-        new_rect.right += x_delta;
-        new_rect.bottom += y_delta;
-      }
+      const new_rect = update_rect_with_delta(
+        start_rect,
+        { x: curr_loc.x - start_loc.x, y: curr_loc.y - start_loc.y },
+        opts.drag_dir
+      );
 
       Object.assign(
         drag_feedback_rect.style,
