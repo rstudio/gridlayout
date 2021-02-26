@@ -19,14 +19,13 @@ parcel index.ts
 ```
 This will bundle the js to a file in `www/dist/bundled.js` which is the path that the shiny app looks for the js in.
 
-## Building a version for shiny "deployment"
-``` bash
-parcel build index.ts --no-minify -o bundled.js 
-```
+## Building a "deployment" version of app
 
-# Building a version for main deployment
+First generate a bundled javascript file without source-map bloat
 ```bash
 parcel build index.ts --no-source-maps
 ```
 
+The shiny app is now good-to-go but we need to generate the html page for the web-app version.
 
+To do this run the script `generate_plain_html.R` to make an up-to-date html page that matches the shiny app.
