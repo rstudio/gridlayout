@@ -697,9 +697,6 @@ window.onload = function () {
   }
 
   function drag_on_grid(opts: Drag_Options): void {
-    const feedback_border_w = 3;
-    const border_offset = 2 * feedback_border_w;
-
     let drag_feedback_rect: HTMLElement;
     let start_rect: Selection_Rect;
     let start_loc: XY_Pos;
@@ -712,31 +709,21 @@ window.onload = function () {
       // make sure dragged element is on top
       grid_holder.appendChild(opts.grid_element);
 
-      const element_bounds = get_bounding_rect(opts.grid_element);
-      if (element_bounds) {
-        // debugger;
-        start_rect = element_bounds;
-        start_rect.left -= event.offsetX + border_offset;
-        start_rect.right -= event.offsetX + border_offset;
-        start_rect.top -= event.offsetY + border_offset;
-        start_rect.bottom -= event.offsetY + border_offset;
-      } else {
-        start_rect = {
-          left: event.offsetX,
-          right: event.offsetX,
-          top: event.offsetY,
-          bottom: event.offsetY,
-        };
-      }
+      // If this is a new element drag there wont be a bounding box for the grid
+      // element yet, so we need to make a new zero-width/height one at start
+      // of the drag 
+      start_rect = get_bounding_rect(opts.grid_element) || {
+        left: event.offsetX,
+        right: event.offsetX,
+        top: event.offsetY,
+        bottom: event.offsetY,
+      };
 
       drag_feedback_rect = maybe_make_el(
         grid_holder.querySelector("#drag_canvas"),
         "div.drag-feedback-rect",
         {
           styles: {
-            border: `${feedback_border_w}px dashed var(--dark-gray)`,
-            pointerEvents: "none",
-            position: "absolute",
             ...bounding_rect_to_css_pos(start_rect),
           },
         }

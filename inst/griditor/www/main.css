@@ -454,10 +454,11 @@ form#name_form input[type="text"] {
   padding: 0.5rem;
 }
 
-#drag_detector,
 #drag_canvas {
-  width: 100%;
-  height: 100%;
+  margin-left: calc(-1*var(--grid-gap));
+  margin-top: calc(-1*var(--grid-gap));
+  width: calc(100% + 2*var(--grid-gap));
+  height: calc(100% + 2*var(--grid-gap));
   grid-row: 1/-1;
   grid-column: 1/-1;
   position: relative;
