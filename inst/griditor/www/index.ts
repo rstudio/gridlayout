@@ -32,10 +32,10 @@ interface Grid_Settings {
 }
 
 export interface Grid_Pos {
-  col_start?: number;
-  col_end?: number;
-  row_start?: number;
-  row_end?: number;
+  start_col?: number;
+  end_col?: number;
+  start_row?: number;
+  end_row?: number;
 }
 
 interface Drag_Res {
@@ -112,12 +112,20 @@ window.onload = function () {
   }
 
   if (Shiny) {
+    console.log("hi shiny!");
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
 
     Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-      elements_to_add.forEach((el) => {
+      interface Shiny_Element_Msg {
+        id: string;
+        start_row: number;
+        end_row: number;
+        start_col: number;
+        end_col: number;
+      };
+      elements_to_add.forEach((el: Shiny_Element_Msg) => {
         add_element({
           id: el.id,
           grid_pos: el,
@@ -258,7 +266,7 @@ window.onload = function () {
           current_cells.push(
             make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
-              grid_pos: { row_start: row_i, col_start: col_i },
+              grid_pos: { start_row: row_i, start_col: col_i },
             })
           );
         }
@@ -322,17 +330,17 @@ window.onload = function () {
   }
   function get_drag_extent_on_grid(selection_rect: Selection_Rect): Grid_Pos {
     // Reset bounding box definitions so we only use current selection extent
-    const sel_bounds: Grid_Pos = { col_start: null, row_start: null };
+    const sel_bounds: Grid_Pos = { start_col: null, start_row: null };
 
     current_cells.forEach(function (el) {
       // Cell is overlapped by selection box
       if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
         const el_row: number = +el.dataset.row;
         const el_col: number = +el.dataset.col;
-        sel_bounds.row_start = min_w_missing(sel_bounds.row_start, el_row);
-        sel_bounds.row_end = max_w_missing(sel_bounds.row_end, el_row);
-        sel_bounds.col_start = min_w_missing(sel_bounds.col_start, el_col);
-        sel_bounds.col_end = max_w_missing(sel_bounds.col_end, el_col);
+        sel_bounds.start_row = min_w_missing(sel_bounds.start_row, el_row);
+        sel_bounds.end_row = max_w_missing(sel_bounds.end_row, el_row);
+        sel_bounds.start_col = min_w_missing(sel_bounds.start_col, el_col);
+        sel_bounds.end_col = max_w_missing(sel_bounds.end_col, el_col);
       }
     });
 
@@ -598,6 +606,7 @@ window.onload = function () {
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
   function add_element({ id, color = get_next_color(), grid_pos }) {
+    debugger;
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
@@ -674,10 +683,10 @@ window.onload = function () {
 
   function get_grid_pos(grid_el: HTMLElement): Grid_Pos {
     return {
-      row_start: +grid_el.style.gridRowStart,
-      col_start: +grid_el.style.gridColumnStart,
-      row_end: +grid_el.style.gridRowEnd - 1,
-      col_end: +grid_el.style.gridColumnEnd - 1,
+      start_row: +grid_el.style.gridRowStart,
+      start_col: +grid_el.style.gridColumnStart,
+      end_row: +grid_el.style.gridRowEnd - 1,
+      end_col: +grid_el.style.gridColumnEnd - 1,
     };
   }
 

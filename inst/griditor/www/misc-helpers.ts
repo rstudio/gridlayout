@@ -27,16 +27,16 @@ export function make_template_start_end(start: number, end?: number): string {
 }
 
 export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
-  if (grid_bounds.row_start) {
+  if (grid_bounds.start_row) {
     el.style.gridRow = make_template_start_end(
-      grid_bounds.row_start,
-      grid_bounds.row_end
+      grid_bounds.start_row,
+      grid_bounds.end_row
     );
   }
-  if (grid_bounds.col_start) {
+  if (grid_bounds.start_col) {
     el.style.gridColumn = make_template_start_end(
-      grid_bounds.col_start,
-      grid_bounds.col_end
+      grid_bounds.start_col,
+      grid_bounds.end_col
     );
   }
   el.style.display = "block"; // make sure we can see the element
