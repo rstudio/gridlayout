@@ -25,13 +25,15 @@ elements_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0
 
 
 setwd(here("inst/griditor/"))
+
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
 
 ui <- tags$body(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
-    tags$script(src = "dist/index.js")
+    tags$script(src = "dist/index.js"),
+    tags$title("Griditor")
   ),
   div(id = "header",
       h2("Griditor: Build a grid layout for your Shiny app"),
