@@ -464,12 +464,20 @@ form#name_form input[type="text"] {
   position: relative;
 }
 
-#drag_detector #drag_box {
-  /* outline: 2px solid gray; */
-  display: none;
-  height: 1px;
-  width: 1px;
-  position: absolute;
-  /* Stops the appearance of the dragged box from triggering mouseoff event */
+.drag-feedback-rect {
   pointer-events: none;
+  position: absolute;
+  background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+  animation: border-dance 16s infinite linear;
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+  }
+  100% {
+    background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+  }
 }
