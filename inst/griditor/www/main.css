@@ -135,7 +135,7 @@ button.minus_btn.disabled {
 }
 
 #elements button.remove_el {
-  background: white;
+  background: rgba(255, 255, 255, 0);
   border: none;
   cursor: pointer;
 }
