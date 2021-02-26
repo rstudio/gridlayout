@@ -6,3 +6,5 @@ development:
 
 home:
   strip_header: false
+
+destination: docs
