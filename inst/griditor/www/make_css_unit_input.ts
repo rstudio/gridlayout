@@ -1,5 +1,7 @@
+import { horizontal_drag_icon, vertical_drag_icon } from "./icons";
 import { make_el } from "./make_el";
 import { get_css_value, get_css_unit } from "./misc-helpers";
+
 
 export interface CSS_Input {
   form: HTMLElement;
@@ -58,10 +60,16 @@ export function make_css_unit_input({
     },
   });
 
+
   const resizer = make_el(input_holder, "div.css-dragger", {
-    innerHTML: `<i class="fa fa-arrows-${
-      drag_dir === "y" ? "v" : "h"
-    }" aria-hidden="true"></i>`,
+    innerHTML: drag_dir === "y" 
+      ? vertical_drag_icon
+      : horizontal_drag_icon,
+    styles: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }
   });
 
   // Place an invisible div over the main one that we let be dragged. This means
@@ -126,7 +134,7 @@ export function make_css_unit_input({
     }
 
     if (new_unit === "px" && allow_drag) {
-      resizer.style.display = "block";
+      resizer.style.display = "flex";
     } else {
       resizer.style.display = "none";
     }

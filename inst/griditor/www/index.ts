@@ -21,6 +21,7 @@ import {
   XY_Pos,
   Drag_Type,
 } from "./misc-helpers";
+import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
 
 export const Shiny = (window as any).Shiny;
 
@@ -617,10 +618,11 @@ window.onload = function () {
             `div.dragger.visible.${handle_type}`,
             {
               styles: { background: color },
-              innerHTML:
-                handle_type === "center"
-                  ? `<i class="fas fa-arrows-alt"></i>`
-                  : `<i class="fas fa-long-arrow-alt-up"></i>`,
+              innerHTML: handle_type === "center"
+              ? drag_icon
+              : handle_type === Drag_Type.bottom_right
+                ? se_arrow
+                : nw_arrow
             }
           ),
           grid_element: element_in_grid,
@@ -655,9 +657,9 @@ window.onload = function () {
         ],
       }
     );
-
+    
     make_el(element_in_list, "button.remove_el", {
-      innerHTML: `<i class="fa fa-trash" aria-hidden="true"></i>`,
+      innerHTML: trashcan_icon,
       event_listener: {
         event: "click",
         func: function () {

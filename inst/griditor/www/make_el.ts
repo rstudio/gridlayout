@@ -1,7 +1,6 @@
 import { Grid_Pos } from ".";
 import {
   as_array,
-  make_template_start_end,
   set_element_in_grid,
 } from "./misc-helpers";
 

@@ -1,3 +1,4 @@
+import { minus_icon, plus_icon } from "./icons";
 import { make_el } from "./make_el";
 
 // Builds an up down button and value input
@@ -19,7 +20,7 @@ export function make_incrementer({
   const inputs_div = make_el(plus_minus_div, "div.controls");
 
   const minus_btn = make_el(inputs_div, "button.minus_btn", {
-    innerHTML: `<i class="fa fa-minus" aria-hidden="true"></i>`,
+    innerHTML: minus_icon,
     event_listener: {
       event: "click",
       func: increment_counter(-1),
@@ -30,7 +31,7 @@ export function make_incrementer({
   });
 
   make_el(inputs_div, "button.plus_btn", {
-    innerHTML: `<i class="fa fa-plus" aria-hidden="true"></i>`,
+    innerHTML: plus_icon,
     event_listener: {
       event: "click",
       func: increment_counter(1),

@@ -69,6 +69,10 @@ h3 {
   margin-top: calc(2 * var(--side-gaps));
 }
 
+/* Makes icons lineup better with the text in headers */
+h3 > svg {
+  margin-bottom: -5px;
+}
 
 * {
   box-sizing: border-box;
@@ -108,6 +112,11 @@ button.minus_btn.disabled {
   padding: 0.5rem 1rem;
 }
 
+.plus_minus_input .controls{
+  display: flex;
+  justify-content: center;
+}
+
 .plus_minus_input .label {
   text-align: right;
 }
@@ -116,6 +125,7 @@ button.minus_btn.disabled {
   display: inline-block;
   width: 1.5rem;
   text-align: center;
+  line-height: 25px;
 }
 
 .plus_minus_input button {
@@ -124,8 +134,11 @@ button.minus_btn.disabled {
   justify-content: center;
   width: 25px;
   height: 25px;
-  font-size: 1.1rem;
   color: var(--off-black);
+}
+
+.plus_minus_input svg {
+  transform: scale(2);
 }
 
 #instructions {
@@ -135,6 +148,12 @@ button.minus_btn.disabled {
 
 #elements {
   grid-area: elements;
+}
+
+#elements button.remove_el {
+  background: white;
+  border: none;
+  cursor: pointer;
 }
 
 #editor {
@@ -243,6 +262,10 @@ button.minus_btn.disabled {
   align-items: center;
   color: var(--off-white);
   opacity: 0.5;
+}
+
+.added-element .dragger > svg {
+  transform: scale(0.85);
 }
 
 .added-element .dragger.top-left {
