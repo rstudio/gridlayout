@@ -1,9 +1,13 @@
 import { Grid_Pos } from ".";
-import { as_array, make_template_start_end, set_element_in_grid } from "./misc-helpers";
+import {
+  as_array,
+  make_template_start_end,
+  set_element_in_grid,
+} from "./misc-helpers";
 
 export interface Event_Listener {
-  event: string,
-  func: (event: Event) => void
+  event: string;
+  func: (event: Event) => void;
 }
 
 interface Element_Opts {
@@ -21,7 +25,7 @@ interface Element_Opts {
 export function make_el(
   parent: HTMLElement,
   sel_txt: string,
-  opts: Element_Opts = {},
+  opts: Element_Opts = {}
 ) {
   const get_tag_regex = /^([^#\.]+)+/g;
   const get_id_regex = /(?<=#)([^\.]+)/g;
@@ -51,7 +55,6 @@ export function make_el(
   }
 
   if (opts.event_listener) {
-    
     as_array(opts.event_listener).forEach(
       (listener) => (el["on" + listener.event] = listener.func)
     );
@@ -69,7 +72,7 @@ export function make_el(
     Object.assign(el.dataset, opts.data_props);
   }
 
-  if(opts.grid_pos){
+  if (opts.grid_pos) {
     set_element_in_grid(el, opts.grid_pos);
   }
 

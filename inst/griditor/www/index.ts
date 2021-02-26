@@ -1,9 +1,5 @@
 // JS entry point
-import {
-  Event_Listener,
-  make_el,
-  remove_elements,
-} from "./make_el";
+import { Event_Listener, make_el, remove_elements } from "./make_el";
 import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
@@ -226,16 +222,12 @@ window.onload = function () {
       }) as HTMLInputElement;
     });
 
-    const action_buttons = make_el(
-      code_modal.modal,
-      "div#action_buttons",
-      {
-        styles: {
-          display: "flex",
-          justifyContent: "space-around",
-        },
-      }
-    );
+    const action_buttons = make_el(code_modal.modal, "div#action_buttons", {
+      styles: {
+        display: "flex",
+        justifyContent: "space-around",
+      },
+    });
     make_el(action_buttons, "button#close_code_model", {
       innerHTML: "Close",
       event_listener: {
