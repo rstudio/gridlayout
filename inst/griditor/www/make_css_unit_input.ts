@@ -122,9 +122,9 @@ export function make_css_unit_input({
     }
 
     if (new_unit === "px" && allow_drag) {
-      resizer.style.display = "flex";
+      form.classList.add("with-drag");
     } else {
-      resizer.style.display = "none";
+      form.classList.remove("with-drag");
     }
   }
 

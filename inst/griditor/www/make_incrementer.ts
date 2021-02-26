@@ -9,28 +9,29 @@ export function make_incrementer({
   label = "my incrementer",
   on_increment = (x) => console.log(x),
 }): (new_value: number) => void {
+
   const plus_minus_div = make_el(
     parent_el,
-    `div#${id}_incrementer.plus_minus_input`,
+    `div#${id}_incrementer.plus-minus-input.settings-grid`,
     {
-      innerHTML: `<span>${label}</span>`,
+      innerHTML: `<span class = "label">${label}</span>`,
     }
   );
 
-  const inputs_div = make_el(plus_minus_div, "div.controls");
+  const inputs_div = make_el(plus_minus_div, "div.plus-minus-input-controls");
 
-  const minus_btn = make_el(inputs_div, "button.minus_btn", {
+  const minus_btn = make_el(inputs_div, "button.plus-minus-input-btn.minus", {
     innerHTML: minus_icon,
     event_listener: {
       event: "click",
       func: increment_counter(-1),
     },
   });
-  const current_value = make_el(inputs_div, "span.value", {
+  const current_value = make_el(inputs_div, "span.plus-minus-input-value", {
     innerHTML: start_val.toString(),
   });
 
-  make_el(inputs_div, "button.plus_btn", {
+  make_el(inputs_div, "button.plus-minus-input-btn.plus", {
     innerHTML: plus_icon,
     event_listener: {
       event: "click",

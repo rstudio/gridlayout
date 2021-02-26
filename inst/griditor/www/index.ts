@@ -86,7 +86,7 @@ window.onload = function () {
     gap: make_css_unit_input({
       parent_el: make_el(
         settings_panel,
-        "div#gap_size_chooser.plus_minus_input",
+        "div#gap_size_chooser.plus_minus_input.settings-grid",
         {
           innerHTML: `<span class = "label">Panel gap size</span>`,
         }

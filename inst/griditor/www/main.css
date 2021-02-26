@@ -105,40 +105,50 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
-.plus_minus_input {
+.settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  justify-items: end;
+  justify-items: center;
+  align-items: center;
   grid-gap: 1rem;
   padding: 0.5rem 1rem;
 }
-
-.plus_minus_input .controls{
-  display: flex;
-  justify-content: center;
+.settings-grid > .label {
+  text-align: right;
+  justify-self: end;
 }
 
-.plus_minus_input .label {
+.plus-minus-input-controls{
+  display: grid;
+  grid-template-columns: 30px 20px 30px;
+  grid-template-rows: 30px;
+  justify-content: center;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.plus-minus-input .label {
   text-align: right;
 }
 
-.plus_minus_input .value {
-  display: inline-block;
-  width: 1.5rem;
+.plus-minus-input-value {
+  /* display: inline-block; */
+  /* width: 1.5rem; */
   text-align: center;
-  line-height: 25px;
+  align-self: center;
+  /* line-height: 25px; */
 }
 
-.plus_minus_input button {
+.plus-minus-input-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
-  height: 25px;
+  width: 100%;
+  height: 100%;
   color: var(--off-black);
 }
 
-.plus_minus_input svg {
+.plus-minus-input svg {
   transform: scale(2);
 }
 
@@ -313,16 +323,18 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
-
-
 .css-unit-input {
   display: grid;
-  grid-template-columns: 60px 45px;
-  grid-template-rows: 32px 18px;
+  grid-template-columns: 60px 54px;
+  grid-template-rows: 32px;
   grid-gap: 5px;
   align-content: center;
   padding: var(--padding);
   pointer-events: none;
+}
+
+.css-unit-input.with-drag {
+  grid-template-rows: 32px 18px;
 }
 
 .css-unit-input-value,
@@ -332,10 +344,11 @@ button.minus_btn.disabled {
   font-size: 1.15rem;
 }
 
+
 .css-unit-input-dragger {
   align-self: stretch;
   grid-column: 1/-1;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   cursor: grab;
@@ -344,6 +357,10 @@ button.minus_btn.disabled {
   color: var(--off-black);
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
   position: relative;
+}
+
+.with-drag .css-unit-input-dragger {
+  display: flex;
 }
 
 .css-unit-input-drag-detector {
