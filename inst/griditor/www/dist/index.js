@@ -841,7 +841,6 @@ window.onload = function () {
   }
 
   if (exports.Shiny) {
-    console.log("hi shiny!");
     exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
@@ -1287,7 +1286,6 @@ window.onload = function () {
         _b = _a.color,
         color = _b === void 0 ? get_next_color() : _b,
         grid_pos = _a.grid_pos;
-    debugger;
     var element_in_grid = make_el_1.make_el(grid_holder, "div#" + id + ".el_" + id + ".added-element", {
       grid_pos: grid_pos,
       styles: {

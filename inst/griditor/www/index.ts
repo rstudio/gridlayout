@@ -112,7 +112,6 @@ window.onload = function () {
   }
 
   if (Shiny) {
-    console.log("hi shiny!");
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
@@ -606,7 +605,6 @@ window.onload = function () {
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
   function add_element({ id, color = get_next_color(), grid_pos }) {
-    debugger;
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
