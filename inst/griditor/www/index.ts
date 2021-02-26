@@ -56,6 +56,7 @@ enum Drag_Type {
 }
 
 interface Drag_Options {
+  watching_element: HTMLElement;
   drag_dir: Drag_Type;
   grid_element?: HTMLElement;
   on_start?: (start_loc: XY_Pos) => void;
@@ -131,7 +132,7 @@ window.onload = function () {
       elements_to_add.forEach((el) => {
         add_element({
           id: el.id,
-          grid_pos: el
+          grid_pos: el,
         });
       });
     });
@@ -273,7 +274,7 @@ window.onload = function () {
           current_cells.push(
             maybe_make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
-              grid_pos: {row_start: row_i, col_start: col_i}
+              grid_pos: { row_start: row_i, col_start: col_i },
             })
           );
         }
@@ -309,36 +310,27 @@ window.onload = function () {
         grid_holder,
         "div#current_selection_box.added-element"
       );
-      const new_element_drag = drag_on_grid({
-        drag_dir: Drag_Type.bottom_right,
+      const drag_canvas = maybe_make_el(grid_holder, "div#drag_canvas");
+
+      drag_on_grid({
+        watching_element: drag_canvas,
         grid_element: current_selection_box,
+        drag_dir: Drag_Type.bottom_right,
         on_start: () => {
           current_selection_box.style.borderColor = get_next_color();
         },
-        on_end: ({grid}) => {
-          debugger;
+        on_end: ({ grid }) => {
           name_new_element({
             grid_pos: grid,
-            selection_box:current_selection_box
-          })
-        }
+            selection_box: current_selection_box,
+          });
+        },
       });
-      const drag_canvas = maybe_make_el(grid_holder, "div#drag_canvas", {
-        event_listener: new_element_drag,
-      });
-
-      const drag_detector = maybe_make_el(grid_holder, "div#drag_detector", {
-        event_listener: new_element_drag,
-        props: { draggable: true },
-        styles: { opacity: 0 },
-      });
-  
 
       // Make sure any added elements sit on top by re-appending them to grid holder
       // Make sure that the drag detector sits over everything
       [
         drag_canvas,
-        drag_detector,
         ...grid_holder.querySelectorAll(".added-element"),
       ].forEach((el) => grid_holder.appendChild(el));
     } else {
@@ -645,12 +637,13 @@ window.onload = function () {
               : `<i class="fas fa-long-arrow-alt-up"></i>`,
         });
 
-        const drag_behavior = drag_on_grid({ drag_dir: handle_type });
-
-        maybe_make_el(element_in_grid, `div.dragger.invisible.${handle_type}`, {
-          props: { draggable: true },
-          data_props: { handle_type },
-          event_listener: drag_behavior,
+        drag_on_grid({
+          watching_element: maybe_make_el(
+            element_in_grid,
+            `div.dragger.invisible.${handle_type}`
+          ),
+          grid_element: element_in_grid,
+          drag_dir: handle_type,
         });
       }
     );
@@ -704,36 +697,38 @@ window.onload = function () {
       col_end: +grid_el.style.gridColumnEnd - 1,
     };
   }
-  function drag_on_grid(opts: Drag_Options): Array<Event_Listener> {
+
+  function drag_on_grid(opts: Drag_Options): void {
     const feedback_border_w = 3;
-    const border_offset = 2*feedback_border_w;
+    const border_offset = 2 * feedback_border_w;
 
     let drag_feedback_rect: HTMLElement;
     let start_rect: Selection_Rect;
     let start_loc: XY_Pos;
 
-    function drag_start(event: DragEvent) {
-      const grid_element = opts.grid_element || this.parentElement;
+    const editor_el: HTMLElement = document.querySelector("#editor");
+
+    opts.watching_element.onmousedown = function (event: MouseEvent) {
       start_loc = event as DragEvent;
 
       // make sure dragged element is on top
-      grid_holder.appendChild(grid_element);
+      grid_holder.appendChild(opts.grid_element);
 
-      const element_bounds = get_bounding_rect(grid_element);
-      if(element_bounds){
+      const element_bounds = get_bounding_rect(opts.grid_element);
+      if (element_bounds) {
         // debugger;
-        start_rect = element_bounds ;
+        start_rect = element_bounds;
         start_rect.left -= event.offsetX + border_offset;
         start_rect.right -= event.offsetX + border_offset;
         start_rect.top -= event.offsetY + border_offset;
-        start_rect.bottom -=event.offsetY + border_offset;
+        start_rect.bottom -= event.offsetY + border_offset;
       } else {
         start_rect = {
           left: event.offsetX,
           right: event.offsetX,
           top: event.offsetY,
           bottom: event.offsetY,
-        }
+        };
       }
 
       drag_feedback_rect = maybe_make_el(
@@ -750,10 +745,14 @@ window.onload = function () {
       );
 
       if (opts.on_start) opts.on_start(start_loc);
-    }
 
-    function drag(event: DragEvent) {
-      const curr_loc: XY_Pos = event as DragEvent;
+      // Add listener to editor so we can continue to track this drag
+      editor_el.addEventListener("mousemove", drag);
+      editor_el.addEventListener("mouseup", drag_end);
+    };
+
+    function drag(event: MouseEvent) {
+      const curr_loc: XY_Pos = event;
       // Sometimes the drag event gets fired with nonsense zeros
       if (curr_loc.x === 0 && curr_loc.y === 0) return;
 
@@ -783,12 +782,12 @@ window.onload = function () {
         bounding_rect_to_css_pos(new_rect)
       );
       const grid_extent = get_drag_extent_on_grid(new_rect);
-      set_element_in_grid(opts.grid_element || this.parentElement, grid_extent);
+      set_element_in_grid(opts.grid_element, grid_extent);
 
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
 
-    function drag_end(event: DragEvent) {
+    function drag_end(event: MouseEvent) {
       const end_loc: XY_Pos = event;
       drag_feedback_rect.remove();
       start_rect = null;
@@ -798,6 +797,9 @@ window.onload = function () {
           xy: end_loc,
           grid: get_grid_pos(opts.grid_element || this.parentElement),
         });
+
+      editor_el.removeEventListener("mousemove", drag);
+      editor_el.removeEventListener("mouseup", drag_end);
     }
 
     function bounding_rect_to_css_pos(rect: Selection_Rect) {
@@ -808,21 +810,6 @@ window.onload = function () {
         height: `${rect.bottom - rect.top}px`,
       };
     }
-
-    return [
-      {
-        event: "dragstart",
-        func: drag_start,
-      },
-      {
-        event: "drag",
-        func: drag,
-      },
-      {
-        event: "dragend",
-        func: drag_end,
-      },
-    ];
   }
 
   interface Element_Info {
