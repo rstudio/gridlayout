@@ -1,28 +1,4 @@
 /* Styles for my app */
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Regular-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Regular-102.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Bold-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Bold-102.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Italic-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Italic-102.woff") format("woff");
-  font-weight: normal;
-  font-style: italic;
-}
-
 body {
   --side-gaps: 0.7rem;
   --blue: #007bff;
@@ -33,7 +9,8 @@ body {
   --off-black: #2c2c2c;
   --edge-round: 5px;
   --element_roundness: 10px;
-  font-family: "atkinson";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 18px;
   display: grid;
   grid-template-columns: 300px 1fr 150px;
   grid-template-rows: 50px auto auto 1fr;
@@ -69,6 +46,10 @@ h3 {
   margin-top: calc(2 * var(--side-gaps));
 }
 
+/* Makes icons lineup better with the text in headers */
+h3 > svg {
+  margin-bottom: -5px;
+}
 
 * {
   box-sizing: border-box;
@@ -100,32 +81,48 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
-.plus_minus_input {
+.settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  justify-items: end;
+  justify-items: center;
+  align-items: center;
   grid-gap: 1rem;
   padding: 0.5rem 1rem;
 }
+.settings-grid > .label {
+  text-align: right;
+  justify-self: end;
+}
 
-.plus_minus_input .label {
+.plus-minus-input-controls{
+  display: grid;
+  grid-template-columns: 30px 30px 30px;
+  grid-template-rows: 30px;
+  justify-content: center;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.plus-minus-input .label {
   text-align: right;
 }
 
-.plus_minus_input .value {
-  display: inline-block;
-  width: 1.5rem;
+.plus-minus-input-value {
   text-align: center;
+  align-self: center;
 }
 
-.plus_minus_input button {
+.plus-minus-input-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
-  height: 25px;
-  font-size: 1.1rem;
+  width: 100%;
+  height: 100%;
   color: var(--off-black);
+}
+
+.plus-minus-input svg {
+  transform: scale(2);
 }
 
 #instructions {
@@ -135,6 +132,12 @@ button.minus_btn.disabled {
 
 #elements {
   grid-area: elements;
+}
+
+#elements button.remove_el {
+  background: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
 }
 
 #editor {
@@ -166,7 +169,7 @@ button.minus_btn.disabled {
 }
 
 #editor-browser-header text {
-  font-family: 'Comic Neue', cursive;
+  font-family: monospace;
   size: 12px;
 }
 
@@ -245,6 +248,10 @@ button.minus_btn.disabled {
   opacity: 0.5;
 }
 
+.added-element .dragger > svg {
+  transform: scale(0.85);
+}
+
 .added-element .dragger.top-left {
   top: -2px;
   left: -2px;
@@ -291,40 +298,87 @@ button.minus_btn.disabled {
 
 .css-unit-input {
   display: grid;
+  grid-template-columns: 60px 54px;
+  grid-template-rows: 32px;
   grid-gap: 5px;
+  align-content: center;
   padding: var(--padding);
   pointer-events: none;
+}
+
+.css-unit-input.with-drag {
+  grid-template-rows: 32px 18px;
+}
+
+.css-unit-input-value,
+.css-unit-input-select {
+  align-self:stretch;
+  justify-self: stretch;
+  font-size: 1.15rem;
+}
+
+
+.css-unit-input-dragger {
+  align-self: stretch;
+  grid-column: 1/-1;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  border: 1px solid var(--dark-gray);
+  border-radius: 4px;
+  color: var(--off-black);
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  position: relative;
+}
+
+.with-drag .css-unit-input-dragger {
+  display: flex;
+}
+
+.css-unit-input-drag-detector {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: steelblue;
+  opacity: 0;
+}
+
+.css-unit-input-dragger:active {
+  cursor: grabbing;
 }
 
 .css-unit-input > * {
   pointer-events: all;
 }
 
-.css-unit-input form {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 
 .cols-controls {
+  position: absolute;
   grid-row: -2 / -1;
-  /* Place controls in middle of column */
-  justify-self: center;
-  align-items: flex-start;
   /* This is so when the columns are thin the unit selector sits to the right 
   side. When everything is on a single row it has no effect */
-  position: absolute;
   top: calc(100% + var(--grid-gap));
   height: var(--editor-bottom-pad);
   width: 100%;
-  
-  grid-template-columns: 1rem 1fr 1rem;
-  justify-items: center;
 }
 
-.css-unit-input.cols-controls form {
-  grid-column: 2/3;
+.cols-controls.css-unit-input {
+  align-content: start;
   justify-content: center;
 }
+
+.rows-controls.css-unit-input {
+  align-content: center;
+  justify-content: end;
+}
+
+
+
+
 
 .rows-controls {
   height: 100%;
@@ -336,55 +390,17 @@ button.minus_btn.disabled {
   right: calc(100% + var(--grid-gap));
   width: var(--editor-left-pad);
 
-  grid-template-rows: 1rem 1fr 1rem;
+  /* grid-template-rows: 1rem 1fr 1rem; */
 }  
 
-.css-unit-input.rows-controls form {
+/* .rows-controls .css-unit-input-form {
   grid-row: 2/3;
 }
 
-.css-unit-input .css-dragger {
-  height: 1rem;
-  width: 1rem;
-  text-align: center;
-  display: block;
-  cursor: grab;
-  border: 1px solid var(--dark-gray);
-  border-radius: 4px;
-  font-size: 0.85rem;
-  color: var(--off-black);
-
-  /* background: steelblue; */
-  /* outline: 1px solid red; */
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  position: relative;
-}
-
-.css-dragger .detector {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: steelblue;
-  opacity: 0;
-}
-
-.css-unit-input .css-dragger:active {
-  cursor: grabbing;
-  /* opacity: 0; */
-}
-
-.rows-controls .css-dragger {
-  grid-row: -1 / -2;
-  width: 100%;
-}
-
-.cols-controls .css-dragger {
-  grid-column: 2 / 3;
-  width: 100%;
-  max-width: 50px;
-}
+ */
+/* .rows-controls .css-unit-input-dragger {
+  max-width: 60px;
+} */
 
 
 
@@ -454,20 +470,30 @@ form#name_form input[type="text"] {
   padding: 0.5rem;
 }
 
-#drag_detector {
-  width: 100%;
-  height: 100%;
+#drag_canvas {
+  margin-left: calc(-1*var(--grid-gap));
+  margin-top: calc(-1*var(--grid-gap));
+  width: calc(100% + 2*var(--grid-gap));
+  height: calc(100% + 2*var(--grid-gap));
   grid-row: 1/-1;
   grid-column: 1/-1;
   position: relative;
 }
 
-#drag_detector #drag_box {
-  /* outline: 2px solid gray; */
-  display: none;
-  height: 1px;
-  width: 1px;
-  position: absolute;
-  /* Stops the appearance of the dragged box from triggering mouseoff event */
+.drag-feedback-rect {
   pointer-events: none;
+  position: absolute;
+  background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+  animation: border-dance 16s infinite linear;
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+  }
+  100% {
+    background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+  }
 }
