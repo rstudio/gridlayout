@@ -21,6 +21,7 @@ export function make_incrementer({
   const inputs_div = make_el(plus_minus_div, "div.plus-minus-input-controls");
 
   const minus_btn = make_el(inputs_div, "button.plus-minus-input-btn.minus", {
+    props: {name: "plus button"},
     innerHTML: minus_icon,
     event_listener: {
       event: "click",
@@ -32,6 +33,7 @@ export function make_incrementer({
   });
 
   make_el(inputs_div, "button.plus-minus-input-btn.plus", {
+    props: {name: "minus button"},
     innerHTML: plus_icon,
     event_listener: {
       event: "click",
