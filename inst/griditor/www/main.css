@@ -1,28 +1,4 @@
 /* Styles for my app */
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Regular-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Regular-102.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Bold-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Bold-102.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "atkinson";
-  src: url("./fonts/Atkinson-Hyperlegible-Italic-102a.woff2") format("woff2"),
-       url("./fonts/Atkinson-Hyperlegible-Italic-102.woff") format("woff");
-  font-weight: normal;
-  font-style: italic;
-}
-
 body {
   --side-gaps: 0.7rem;
   --blue: #007bff;
@@ -33,7 +9,7 @@ body {
   --off-black: #2c2c2c;
   --edge-round: 5px;
   --element_roundness: 10px;
-  font-family: "atkinson";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 18px;
   display: grid;
   grid-template-columns: 300px 1fr 150px;
@@ -120,7 +96,7 @@ button.minus_btn.disabled {
 
 .plus-minus-input-controls{
   display: grid;
-  grid-template-columns: 30px 20px 30px;
+  grid-template-columns: 30px 30px 30px;
   grid-template-rows: 30px;
   justify-content: center;
   align-items: stretch;
@@ -132,11 +108,8 @@ button.minus_btn.disabled {
 }
 
 .plus-minus-input-value {
-  /* display: inline-block; */
-  /* width: 1.5rem; */
   text-align: center;
   align-self: center;
-  /* line-height: 25px; */
 }
 
 .plus-minus-input-btn {
@@ -196,7 +169,7 @@ button.minus_btn.disabled {
 }
 
 #editor-browser-header text {
-  font-family: 'Comic Neue', cursive;
+  font-family: monospace;
   size: 12px;
 }
 
