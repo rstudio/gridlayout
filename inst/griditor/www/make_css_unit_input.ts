@@ -1,4 +1,4 @@
-import { maybe_make_el } from "./maybe_make_el";
+import { make_el } from "./make_el";
 import { get_css_value, get_css_unit } from "./misc-helpers";
 
 export interface CSS_Input {
@@ -23,7 +23,7 @@ export function make_css_unit_input({
 }): CSS_Input {
   const allow_drag = drag_dir !== "none";
 
-  const input_holder = maybe_make_el(
+  const input_holder = make_el(
     parent_el,
     `div${selector}.input-holder.css-unit-input`,
     {
@@ -31,11 +31,11 @@ export function make_css_unit_input({
     }
   );
 
-  const form = maybe_make_el(input_holder, `form`, {
+  const form = make_el(input_holder, `form`, {
     event_listener: { event: "change", func: on_update },
   });
 
-  const value_input = <HTMLInputElement>maybe_make_el(form, "input", {
+  const value_input = <HTMLInputElement>make_el(form, "input", {
     props: {
       type: "number",
       min: 0,
@@ -50,7 +50,7 @@ export function make_css_unit_input({
     },
   });
 
-  const unit_selector = <HTMLSelectElement>maybe_make_el(form, "select", {
+  const unit_selector = <HTMLSelectElement>make_el(form, "select", {
     props: { name: "units" },
     styles: {
       minWidth: "20px",
@@ -58,7 +58,7 @@ export function make_css_unit_input({
     },
   });
 
-  const resizer = maybe_make_el(input_holder, "div.css-dragger", {
+  const resizer = make_el(input_holder, "div.css-dragger", {
     innerHTML: `<i class="fa fa-arrows-${
       drag_dir === "y" ? "v" : "h"
     }" aria-hidden="true"></i>`,
@@ -67,7 +67,7 @@ export function make_css_unit_input({
   // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
-  maybe_make_el(resizer, "div.detector", {
+  make_el(resizer, "div.detector", {
     props: { draggable: true },
     event_listener: [
       {
@@ -96,7 +96,7 @@ export function make_css_unit_input({
 
   allowed_units.forEach(function (unit_type) {
     const unit_option = <HTMLOptionElement>(
-      maybe_make_el(unit_selector, `option.${unit_type}`, {
+      make_el(unit_selector, `option.${unit_type}`, {
         props: { value: unit_type },
         innerHTML: unit_type,
       })

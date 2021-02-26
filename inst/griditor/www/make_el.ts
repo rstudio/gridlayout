@@ -18,7 +18,7 @@ interface Element_Opts {
 // This is a heavy-lifter that takes care of building elements and placing them
 // on the grid etc.. It only create's an element if it needs to, which means
 // that we dont get dom leaks caused by recalling stuff over and over again.
-export function maybe_make_el(
+export function make_el(
   parent: HTMLElement,
   sel_txt: string,
   opts: Element_Opts = {},

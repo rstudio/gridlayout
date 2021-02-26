@@ -1,9 +1,9 @@
 // JS entry point
 import {
   Event_Listener,
-  maybe_make_el,
+  make_el,
   remove_elements,
-} from "./maybe_make_el";
+} from "./make_el";
 import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
@@ -87,7 +87,7 @@ window.onload = function () {
       on_increment: (x) => update_num_rows_or_cols("cols", x),
     }),
     gap: make_css_unit_input({
-      parent_el: maybe_make_el(
+      parent_el: make_el(
         settings_panel,
         "div#gap_size_chooser.plus_minus_input",
         {
@@ -174,7 +174,7 @@ window.onload = function () {
     as_array(code_blocks).forEach(function (code_to_show) {
       const num_of_lines: number = code_to_show.code.match(/\n/g).length;
 
-      const code_section = maybe_make_el(
+      const code_section = make_el(
         code_modal.modal,
         `div#${code_to_show.type}.code_chunk`,
         {
@@ -193,12 +193,12 @@ window.onload = function () {
 
       let code_text: HTMLInputElement;
 
-      maybe_make_el(code_section, "strong", {
+      make_el(code_section, "strong", {
         innerHTML: code_to_show.type,
         styles: { gridArea: "code_type" },
       });
 
-      maybe_make_el(code_section, "button#copy_code", {
+      make_el(code_section, "button#copy_code", {
         innerHTML: "Copy to clipboard",
         styles: { gridArea: "copy_btn" },
         event_listener: {
@@ -210,7 +210,7 @@ window.onload = function () {
         },
       });
 
-      code_text = maybe_make_el(code_section, "textarea#code_for_layout", {
+      code_text = make_el(code_section, "textarea#code_for_layout", {
         innerHTML: code_to_show.code,
         props: { rows: num_of_lines + 3 },
         styles: {
@@ -226,7 +226,7 @@ window.onload = function () {
       }) as HTMLInputElement;
     });
 
-    const action_buttons = maybe_make_el(
+    const action_buttons = make_el(
       code_modal.modal,
       "div#action_buttons",
       {
@@ -236,7 +236,7 @@ window.onload = function () {
         },
       }
     );
-    maybe_make_el(action_buttons, "button#close_code_model", {
+    make_el(action_buttons, "button#close_code_model", {
       innerHTML: "Close",
       event_listener: {
         event: "click",
@@ -263,7 +263,7 @@ window.onload = function () {
       for (let row_i = 1; row_i <= num_rows; row_i++) {
         for (let col_i = 1; col_i <= num_cols; col_i++) {
           current_cells.push(
-            maybe_make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
+            make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
               grid_pos: { row_start: row_i, col_start: col_i },
             })
@@ -297,11 +297,11 @@ window.onload = function () {
           });
         });
       }
-      const current_selection_box = maybe_make_el(
+      const current_selection_box = make_el(
         grid_holder,
         "div#current_selection_box.added-element"
       );
-      const drag_canvas = maybe_make_el(grid_holder, "div#drag_canvas");
+      const drag_canvas = make_el(grid_holder, "div#drag_canvas");
 
       drag_on_grid({
         watching_element: drag_canvas,
@@ -412,7 +412,7 @@ window.onload = function () {
           ""
         );
 
-        const delete_or_edit_form = maybe_make_el(
+        const delete_or_edit_form = make_el(
           fix_els_modal.modal,
           "form#delete_or_fix_list",
           {
@@ -456,11 +456,11 @@ window.onload = function () {
           }
         );
 
-        maybe_make_el(delete_or_edit_form, "input#name_submit", {
+        make_el(delete_or_edit_form, "input#name_submit", {
           props: { type: "submit" },
         });
 
-        maybe_make_el(fix_els_modal.modal, "p.notice-text", {
+        make_el(fix_els_modal.modal, "p.notice-text", {
           innerHTML:
             "Note that elements residing completely in the removed row or column are automatically deleted.",
         });
@@ -522,7 +522,7 @@ window.onload = function () {
 
     const modal_div = modal_divs.modal;
 
-    maybe_make_el(modal_div, "div.instructions", {
+    make_el(modal_div, "div.instructions", {
       innerHTML: `
       <h2>Name your element:</h2>
       <p>This name will be used to place items in your app.
@@ -532,7 +532,7 @@ window.onload = function () {
       `,
     });
 
-    const name_form = maybe_make_el(modal_div, "form#name_form", {
+    const name_form = make_el(modal_div, "form#name_form", {
       event_listener: {
         event: "submit",
         func: function () {
@@ -564,12 +564,12 @@ window.onload = function () {
         },
       },
     });
-    maybe_make_el(name_form, "input#cancel_btn", {
+    make_el(name_form, "input#cancel_btn", {
       props: { type: "button", value: "cancel" },
       event_listener: { event: "click", func: reset_el_creation },
     });
 
-    maybe_make_el(name_form, "input#name_input", {
+    make_el(name_form, "input#name_input", {
       props: { type: "text" },
       event_listener: {
         // Don't leave warning message up while user is typing
@@ -578,12 +578,12 @@ window.onload = function () {
       },
     }).focus(); // So user can immediately type in id
 
-    maybe_make_el(name_form, "input#name_submit", {
+    make_el(name_form, "input#name_submit", {
       props: { type: "submit" },
     });
 
     function warn_about_bad_id(msg) {
-      maybe_make_el(modal_div, "span#bad_id_msg.notice-text", {
+      make_el(modal_div, "span#bad_id_msg.notice-text", {
         innerHTML: msg,
         styles: { color: "orangered" },
       });
@@ -605,7 +605,7 @@ window.onload = function () {
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
   function add_element({ id, color = get_next_color(), grid_pos }) {
-    const element_in_grid = maybe_make_el(
+    const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
       {
@@ -620,7 +620,7 @@ window.onload = function () {
     [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
       function (handle_type) {
         drag_on_grid({
-          watching_element: maybe_make_el(
+          watching_element: make_el(
             element_in_grid,
             `div.dragger.visible.${handle_type}`,
             {
@@ -637,7 +637,7 @@ window.onload = function () {
       }
     );
 
-    const element_in_list = maybe_make_el(
+    const element_in_list = make_el(
       document.querySelector("#added_elements"),
       `div.el_${id}.added-element`,
       {
@@ -664,7 +664,7 @@ window.onload = function () {
       }
     );
 
-    maybe_make_el(element_in_list, "button.remove_el", {
+    make_el(element_in_list, "button.remove_el", {
       innerHTML: `<i class="fa fa-trash" aria-hidden="true"></i>`,
       event_listener: {
         event: "click",
@@ -710,7 +710,7 @@ window.onload = function () {
         bottom: event.offsetY,
       };
 
-      drag_feedback_rect = maybe_make_el(
+      drag_feedback_rect = make_el(
         grid_holder.querySelector("#drag_canvas"),
         "div.drag-feedback-rect",
         {
