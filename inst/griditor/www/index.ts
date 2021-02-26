@@ -628,19 +628,17 @@ window.onload = function () {
 
     [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
       function (handle_type) {
-        // First we draw the handle that people see
-        maybe_make_el(element_in_grid, `div.dragger.visible.${handle_type}`, {
-          styles: { background: color, pointerEvents: "none" },
-          innerHTML:
-            handle_type === "center"
-              ? `<i class="fas fa-arrows-alt"></i>`
-              : `<i class="fas fa-long-arrow-alt-up"></i>`,
-        });
-
         drag_on_grid({
           watching_element: maybe_make_el(
             element_in_grid,
-            `div.dragger.invisible.${handle_type}`
+            `div.dragger.visible.${handle_type}`,
+            {
+              styles: { background: color },
+              innerHTML:
+                handle_type === "center"
+                  ? `<i class="fas fa-arrows-alt"></i>`
+                  : `<i class="fas fa-long-arrow-alt-up"></i>`,
+            }
           ),
           grid_element: element_in_grid,
           drag_dir: handle_type,
