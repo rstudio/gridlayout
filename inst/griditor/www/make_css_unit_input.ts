@@ -2,7 +2,6 @@ import { horizontal_drag_icon, vertical_drag_icon } from "./icons";
 import { make_el } from "./make_el";
 import { get_css_value, get_css_unit } from "./misc-helpers";
 
-
 export interface CSS_Input {
   form: HTMLElement;
   current_value: () => string;
@@ -25,15 +24,8 @@ export function make_css_unit_input({
 }): CSS_Input {
   const allow_drag = drag_dir !== "none";
 
-  const input_holder = make_el(
-    parent_el,
-    `div${selector}.input-holder.css-unit-input`,
-    {
-      styles: form_styles,
-    }
-  );
-
-  const form = make_el(input_holder, `form`, {
+  const form = make_el(parent_el, `form${selector}.css-unit-input`, {
+    styles: form_styles,
     event_listener: [
       { event: "change", func: on_update },
       {
@@ -46,44 +38,32 @@ export function make_css_unit_input({
     ],
   });
 
-  const value_input = <HTMLInputElement>make_el(form, "input", {
-    props: {
-      type: "number",
-      min: 0,
-      value: start_val,
-      step: 1,
-      "aria-live": "polite",
-    },
-    styles: {
-      minWidth: "30px",
-      width: "100%",
-      maxWidth: "55px",
-    },
-  });
+  const value_input = <HTMLInputElement>(
+    make_el(form, "input.css-unit-input-value", {
+      props: {
+        type: "number",
+        min: 0,
+        value: start_val,
+        step: 1,
+        "aria-live": "polite",
+      },
+    })
+  );
 
-  const unit_selector = <HTMLSelectElement>make_el(form, "select", {
-    props: { name: "units" },
-    styles: {
-      minWidth: "20px",
-      marginLeft: "3px",
-    },
-  });
+  const unit_selector = <HTMLSelectElement>(
+    make_el(form, "select.css-unit-input-select", {
+      props: { name: "units" },
+    })
+  );
 
-  const resizer = make_el(input_holder, "div.css-dragger", {
-    innerHTML: drag_dir === "y" 
-      ? vertical_drag_icon
-      : horizontal_drag_icon,
-    styles: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    }
+  const resizer = make_el(form, "div.css-unit-input-dragger", {
+    innerHTML: drag_dir === "y" ? vertical_drag_icon : horizontal_drag_icon,
   });
 
   // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
-  make_el(resizer, "div.detector", {
+  make_el(resizer, "div.css-unit-input-drag-detector", {
     props: { draggable: true },
     event_listener: [
       {

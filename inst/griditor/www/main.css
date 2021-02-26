@@ -34,6 +34,7 @@ body {
   --edge-round: 5px;
   --element_roundness: 10px;
   font-family: "atkinson";
+  font-size: 18px;
   display: grid;
   grid-template-columns: 300px 1fr 150px;
   grid-template-rows: 50px auto auto 1fr;
@@ -312,42 +313,82 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
+
+
 .css-unit-input {
   display: grid;
+  grid-template-columns: 60px 45px;
+  grid-template-rows: 32px 18px;
   grid-gap: 5px;
+  align-content: center;
   padding: var(--padding);
   pointer-events: none;
+}
+
+.css-unit-input-value,
+.css-unit-input-select {
+  align-self:stretch;
+  justify-self: stretch;
+  font-size: 1.15rem;
+}
+
+.css-unit-input-dragger {
+  align-self: stretch;
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  border: 1px solid var(--dark-gray);
+  border-radius: 4px;
+  color: var(--off-black);
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  position: relative;
+}
+
+.css-unit-input-drag-detector {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: steelblue;
+  opacity: 0;
+}
+
+.css-unit-input-dragger:active {
+  cursor: grabbing;
 }
 
 .css-unit-input > * {
   pointer-events: all;
 }
 
-.css-unit-input form {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 
 .cols-controls {
+  position: absolute;
   grid-row: -2 / -1;
-  /* Place controls in middle of column */
-  justify-self: center;
-  align-items: flex-start;
   /* This is so when the columns are thin the unit selector sits to the right 
   side. When everything is on a single row it has no effect */
-  position: absolute;
   top: calc(100% + var(--grid-gap));
   height: var(--editor-bottom-pad);
   width: 100%;
-  
-  grid-template-columns: 1rem 1fr 1rem;
-  justify-items: center;
 }
 
-.css-unit-input.cols-controls form {
-  grid-column: 2/3;
+.cols-controls.css-unit-input {
+  align-content: start;
   justify-content: center;
 }
+
+.rows-controls.css-unit-input {
+  align-content: center;
+  justify-content: end;
+}
+
+
+
+
 
 .rows-controls {
   height: 100%;
@@ -359,55 +400,17 @@ button.minus_btn.disabled {
   right: calc(100% + var(--grid-gap));
   width: var(--editor-left-pad);
 
-  grid-template-rows: 1rem 1fr 1rem;
+  /* grid-template-rows: 1rem 1fr 1rem; */
 }  
 
-.css-unit-input.rows-controls form {
+/* .rows-controls .css-unit-input-form {
   grid-row: 2/3;
 }
 
-.css-unit-input .css-dragger {
-  height: 1rem;
-  width: 1rem;
-  text-align: center;
-  display: block;
-  cursor: grab;
-  border: 1px solid var(--dark-gray);
-  border-radius: 4px;
-  font-size: 0.85rem;
-  color: var(--off-black);
-
-  /* background: steelblue; */
-  /* outline: 1px solid red; */
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  position: relative;
-}
-
-.css-dragger .detector {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: steelblue;
-  opacity: 0;
-}
-
-.css-unit-input .css-dragger:active {
-  cursor: grabbing;
-  /* opacity: 0; */
-}
-
-.rows-controls .css-dragger {
-  grid-row: -1 / -2;
-  width: 100%;
-}
-
-.cols-controls .css-dragger {
-  grid-column: 2 / 3;
-  width: 100%;
-  max-width: 50px;
-}
+ */
+/* .rows-controls .css-unit-input-dragger {
+  max-width: 60px;
+} */
 
 
 
