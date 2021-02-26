@@ -34,7 +34,16 @@ export function make_css_unit_input({
   );
 
   const form = make_el(input_holder, `form`, {
-    event_listener: { event: "change", func: on_update },
+    event_listener: [
+      { event: "change", func: on_update },
+      {
+        event: "submit",
+        func: function (e) {
+          // Needed to stop pressing enter causing page to refresh
+          e.preventDefault();
+        },
+      },
+    ],
   });
 
   const value_input = <HTMLInputElement>make_el(form, "input", {
@@ -59,7 +68,6 @@ export function make_css_unit_input({
       marginLeft: "3px",
     },
   });
-
 
   const resizer = make_el(input_holder, "div.css-dragger", {
     innerHTML: drag_dir === "y" 
