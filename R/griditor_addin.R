@@ -2,7 +2,7 @@
 #'
 #' @return NULL
 #' @export
-griditor_addin <- function() {
+grided_addin <- function() {
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
@@ -46,13 +46,13 @@ griditor_addin <- function() {
       shiny::tags$link(href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap", rel="stylesheet"),
     ),
     shiny::includeScript(
-      system.file("griditor/www/griditor.js", package = "gridlayout")
+      system.file("grided/www/grided.js", package = "gridlayout")
     ),
     shiny::includeCSS(
-      system.file("griditor/www/styles.css", package = "gridlayout")
+      system.file("grided/www/styles.css", package = "gridlayout")
     ),
     shiny::div(id = "header",
-               shiny::h2("Griditor: Build a grid layout for your Shiny app"),
+               shiny::h2("Grided: Build a grid layout for your Shiny app"),
                shiny::div(
                  class = "code_btns",
                   shiny::actionButton("updated_code", "Update selected layout"),
