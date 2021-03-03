@@ -635,6 +635,7 @@ window.onload = function () {
           ),
           grid_element: element_in_grid,
           drag_dir: handle_type,
+          on_end: () => {send_elements_to_shiny();}
         });
       }
     );
