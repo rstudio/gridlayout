@@ -535,7 +535,8 @@ window.onload = function () {
     const name_form = make_el(modal_div, "form#name_form", {
       event_listener: {
         event: "submit",
-        func: function () {
+        func: function (event) {
+          event.preventDefault();
           const id = this["name_input"].value.replace(/\s/g, "_");
 
           const element_exists: boolean = !!current_elements().find(
