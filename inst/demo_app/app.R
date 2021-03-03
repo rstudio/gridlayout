@@ -1,3 +1,5 @@
+# The geyser app... but in grid!
+
 library(gridlayout)
 library(shiny)
 
