@@ -18,6 +18,19 @@ interface Element_Opts {
   props?: object;
 }
 
+// Safari doesn't support lookbehinds for regex so we have to make it manually
+function extract_id(sel_txt: string): string|null {
+  const id_match: RegExpMatchArray = sel_txt.match(/#([^\.]+)/g);
+  return id_match ? id_match[0].replace("#", ""): null;
+}
+
+function extract_classes(sel_txt:string): Array<string>|null {
+  const class_list: RegExpMatchArray = sel_txt.match(/\.([^\.#]+)/g);
+  return class_list 
+    ? [...class_list].map(c => c.replace("\.", ""))
+    : null;
+}
+
 // This is a heavy-lifter that takes care of building elements and placing them
 // on the grid etc.. It only create's an element if it needs to, which means
 // that we dont get dom leaks caused by recalling stuff over and over again.
@@ -25,21 +38,19 @@ export function make_el(
   parent: HTMLElement,
   sel_txt: string,
   opts: Element_Opts = {}
-) {
-  const get_tag_regex = /^([^#\.]+)+/g;
-  const get_id_regex = /(?<=#)([^\.]+)/g;
-  const get_class_regex = /(?<=\.)([^\.#]+)/g;
+  ) {  
 
-  const tag_type: string = sel_txt.match(get_tag_regex)[0];
-  const el_id: RegExpMatchArray = sel_txt.match(get_id_regex);
-  const class_list: RegExpMatchArray = sel_txt.match(get_class_regex);
+  const tag_type: string = sel_txt.match(/^([^#\.]+)+/g)[0];
+  const el_id = extract_id(sel_txt);
+  const class_list = extract_classes(sel_txt);
 
   let el: HTMLElement = parent.querySelector(sel_txt);
   if (!el) {
     // Element doesn't exists so we need to make it
     el = document.createElement(tag_type);
     if (el_id) {
-      el.id = el_id[0];
+      // debugger;
+      el.id = el_id;
     }
 
     if (class_list) {
