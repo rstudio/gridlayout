@@ -11,14 +11,19 @@ test_that("Works with default body target", {
   expect_equal(
     to_css(grid_obj),
     "body {
+  display: grid;
   grid-template-rows: 100px 1fr 1fr;
   grid-template-columns: 120px 1fr 1fr;
-  grid-template-gap: 1rem;
+  grid-gap: 1rem;
   padding: 1rem;
   grid-template-areas:
     \"header header header\"
     \"sidebar plot_a plot_c\"
     \"sidebar plot_b plot_b\";
+}
+
+body > * {
+  box-sizing: border-box;
 }
 
 #header { grid-area: header; }
@@ -40,16 +45,21 @@ test_that("Can change body target", {
   )
 
   expect_equal(
-    to_css(grid_obj, "#app_container"),
+    to_css(grid_obj, "app_container"),
     "#app_container {
+  display: grid;
   grid-template-rows: 100px 1fr 1fr;
   grid-template-columns: 120px 1fr 1fr;
-  grid-template-gap: 1rem;
+  grid-gap: 1rem;
   padding: 1rem;
   grid-template-areas:
     \"header header header\"
     \"sidebar plot_a plot_c\"
     \"sidebar plot_b plot_b\";
+}
+
+#app_container > * {
+  box-sizing: border-box;
 }
 
 #header { grid-area: header; }

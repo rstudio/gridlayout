@@ -16,4 +16,5 @@ Imports:
     glue,
     knitr,
     crayon,
-    miniUI
+    miniUI,
+    htmltools

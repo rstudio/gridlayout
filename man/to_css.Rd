@@ -4,13 +4,17 @@
 \alias{to_css}
 \title{Convert grid layout to css string}
 \usage{
-to_css(layout, container_query = "body")
+to_css(layout, container, debug_mode = FALSE)
 }
 \arguments{
 \item{layout}{Object of class `"gridlayout"`.}
 
-\item{container_query}{Query used by css to find the container for your grid.
-Defaults to `"body"` for whole page grids}
+\item{container}{Id of the element for grid to be placed in. Default value to
+apply grid styling to the whole app (aka the `body` element) for whole page
+grids}
+
+\item{debug_mode}{If set to `TRUE` then each element of the grid will have an
+outline applied so positioning can more easily be assessed.}
 }
 \value{
 Character string of css used to setup grid layout and place elements
