@@ -65,10 +65,16 @@ img {
   margin: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 #header > h2 {
   margin: 0;
+}
+
+#header button {
+  font-size: 1.4rem;
+  height: 100%;
 }
 
 #settings {
