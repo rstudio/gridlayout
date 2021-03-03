@@ -7,3 +7,5 @@
 .DS_Store
 
 inst/griditor/www/.cache/
+
+inst/grided/www/.cache/
