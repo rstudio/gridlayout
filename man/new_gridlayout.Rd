@@ -12,15 +12,15 @@ id will take up that given position in the grid. For instance a header
 element would take up every cell in the first row.}
 
 \item{col_sizes}{A character vector of valid css sizes for the width of each
-column in your grid as given by `layout_mat`. If a single value is passed, it will be repeated for all columns.}
+column in your grid as given by \code{layout_mat}. If a single value is passed, it will be repeated for all columns.}
 
-\item{row_sizes}{Same as `col_sizes`, but for row heights.}
+\item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
 
 \item{gap}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to `"1rem"`.}
+grid. Defaults to \code{"1rem"}.}
 }
 \value{
-Object of class `"gridlayout"`
+Object of class \code{"gridlayout"}
 }
 \description{
 Construct a gridlayout object from basic parts

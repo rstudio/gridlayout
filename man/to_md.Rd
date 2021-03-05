@@ -7,18 +7,18 @@
 to_md(layout, include_gap_size = TRUE)
 }
 \arguments{
-\item{layout}{Object of class `"gridlayout"`.}
+\item{layout}{Object of class \code{"gridlayout"}.}
 
 \item{include_gap_size}{Should the gap size for the layout be added in
 upper-left of table?}
 }
 \value{
-Markdown table as constructed by `knitr::kable()` that defines the
-  grid layout. This can be used with the function `grid_layout_from_md()` to
-  build grid layouts.
+Markdown table as constructed by \code{knitr::kable()} that defines the
+grid layout. This can be used with the function \code{grid_layout_from_md()} to
+build grid layouts.
 }
 \description{
-Uses the `knitr::kable()` function to convert a layout object to a markdown
+Uses the \code{knitr::kable()} function to convert a layout object to a markdown
 table
 }
 \examples{

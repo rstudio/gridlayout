@@ -18,3 +18,4 @@ Imports:
     crayon,
     miniUI,
     htmltools
+Roxygen: list(markdown = TRUE)

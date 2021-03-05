@@ -4,26 +4,33 @@
 \alias{use_gridlayout}
 \title{Convert layout to css for Shiny}
 \usage{
-use_gridlayout(layout_def, container, debug_mode)
+use_gridlayout(layout_def, ...)
 }
 \arguments{
 \item{layout_def}{Either a markdown table representation (see
-\code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
+\code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{container}{Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the `body` element) for whole page
+\item{...}{
+  Arguments passed on to \code{\link[=to_css]{to_css}}
+  \describe{
+    \item{\code{container}}{Id of the element for grid to be placed in. Default value to
+apply grid styling to the whole app (aka the \code{body} element) for whole page
 grids}
-
-\item{debug_mode}{If set to `TRUE` then each element of the grid will have an
+    \item{\code{use_card_style}}{Should each section of the grid be given a card style
+to make it stand out?}
+    \item{\code{element_styles}}{A list of named property-value pairs for additional
+styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
+    \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
+  }}
 }
 \value{
 Character string of css used to setup grid layout and place elements
-  (referenced by id) into correct locations
+(referenced by id) into correct locations
 }
 \description{
-This simply wraps the output of `to_css()` in a `style` tag and escapes HTML
+This simply wraps the output of \code{to_css()} in a \code{style} tag and escapes HTML
 characters to simplify using in Shiny
 }
 \examples{
@@ -40,7 +47,7 @@ my_layout <- "
 # The classic Geyser app with grid layout
 shinyApp(
   ui = fluidPage(
-    use_gridlayout(my_layout, "app-container", debug_mode = TRUE),
+    use_gridlayout(my_layout, "app-container"),
     div(
       id = "app-container",
       div(id = "header",

@@ -13,7 +13,7 @@ grid-gap can be provided using the very first cell.}
 }
 \value{
 An object of class "grid_layout", which stores the layout as a
-  matrix. This can be passed to other functions such as `layout_to_css()`.
+matrix. This can be passed to other functions such as \code{layout_to_css()}.
 }
 \description{
 Build grid layout obj from markdown table

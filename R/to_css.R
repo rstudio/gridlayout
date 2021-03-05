@@ -6,6 +6,8 @@
 #'   grids
 #' @param use_card_style Should each section of the grid be given a card style
 #'   to make it stand out?
+#' @param element_styles A list of named property-value pairs for additional
+#'   styles to be added to each element. E.g. `element_styles = c("background" = "blue")`.
 #' @param debug_mode If set to `TRUE` then each element of the grid will have an
 #'   outline applied so positioning can more easily be assessed.
 #'
@@ -26,17 +28,17 @@
 #' to_css(grid_obj)
 #'
 #' @export
-to_css <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE) {
+to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE) {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE){
+to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE){
+to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE){
   # ...
 
   glue_nl <- function(...){
@@ -71,6 +73,8 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mo
 
   debug_styles <- if(debug_mode) glue_nl("", "  outline:1px solid black;") else ""
 
+  extra_card_styles <- build_css_props(element_styles)
+
   glue_nl(
     "[container_query] {",
     "  display: grid;",
@@ -83,7 +87,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mo
     "",
     "[container_query] > * {",
     "  box-sizing: border-box;",
-    "  padding: 0.8rem;[card_styles][debug_styles]",
+    "  padding: 0.8rem;[card_styles][debug_styles][extra_card_styles]",
     "}",
     "",
     "[element_grid_areas]")
@@ -98,7 +102,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mo
 #' @param layout_def Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.
-#' @inheritParams to_css
+#' @inheritDotParams to_css -layout
 #'
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
@@ -119,7 +123,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mo
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = fluidPage(
-#'     use_gridlayout(my_layout, "app-container", debug_mode = TRUE),
+#'     use_gridlayout(my_layout, "app-container"),
 #'     div(
 #'       id = "app-container",
 #'       div(id = "header",
@@ -141,7 +145,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mo
 #'   }
 #' )
 #' }
-use_gridlayout <- function(layout_def, container, debug_mode){
+use_gridlayout <- function(layout_def, ...){
   if(inherits(layout_def, "character")){
     # If we were passed a string directly then convert to a grid layout before
     # proceeding
@@ -149,11 +153,25 @@ use_gridlayout <- function(layout_def, container, debug_mode){
   } else if(!inherits(layout_def, "gridlayout")){
     stop("Passed layout must either be a markdown table or a gridlayout object.")
   }
-
   htmltools::tags$head(
     htmltools::tags$style(
-      htmltools::HTML(to_css(layout_def, container, debug_mode))
+      htmltools::HTML(to_css(layout_def, ...))
     )
   )
 }
 
+# Builds string of properties from a named list of property values
+build_css_props <- function(list_of_props){
+
+  prop_names <- names(list_of_props)
+
+  css_txt <- ""
+
+  for(i in seq_along(list_of_props)){
+    name <- prop_names[i]
+    value <- list_of_props[i]
+    css_txt <- paste0(css_txt, "  ", name, ": ", value, ";\n")
+  }
+
+  css_txt
+}

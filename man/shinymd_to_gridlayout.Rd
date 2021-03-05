@@ -7,11 +7,11 @@
 shinymd_to_gridlayout(path_to_shinymd)
 }
 \arguments{
-\item{path_to_shinymd}{Path to a markdown file with a `.layout .grid` chunk
+\item{path_to_shinymd}{Path to a markdown file with a \verb{.layout .grid} chunk
 in it defining a grid layout}
 }
 \value{
-Object of class `"gridlayout"`
+Object of class \code{"gridlayout"}
 }
 \description{
 Extract gridlayout from shinymd file

@@ -7,12 +7,12 @@
 get_elements(layout)
 }
 \arguments{
-\item{layout}{Object of class `"gridlayout"`.}
+\item{layout}{Object of class \code{"gridlayout"}.}
 }
 \value{
-List of all unique elements in the layout and their `id`,
-  `{start,end}_row`, and `{start,end}_col`. Positions are indexed starting at
-  1
+List of all unique elements in the layout and their \code{id},
+\verb{\{start,end\}_row}, and \verb{\{start,end\}_col}. Positions are indexed starting at
+1
 }
 \description{
 Get elements and positions out of a grid layout

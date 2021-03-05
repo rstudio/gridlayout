@@ -11,10 +11,10 @@ update_shinymd(
 )
 }
 \arguments{
-\item{path_to_shinymd}{Path to a markdown file with a `.layout .grid` chunk
+\item{path_to_shinymd}{Path to a markdown file with a \verb{.layout .grid} chunk
 in it defining a grid layout}
 
-\item{new_layout}{An updated `gridlayout` object to replace the current one}
+\item{new_layout}{An updated \code{gridlayout} object to replace the current one}
 
 \item{updated_shinymd_path}{Where the shinymd with the new layout should be
 placed. Default is overwriting the previous file}

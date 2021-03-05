@@ -135,3 +135,33 @@ test_that("Debug mode adds outline to all elements", {
     )
   )
 })
+
+test_that("Custom styles can be added by the user for further customization of card style", {
+  grid_obj <- md_to_gridlayout(
+    layout_table = "
+    |      |120px   |1fr    |1fr    |
+    |:-----|:-------|:------|:------|
+    |100px |header  |header |header |
+    |1fr   |sidebar |plot_a |plot_c |
+    |1fr   |sidebar |plot_b |plot_b |"
+  )
+
+  custom_styles <- c(
+    "background" = "blue",
+    "border" = "1px solid red"
+  )
+
+  expect_true(
+    stringr::str_detect(
+      to_css(grid_obj, element_styles = custom_styles),
+      "background: blue;"
+    )
+  )
+
+  expect_true(
+    stringr::str_detect(
+      to_css(grid_obj, element_styles = custom_styles),
+      "border: 1px solid red;"
+    )
+  )
+})

@@ -4,24 +4,33 @@
 \alias{to_css}
 \title{Convert grid layout to css string}
 \usage{
-to_css(layout, container, use_card_style = TRUE, debug_mode = FALSE)
+to_css(
+  layout,
+  container,
+  use_card_style = TRUE,
+  element_styles = c(),
+  debug_mode = FALSE
+)
 }
 \arguments{
-\item{layout}{Object of class `"gridlayout"`.}
+\item{layout}{Object of class \code{"gridlayout"}.}
 
 \item{container}{Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the `body` element) for whole page
+apply grid styling to the whole app (aka the \code{body} element) for whole page
 grids}
 
 \item{use_card_style}{Should each section of the grid be given a card style
 to make it stand out?}
 
-\item{debug_mode}{If set to `TRUE` then each element of the grid will have an
+\item{element_styles}{A list of named property-value pairs for additional
+styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
+
+\item{debug_mode}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
 }
 \value{
 Character string of css used to setup grid layout and place elements
-  (referenced by id) into correct locations
+(referenced by id) into correct locations
 }
 \description{
 Convert grid layout to css string
