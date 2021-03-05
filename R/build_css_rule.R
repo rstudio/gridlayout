@@ -1,6 +1,7 @@
 #' Build css properties named or unnamed list of property values
 #'
-#' @param list_of_props A list of property-value pairs for additional styles to
+#' @param selector valid css selector to target. E.g. `body` or `div.blue_boxes`...
+#' @param prop_list A list of property-value pairs for additional styles to
 #'   be added to each element. Pairs can be given as named elements: e.g.
 #'   `element_styles = c("background" = "blue")`, or simple as the whole
 #'   character: e.g. `element_styles = c("background: blue")`. (Semicolon usage
@@ -16,18 +17,18 @@
 #'   "border" = "1px solid red",
 #'   "cursor: none"
 #' )
-#' build_css_props(custom_styles)
+#' build_css_rule(custom_styles)
 #'
-build_css_props <- function(list_of_props){
+build_css_rule <- function(selector, prop_list){
 
-  prop_names <- names(list_of_props)
-  if(is.null(prop_names)) prop_names <- rep_len("", length(list_of_props))
+  prop_names <- names(prop_list)
+  if(is.null(prop_names)) prop_names <- rep_len("", length(prop_list))
 
   css_txt <- ""
 
-  for(i in seq_along(list_of_props)){
+  for(i in seq_along(prop_list)){
     property <- prop_names[i]
-    value <- list_of_props[i]
+    value <- prop_list[i]
 
     if(property == ""){
       # Get rid of any whitespace that may be present
@@ -52,12 +53,18 @@ build_css_props <- function(list_of_props){
     }
   }
   # Make sure we dont have any whitespace at the end of our lines
-  paste(
+  css_txt <- paste(
     stringr::str_trim(
       stringr::str_split(css_txt, "\n")[[1]],
       side = "right"
     ),
     collapse = "\n"
+  )
+
+  paste0(
+    selector, " {\n",
+    css_txt,
+    "\n}"
   )
 }
 

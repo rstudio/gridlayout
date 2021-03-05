@@ -110,14 +110,6 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 }
 
 
-build_css_rule <- function(selector, prop_list){
-  paste0(
-    selector, " {\n",
-    build_css_props(prop_list),
-    "\n}"
-  )
-}
-
 
 #' Convert layout to css for Shiny
 #'
