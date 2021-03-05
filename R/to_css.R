@@ -39,11 +39,7 @@ to_css.default <- function(layout, container, use_card_style = TRUE, element_sty
 
 #' @export
 to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE){
-  # ...
 
-  glue_nl <- function(...){
-    as.character(glue::glue(..., .sep = "\n", .open = "[", .close = "]", .trim = FALSE))
-  }
   container_query <- if(missing(container)) "body" else paste0("#", container)
   collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
@@ -60,37 +56,66 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
     sapply(
       all_elements[all_elements != "."],
       function(id){
-        glue::glue("#[id] { grid-area: [id]; }", .open = "[", .close = "]")
+        build_css_rule(
+          selector = paste0("#",id),
+          prop_list = c("grid-area" = id)
+        )
       }
     ),
     collapse = "\n"
   )
 
-  card_styles <- if(use_card_style) {
-    glue_nl("",
-            "  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);",
-            "  border-radius: 0.5rem;") } else {""}
+  main_container_styles <- build_css_rule(
+    selector = container_query,
+    prop_list = c(
+      "display" = "grid",
+      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
+      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
+      "grid-gap" = attr(layout, 'gap'),
+      "padding" = attr(layout, 'gap'),
+      "grid-template-areas" = template_areas
+    )
+  )
 
-  debug_styles <- if(debug_mode) glue_nl("", "  outline:1px solid black;") else ""
+  card_style_list <- if(use_card_style) {
+    c("box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
+      "border-radius" = "0.5rem")
+  } else {
+    c()
+  }
 
-  extra_card_styles <- build_css_props(element_styles)
+  debug_style_list <- if(debug_mode){
+    c("outline" = "1px solid black")
+  } else {
+    c()
+  }
 
-  glue_nl(
-    "[container_query] {",
-    "  display: grid;",
-    "  grid-template-rows: [collapse_w_space(attr(layout, 'row_sizes'))];",
-    "  grid-template-columns: [collapse_w_space(attr(layout, 'col_sizes'))];",
-    "  grid-gap: [attr(layout, 'gap')];",
-    "  padding: [attr(layout, 'gap')];",
-    "  grid-template-areas:[template_areas];",
-    "}",
-    "",
-    "[container_query] > * {",
-    "  box-sizing: border-box;",
-    "  padding: 0.8rem;[card_styles][debug_styles][extra_card_styles]",
-    "}",
-    "",
-    "[element_grid_areas]")
+  card_styles <- build_css_rule(
+    selector = paste0(container_query, " > *"),
+    prop_list = c(
+      "box-sizing" = "border-box",
+      "padding" = "0.8rem",
+      card_style_list,
+      debug_style_list,
+      element_styles
+    )
+  )
+
+  paste(
+    main_container_styles,
+    card_styles,
+    element_grid_areas,
+    sep = "\n\n"
+  )
+}
+
+
+build_css_rule <- function(selector, prop_list){
+  paste0(
+    selector, " {\n",
+    build_css_props(prop_list),
+    "\n}"
+  )
 }
 
 
@@ -160,18 +185,3 @@ use_gridlayout <- function(layout_def, ...){
   )
 }
 
-# Builds string of properties from a named list of property values
-build_css_props <- function(list_of_props){
-
-  prop_names <- names(list_of_props)
-
-  css_txt <- ""
-
-  for(i in seq_along(list_of_props)){
-    name <- prop_names[i]
-    value <- list_of_props[i]
-    css_txt <- paste0(css_txt, "  ", name, ": ", value, ";\n")
-  }
-
-  css_txt
-}

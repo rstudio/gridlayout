@@ -29,11 +29,21 @@ body > * {
   border-radius: 0.5rem;
 }
 
-#header { grid-area: header; }
-#sidebar { grid-area: sidebar; }
-#plot_a { grid-area: plot_a; }
-#plot_b { grid-area: plot_b; }
-#plot_c { grid-area: plot_c; }")
+#header {
+  grid-area: header;
+}
+#sidebar {
+  grid-area: sidebar;
+}
+#plot_a {
+  grid-area: plot_a;
+}
+#plot_b {
+  grid-area: plot_b;
+}
+#plot_c {
+  grid-area: plot_c;
+}")
 })
 
 
@@ -68,11 +78,21 @@ test_that("Can change body target", {
   border-radius: 0.5rem;
 }
 
-#header { grid-area: header; }
-#sidebar { grid-area: sidebar; }
-#plot_a { grid-area: plot_a; }
-#plot_b { grid-area: plot_b; }
-#plot_c { grid-area: plot_c; }")
+#header {
+  grid-area: header;
+}
+#sidebar {
+  grid-area: sidebar;
+}
+#plot_a {
+  grid-area: plot_a;
+}
+#plot_b {
+  grid-area: plot_b;
+}
+#plot_c {
+  grid-area: plot_c;
+}")
 })
 
 test_that("Card styling can be disabled", {
@@ -125,13 +145,13 @@ test_that("Debug mode adds outline to all elements", {
   expect_true(
     stringr::str_detect(
       to_css(grid_obj, debug_mode = TRUE),
-      "outline:1px solid black;"
+      "outline: 1px solid black;"
     )
   )
   expect_false(
     stringr::str_detect(
       to_css(grid_obj, debug_mode = FALSE),
-      "outline:1px solid black;"
+      "outline: 1px solid black;"
     )
   )
 })

@@ -7,13 +7,14 @@ my_layout <- "
 |      |        |         |
 |------|--------|---------|
 |2rem  |200px   |1fr      |
-|100px |header  |header   |
-|1fr   |sidebar |distPlot |"
+|150px |header  |header   |
+|1fr   |sidebar |distPlot |
+|1fr   |footer  |footer   |"
 
 # The classic Geyser app with grid layout
 shinyApp(
   ui = fluidPage(
-    use_gridlayout(my_layout, "app-container", debug_mode = TRUE),
+    use_gridlayout(my_layout, "app-container", use_card_style = TRUE),
     div(
       id = "app-container",
       div(id = "header",

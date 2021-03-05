@@ -156,9 +156,10 @@ grided_addin <- function() {
 
     shiny::bindEvent(
       shiny::observe({
-       layout_call <- glue::glue(
+       layout_call <- paste(
           "layout <- grid_layout_from_md(layout_table = \"",
-          "    {layout_table()}\")", .sep = "\n")
+          "    ", layout_table(), "\")",
+          sep = "\n")
 
         session$sendCustomMessage("code_modal", layout_call)
       }),
