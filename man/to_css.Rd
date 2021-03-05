@@ -4,7 +4,7 @@
 \alias{to_css}
 \title{Convert grid layout to css string}
 \usage{
-to_css(layout, container, debug_mode = FALSE)
+to_css(layout, container, use_card_style = TRUE, debug_mode = FALSE)
 }
 \arguments{
 \item{layout}{Object of class `"gridlayout"`.}
@@ -12,6 +12,9 @@ to_css(layout, container, debug_mode = FALSE)
 \item{container}{Id of the element for grid to be placed in. Default value to
 apply grid styling to the whole app (aka the `body` element) for whole page
 grids}
+
+\item{use_card_style}{Should each section of the grid be given a card style
+to make it stand out?}
 
 \item{debug_mode}{If set to `TRUE` then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}

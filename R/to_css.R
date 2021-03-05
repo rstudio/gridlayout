@@ -4,6 +4,8 @@
 #' @param container Id of the element for grid to be placed in. Default value to
 #'   apply grid styling to the whole app (aka the `body` element) for whole page
 #'   grids
+#' @param use_card_style Should each section of the grid be given a card style
+#'   to make it stand out?
 #' @param debug_mode If set to `TRUE` then each element of the grid will have an
 #'   outline applied so positioning can more easily be assessed.
 #'
@@ -24,19 +26,22 @@
 #' to_css(grid_obj)
 #'
 #' @export
-to_css <- function(layout, container, debug_mode = FALSE) {
+to_css <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE) {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, debug_mode = FALSE){
+to_css.default <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, debug_mode = FALSE){
+to_css.gridlayout <- function(layout, container, use_card_style = TRUE, debug_mode = FALSE){
   # ...
 
+  glue_nl <- function(...){
+    as.character(glue::glue(..., .sep = "\n", .open = "[", .close = "]", .trim = FALSE))
+  }
   container_query <- if(missing(container)) "body" else paste0("#", container)
   collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
@@ -53,28 +58,35 @@ to_css.gridlayout <- function(layout, container, debug_mode = FALSE){
     sapply(
       all_elements[all_elements != "."],
       function(id){
-        glue::glue("#{id} {{ grid-area: {id};{if(debug_mode) 'outline:1px solid black;' else ''} }}")
+        glue::glue("#[id] { grid-area: [id]; }", .open = "[", .close = "]")
       }
     ),
     collapse = "\n"
   )
 
-  as.character(glue::glue(
-    "{container_query} {{",
+  card_styles <- if(use_card_style) {
+    glue_nl("",
+            "  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);",
+            "  border-radius: 0.5rem;") } else {""}
+
+  debug_styles <- if(debug_mode) glue_nl("", "  outline:1px solid black;") else ""
+
+  glue_nl(
+    "[container_query] {",
     "  display: grid;",
-    "  grid-template-rows: {collapse_w_space(attr(layout, 'row_sizes'))};",
-    "  grid-template-columns: {collapse_w_space(attr(layout, 'col_sizes'))};",
-    "  grid-gap: {attr(layout, 'gap')};",
-    "  padding: {attr(layout, 'gap')};",
-    "  grid-template-areas:{template_areas};",
-    "}}",
+    "  grid-template-rows: [collapse_w_space(attr(layout, 'row_sizes'))];",
+    "  grid-template-columns: [collapse_w_space(attr(layout, 'col_sizes'))];",
+    "  grid-gap: [attr(layout, 'gap')];",
+    "  padding: [attr(layout, 'gap')];",
+    "  grid-template-areas:[template_areas];",
+    "}",
     "",
-    "{container_query} > * {{",
+    "[container_query] > * {",
     "  box-sizing: border-box;",
-    "}}",
+    "  padding: 0.8rem;[card_styles][debug_styles]",
+    "}",
     "",
-    "{element_grid_areas}",
-    .sep = "\n"))
+    "[element_grid_areas]")
 }
 
 
