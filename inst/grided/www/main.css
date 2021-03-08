@@ -157,6 +157,7 @@ button.minus_btn.disabled {
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
   padding-bottom: var(--editor-bottom-pad);
+  min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
 }
 
 #editor-wrapper {
