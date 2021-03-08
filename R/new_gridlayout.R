@@ -86,14 +86,15 @@ print.gridlayout <- function(layout){
 
   color_sizings <- crayon::cyan
   emph <- crayon::bold
-  no_pipes <- stringr::str_remove_all(no_header, "\\|")
+  no_pipes <- gsub("\\|", "", no_header)
   cat(
     emph("gridlayout") %+% " object with " %+%
       emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
       emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
       "gap size: " %+% emph(attr(layout, 'gap')),
     "\n",
-    stringr::str_replace_all(no_pipes, "[1-9]+.+?(?=\\s)", color_sizings)
+    gsub(pattern = "[1-9]+.+?(?=\\s)", replacement = "\033[36m\1\033[39m", no_pipes)
+    # stringr::str_replace_all(no_pipes, "[1-9]+.+?(?=\\s)", color_sizings)
   )
 }
 

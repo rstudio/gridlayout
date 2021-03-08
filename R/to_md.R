@@ -56,8 +56,8 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
 
   # knitr::kable() likes to insert alignment colons but let's remove them so the
   # table looks cleaner
-  stringr::str_replace_all(
-    paste(as.character(md_table), collapse = "\n"),
-    ":", "-"
+  gsub(
+    pattern = ":", replacement = "-",
+    paste(as.character(md_table), collapse = "\n")
   )
 }

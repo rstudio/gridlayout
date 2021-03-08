@@ -24,7 +24,7 @@ build_css_rule <- function(selector, prop_list){
   prop_names <- names(prop_list)
   if(is.null(prop_names)) prop_names <- rep_len("", length(prop_list))
 
-  css_txt <- ""
+  prop_lines <- c()
 
   for(i in seq_along(prop_list)){
     property <- prop_names[i]
@@ -47,12 +47,16 @@ build_css_rule <- function(selector, prop_list){
 
     valid_property <- single_name & !non_terminating_semicolon
     if(valid_property){
-      css_txt <- paste0(css_txt, if(css_txt != "") "\n" else "", "  ", line_txt, ";")
+      prop_lines <- c(prop_lines, paste0("  ", line_txt, ";"))
     } else {
       warning("The passed css property \"", line_txt, "\" doesn't appear to be valid. Ignoring it.")
     }
   }
-  # Make sure we dont have any whitespace at the end of our lines
+
+  css_txt <- paste(prop_lines, collapse = "\n")
+  # Make sure we dont have any whitespace at the end of our lines We need to do
+  # this again because the user may have passed some text with spaces etc at the
+  # end of the lines...
   css_txt <- paste(
     stringr::str_trim(
       stringr::str_split(css_txt, "\n")[[1]],
