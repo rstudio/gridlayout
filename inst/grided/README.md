@@ -15,7 +15,7 @@ This will give you a live-reload server.
 ## Actively developing for shiny:
 
 ``` bash
-parcel index.ts
+parcel watch index.ts
 ```
 This will bundle the js to a file in `www/dist/bundled.js` which is the path that the shiny app looks for the js in.
 
