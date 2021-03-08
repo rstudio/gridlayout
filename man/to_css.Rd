@@ -9,7 +9,8 @@ to_css(
   container,
   use_card_style = TRUE,
   element_styles = c(),
-  debug_mode = FALSE
+  debug_mode = FALSE,
+  full_height = TRUE
 )
 }
 \arguments{
@@ -27,6 +28,10 @@ styles to be added to each element. E.g. \code{element_styles = c("background" =
 
 \item{debug_mode}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
+
+\item{full_height}{Should the grid-containing element be made as tall as
+possible? Set to \code{FALSE} if the grid is contained within another element
+and is not the whole app's UI.}
 }
 \value{
 Character string of css used to setup grid layout and place elements

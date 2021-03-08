@@ -23,6 +23,9 @@ to make it stand out?}
 styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
     \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
+    \item{\code{full_height}}{Should the grid-containing element be made as tall as
+possible? Set to \code{FALSE} if the grid is contained within another element
+and is not the whole app's UI.}
   }}
 }
 \value{

@@ -114,8 +114,7 @@ server <- function(input, output, session) {
       new_gridlayout(layout_mat = grid_mat,
                      col_sizes = input$grid_sizing$cols,
                      row_sizes = input$grid_sizing$rows,
-                     gap = input$grid_sizing$gap
-      )
+                     gap = input$grid_sizing$gap)
     )
 
     layout_call <- paste(

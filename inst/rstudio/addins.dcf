@@ -2,3 +2,8 @@ Name: Edit selected layout
 Description: Takes a gridlayout markdown table and opens interactive editor
 Binding: grided_addin
 Interactive: true
+
+Name: New shiny app with gridlayout
+Description: Opens interactive gridlayout editor and returns new app.R script with desired layout
+Binding: grided_new_app
+Interactive: true
