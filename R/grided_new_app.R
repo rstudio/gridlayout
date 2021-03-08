@@ -135,8 +135,6 @@ grided_new_app <- function() {
     shiny::bindEvent(shiny::observe({
       req(input$elements)
 
-
-
       rstudioapi::documentNew(
         text = to_app_template(current_layout())
       )
@@ -144,8 +142,7 @@ grided_new_app <- function() {
     }), input$updated_code)
   }
 
-  # We'll use a pane viwer, and set the minimum height at
-  # 300px to ensure we get enough screen space to display the clock.
-  viewer <- shiny::paneViewer(500)
+  # Open gadget in the external viewer
+  viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
   shiny::runGadget(ui, server, viewer = viewer)
 }
