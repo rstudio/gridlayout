@@ -11,7 +11,6 @@
 #' @examples
 #'
 to_app_template <- function(layout) {
-
   UseMethod("to_app_template")
 }
 
@@ -40,6 +39,7 @@ to_app_template.gridlayout <- function(layout){
   paste_nl(
     "library(shiny)",
     "library(gridlayout)",
+    "",
     "app_layout <- md_to_gridlayout(\"",
     to_md(layout),
     "\")",
