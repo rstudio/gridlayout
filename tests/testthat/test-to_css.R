@@ -16,6 +16,7 @@ test_that("Works with default body target", {
   grid-template-columns: 120px 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem;
+  height: calc(100vh - 2*1rem);
   grid-template-areas:
     \"header header header\"
     \"sidebar plot_a plot_c\"
@@ -65,6 +66,7 @@ test_that("Can change body target", {
   grid-template-columns: 120px 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem;
+  height: calc(100vh - 2*1rem);
   grid-template-areas:
     \"header header header\"
     \"sidebar plot_a plot_c\"
@@ -184,4 +186,32 @@ test_that("Custom styles can be added by the user for further customization of c
       "border: 1px solid red;"
     )
   )
+})
+
+
+test_that("Height setting can be un-set", {
+  grid_obj <- md_to_gridlayout(
+    layout_table = "
+    |      |120px   |1fr    |1fr    |
+    |:-----|:-------|:------|:------|
+    |100px |header  |header |header |
+    |1fr   |sidebar |plot_a |plot_c |
+    |1fr   |sidebar |plot_b |plot_b |"
+  )
+
+
+  expect_true(
+    stringr::str_detect(
+      to_css(grid_obj),
+      stringr::fixed("height: calc(")
+    )
+  )
+
+  expect_false(
+    stringr::str_detect(
+      to_css(grid_obj, full_height = FALSE),
+      stringr::fixed("height: calc(")
+    )
+  )
+
 })

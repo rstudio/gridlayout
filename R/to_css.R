@@ -7,9 +7,13 @@
 #' @param use_card_style Should each section of the grid be given a card style
 #'   to make it stand out?
 #' @param element_styles A list of named property-value pairs for additional
-#'   styles to be added to each element. E.g. `element_styles = c("background" = "blue")`.
+#'   styles to be added to each element. E.g. `element_styles = c("background" =
+#'   "blue")`.
 #' @param debug_mode If set to `TRUE` then each element of the grid will have an
 #'   outline applied so positioning can more easily be assessed.
+#' @param full_height Should the grid-containing element be made as tall as
+#'   possible? Set to `FALSE` if the grid is contained within another element
+#'   and is not the whole app's UI.
 #'
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
@@ -28,17 +32,17 @@
 #' to_css(grid_obj)
 #'
 #' @export
-to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE) {
+to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE) {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE){
+to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE){
+to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE){
 
   container_query <- if(missing(container)) "body" else paste0("#", container)
   collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
@@ -73,6 +77,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
+      "height" = if(full_height) glue::glue("calc(100vh - 2*{attr(layout, 'gap')})") else c(),
       "grid-template-areas" = template_areas
     )
   )
