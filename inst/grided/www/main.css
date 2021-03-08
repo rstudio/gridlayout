@@ -24,6 +24,7 @@ body {
   grid-gap: var(--side-gaps);
   align-items: stretch;
   justify-items: stretch;
+  background: white;
 }
 
 /* Styles that apply to every panel in grid */
@@ -73,7 +74,7 @@ img {
 }
 
 #header button {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   height: 100%;
 }
 
@@ -225,14 +226,14 @@ button.minus_btn.disabled {
   height: 35px;
   margin: 0 0 5px 0;
   padding: 0.65rem 1rem;
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 #added_elements .added-element.hovered {
   /* Emphasize by making a bit bigger */
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 #grid_holder .added-element.hovered,
@@ -365,7 +366,7 @@ button.minus_btn.disabled {
 .cols-controls {
   position: absolute;
   grid-row: -2 / -1;
-  /* This is so when the columns are thin the unit selector sits to the right 
+  /* This is so when the columns are thin the unit selector sits to the right
   side. When everything is on a single row it has no effect */
   top: calc(100% + var(--grid-gap));
   height: var(--editor-bottom-pad);
@@ -397,7 +398,7 @@ button.minus_btn.disabled {
   width: var(--editor-left-pad);
 
   /* grid-template-rows: 1rem 1fr 1rem; */
-}  
+}
 
 /* .rows-controls .css-unit-input-form {
   grid-row: 2/3;
