@@ -723,12 +723,22 @@ window.onload = function () {
         }
       );
 
+      // We start grid position here in case user selects by simply clicking, 
+      // which would mean we never get to run the drag function
+      update_grid_pos(opts.grid_element, start_rect);
+
       if (opts.on_start) opts.on_start(start_loc);
 
       // Add listener to editor so we can continue to track this drag
       editor_el.addEventListener("mousemove", drag);
       editor_el.addEventListener("mouseup", drag_end);
     };
+
+    function update_grid_pos(element: HTMLElement, bounding_rect: Selection_Rect): Grid_Pos{
+      const grid_extent = get_drag_extent_on_grid(bounding_rect);
+      set_element_in_grid(element, grid_extent);
+      return grid_extent;
+    }
 
     function drag(event: MouseEvent) {
       const curr_loc: XY_Pos = event;
@@ -745,9 +755,7 @@ window.onload = function () {
         drag_feedback_rect.style,
         bounding_rect_to_css_pos(new_rect)
       );
-      const grid_extent = get_drag_extent_on_grid(new_rect);
-      set_element_in_grid(opts.grid_element, grid_extent);
-
+      const grid_extent = update_grid_pos(opts.grid_element, new_rect);
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
 
