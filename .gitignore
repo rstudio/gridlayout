@@ -7,5 +7,9 @@
 .DS_Store
 
 inst/griditor/www/.cache/
-
 inst/grided/www/.cache/
+
+# Ignore all the stuff in the dist folder
+inst/grided/dist/*
+# Except index.js becuse that's the bundled js we actually want
+!inst/grided/dist/index.js
