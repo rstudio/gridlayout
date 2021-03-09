@@ -93,8 +93,8 @@ print.gridlayout <- function(layout){
       emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
       "gap size: " %+% emph(attr(layout, 'gap')),
     "\n",
-    gsub(pattern = "[1-9]+.+?(?=\\s)", replacement = "\033[36m\1\033[39m", no_pipes)
-    # stringr::str_replace_all(no_pipes, "[1-9]+.+?(?=\\s)", color_sizings)
+    # gsub(pattern = "[1-9]+.+?(?=\\s)", replacement = "\033[36m\1\033[39m", no_pipes)
+    stringr::str_replace_all(no_pipes, "[1-9]+.+?(?=\\s)", color_sizings)
   )
 }
 
