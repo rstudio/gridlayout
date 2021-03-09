@@ -20,9 +20,6 @@ elements_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0
 #' @return NULL
 #' @export
 grided_addin <- function() {
-  requireNamespace("miniUI", quietly = TRUE)
-  requireNamespace("shiny", quietly = TRUE)
-
   editor_selection <- rstudioapi::getSourceEditorContext()
 
   app_editor_id <- editor_selection$id
@@ -53,127 +50,10 @@ grided_addin <- function() {
   }
 
   my_layout <- if(user_has_selected_text | has_layout_chunk) gridlayout::md_to_gridlayout(selected_text) else gridlayout::new_gridlayout()
-
-  starting_elements <- gridlayout::get_elements(my_layout)
-
-
-  ui <- shiny::tags$body(
-    shiny::tags$head(
-      shiny::tags$title("GridEd")
-    ),
-    shiny::includeScript(
-      system.file("grided/www/dist/index.js", package = "gridlayout")
-    ),
-    shiny::includeCSS(
-      system.file("grided/www/main.css", package = "gridlayout")
-    ),
-    shiny::div(id = "header",
-               shiny::h2(shiny::HTML("GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app")),
-               shiny::div(
-                 class = "code_btns",
-                 shiny::actionButton("updated_code", "Update selected layout"),
-                 shiny::actionButton("get_code", "Get layout code")
-               )
-    ),
-    shiny::div(
-      id = "settings",
-      shiny::h3(settings_icon, "Settings"),
-      shiny::div(
-        class = "card-body",
-      )
-    ),
-    shiny::div(
-      id = "instructions",
-      shiny::h3(instructions_icon, "Instructions"),
-      shiny::div(
-        class = "card-body",
-        shiny::strong("Add an element:"),
-        shiny::tags$ul(
-          shiny::tags$li("Click and drag over the grid to define a region"),
-          shiny::tags$li("Enter id of element in popup")
-        ),
-        shiny::strong("Edit an element:"),
-        shiny::tags$ul(
-          shiny::tags$li("Drag the upper left, middle, or bottom right corners of the element to reposition")
-        ),
-        shiny::strong("Remove an element:"),
-        shiny::tags$ul(
-          shiny::tags$li("Find element entry in “Added elements” panel and click the", trashcan_icon, " icon")
-        ),
-      )
-    ),
-    shiny::div(
-      id = "elements",
-      shiny::h3(elements_icon, "Added elements"),
-      shiny::div(
-        class = "card-body",
-        shiny::div(id = "added_elements")
-      )
-    ),
-    shiny::div(
-      id = "editor",
-      shiny::div(
-        id = "editor-wrapper",
-        shiny::tags$svg(id = "editor-browser-header"),
-        shiny::uiOutput("grid_holder")
-      )
-    )
-  )
-
-  server <- function(input, output, session) {
-
-    session$sendCustomMessage(
-      "add-elements",
-      starting_elements
-    )
-    session$sendCustomMessage(
-      "update-grid",
-      list(
-        rows =  attr(my_layout, "row_sizes"),
-        cols = attr(my_layout, "col_sizes"),
-        gap = attr(my_layout, "gap")
-      )
-    )
-
-    layout_table <- reactive({
-      shiny::req(input$elements)
-
-      grid_mat <- matrix(".",
-                         nrow = length(input$grid_sizing$rows),
-                         ncol = length(input$grid_sizing$cols) )
-      for(el in input$elements){
-        grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
-      }
-
-      to_md(
-        new_gridlayout(layout_mat = grid_mat,
-                       col_sizes = input$grid_sizing$cols,
-                       row_sizes = input$grid_sizing$rows,
-                       gap = input$grid_sizing$gap
-        )
-      )
+  gridded_app(
+    starting_layout = my_layout,
+    update_btn_text = "Update selected layout",
+    on_update = function(new_layout){
+      rstudioapi::modifyRange(selected_range, to_md(new_layout), id = NULL)
     })
-
-    shiny::bindEvent(
-      shiny::observe({
-       layout_call <- paste(
-          "layout <- grid_layout_from_md(layout_table = \"",
-          "    ", layout_table(), "\")",
-          sep = "\n")
-
-        session$sendCustomMessage("code_modal", layout_call)
-      }),
-      input$get_code)
-
-    shiny::bindEvent(shiny::observe({
-      req(input$elements)
-
-      rstudioapi::modifyRange(selected_range, layout_table(), id = NULL)
-      shiny::stopApp()
-    }), input$updated_code)
-  }
-
-  # Open gadget in the external viewer
-  viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
-  shiny::runGadget(ui, server, viewer = viewer)
 }
