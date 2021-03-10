@@ -32,18 +32,18 @@ build_css_rule <- function(selector, prop_list){
 
     if(property == ""){
       # Get rid of any whitespace that may be present
-      line_txt <- stringr::str_trim(value, side = "both")
+      line_txt <- str_trim(value)
 
       # Strip off ending semi-colon if it exists. (We add it later when combining)
-      line_txt <- stringr::str_remove(line_txt, ";$")
+      line_txt <- str_remove_all(line_txt, ";$")
     } else {
       # Assemble property from name and value
       line_txt <- paste0(property, ": ", value)
     }
 
     # Check if this is a valid css property structure
-    single_name <- stringr::str_detect(line_txt, "^\\S+:")
-    non_terminating_semicolon <- stringr::str_detect(line_txt, ";(?!$)")
+    single_name <- str_detect(line_txt, "^\\S+:")
+    non_terminating_semicolon <- str_detect(line_txt, ";(?!$)")
 
     valid_property <- single_name & !non_terminating_semicolon
     if(valid_property){
@@ -58,9 +58,8 @@ build_css_rule <- function(selector, prop_list){
   # this again because the user may have passed some text with spaces etc at the
   # end of the lines...
   css_txt <- paste(
-    stringr::str_trim(
-      stringr::str_split(css_txt, "\n")[[1]],
-      side = "right"
+    trim_trailing(
+      strsplit(x = css_txt, split = "\n")[[1]]
     ),
     collapse = "\n"
   )

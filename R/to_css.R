@@ -3,7 +3,10 @@
 #' @param layout Object of class `"gridlayout"`.
 #' @param container Id of the element for grid to be placed in. Default value to
 #'   apply grid styling to the whole app (aka the `body` element) for whole page
-#'   grids
+#'   grids. If an simple name is passed it is assumed that it is an id: i.e. the
+#'   css id selector `#` is apended to the name. If container contains css
+#'   selector characters such as a dot, the selector will not be transformed
+#'   into an id automatically. E.g. `container = ".main-content"`.
 #' @param use_card_style Should each section of the grid be given a card style
 #'   to make it stand out?
 #' @param element_styles A list of named property-value pairs for additional
@@ -44,7 +47,14 @@ to_css.default <- function(layout, container, use_card_style = TRUE, element_sty
 #' @export
 to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE){
 
-  container_query <- if(missing(container)) "body" else paste0("#", container)
+  container_query <- if(missing(container)){
+    "body"
+  }  else {
+
+    has_css_selector <- grepl("\\.|#|>|\\+", container)
+
+    if(has_css_selector) container else paste0("#", container)
+  }
   collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
   template_areas <- ""
