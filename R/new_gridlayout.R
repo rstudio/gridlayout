@@ -73,7 +73,6 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap){
 }
 
 #' @export
-#' @importFrom crayon %+%
 print.gridlayout <- function(layout){
   no_header <- paste(
     strsplit(
@@ -83,15 +82,16 @@ print.gridlayout <- function(layout){
     collapse = "\n"
   )
 
-  emph <- crayon::bold
-  no_pipes <- gsub("\\|", "", no_header)
+  emph <- function(text) paste0("\033[1m",text,"\033[22m")
+
+  no_pipes <- str_remove_all(no_header, "\\|")
   cat(
     emph("gridlayout") %+% " object with " %+%
       emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
       emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
       "gap size: " %+% emph(attr(layout, 'gap')),
     "\n",
-    gsub(pattern = "([1-9]+[^ ]+)", replacement = "\033[36m\\1\033[39m", no_pipes)
+    str_replace_all(no_pipes, pattern = "([1-9]+[^ ]+)", replacement = "\033[36m\\1\033[39m")
   )
 }
 
