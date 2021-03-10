@@ -1,4 +1,4 @@
-gridded_app <- function(starting_layout = gridlayout::new_gridlayout(),
+gridded_app <- function(starting_layout = new_gridlayout(),
                         update_btn_text,
                         on_update = function(new_layout){
                           print(new_layout)
@@ -7,7 +7,7 @@ gridded_app <- function(starting_layout = gridlayout::new_gridlayout(),
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
-  starting_elements <- gridlayout::get_elements(starting_layout)
+  starting_elements <- get_elements(starting_layout)
 
   ui <- shiny::tags$body(
     shiny::tags$head(

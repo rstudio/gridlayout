@@ -49,7 +49,7 @@ grided_addin <- function() {
     rstudioapi::setSelectionRanges(selected_range, id = app_editor_id)
   }
 
-  my_layout <- if(user_has_selected_text | has_layout_chunk) gridlayout::md_to_gridlayout(selected_text) else gridlayout::new_gridlayout()
+  my_layout <- if(user_has_selected_text | has_layout_chunk) md_to_gridlayout(selected_text) else gridlayout::new_gridlayout()
   gridded_app(
     starting_layout = my_layout,
     update_btn_text = "Update selected layout",
