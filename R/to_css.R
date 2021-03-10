@@ -87,7 +87,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(full_height) glue::glue("calc(100vh - 2*{attr(layout, 'gap')})") else c(),
+      "height" = if(full_height) paste0("calc(100vh - 2*", attr(layout, 'gap'), ")") else c(),
       "grid-template-areas" = template_areas
     )
   )
