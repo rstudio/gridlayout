@@ -14,6 +14,7 @@ my_layout <- "
 # The classic Geyser app with grid layout
 shinyApp(
   ui = fluidPage(
+    theme = bslib::bs_theme(),
     use_gridlayout(my_layout, "app-container", use_card_style = TRUE),
     div(
       id = "app-container",
@@ -24,7 +25,7 @@ shinyApp(
         sliderInput("bins","Number of bins:",
                     min = 1, max = 50, value = 30)
       ),
-      plotOutput("distPlot")
+      plotOutput("distPlot", height = "100%")
     )
   ),
   server = function(input, output) {
