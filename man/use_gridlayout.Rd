@@ -16,7 +16,10 @@ desired layout for your Shiny app.}
   \describe{
     \item{\code{container}}{Id of the element for grid to be placed in. Default value to
 apply grid styling to the whole app (aka the \code{body} element) for whole page
-grids}
+grids. If an simple name is passed it is assumed that it is an id: i.e. the
+css id selector \verb{#} is apended to the name. If container contains css
+selector characters such as a dot, the selector will not be transformed
+into an id automatically. E.g. \code{container = ".main-content"}.}
     \item{\code{use_card_style}}{Should each section of the grid be given a card style
 to make it stand out?}
     \item{\code{element_styles}}{A list of named property-value pairs for additional

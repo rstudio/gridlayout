@@ -11,7 +11,7 @@ in_development <- TRUE
 deploy_loc <- "docs/grided"
 
 shiny:::renderPage(ui) %>%
-  stringr::str_remove_all(
+  str_remove_all(
     paste(
       '<script type=\"application/shiny-singletons\"></script>',
       '<script type="application/html-dependencies">.+</script>',
@@ -21,7 +21,7 @@ shiny:::renderPage(ui) %>%
       sep = "\\s*\\n*|"
     )
   ) %>%
-  stringr::str_replace(
+  str_replace_all(
     "Build a grid layout for your Shiny app",
     "Build a grid layout for your web app"
   ) %>%

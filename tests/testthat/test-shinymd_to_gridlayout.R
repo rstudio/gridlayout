@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("extractions works", {
 
   temp_rmd <- tempfile(fileext = ".rmd")
 

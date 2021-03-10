@@ -83,10 +83,8 @@ print.gridlayout <- function(layout){
     collapse = "\n"
   )
 
-  color_sizings <- crayon::cyan
   emph <- crayon::bold
   no_pipes <- gsub("\\|", "", no_header)
-  browser()
   cat(
     emph("gridlayout") %+% " object with " %+%
       emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%

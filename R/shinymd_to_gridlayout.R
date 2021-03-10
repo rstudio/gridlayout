@@ -13,10 +13,9 @@
 #' my_layout
 #'
 shinymd_to_gridlayout <- function(path_to_shinymd){
-
   shinymd_txt <- paste(readLines(path_to_shinymd), collapse = "\n")
 
-  layout_table <- stringr::str_extract(
+  layout_table <- str_extract(
     shinymd_txt,
     find_layout_regex
   )
@@ -54,13 +53,12 @@ shinymd_to_gridlayout <- function(path_to_shinymd){
 #' shinymd_to_gridlayout(loc_of_new_shinymd)
 #'
 update_shinymd <- function(path_to_shinymd, new_layout, updated_shinymd_path = path_to_shinymd){
-
   shinymd_txt <- paste(readLines(path_to_shinymd), collapse = "\n")
 
-  new_shinymd <- stringr::str_replace(
-    shinymd_txt,
-    find_layout_regex,
-    paste0("\n", to_md(new_layout), "\n")
+  new_shinymd <- str_replace_all(
+    text = shinymd_txt,
+    pattern = find_layout_regex,
+    replacement = paste0("\n", to_md(new_layout), "\n")
   )
 
   message("Saving shinymd with updated layout to ", updated_shinymd_path)
@@ -70,9 +68,4 @@ update_shinymd <- function(path_to_shinymd, new_layout, updated_shinymd_path = p
   )
 }
 
-
-find_layout_regex <- stringr::regex(
-  "(?<=\\`\\`\\` \\{\\.layout \\.grid\\}).+?(?=\\`\\`\\`)",
-  multiline = TRUE,
-  dotall = TRUE
-)
+find_layout_regex <- "(?sm)(?<=\\`\\`\\` \\{\\.layout \\.grid\\}).+?(?=\\`\\`\\`)"

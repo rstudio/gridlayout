@@ -108,28 +108,31 @@ test_that("Card styling can be disabled", {
   )
 
   expect_false(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, use_card_style = FALSE),
-      stringr::fixed("box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);")
+      "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);", fixed = TRUE
     )
   )
   expect_false(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, use_card_style = FALSE),
-      stringr::fixed("border-radius: 0.5rem;")
+      "border-radius: 0.5rem;",
+      fixed = TRUE
     )
   )
 
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, use_card_style = TRUE),
-      stringr::fixed("box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);")
+      "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);",
+      fixed = TRUE
     )
   )
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, use_card_style = TRUE),
-      stringr::fixed("border-radius: 0.5rem;")
+      "border-radius: 0.5rem;",
+      fixed = TRUE
     )
   )
 })
@@ -145,13 +148,13 @@ test_that("Debug mode adds outline to all elements", {
   )
 
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, debug_mode = TRUE),
       "outline: 1px solid black;"
     )
   )
   expect_false(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, debug_mode = FALSE),
       "outline: 1px solid black;"
     )
@@ -174,14 +177,14 @@ test_that("Custom styles can be added by the user for further customization of c
   )
 
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, element_styles = custom_styles),
       "background: blue;"
     )
   )
 
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, element_styles = custom_styles),
       "border: 1px solid red;"
     )
@@ -201,16 +204,18 @@ test_that("Height setting can be un-set", {
 
 
   expect_true(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj),
-      stringr::fixed("height: calc(")
+      "height: calc(",
+      fixed = TRUE
     )
   )
 
   expect_false(
-    stringr::str_detect(
+    str_detect(
       to_css(grid_obj, full_height = FALSE),
-      stringr::fixed("height: calc(")
+      "height: calc(",
+      fixed = TRUE
     )
   )
 
