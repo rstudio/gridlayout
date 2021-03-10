@@ -2,7 +2,7 @@
 
 library(gridlayout)
 library(shiny)
-
+requireNamespace("bslib", quietly = TRUE)
 my_layout <- "
 |      |        |         |
 |------|--------|---------|

@@ -11,7 +11,8 @@ Suggests:
     testthat (>= 3.0.0),
     shiny,
     miniUI,
-    htmltools
+    htmltools,
+    bslib
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
