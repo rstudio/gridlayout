@@ -178,6 +178,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #' )
 #' }
 use_gridlayout <- function(layout_def, ...){
+  requireNamespace("htmltools", quietly = TRUE)
   if(inherits(layout_def, "character")){
     # If we were passed a string directly then convert to a grid layout before
     # proceeding

@@ -9,10 +9,9 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0),
-    shiny
-Config/testthat/edition: 3
-RoxygenNote: 7.1.1
-Imports: 
+    shiny,
     miniUI,
     htmltools
+Config/testthat/edition: 3
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
