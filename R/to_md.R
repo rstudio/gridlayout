@@ -1,15 +1,11 @@
 #' Convert layout to markdown table
 #'
-#' Uses the `knitr::kable()` function to convert a layout object to a markdown
-#' table
-#'
 #' @param layout Object of class `"gridlayout"`.
 #' @param include_gap_size Should the gap size for the layout be added in
 #'   upper-left of table?
 #'
-#' @return Markdown table as constructed by `knitr::kable()` that defines the
-#'   grid layout. This can be used with the function `grid_layout_from_md()` to
-#'   build grid layouts.
+#' @return Markdown table that defines the grid layout. This can be used with
+#'   the function `grid_layout_from_md()` to build grid layouts.
 #' @export
 #'
 #' @examples
@@ -49,15 +45,5 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
     )
   )
 
-  rownames(layout_w_size_row) <- NULL
-  colnames(layout_w_size_row) <- NULL
-
-  md_table <- knitr::kable(layout_w_size_row, col.names = rep("", length(first_row)))
-
-  # knitr::kable() likes to insert alignment colons but let's remove them so the
-  # table looks cleaner
-  gsub(
-    pattern = ":", replacement = "-",
-    paste(as.character(md_table), collapse = "\n")
-  )
+  matrix_to_md_table(layout_w_size_row)
 }

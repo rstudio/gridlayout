@@ -13,7 +13,6 @@ Suggests:
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Imports: 
-    knitr,
     miniUI,
     htmltools
 Roxygen: list(markdown = TRUE)

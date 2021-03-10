@@ -13,13 +13,11 @@ to_md(layout, include_gap_size = TRUE)
 upper-left of table?}
 }
 \value{
-Markdown table as constructed by \code{knitr::kable()} that defines the
-grid layout. This can be used with the function \code{grid_layout_from_md()} to
-build grid layouts.
+Markdown table that defines the grid layout. This can be used with
+the function \code{grid_layout_from_md()} to build grid layouts.
 }
 \description{
-Uses the \code{knitr::kable()} function to convert a layout object to a markdown
-table
+Convert layout to markdown table
 }
 \examples{
 
