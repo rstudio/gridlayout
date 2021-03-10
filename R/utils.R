@@ -67,31 +67,22 @@ str_extract <- function(text, pattern){
 matrix_to_md_table <- function(mat){
   empty_row <- rep_len("", ncol(mat))
 
-  mat_w_header_rows <- rbind(
-    empty_row,
-    empty_row,
-    mat
-  )
+  mat_w_header_rows <- rbind(empty_row,
+                             empty_row,
+                             mat)
 
-  even_width_cols <- apply(
-    mat_w_header_rows,
-    FUN = format,
-    MARGIN = 2
-  )
+  even_width_cols <- apply(mat_w_header_rows,
+                           FUN = format,
+                           MARGIN = 2)
 
-  w_bars <- apply(
-    even_width_cols,
-    FUN = function(x) paste0("|", paste(x, collapse = " |"), " |"),
-    MARGIN = 1
-  )
+  w_bars <- apply(even_width_cols,
+                  FUN = function(x) paste0("|", paste(x, collapse=" |"), " |"),
+                  MARGIN = 1)
 
-  # Add header delimiting dashes to second to top row
-  w_bars[2] <- gsub(x = w_bars[2], pattern = "\\s", replacement = "\\-")
+  # Add header delimiting dashes to second row
+  w_bars[2] <- gsub(" ", "-", w_bars[2])
 
   # Collapse with new-lines to
-  paste(
-    w_bars,
-    collapse = "\n"
-  )
+  paste(w_bars, collapse = "\n")
 }
 
