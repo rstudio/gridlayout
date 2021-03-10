@@ -1,0 +1,53 @@
+---
+title: "grid_markdown"
+author: "Nick Strayer"
+date: "3/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(gridlayout)
+library(glue)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::knit_engines$set(gridlayout = function(options) {
+  code <- paste(options$code, collapse = "\n")
+  if (options$eval) {
+    layout <- gridlayout::md_to_gridlayout(code)
+    css_for_layout <- glue::glue(
+      "<style>",
+      "{to_css(layout, container = '.main-container')}",
+      "</style>",
+      .sep = "\n"
+    )
+  }
+  options$results <- "asis"
+  options$echo <- FALSE
+  knitr::engine_output(
+    options, 
+    code = options$code, 
+    out = css_for_layout
+  )
+})
+```
+
+## Main
+
+```{gridlayout}
+|      |        |         |
+|------|--------|---------|
+|2rem  |200px   |1fr      |
+|150px |header  |header   |
+|1fr   |sidebar |main     |
+|120px |footer  |footer   |
+```
+
+
+## Sidebar
+
+Here is some content for the sidebar
+
+## Footer
+
+Anything you want could go in the footer.
