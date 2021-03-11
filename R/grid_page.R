@@ -15,6 +15,8 @@
 #' @examples
 grid_page <- function(layout, ..., .verify_matches = TRUE){
 
+  requireNamespace("shiny", quietly = TRUE)
+
   # Kinda silly to have a grid page without a layout
   if(missing(layout)){
     stop("Need a defined layout for page")
@@ -45,5 +47,5 @@ grid_page <- function(layout, ..., .verify_matches = TRUE){
 }
 
 wrap_in_div <- function(id, contents){
-  div(id = id, contents)
+  shiny::div(id = id, contents)
 }
