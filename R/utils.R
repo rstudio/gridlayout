@@ -70,3 +70,6 @@ matrix_to_md_table <- function(mat){
   paste(w_bars, collapse = "\n")
 }
 
+pluck <- function(x, attr_id){
+  sapply(x, function(x) x[attr_id])
+}
