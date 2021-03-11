@@ -131,7 +131,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #' This simply wraps the output of `to_css()` in a `style` tag and escapes HTML
 #' characters to simplify using in Shiny
 #'
-#' @param layout_def Either a markdown table representation (see
+#' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.
 #' @inheritDotParams to_css -layout
@@ -177,18 +177,12 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #'   }
 #' )
 #' }
-use_gridlayout <- function(layout_def, ...){
+use_gridlayout <- function(layout, ...){
   requireNamespace("htmltools", quietly = TRUE)
-  if(inherits(layout_def, "character")){
-    # If we were passed a string directly then convert to a grid layout before
-    # proceeding
-    layout_def <- md_to_gridlayout(layout_def)
-  } else if(!inherits(layout_def, "gridlayout")){
-    stop("Passed layout must either be a markdown table or a gridlayout object.")
-  }
+  layout <- coerce_to_layout(layout)
   htmltools::tags$head(
     htmltools::tags$style(
-      htmltools::HTML(to_css(layout_def, ...))
+      htmltools::HTML(to_css(layout, ...))
     )
   )
 }

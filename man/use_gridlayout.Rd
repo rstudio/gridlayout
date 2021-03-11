@@ -4,10 +4,10 @@
 \alias{use_gridlayout}
 \title{Convert layout to css for Shiny}
 \usage{
-use_gridlayout(layout_def, ...)
+use_gridlayout(layout, ...)
 }
 \arguments{
-\item{layout_def}{Either a markdown table representation (see
+\item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
