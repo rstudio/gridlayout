@@ -8,25 +8,16 @@ my_layout <- "
 |------|--------|---------|
 |2rem  |200px   |1fr      |
 |150px |header  |header   |
-|1fr   |sidebar |distPlot |
-|1fr   |footer  |footer   |"
+|1fr   |sidebar |mainPlot |"
 
 # The classic Geyser app with grid layout
 shinyApp(
-  ui = fluidPage(
+  ui = grid_page(
+    layout = my_layout,
     theme = bslib::bs_theme(),
-    use_gridlayout(my_layout, "app-container", use_card_style = TRUE),
-    div(
-      id = "app-container",
-      div(id = "header",
-        h2(id = "app-title", "Old Faithful Geyser Data")
-      ),
-      div(id = "sidebar",
-        sliderInput("bins","Number of bins:",
-                    min = 1, max = 50, value = 30)
-      ),
-      plotOutput("distPlot", height = "100%")
-    )
+    header = h2(id = "app-title", "Old Faithful Geyser Data"),
+    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+    mainPlot = plotOutput("distPlot", height = "100%")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
