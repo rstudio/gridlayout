@@ -39,7 +39,8 @@ md_to_gridlayout <- function(layout_table){
 
   if(has_sizes){
     new_gridlayout(
-      layout_mat = raw_mat[-1,-1],
+      # Stop single column or row layouts from getting collapsed to vectors
+      layout_mat = raw_mat[-1,-1, drop = FALSE],
       col_sizes = raw_mat[1,-1],
       row_sizes = raw_mat[-1,1],
       gap = if(raw_mat[1,1] != "") raw_mat[1,1] else "1rem"
