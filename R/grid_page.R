@@ -14,6 +14,34 @@
 #' @export
 #'
 #' @examples
+#' # Only run these examples in interactive R sessions
+#' if (interactive()) {
+#'
+#' my_layout <- "
+#' |      |        |         |
+#' |------|--------|---------|
+#' |2rem  |200px   |1fr      |
+#' |150px |header  |header   |
+#' |1fr   |sidebar |mainPlot |"
+#'
+#' # The classic Geyser app with grid layout
+#' shinyApp(
+#'   ui = grid_page(
+#'     layout = my_layout,
+#'     theme = bslib::bs_theme(),
+#'     header = h2(id = "app-title", "Old Faithful Geyser Data"),
+#'     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+#'     mainPlot = plotOutput("distPlot", height = "100%")
+#'   ),
+#'   server = function(input, output) {
+#'     output$distPlot <- renderPlot({
+#'       x    <- faithful[, 2]
+#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
+#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
+#'     })
+#'   }
+#' )
+#' }
 grid_page <- function(layout, theme, ..., .verify_matches = TRUE){
 
   requireNamespace("shiny", quietly = TRUE)
@@ -36,16 +64,18 @@ grid_page <- function(layout, theme, ..., .verify_matches = TRUE){
     in_layout_not_args <- setdiff(layout_ids, arg_ids)
     in_args_not_layout <- setdiff(arg_ids, layout_ids)
 
-    stop("Mismatch between the provided elements and the defined elements in layout definition. ",
-         if(length(in_layout_not_args) > 0) {
-           "\nThe following element(s) were declared in the layout but not provided to `grid_page`: " %+%
-             paste(in_layout_not_args, collapse = ",") %+% "."
-         },
-         if(length(in_args_not_layout) > 0) {
-           "\nThe following element(s) were passed to `grid_page` but not declared in the layout: " %+%
-             paste(in_args_not_layout, collapse = ",") %+% "."
-         },
-         "\nIf this was intentional set `.verify_matches = FALSE`")
+    stop(
+      "Mismatch between the provided elements and the defined elements in layout definition. ",
+      if(length(in_layout_not_args) > 0) {
+        "\nThe following element(s) were declared in the layout but not provided to `grid_page`: " %+%
+          paste(in_layout_not_args, collapse = ",") %+% "."
+      },
+      if(length(in_args_not_layout) > 0) {
+        "\nThe following element(s) were passed to `grid_page` but not declared in the layout: " %+%
+          paste(in_args_not_layout, collapse = ",") %+% "."
+      },
+      "\nIf this was intentional set `.verify_matches = FALSE`"
+    )
   }
 
   shiny::fluidPage(
