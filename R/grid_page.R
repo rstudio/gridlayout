@@ -88,7 +88,7 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
     in_args_not_layout <- setdiff(arg_ids, layout_ids)
 
     id_mismatch_err <- paste0(
-      "Mismatch between the provided elements and the defined elements in layout definition.\n",
+      "\nMismatch between the provided elements and the defined elements in layout definition.\n",
       if(length(in_layout_not_args) > 0) {
         paste0(
           "In layout declaration but not passed to `grid_page`:\n",
@@ -107,18 +107,17 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
     )
 
     no_id_err <- paste(
-      "The following elements of the page lack an id",
+      "\nThe following elements of the page lack an id:",
       paste("  -", user_exprs[element_missing_id], collapse = "\n") ,
       "Consider wrapping in `grid_panel(id = ...)`",
       sep = "\n"
     )
 
     stop(
-      paste(
+      paste0(
         "Malformed call to grid_page():",
         if(id_mismatches) id_mismatch_err,
-        if(elements_wo_ids) no_id_err,
-        sep = "\n"
+        if(elements_wo_ids) no_id_err
       ),
       call. = FALSE
     )
