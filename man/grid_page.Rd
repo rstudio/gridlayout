@@ -4,17 +4,17 @@
 \alias{grid_page}
 \title{Setup gridlayout UI for shiny app}
 \usage{
-grid_page(layout, theme, ..., .verify_matches = TRUE)
+grid_page(layout, ..., theme, .verify_matches = TRUE)
 }
 \arguments{
 \item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{theme}{Optional argument to pass to \code{theme} argument of \code{\link[shiny]{fluidPage}}.}
-
 \item{...}{Contents of each grid element. For instance the contents of the
 header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}.}
+
+\item{theme}{Optional argument to pass to \code{theme} argument of \code{\link[shiny]{fluidPage}}.}
 
 \item{.verify_matches}{If \code{TRUE} then the function will make sure defined
 elements match those specified in \code{layout} declaration. For advanced

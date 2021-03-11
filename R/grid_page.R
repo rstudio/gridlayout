@@ -46,7 +46,7 @@
 #' )
 #'
 #' }
-grid_page <- function(layout, theme, ..., .verify_matches = TRUE){
+grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
@@ -78,7 +78,6 @@ grid_page <- function(layout, theme, ..., .verify_matches = TRUE){
   # the passed arg_sections
   layout <- coerce_to_layout(layout)
   layout_ids <- pluck(get_elements(layout), 'id')
-
   id_mismatches <- .verify_matches & !setequal(layout_ids, arg_ids)
 
   # Gather all error messages into one call because giving them together maybe
