@@ -73,3 +73,15 @@ matrix_to_md_table <- function(mat){
 pluck <- function(x, attr_id){
   sapply(x, function(x) x[attr_id])
 }
+
+pluck_dbl <- function(x, attr_id){
+  as.numeric(pluck(x, attr_id))
+}
+
+pluck_chr <- function(x, attr_id){
+  as.character(pluck(x, attr_id))
+}
+
+list_in_quotes <- function(name_ids){
+  paste0("\"", name_ids, "\"", collapse = ", ")
+}
