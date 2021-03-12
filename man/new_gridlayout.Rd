@@ -4,7 +4,7 @@
 \alias{new_gridlayout}
 \title{Construct a gridlayout object from basic parts}
 \usage{
-new_gridlayout(layout_mat, col_sizes, row_sizes, gap)
+new_gridlayout(layout_mat, col_sizes, row_sizes, gap, element_list)
 }
 \arguments{
 \item{layout_mat}{A character matrix where each entry controls what element

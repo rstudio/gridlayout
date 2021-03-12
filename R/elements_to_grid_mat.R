@@ -1,42 +1,55 @@
 #' Validate list of elements for grid
 #'
-#' @param elements List of elements with the `id`, `start_row`, `end_row`,
-#'   `start_col`, and `end_col` format.
 #' @inheritParams new_gridlayout
 #' @param ignore_overlap Should overlapping elements in the grid be flagged?
 #'
 #' @return NULL
 #' @export
-elements_to_grid_mat <- function(elements, col_sizes, row_sizes, warn_about_overap = TRUE){
+elements_to_grid_mat <- function(element_list, col_sizes, row_sizes, warn_about_overap = TRUE){
+
+  # Gather info about the extent of positions
+  start_rows <- pluck_dbl(element_list, "start_row")
+  min_row <- min(start_rows)
+  end_rows <- pluck_dbl(element_list, "end_row")
+  max_row <- max(end_rows)
+  start_cols <- pluck_dbl(element_list, "start_col")
+  min_col <- min(start_cols)
+  end_cols <- pluck_dbl(element_list, "end_col")
+  max_col <- max(start_cols)
+
+  # Recycle column and row sizes if only singular value was passed
+  if(length(col_sizes) == 1 & max_col > 1){
+    col_sizes <- rep_len(col_sizes, max_col)
+  }
+  if(length(row_sizes) == 1 & max_row > 1){
+    row_sizes <- rep_len(row_sizes, max_row)
+  }
+
 
   num_cols <- length(col_sizes)
   num_rows <- length(row_sizes)
 
-  start_rows <- pluck_dbl(elements, "start_row")
   if(min(start_rows) < 1){
-    bad_elements <- pluck_chr(elements[start_rows < 1], "id")
+    bad_elements <- pluck_chr(element_list[start_rows < 1], "id")
     stop(
       "Element(s) ", list_in_quotes(bad_elements), " have invalid start_row values\n",
       "Row start must be 1 or greater as indexing into the grid starts at 1."
     )
   }
-  end_rows <- pluck_dbl(elements, "end_row")
   if(max(end_rows) > num_rows){
-    bad_elements <- pluck_chr(elements[end_rows > num_rows], "id")
+    bad_elements <- pluck_chr(element_list[end_rows > num_rows], "id")
     stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
   }
 
-  start_cols <- pluck_dbl(elements, "start_col")
   if(min(start_cols) < 1){
-    bad_elements <- pluck_chr(elements[start_cols < 1], "id")
+    bad_elements <- pluck_chr(element_list[start_cols < 1], "id")
     stop(
       "Element(s) ", list_in_quotes(bad_elements), " have invalid start_col values\n",
       "Column start must be 1 or greater as indexing into the grid starts at 1."
     )
   }
-  end_cols <- pluck_dbl(elements, "end_col")
   if(max(end_cols) > num_cols){
-    bad_elements <- pluck_chr(elements[end_cols > num_cols], "id")
+    bad_elements <- pluck_chr(element_list[end_cols > num_cols], "id")
     stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid cols")
   }
 
@@ -44,7 +57,7 @@ elements_to_grid_mat <- function(elements, col_sizes, row_sizes, warn_about_over
   # building a matrix and then filling it with each element If we try and fill a
   # cell that already has something in it, we have an overlap
   layout_mat <- matrix("", nrow = num_rows, ncol = num_cols)
-  for(el in elements){
+  for(el in element_list){
     row_span <- el$start_row:el$end_row
     col_span <- el$start_col:el$end_col
     current_cells <- layout_mat[row_span, col_span, drop = FALSE]
