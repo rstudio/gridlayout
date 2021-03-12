@@ -4,10 +4,15 @@
 #'   id will take up that given position in the grid. For instance a header
 #'   element would take up every cell in the first row.
 #' @param col_sizes A character vector of valid css sizes for the width of each
-#'   column in your grid as given by `layout_mat`. If a single value is passed, it will be repeated for all columns.
+#'   column in your grid as given by `layout_mat`. If a single value is passed,
+#'   it will be repeated for all columns.
 #' @param row_sizes Same as `col_sizes`, but for row heights.
 #' @param gap Valid css sizing for gap to be left between each element in your
 #'   grid. Defaults to `"1rem"`.
+#' @param element_list List of elements with the `id`, `start_row`, `end_row`,
+#'   `start_col`, and `end_col` format.
+#' @param ignore_overlap Should overlapping elements in the grid be flagged?
+#'   Only used in `element_list` argument is use to define layout
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -24,20 +29,31 @@
 #'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap){
-
-  # Default is a 2x2 layout with no elements added
-  if(missing(layout_mat)){
-    layout_mat <- matrix(rep(".", times = 4), ncol = 2)
-  }
+new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list){
 
   # If no sizing is given just make every row and column the same size as other
   # rows and columns
   if(missing(col_sizes)){
-    col_sizes <- rep("1fr", ncol(layout_mat))
+    col_sizes <- "1fr"
+    message("Defaulting to even width columns")
   }
   if(missing(row_sizes)){
-    row_sizes <- rep("1fr", nrow(layout_mat))
+    row_sizes <- "1fr"
+    message("Defaulting to even width rows")
+  }
+
+  # Default is a 2x2 layout with no elements added
+  if(missing(layout_mat)){
+    # Either we want to use the element_list option or just resort to the default
+    if(missing(element_list)){
+      layout_mat <- matrix(rep(".", times = 4), ncol = 2)
+    } else {
+      elements_to_grid_mat(
+        element_list = element_list,
+        col_sizes = col_sizes, row_sizes = row_sizes,
+        warn_about_overap = warn_about_overap
+      )
+    }
   }
 
   # If the user has just passed a single value, assume that it should be
