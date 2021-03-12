@@ -134,32 +134,58 @@
     <p>Convert grid layout to css string</p>
     </div>
 
-    <pre class="usage"><span class='fu'>to_css</span><span class='op'>(</span><span class='va'>layout</span>, <span class='va'>container</span>, debug_mode <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>to_css</span><span class='op'>(</span>
+  <span class='va'>layout</span>,
+  <span class='va'>container</span>,
+  use_card_style <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  element_styles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
+  debug_mode <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  full_height <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>layout</th>
-      <td><p>Object of class `"gridlayout"`.</p></td>
+      <td><p>Object of class <code>"gridlayout"</code>.</p></td>
     </tr>
     <tr>
       <th>container</th>
       <td><p>Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the `body` element) for whole page
-grids</p></td>
+apply grid styling to the whole app (aka the <code>body</code> element) for whole page
+grids. If an simple name is passed it is assumed that it is an id: i.e. the
+css id selector <code>#</code> is apended to the name. If container contains css
+selector characters such as a dot, the selector will not be transformed
+into an id automatically. E.g. <code>container = ".main-content"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>use_card_style</th>
+      <td><p>Should each section of the grid be given a card style
+to make it stand out?</p></td>
+    </tr>
+    <tr>
+      <th>element_styles</th>
+      <td><p>A list of named property-value pairs for additional
+styles to be added to each element. E.g. <code>element_styles = c("background" = "blue")</code>.</p></td>
     </tr>
     <tr>
       <th>debug_mode</th>
-      <td><p>If set to `TRUE` then each element of the grid will have an
+      <td><p>If set to <code>TRUE</code> then each element of the grid will have an
 outline applied so positioning can more easily be assessed.</p></td>
+    </tr>
+    <tr>
+      <th>full_height</th>
+      <td><p>Should the grid-containing element be made as tall as
+possible? Set to <code>FALSE</code> if the grid is contained within another element
+and is not the whole app's UI.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Character string of css used to setup grid layout and place elements
-  (referenced by id) into correct locations</p>
+(referenced by id) into correct locations</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -173,7 +199,7 @@ outline applied so positioning can more easily be assessed.</p></td>
 <span class='op'>)</span>
 
 <span class='fu'>to_css</span><span class='op'>(</span><span class='va'>grid_obj</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "body {\n  display: grid;\n  grid-template-rows: 100px 1fr 1fr;\n  grid-template-columns: 120px 1fr 1fr;\n  grid-gap: 1rem;\n  padding: 1rem;\n  grid-template-areas:\n    \"header header header\"\n    \"sidebar plot_a plot_c\"\n    \"sidebar plot_b plot_b\";\n}\n\nbody &gt; * {\n  box-sizing: border-box;\n}\n\n#header { grid-area: header; }\n#sidebar { grid-area: sidebar; }\n#plot_a { grid-area: plot_a; }\n#plot_b { grid-area: plot_b; }\n#plot_c { grid-area: plot_c; }"</div><div class='input'>
+</div><div class='output co'>#&gt; [1] "body {\n  display: grid;\n  grid-template-rows: 100px 1fr 1fr;\n  grid-template-columns: 120px 1fr 1fr;\n  grid-gap: 1rem;\n  padding: 1rem;\n  height: calc(100vh - 2*1rem);\n  grid-template-areas:\n    \"header header header\"\n    \"sidebar plot_a plot_c\"\n    \"sidebar plot_b plot_b\";\n}\n\nbody &gt; * {\n  box-sizing: border-box;\n  padding: 0.8rem;\n  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);\n  border-radius: 0.5rem;\n}\n\n#header {\n  grid-area: header;\n}\n#sidebar {\n  grid-area: sidebar;\n}\n#plot_a {\n  grid-area: plot_a;\n}\n#plot_b {\n  grid-area: plot_b;\n}\n#plot_c {\n  grid-area: plot_c;\n}"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
