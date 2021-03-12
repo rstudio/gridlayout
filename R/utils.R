@@ -85,3 +85,7 @@ pluck_chr <- function(x, attr_id){
 list_in_quotes <- function(name_ids){
   paste0("\"", name_ids, "\"", collapse = ", ")
 }
+
+arg_list_exprs <- function(...){
+  as.list(substitute(...()))
+}

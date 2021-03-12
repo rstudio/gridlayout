@@ -59,7 +59,7 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
   # Capture expressions passed just in case we need to point user to where
   # things went wrong
   user_exprs <- lapply(
-    as.list(substitute(...())),
+    arg_list_exprs(...),
     deparse
   )
 
