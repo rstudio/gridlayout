@@ -47,3 +47,36 @@ test_that("Gets mad when elements extend beyond designated grid", {
     fixed = TRUE
   )
 })
+
+
+test_that("Overlapping elements are detected (and can be ignored)", {
+  elements_w_overlap <- list(
+    list(id = "header",  start_row = 1, end_row = 1, start_col = 1, end_col = 3),
+    list(id = "sidebar", start_row = 2, end_row = 3, start_col = 1, end_col = 1),
+    list(id = "plot_a",  start_row = 2, end_row = 3, start_col = 2, end_col = 3),
+    list(id = "plot_b",  start_row = 3, end_row = 3, start_col = 2, end_col = 2),
+    list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
+  )
+  suppressWarnings({
+    expect_warning(
+      is_valid_template_areas(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
+    )
+  })
+  expect_silent(
+    is_valid_template_areas(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"), warn_about_overap = FALSE)
+  )
+})
+
+# elements <- list(
+#   list(id = "header",  start_row = 1, end_row = 1, start_col = 1, end_col = 3),
+#   list(id = "sidebar", start_row = 2, end_row = 3, start_col = 1, end_col = 1),
+#   list(id = "plot_a",  start_row = 2, end_row = 2, start_col = 2, end_col = 3),
+#   list(id = "plot_b",  start_row = 3, end_row = 3, start_col = 2, end_col = 2),
+#   list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
+# )
+#
+#
+# is_valid_template_areas(elements, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
+
+
+

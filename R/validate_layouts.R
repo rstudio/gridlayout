@@ -3,10 +3,11 @@
 #' @param elements List of elements with the `id`, `start_row`, `end_row`,
 #'   `start_col`, and `end_col` format.
 #' @inheritParams new_gridlayout
+#' @param ignore_overlap Should overlapping elements in the grid be flagged?
 #'
 #' @return NULL
 #' @export
-is_valid_template_areas <- function(elements, col_sizes, row_sizes){
+is_valid_template_areas <- function(elements, col_sizes, row_sizes, warn_about_overap = TRUE){
 
   num_cols <- length(col_sizes)
   num_rows <- length(row_sizes)
@@ -39,5 +40,23 @@ is_valid_template_areas <- function(elements, col_sizes, row_sizes){
     stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid cols")
   }
 
+  # Now we can start checking for overlaps in element ranges. We will do this by
+  # building a matrix and then filling it with each element If we try and fill a
+  # cell that already has something in it, we have an overlap
+  layout_mat <- matrix("", nrow = num_rows, ncol = num_cols)
+  for(el in elements){
+    row_span <- el$start_row:el$end_row
+    col_span <- el$start_col:el$end_col
+    current_cells <- layout_mat[row_span, col_span, drop = FALSE]
+    already_filled_cells <- current_cells != ""
+    if(any(already_filled_cells) & warn_about_overap){
+      warning(el$id, " overlaps other elements. If this was intentional ",
+              "set warn_about_overap = FALSE to supress these warnings.")
+    }
 
+    # Add a visual separation for overlaps with a pipe
+    current_cells[already_filled_cells] <- paste0(current_cells[already_filled_cells], ",")
+    layout_mat[row_span, col_span] <- paste0(current_cells, el$id)
+  }
+  layout_mat
 }
