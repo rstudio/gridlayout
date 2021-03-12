@@ -7,7 +7,7 @@
 #'
 #' @return NULL
 #' @export
-is_valid_template_areas <- function(elements, col_sizes, row_sizes, warn_about_overap = TRUE){
+elements_to_grid_mat <- function(elements, col_sizes, row_sizes, warn_about_overap = TRUE){
 
   num_cols <- length(col_sizes)
   num_rows <- length(row_sizes)

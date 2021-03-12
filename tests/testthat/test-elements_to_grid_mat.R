@@ -5,7 +5,7 @@ test_that("Gets mad when elements start before grid", {
   )
 
   expect_error(
-    is_valid_template_areas(bad_row, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
+    elements_to_grid_mat(bad_row, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
     regexp = paste0("Element(s) \"header\" have invalid start_row values\n",
                     "Row start must be 1 or greater as indexing into the grid starts at 1."),
     fixed = TRUE
@@ -17,7 +17,7 @@ test_that("Gets mad when elements start before grid", {
   )
 
   expect_error(
-    is_valid_template_areas(bad_col, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
+    elements_to_grid_mat(bad_col, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
     regexp = paste0("Element(s) \"sidebar\" have invalid start_col values\n",
                     "Column start must be 1 or greater as indexing into the grid starts at 1."),
     fixed = TRUE
@@ -31,7 +31,7 @@ test_that("Gets mad when elements extend beyond designated grid", {
   )
 
   expect_error(
-    is_valid_template_areas(too_wide, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
+    elements_to_grid_mat(too_wide, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
     regexp = "Element(s) \"header\" extend beyond specified grid rows",
     fixed = TRUE
   )
@@ -42,7 +42,7 @@ test_that("Gets mad when elements extend beyond designated grid", {
   )
 
   expect_error(
-    is_valid_template_areas(too_tall, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
+    elements_to_grid_mat(too_tall, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr")),
     regexp = "Element(s) \"sidebar\" extend beyond specified grid cols",
     fixed = TRUE
   )
@@ -59,11 +59,11 @@ test_that("Overlapping elements are detected (and can be ignored)", {
   )
   suppressWarnings({
     expect_warning(
-      is_valid_template_areas(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
+      elements_to_grid_mat(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
     )
   })
   expect_silent(
-    is_valid_template_areas(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"), warn_about_overap = FALSE)
+    elements_to_grid_mat(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"), warn_about_overap = FALSE)
   )
 })
 
@@ -76,7 +76,7 @@ test_that("Overlapping elements are detected (and can be ignored)", {
 # )
 #
 #
-# is_valid_template_areas(elements, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
+# elements_to_grid_mat(elements, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
 
 
 
