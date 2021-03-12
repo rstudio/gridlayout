@@ -66,7 +66,7 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
   # Get all the elements so we can make sure they are properly formed before
   # writing page
   arg_sections <- list(...)
-  arg_ids <- as.character(pluck(pluck(arg_sections, 'attribs'), 'id'))
+  arg_ids <- extract_chr(arg_sections, 'attribs', 'id')
 
 
   element_missing_id <- arg_ids == "NULL"
@@ -79,7 +79,7 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
   layout <- coerce_to_layout(layout)
-  layout_ids <- pluck(get_elements(layout), 'id')
+  layout_ids <- extract(get_elements(layout), 'id')
   id_mismatches <- .verify_matches & !setequal(layout_ids, arg_ids)
 
   # Gather all error messages into one call because giving them together maybe

@@ -19,7 +19,7 @@ trim_trailing <- function(text){
 }
 
 str_trim <- function(text, side = c("both", "left", "right")){
-  side <- match.arg(side)
+  side <- match.arg(side, choices = c("both", "left", "right"))
   if(side == "both" | side == "left"){
     text <- trim_leading(text)
   }
@@ -70,16 +70,36 @@ matrix_to_md_table <- function(mat){
   paste(w_bars, collapse = "\n")
 }
 
-pluck <- function(x, attr_id){
-  sapply(x, function(x) x[attr_id])
+# extract from a list of lists to whatever level is desired
+extract <- function(x, ...){
+  all_keys <- list(...)
+
+  next_key <- all_keys[[1]]
+
+  extracted <- lapply(x, `[[`, next_key)
+
+  if(length(all_keys) == 1){
+    return(extracted)
+  } else {
+    all_keys[[1]] <- NULL
+    return(do.call(extract, c(list(x = extracted), all_keys)))
+  }
 }
 
-pluck_dbl <- function(x, attr_id){
-  as.numeric(pluck(x, attr_id))
+# my_list <- list(
+#   list(id = "hi", attribs = list(class = "a")),
+#   list(id = "there", attribs = list(class = "b"))
+# )
+# extract(my_list, "id")
+# extract(my_list, "attribs", "class")
+
+
+extract_dbl <- function(x, ...){
+  as.numeric(extract(x, ...))
 }
 
-pluck_chr <- function(x, attr_id){
-  as.character(pluck(x, attr_id))
+extract_chr <- function(x, ...){
+  as.character(extract(x, ...))
 }
 
 list_in_quotes <- function(name_ids){
