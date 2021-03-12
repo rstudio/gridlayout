@@ -13,6 +13,8 @@
 #' @return A UI definition that can be passed to the \code{\link[shiny]{shinyUI}} function.
 #' @export
 #'
+#' @seealso grid_panel
+#'
 #' @examples
 #' # Only run these examples in interactive R sessions
 #' if (interactive()) {

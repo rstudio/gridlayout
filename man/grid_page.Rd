@@ -61,3 +61,6 @@ shinyApp(
 
 }
 }
+\seealso{
+grid_panel
+}
