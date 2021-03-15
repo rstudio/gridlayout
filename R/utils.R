@@ -94,3 +94,12 @@ list_in_quotes <- function(name_ids){
 arg_list_exprs <- function(...){
   as.list(substitute(...()))
 }
+
+w_default <- function(arg_val, default, msg){
+  if(missing(arg_val)){
+    if(!missing(msg)) message(msg)
+    default
+  } else {
+    arg_val
+  }
+}
