@@ -30,10 +30,30 @@ get_elements.default <- function(layout){
 
 #' @export
 get_elements.gridlayout <- function(layout){
+  elements_from_mat(layout)
+}
+
+
+elements_from_mat <- function(layout_mat){
+  # First get all unique ids, this may include concatinated ones, hense to
+  # string manipulation cruft
+  element_ids <- unique(str_trim(strsplit(paste(layout_mat, collapse = ","), ",")[[1]]))
+  n_row <- nrow(layout_mat)
+  n_col <- ncol(layout_mat)
+
   lapply(
-    unique(c(layout)),
+    element_ids,
     function(id){
-      all_pos <- which(layout == id, arr.ind = TRUE)
+      # str_detect/grepl collapses the results back to a vector so we have to
+      # reassemble the matrix for the which to give us 2d coordinates
+      all_pos <- which(
+        matrix(
+          str_detect(layout_mat, id),
+          nrow = n_row,
+          ncol = n_col
+        ),
+        arr.ind = TRUE
+      )
       list(
         id = id,
         start_row = min(all_pos[,"row"]),
