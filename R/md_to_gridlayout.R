@@ -19,6 +19,7 @@
 #' )
 #'
 md_to_gridlayout <- function(layout_table){
+  # browser()
   by_row <- strsplit(layout_table, "\n")[[1]]
   is_header_divider <- grepl("^[\\| \\- :]+$", by_row, perl = TRUE)
   is_empty_row <- by_row == ""
@@ -39,14 +40,16 @@ md_to_gridlayout <- function(layout_table){
 
   if(has_sizes){
     new_gridlayout(
-      # Stop single column or row layouts from getting collapsed to vectors
-      layout_mat = raw_mat[-1,-1, drop = FALSE],
       col_sizes = raw_mat[1,-1],
       row_sizes = raw_mat[-1,1],
+      # Stop single column or row layouts from getting collapsed to vectors
+      element_list = elements_from_mat(raw_mat[-1,-1, drop = FALSE]),
+      warn_about_overap = FALSE,
       gap = if(raw_mat[1,1] != "") raw_mat[1,1] else "1rem"
     )
   } else {
-    new_gridlayout(layout_mat = raw_mat)
+    new_gridlayout( element_list = elements_from_mat(raw_mat),
+                    warn_about_overap = FALSE)
   }
 }
 
