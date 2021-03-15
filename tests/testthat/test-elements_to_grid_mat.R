@@ -66,17 +66,3 @@ test_that("Overlapping elements are detected (and can be ignored)", {
     elements_to_grid_mat(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"), warn_about_overap = FALSE)
   )
 })
-
-# elements <- list(
-#   list(id = "header",  start_row = 1, end_row = 1, start_col = 1, end_col = 3),
-#   list(id = "sidebar", start_row = 2, end_row = 3, start_col = 1, end_col = 1),
-#   list(id = "plot_a",  start_row = 2, end_row = 2, start_col = 2, end_col = 3),
-#   list(id = "plot_b",  start_row = 3, end_row = 3, start_col = 2, end_col = 2),
-#   list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
-# )
-#
-#
-# elements_to_grid_mat(elements, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
-
-
-

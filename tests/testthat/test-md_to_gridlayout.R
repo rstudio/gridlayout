@@ -75,8 +75,6 @@ test_that("No sizes will give you constant sizes rows and cols", {
 })
 
 test_that("Nonsense will give a usefull error message", {
-  my_layout <-
-
     expect_error(
       md_to_gridlayout(
         layout_table = "## THis was an accidentally
