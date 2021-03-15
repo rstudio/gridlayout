@@ -134,7 +134,14 @@
     <p>Construct a gridlayout object from basic parts</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_gridlayout</span><span class='op'>(</span><span class='va'>layout_mat</span>, <span class='va'>col_sizes</span>, <span class='va'>row_sizes</span>, <span class='va'>gap</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>new_gridlayout</span><span class='op'>(</span>
+  <span class='va'>layout_mat</span>,
+  <span class='va'>col_sizes</span>,
+  <span class='va'>row_sizes</span>,
+  <span class='va'>gap</span>,
+  <span class='va'>element_list</span>,
+  warn_about_overap <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +155,8 @@ element would take up every cell in the first row.</p></td>
     <tr>
       <th>col_sizes</th>
       <td><p>A character vector of valid css sizes for the width of each
-column in your grid as given by <code>layout_mat</code>. If a single value is passed, it will be repeated for all columns.</p></td>
+column in your grid as given by <code>layout_mat</code>. If a single value is passed,
+it will be repeated for all columns.</p></td>
     </tr>
     <tr>
       <th>row_sizes</th>
@@ -158,6 +166,16 @@ column in your grid as given by <code>layout_mat</code>. If a single value is pa
       <th>gap</th>
       <td><p>Valid css sizing for gap to be left between each element in your
 grid. Defaults to <code>"1rem"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>element_list</th>
+      <td><p>List of elements with the <code>id</code>, <code>start_row</code>, <code>end_row</code>,
+<code>start_col</code>, and <code>end_col</code> format.</p></td>
+    </tr>
+    <tr>
+      <th>warn_about_overap</th>
+      <td><p>Should overlapping elements in the grid be flagged?
+Only used in <code>element_list</code> argument is use to define layout</p></td>
     </tr>
     </table>
 

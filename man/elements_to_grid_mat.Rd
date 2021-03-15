@@ -4,18 +4,25 @@
 \alias{elements_to_grid_mat}
 \title{Validate list of elements for grid}
 \usage{
-elements_to_grid_mat(elements, col_sizes, row_sizes, warn_about_overap = TRUE)
+elements_to_grid_mat(
+  element_list,
+  col_sizes,
+  row_sizes,
+  warn_about_overap = TRUE
+)
 }
 \arguments{
-\item{elements}{List of elements with the \code{id}, \code{start_row}, \code{end_row},
+\item{element_list}{List of elements with the \code{id}, \code{start_row}, \code{end_row},
 \code{start_col}, and \code{end_col} format.}
 
 \item{col_sizes}{A character vector of valid css sizes for the width of each
-column in your grid as given by \code{layout_mat}. If a single value is passed, it will be repeated for all columns.}
+column in your grid as given by \code{layout_mat}. If a single value is passed,
+it will be repeated for all columns.}
 
 \item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
 
-\item{ignore_overlap}{Should overlapping elements in the grid be flagged?}
+\item{warn_about_overap}{Should overlapping elements in the grid be flagged?
+Only used in \code{element_list} argument is use to define layout}
 }
 \description{
 Validate list of elements for grid

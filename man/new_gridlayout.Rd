@@ -4,7 +4,14 @@
 \alias{new_gridlayout}
 \title{Construct a gridlayout object from basic parts}
 \usage{
-new_gridlayout(layout_mat, col_sizes, row_sizes, gap, element_list)
+new_gridlayout(
+  layout_mat,
+  col_sizes,
+  row_sizes,
+  gap,
+  element_list,
+  warn_about_overap = FALSE
+)
 }
 \arguments{
 \item{layout_mat}{A character matrix where each entry controls what element
@@ -12,12 +19,19 @@ id will take up that given position in the grid. For instance a header
 element would take up every cell in the first row.}
 
 \item{col_sizes}{A character vector of valid css sizes for the width of each
-column in your grid as given by \code{layout_mat}. If a single value is passed, it will be repeated for all columns.}
+column in your grid as given by \code{layout_mat}. If a single value is passed,
+it will be repeated for all columns.}
 
 \item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
 
 \item{gap}{Valid css sizing for gap to be left between each element in your
 grid. Defaults to \code{"1rem"}.}
+
+\item{element_list}{List of elements with the \code{id}, \code{start_row}, \code{end_row},
+\code{start_col}, and \code{end_col} format.}
+
+\item{warn_about_overap}{Should overlapping elements in the grid be flagged?
+Only used in \code{element_list} argument is use to define layout}
 }
 \value{
 Object of class \code{"gridlayout"}
