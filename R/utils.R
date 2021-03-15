@@ -71,27 +71,12 @@ matrix_to_md_table <- function(mat){
 }
 
 # extract from a list of lists to whatever level is desired
-extract <- function(x, ...){
-  all_keys <- list(...)
-
-  next_key <- all_keys[[1]]
-
-  extracted <- lapply(x, `[[`, next_key)
-
-  if(length(all_keys) == 1){
-    return(extracted)
-  } else {
-    all_keys[[1]] <- NULL
-    return(do.call(extract, c(list(x = extracted), all_keys)))
+extract <- function(x, ...) {
+  for (key in list(...)) {
+    x <- lapply(x, `[[`, key)
   }
+  x
 }
-
-# my_list <- list(
-#   list(id = "hi", attribs = list(class = "a")),
-#   list(id = "there", attribs = list(class = "b"))
-# )
-# extract(my_list, "id")
-# extract(my_list, "attribs", "class")
 
 
 extract_dbl <- function(x, ...){
