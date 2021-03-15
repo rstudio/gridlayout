@@ -88,3 +88,24 @@ test_that("Gets mad if your row and column sizes don't match matrix dimensions",
   )
 
 })
+
+
+test_that("Can initialize a layout with the element_list argument instead of a md table", {
+  elements_w_overlap <- list(
+    list(id = "header",  start_row = 1, end_row = 1, start_col = 1, end_col = 3),
+    list(id = "sidebar", start_row = 2, end_row = 3, start_col = 1, end_col = 1),
+    list(id = "plot_a",  start_row = 2, end_row = 3, start_col = 2, end_col = 3),
+    list(id = "plot_b",  start_row = 3, end_row = 3, start_col = 2, end_col = 2),
+    list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
+  )
+
+  suppressWarnings({
+    expect_warning(
+      new_gridlayout(
+        col_sizes = c("1fr", "1fr", "1fr"),
+        row_sizes = c("1fr", "1fr", "1fr"),
+        element_list = elements_w_overlap,
+        warn_about_overap = TRUE)
+    )
+  })
+})
