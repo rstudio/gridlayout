@@ -11,7 +11,7 @@
 #'   grid. Defaults to `"1rem"`.
 #' @param element_list List of elements with the `id`, `start_row`, `end_row`,
 #'   `start_col`, and `end_col` format.
-#' @param ignore_overlap Should overlapping elements in the grid be flagged?
+#' @param warn_about_overap Should overlapping elements in the grid be flagged?
 #'   Only used in `element_list` argument is use to define layout
 #'
 #' @return Object of class `"gridlayout"`
@@ -29,7 +29,7 @@
 #'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list){
+new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, warn_about_overap = FALSE){
 
   # If no sizing is given just make every row and column the same size as other
   # rows and columns
@@ -39,8 +39,8 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list){
   # Default is a 2x2 layout with no elements added
   if(missing(layout_mat)){
     # Either we want to use the element_list option or just resort to the default
-    if(missing(element_list)){
-      layout_mat <- matrix(rep(".", times = 4), ncol = 2)
+    layout_mat <- if(missing(element_list)){
+       matrix(rep(".", times = 4), ncol = 2)
     } else {
       elements_to_grid_mat(
         element_list = element_list,

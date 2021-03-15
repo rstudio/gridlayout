@@ -1,7 +1,6 @@
 #' Validate list of elements for grid
 #'
 #' @inheritParams new_gridlayout
-#' @param ignore_overlap Should overlapping elements in the grid be flagged?
 #'
 #' @return NULL
 #' @export
