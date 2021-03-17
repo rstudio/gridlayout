@@ -68,9 +68,9 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
           selector = paste0(selector_prefix, el$id),
           prop_list = c(
             "grid-column-start" = el$start_col,
-            "grid-column-end" = el$end_col,
+            "grid-column-end" = el$end_col + 1,
             "grid-row-start" = el$start_row,
-            "grid-row-end" = el$end_row)
+            "grid-row-end" = el$end_row + 1)
         )
       }
     ),
