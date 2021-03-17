@@ -31,10 +31,24 @@
 #'
 new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, warn_about_overap = FALSE){
 
+
   # If no sizing is given just make every row and column the same size as other
   # rows and columns
-  col_sizes <- w_default(col_sizes, "1fr", "Defaulting to even width columns")
-  row_sizes <- w_default(row_sizes, "1fr", "Defaulting to even width rows")
+  col_sizes <- validate_argument(
+    col_sizes,
+    default = "1fr",
+    using_default_msg = "Defaulting to even width columns",
+    check_fn = is.atomic,
+    check_fail_msg = "Column sizes need to be an simple (atomic) character vector."
+  )
+
+  row_sizes <- validate_argument(
+    row_sizes,
+    default = "1fr",
+    using_default_msg = "Defaulting to even width rows",
+    check_fn = is.atomic,
+    check_fail_msg = "Row sizes need to be an simple (atomic) character vector."
+  )
 
   # Default is a 2x2 layout with no elements added
   if(missing(layout_mat)){
@@ -53,10 +67,10 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
   # If the user has just passed a single value, assume that it should be
   # repeated to fill
   if(length(col_sizes) == 1){
-    col_sizes <- as.character(rep(col_sizes, ncol(layout_mat)))
+    col_sizes <- rep(col_sizes, ncol(layout_mat))
   }
   if(length(row_sizes) == 1){
-    row_sizes <- as.character(rep(row_sizes, nrow(layout_mat)))
+    row_sizes <- rep(row_sizes, nrow(layout_mat))
   }
 
   if(length(row_sizes) != nrow(layout_mat)){
@@ -69,7 +83,7 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
   # Default gap is a single rem unit. This is a relative unit that scales with
   # the base text size of a page. E.g. setting font-size: 16px on the body
   # element of a page means 1rem = 16px;
-  gap <- w_default(gap, "1rem")
+  gap <- validate_argument(gap, default = "1rem")
 
   structure(
     layout_mat,
