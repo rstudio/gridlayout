@@ -72,3 +72,4 @@ elements_to_grid_mat <- function(element_list, col_sizes, row_sizes, warn_about_
   }
   layout_mat
 }
+

@@ -95,24 +95,17 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
 
 #' @export
 print.gridlayout <- function(layout){
-  no_header <- paste(
-    strsplit(
-      to_md(layout, include_gap_size = FALSE),
-      "\n"
-    )[[1]][-c(1,2)],
-    collapse = "\n"
-  )
 
+  # Make text bold
   emph <- function(text) paste0("\033[1m",text,"\033[22m")
 
-  no_pipes <- str_remove_all(no_header, "\\|")
   cat(
     emph("gridlayout") %+% " object with " %+%
       emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
       emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
       "gap size: " %+% emph(attr(layout, 'gap')),
     "\n",
-    str_replace_all(no_pipes, pattern = "([1-9]+[^ ]+)", replacement = "\033[36m\\1\033[39m")
+    to_table(layout, sizes_decorator = emph)
   )
 }
 
