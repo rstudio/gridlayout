@@ -6,11 +6,10 @@
 \usage{
 new_gridlayout(
   layout_mat,
-  col_sizes,
-  row_sizes,
+  col_sizes = "auto",
+  row_sizes = "auto",
   gap,
-  element_list,
-  warn_about_overap = FALSE
+  element_list
 )
 }
 \arguments{
@@ -29,9 +28,6 @@ grid. Defaults to \code{"1rem"}.}
 
 \item{element_list}{List of elements with the \code{id}, \code{start_row}, \code{end_row},
 \code{start_col}, and \code{end_col} format.}
-
-\item{warn_about_overap}{Should overlapping elements in the grid be flagged?
-Only used in \code{element_list} argument is use to define layout}
 }
 \value{
 Object of class \code{"gridlayout"}

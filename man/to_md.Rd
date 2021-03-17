@@ -4,7 +4,7 @@
 \alias{to_md}
 \title{Convert layout to markdown table}
 \usage{
-to_md(layout, include_gap_size = TRUE)
+to_md(layout, include_gap_size = TRUE, sep_char = "|")
 }
 \arguments{
 \item{layout}{Object of class \code{"gridlayout"}.}
