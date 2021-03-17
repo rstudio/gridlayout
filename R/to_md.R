@@ -59,6 +59,8 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
     current_cells[already_filled_cells] <- paste0(current_cells[already_filled_cells], ",")
     layout_mat[row_span, col_span] <- paste0(current_cells, el$id)
   }
+  # Empty cells get a dot
+  layout_mat[layout_mat == ""] <- "."
 
   first_row <- c(if(include_gap_size) attr(layout, "gap") else "", col_sizes)
 
