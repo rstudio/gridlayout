@@ -98,8 +98,8 @@ gridded_app <- function(starting_layout = new_gridlayout(),
       }
 
       new_gridlayout(layout_mat = grid_mat,
-                     col_sizes = input$grid_sizing$cols,
-                     row_sizes = input$grid_sizing$rows,
+                     col_sizes = as.character(input$grid_sizing$cols),
+                     row_sizes = as.character(input$grid_sizing$rows),
                      gap = input$grid_sizing$gap)
     })
 
