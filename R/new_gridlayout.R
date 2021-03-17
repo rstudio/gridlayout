@@ -29,8 +29,7 @@
 #'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, warn_about_overap = FALSE){
-
+new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list, warn_about_overap = FALSE){
   have_element_list <- !missing(element_list)
   have_layout_mat <- !missing(layout_mat)
 
@@ -47,69 +46,38 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
 
   empty_grid <- length(elements) == 0
 
-  start_rows <- extract_dbl(elements, "start_row")
-  end_rows <- extract_dbl(elements, "end_row")
-  start_cols <- extract_dbl(elements, "start_col")
-  end_cols <- extract_dbl(elements, "end_col")
+  # Validate row and column sizes.
+  sizes <- map_w_names(
+    list(row = row_sizes, col = col_sizes),
+    function(dir, sizes){
+      start_vals <- extract_dbl(elements, "start_" %+% dir)
+      end_vals <- extract_dbl(elements, "end_" %+% dir)
+      auto_sizing <- identical(sizes, "auto")
 
-  num_rows <- if(missing(row_sizes) & empty_grid) {
-    2
-  } else if(empty_grid){
-    length(row_sizes)
-  } else {
-    max(end_rows)
-  }
+      if(!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
 
-  num_cols <- if(missing(col_sizes) & empty_grid) {
-    2
-  } else if(empty_grid){
-    length(col_sizes)
-  } else {
-    max(end_cols)
-  }
+      num_sections <- if(auto_sizing & empty_grid) {
+        2
+      } else if(empty_grid){
+        length(sizes)
+      } else {
+        max(end_vals)
+      }
 
-  # If no sizing is given just make every row and column the same size as other
-  # rows and columns
-  row_sizes <- validate_argument(
-    row_sizes,
-    default = rep_len("1fr", num_rows),
-    using_default_msg = "Defaulting to even width rows",
-    check_fn = is.atomic,
-    check_fail_msg = "Row sizes need to be an simple (atomic) character vector."
-  )
+      if(auto_sizing) sizes <- "1fr"
 
-  col_sizes <- validate_argument(
-    col_sizes,
-    default = rep_len("1fr", num_cols),
-    using_default_msg = "Defaulting to even width columns",
-    check_fn = is.atomic,
-    check_fail_msg = "Column sizes need to be an simple (atomic) character vector."
-  )
+      if(length(sizes) == 1 & num_sections != 1){
+        sizes <- rep_len(sizes, num_sections)
+      }
 
-  # If we only have a single row or column size provided get number of row and
-  # column sizes from elements
-  if(is_atomic_val(row_sizes)) row_sizes <- rep_len(row_sizes, num_rows)
-  if(is_atomic_val(col_sizes)) col_sizes <- rep_len(col_sizes, num_cols)
+      # Make sure that the elements sit within the defined grid
+      if(max(end_vals) > num_sections){
+        bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
+        stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
+      }
 
-  # Final check to make sure that passed sizes properly map to grid
-  if(length(col_sizes) != num_cols){
-    stop("The provided column sizes need to either be a single value to be",
-         " repeated or match the number of columns in your layout")
-  }
-  if(length(row_sizes) != num_rows){
-    stop("The provided row sizes need to either be a single value to be",
-         " repeated or match the number of rows in your layout")
-  }
-
-  # Make sure that the elements sit within the defined grid
-  if(max(end_rows) > num_rows){
-    bad_elements <- extract_chr(element_list[end_rows > num_rows], "id")
-    stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
-  }
-  if(max(end_cols) > num_cols){
-    bad_elements <- extract_chr(element_list[end_cols > num_cols], "id")
-    stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid cols")
-  }
+      sizes
+    })
 
   # Default gap is a single rem unit. This is a relative unit that scales with
   # the base text size of a page. E.g. setting font-size: 16px on the body
@@ -119,8 +87,8 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
   structure(
     elements,
     class = "gridlayout",
-    row_sizes = row_sizes,
-    col_sizes = col_sizes,
+    row_sizes = sizes$row,
+    col_sizes = sizes$col,
     gap = gap
   )
 }

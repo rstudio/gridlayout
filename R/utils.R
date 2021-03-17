@@ -88,11 +88,7 @@ extract_chr <- function(x, ...){
 }
 
 map_w_names <- function(x, fn){
-  Map(
-    names(x),
-    x,
-    f = fn
-  )
+  Map(names(x), x, f = fn)
 }
 
 list_in_quotes <- function(name_ids){
@@ -106,7 +102,7 @@ arg_list_exprs <- function(...){
 
 # Uses a default value if supplied argument is missing. Also checks to make sure
 # that the supplied argument fits some desired check
-validate_argument <- function(x, default, check_fn, check_fail_msg, using_default_msg){
+validate_argument <- function(x, default = NULL, check_fn, check_fail_msg, using_default_msg){
   if(missing(x)){
     # If argument is missing, give if the default value with an optional message
     # alerting the user the default value was used
