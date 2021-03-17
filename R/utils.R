@@ -95,11 +95,21 @@ arg_list_exprs <- function(...){
   as.list(substitute(...()))
 }
 
-w_default <- function(arg_val, default, msg){
-  if(missing(arg_val)){
-    if(!missing(msg)) message(msg)
+
+# Uses a default value if supplied argument is missing. Also checks to make sure
+# that the supplied argument fits some desired check
+validate_argument <- function(x, default, check_fn, check_fail_msg, using_default_msg){
+  if(missing(x)){
+    # If argument is missing, give if the default value with an optional message
+    # alerting the user the default value was used
+    if(!missing(using_default_msg)) message(using_default_msg)
     default
   } else {
-    arg_val
+    # If argument is supplied, run the checking function on it to make sure it's
+    # valid before letting it through
+    if(!missing(check_fn) && !check_fn(x)) stop(check_fail_msg)
+    x
   }
 }
+
+
