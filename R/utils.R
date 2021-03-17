@@ -87,6 +87,14 @@ extract_chr <- function(x, ...){
   as.character(extract(x, ...))
 }
 
+map_w_names <- function(x, fn){
+  Map(
+    names(x),
+    x,
+    f = fn
+  )
+}
+
 list_in_quotes <- function(name_ids){
   paste0("\"", name_ids, "\"", collapse = ", ")
 }
@@ -110,6 +118,10 @@ validate_argument <- function(x, default, check_fn, check_fail_msg, using_defaul
     if(!missing(check_fn) && !check_fn(x)) stop(check_fail_msg)
     x
   }
+}
+
+is_atomic_val <- function(x){
+  is.atomic(x) & (length(x) == 1)
 }
 
 

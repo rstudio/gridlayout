@@ -31,53 +31,84 @@
 #'
 new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, warn_about_overap = FALSE){
 
+  have_element_list <- !missing(element_list)
+  have_layout_mat <- !missing(layout_mat)
+
+  elements <- if(have_element_list & have_layout_mat){
+    stop("Both element list and layout matrix inputs supplied. Only use one")
+  } else if(have_element_list){
+    # TODO: Validate form of elements
+    element_list
+  } else if(have_layout_mat){
+    elements_from_mat(layout_mat)
+  } else {
+    list()
+  }
+
+  empty_grid <- length(elements) == 0
+
+  start_rows <- extract_dbl(elements, "start_row")
+  end_rows <- extract_dbl(elements, "end_row")
+  start_cols <- extract_dbl(elements, "start_col")
+  end_cols <- extract_dbl(elements, "end_col")
+
+  num_rows <- if(missing(row_sizes) & empty_grid) {
+    2
+  } else if(empty_grid){
+    length(row_sizes)
+  } else {
+    max(end_rows)
+  }
+
+  num_cols <- if(missing(col_sizes) & empty_grid) {
+    2
+  } else if(empty_grid){
+    length(col_sizes)
+  } else {
+    max(end_cols)
+  }
 
   # If no sizing is given just make every row and column the same size as other
   # rows and columns
-  col_sizes <- validate_argument(
-    col_sizes,
-    default = "1fr",
-    using_default_msg = "Defaulting to even width columns",
-    check_fn = is.atomic,
-    check_fail_msg = "Column sizes need to be an simple (atomic) character vector."
-  )
-
   row_sizes <- validate_argument(
     row_sizes,
-    default = "1fr",
+    default = rep_len("1fr", num_rows),
     using_default_msg = "Defaulting to even width rows",
     check_fn = is.atomic,
     check_fail_msg = "Row sizes need to be an simple (atomic) character vector."
   )
 
-  # Default is a 2x2 layout with no elements added
-  if(missing(layout_mat)){
-    # Either we want to use the element_list option or just resort to the default
-    layout_mat <- if(missing(element_list)){
-       matrix(rep(".", times = 4), ncol = 2)
-    } else {
-      elements_to_grid_mat(
-        element_list = element_list,
-        col_sizes = col_sizes, row_sizes = row_sizes,
-        warn_about_overap = warn_about_overap
-      )
-    }
+  col_sizes <- validate_argument(
+    col_sizes,
+    default = rep_len("1fr", num_cols),
+    using_default_msg = "Defaulting to even width columns",
+    check_fn = is.atomic,
+    check_fail_msg = "Column sizes need to be an simple (atomic) character vector."
+  )
+
+  # If we only have a single row or column size provided get number of row and
+  # column sizes from elements
+  if(is_atomic_val(row_sizes)) row_sizes <- rep_len(row_sizes, num_rows)
+  if(is_atomic_val(col_sizes)) col_sizes <- rep_len(col_sizes, num_cols)
+
+  # Final check to make sure that passed sizes properly map to grid
+  if(length(col_sizes) != num_cols){
+    stop("The provided column sizes need to either be a single value to be",
+         " repeated or match the number of columns in your layout")
+  }
+  if(length(row_sizes) != num_rows){
+    stop("The provided row sizes need to either be a single value to be",
+         " repeated or match the number of rows in your layout")
   }
 
-  # If the user has just passed a single value, assume that it should be
-  # repeated to fill
-  if(length(col_sizes) == 1){
-    col_sizes <- rep(col_sizes, ncol(layout_mat))
+  # Make sure that the elements sit within the defined grid
+  if(max(end_rows) > num_rows){
+    bad_elements <- extract_chr(element_list[end_rows > num_rows], "id")
+    stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
   }
-  if(length(row_sizes) == 1){
-    row_sizes <- rep(row_sizes, nrow(layout_mat))
-  }
-
-  if(length(row_sizes) != nrow(layout_mat)){
-    stop("The provided row sizes need to match the number of rows in your layout matrix")
-  }
-  if(length(col_sizes) != ncol(layout_mat)){
-    stop("The provided column sizes need to match the number of columns in your layout matrix")
+  if(max(end_cols) > num_cols){
+    bad_elements <- extract_chr(element_list[end_cols > num_cols], "id")
+    stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid cols")
   }
 
   # Default gap is a single rem unit. This is a relative unit that scales with
@@ -86,7 +117,7 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
   gap <- validate_argument(gap, default = "1rem")
 
   structure(
-    layout_mat,
+    elements,
     class = "gridlayout",
     row_sizes = row_sizes,
     col_sizes = col_sizes,
