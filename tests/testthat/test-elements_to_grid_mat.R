@@ -63,6 +63,6 @@ test_that("Overlapping elements are detected (and can be ignored)", {
     )
   })
   expect_silent(
-    elements_to_grid_mat(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"), warn_about_overap = FALSE)
+    elements_to_grid_mat(elements_w_overlap, col_sizes = c('1fr', "1fr", "1fr"), row_sizes = c("1fr", "1fr", "1fr"))
   )
 })

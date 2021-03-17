@@ -4,7 +4,7 @@
 #'
 #' @return NULL
 #' @export
-elements_to_grid_mat <- function(element_list, col_sizes, row_sizes, warn_about_overap = TRUE){
+elements_to_grid_mat <- function(element_list, col_sizes, row_sizes){
 
   # Gather info about the extent of positions
   start_rows <- extract_dbl(element_list, "start_row")
@@ -23,7 +23,6 @@ elements_to_grid_mat <- function(element_list, col_sizes, row_sizes, warn_about_
   if(length(row_sizes) == 1 & max_row > 1){
     row_sizes <- rep_len(row_sizes, max_row)
   }
-
 
   num_cols <- length(col_sizes)
   num_rows <- length(row_sizes)
@@ -61,10 +60,6 @@ elements_to_grid_mat <- function(element_list, col_sizes, row_sizes, warn_about_
     col_span <- el$start_col:el$end_col
     current_cells <- layout_mat[row_span, col_span, drop = FALSE]
     already_filled_cells <- current_cells != ""
-    if(any(already_filled_cells) & warn_about_overap){
-      warning(el$id, " overlaps other elements. If this was intentional ",
-              "set warn_about_overap = FALSE to supress these warnings.")
-    }
 
     # Add a visual separation for overlaps with a pipe
     current_cells[already_filled_cells] <- paste0(current_cells[already_filled_cells], ",")

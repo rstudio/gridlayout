@@ -11,8 +11,6 @@
 #'   grid. Defaults to `"1rem"`.
 #' @param element_list List of elements with the `id`, `start_row`, `end_row`,
 #'   `start_col`, and `end_col` format.
-#' @param warn_about_overap Should overlapping elements in the grid be flagged?
-#'   Only used in `element_list` argument is use to define layout
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -29,7 +27,7 @@
 #'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list, warn_about_overap = FALSE){
+new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list){
   have_element_list <- !missing(element_list)
   have_layout_mat <- !missing(layout_mat)
 
@@ -74,6 +72,16 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
       if(max(end_vals) > num_sections){
         bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
         stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
+      }
+
+      if(have_layout_mat){
+        mat_dim_size <- if(dir == "row") nrow(layout_mat) else ncol(layout_mat)
+        if(mat_dim_size != length(sizes)){
+          stop("The provided ", dir,
+               " sizes need to match the number of ", dir,
+               "s in your layout matrix")
+        }
+
       }
 
       sizes
