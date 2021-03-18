@@ -13,3 +13,5 @@ inst/grided/www/.cache/
 inst/grided/dist/*
 # Except index.js becuse that's the bundled js we actually want
 !inst/grided/dist/index.js
+
+inst/rmarkdown_demo/grid_markdown.html
