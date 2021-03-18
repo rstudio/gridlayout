@@ -5,15 +5,11 @@
 #'   header (as defined in `layout`) would be set with `header = h2("App
 #'   Title")`.
 #' @param theme Optional argument to pass to `theme` argument of \code{\link[shiny]{fluidPage}}.
-#' @param .verify_matches If `TRUE` then the function will make sure defined
-#'   elements match those specified in `layout` declaration. For advanced
-#'   use-cases such as utilizing css-grid's auto-fill, this can be disabled with
-#'   `FALSE`.
 #'
 #' @return A UI definition that can be passed to the \code{\link[shiny]{shinyUI}} function.
 #' @export
 #'
-#' @seealso grid_panel
+#' @seealso grid_container
 #'
 #' @examples
 #' # Only run these examples in interactive R sessions
@@ -63,15 +59,13 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
   grid_element_args <- arg_sections[arg_ids %in% layout_ids]
   extra_args <- arg_sections[!(arg_ids %in% layout_ids)]
 
-
   shiny::fluidPage(
     theme = if(!missing(theme)) theme,
     grid_container(
-      id = "main_grid",
       layout = layout,
       elements = grid_element_args
     ),
-    if(length(extra_args) != 0) extra_args
+    if(length(extra_args) != 0) extra_args #any extra args not matched to layout will get added after
   )
 
 }
