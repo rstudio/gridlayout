@@ -5,6 +5,8 @@ screenshot_demo_app <- function(app_loc) {
   webshot2::appshot(
     app = app_loc,
     file = path,
+    vwidth = 1600,
+    vheight = 1200,
     cliprect = "viewport"
   )
 
