@@ -15,15 +15,9 @@ shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    h2(id = "header", "This is my header content"),
-    grid_panel(
-      id = "sidebar",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
-    ),
-    grid_panel(
-      id = "plot",
-      plotOutput("distPlot", height = "100%")
-    )
+    header = h2(id = "header", "This is my header content"),
+    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+    plot = plotOutput("distPlot", height = "100%")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -33,3 +27,4 @@ shinyApp(
     })
   }
 )
+
