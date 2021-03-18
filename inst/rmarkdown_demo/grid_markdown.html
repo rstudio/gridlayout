@@ -181,10 +181,6 @@ pre code {
   grid-gap: 2rem;
   padding: 2rem;
   height: calc(100vh - 2*2rem);
-  grid-template-areas:
-    "header header"
-    "sidebar main"
-    "footer footer";
 }
 
 .main-container > * {
@@ -195,16 +191,28 @@ pre code {
 }
 
 #header {
-  grid-area: header;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
 }
 #sidebar {
-  grid-area: sidebar;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
 #footer {
-  grid-area: footer;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
 }
 #main {
-  grid-area: main;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
 </style>
 </div>

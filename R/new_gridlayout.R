@@ -11,8 +11,6 @@
 #'   grid. Defaults to `"1rem"`.
 #' @param element_list List of elements with the `id`, `start_row`, `end_row`,
 #'   `start_col`, and `end_col` format.
-#' @param warn_about_overap Should overlapping elements in the grid be flagged?
-#'   Only used in `element_list` argument is use to define layout
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -29,56 +27,65 @@
 #'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, warn_about_overap = FALSE){
+new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list){
+  have_element_list <- !missing(element_list)
+  have_layout_mat <- !missing(layout_mat)
 
-
-  # If no sizing is given just make every row and column the same size as other
-  # rows and columns
-  col_sizes <- validate_argument(
-    col_sizes,
-    default = "1fr",
-    using_default_msg = "Defaulting to even width columns",
-    check_fn = is.atomic,
-    check_fail_msg = "Column sizes need to be an simple (atomic) character vector."
-  )
-
-  row_sizes <- validate_argument(
-    row_sizes,
-    default = "1fr",
-    using_default_msg = "Defaulting to even width rows",
-    check_fn = is.atomic,
-    check_fail_msg = "Row sizes need to be an simple (atomic) character vector."
-  )
-
-  # Default is a 2x2 layout with no elements added
-  if(missing(layout_mat)){
-    # Either we want to use the element_list option or just resort to the default
-    layout_mat <- if(missing(element_list)){
-       matrix(rep(".", times = 4), ncol = 2)
-    } else {
-      elements_to_grid_mat(
-        element_list = element_list,
-        col_sizes = col_sizes, row_sizes = row_sizes,
-        warn_about_overap = warn_about_overap
-      )
-    }
+  elements <- if(have_element_list & have_layout_mat){
+    stop("Both element list and layout matrix inputs supplied. Only use one")
+  } else if(have_element_list){
+    # TODO: Validate form of elements
+    element_list
+  } else if(have_layout_mat){
+    elements_from_mat(layout_mat)
+  } else {
+    list()
   }
 
-  # If the user has just passed a single value, assume that it should be
-  # repeated to fill
-  if(length(col_sizes) == 1){
-    col_sizes <- rep(col_sizes, ncol(layout_mat))
-  }
-  if(length(row_sizes) == 1){
-    row_sizes <- rep(row_sizes, nrow(layout_mat))
-  }
+  empty_grid <- length(elements) == 0
 
-  if(length(row_sizes) != nrow(layout_mat)){
-    stop("The provided row sizes need to match the number of rows in your layout matrix")
-  }
-  if(length(col_sizes) != ncol(layout_mat)){
-    stop("The provided column sizes need to match the number of columns in your layout matrix")
-  }
+  # Validate row and column sizes.
+  sizes <- map_w_names(
+    list(row = row_sizes, col = col_sizes),
+    function(dir, sizes){
+      start_vals <- extract_dbl(elements, "start_" %+% dir)
+      end_vals <- extract_dbl(elements, "end_" %+% dir)
+      auto_sizing <- identical(sizes, "auto")
+
+      if(!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
+
+      num_sections <- if(auto_sizing & empty_grid) {
+        2
+      } else if(empty_grid){
+        length(sizes)
+      } else {
+        max(end_vals)
+      }
+
+      if(auto_sizing) sizes <- "1fr"
+
+      if(length(sizes) == 1 & num_sections != 1){
+        sizes <- rep_len(sizes, num_sections)
+      }
+
+      # Make sure that the elements sit within the defined grid
+      if(max(end_vals) > num_sections){
+        bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
+        stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
+      }
+
+      if(have_layout_mat){
+        mat_dim_size <- if(dir == "row") nrow(layout_mat) else ncol(layout_mat)
+        if(mat_dim_size != length(sizes)){
+          stop("The provided ", dir,
+               " sizes need to match the number of ", dir,
+               "s in your layout matrix")
+        }
+
+      }
+
+      sizes
+    })
 
   # Default gap is a single rem unit. This is a relative unit that scales with
   # the base text size of a page. E.g. setting font-size: 16px on the body
@@ -86,34 +93,27 @@ new_gridlayout <- function(layout_mat, col_sizes, row_sizes, gap, element_list, 
   gap <- validate_argument(gap, default = "1rem")
 
   structure(
-    layout_mat,
+    elements,
     class = "gridlayout",
-    row_sizes = row_sizes,
-    col_sizes = col_sizes,
+    row_sizes = sizes$row,
+    col_sizes = sizes$col,
     gap = gap
   )
 }
 
 #' @export
 print.gridlayout <- function(layout){
-  no_header <- paste(
-    strsplit(
-      to_md(layout, include_gap_size = FALSE),
-      "\n"
-    )[[1]][-c(1,2)],
-    collapse = "\n"
-  )
 
+  # Make text bold
   emph <- function(text) paste0("\033[1m",text,"\033[22m")
 
-  no_pipes <- str_remove_all(no_header, "\\|")
   cat(
     emph("gridlayout") %+% " object with " %+%
       emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
       emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
       "gap size: " %+% emph(attr(layout, 'gap')),
     "\n",
-    str_replace_all(no_pipes, pattern = "([1-9]+[^ ]+)", replacement = "\033[36m\\1\033[39m")
+    to_table(layout, sizes_decorator = emph)
   )
 }
 

@@ -140,7 +140,8 @@
   use_card_style <span class='op'>=</span> <span class='cn'>TRUE</span>,
   element_styles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
   debug_mode <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  full_height <span class='op'>=</span> <span class='cn'>TRUE</span>
+  full_height <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  selector_prefix <span class='op'>=</span> <span class='st'>"#"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -180,6 +181,13 @@ outline applied so positioning can more easily be assessed.</p></td>
 possible? Set to <code>FALSE</code> if the grid is contained within another element
 and is not the whole app's UI.</p></td>
     </tr>
+    <tr>
+      <th>selector_prefix</th>
+      <td><p>CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the <code>"#"</code> prefix) with because they are not available or are used for
+other reasons.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -199,7 +207,7 @@ and is not the whole app's UI.</p></td>
 <span class='op'>)</span>
 
 <span class='fu'>to_css</span><span class='op'>(</span><span class='va'>grid_obj</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "body {\n  display: grid;\n  grid-template-rows: 100px 1fr 1fr;\n  grid-template-columns: 120px 1fr 1fr;\n  grid-gap: 1rem;\n  padding: 1rem;\n  height: calc(100vh - 2*1rem);\n  grid-template-areas:\n    \"header header header\"\n    \"sidebar plot_a plot_c\"\n    \"sidebar plot_b plot_b\";\n}\n\nbody &gt; * {\n  box-sizing: border-box;\n  padding: 0.8rem;\n  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);\n  border-radius: 0.5rem;\n}\n\n#header {\n  grid-area: header;\n}\n#sidebar {\n  grid-area: sidebar;\n}\n#plot_a {\n  grid-area: plot_a;\n}\n#plot_b {\n  grid-area: plot_b;\n}\n#plot_c {\n  grid-area: plot_c;\n}"</div><div class='input'>
+</div><div class='output co'>#&gt; [1] "body {\n  display: grid;\n  grid-template-rows: 100px 1fr 1fr;\n  grid-template-columns: 120px 1fr 1fr;\n  grid-gap: 1rem;\n  padding: 1rem;\n  height: calc(100vh - 2*1rem);\n}\n\nbody &gt; * {\n  box-sizing: border-box;\n  padding: 0.8rem;\n  overflow: hidden;\n  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);\n  border-radius: 0.5rem;\n}\n\n.shiny-plot-output {\n  display: grid;\n  place-content: center;\n}\n\n#header {\n  grid-column-start: 1;\n  grid-column-end: 4;\n  grid-row-start: 1;\n  grid-row-end: 2;\n}\n#sidebar {\n  grid-column-start: 1;\n  grid-column-end: 2;\n  grid-row-start: 2;\n  grid-row-end: 4;\n}\n#plot_a {\n  grid-column-start: 2;\n  grid-column-end: 3;\n  grid-row-start: 2;\n  grid-row-end: 3;\n}\n#plot_b {\n  grid-column-start: 2;\n  grid-column-end: 4;\n  grid-row-start: 3;\n  grid-row-end: 4;\n}\n#plot_c {\n  grid-column-start: 3;\n  grid-column-end: 4;\n  grid-row-start: 2;\n  grid-row-end: 3;\n}"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

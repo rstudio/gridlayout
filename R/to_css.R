@@ -17,6 +17,10 @@
 #' @param full_height Should the grid-containing element be made as tall as
 #'   possible? Set to `FALSE` if the grid is contained within another element
 #'   and is not the whole app's UI.
+#' @param selector_prefix CSS prefix used to target grid elements. This will
+#'   change if you're integrating grid with a system that you don't want to use
+#'   ids (the `"#"` prefix) with because they are not available or are used for
+#'   other reasons.
 #'
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
@@ -35,50 +39,45 @@
 #' to_css(grid_obj)
 #'
 #' @export
-to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE) {
+to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#") {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE){
+to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#"){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE){
+to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#"){
 
   container_query <- if(missing(container)){
     "body"
   }  else {
-
     has_css_selector <- grepl("\\.|#|>|\\+", container)
 
     if(has_css_selector) container else paste0("#", container)
   }
-  collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
-  template_areas <- ""
-  for(row_i in 1:nrow(layout)){
-    current_row <- collapse_w_space(layout[row_i,])
-    template_areas <- paste0(template_areas, "\n    \"", current_row, "\"")
-  }
-
-  # Build the mapping for each element to its grid area. The simple "." denotes
-  # an empty space so we need to filter that out
-  all_elements <- unique(c(layout))
+  # Build the mapping for each element to its grid area.
   element_grid_areas <- paste(
     sapply(
-      all_elements[all_elements != "."],
-      function(id){
+      layout,
+      function(el){
         build_css_rule(
-          selector = paste0("#",id),
-          prop_list = c("grid-area" = id)
+          selector = paste0(selector_prefix, el$id),
+          prop_list = c(
+            "grid-column-start" = el$start_col,
+            "grid-column-end" = el$end_col + 1,
+            "grid-row-start" = el$start_row,
+            "grid-row-end" = el$end_row + 1)
         )
       }
     ),
     collapse = "\n"
   )
 
+  collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
   main_container_styles <- build_css_rule(
     selector = container_query,
     prop_list = c(
@@ -87,8 +86,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(full_height) paste0("calc(100vh - 2*", attr(layout, 'gap'), ")") else c(),
-      "grid-template-areas" = template_areas
+      "height" = if(full_height) paste0("calc(100vh - 2*", attr(layout, 'gap'), ")") else c()
     )
   )
 
@@ -110,15 +108,28 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
     prop_list = c(
       "box-sizing" = "border-box",
       "padding" = "0.8rem",
+      "overflow" = "hidden",
       card_style_list,
       debug_style_list,
       element_styles
     )
   )
 
+  # A slightly hacky fix to get plot's to not dump over the edge We want to make
+  # sure it's a plot-containing div so we don't just center any image on the
+  # page
+  plot_centering_styles <- build_css_rule(
+    selector = ".shiny-plot-output",
+    prop_list = c(
+      "display" = "grid",
+      "place-content" = "center"
+    )
+  )
+
   paste(
     main_container_styles,
     card_styles,
+    plot_centering_styles,
     element_grid_areas,
     sep = "\n\n"
   )

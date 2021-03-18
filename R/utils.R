@@ -48,28 +48,6 @@ str_extract <- function(text, pattern){
 `%+%` <- function (lhs, rhs) paste0(lhs, rhs)
 
 
-matrix_to_md_table <- function(mat){
-  empty_row <- rep_len("", ncol(mat))
-
-  mat_w_header_rows <- rbind(empty_row,
-                             empty_row,
-                             mat)
-
-  even_width_cols <- apply(mat_w_header_rows,
-                           FUN = format,
-                           MARGIN = 2)
-
-  w_bars <- apply(even_width_cols,
-                  FUN = function(x) paste0("|", paste(x, collapse=" |"), " |"),
-                  MARGIN = 1)
-
-  # Add header delimiting dashes to second row
-  w_bars[2] <- gsub(" ", "-", w_bars[2])
-
-  # Collapse with new-lines to
-  paste(w_bars, collapse = "\n")
-}
-
 # extract from a list of lists to whatever level is desired
 extract <- function(x, ...) {
   for (key in list(...)) {
@@ -87,6 +65,10 @@ extract_chr <- function(x, ...){
   as.character(extract(x, ...))
 }
 
+map_w_names <- function(x, fn){
+  Map(names(x), x, f = fn)
+}
+
 list_in_quotes <- function(name_ids){
   paste0("\"", name_ids, "\"", collapse = ", ")
 }
@@ -98,7 +80,7 @@ arg_list_exprs <- function(...){
 
 # Uses a default value if supplied argument is missing. Also checks to make sure
 # that the supplied argument fits some desired check
-validate_argument <- function(x, default, check_fn, check_fail_msg, using_default_msg){
+validate_argument <- function(x, default = NULL, check_fn, check_fail_msg, using_default_msg){
   if(missing(x)){
     # If argument is missing, give if the default value with an optional message
     # alerting the user the default value was used
@@ -110,6 +92,10 @@ validate_argument <- function(x, default, check_fn, check_fail_msg, using_defaul
     if(!missing(check_fn) && !check_fn(x)) stop(check_fail_msg)
     x
   }
+}
+
+is_atomic_val <- function(x){
+  is.atomic(x) & (length(x) == 1)
 }
 
 

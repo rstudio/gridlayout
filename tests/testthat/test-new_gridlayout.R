@@ -84,7 +84,7 @@ test_that("Gets mad if your row and column sizes don't match matrix dimensions",
       ), ncol = 2, byrow = TRUE),
       col_sizes = c("200px", "1fr", "2fr")
     ),
-    "The provided column sizes need to match the number of columns in your layout matrix"
+    "The provided col sizes need to match the number of cols in your layout matrix"
   )
 
 })
@@ -99,13 +99,11 @@ test_that("Can initialize a layout with the element_list argument instead of a m
     list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
   )
 
-  suppressWarnings({
-    expect_warning(
-      new_gridlayout(
-        col_sizes = c("1fr", "1fr", "1fr"),
-        row_sizes = c("1fr", "1fr", "1fr"),
-        element_list = elements_w_overlap,
-        warn_about_overap = TRUE)
-    )
-  })
+  expect_silent(
+    new_gridlayout(
+      col_sizes = c("1fr", "1fr", "1fr"),
+      row_sizes = c("1fr", "1fr", "1fr"),
+      element_list = elements_w_overlap)
+  )
+
 })

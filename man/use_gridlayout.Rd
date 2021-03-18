@@ -29,6 +29,10 @@ outline applied so positioning can more easily be assessed.}
     \item{\code{full_height}}{Should the grid-containing element be made as tall as
 possible? Set to \code{FALSE} if the grid is contained within another element
 and is not the whole app's UI.}
+    \item{\code{selector_prefix}}{CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the \code{"#"} prefix) with because they are not available or are used for
+other reasons.}
   }}
 }
 \value{

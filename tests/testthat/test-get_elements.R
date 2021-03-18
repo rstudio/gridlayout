@@ -17,6 +17,7 @@ test_that("multiplication works", {
       list(id = "plot_a",  start_row = 2, end_row = 2, start_col = 2, end_col = 3),
       list(id = "plot_b",  start_row = 3, end_row = 3, start_col = 2, end_col = 2),
       list(id = "plot_c",  start_row = 3, end_row = 3, start_col = 3, end_col = 3)
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
