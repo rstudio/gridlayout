@@ -13,6 +13,8 @@ screenshot_demo_app <- function(app_loc) {
   path
 }
 
-test_that("geyser app demo", {
-  expect_snapshot_file(screenshot_demo_app(here::here("inst/demo_app/app.R")), "app.png")
-})
+# test_that("geyser app demo", {
+#   expect_snapshot_file(screenshot_demo_app(here::here("inst/demo_app/app.R")), "app.png")
+# })
+
+

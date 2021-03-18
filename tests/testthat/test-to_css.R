@@ -136,7 +136,7 @@ test_that("Height setting can be un-set", {
   expect_true(
     str_detect(
       to_css(grid_obj),
-      "height: calc(",
+      "height: 100vh",
       fixed = TRUE
     )
   )
@@ -144,7 +144,7 @@ test_that("Height setting can be un-set", {
   expect_false(
     str_detect(
       to_css(grid_obj, full_height = FALSE),
-      "height: calc(",
+      "height: 100vh",
       fixed = TRUE
     )
   )
