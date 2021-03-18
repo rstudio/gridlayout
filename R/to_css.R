@@ -108,15 +108,28 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
     prop_list = c(
       "box-sizing" = "border-box",
       "padding" = "0.8rem",
+      "overflow" = "hidden",
       card_style_list,
       debug_style_list,
       element_styles
     )
   )
 
+  # A slightly hacky fix to get plot's to not dump over the edge We want to make
+  # sure it's a plot-containing div so we don't just center any image on the
+  # page
+  plot_centering_styles <- build_css_rule(
+    selector = ".shiny-plot-output",
+    prop_list = c(
+      "display" = "grid",
+      "place-content" = "center"
+    )
+  )
+
   paste(
     main_container_styles,
     card_styles,
+    plot_centering_styles,
     element_grid_areas,
     sep = "\n\n"
   )
