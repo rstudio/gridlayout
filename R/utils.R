@@ -98,4 +98,5 @@ is_atomic_val <- function(x){
   is.atomic(x) & (length(x) == 1)
 }
 
-
+# I never remember the order of this
+in_a_not_b <- function(a,b) setdiff(a,b)

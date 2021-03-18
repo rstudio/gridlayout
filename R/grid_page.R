@@ -31,12 +31,9 @@
 #'   ui = grid_page(
 #'     layout = my_layout,
 #'     theme = bslib::bs_theme(),
-#'     h2(id = "header", "This is my header content"),
-#'     grid_panel(
-#'       id = "sidebar",
-#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
-#'     ),
-#'     plotOutput("distPlot", height = "100%")
+#'     header = h2(id = "header", "This is my header content"),
+#'     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+#'     plot = plotOutput("distPlot", height = "100%")
 #'   ),
 #'   server = function(input, output) {
 #'     output$distPlot <- renderPlot({
@@ -56,103 +53,27 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
     stop("Need a defined layout for page")
   }
 
-  # Capture expressions passed just in case we need to point user to where
-  # things went wrong
-  user_exprs <- lapply(
-    arg_list_exprs(...),
-    deparse
-  )
-
-  # Get all the elements so we can make sure they are properly formed before
-  # writing page
-  arg_sections <- list(...)
-  arg_ids <- extract_chr(arg_sections, 'attribs', 'id')
-
-  # Check to see if the user is placing any plots at the top level of their
-  # code. If they are, then let them know it may cause problems and offer a
-  # solution.
-  unwrapped_plotoutput <- str_detect(
-    user_exprs,
-    "^(shiny::)?plotOutput"
-  )
-  if(any(unwrapped_plotoutput)){
-    bad_plots <- user_exprs[unwrapped_plotoutput]
-    bad_plot_ids <- arg_ids[unwrapped_plotoutput]
-
-    fixed_plot_calls <- paste0("grid_panel(\n  id = \"", bad_plot_ids , "_grid\",\n  ",
-                              bad_plots, "\n)", collapse = "\n")
-
-    warning(
-      "Passing plotOutput as direct child of gridPage can result in",
-      " slightly wonky styling.\n",
-      "It's recomended to wrap it in grid_panel():\n",
-      fixed_plot_calls,
-      "\nDon't forget to update your layout definition to match the id for grid_panel, not the plot.",
-      call. = FALSE
-    )
-  }
-
-  element_missing_id <- arg_ids == "NULL"
-  elements_wo_ids <- any(element_missing_id)
-  # Remove the no-id arguments so "NULL" doesn't show up when we look for
-  # mismatches
-  arg_ids <- arg_ids[!element_missing_id]
-
-
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
   layout <- coerce_to_layout(layout)
-  layout_ids <- extract(get_elements(layout), 'id')
-  id_mismatches <- .verify_matches & !setequal(layout_ids, arg_ids)
+  layout_ids <- extract_chr(get_elements(layout), 'id')
+  arg_sections <- list(...)
+  arg_ids <- names(arg_sections)
 
-  # Gather all error messages into one call because giving them together maybe
-  # informative. E.g. someone forgot to pass an id and that element was meant
-  # for a layout space that was unnamed.
-  if(id_mismatches | elements_wo_ids){
-    in_layout_not_args <- setdiff(layout_ids, arg_ids)
-    in_args_not_layout <- setdiff(arg_ids, layout_ids)
+  grid_element_args <- arg_sections[arg_ids %in% layout_ids]
+  extra_args <- arg_sections[!(arg_ids %in% layout_ids)]
 
-    id_mismatch_err <- paste0(
-      "\nMismatch between the provided elements and the defined elements in layout definition.\n",
-      if(length(in_layout_not_args) > 0) {
-        paste0(
-          "In layout declaration but not passed to `grid_page`:\n",
-          paste0("  - \"", in_layout_not_args, "\"", collapse = "\n"),
-          "\n"
-        )
-      },
-      if(length(in_args_not_layout) > 0) {
-        paste0(
-          "Passed to `grid_page` but not in layout declaration:\n",
-          paste0("  - \"", in_args_not_layout, "\"", collapse = "\n"),
-          "\n"
-        )
-      },
-      "If this was intentional set `.verify_matches = FALSE` to override this check."
-    )
-
-    no_id_err <- paste(
-      "\nThe following elements of the page lack an id:",
-      paste("  -", user_exprs[element_missing_id], collapse = "\n") ,
-      "Consider wrapping in `grid_panel(id = ...)`",
-      sep = "\n"
-    )
-
-    stop(
-      paste0(
-        "Malformed call to grid_page():",
-        if(id_mismatches) id_mismatch_err,
-        if(elements_wo_ids) no_id_err
-      ),
-      call. = FALSE
-    )
-  }
 
   shiny::fluidPage(
     theme = if(!missing(theme)) theme,
-    use_gridlayout(layout = layout, "body > .container-fluid", use_card_style = TRUE),
-    ...
+    grid_container(
+      id = "main_grid",
+      layout = layout,
+      elements = grid_element_args
+    ),
+    if(length(extra_args) != 0) extra_args
   )
+
 }
 
 #' Panel element for a grid layout
@@ -198,6 +119,6 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
 #'
 #' }
 grid_panel <- function(id, ...){
-
   shiny::div(id = id, ...)
 }
+
