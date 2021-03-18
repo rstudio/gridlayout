@@ -15,11 +15,6 @@ desired layout for your Shiny app.}
 header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of \code{\link[shiny]{fluidPage}}.}
-
-\item{.verify_matches}{If \code{TRUE} then the function will make sure defined
-elements match those specified in \code{layout} declaration. For advanced
-use-cases such as utilizing css-grid's auto-fill, this can be disabled with
-\code{FALSE}.}
 }
 \value{
 A UI definition that can be passed to the \code{\link[shiny]{shinyUI}} function.
@@ -43,12 +38,9 @@ shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    h2(id = "header", "This is my header content"),
-    grid_panel(
-      id = "sidebar",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
-    ),
-    plotOutput("distPlot", height = "100\%")
+    header = h2(id = "header", "This is my header content"),
+    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+    plot = plotOutput("distPlot", height = "100\%")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -62,5 +54,5 @@ shinyApp(
 }
 }
 \seealso{
-grid_panel
+grid_container
 }
