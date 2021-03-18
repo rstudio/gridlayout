@@ -16,7 +16,8 @@
 #'   outline applied so positioning can more easily be assessed.
 #' @param full_height Should the grid-containing element be made as tall as
 #'   possible? Set to `FALSE` if the grid is contained within another element
-#'   and is not the whole app's UI.
+#'   and is not the whole application's UI. In this case the grid-container will take
+#'   the full height of containing element.
 #' @param selector_prefix CSS prefix used to target grid elements. This will
 #'   change if you're integrating grid with a system that you don't want to use
 #'   ids (the `"#"` prefix) with because they are not available or are used for
@@ -86,7 +87,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(full_height) paste0("calc(100vh - 2*", attr(layout, 'gap'), ")") else c()
+      "height" = if(full_height) "100vh" else c("100%")
     )
   )
 
@@ -115,21 +116,9 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
     )
   )
 
-  # A slightly hacky fix to get plot's to not dump over the edge We want to make
-  # sure it's a plot-containing div so we don't just center any image on the
-  # page
-  plot_centering_styles <- build_css_rule(
-    selector = ".shiny-plot-output",
-    prop_list = c(
-      "display" = "grid",
-      "place-content" = "center"
-    )
-  )
-
   paste(
     main_container_styles,
     card_styles,
-    plot_centering_styles,
     element_grid_areas,
     sep = "\n\n"
   )
