@@ -122,3 +122,25 @@ Consider wrapping in `grid_panel(id = ...)`'
   )
 
 })
+
+
+
+test_that("Warns about plots not wrapped in grid_panel()", {
+
+  expect_warning(
+    grid_page(
+      layout = "
+    |      |        |
+    |------|--------|
+    |2rem  |200px   |
+    |1fr   |header  |
+    |1fr   |myPlot  |
+    |1fr   |footer  |",
+    shiny::h2(id = 'header', "This is my header content"),
+    shiny::h2(id = "footer", "This is a footer"),
+    shiny::plotOutput("myPlot")
+    )
+  )
+
+})
+

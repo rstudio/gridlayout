@@ -4,11 +4,11 @@ library(gridlayout)
 library(shiny)
 requireNamespace("bslib", quietly = TRUE)
 my_layout <- "
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |distPlot |"
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"
 
 # The classic Geyser app with grid layout
 shinyApp(
@@ -20,7 +20,10 @@ shinyApp(
       id = "sidebar",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
     ),
-    plotOutput("distPlot", height = "100%")
+    grid_panel(
+      id = "plot",
+      plotOutput("distPlot", height = "100%")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -30,4 +33,3 @@ shinyApp(
     })
   }
 )
-

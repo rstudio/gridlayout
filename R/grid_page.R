@@ -68,6 +68,29 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
   arg_sections <- list(...)
   arg_ids <- extract_chr(arg_sections, 'attribs', 'id')
 
+  # Check to see if the user is placing any plots at the top level of their
+  # code. If they are, then let them know it may cause problems and offer a
+  # solution.
+  unwrapped_plotoutput <- str_detect(
+    user_exprs,
+    "^(shiny::)?plotOutput"
+  )
+  if(any(unwrapped_plotoutput)){
+    bad_plots <- user_exprs[unwrapped_plotoutput]
+    bad_plot_ids <- arg_ids[unwrapped_plotoutput]
+
+    fixed_plot_calls <- paste0("grid_panel(\n  id = \"", bad_plot_ids , "_grid\",\n  ",
+                              bad_plots, "\n)", collapse = "\n")
+
+    warning(
+      "Passing plotOutput as direct child of gridPage can result in",
+      " slightly wonky styling.\n",
+      "It's recomended to wrap it in grid_panel():\n",
+      fixed_plot_calls,
+      "\nDon't forget to update your layout definition to match the id for grid_panel, not the plot.",
+      call. = FALSE
+    )
+  }
 
   element_missing_id <- arg_ids == "NULL"
   elements_wo_ids <- any(element_missing_id)
