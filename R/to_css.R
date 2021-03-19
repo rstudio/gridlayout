@@ -132,8 +132,11 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #' Convert layout to css for Shiny
 #'
 #' This simply wraps the output of `to_css()` in a `style` tag and escapes HTML
-#' characters to simplify using in Shiny
+#' characters to simplify using in Shiny. Most of the time you'll want to use
+#' \code{\link{grid_page}} or \code{\link{grid_container}} instead of manually
+#' adding this css though.
 #'
+#' @seealso \code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
 #' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.

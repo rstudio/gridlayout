@@ -44,7 +44,9 @@ Character string of css used to setup grid layout and place elements
 }
 \description{
 This simply wraps the output of \code{to_css()} in a \code{style} tag and escapes HTML
-characters to simplify using in Shiny
+characters to simplify using in Shiny. Most of the time you'll want to use
+\code{\link{grid_page}} or \code{\link{grid_container}} instead of manually
+adding this css though.
 }
 \examples{
 # Only run these examples in interactive R sessions
@@ -82,4 +84,7 @@ shinyApp(
   }
 )
 }
+}
+\seealso{
+\code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
 }
