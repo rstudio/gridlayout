@@ -8,7 +8,6 @@
 #'   doesn't matter for single character declaration.)
 #'
 #' @return A concatenated string of property values to be used inside a css selector.
-#' @export
 #'
 #' @examples
 #'
