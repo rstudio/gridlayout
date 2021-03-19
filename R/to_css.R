@@ -39,7 +39,7 @@
 #'     |1fr   |sidebar |plot_b |plot_b |"
 #' )
 #'
-#' to_css(grid_obj)
+#' cat(to_css(grid_obj))
 #'
 #' @export
 to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#") {
