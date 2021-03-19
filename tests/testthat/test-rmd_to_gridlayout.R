@@ -24,7 +24,7 @@ tagList(
 More text in the sidebar."
 
   writeLines(rmd_txt, temp_rmd)
-  my_layout <- shinymd_to_gridlayout(temp_rmd)
+  my_layout <- rmd_to_gridlayout(temp_rmd)
   expect_equal(
     to_md(my_layout),
 "|     |        |     |
@@ -38,8 +38,8 @@ More text in the sidebar."
 
 test_that("updating layout chunk works", {
 
-  loc_of_shinymd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-  first_layout <- shinymd_to_gridlayout(loc_of_shinymd)
+  loc_of_rmd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
+  first_layout <- rmd_to_gridlayout(loc_of_rmd)
 
   new_layout <- md_to_gridlayout(
     layout_table = "
@@ -50,9 +50,9 @@ test_that("updating layout chunk works", {
       |1fr   |sidebar |plot_b |plot_b |"
   )
 
-  loc_of_new_shinymd <- tempfile(fileext = ".rmd")
-  update_shinymd(loc_of_shinymd, new_layout, loc_of_new_shinymd)
-  updated_layout <- shinymd_to_gridlayout(loc_of_new_shinymd)
+  loc_of_new_rmd <- tempfile(fileext = ".rmd")
+  update_rmd(loc_of_rmd, new_layout, loc_of_new_rmd)
+  updated_layout <- rmd_to_gridlayout(loc_of_new_rmd)
 
   # Updated layout should be the same as the one we passed in
   expect_equal(new_layout, updated_layout)

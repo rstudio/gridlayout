@@ -3,8 +3,8 @@ library(here)
 library(purrr)
 library(gridlayout)
 
-path_to_shinymd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- gridlayout::shinymd_to_gridlayout(path_to_shinymd)
+path_to_rmd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
+my_layout <- gridlayout::rmd_to_gridlayout(path_to_rmd)
 starting_elements <- gridlayout::get_elements(my_layout)
 
 trashcan_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0 24 24">
