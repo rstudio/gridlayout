@@ -137,8 +137,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-creating-layouts" class="hasAnchor"><a href="#section-creating-layouts" class="anchor"></a>Creating layouts</h2>
+          <p class="section-desc"><p>Functions relating to creating and displaying gridlayout objects</p></p>
         </th>
       </tr>
       
@@ -149,15 +149,52 @@
       <tr>
         
         <td>
-          <p><code><a href="build_css_rule.html">build_css_rule()</a></code> </p>
+          <p><code><a href="new_gridlayout.html">new_gridlayout()</a></code> </p>
         </td>
-        <td><p>Build css properties named or unnamed list of property values</p></td>
+        <td><p>Construct a gridlayout object from basic parts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="md_to_gridlayout.html">md_to_gridlayout()</a></code> </p>
+        </td>
+        <td><p>Build grid layout obj from markdown table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="to_md.html">to_md()</a></code> </p>
+        </td>
+        <td><p>Convert layout to markdown table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmd_to_gridlayout.html">rmd_to_gridlayout()</a></code> </p>
+        </td>
+        <td><p>Extract gridlayout from rmd file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_elements.html">get_elements()</a></code> </p>
         </td>
         <td><p>Get elements and positions out of a grid layout</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-using-layouts" class="hasAnchor"><a href="#section-using-layouts" class="anchor"></a>Using layouts</h2>
+          <p class="section-desc"><p>Functions for utilizing layouts in Shiny apps or RMarkdown documents</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="grid_page.html">grid_page()</a></code> </p>
+        </td>
+        <td><p>Setup gridlayout UI for shiny app</p></td>
       </tr><tr>
         
         <td>
@@ -167,9 +204,40 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="grid_page.html">grid_page()</a></code> </p>
+          <p><code><a href="use_gridlayout.html">use_gridlayout()</a></code> </p>
         </td>
-        <td><p>Setup gridlayout UI for shiny app</p></td>
+        <td><p>Convert layout to css for Shiny</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="to_css.html">to_css()</a></code> </p>
+        </td>
+        <td><p>Convert grid layout to css string</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="to_app_template.html">to_app_template()</a></code> </p>
+        </td>
+        <td><p>Build Shiny app template based on a grid layout</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-grided-layout-builder-app" class="hasAnchor"><a href="#section-grided-layout-builder-app" class="anchor"></a>Grided layout builder app</h2>
+          <p class="section-desc"><p>Functions for using the grided app for generating layouts with a graphical interface. These are typically called by the RStudio addin functionality and thus not called directly.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="update_rmd.html">update_rmd()</a></code> </p>
+        </td>
+        <td><p>Update a layout chunk in a rmd document</p></td>
       </tr><tr>
         
         <td>
@@ -182,54 +250,6 @@
           <p><code><a href="grided_new_app.html">grided_new_app()</a></code> </p>
         </td>
         <td><p>Create gridlayout and build new app</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="md_to_gridlayout.html">md_to_gridlayout()</a></code> </p>
-        </td>
-        <td><p>Build grid layout obj from markdown table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="new_gridlayout.html">new_gridlayout()</a></code> </p>
-        </td>
-        <td><p>Construct a gridlayout object from basic parts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rmd_to_gridlayout.html">rmd_to_gridlayout()</a></code> </p>
-        </td>
-        <td><p>Extract gridlayout from rmd file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="to_app_template.html">to_app_template()</a></code> </p>
-        </td>
-        <td><p>Build Shiny app template based on a grid layout</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="to_css.html">to_css()</a></code> </p>
-        </td>
-        <td><p>Convert grid layout to css string</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="to_md.html">to_md()</a></code> </p>
-        </td>
-        <td><p>Convert layout to markdown table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_rmd.html">update_rmd()</a></code> </p>
-        </td>
-        <td><p>Update a layout chunk in a rmd document</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="use_gridlayout.html">use_gridlayout()</a></code> </p>
-        </td>
-        <td><p>Convert layout to css for Shiny</p></td>
       </tr>
     </tbody>
     </table>
