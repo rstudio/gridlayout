@@ -97,3 +97,23 @@ validate_argument <- function(x, default = NULL, check_fn, check_fail_msg, using
 is_atomic_val <- function(x){
   is.atomic(x) & (length(x) == 1)
 }
+
+# Taken from the shiny source
+validCssUnit <- function(x)
+{
+  if (is.null(x) || is.na(x))
+    return(x)
+  if (length(x) > 1 || (!is.character(x) && !is.numeric(x)))
+    stop("CSS units must be a single-element numeric or character vector")
+  if (is.character(x) && nchar(x) > 0 && gsub("\\d*", "", x) ==
+      "")
+    x <- as.numeric(x)
+  pattern <- "^(auto|inherit|fit-content|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|fr|ch|pt|pc|px|vh|vw|vmin|vmax))$"
+  if (is.character(x) && !grepl(pattern, x)) {
+    stop("\"", x, "\" is not a valid CSS unit (e.g., \"100%\", \"400px\", \"auto\")")
+  }
+  else if (is.numeric(x)) {
+    x <- paste(x, "px", sep = "")
+  }
+  x
+}
