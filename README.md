@@ -25,6 +25,8 @@ markdown table syntax. This allows you to use any markdown table editor
 of your choice to configure your layout.
 
 ``` r
+library(gridlayout)
+
 my_layout <- md_to_gridlayout(
   layout_table = "
     |      |120px   |1fr    |1fr    |
@@ -35,11 +37,11 @@ my_layout <- md_to_gridlayout(
 )
 
 my_layout
-#> [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m1rem[22m 
-#>  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m
-#> [1m100px[22m header  header header
-#> [1m1fr  [22m sidebar plot_a plot_c
-#> [1m1fr  [22m sidebar plot_b plot_b
+#> gridlayout object with 3 rows, 3 columns, and gap size: 1rem 
+#>        120px   1fr    1fr   
+#> 100px header  header header
+#> 1fr   sidebar plot_a plot_c
+#> 1fr   sidebar plot_b plot_b
 ```
 
 You can also use the top left cell of your table to specify the gap
@@ -56,11 +58,11 @@ my_layout <- md_to_gridlayout(
 )
 
 my_layout
-#> [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m25px[22m 
-#>  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m
-#> [1m100px[22m header  header header
-#> [1m1fr  [22m sidebar plot_a plot_c
-#> [1m1fr  [22m sidebar plot_b plot_b
+#> gridlayout object with 3 rows, 3 columns, and gap size: 25px 
+#>        120px   1fr    1fr   
+#> 100px header  header header
+#> 1fr   sidebar plot_a plot_c
+#> 1fr   sidebar plot_b plot_b
 ```
 
 You can also programatically build your layout using `new_gridlayout`.
@@ -87,11 +89,11 @@ new_gridlayout(
   row_sizes = c("100px", "1fr", "1fr"),
   element_list = elements_list
 )
-#> [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
-#>  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m
-#> [1m100px[22m header header
-#> [1m1fr  [22m plot   table 
-#> [1m1fr  [22m footer footer
+#> gridlayout object with 3 rows, 2 columns, and gap size: 1rem 
+#>        1fr    2fr   
+#> 100px header header
+#> 1fr   plot   table 
+#> 1fr   footer footer
 ```
 
 Alternatively, you can use a matrix for a more visually intuitive layout
@@ -110,11 +112,11 @@ new_gridlayout(
   row_sizes = c("100px", "1fr", "1fr"),
   layout_mat = elements_mat
 )
-#> [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
-#>  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m
-#> [1m100px[22m header header
-#> [1m1fr  [22m plot   table 
-#> [1m1fr  [22m footer footer
+#> gridlayout object with 3 rows, 2 columns, and gap size: 1rem 
+#>        1fr    2fr   
+#> 100px header header
+#> 1fr   plot   table 
+#> 1fr   footer footer
 ```
 
 You can also build a layout from a markdown documents that have your
@@ -149,10 +151,10 @@ applications layouts without copying and pasting your layout table.
 my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
 my_layout <- rmd_to_gridlayout(my_app_loc)
 my_layout
-#> [1mgridlayout[22m object with [1m2[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
-#>  [1m[1m   [22m[22m [1m1fr    [22m [1m1fr [22m
-#> [1m1fr[22m sidebar main
-#> [1m1fr[22m sidebar main
+#> gridlayout object with 2 rows, 2 columns, and gap size: 1rem 
+#>      1fr     1fr 
+#> 1fr sidebar main
+#> 1fr sidebar main
 ```
 
 ## Using in a shiny app
@@ -188,7 +190,7 @@ shinyApp(
 )
 ```
 
-<img src="/var/folders/d4/cbr0wtz50gb69vd8pqt65w0m0000gn/T//RtmpInE1OR/file16e84d294d88.png" width="100%" />
+<img src="man/figures/basic_grid_demo.png" width="100%" />
 
 `grid_page()` will automatically make your gridlayout fill the entire
 page. If you are interested in having a finer-grain control over the

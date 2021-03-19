@@ -11,7 +11,6 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
-library(gridlayout)
 ```
 
 # gridlayout
@@ -35,6 +34,8 @@ devtools::install_github("rstudio/gridlayout")
 The easiest and most common way to specify a grid layout is using a markdown table syntax. This allows you to use any markdown table editor of your choice to configure your layout. 
 
 ```{r md_to_gridlayout}
+library(gridlayout)
+
 my_layout <- md_to_gridlayout(
   layout_table = "
     |      |120px   |1fr    |1fr    |
@@ -46,6 +47,7 @@ my_layout <- md_to_gridlayout(
 
 my_layout
 ```
+
 
 You can also use the top left cell of your table to specify the gap size.
 
@@ -195,7 +197,7 @@ app_obj <- shiny::shinyApp(
   }
 )
 
-screenshot_path <- tempfile(fileext = ".png")
+screenshot_path <- "man/figures/basic_grid_demo.png"
 
 webshot2::appshot(
   app = app_obj,
