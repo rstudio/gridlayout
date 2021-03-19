@@ -123,30 +123,6 @@ You can also build a layout from a markdown documents that have your
 layout in a code-chunk. This is useful for updating existing
 applications layouts without copying and pasting your layout table.
 
-**`my_app.rmd`**
-
-    ``` {.layout .grid}
-    | sidebar | main |
-    |---------|------|
-    | sidebar | main |
-    ```
-
-    ## Sidebar title here {#sidebar}
-
-    Here's a sentence at the top of the sidebar.
-
-    ``` {.r .ui}
-    tagList(
-      sliderInput('x', 'X:', 1, 10, 5),
-      textInput('txt', 'Input text')
-    )
-    ```
-
-    ------------------------------------------------------------------------
-
-    More text in the sidebar.
-    ...
-
 ``` r
 my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
 my_layout <- rmd_to_gridlayout(my_app_loc)
@@ -190,7 +166,8 @@ shinyApp(
 )
 ```
 
-<img src="man/figures/basic_grid_demo.png" width="100%" />
+<img src="man/figures/basic_grid_demo.png" width="100%" /> *Screenshot
+of grided geyser app running*
 
 `grid_page()` will automatically make your gridlayout fill the entire
 page. If you are interested in having a finer-grain control over the
@@ -222,6 +199,49 @@ shinyApp(
 This time, however the grid is constrained to `800px` tall, no-matter
 how large or small the window viewing it is.
 
+## Using in RMarkdown
+
+The function `use_gridlayout_rmd()` called in the `setup` chunk of an
+RMarkdown file will enable you to use gridlayout to layout your
+document. Just match the section headers to the layout element names and
+place layout md table in a `gridlayout` chunk…
+
+**`my_app.rmd`**
+
+    ---
+    title: "`gridlayout` in Rmarkdown"
+    author: "Nick Strayer"
+    date: "3/9/2021"
+    output: html_document
+    ---
+
+
+
+    ## Main
+
+
+    ```gridlayout
+    |      |        |         |
+    |------|--------|---------|
+    |2rem  |200px   |1fr      |
+    |150px |header  |header   |
+    |1fr   |sidebar |main     |
+    |120px |footer  |footer   |
+    ```
+
+
+    ## Sidebar
+
+    Here is some content for the sidebar
+
+    ## Footer
+
+    Anything you want could go in the footer.
+
+<img src="man/figures/basic_markdown.png" width="100%" />
+
+*Output of `my_app.rmd`*
+
 ## Working with layout object
 
 Once you have your `gridlayout` object, you can convert it to a markdown
@@ -229,12 +249,44 @@ table spec or to the CSS that generates the given grid.
 
 ``` r
 cat(to_md(my_layout))
-#> to_md generic
+#> |     |        |     |
+#> |-----|--------|-----|
+#> |1rem |1fr     |1fr  |
+#> |1fr  |sidebar |main |
+#> |1fr  |sidebar |main |
 ```
 
 ``` r
 cat(to_css(my_layout))
-#> to_css generic
+#> body {
+#>   display: grid;
+#>   grid-template-rows: 1fr 1fr;
+#>   grid-template-columns: 1fr 1fr;
+#>   grid-gap: 1rem;
+#>   padding: 1rem;
+#>   height: 100vh;
+#> }
+#> 
+#> body > * {
+#>   box-sizing: border-box;
+#>   padding: 0.8rem;
+#>   overflow: hidden;
+#>   box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+#>   border-radius: 0.5rem;
+#> }
+#> 
+#> #sidebar {
+#>   grid-column-start: 1;
+#>   grid-column-end: 2;
+#>   grid-row-start: 1;
+#>   grid-row-end: 3;
+#> }
+#> #main {
+#>   grid-column-start: 2;
+#>   grid-column-end: 3;
+#>   grid-row-start: 1;
+#>   grid-row-end: 3;
+#> }
 ```
 
 If you want to get at the individual components or “elements” stored in
@@ -242,7 +294,36 @@ your grid you can use `get_elements()`.
 
 ``` r
 head(get_elements(my_layout), 2)
-#> Warning in get_elements.default(my_layout): The get_elements function is only
-#> defined for objects of the gridlayout class
-#> [1] "The get_elements function is only defined for objects of the gridlayout class"
+#> [[1]]
+#> [[1]]$id
+#> [1] "sidebar"
+#> 
+#> [[1]]$start_row
+#> [1] 1
+#> 
+#> [[1]]$end_row
+#> [1] 2
+#> 
+#> [[1]]$start_col
+#> [1] 1
+#> 
+#> [[1]]$end_col
+#> [1] 1
+#> 
+#> 
+#> [[2]]
+#> [[2]]$id
+#> [1] "main"
+#> 
+#> [[2]]$start_row
+#> [1] 1
+#> 
+#> [[2]]$end_row
+#> [1] 2
+#> 
+#> [[2]]$start_col
+#> [1] 2
+#> 
+#> [[2]]$end_col
+#> [1] 2
 ```

@@ -111,31 +111,6 @@ new_gridlayout(
 You can also build a layout from a markdown documents that have your layout in a code-chunk. This is useful for updating existing applications layouts without copying and pasting your layout table.
 
 
-__`my_app.rmd`__
-````
-``` {.layout .grid}
-| sidebar | main |
-|---------|------|
-| sidebar | main |
-```
-
-## Sidebar title here {#sidebar}
-
-Here's a sentence at the top of the sidebar.
-
-``` {.r .ui}
-tagList(
-  sliderInput('x', 'X:', 1, 10, 5),
-  textInput('txt', 'Input text')
-)
-```
-
-------------------------------------------------------------------------
-
-More text in the sidebar.
-...
-````
-
 ````{r}
 my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
 my_layout <- rmd_to_gridlayout(my_app_loc)
@@ -175,40 +150,9 @@ shinyApp(
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-my_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|150px |header  |header |
-|1fr   |sidebar |plot   |"
-app_obj <- shiny::shinyApp(
-  ui = grid_page(
-    layout = my_layout,
-    header = shiny::h2("Old Faithful Geyser Data"),
-    sidebar = shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-    plot = shiny::plotOutput("distPlot", height = "100%")
-  ),
-  server = function(input, output) {
-    output$distPlot <- shiny::renderPlot({
-      x    <- faithful[, 2]
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    })
-  }
-)
-
-screenshot_path <- "man/figures/basic_grid_demo.png"
-
-webshot2::appshot(
-  app = app_obj,
-  file = screenshot_path,
-  vwidth = 1600,
-  vheight = 1200,
-  cliprect = "viewport"
-)
-
-knitr::include_graphics(screenshot_path)
+knitr::include_graphics("man/figures/basic_grid_demo.png")
 ```
+_Screenshot of grided geyser app running_
 
 
 
@@ -235,6 +179,52 @@ shinyApp(
 ```
 
 This time, however the grid is constrained to `800px` tall, no-matter how large or small the window viewing it is. 
+
+## Using in RMarkdown
+
+The function `use_gridlayout_rmd()` called in the `setup` chunk of an RMarkdown file will enable you to use gridlayout to layout your document. Just match the section headers to the layout element names and place layout md table in a `gridlayout` chunk... 
+
+__`my_app.rmd`__
+````
+---
+title: "`gridlayout` in Rmarkdown"
+author: "Nick Strayer"
+date: "3/9/2021"
+output: html_document
+---
+
+```{r setup, eval = FALSE, include=FALSE}
+library(gridlayout)
+use_gridlayout_rmd()
+```
+
+## Main
+
+```{gridlayout}
+|      |        |         |
+|------|--------|---------|
+|2rem  |200px   |1fr      |
+|150px |header  |header   |
+|1fr   |sidebar |main     |
+|120px |footer  |footer   |
+```
+
+
+## Sidebar
+
+Here is some content for the sidebar
+
+## Footer
+
+Anything you want could go in the footer.
+
+````
+
+```{r, echo = FALSE, message=FALSE}
+knitr::include_graphics("man/figures/basic_markdown.png")
+```
+
+_Output of `my_app.rmd`_
 
 ## Working with layout object
 
