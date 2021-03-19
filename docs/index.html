@@ -101,26 +101,8 @@
 <h2 class="hasAnchor">
 <a href="#setting-up-your-gridlayout" class="anchor"></a>Setting up your <code>gridlayout</code>
 </h2>
-<p>The most basic way of making a grid layout is with <code>new_gridlayout</code> (This is not how you will typically make a layout.)</p>
+<p>The easiest and most common way to specify a grid layout is using a markdown table syntax. This allows you to use any markdown table editor of your choice to configure your layout.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
-
-<span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
-  layout_mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-    <span class="st">"header"</span>, <span class="st">"header"</span>,
-    <span class="st">"plota"</span>,  <span class="st">"plotb"</span>
-  <span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,
-  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,
-  gap <span class="op">=</span> <span class="st">"2rem"</span>
-<span class="op">)</span>
-<span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout object with 2 rows, 2 columns, and gap size: 2rem </span>
-<span class="co">#&gt;        1fr    2fr    </span>
-<span class="co">#&gt; 100px header header </span>
-<span class="co">#&gt; 1fr   plota  plotb</span></code></pre></div>
-<p>More typically you will be specifying your layouts using a table syntax. This allows you to use any markdown table editor of your choice to configure your layout.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/md_to_gridlayout.html">md_to_gridlayout</a></span><span class="op">(</span>
   layout_table <span class="op">=</span> <span class="st">"
     |      |120px   |1fr    |1fr    |
@@ -131,13 +113,13 @@
 <span class="op">)</span>
 
 <span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout object with 3 rows, 3 columns, and gap size: 1rem </span>
-<span class="co">#&gt;        120px   1fr    1fr    </span>
-<span class="co">#&gt; 100px header  header header </span>
-<span class="co">#&gt; 1fr   sidebar plot_a plot_c </span>
-<span class="co">#&gt; 1fr   sidebar plot_b plot_b</span></code></pre></div>
+<span class="co">#&gt; [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m1rem[22m </span>
+<span class="co">#&gt;  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m</span>
+<span class="co">#&gt; [1m100px[22m header  header header</span>
+<span class="co">#&gt; [1m1fr  [22m sidebar plot_a plot_c</span>
+<span class="co">#&gt; [1m1fr  [22m sidebar plot_b plot_b</span></code></pre></div>
 <p>You can also use the top left cell of your table to specify the gap size.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/md_to_gridlayout.html">md_to_gridlayout</a></span><span class="op">(</span>
   layout_table <span class="op">=</span> <span class="st">"
     | 25px |120px   |1fr    |1fr    |
@@ -148,103 +130,156 @@
 <span class="op">)</span>
 
 <span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout object with 3 rows, 3 columns, and gap size: 25px </span>
-<span class="co">#&gt;        120px   1fr    1fr    </span>
-<span class="co">#&gt; 100px header  header header </span>
-<span class="co">#&gt; 1fr   sidebar plot_a plot_c </span>
-<span class="co">#&gt; 1fr   sidebar plot_b plot_b</span></code></pre></div>
-<p>You can also build a layout from a markdown document that contains a code-chunk with the labels <code>.layout .grid</code>. This is useful for updating existing applications layouts without copying and pasting your layout table.</p>
+<span class="co">#&gt; [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m25px[22m </span>
+<span class="co">#&gt;  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m</span>
+<span class="co">#&gt; [1m100px[22m header  header header</span>
+<span class="co">#&gt; [1m1fr  [22m sidebar plot_a plot_c</span>
+<span class="co">#&gt; [1m1fr  [22m sidebar plot_b plot_b</span></code></pre></div>
+<p>You can also programatically build your layout using <code>new_gridlayout</code>. Here you simply pass a list of the elements that make up your layout along with column and row sizes.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
+
+<span class="co"># Assemble list of elements along with their positions</span>
+<span class="va">elements_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>,
+       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot"</span>,   start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,
+       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"table"</span>,  start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,
+       start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"footer"</span>, start_row <span class="op">=</span> <span class="fl">3</span>, end_row <span class="op">=</span> <span class="fl">3</span>,
+       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
+  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,
+  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span>, <span class="st">"1fr"</span><span class="op">)</span>,
+  element_list <span class="op">=</span> <span class="va">elements_list</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m </span>
+<span class="co">#&gt;  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m</span>
+<span class="co">#&gt; [1m100px[22m header header</span>
+<span class="co">#&gt; [1m1fr  [22m plot   table </span>
+<span class="co">#&gt; [1m1fr  [22m footer footer</span></code></pre></div>
+<p>Alternatively, you can use a matrix for a more visually intuitive layout system (although <code>my_to_gridlayout()</code> is even better.)</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">elements_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  <span class="st">"header"</span>, <span class="st">"header"</span>,
+  <span class="st">"plot"</span>,   <span class="st">"table"</span>,
+  <span class="st">"footer"</span>, <span class="st">"footer"</span><span class="op">)</span>,
+  ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
+  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,
+  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span>, <span class="st">"1fr"</span><span class="op">)</span>,
+  layout_mat <span class="op">=</span> <span class="va">elements_mat</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m </span>
+<span class="co">#&gt;  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m</span>
+<span class="co">#&gt; [1m100px[22m header header</span>
+<span class="co">#&gt; [1m1fr  [22m plot   table </span>
+<span class="co">#&gt; [1m1fr  [22m footer footer</span></code></pre></div>
+<p>You can also build a layout from a markdown documents that have your layout in a code-chunk. This is useful for updating existing applications layouts without copying and pasting your layout table.</p>
 <p><strong><code>my_app.rmd</code></strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at"> {.layout .grid}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">| sidebar | main |</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">|---------|------|</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">| sidebar | main |</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Sidebar title here {#sidebar}</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Here<span class="st">'s a sentence at the top of the sidebar.</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">``` {.r .ui}</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">tagList(</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">  sliderInput('</span>x<span class="st">', '</span>X<span class="sc">:</span><span class="st">', 1, 10, 5),</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">  textInput('</span>txt<span class="st">', '</span>Input text<span class="st">')</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">------------------------------------------------------------------------</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="st">More text in the sidebar.</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="st">...</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at"> {.layout .grid}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">| sidebar | main |</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">|---------|------|</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">| sidebar | main |</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Sidebar title here {#sidebar}</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Here<span class="st">'s a sentence at the top of the sidebar.</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">``` {.r .ui}</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">tagList(</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">  sliderInput('</span>x<span class="st">', '</span>X<span class="sc">:</span><span class="st">', 1, 10, 5),</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="st">  textInput('</span>txt<span class="st">', '</span>Input text<span class="st">')</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="st">------------------------------------------------------------------------</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="st">More text in the sidebar.</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="st">...</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_app_loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"sample_apps/my_app.Rmd"</span>, package <span class="op">=</span> <span class="st">"gridlayout"</span><span class="op">)</span>
-<span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/shinymd_to_gridlayout.html">shinymd_to_gridlayout</a></span><span class="op">(</span><span class="va">my_app_loc</span><span class="op">)</span>
+<span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rmd_to_gridlayout.html">rmd_to_gridlayout</a></span><span class="op">(</span><span class="va">my_app_loc</span><span class="op">)</span>
 <span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout object with 2 rows, 2 columns, and gap size: 1rem </span>
-<span class="co">#&gt;      1fr     1fr  </span>
-<span class="co">#&gt; 1fr sidebar main </span>
-<span class="co">#&gt; 1fr sidebar main</span></code></pre></div>
+<span class="co">#&gt; [1mgridlayout[22m object with [1m2[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m </span>
+<span class="co">#&gt;  [1m[1m   [22m[22m [1m1fr    [22m [1m1fr [22m</span>
+<span class="co">#&gt; [1m1fr[22m sidebar main</span>
+<span class="co">#&gt; [1m1fr[22m sidebar main</span></code></pre></div>
+</div>
+<div id="using-in-a-shiny-app" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using-in-a-shiny-app" class="anchor"></a>Using in a shiny app</h2>
+<p>Once you’ve setup your layout you can use it in a Shiny app with the <code><a href="reference/grid_page.html">grid_page()</a></code> ui function:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
+
+<span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="st">"
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"</span>
+
+<span class="co"># The classic Geyser app with grid layout</span>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
+  ui <span class="op">=</span> <span class="fu"><a href="reference/grid_page.html">grid_page</a></span><span class="op">(</span>
+    layout <span class="op">=</span> <span class="va">my_layout</span>,
+    header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span><span class="op">(</span><span class="st">"Old Faithful Geyser Data"</span><span class="op">)</span>,
+    sidebar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,
+    plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+  <span class="op">)</span>,
+  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
+      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
+      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span>
+    <span class="op">}</span><span class="op">)</span>
+  <span class="op">}</span>
+<span class="op">)</span></code></pre></div>
+<p><img src="/var/folders/d4/cbr0wtz50gb69vd8pqt65w0m0000gn/T//RtmpInE1OR/file16e84d294d88.png" width="100%"></p>
+<p><code><a href="reference/grid_page.html">grid_page()</a></code> will automatically make your gridlayout fill the entire page. If you are interested in having a finer-grain control over the size and position of your grid layout you can use the <code><a href="reference/grid_container.html">grid_container()</a></code> function to place your grid layout wherever you want. The equivalent app to above can be created by replacing the UI definition with a <code>fluidPage</code> containing a <code><a href="reference/grid_container.html">grid_container()</a></code>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">...</span>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
+  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html">fluidPage</a></span><span class="op">(</span>
+    theme <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib//reference/bs_theme.html">bs_theme</a></span><span class="op">(</span><span class="op">)</span>,
+    <span class="fu"><a href="reference/grid_container.html">grid_container</a></span><span class="op">(</span>
+      id <span class="op">=</span> <span class="st">"main_grid"</span>,
+      layout <span class="op">=</span> <span class="va">my_layout</span>,
+      container_height <span class="op">=</span> <span class="st">"800px"</span>,
+      elements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+        header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"This is my header content"</span><span class="op">)</span>,
+        sidebar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,
+        plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+      <span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">)</span>,
+  server <span class="op">=</span> <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
+<p>This time, however the grid is constrained to <code>800px</code> tall, no-matter how large or small the window viewing it is.</p>
 </div>
 <div id="working-with-layout-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#working-with-layout-object" class="anchor"></a>Working with layout object</h2>
 <p>Once you have your <code>gridlayout</code> object, you can convert it to a markdown table spec or to the CSS that generates the given grid.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="reference/to_md.html">to_md</a></span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; |     |        |     |</span>
-<span class="co">#&gt; |-----|--------|-----|</span>
-<span class="co">#&gt; |1rem |1fr     |1fr  |</span>
-<span class="co">#&gt; |1fr  |sidebar |main |</span>
-<span class="co">#&gt; |1fr  |sidebar |main |</span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<span class="co">#&gt; to_md generic</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="reference/to_css.html">to_css</a></span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; body {</span>
-<span class="co">#&gt;   grid-template-rows: 1fr 1fr;</span>
-<span class="co">#&gt;   grid-template-columns: 1fr 1fr;</span>
-<span class="co">#&gt;   grid-template-gap: 1rem;</span>
-<span class="co">#&gt;   padding: 1rem;</span>
-<span class="co">#&gt;   grid-template-areas:</span>
-<span class="co">#&gt;     "sidebar main"</span>
-<span class="co">#&gt;     "sidebar main";</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; #sidebar { grid-area: sidebar; }</span>
-<span class="co">#&gt; #main { grid-area: main; }</span></code></pre></div>
+<span class="co">#&gt; to_css generic</span></code></pre></div>
 <p>If you want to get at the individual components or “elements” stored in your grid you can use <code><a href="reference/get_elements.html">get_elements()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="reference/get_elements.html">get_elements</a></span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [[1]]$id</span>
-<span class="co">#&gt; [1] "sidebar"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[1]]$start_row</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[1]]$end_row</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[1]]$start_col</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[1]]$end_col</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [[2]]$id</span>
-<span class="co">#&gt; [1] "main"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]$start_row</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]$end_row</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]$start_col</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]$end_col</span>
-<span class="co">#&gt; [1] 2</span></code></pre></div>
+<span class="co">#&gt; Warning in get_elements.default(my_layout): The get_elements function is only</span>
+<span class="co">#&gt; defined for objects of the gridlayout class</span>
+<span class="co">#&gt; [1] "The get_elements function is only defined for objects of the gridlayout class"</span></code></pre></div>
 </div>
 </div>
   </div>

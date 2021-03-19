@@ -11,7 +11,7 @@ my_layout <- "
 |1fr   |sidebar |plot   |"
 
 # The classic Geyser app with grid layout
-shinyApp(
+app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
@@ -39,5 +39,12 @@ shinyApp(
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
   }
+)
+
+webshot2::appshot(
+  app = app,
+  vwidth = 1600,
+  vheight = 1200,
+  cliprect = "viewport"
 )
 

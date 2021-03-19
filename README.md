@@ -20,31 +20,9 @@ devtools::install_github("rstudio/gridlayout")
 
 ## Setting up your `gridlayout`
 
-The most basic way of making a grid layout is with `new_gridlayout`
-(This is not how you will typically make a layout.)
-
-``` r
-library(gridlayout)
-
-my_layout <- new_gridlayout(
-  layout_mat = matrix(c(
-    "header", "header",
-    "plota",  "plotb"
-  ), ncol = 2, byrow = TRUE),
-  col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr"),
-  gap = "2rem"
-)
-my_layout
-#> gridlayout object with 2 rows, 2 columns, and gap size: 2rem 
-#>        1fr    2fr    
-#> 100px header header 
-#> 1fr   plota  plotb
-```
-
-More typically you will be specifying your layouts using a table syntax.
-This allows you to use any markdown table editor of your choice to
-configure your layout.
+The easiest and most common way to specify a grid layout is using a
+markdown table syntax. This allows you to use any markdown table editor
+of your choice to configure your layout.
 
 ``` r
 my_layout <- md_to_gridlayout(
@@ -57,11 +35,11 @@ my_layout <- md_to_gridlayout(
 )
 
 my_layout
-#> gridlayout object with 3 rows, 3 columns, and gap size: 1rem 
-#>        120px   1fr    1fr    
-#> 100px header  header header 
-#> 1fr   sidebar plot_a plot_c 
-#> 1fr   sidebar plot_b plot_b
+#> [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m1rem[22m 
+#>  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m
+#> [1m100px[22m header  header header
+#> [1m1fr  [22m sidebar plot_a plot_c
+#> [1m1fr  [22m sidebar plot_b plot_b
 ```
 
 You can also use the top left cell of your table to specify the gap
@@ -78,17 +56,70 @@ my_layout <- md_to_gridlayout(
 )
 
 my_layout
-#> gridlayout object with 3 rows, 3 columns, and gap size: 25px 
-#>        120px   1fr    1fr    
-#> 100px header  header header 
-#> 1fr   sidebar plot_a plot_c 
-#> 1fr   sidebar plot_b plot_b
+#> [1mgridlayout[22m object with [1m3[22m rows, [1m3[22m columns, and gap size: [1m25px[22m 
+#>  [1m[1m     [22m[22m [1m120px  [22m [1m1fr   [22m [1m1fr   [22m
+#> [1m100px[22m header  header header
+#> [1m1fr  [22m sidebar plot_a plot_c
+#> [1m1fr  [22m sidebar plot_b plot_b
 ```
 
-You can also build a layout from a markdown document that contains a
-code-chunk with the labels `.layout .grid`. This is useful for updating
-existing applications layouts without copying and pasting your layout
-table.
+You can also programatically build your layout using `new_gridlayout`.
+Here you simply pass a list of the elements that make up your layout
+along with column and row sizes.
+
+``` r
+library(gridlayout)
+
+# Assemble list of elements along with their positions
+elements_list <- list(
+  list(id = "header", start_row = 1, end_row = 1,
+       start_col = 1, end_col = 2),
+  list(id = "plot",   start_row = 2, end_row = 2,
+       start_col = 1, end_col = 1),
+  list(id = "table",  start_row = 2, end_row = 2,
+       start_col = 2, end_col = 2),
+  list(id = "footer", start_row = 3, end_row = 3,
+       start_col = 1, end_col = 2)
+)
+
+new_gridlayout(
+  col_sizes = c("1fr", "2fr"),
+  row_sizes = c("100px", "1fr", "1fr"),
+  element_list = elements_list
+)
+#> [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
+#>  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m
+#> [1m100px[22m header header
+#> [1m1fr  [22m plot   table 
+#> [1m1fr  [22m footer footer
+```
+
+Alternatively, you can use a matrix for a more visually intuitive layout
+system (although `my_to_gridlayout()` is even better.)
+
+``` r
+elements_mat <- matrix(c(
+  "header", "header",
+  "plot",   "table",
+  "footer", "footer"),
+  ncol = 2, byrow = TRUE
+)
+
+new_gridlayout(
+  col_sizes = c("1fr", "2fr"),
+  row_sizes = c("100px", "1fr", "1fr"),
+  layout_mat = elements_mat
+)
+#> [1mgridlayout[22m object with [1m3[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
+#>  [1m[1m     [22m[22m [1m1fr   [22m [1m2fr   [22m
+#> [1m100px[22m header header
+#> [1m1fr  [22m plot   table 
+#> [1m1fr  [22m footer footer
+```
+
+You can also build a layout from a markdown documents that have your
+layout in a code-chunk. This is useful for updating existing
+applications layouts without copying and pasting your layout table.
 
 **`my_app.rmd`**
 
@@ -116,13 +147,78 @@ table.
 
 ``` r
 my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- shinymd_to_gridlayout(my_app_loc)
+my_layout <- rmd_to_gridlayout(my_app_loc)
 my_layout
-#> gridlayout object with 2 rows, 2 columns, and gap size: 1rem 
-#>      1fr     1fr  
-#> 1fr sidebar main 
-#> 1fr sidebar main
+#> [1mgridlayout[22m object with [1m2[22m rows, [1m2[22m columns, and gap size: [1m1rem[22m 
+#>  [1m[1m   [22m[22m [1m1fr    [22m [1m1fr [22m
+#> [1m1fr[22m sidebar main
+#> [1m1fr[22m sidebar main
 ```
+
+## Using in a shiny app
+
+Once you’ve setup your layout you can use it in a Shiny app with the
+`grid_page()` ui function:
+
+``` r
+library(shiny)
+
+my_layout <- "
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"
+
+# The classic Geyser app with grid layout
+shinyApp(
+  ui = grid_page(
+    layout = my_layout,
+    header = h2("Old Faithful Geyser Data"),
+    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+    plot = plotOutput("distPlot", height = "100%")
+  ),
+  server = function(input, output) {
+    output$distPlot <- renderPlot({
+      x    <- faithful[, 2]
+      bins <- seq(min(x), max(x), length.out = input$bins + 1)
+      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    })
+  }
+)
+```
+
+<img src="/var/folders/d4/cbr0wtz50gb69vd8pqt65w0m0000gn/T//RtmpInE1OR/file16e84d294d88.png" width="100%" />
+
+`grid_page()` will automatically make your gridlayout fill the entire
+page. If you are interested in having a finer-grain control over the
+size and position of your grid layout you can use the `grid_container()`
+function to place your grid layout wherever you want. The equivalent app
+to above can be created by replacing the UI definition with a
+`fluidPage` containing a `grid_container()`:
+
+``` r
+...
+shinyApp(
+  ui = fluidPage(
+    theme = bslib::bs_theme(),
+    grid_container(
+      id = "main_grid",
+      layout = my_layout,
+      container_height = "800px",
+      elements = list(
+        header = h2(id = "header", "This is my header content"),
+        sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+        plot = plotOutput("distPlot", height = "100%")
+      )
+    )
+  ),
+  server = ...
+)
+```
+
+This time, however the grid is constrained to `800px` tall, no-matter
+how large or small the window viewing it is.
 
 ## Working with layout object
 
@@ -131,27 +227,12 @@ table spec or to the CSS that generates the given grid.
 
 ``` r
 cat(to_md(my_layout))
-#> |     |        |     |
-#> |-----|--------|-----|
-#> |1rem |1fr     |1fr  |
-#> |1fr  |sidebar |main |
-#> |1fr  |sidebar |main |
+#> to_md generic
 ```
 
 ``` r
 cat(to_css(my_layout))
-#> body {
-#>   grid-template-rows: 1fr 1fr;
-#>   grid-template-columns: 1fr 1fr;
-#>   grid-template-gap: 1rem;
-#>   padding: 1rem;
-#>   grid-template-areas:
-#>     "sidebar main"
-#>     "sidebar main";
-#> }
-#> 
-#> #sidebar { grid-area: sidebar; }
-#> #main { grid-area: main; }
+#> to_css generic
 ```
 
 If you want to get at the individual components or “elements” stored in
@@ -159,36 +240,7 @@ your grid you can use `get_elements()`.
 
 ``` r
 head(get_elements(my_layout), 2)
-#> [[1]]
-#> [[1]]$id
-#> [1] "sidebar"
-#> 
-#> [[1]]$start_row
-#> [1] 1
-#> 
-#> [[1]]$end_row
-#> [1] 2
-#> 
-#> [[1]]$start_col
-#> [1] 1
-#> 
-#> [[1]]$end_col
-#> [1] 1
-#> 
-#> 
-#> [[2]]
-#> [[2]]$id
-#> [1] "main"
-#> 
-#> [[2]]$start_row
-#> [1] 1
-#> 
-#> [[2]]$end_row
-#> [1] 2
-#> 
-#> [[2]]$start_col
-#> [1] 2
-#> 
-#> [[2]]$end_col
-#> [1] 2
+#> Warning in get_elements.default(my_layout): The get_elements function is only
+#> defined for objects of the gridlayout class
+#> [1] "The get_elements function is only defined for objects of the gridlayout class"
 ```
