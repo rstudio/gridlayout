@@ -12,7 +12,8 @@ Suggests:
     shiny,
     miniUI,
     htmltools,
-    bslib
+    bslib,
+    crayon
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

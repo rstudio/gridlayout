@@ -127,7 +127,7 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
 print.gridlayout <- function(layout){
 
   # Make text bold
-  emph <- function(text) paste0("\033[1m",text,"\033[22m")
+  emph <- if(is_installed("crayon")) crayon::bold else as.character
 
   cat(
     emph("gridlayout") %+% " object with " %+%
