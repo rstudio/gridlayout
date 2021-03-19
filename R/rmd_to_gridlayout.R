@@ -1,7 +1,11 @@
 #' Extract gridlayout from rmd file
 #'
-#' @param path_to_rmd Path to a markdown file with a `.layout .grid` chunk
-#'   in it defining a grid layout
+#' @param path_to_rmd Path to a markdown file with a `.layout .grid` chunk in it
+#'   defining a grid layout
+#' @param chunk_tag The identifying labels for the chunk that contains layout.
+#'   Aka what goes inbetween the curly braces after backticks. This is used as a
+#'   regular expression so make sure to escape characters properly. For more
+#'   guidance see \code{\link[base]{regex}}.
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -12,12 +16,12 @@
 #' my_layout <- rmd_to_gridlayout(my_app_loc)
 #' my_layout
 #'
-rmd_to_gridlayout <- function(path_to_rmd){
+rmd_to_gridlayout <- function(path_to_rmd, chunk_tag = "\\.layout \\.grid"){
   rmd_txt <- paste(readLines(path_to_rmd), collapse = "\n")
 
   layout_table <- str_extract(
     rmd_txt,
-    find_layout_regex
+    make_layout_regex(chunk_tag)
   )
 
   md_to_gridlayout(layout_table)
@@ -52,12 +56,12 @@ rmd_to_gridlayout <- function(path_to_rmd){
 #' update_rmd(loc_of_rmd, new_layout, loc_of_new_rmd)
 #' rmd_to_gridlayout(loc_of_new_rmd)
 #'
-update_rmd <- function(path_to_rmd, new_layout, updated_rmd_path = path_to_rmd){
+update_rmd <- function(path_to_rmd, new_layout, updated_rmd_path = path_to_rmd, chunk_tag = "\\.layout \\.grid"){
   rmd_txt <- paste(readLines(path_to_rmd), collapse = "\n")
 
   new_rmd <- str_replace_all(
     text = rmd_txt,
-    pattern = find_layout_regex,
+    pattern = make_layout_regex(chunk_tag),
     replacement = paste0("\n", to_md(new_layout), "\n")
   )
 
@@ -68,4 +72,8 @@ update_rmd <- function(path_to_rmd, new_layout, updated_rmd_path = path_to_rmd){
   )
 }
 
-find_layout_regex <- "(?sm)(?<=\\`\\`\\` \\{\\.layout \\.grid\\}).+?(?=\\`\\`\\`)"
+
+make_layout_regex <- function(chunk_tag){
+  paste0("(?sm)(?<=\\`\\`\\` \\{", chunk_tag, "\\}).+?(?=\\`\\`\\`)")
+}
+

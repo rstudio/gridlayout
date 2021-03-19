@@ -4,11 +4,16 @@
 \alias{rmd_to_gridlayout}
 \title{Extract gridlayout from rmd file}
 \usage{
-rmd_to_gridlayout(path_to_rmd)
+rmd_to_gridlayout(path_to_rmd, chunk_tag = "\\\\.layout \\\\.grid")
 }
 \arguments{
-\item{path_to_rmd}{Path to a markdown file with a \verb{.layout .grid} chunk
-in it defining a grid layout}
+\item{path_to_rmd}{Path to a markdown file with a \verb{.layout .grid} chunk in it
+defining a grid layout}
+
+\item{chunk_tag}{The identifying labels for the chunk that contains layout.
+Aka what goes inbetween the curly braces after backticks. This is used as a
+regular expression so make sure to escape characters properly. For more
+guidance see \code{\link[base]{regex}}.}
 }
 \value{
 Object of class \code{"gridlayout"}

@@ -4,16 +4,26 @@
 \alias{update_rmd}
 \title{Update a layout chunk in a rmd document}
 \usage{
-update_rmd(path_to_rmd, new_layout, updated_rmd_path = path_to_rmd)
+update_rmd(
+  path_to_rmd,
+  new_layout,
+  updated_rmd_path = path_to_rmd,
+  chunk_tag = "\\\\.layout \\\\.grid"
+)
 }
 \arguments{
-\item{path_to_rmd}{Path to a markdown file with a \verb{.layout .grid} chunk
-in it defining a grid layout}
+\item{path_to_rmd}{Path to a markdown file with a \verb{.layout .grid} chunk in it
+defining a grid layout}
 
 \item{new_layout}{An updated \code{gridlayout} object to replace the current one}
 
 \item{updated_rmd_path}{Where the rmd with the new layout should be
 placed. Default is overwriting the previous file}
+
+\item{chunk_tag}{The identifying labels for the chunk that contains layout.
+Aka what goes inbetween the curly braces after backticks. This is used as a
+regular expression so make sure to escape characters properly. For more
+guidance see \code{\link[base]{regex}}.}
 }
 \description{
 Update a layout chunk in a rmd document
