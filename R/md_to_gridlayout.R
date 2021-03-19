@@ -9,13 +9,42 @@
 #' @export
 #'
 #' @examples
-#' grid_obj <- md_to_gridlayout(
+#' md_to_gridlayout(
 #'   layout_table = "
 #'     |      |120px   |1fr    |1fr    |
 #'     |:-----|:-------|:------|:------|
 #'     |100px |header  |header |header |
 #'     |1fr   |sidebar |plot_a |plot_c |
 #'     |1fr   |sidebar |plot_b |plot_b |"
+#' )
+#'
+#'
+#' # Can specify gap size in upper left cell
+#' md_to_gridlayout(
+#'   layout_table = "
+#'     |25px  |120px  |1fr    |
+#'     |:-----|:------|:------|
+#'     |100px |header |header |
+#'     |1fr   |plot   |table  |
+#'     |1fr   |footer |footer |"
+#' )
+#'
+#' # Don't need to follow full md table with
+#' # header row if not desired
+#' md_to_gridlayout(
+#'   layout_table = "
+#'     |25px  |120px  |1fr    |
+#'     |100px |header |header |
+#'     |1fr   |plot   |table  |
+#'     |1fr   |footer |footer |"
+#' )
+#'
+#' # Can omit sizing as well if desired
+#' md_to_gridlayout(
+#'   layout_table = "
+#'     |header |header |
+#'     |plot   |table  |
+#'     |footer |footer |"
 #' )
 #'
 md_to_gridlayout <- function(layout_table){
