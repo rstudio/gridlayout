@@ -4,23 +4,30 @@
 \alias{grid_container}
 \title{Build gridlayout container for specified layout}
 \usage{
-grid_container(id = "grid-container", layout, elements, full_height = TRUE)
+grid_container(
+  id = "grid-container",
+  layout,
+  elements,
+  container_height = "100\%"
+)
 }
 \arguments{
-\item{id}{ID unique to this container (not the HTML will be prefixed with
-\verb{grid-})}
+\item{id}{ID unique to this container (note that the HTML will be prefixed with
+\verb{grid-} to avoid namespace clashes)}
 
 \item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{elements}{named list of the UI definitions that will be used to fill
+\item{elements}{Named list of the UI definitions that will be used to fill
 all cells. Names must match those provided in \code{layout}.}
 
-\item{full_height}{Should the grid-containing element be made as tall as
-possible? Set to \code{FALSE} if the grid is contained within another element
-and is not the whole application's UI. In this case the grid-container will take
-the full height of containing element.}
+\item{container_height}{How tall should the grid-containing element be? If
+set to \code{"viewport"} then the container will take up the entire available
+vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
+value of \code{"100\%"} will enable the the nested grid to take up the full
+vertical space provided by its parent container. Any other css size unit is
+also valid such as \code{"400px"} or \code{"100\%"}.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class \code{id}.
@@ -53,7 +60,8 @@ shinyApp(
         header = h2(id = "header", "This is my header content"),
         sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
         plot = plotOutput("distPlot", height = "100\%")
-      )
+      ),
+      container_height = "800px"
     )
   ),
   server = function(input, output) {

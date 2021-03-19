@@ -140,7 +140,7 @@
   use_card_style <span class='op'>=</span> <span class='cn'>TRUE</span>,
   element_styles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
   debug_mode <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  full_height <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  container_height <span class='op'>=</span> <span class='st'>"viewport"</span>,
   selector_prefix <span class='op'>=</span> <span class='st'>"#"</span>
 <span class='op'>)</span></pre>
 
@@ -176,10 +176,13 @@ styles to be added to each element. E.g. <code>element_styles = c("background" =
 outline applied so positioning can more easily be assessed.</p></td>
     </tr>
     <tr>
-      <th>full_height</th>
-      <td><p>Should the grid-containing element be made as tall as
-possible? Set to <code>FALSE</code> if the grid is contained within another element
-and is not the whole app's UI.</p></td>
+      <th>container_height</th>
+      <td><p>How tall should the grid-containing element be? If
+set to <code>"viewport"</code> then the container will take up the entire available
+vertical space (equivalent to the CSS value of <code>100vh</code>). For nested grids a
+value of <code>"100%"</code> will enable the the nested grid to take up the full
+vertical space provided by its parent container. Any other css size unit is
+also valid such as <code>"400px"</code> or <code>"100%"</code>.</p></td>
     </tr>
     <tr>
       <th>selector_prefix</th>
@@ -206,8 +209,54 @@ other reasons.</p></td>
     |1fr   |sidebar |plot_b |plot_b |"</span>
 <span class='op'>)</span>
 
-<span class='fu'>to_css</span><span class='op'>(</span><span class='va'>grid_obj</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "body {\n  display: grid;\n  grid-template-rows: 100px 1fr 1fr;\n  grid-template-columns: 120px 1fr 1fr;\n  grid-gap: 1rem;\n  padding: 1rem;\n  height: calc(100vh - 2*1rem);\n}\n\nbody &gt; * {\n  box-sizing: border-box;\n  padding: 0.8rem;\n  overflow: hidden;\n  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);\n  border-radius: 0.5rem;\n}\n\n.shiny-plot-output {\n  display: grid;\n  place-content: center;\n}\n\n#header {\n  grid-column-start: 1;\n  grid-column-end: 4;\n  grid-row-start: 1;\n  grid-row-end: 2;\n}\n#sidebar {\n  grid-column-start: 1;\n  grid-column-end: 2;\n  grid-row-start: 2;\n  grid-row-end: 4;\n}\n#plot_a {\n  grid-column-start: 2;\n  grid-column-end: 3;\n  grid-row-start: 2;\n  grid-row-end: 3;\n}\n#plot_b {\n  grid-column-start: 2;\n  grid-column-end: 4;\n  grid-row-start: 3;\n  grid-row-end: 4;\n}\n#plot_c {\n  grid-column-start: 3;\n  grid-column-end: 4;\n  grid-row-start: 2;\n  grid-row-end: 3;\n}"</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>to_css</span><span class='op'>(</span><span class='va'>grid_obj</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; body {
+#&gt;   display: grid;
+#&gt;   grid-template-rows: 100px 1fr 1fr;
+#&gt;   grid-template-columns: 120px 1fr 1fr;
+#&gt;   grid-gap: 1rem;
+#&gt;   padding: 1rem;
+#&gt;   height: 100vh;
+#&gt; }
+#&gt; 
+#&gt; body &gt; * {
+#&gt;   box-sizing: border-box;
+#&gt;   padding: 0.8rem;
+#&gt;   overflow: hidden;
+#&gt;   box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+#&gt;   border-radius: 0.5rem;
+#&gt; }
+#&gt; 
+#&gt; #header {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 4;
+#&gt;   grid-row-start: 1;
+#&gt;   grid-row-end: 2;
+#&gt; }
+#&gt; #sidebar {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 2;
+#&gt;   grid-row-end: 4;
+#&gt; }
+#&gt; #plot_a {
+#&gt;   grid-column-start: 2;
+#&gt;   grid-column-end: 3;
+#&gt;   grid-row-start: 2;
+#&gt;   grid-row-end: 3;
+#&gt; }
+#&gt; #plot_b {
+#&gt;   grid-column-start: 2;
+#&gt;   grid-column-end: 4;
+#&gt;   grid-row-start: 3;
+#&gt;   grid-row-end: 4;
+#&gt; }
+#&gt; #plot_c {
+#&gt;   grid-column-start: 3;
+#&gt;   grid-column-end: 4;
+#&gt;   grid-row-start: 2;
+#&gt;   grid-row-end: 3;
+#&gt; }</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

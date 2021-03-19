@@ -37,14 +37,36 @@ Construct a gridlayout object from basic parts
 }
 \examples{
 
-my_layout <- new_gridlayout(
-  layout_mat = matrix(c(
-    "header", "header",
-    "plota",  "plotb"
-  ), ncol = 2, byrow = TRUE),
+# Assemble list of elements along with their positions
+elements_list <- list(
+  list(id = "header", start_row = 1, end_row = 1,
+       start_col = 1, end_col = 2),
+  list(id = "plot",   start_row = 2, end_row = 2,
+       start_col = 1, end_col = 1),
+  list(id = "table",  start_row = 2, end_row = 2,
+       start_col = 2, end_col = 2),
+  list(id = "footer", start_row = 3, end_row = 3,
+       start_col = 1, end_col = 2)
+)
+
+new_gridlayout(
   col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr"),
-  gap = "2rem"
+  row_sizes = c("100px", "1fr", "1fr"),
+  element_list = elements_list
+)
+
+# Can also use a matrix for more visually intuitive laying out
+elements_mat <- matrix(c(
+  "header", "header",
+  "plot",   "table",
+  "footer", "footer"),
+  ncol = 2, byrow = TRUE
+)
+
+new_gridlayout(
+  col_sizes = c("1fr", "2fr"),
+  row_sizes = c("100px", "1fr", "1fr"),
+  layout_mat = elements_mat
 )
 
 }

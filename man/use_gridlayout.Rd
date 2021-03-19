@@ -26,10 +26,12 @@ to make it stand out?}
 styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
     \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
-    \item{\code{full_height}}{Should the grid-containing element be made as tall as
-possible? Set to \code{FALSE} if the grid is contained within another element
-and is not the whole application's UI. In this case the grid-container will take
-the full height of containing element.}
+    \item{\code{container_height}}{How tall should the grid-containing element be? If
+set to \code{"viewport"} then the container will take up the entire available
+vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
+value of \code{"100\%"} will enable the the nested grid to take up the full
+vertical space provided by its parent container. Any other css size unit is
+also valid such as \code{"400px"} or \code{"100\%"}.}
     \item{\code{selector_prefix}}{CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
 ids (the \code{"#"} prefix) with because they are not available or are used for

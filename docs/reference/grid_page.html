@@ -148,32 +148,32 @@ desired layout for your Shiny app.</p></td>
     <tr>
       <th>...</th>
       <td><p>Contents of each grid element. For instance the contents of the
-header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>.</p></td>
+header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>. Any arguments that don't match the names used in the layout
+definition are added to the page after the container. This can be used to
+do things like things to the <code>head</code> or <code>meta</code> sections of the page.</p></td>
     </tr>
     <tr>
       <th>theme</th>
-      <td><p>Optional argument to pass to <code>theme</code> argument of <code><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>.verify_matches</th>
-      <td><p>If <code>TRUE</code> then the function will make sure defined
-elements match those specified in <code>layout</code> declaration. For advanced
-use-cases such as utilizing css-grid's auto-fill, this can be disabled with
-<code>FALSE</code>.</p></td>
+      <td><p>Optional argument to pass to <code>theme</code> argument of
+<code><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A UI definition that can be passed to the <code><a href='https://rdrr.io/pkg/shiny/man/shinyUI.html'>shinyUI</a></code> function.</p>
+    <p>A UI definition that can be passed to the
+<code><a href='https://rdrr.io/pkg/shiny/man/shinyUI.html'>shinyUI</a></code> function.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>grid_panel</p></div>
+    <div class='dont-index'><p>grid_container</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Only run these examples in interactive R sessions</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"shiny"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"bslib"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
 <span class='va'>my_layout</span> <span class='op'>&lt;-</span> <span class='st'>"
 |      |        |         |
 |------|--------|---------|
@@ -182,19 +182,16 @@ use-cases such as utilizing css-grid's auto-fill, this can be disabled with
 |1fr   |sidebar |distPlot |"</span>
 
 <span class='co'># The classic Geyser app with grid layout</span>
-<span class='fu'>shinyApp</span><span class='op'>(</span>
+<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
   ui <span class='op'>=</span> <span class='fu'>grid_page</span><span class='op'>(</span>
     layout <span class='op'>=</span> <span class='va'>my_layout</span>,
     theme <span class='op'>=</span> <span class='fu'>bslib</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/bslib//reference/bs_theme.html'>bs_theme</a></span><span class='op'>(</span><span class='op'>)</span>,
-    <span class='fu'>h2</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>, <span class='st'>"This is my header content"</span><span class='op'>)</span>,
-    <span class='fu'><a href='grid_panel.html'>grid_panel</a></span><span class='op'>(</span>
-      id <span class='op'>=</span> <span class='st'>"sidebar"</span>,
-      <span class='fu'>sliderInput</span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
-    <span class='op'>)</span>,
-    <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
+    header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span><span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>,
+    sidebar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
+    plot <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
   <span class='op'>)</span>,
   server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>output</span><span class='op'>$</span><span class='va'>distPlot</span> <span class='op'>&lt;-</span> <span class='fu'>renderPlot</span><span class='op'>(</span><span class='op'>{</span>
+    <span class='va'>output</span><span class='op'>$</span><span class='va'>distPlot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
       <span class='va'>x</span>    <span class='op'>&lt;-</span> <span class='va'>faithful</span><span class='op'>[</span>, <span class='fl'>2</span><span class='op'>]</span>
       <span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>bins</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='va'>x</span>, breaks <span class='op'>=</span> <span class='va'>bins</span>, col <span class='op'>=</span> <span class='st'>'darkgray'</span>, border <span class='op'>=</span> <span class='st'>'white'</span><span class='op'>)</span>

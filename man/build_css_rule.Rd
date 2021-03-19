@@ -28,6 +28,6 @@ custom_styles <- c(
   "border" = "1px solid red",
   "cursor: none"
 )
-build_css_rule(custom_styles)
+cat(build_css_rule("#myDiv", custom_styles))
 
 }

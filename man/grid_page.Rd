@@ -12,12 +12,16 @@ grid_page(layout, ..., theme, .verify_matches = TRUE)
 desired layout for your Shiny app.}
 
 \item{...}{Contents of each grid element. For instance the contents of the
-header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}.}
+header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}. Any arguments that don't match the names used in the layout
+definition are added to the page after the container. This can be used to
+do things like things to the \code{head} or \code{meta} sections of the page.}
 
-\item{theme}{Optional argument to pass to \code{theme} argument of \code{\link[shiny]{fluidPage}}.}
+\item{theme}{Optional argument to pass to \code{theme} argument of
+\code{\link[shiny]{fluidPage}}.}
 }
 \value{
-A UI definition that can be passed to the \code{\link[shiny]{shinyUI}} function.
+A UI definition that can be passed to the
+\code{\link[shiny]{shinyUI}} function.
 }
 \description{
 Setup gridlayout UI for shiny app
@@ -25,7 +29,10 @@ Setup gridlayout UI for shiny app
 \examples{
 # Only run these examples in interactive R sessions
 if (interactive()) {
+requireNamespace("shiny", quietly = TRUE)
+requireNamespace("bslib", quietly = TRUE)
 
+library(shiny)
 my_layout <- "
 |      |        |         |
 |------|--------|---------|
@@ -38,7 +45,7 @@ shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    header = h2(id = "header", "This is my header content"),
+    header = h2("Old Faithful Geyser Data"),
     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
     plot = plotOutput("distPlot", height = "100\%")
   ),

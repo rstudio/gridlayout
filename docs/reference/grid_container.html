@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert layout to css for Shiny — use_gridlayout • gridlayout</title>
+<title>Build gridlayout container for specified layout — grid_container • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,9 +40,9 @@
 
 
 
-<meta property="og:title" content="Convert layout to css for Shiny — use_gridlayout" />
-<meta property="og:description" content="This simply wraps the output of to_css() in a style tag and escapes HTML
-characters to simplify using in Shiny" />
+<meta property="og:title" content="Build gridlayout container for specified layout — grid_container" />
+<meta property="og:description" content="Builds a gridlayout within a div of specified id. Not typically called
+directly but can be used to create nested grids" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,21 +126,31 @@ characters to simplify using in Shiny" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert layout to css for Shiny</h1>
+    <h1>Build gridlayout container for specified layout</h1>
     
-    <div class="hidden name"><code>use_gridlayout.Rd</code></div>
+    <div class="hidden name"><code>grid_container.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This simply wraps the output of <code><a href='to_css.html'>to_css()</a></code> in a <code>style</code> tag and escapes HTML
-characters to simplify using in Shiny</p>
+    <p>Builds a gridlayout within a div of specified id. Not typically called
+directly but can be used to create nested grids</p>
     </div>
 
-    <pre class="usage"><span class='fu'>use_gridlayout</span><span class='op'>(</span><span class='va'>layout</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>grid_container</span><span class='op'>(</span>
+  id <span class='op'>=</span> <span class='st'>"grid-container"</span>,
+  <span class='va'>layout</span>,
+  <span class='va'>elements</span>,
+  container_height <span class='op'>=</span> <span class='st'>"100%"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>id</th>
+      <td><p>ID unique to this container (note that the HTML will be prefixed with
+<code>grid-</code> to avoid namespace clashes)</p></td>
+    </tr>
     <tr>
       <th>layout</th>
       <td><p>Either a markdown table representation (see
@@ -148,65 +158,51 @@ characters to simplify using in Shiny</p>
 desired layout for your Shiny app.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Arguments passed on to <code><a href='to_css.html'>to_css</a></code></p><dl>
-    <dt><code>container</code></dt><dd><p>Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the <code>body</code> element) for whole page
-grids. If an simple name is passed it is assumed that it is an id: i.e. the
-css id selector <code>#</code> is apended to the name. If container contains css
-selector characters such as a dot, the selector will not be transformed
-into an id automatically. E.g. <code>container = ".main-content"</code>.</p></dd>
-    <dt><code>use_card_style</code></dt><dd><p>Should each section of the grid be given a card style
-to make it stand out?</p></dd>
-    <dt><code>element_styles</code></dt><dd><p>A list of named property-value pairs for additional
-styles to be added to each element. E.g. <code>element_styles = c("background" = "blue")</code>.</p></dd>
-    <dt><code>debug_mode</code></dt><dd><p>If set to <code>TRUE</code> then each element of the grid will have an
-outline applied so positioning can more easily be assessed.</p></dd>
-    <dt><code>container_height</code></dt><dd><p>How tall should the grid-containing element be? If
+      <th>elements</th>
+      <td><p>Named list of the UI definitions that will be used to fill
+all cells. Names must match those provided in <code>layout</code>.</p></td>
+    </tr>
+    <tr>
+      <th>container_height</th>
+      <td><p>How tall should the grid-containing element be? If
 set to <code>"viewport"</code> then the container will take up the entire available
 vertical space (equivalent to the CSS value of <code>100vh</code>). For nested grids a
 value of <code>"100%"</code> will enable the the nested grid to take up the full
 vertical space provided by its parent container. Any other css size unit is
-also valid such as <code>"400px"</code> or <code>"100%"</code>.</p></dd>
-    <dt><code>selector_prefix</code></dt><dd><p>CSS prefix used to target grid elements. This will
-change if you're integrating grid with a system that you don't want to use
-ids (the <code>"#"</code> prefix) with because they are not available or are used for
-other reasons.</p></dd>
-  
-</dl></td>
+also valid such as <code>"400px"</code> or <code>"100%"</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Character string of css used to setup grid layout and place elements
-(referenced by id) into correct locations</p>
+    <p>A taglist with grid elements wrapped inside a container div of class <code>id</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Only run these examples in interactive R sessions</span>
+    <pre class="examples"><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>gridlayout</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"bslib"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>my_layout</span> <span class='op'>&lt;-</span> <span class='st'>"
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|100px |header  |header   |
-|1fr   |sidebar |distPlot |"</span>
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"</span>
 
 <span class='co'># The classic Geyser app with grid layout</span>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
   ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-    <span class='fu'>use_gridlayout</span><span class='op'>(</span><span class='va'>my_layout</span>, <span class='st'>"app-container"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>
-      id <span class='op'>=</span> <span class='st'>"app-container"</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>,
-          <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"app-title"</span>, <span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>
+    theme <span class='op'>=</span> <span class='fu'>bslib</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/bslib//reference/bs_theme.html'>bs_theme</a></span><span class='op'>(</span><span class='op'>)</span>,
+    <span class='fu'>grid_container</span><span class='op'>(</span>
+      id <span class='op'>=</span> <span class='st'>"main_grid"</span>,
+      layout <span class='op'>=</span> <span class='va'>my_layout</span>,
+      elements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>, <span class='st'>"This is my header content"</span><span class='op'>)</span>,
+        sidebar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
+        plot <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
       <span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"sidebar"</span>,
-          <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>,
-                      min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
-      <span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span><span class='op'>)</span>
+      container_height <span class='op'>=</span> <span class='st'>"800px"</span>
     <span class='op'>)</span>
   <span class='op'>)</span>,
   server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
@@ -218,6 +214,7 @@ other reasons.</p></dd>
   <span class='op'>}</span>
 <span class='op'>)</span>
 <span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
