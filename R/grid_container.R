@@ -5,7 +5,7 @@
 #'
 #' @param id ID unique to this container (note that the HTML will be prefixed with
 #'   `grid-` to avoid namespace clashes)
-#' @inheritParams use_gridlayout
+#' @inheritParams use_gridlayout_shiny
 #' @inheritParams to_css
 #' @param elements Named list of the UI definitions that will be used to fill
 #'   all cells. Names must match those provided in `layout`.
@@ -98,7 +98,7 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
 
   # Build container div, append the styles to head and then return
   shiny::tagList(
-    use_gridlayout(layout,
+    use_gridlayout_shiny(layout,
                    container = id,
                    selector_prefix = paste0("#", id_prefix),
                    container_height = container_height),

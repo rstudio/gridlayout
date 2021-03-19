@@ -1,6 +1,6 @@
 #' Setup gridlayout UI for shiny app
 #'
-#' @inheritParams use_gridlayout
+#' @inheritParams use_gridlayout_shiny
 #' @param ... Contents of each grid element. For instance the contents of the
 #'   header (as defined in `layout`) would be set with `header = h2("App
 #'   Title")`. Any arguments that don't match the names used in the layout

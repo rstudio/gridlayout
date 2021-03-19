@@ -45,7 +45,7 @@ to_app_template.gridlayout <- function(layout){
     "\")",
     "",
     "ui <- fluidPage(",
-    "  use_gridlayout(app_layout, \"app-container\", use_card_style = TRUE),",
+    "  use_gridlayout_shiny(app_layout, \"app-container\", use_card_style = TRUE),",
     "  div(id = \"app-container\",",
     element_divs,
     "  )",

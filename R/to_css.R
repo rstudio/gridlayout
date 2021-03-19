@@ -161,7 +161,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = fluidPage(
-#'     use_gridlayout(my_layout, "app-container"),
+#'     use_gridlayout_shiny(my_layout, "app-container"),
 #'     div(
 #'       id = "app-container",
 #'       div(id = "header",
@@ -183,7 +183,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
 #'   }
 #' )
 #' }
-use_gridlayout <- function(layout, ...){
+use_gridlayout_shiny <- function(layout, ...){
   requireNamespace("htmltools", quietly = TRUE)
   layout <- coerce_to_layout(layout)
   htmltools::tags$head(
@@ -191,5 +191,37 @@ use_gridlayout <- function(layout, ...){
       htmltools::HTML(to_css(layout, ...))
     )
   )
+}
+
+#' Enable gridlayout usage in RMarkdown documents
+#'
+#' Adds required hooks to RMarkdown to process `gridlayout` chunks and style document accordingly.
+#'
+#' @return NULL
+#' @export
+#'
+use_gridlayout_rmd <- function(){
+
+  requireNamespace("knitr", quietly = TRUE)
+
+  knitr::knit_engines$set(gridlayout = function(options) {
+    code <- paste(options$code, collapse = "\n")
+    if (options$eval) {
+      layout <- md_to_gridlayout(code)
+      css_for_layout <- paste(
+        "<style>",
+        to_css(layout, container = '.main-container', container_height = 'viewport'),
+        "</style>",
+        sep = "\n"
+      )
+    }
+    options$results <- "asis"
+    options$echo <- FALSE
+    knitr::engine_output(
+      options,
+      code = options$code,
+      out = css_for_layout
+    )
+  })
 }
 
