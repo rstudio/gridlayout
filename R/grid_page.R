@@ -63,56 +63,10 @@ grid_page <- function(layout, ..., theme, .verify_matches = TRUE){
     theme = if(!missing(theme)) theme,
     grid_container(
       layout = layout,
-      elements = grid_element_args
+      elements = grid_element_args,
+      container_height = "viewport"
     ),
     if(length(extra_args) != 0) extra_args #any extra args not matched to layout will get added after
   )
 
 }
-
-#' Panel element for a grid layout
-#'
-#' @param id Id of element in grid. This should match one of the ids in layout declaration given to \code{\link{grid_page}}.
-#'
-#' @param ... Any children elements or arguments to be passed to containing \code{\link[shiny]{div}}.
-#'
-#' @seealso grid_page
-#' @export
-#'
-#' @examples
-#' # Only run these examples in interactive R sessions
-#' if (interactive()) {
-#'
-#' my_layout <- "
-#' |      |        |         |
-#' |------|--------|---------|
-#' |2rem  |200px   |1fr      |
-#' |150px |header  |header   |
-#' |1fr   |sidebar |distPlot |"
-#'
-#' # The classic Geyser app with grid layout
-#' shinyApp(
-#'   ui = grid_page(
-#'     layout = my_layout,
-#'     theme = bslib::bs_theme(),
-#'     h2(id = "header", "This is my header content"),
-#'     grid_panel(
-#'       id = "sidebar",
-#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
-#'     ),
-#'     plotOutput("distPlot", height = "100%")
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x    <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#'     })
-#'   }
-#' )
-#'
-#' }
-grid_panel <- function(id, ...){
-  shiny::div(id = id, ...)
-}
-

@@ -122,7 +122,7 @@ test_that("Custom styles can be added by the user for further customization of c
 })
 
 
-test_that("Height setting can be un-set", {
+test_that("Height setting can be customized", {
   grid_obj <- md_to_gridlayout(
     layout_table = "
     |      |120px   |1fr    |1fr    |
@@ -135,16 +135,16 @@ test_that("Height setting can be un-set", {
 
   expect_true(
     str_detect(
-      to_css(grid_obj),
+      to_css(grid_obj, container_height = "viewport"),
       "height: 100vh",
       fixed = TRUE
     )
   )
 
-  expect_false(
+  expect_true(
     str_detect(
-      to_css(grid_obj, full_height = FALSE),
-      "height: 100vh",
+      to_css(grid_obj, container_height = "800px"),
+      "height: 800px",
       fixed = TRUE
     )
   )

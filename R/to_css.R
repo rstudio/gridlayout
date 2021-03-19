@@ -14,10 +14,12 @@
 #'   "blue")`.
 #' @param debug_mode If set to `TRUE` then each element of the grid will have an
 #'   outline applied so positioning can more easily be assessed.
-#' @param full_height Should the grid-containing element be made as tall as
-#'   possible? Set to `FALSE` if the grid is contained within another element
-#'   and is not the whole application's UI. In this case the grid-container will take
-#'   the full height of containing element.
+#' @param container_height How tall should the grid-containing element be? If
+#'   set to `"viewport"` then the container will take up the entire available
+#'   vertical space (equivalent to the CSS value of `100vh`). For nested grids a
+#'   value of `"100%"` will enable the the nested grid to take up the full
+#'   vertical space provided by its parent container. Any other css size unit is
+#'   also valid such as `"400px"` or `"100%"`.
 #' @param selector_prefix CSS prefix used to target grid elements. This will
 #'   change if you're integrating grid with a system that you don't want to use
 #'   ids (the `"#"` prefix) with because they are not available or are used for
@@ -40,17 +42,17 @@
 #' to_css(grid_obj)
 #'
 #' @export
-to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#") {
+to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#") {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#"){
+to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, full_height = TRUE, selector_prefix = "#"){
+to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
 
   container_query <- if(missing(container)){
     "body"
@@ -79,6 +81,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
   )
 
   collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
+
   main_container_styles <- build_css_rule(
     selector = container_query,
     prop_list = c(
@@ -87,7 +90,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(full_height) "100vh" else c("100%")
+      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
     )
   )
 

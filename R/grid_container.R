@@ -3,11 +3,11 @@
 #' Builds a gridlayout within a div of specified id. Not typically called
 #' directly but can be used to create nested grids
 #'
-#' @param id ID unique to this container (not the HTML will be prefixed with
-#'   `grid-`)
+#' @param id ID unique to this container (note that the HTML will be prefixed with
+#'   `grid-` to avoid namespace clashes)
 #' @inheritParams use_gridlayout
 #' @inheritParams to_css
-#' @param elements named list of the UI definitions that will be used to fill
+#' @param elements Named list of the UI definitions that will be used to fill
 #'   all cells. Names must match those provided in `layout`.
 #'
 #' @return A taglist with grid elements wrapped inside a container div of class `id`.
@@ -37,7 +37,8 @@
 #'         header = h2(id = "header", "This is my header content"),
 #'         sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
 #'         plot = plotOutput("distPlot", height = "100%")
-#'       )
+#'       ),
+#'       container_height = "800px"
 #'     )
 #'   ),
 #'   server = function(input, output) {
@@ -50,7 +51,7 @@
 #' )
 #' }
 #'
-grid_container <- function(id = "grid-container", layout, elements, full_height = TRUE){
+grid_container <- function(id = "grid-container", layout, elements, container_height = "100%"){
 
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
@@ -100,7 +101,59 @@ grid_container <- function(id = "grid-container", layout, elements, full_height 
 
   # Build container div, append the styles to head and then return
   shiny::tagList(
-    use_gridlayout(layout, container = id, selector_prefix = paste0("#", id_prefix), full_height = full_height),
+    use_gridlayout(layout,
+                   container = id,
+                   selector_prefix = paste0("#", id_prefix),
+                   container_height = container_height),
     shiny::div(id = id, shiny::tagList(grid_elements))
   )
 }
+
+
+#' Panel element for a grid layout
+#'
+#' @param id Id of element in grid. This should match one of the ids in layout declaration given to \code{\link{grid_page}}.
+#'
+#' @param ... Any children elements or arguments to be passed to containing \code{\link[shiny]{div}}.
+#'
+#' @seealso grid_page, grid_container
+#' @export
+#'
+#' @examples
+#' # Only run these examples in interactive R sessions
+#' if (interactive()) {
+#'
+#' my_layout <- "
+#' |      |        |         |
+#' |------|--------|---------|
+#' |2rem  |200px   |1fr      |
+#' |150px |header  |header   |
+#' |1fr   |sidebar |distPlot |"
+#'
+#' # The classic Geyser app with grid layout
+#' shinyApp(
+#'   ui = grid_page(
+#'     layout = my_layout,
+#'     theme = bslib::bs_theme(),
+#'     h2(id = "header", "This is my header content"),
+#'     grid_panel(
+#'       id = "sidebar",
+#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
+#'     ),
+#'     plotOutput("distPlot", height = "100%")
+#'   ),
+#'   server = function(input, output) {
+#'     output$distPlot <- renderPlot({
+#'       x    <- faithful[, 2]
+#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
+#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
+#'     })
+#'   }
+#' )
+#'
+#' }
+grid_panel <- function(id, ...){
+  shiny::div(id = id, ...)
+}
+
+
