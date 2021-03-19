@@ -19,6 +19,19 @@ shinyApp(
     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
     plot = plotOutput("distPlot", height = "100%")
   ),
+  # ui = fluidPage(
+  #   theme = bslib::bs_theme(),
+  #   grid_container(
+  #     id = "main_grid",
+  #     layout = my_layout,
+  #     container_height = "800px",
+  #     elements = list(
+  #       header = h2(id = "header", "This is my header content"),
+  #       sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
+  #       plot = plotOutput("distPlot", height = "100%")
+  #     )
+  #   )
+  # ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
       x    <- faithful[, 2]
