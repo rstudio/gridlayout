@@ -40,11 +40,3 @@ app <- shinyApp(
     })
   }
 )
-
-webshot2::appshot(
-  app = app,
-  vwidth = 1600,
-  vheight = 1200,
-  cliprect = "viewport"
-)
-
