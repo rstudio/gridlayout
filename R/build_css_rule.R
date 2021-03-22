@@ -1,13 +1,16 @@
 #' Build css properties named or unnamed list of property values
 #'
-#' @param selector valid css selector to target. E.g. `body` or `div.blue_boxes`...
-#' @param prop_list A list of property-value pairs for additional styles to
-#'   be added to each element. Pairs can be given as named elements: e.g.
+#' @param selector valid css selector to target. E.g. `body` or
+#'   `div.blue_boxes`... For inline styles where no selector is desired use
+#'   `"inline"`.
+#' @param prop_list A list of property-value pairs for additional styles to be
+#'   added to each element. Pairs can be given as named elements: e.g.
 #'   `element_styles = c("background" = "blue")`, or simple as the whole
 #'   character: e.g. `element_styles = c("background: blue")`. (Semicolon usage
 #'   doesn't matter for single character declaration.)
 #'
-#' @return A concatenated string of property values to be used inside a css selector.
+#' @return A concatenated string of property values to be used inside a css
+#'   selector.
 #'
 #' @examples
 #'
@@ -19,7 +22,6 @@
 #' cat(build_css_rule("#myDiv", custom_styles))
 #'
 build_css_rule <- function(selector, prop_list){
-
   prop_names <- names(prop_list)
   if(is.null(prop_names)) prop_names <- rep_len("", length(prop_list))
 
@@ -51,23 +53,31 @@ build_css_rule <- function(selector, prop_list){
       warning("The passed css property \"", line_txt, "\" doesn't appear to be valid. Ignoring it.")
     }
   }
+  css_text <- paste(prop_lines, collapse = "\n")
 
-  css_txt <- paste(prop_lines, collapse = "\n")
+  # Inline mode means we just give all the css on oneline with no sector needed.
+  inline_mode <- selector == "inline"
+
   # Make sure we dont have any whitespace at the end of our lines We need to do
   # this again because the user may have passed some text with spaces etc at the
   # end of the lines...
-  css_txt <- paste(
-    trim_trailing(
-      strsplit(x = css_txt, split = "\n")[[1]]
+  css_text <- paste(
+    str_trim(
+      strsplit(x = css_text, split = "\n")[[1]],
+      side = if(inline_mode) "both" else "right"
     ),
-    collapse = "\n"
+    collapse = if(inline_mode) " " else "\n"
   )
 
-  paste0(
-    selector, " {\n",
-    css_txt,
-    "\n}"
-  )
+  if(inline_mode){
+    css_text
+  } else {
+    paste0(
+      selector, " {\n",
+      css_text,
+      "\n}"
+    )
+  }
 }
 
 
