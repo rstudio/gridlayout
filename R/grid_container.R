@@ -95,7 +95,8 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
       prefixed_id <- paste0(id_prefix, el_id)
       el_class <- el$attribs$class
       if(!is.null(el_class) && str_detect("grid_panel", el_class)){
-        # If element is already wrapped in a grid_panel, we just need to update the id
+        # If element is already wrapped in a grid_panel, we just need to update
+        # the id
         el$attribs$id <- prefixed_id
         el
       } else {
@@ -106,10 +107,11 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
 
   # Build container div, append the styles to head and then return
   shiny::tagList(
-    use_gridlayout_shiny(layout,
-                   container = id,
-                   selector_prefix = paste0("#", id_prefix),
-                   container_height = container_height),
+    use_gridlayout_shiny(
+      layout,
+      container = id,
+      selector_prefix = paste0("#", id_prefix),
+      container_height = container_height),
     shiny::div(id = id, shiny::tagList(grid_elements))
   )
 }
