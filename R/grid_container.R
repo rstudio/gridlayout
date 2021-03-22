@@ -92,7 +92,15 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
   grid_elements <- map_w_names(
     elements,
     function(el_id, el){
-      shiny::div(id = paste0(id_prefix, el_id), el)
+      prefixed_id <- paste0(id_prefix, el_id)
+      el_class <- el$attribs$class
+      if(!is.null(el_class) && str_detect("grid_panel", el_class)){
+        # If element is already wrapped in a grid_panel, we just need to update the id
+        el$attribs$id <- prefixed_id
+        el
+      } else {
+        grid_panel(id = prefixed_id, el)
+      }
     }
   )
 
