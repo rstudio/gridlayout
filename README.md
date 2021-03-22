@@ -166,8 +166,8 @@ shinyApp(
 )
 ```
 
-<img src="man/figures/basic_grid_demo.png" width="100%" /> *Screenshot
-of grided geyser app running*
+<img src="man/figures/geyser_demo.png" width="100%" /> *Screenshot of
+grided geyser app running*
 
 `grid_page()` will automatically make your gridlayout fill the entire
 page. If you are interested in having a finer-grain control over the

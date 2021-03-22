@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+source("tools/generate_screenshots.R")
 ```
 
 # gridlayout
@@ -150,7 +152,7 @@ shinyApp(
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("man/figures/basic_grid_demo.png")
+knitr::include_graphics("man/figures/geyser_demo.png")
 ```
 _Screenshot of grided geyser app running_
 
