@@ -7,16 +7,19 @@
 build_css_rule(selector, prop_list)
 }
 \arguments{
-\item{selector}{valid css selector to target. E.g. \code{body} or \code{div.blue_boxes}...}
+\item{selector}{valid css selector to target. E.g. \code{body} or
+\code{div.blue_boxes}... For inline styles where no selector is desired use
+\code{"inline"}.}
 
-\item{prop_list}{A list of property-value pairs for additional styles to
-be added to each element. Pairs can be given as named elements: e.g.
+\item{prop_list}{A list of property-value pairs for additional styles to be
+added to each element. Pairs can be given as named elements: e.g.
 \code{element_styles = c("background" = "blue")}, or simple as the whole
 character: e.g. \code{element_styles = c("background: blue")}. (Semicolon usage
 doesn't matter for single character declaration.)}
 }
 \value{
-A concatenated string of property values to be used inside a css selector.
+A concatenated string of property values to be used inside a css
+selector.
 }
 \description{
 Build css properties named or unnamed list of property values
