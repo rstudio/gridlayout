@@ -8,7 +8,11 @@
 #'   selector characters such as a dot, the selector will not be transformed
 #'   into an id automatically. E.g. `container = ".main-content"`.
 #' @param use_card_style Should each section of the grid be given a card style
-#'   to make it stand out?
+#'   to make it stand out? Options are `"grid_panel"`, where only elements with
+#'   `"grid_panel"` class will get card styling, `"all"` where all children of
+#'   the grid container will get card styling (useful for RMarkdown or other
+#'   situations where you don't control child rendering) or `"none"` for no card
+#'   styling.
 #' @param element_styles A list of named property-value pairs for additional
 #'   styles to be added to each element. E.g. `element_styles = c("background" =
 #'   "blue")`.
@@ -42,17 +46,17 @@
 #' cat(to_css(grid_obj))
 #'
 #' @export
-to_css <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#") {
+to_css <- function(layout, container, use_card_style = "grid_panel", element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#") {
   UseMethod("to_css")
 }
 
 #' @export
-to_css.default <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
+to_css.default <- function(layout, container, use_card_style = "grid_panel", element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
   cat("to_css generic")
 }
 
 #' @export
-to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
+to_css.gridlayout <- function(layout, container, use_card_style = "grid_panel", element_styles = c(), debug_mode = FALSE, container_height = "viewport", selector_prefix = "#"){
 
   container_query <- if(missing(container)){
     "body"
@@ -94,11 +98,11 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
     )
   )
 
-  card_style_list <- if(use_card_style) {
+  card_style_list <- if(use_card_style == "none") {
+    c()
+  } else {
     c("box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
       "border-radius" = "0.5rem")
-  } else {
-    c()
   }
 
   debug_style_list <- if(debug_mode){
@@ -108,7 +112,7 @@ to_css.gridlayout <- function(layout, container, use_card_style = TRUE, element_
   }
 
   card_styles <- build_css_rule(
-    selector = paste0(container_query, " > *"),
+    selector = paste0(container_query, if(use_card_style == "all") " > *" else " .grid_panel"),
     prop_list = c(
       "box-sizing" = "border-box",
       "padding" = "0.8rem",
@@ -210,7 +214,7 @@ use_gridlayout_rmd <- function(){
       layout <- md_to_gridlayout(code)
       css_for_layout <- paste(
         "<style>",
-        to_css(layout, container = '.main-container', container_height = 'viewport'),
+        to_css(layout, container = '.main-container', container_height = 'viewport', use_card_style = "all"),
         "</style>",
         sep = "\n"
       )
