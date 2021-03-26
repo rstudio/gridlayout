@@ -63,7 +63,8 @@ window.onload = function () {
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = document.querySelector("#grid_holder");
+  const grid_holder: HTMLElement = document.querySelector("#grid_page");
+
   const settings_panel: HTMLElement = document.querySelector(
     "#settings .card-body"
   );

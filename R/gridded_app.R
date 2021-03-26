@@ -1,8 +1,6 @@
 gridded_app <- function(starting_layout = new_gridlayout(),
                         update_btn_text = "update button",
-                        on_update = function(new_layout){
-                          print(new_layout)
-                        },
+                        on_update = function(new_layout) print(new_layout),
                         return_app_obj = FALSE){
 
   requireNamespace("miniUI", quietly = TRUE)
@@ -10,7 +8,7 @@ gridded_app <- function(starting_layout = new_gridlayout(),
 
   starting_elements <- get_elements(starting_layout)
 
-  ui <- grided_ui_wrapper(shiny::uiOutput("grid_holder"),update_btn_text = update_btn_text)
+  ui <- grided_ui_wrapper(shiny::uiOutput("grid_page"),update_btn_text = update_btn_text)
 
   server <- function(input, output, session) {
 

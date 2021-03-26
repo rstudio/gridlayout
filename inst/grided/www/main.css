@@ -185,7 +185,7 @@ button.minus_btn.disabled {
   fill: var(--blue);
 }
 
-#grid_holder {
+#grid_page {
   --grid-gap: 1rem;
   --padding: 0.5rem;
   height: calc(100% - var(--browser-menu-height));
@@ -209,7 +209,7 @@ button.minus_btn.disabled {
   border: 2px solid var(--light-gray);
 }
 
-#grid_holder .added-element {
+#grid_page .added-element {
   background: none;
   /* pointer-events: none; So the cells beneath the elements can be selected still */
   position: relative;
@@ -237,7 +237,7 @@ button.minus_btn.disabled {
   transform: scale(1.05);
 }
 
-#grid_holder .added-element.hovered,
+#grid_page .added-element.hovered,
 #current_selection_box.added-element {
   border-width: 7px;
 }
