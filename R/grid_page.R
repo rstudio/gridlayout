@@ -70,6 +70,7 @@ grid_page <- function(layout, ..., theme, layout_edit_mode = FALSE, .verify_matc
   extra_args <- arg_sections[!(arg_ids %in% layout_ids)]
 
   container <- grid_container(
+    id = "grid_page",
     layout = layout,
     elements = grid_element_args,
     container_height = if(layout_edit_mode) "100%" else "viewport"
