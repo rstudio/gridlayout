@@ -39,13 +39,13 @@ test_that("Card styling can be disabled", {
 
   expect_false(
     str_detect(
-      to_css(grid_obj, use_card_style = FALSE),
+      to_css(grid_obj, use_card_style = "none"),
       "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);", fixed = TRUE
     )
   )
   expect_false(
     str_detect(
-      to_css(grid_obj, use_card_style = FALSE),
+      to_css(grid_obj, use_card_style = "none"),
       "border-radius: 0.5rem;",
       fixed = TRUE
     )
@@ -53,7 +53,7 @@ test_that("Card styling can be disabled", {
 
   expect_true(
     str_detect(
-      to_css(grid_obj, use_card_style = TRUE),
+      to_css(grid_obj, use_card_style = ""),
       "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);",
       fixed = TRUE
     )

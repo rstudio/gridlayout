@@ -21,7 +21,11 @@ css id selector \verb{#} is apended to the name. If container contains css
 selector characters such as a dot, the selector will not be transformed
 into an id automatically. E.g. \code{container = ".main-content"}.}
     \item{\code{use_card_style}}{Should each section of the grid be given a card style
-to make it stand out?}
+to make it stand out? Options are \code{"grid_panel"}, where only elements with
+\code{"grid_panel"} class will get card styling, \code{"all"} where all children of
+the grid container will get card styling (useful for RMarkdown or other
+situations where you don't control child rendering) or \code{"none"} for no card
+styling.}
     \item{\code{element_styles}}{A list of named property-value pairs for additional
 styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
     \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
