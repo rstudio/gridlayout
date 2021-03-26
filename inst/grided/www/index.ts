@@ -22,6 +22,7 @@ import {
   Drag_Type,
 } from "./misc-helpers";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
+import { find_rules_by_selector } from "./find_rules_by_selector";
 
 export const Shiny = (window as any).Shiny;
 
@@ -52,6 +53,11 @@ interface Drag_Options {
   on_end?: (drag_info: Drag_Res) => void;
 }
 
+const enum App_Mode {
+  ShinyNew,
+  ShinyExisting,
+  ClientSide,
+}
 window.onload = function () {
   draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
@@ -112,7 +118,35 @@ window.onload = function () {
     update_grid({ [dir]: current_vals });
   }
 
-  if (Shiny) {
+  const app_mode: App_Mode = grid_holder.hasChildNodes()
+    ? App_Mode.ShinyExisting
+    : Shiny
+    ? App_Mode.ShinyNew
+    : App_Mode.ClientSide;
+
+  if (app_mode === App_Mode.ShinyExisting) {
+    
+    // Container styles are in this object
+    const styles_for_container = find_rules_by_selector("#grid_page");
+
+    const current_rows = styles_for_container.gridTemplateRows.split(" ");
+    const current_cols = styles_for_container.gridTemplateColumns.split(" ");
+    // I dont know why this is just .gap and not gridGap
+    const current_gap = styles_for_container.gap;
+
+    // If grided is running on an existing app, we need to parse the children and
+    // add them as elements;
+    const children = [...grid_holder.children];
+    const child_ids = children.map((el) => el.id);
+    update_grid({
+      rows: current_rows,
+      cols: current_cols,
+      gap: current_gap,
+    });
+
+    // Make grid cells transparent so the app is seen beneath them
+    find_rules_by_selector(".grid-cell").background = "none";
+  } else if (app_mode === App_Mode.ShinyNew) {
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
@@ -124,7 +158,7 @@ window.onload = function () {
         end_row: number;
         start_col: number;
         end_col: number;
-      };
+      }
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
         add_element({
           id: el.id,
@@ -483,7 +517,7 @@ window.onload = function () {
 
     if (grid_numbers_changed) fill_grid_cells();
 
-    if (Shiny) {
+    if (app_mode == App_Mode.ShinyNew) {
       Shiny.setInputValue("grid_sizing", {
         rows: grid_holder.style.gridTemplateRows.split(" "),
         cols: grid_holder.style.gridTemplateColumns.split(" "),
@@ -627,16 +661,19 @@ window.onload = function () {
             `div.dragger.visible.${handle_type}`,
             {
               styles: { background: color },
-              innerHTML: handle_type === "center"
-              ? drag_icon
-              : handle_type === Drag_Type.bottom_right
-                ? se_arrow
-                : nw_arrow
+              innerHTML:
+                handle_type === "center"
+                  ? drag_icon
+                  : handle_type === Drag_Type.bottom_right
+                  ? se_arrow
+                  : nw_arrow,
             }
           ),
           grid_element: element_in_grid,
           drag_dir: handle_type,
-          on_end: () => {send_elements_to_shiny();}
+          on_end: () => {
+            send_elements_to_shiny();
+          },
         });
       }
     );
@@ -667,7 +704,7 @@ window.onload = function () {
         ],
       }
     );
-    
+
     make_el(element_in_list, "button.remove_el", {
       innerHTML: trashcan_icon,
       event_listener: {
@@ -724,7 +761,7 @@ window.onload = function () {
         }
       );
 
-      // We start grid position here in case user selects by simply clicking, 
+      // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
       update_grid_pos(opts.grid_element, start_rect);
 
@@ -735,7 +772,10 @@ window.onload = function () {
       editor_el.addEventListener("mouseup", drag_end);
     };
 
-    function update_grid_pos(element: HTMLElement, bounding_rect: Selection_Rect): Grid_Pos{
+    function update_grid_pos(
+      element: HTMLElement,
+      bounding_rect: Selection_Rect
+    ): Grid_Pos {
       const grid_extent = get_drag_extent_on_grid(bounding_rect);
       set_element_in_grid(element, grid_extent);
       return grid_extent;
@@ -816,7 +856,7 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (Shiny) {
+    if (app_mode == App_Mode.ShinyNew) {
       const elements_by_id = {};
       current_elements().forEach(function (el) {
         elements_by_id[el.id] = el;

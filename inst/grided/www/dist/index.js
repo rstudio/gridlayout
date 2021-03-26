@@ -748,7 +748,40 @@ function make_css_unit_input(_a) {
 }
 
 exports.make_css_unit_input = make_css_unit_input;
-},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"index.ts":[function(require,module,exports) {
+},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"find_rules_by_selector.ts":[function(require,module,exports) {
+"use strict";
+
+var __spreadArray = this && this.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.find_rules_by_selector = void 0; // Assumes that only one stylesheet has rules for the given selector and 
+// that only one rule targeting that selector alone is defined
+
+function find_rules_by_selector(selector_text) {
+  // Find the stylesheet which contains the containers styles
+  var defines_ruleset = function defines_ruleset(selector_text) {
+    return function (rule) {
+      return rule.selectorText === selector_text;
+    };
+  };
+
+  var stylesheet_w_selector = __spreadArray([], document.styleSheets).find(function (style_sheet) {
+    return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
+  });
+
+  return __spreadArray([], stylesheet_w_selector.cssRules).find(defines_ruleset(selector_text)).style;
+}
+
+exports.find_rules_by_selector = find_rules_by_selector;
+},{}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -794,7 +827,16 @@ var misc_helpers_1 = require("./misc-helpers");
 
 var icons_1 = require("./icons");
 
+var find_rules_by_selector_1 = require("./find_rules_by_selector");
+
 exports.Shiny = window.Shiny;
+var App_Mode;
+
+(function (App_Mode) {
+  App_Mode[App_Mode["ShinyNew"] = 0] = "ShinyNew";
+  App_Mode[App_Mode["ShinyExisting"] = 1] = "ShinyExisting";
+  App_Mode[App_Mode["ClientSide"] = 2] = "ClientSide";
+})(App_Mode || (App_Mode = {}));
 
 window.onload = function () {
   draw_browser_header_1.draw_browser_header(); // Keep track of the grid controls here. Tradeoff of a global variable
@@ -809,7 +851,7 @@ window.onload = function () {
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
 
-  var grid_holder = document.querySelector("#grid_holder");
+  var grid_holder = document.querySelector("#grid_page");
   var settings_panel = document.querySelector("#settings .card-body");
   var grid_settings = {
     num_rows: make_incrementer_1.make_incrementer({
@@ -859,12 +901,34 @@ window.onload = function () {
     update_grid((_a = {}, _a[dir] = current_vals, _a));
   }
 
-  if (exports.Shiny) {
+  var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide;
+
+  if (app_mode === App_Mode.ShinyExisting) {
+    // Container styles are in this object
+    var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page");
+    var current_rows = styles_for_container.gridTemplateRows.split(" ");
+    var current_cols = styles_for_container.gridTemplateColumns.split(" "); // I dont know why this is just .gap and not gridGap
+
+    var current_gap = styles_for_container.gap; // If grided is running on an existing app, we need to parse the children and
+    // add them as elements;
+
+    var children = __spreadArray([], grid_holder.children);
+
+    var child_ids = children.map(function (el) {
+      return el.id;
+    });
+    update_grid({
+      rows: current_rows,
+      cols: current_cols,
+      gap: current_gap
+    }); // Make grid cells transparent so the app is seen beneath them
+
+    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none";
+  } else if (app_mode === App_Mode.ShinyNew) {
     exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
     });
     exports.Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-      ;
       elements_to_add.forEach(function (el) {
         add_element({
           id: el.id,
@@ -1171,7 +1235,7 @@ window.onload = function () {
 
     if (grid_numbers_changed) fill_grid_cells();
 
-    if (exports.Shiny) {
+    if (app_mode == App_Mode.ShinyNew) {
       exports.Shiny.setInputValue("grid_sizing", {
         rows: grid_holder.style.gridTemplateRows.split(" "),
         cols: grid_holder.style.gridTemplateColumns.split(" "),
@@ -1390,7 +1454,7 @@ window.onload = function () {
       };
       drag_feedback_rect = make_el_1.make_el(grid_holder.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
         styles: __assign({}, bounding_rect_to_css_pos(start_rect))
-      }); // We start grid position here in case user selects by simply clicking, 
+      }); // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
 
       update_grid_pos(opts.grid_element, start_rect);
@@ -1464,7 +1528,7 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (exports.Shiny) {
+    if (app_mode == App_Mode.ShinyNew) {
       var elements_by_id_1 = {};
       current_elements().forEach(function (el) {
         elements_by_id_1[el.id] = el;
@@ -1521,7 +1585,7 @@ window.onload = function () {
 window.onresize = function () {
   draw_browser_header_1.draw_browser_header();
 };
-},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./icons":"icons.ts"}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1549,7 +1613,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52945" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51341" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -1725,5 +1789,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
+},{}]},{},["../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
 //# sourceMappingURL=/index.js.map
