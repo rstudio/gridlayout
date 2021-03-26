@@ -1,8 +1,9 @@
 gridded_app <- function(starting_layout = new_gridlayout(),
-                        update_btn_text,
+                        update_btn_text = "update button",
                         on_update = function(new_layout){
                           print(new_layout)
-                        }){
+                        },
+                        return_app_obj = FALSE){
 
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
@@ -30,7 +31,7 @@ gridded_app <- function(starting_layout = new_gridlayout(),
       shiny::req(input$elements)
 
       grid_mat <- matrix(".",
-                         nrow = length(input$grid_sizing$rows),
+                         nrow = length(input$gridd_sizing$rows),
                          ncol = length(input$grid_sizing$cols) )
       for(el in input$elements){
         grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
@@ -60,9 +61,14 @@ gridded_app <- function(starting_layout = new_gridlayout(),
     }), input$updated_code)
   }
 
-  # Open gadget in the external viewer
-  viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
-  shiny::runGadget(ui, server, viewer = viewer)
+  if(return_app_obj){
+    shiny::shinyApp(ui, server)
+  } else {
+    # Open gadget in the external viewer
+    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
+    shiny::runGadget(ui, server, viewer = viewer)
+  }
+
 }
 
 trashcan_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0 24 24">
