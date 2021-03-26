@@ -7,7 +7,7 @@
           "myPlot"))
     Output
       <div class="container-fluid">
-        <div id="grid-container">
+        <div id="grid-container" class="grid-container">
           <div style="display: grid;" class="grid_panel" id="grid-container__header">
             <h2 id="header">This is my header content</h2>
           </div>
