@@ -26,19 +26,22 @@ export function make_template_start_end(start: number, end?: number): string {
   return `${start} / ${end}`;
 }
 
-export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
+
+export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos, el_styles?: CSSStyleDeclaration) {
+  
   if (grid_bounds.start_row) {
-    el.style.gridRow = make_template_start_end(
-      grid_bounds.start_row,
-      grid_bounds.end_row
-    );
+    el.style.gridRowStart = grid_bounds.start_row.toString();
+  }
+  if(grid_bounds.end_row) {
+    el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
   }
   if (grid_bounds.start_col) {
-    el.style.gridColumn = make_template_start_end(
-      grid_bounds.start_col,
-      grid_bounds.end_col
-    );
+    el.style.gridColumnStart = grid_bounds.start_col.toString();
   }
+  if (grid_bounds.end_col) {
+    el.style.gridColumnEnd = (grid_bounds.end_col + 1).toString();
+  }
+
   el.style.display = "block"; // make sure we can see the element
 }
 
