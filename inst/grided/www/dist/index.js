@@ -162,13 +162,21 @@ function make_template_start_end(start, end) {
 
 exports.make_template_start_end = make_template_start_end;
 
-function set_element_in_grid(el, grid_bounds) {
+function set_element_in_grid(el, grid_bounds, el_styles) {
   if (grid_bounds.start_row) {
-    el.style.gridRow = make_template_start_end(grid_bounds.start_row, grid_bounds.end_row);
+    el.style.gridRowStart = grid_bounds.start_row.toString();
+  }
+
+  if (grid_bounds.end_row) {
+    el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
   }
 
   if (grid_bounds.start_col) {
-    el.style.gridColumn = make_template_start_end(grid_bounds.start_col, grid_bounds.end_col);
+    el.style.gridColumnStart = grid_bounds.start_col.toString();
+  }
+
+  if (grid_bounds.end_col) {
+    el.style.gridColumnEnd = (grid_bounds.end_col + 1).toString();
   }
 
   el.style.display = "block"; // make sure we can see the element
@@ -762,7 +770,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.find_rules_by_selector = void 0; // Assumes that only one stylesheet has rules for the given selector and 
+exports.find_rules_by_selector = void 0; // Assumes that only one stylesheet has rules for the given selector and
 // that only one rule targeting that selector alone is defined
 
 function find_rules_by_selector(selector_text) {
@@ -773,11 +781,17 @@ function find_rules_by_selector(selector_text) {
     };
   };
 
-  var stylesheet_w_selector = __spreadArray([], document.styleSheets).find(function (style_sheet) {
+  var stylesheets_w_selector = __spreadArray([], document.styleSheets).filter(function (style_sheet) {
     return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
   });
 
-  return __spreadArray([], stylesheet_w_selector.cssRules).find(defines_ruleset(selector_text)).style;
+  var n_sheets = stylesheets_w_selector.length;
+
+  if (n_sheets === 0) {// No rules declared so make a new rule and append to last style sheet
+  } else {
+    // Take the latest style sheet and (hope) that's the correct one
+    return __spreadArray([], stylesheets_w_selector[n_sheets - 1].cssRules).find(defines_ruleset(selector_text)).style;
+  }
 }
 
 exports.find_rules_by_selector = find_rules_by_selector;
@@ -914,9 +928,14 @@ window.onload = function () {
 
     var children = __spreadArray([], grid_holder.children);
 
-    var child_ids = children.map(function (el) {
-      return el.id;
-    });
+    children.forEach(function (el) {
+      add_element({
+        id: el.id,
+        grid_pos: get_grid_pos(el),
+        existing_element: el
+      });
+    }); // Make sure grid matches the one the app is working with
+
     update_grid({
       rows: current_rows,
       cols: current_cols,
@@ -1361,22 +1380,24 @@ window.onload = function () {
 
       selection_box.style.display = "none";
     }
-  } // Adds a new element of a given id to the app. Both in the grid window
-  // and the addeded elements panel
+  }
 
+  ;
 
-  function add_element(_a) {
-    var id = _a.id,
-        _b = _a.color,
-        color = _b === void 0 ? get_next_color() : _b,
-        grid_pos = _a.grid_pos;
+  function add_element(el_props) {
+    var id = el_props.id,
+        grid_pos = el_props.grid_pos,
+        _a = el_props.color,
+        color = _a === void 0 ? get_next_color() : _a,
+        existing_element = el_props.existing_element;
     var element_in_grid = make_el_1.make_el(grid_holder, "div#" + id + ".el_" + id + ".added-element", {
       grid_pos: grid_pos,
       styles: {
         borderColor: color,
         position: "relative"
       }
-    });
+    }); // Setup drag behavior
+
     [misc_helpers_1.Drag_Type.top_left, misc_helpers_1.Drag_Type.bottom_right, misc_helpers_1.Drag_Type.center].forEach(function (handle_type) {
       drag_on_grid({
         watching_element: make_el_1.make_el(element_in_grid, "div.dragger.visible." + handle_type, {
@@ -1387,6 +1408,11 @@ window.onload = function () {
         }),
         grid_element: element_in_grid,
         drag_dir: handle_type,
+        on_drag: function on_drag(res) {
+          if (existing_element) {
+            misc_helpers_1.set_element_in_grid(existing_element, res.grid);
+          }
+        },
         on_end: function on_end() {
           send_elements_to_shiny();
         }
@@ -1425,11 +1451,12 @@ window.onload = function () {
   }
 
   function get_grid_pos(grid_el) {
+    var el_styles = getComputedStyle(grid_el);
     return {
-      start_row: +grid_el.style.gridRowStart,
-      start_col: +grid_el.style.gridColumnStart,
-      end_row: +grid_el.style.gridRowEnd - 1,
-      end_col: +grid_el.style.gridColumnEnd - 1
+      start_row: +el_styles.gridRowStart,
+      start_col: +el_styles.gridColumnStart,
+      end_row: +el_styles.gridRowEnd - 1,
+      end_col: +el_styles.gridColumnEnd - 1
     };
   }
 
@@ -1613,7 +1640,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51341" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54180" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
