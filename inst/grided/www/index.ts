@@ -125,7 +125,6 @@ window.onload = function () {
     : App_Mode.ClientSide;
 
   if (app_mode === App_Mode.ShinyExisting) {
-    
     // Container styles are in this object
     const styles_for_container = find_rules_by_selector("#grid_page");
 
@@ -137,7 +136,7 @@ window.onload = function () {
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
     const children = [...grid_holder.children];
-    
+
     children.forEach(function (el) {
       add_element({
         id: el.id,
@@ -145,7 +144,7 @@ window.onload = function () {
         existing_element: el as HTMLElement,
       });
     });
-    
+
     // Make sure grid matches the one the app is working with
     update_grid({
       rows: current_rows,
@@ -167,7 +166,9 @@ window.onload = function () {
       start_col: number;
       end_col: number;
     }
-    Shiny.addCustomMessageHandler("add-elements", function (elements_to_add: Shiny_Element_Msg[]) {
+    Shiny.addCustomMessageHandler("add-elements", function (
+      elements_to_add: Shiny_Element_Msg[]
+    ) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
         add_element({
           id: el.id,
@@ -650,22 +651,23 @@ window.onload = function () {
 
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
-  interface New_Element{
+  interface New_Element {
     id: string;
     color?: string;
     grid_pos: Grid_Pos;
     existing_element?: HTMLElement;
-  };
+  }
 
   function add_element(el_props: New_Element) {
-
-    const {grid_pos, color = get_next_color(), existing_element} = el_props;
+    const { grid_pos, color = get_next_color(), existing_element } = el_props;
     const mirrors_existing_element = existing_element !== undefined;
     // If element ids were generated with the grid_container R function then
-    // they have a prefix of the container name which we should remove so the 
-    // added elements list is not ugly looking 
-    const id = mirrors_existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
-    
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
+    const id = mirrors_existing_element
+      ? el_props.id.replace(/^.+?__/g, "")
+      : el_props.id;
+
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
@@ -698,7 +700,7 @@ window.onload = function () {
           grid_element: element_in_grid,
           drag_dir: handle_type,
           on_drag: (res) => {
-            if(mirrors_existing_element){
+            if (mirrors_existing_element) {
               set_element_in_grid(existing_element, res.grid);
             }
           },
@@ -735,8 +737,8 @@ window.onload = function () {
         ],
       }
     );
-    
-    if(!mirrors_existing_element){
+
+    if (!mirrors_existing_element) {
       // Turn of deleting if were editing an existing app
       // This means that if were in app editing mode and the user adds a new element
       // they can delete that new element but they can't delete the existing elements
@@ -760,8 +762,8 @@ window.onload = function () {
     return {
       start_row: +el_styles.gridRowStart,
       start_col: +el_styles.gridColumnStart,
-      end_row:   +el_styles.gridRowEnd - 1,
-      end_col:   +el_styles.gridColumnEnd - 1,
+      end_row: +el_styles.gridRowEnd - 1,
+      end_col: +el_styles.gridColumnEnd - 1,
     };
   }
 
