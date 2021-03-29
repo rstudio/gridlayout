@@ -720,11 +720,12 @@ window.onload = function () {
   }
 
   function get_grid_pos(grid_el: HTMLElement): Grid_Pos {
+    const el_styles = getComputedStyle(grid_el);
     return {
-      start_row: +grid_el.style.gridRowStart,
-      start_col: +grid_el.style.gridColumnStart,
-      end_row: +grid_el.style.gridRowEnd - 1,
-      end_col: +grid_el.style.gridColumnEnd - 1,
+      start_row: +el_styles.gridRowStart,
+      start_col: +el_styles.gridColumnStart,
+      end_row:   +el_styles.gridRowEnd - 1,
+      end_col:   +el_styles.gridColumnEnd - 1,
     };
   }
 
