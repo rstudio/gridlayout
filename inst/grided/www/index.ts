@@ -659,8 +659,12 @@ window.onload = function () {
 
   function add_element(el_props: New_Element) {
 
-    const {id, grid_pos, color = get_next_color(), existing_element} = el_props;
-
+    const {grid_pos, color = get_next_color(), existing_element} = el_props;
+    // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the 
+    // added elements list is not ugly looking 
+    const id = existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
+    
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
