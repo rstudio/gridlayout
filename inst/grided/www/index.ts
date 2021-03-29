@@ -137,19 +137,20 @@ window.onload = function () {
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
     const children = [...grid_holder.children];
-    const child_ids = children.map((el) => el.id);
-    update_grid({
-      rows: current_rows,
-      cols: current_cols,
-      gap: current_gap,
-    });
-
+    
     children.forEach(function (el) {
       add_element({
         id: el.id,
         grid_pos: get_grid_pos(el as HTMLElement),
-        existing_element: true,
+        existing_element: el as HTMLElement,
       });
+    });
+    
+    // Make sure grid matches the one the app is working with
+    update_grid({
+      rows: current_rows,
+      cols: current_cols,
+      gap: current_gap,
     });
 
     // Make grid cells transparent so the app is seen beneath them
@@ -159,14 +160,14 @@ window.onload = function () {
       update_grid(opts);
     });
 
-    Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-      interface Shiny_Element_Msg {
-        id: string;
-        start_row: number;
-        end_row: number;
-        start_col: number;
-        end_col: number;
-      }
+    interface Shiny_Element_Msg {
+      id: string;
+      start_row: number;
+      end_row: number;
+      start_col: number;
+      end_col: number;
+    }
+    Shiny.addCustomMessageHandler("add-elements", function (elements_to_add: Shiny_Element_Msg[]) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
         add_element({
           id: el.id,
@@ -476,6 +477,7 @@ window.onload = function () {
                   const el_node: HTMLElement = grid_holder.querySelector(
                     `#${el.id}`
                   );
+
                   el_node.style.gridRow = make_template_start_end(
                     el.start_row,
                     Math.min(el.end_row, new_num_rows)
@@ -652,12 +654,13 @@ window.onload = function () {
     id: string;
     color?: string;
     grid_pos: Grid_Pos;
-    existing_element?: boolean;
+    existing_element?: HTMLElement;
   };
 
   function add_element(el_props: New_Element) {
 
-    const {id, grid_pos, color = get_next_color(), existing_element = false} = el_props;
+    const {id, grid_pos, color = get_next_color(), existing_element} = el_props;
+
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
@@ -670,6 +673,7 @@ window.onload = function () {
       }
     );
 
+    // Setup drag behavior
     [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
       function (handle_type) {
         drag_on_grid({
@@ -688,6 +692,11 @@ window.onload = function () {
           ),
           grid_element: element_in_grid,
           drag_dir: handle_type,
+          on_drag: (res) => {
+            if(existing_element){
+              set_element_in_grid(existing_element, res.grid);
+            }
+          },
           on_end: () => {
             send_elements_to_shiny();
           },
