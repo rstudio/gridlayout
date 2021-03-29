@@ -26,13 +26,15 @@ export function make_template_start_end(start: number, end?: number): string {
   return `${start} / ${end}`;
 }
 
-
-export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos, el_styles?: CSSStyleDeclaration) {
-  
+export function set_element_in_grid(
+  el: HTMLElement,
+  grid_bounds: Grid_Pos,
+  el_styles?: CSSStyleDeclaration
+) {
   if (grid_bounds.start_row) {
     el.style.gridRowStart = grid_bounds.start_row.toString();
   }
-  if(grid_bounds.end_row) {
+  if (grid_bounds.end_row) {
     el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
   }
   if (grid_bounds.start_col) {
@@ -190,3 +192,5 @@ export function get_css_unit(css_size: string): string {
 export function get_css_value(css_size: string): number {
   return Number(css_size.match(/^[\d | \.]+/g)[0]);
 }
+
+
