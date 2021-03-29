@@ -4,7 +4,7 @@ library(purrr)
 library(gridlayout)
 
 path_to_rmd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- gridlayout::rmd_to_gridlayout(path_to_rmd)
+starting_layout <- gridlayout::rmd_to_gridlayout(path_to_rmd)
 starting_elements <- gridlayout::get_elements(my_layout)
 
 trashcan_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -28,6 +28,8 @@ setwd(here("inst/grided/"))
 
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
+
+
 
 ui <- tags$body(
   tags$head(
@@ -79,7 +81,7 @@ ui <- tags$body(
     div(
       id = "editor-wrapper",
       tags$svg(id = "editor-browser-header"),
-      uiOutput("grid_holder")
+      uiOutput("grid_page")
     )
   )
 )
@@ -94,36 +96,44 @@ server <- function(input, output, session) {
   session$sendCustomMessage(
     "update-grid",
     list(
-      rows =  attr(my_layout, "row_sizes"),
-      cols = attr(my_layout, "col_sizes"),
-      gap = attr(my_layout, "gap")
+      rows =  attr(starting_layout, "row_sizes"),
+      cols = attr(starting_layout, "col_sizes"),
+      gap = attr(starting_layout, "gap")
     )
   )
 
-  observe({
-    req(input$elements)
+  current_layout <- reactive({
+    shiny::req(input$elements)
 
     grid_mat <- matrix(".",
-                       nrow = length(input$grid_sizing$rows),
+                       nrow = length(input$gridd_sizing$rows),
                        ncol = length(input$grid_sizing$cols) )
     for(el in input$elements){
       grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
     }
 
-    layout_table <- to_md(
-      new_gridlayout(layout_mat = grid_mat,
-                     col_sizes = input$grid_sizing$cols,
-                     row_sizes = input$grid_sizing$rows,
-                     gap = input$grid_sizing$gap)
-    )
+    new_gridlayout(layout_mat = grid_mat,
+                   col_sizes = as.character(input$grid_sizing$cols),
+                   row_sizes = as.character(input$grid_sizing$rows),
+                   gap = input$grid_sizing$gap)
+  })
 
-    layout_call <- paste(
-      "layout <- grid_layout_from_md(layout_table = \"",
-      "    ", layout_table(), "\")",
-      sep = "\n")
+  shiny::bindEvent(
+    shiny::observe({
+      layout_call <- paste(
+        "layout <- grid_layout_from_md(layout_table = \"",
+        "    ", to_md(current_layout()), "\")",
+        sep = "\n")
 
-    session$sendCustomMessage("code_modal", layout_call)
-  }) %>% bindEvent(input$get_code)
+      session$sendCustomMessage("code_modal", layout_call)
+    }),
+    input$get_code)
+
+  shiny::bindEvent(shiny::observe({
+    req(input$elements)
+    on_update(current_layout())
+    shiny::stopApp()
+  }), input$updated_code)
 }
 
 shinyApp(ui, server)
