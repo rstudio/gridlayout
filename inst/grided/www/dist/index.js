@@ -1388,11 +1388,12 @@ window.onload = function () {
     var grid_pos = el_props.grid_pos,
         _a = el_props.color,
         color = _a === void 0 ? get_next_color() : _a,
-        existing_element = el_props.existing_element; // If element ids were generated with the grid_container R function then
+        existing_element = el_props.existing_element;
+    var mirrors_existing_element = existing_element !== undefined; // If element ids were generated with the grid_container R function then
     // they have a prefix of the container name which we should remove so the 
     // added elements list is not ugly looking 
 
-    var id = existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
+    var id = mirrors_existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
     var element_in_grid = make_el_1.make_el(grid_holder, "div#" + id + ".el_" + id + ".added-element", {
       grid_pos: grid_pos,
       styles: {
@@ -1412,7 +1413,7 @@ window.onload = function () {
         grid_element: element_in_grid,
         drag_dir: handle_type,
         on_drag: function on_drag(res) {
-          if (existing_element) {
+          if (mirrors_existing_element) {
             misc_helpers_1.set_element_in_grid(existing_element, res.grid);
           }
         },
@@ -1440,15 +1441,22 @@ window.onload = function () {
         }
       }]
     });
-    make_el_1.make_el(element_in_list, "button.remove_el", {
-      innerHTML: icons_1.trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function func() {
-          remove_added_elements(id);
+
+    if (!mirrors_existing_element) {
+      // Turn of deleting if were editing an existing app
+      // This means that if were in app editing mode and the user adds a new element
+      // they can delete that new element but they can't delete the existing elements
+      make_el_1.make_el(element_in_list, "button.remove_el", {
+        innerHTML: icons_1.trashcan_icon,
+        event_listener: {
+          event: "click",
+          func: function func() {
+            remove_added_elements(id);
+          }
         }
-      }
-    }); // Let shiny know we have a new element
+      });
+    } // Let shiny know we have a new element
+
 
     send_elements_to_shiny();
   }

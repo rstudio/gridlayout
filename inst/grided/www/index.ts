@@ -660,10 +660,11 @@ window.onload = function () {
   function add_element(el_props: New_Element) {
 
     const {grid_pos, color = get_next_color(), existing_element} = el_props;
+    const mirrors_existing_element = existing_element !== undefined;
     // If element ids were generated with the grid_container R function then
     // they have a prefix of the container name which we should remove so the 
     // added elements list is not ugly looking 
-    const id = existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
+    const id = mirrors_existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
     
     const element_in_grid = make_el(
       grid_holder,
@@ -697,7 +698,7 @@ window.onload = function () {
           grid_element: element_in_grid,
           drag_dir: handle_type,
           on_drag: (res) => {
-            if(existing_element){
+            if(mirrors_existing_element){
               set_element_in_grid(existing_element, res.grid);
             }
           },
@@ -734,16 +735,21 @@ window.onload = function () {
         ],
       }
     );
-
-    make_el(element_in_list, "button.remove_el", {
-      innerHTML: trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function () {
-          remove_added_elements(id);
+    
+    if(!mirrors_existing_element){
+      // Turn of deleting if were editing an existing app
+      // This means that if were in app editing mode and the user adds a new element
+      // they can delete that new element but they can't delete the existing elements
+      make_el(element_in_list, "button.remove_el", {
+        innerHTML: trashcan_icon,
+        event_listener: {
+          event: "click",
+          func: function () {
+            remove_added_elements(id);
+          },
         },
-      },
-    });
+      });
+    }
 
     // Let shiny know we have a new element
     send_elements_to_shiny();
