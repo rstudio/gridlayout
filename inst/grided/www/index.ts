@@ -144,6 +144,14 @@ window.onload = function () {
       gap: current_gap,
     });
 
+    children.forEach(function (el) {
+      add_element({
+        id: el.id,
+        grid_pos: get_grid_pos(el as HTMLElement),
+        existing_element: true,
+      });
+    });
+
     // Make grid cells transparent so the app is seen beneath them
     find_rules_by_selector(".grid-cell").background = "none";
   } else if (app_mode === App_Mode.ShinyNew) {
@@ -640,7 +648,16 @@ window.onload = function () {
 
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
-  function add_element({ id, color = get_next_color(), grid_pos }) {
+  interface New_Element{
+    id: string;
+    color?: string;
+    grid_pos: Grid_Pos;
+    existing_element?: boolean;
+  };
+
+  function add_element(el_props: New_Element) {
+
+    const {id, grid_pos, color = get_next_color(), existing_element = false} = el_props;
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
