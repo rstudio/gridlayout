@@ -756,7 +756,54 @@ function make_css_unit_input(_a) {
 }
 
 exports.make_css_unit_input = make_css_unit_input;
-},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"find_rules_by_selector.ts":[function(require,module,exports) {
+},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"make_toggle_switch.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.make_toggle_switch = void 0;
+
+var make_el_1 = require("./make_el");
+
+function make_toggle_switch(parent, off_text, on_text, on_change) {
+  var container = make_el_1.make_el(parent, "div.toggle-switch");
+  make_el_1.make_el(container, "span.off-text", {
+    innerHTML: off_text
+  });
+  var label = make_el_1.make_el(container, "label.switch");
+  make_el_1.make_el(container, "span.on-text", {
+    innerHTML: on_text
+  });
+  make_el_1.make_el(label, "input", {
+    props: {
+      type: "checkbox"
+    },
+    event_listener: {
+      event: "change",
+      func: function func(event) {
+        on_change(event.target.checked);
+      }
+    }
+  });
+  make_el_1.make_el(label, "span.slider"); // Add styles
+
+  var style_sheet = document.styleSheets[0];
+  style_sheet.insertRule("\n    div.toggle-switch {\n      display: inline-grid;\n      grid-template-columns: 1fr auto 1fr;\n      grid-gap: 3px;\n      width: 180px;\n      align-items: center;\n      justify-items: center;\n    }\n  ");
+  style_sheet.insertRule("\n  .toggle-switch > span {\n    font-size: 0.85rem;\n  }\n");
+  style_sheet.insertRule("\n    .toggle-switch > .off-text {\n      text-align: end;\n    }\n  ");
+  style_sheet.insertRule(".switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }", 0); // Hide default HTML checkbox
+
+  style_sheet.insertRule(".switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }", 0);
+  style_sheet.insertRule(".slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }", 0);
+  style_sheet.insertRule(".slider:before {\n    position: absolute;\n    content: \"\";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }", 0);
+  style_sheet.insertRule("input:checked + .slider {\n    background-color: #2196F3;\n  }", 0);
+  style_sheet.insertRule("input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }", 0);
+  style_sheet.insertRule("input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }", 0);
+}
+
+exports.make_toggle_switch = make_toggle_switch;
+},{"./make_el":"make_el.ts"}],"find_rules_by_selector.ts":[function(require,module,exports) {
 "use strict";
 
 var __spreadArray = this && this.__spreadArray || function (to, from) {
@@ -838,6 +885,8 @@ var focused_modal_1 = require("./focused_modal");
 var make_css_unit_input_1 = require("./make_css_unit_input");
 
 var misc_helpers_1 = require("./misc-helpers");
+
+var make_toggle_switch_1 = require("./make_toggle_switch");
 
 var icons_1 = require("./icons");
 
@@ -942,7 +991,21 @@ window.onload = function () {
       gap: current_gap
     }); // Make grid cells transparent so the app is seen beneath them
 
-    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none";
+    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app 
+
+    make_toggle_switch_1.make_toggle_switch(document.querySelector("#header .code_btns"), "Edit layout", "Interact mode", function (interact_is_on) {
+      var update_el = function update_el(el) {
+        if (interact_is_on) {
+          el.classList.add("disabled");
+        } else {
+          el.classList.remove("disabled");
+        }
+      };
+
+      document.querySelectorAll(".added-element").forEach(update_el);
+      document.querySelectorAll(".grid-cell").forEach(update_el);
+      update_el(document.querySelector("#drag_canvas"));
+    });
   } else if (app_mode === App_Mode.ShinyNew) {
     exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
@@ -1621,7 +1684,7 @@ window.onload = function () {
 window.onresize = function () {
   draw_browser_header_1.draw_browser_header();
 };
-},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./make_toggle_switch":"make_toggle_switch.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

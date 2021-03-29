@@ -21,6 +21,7 @@ import {
   XY_Pos,
   Drag_Type,
 } from "./misc-helpers";
+import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
 import { find_rules_by_selector } from "./find_rules_by_selector";
 
@@ -154,6 +155,26 @@ window.onload = function () {
 
     // Make grid cells transparent so the app is seen beneath them
     find_rules_by_selector(".grid-cell").background = "none";
+
+    // And edit mode toggle to allow user to interact with app 
+    make_toggle_switch(
+      document.querySelector("#header .code_btns"),
+      "Edit layout",
+      "Interact mode",
+      (interact_is_on: boolean) => {
+        const update_el = function (el: Element) {
+          if (interact_is_on) {
+            el.classList.add("disabled");
+          } else {
+            el.classList.remove("disabled");
+          }
+        };
+        document.querySelectorAll(".added-element").forEach(update_el);
+        document.querySelectorAll(".grid-cell").forEach(update_el);
+        update_el(document.querySelector("#drag_canvas"));
+      }
+    );
+
   } else if (app_mode === App_Mode.ShinyNew) {
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);

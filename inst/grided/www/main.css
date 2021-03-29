@@ -73,9 +73,15 @@ img {
   margin: 0;
 }
 
+.code_btns {
+  display: flex;
+  align-items: center;
+}
+
 #header button {
   font-size: 1.2rem;
   height: 100%;
+  margin-left: 5px;
 }
 
 #settings {
@@ -295,6 +301,13 @@ button.minus_btn.disabled {
 .added-element .dragger.top-left,
 .added-element .dragger.bottom-right {
   border-radius: var(--element_roundness) 0;
+}
+
+.added-element.disabled,
+.grid-cell.disabled,
+#drag_canvas.disabled {
+  opacity: 0;
+  pointer-events: none;
 }
 
 
