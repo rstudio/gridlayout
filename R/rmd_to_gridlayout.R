@@ -74,6 +74,9 @@ update_rmd <- function(path_to_rmd, new_layout, updated_rmd_path = path_to_rmd, 
 
 
 make_layout_regex <- function(chunk_tag){
+  # The (?...) block controls how the perl regex parser works
+  # s -> Makes a dot matches all characters
+  # m -> Multiline mode
   paste0("(?sm)(?<=\\`\\`\\` \\{", chunk_tag, "\\}).+?(?=\\`\\`\\`)")
 }
 
