@@ -125,7 +125,7 @@ window.onload = function () {
 
   if (app_mode === App_Mode.ShinyExisting) {
     // Container styles are in this object
-    const styles_for_container = find_rules_by_selector("#grid_page");
+    const styles_for_container = find_rules_by_selector("#grid_page", "gridTemplateColumns");
 
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");

@@ -448,45 +448,7 @@ function remove_elements(els_to_remove) {
 }
 
 exports.remove_elements = remove_elements;
-},{"./misc-helpers":"misc-helpers.ts"}],"draw_browser_header.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.draw_browser_header = void 0;
-
-var index_1 = require("./index");
-
-function draw_browser_header() {
-  var header_svg = document.getElementById("editor-browser-header");
-
-  var _a = header_svg.getBoundingClientRect(),
-      width_of_bar = _a.width,
-      height_of_bar = _a.height; // Clear out anything that may be in the svg already
-
-
-  header_svg.innerHTML = ""; // First make the buttons for closing, minimizing and maximizing window
-
-  var button_r = height_of_bar / 4.5;
-
-  for (var i = 1; i <= 3; i++) {
-    header_svg.innerHTML += "\n    <circle cx=" + i * button_r * 3 + "px\n            cy = 50%\n            r = " + button_r + "px\n    > </circle>";
-  } // Next make the browser url bar
-
-
-  var url_bar_start = 4 * button_r * 3; // Bar is takes up middle 65% of header area
-
-  var url_bar_rel_height = 0.65;
-  var url_bar_height = height_of_bar * url_bar_rel_height;
-  var url_bar_margin = (height_of_bar - url_bar_height) / 2;
-  header_svg.innerHTML += "\n  <rect x = " + url_bar_start + "px\n        y = " + url_bar_margin + "px\n        width = " + (width_of_bar - url_bar_start - 10) + "px\n        height = " + height_of_bar * url_bar_rel_height + "px\n        stroke = \"black\"\n        stroke-width: 3px\n        fill = \"none\"\n        rx = " + url_bar_height / 2 + "px\n        ry = " + url_bar_height / 2 + "px\n  ></rect>";
-  var url_address = index_1.Shiny ? "www.myShinyApp.com" : "www.myGridApp.com";
-  header_svg.innerHTML += "\n  <text x = " + (url_bar_start + 13) + "px\n        y = " + height_of_bar / 2 + "px\n        alignment-baseline = \"central\"\n  >\n    " + url_address + "\n  </text>\n";
-}
-
-exports.draw_browser_header = draw_browser_header;
-},{"./index":"index.ts"}],"icons.ts":[function(require,module,exports) {
+},{"./misc-helpers":"misc-helpers.ts"}],"icons.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -819,8 +781,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.find_rules_by_selector = void 0; // Assumes that only one stylesheet has rules for the given selector and
 // that only one rule targeting that selector alone is defined
+// If target_property is provided the function will chose the sheet that defines
+// that given property (if multiple exist)
 
-function find_rules_by_selector(selector_text) {
+function find_rules_by_selector(selector_text, target_property) {
   // Find the stylesheet which contains the containers styles
   var defines_ruleset = function defines_ruleset(selector_text) {
     return function (rule) {
@@ -828,16 +792,20 @@ function find_rules_by_selector(selector_text) {
     };
   };
 
-  var stylesheets_w_selector = __spreadArray([], document.styleSheets).filter(function (style_sheet) {
+  var rules_for_selector = __spreadArray([], document.styleSheets).filter(function (style_sheet) {
     return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
+  }).map(function (x) {
+    return __spreadArray([], x.cssRules).find(defines_ruleset(selector_text)).style;
+  }).filter(function (x) {
+    return target_property ? x[target_property] : true;
   });
 
-  var n_sheets = stylesheets_w_selector.length;
+  var n_sheets = rules_for_selector.length;
 
   if (n_sheets === 0) {// No rules declared so make a new rule and append to last style sheet
   } else {
     // Take the latest style sheet and (hope) that's the correct one
-    return __spreadArray([], stylesheets_w_selector[n_sheets - 1].cssRules).find(defines_ruleset(selector_text)).style;
+    return rules_for_selector[n_sheets - 1];
   }
 }
 
@@ -876,8 +844,6 @@ exports.Shiny = void 0; // JS entry point
 
 var make_el_1 = require("./make_el");
 
-var draw_browser_header_1 = require("./draw_browser_header");
-
 var make_incrementer_1 = require("./make_incrementer");
 
 var focused_modal_1 = require("./focused_modal");
@@ -902,9 +868,8 @@ var App_Mode;
 })(App_Mode || (App_Mode = {}));
 
 window.onload = function () {
-  draw_browser_header_1.draw_browser_header(); // Keep track of the grid controls here. Tradeoff of a global variable
+  // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
-
   var grid_controls = {
     rows: [],
     cols: []
@@ -968,7 +933,7 @@ window.onload = function () {
 
   if (app_mode === App_Mode.ShinyExisting) {
     // Container styles are in this object
-    var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page");
+    var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
     var current_cols = styles_for_container.gridTemplateColumns.split(" "); // I dont know why this is just .gap and not gridGap
 
@@ -1679,12 +1644,7 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-
-
-window.onresize = function () {
-  draw_browser_header_1.draw_browser_header();
-};
-},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./make_toggle_switch":"make_toggle_switch.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./make_el":"make_el.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./make_toggle_switch":"make_toggle_switch.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1712,7 +1672,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54180" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63979" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
