@@ -122,11 +122,11 @@ window.onload = function () {
     : Shiny
     ? App_Mode.ShinyNew
     : App_Mode.ClientSide;
-
+    
+  // Container styles are in this object
+  const styles_for_container = find_rules_by_selector("#grid_page", "gridTemplateColumns");
   if (app_mode === App_Mode.ShinyExisting) {
-    // Container styles are in this object
-    const styles_for_container = find_rules_by_selector("#grid_page", "gridTemplateColumns");
-
+    
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
     // I dont know why this is just .gap and not gridGap
@@ -543,6 +543,12 @@ window.onload = function () {
     if (opts.gap) {
       // To give a consistant gap around everything we also add margin of same size
       grid_holder.style.setProperty("--grid-gap", opts.gap);
+      
+      if(app_mode === App_Mode.ShinyExisting){
+        // We dont use css variables in the exported css so we need to modify both
+        styles_for_container['gap'] = opts.gap;
+        styles_for_container['padding'] = opts.gap;
+      }
     }
 
     if (grid_numbers_changed) fill_grid_cells();
