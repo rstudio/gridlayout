@@ -142,7 +142,16 @@ grided_ui_wrapper <- function(grid_container, update_btn_text){
       id = "editor",
       shiny::div(
         id = "editor-wrapper",
-        shiny::tags$svg(id = "editor-browser-header"),
+        shiny::HTML('<div id="editor-browser-header">
+  <div id="buttons-container">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div id="url-box">
+    <span> www.myShinyApp.com </span>
+  </div>
+</div>'),
         grid_container
       )
     )

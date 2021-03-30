@@ -1,6 +1,5 @@
 // JS entry point
 import { Event_Listener, make_el, remove_elements } from "./make_el";
-import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
@@ -60,7 +59,6 @@ const enum App_Mode {
   ClientSide,
 }
 window.onload = function () {
-  draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
   const grid_controls = { rows: [], cols: [] };
@@ -997,7 +995,3 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-
-window.onresize = function () {
-  draw_browser_header();
-};

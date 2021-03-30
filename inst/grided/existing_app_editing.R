@@ -97,7 +97,16 @@ ui <- shiny::tags$body(
     id = "editor",
     shiny::div(
       id = "editor-wrapper",
-      shiny::tags$svg(id = "editor-browser-header"),
+      shiny::HTML('<div id="editor-browser-header">
+  <div id="buttons-container">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div id="url-box">
+    <span> www.myShinyApp.com </span>
+  </div>
+</div>'),
       grid_container(
         id = "grid_page",
         layout = my_layout,

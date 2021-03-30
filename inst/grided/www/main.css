@@ -518,3 +518,43 @@ form#name_form input[type="text"] {
     background-position: 100% 0, 0 100%, 0 0, 100% 100%;
   }
 }
+
+
+
+#editor-browser-header{
+  --bar-height: 35px;
+  --buttons-width: 70px;
+  width: 100%;
+  height: var(--bar-height);
+  display: flex;
+}
+
+#buttons-container {
+  width: var(--buttons-width);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#buttons-container > div {
+  --button-size: 12px;
+  background: blue;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: calc(var(--button-size)/2);
+}
+#url-box {
+  --vert-offset: 3px;
+  --url-box-height: calc(100% - 2 * var(--vert-offset));
+  width: calc(100% - var(--buttons-width) - var(--vert-offset));
+  margin-top: var(--vert-offset);
+  height: var(--url-box-height);
+  border: 1px solid black;
+  border-radius: calc(var(--bar-height) - 2 * var(--vert-offset));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+#url-box > span {
+  margin-left: 5px;
+}
