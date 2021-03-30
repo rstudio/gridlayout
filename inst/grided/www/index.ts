@@ -545,7 +545,8 @@ window.onload = function () {
       grid_holder.style.setProperty("--grid-gap", opts.gap);
       
       if(app_mode === App_Mode.ShinyExisting){
-        // We dont use css variables in the exported css so we need to modify both
+        // We dont use css variables in the exported css that existing apps used
+        // so we need to modify both gap and padding
         styles_for_container['gap'] = opts.gap;
         styles_for_container['padding'] = opts.gap;
       }
