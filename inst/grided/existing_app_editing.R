@@ -111,7 +111,7 @@ ui <- shiny::tags$body(
         id = "grid_page",
         layout = my_layout,
         elements = list(
-          header = h2("This is my header content 2"),
+          header = h2("Geysers!"),
           sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
           plot = plotOutput("distPlot", height = "100%")
         )
