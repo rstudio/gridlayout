@@ -792,17 +792,22 @@ function find_rules_by_selector(selector_text, target_property) {
     };
   };
 
-  var rules_for_selector = __spreadArray([], document.styleSheets).filter(function (style_sheet) {
+  var all_sheets = __spreadArray([], document.styleSheets);
+
+  var rules_for_selector = all_sheets.filter(function (style_sheet) {
     return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
   }).map(function (x) {
     return __spreadArray([], x.cssRules).find(defines_ruleset(selector_text)).style;
   }).filter(function (x) {
     return target_property ? x[target_property] : true;
   });
-
   var n_sheets = rules_for_selector.length;
 
-  if (n_sheets === 0) {// No rules declared so make a new rule and append to last style sheet
+  if (n_sheets === 0) {
+    // No rules declared so make a new rule and append to last style sheet
+    var last_sheet = all_sheets[all_sheets.length - 1];
+    last_sheet.insertRule(selector_text + " { }", 0);
+    return __spreadArray([], last_sheet.cssRules).find(defines_ruleset(selector_text)).style;
   } else {
     // Take the latest style sheet and (hope) that's the correct one
     return rules_for_selector[n_sheets - 1];
@@ -929,11 +934,11 @@ window.onload = function () {
     update_grid((_a = {}, _a[dir] = current_vals, _a));
   }
 
-  var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide;
+  var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide; // Container styles are in this object
+
+  var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
 
   if (app_mode === App_Mode.ShinyExisting) {
-    // Container styles are in this object
-    var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
     var current_cols = styles_for_container.gridTemplateColumns.split(" "); // I dont know why this is just .gap and not gridGap
 
@@ -956,7 +961,7 @@ window.onload = function () {
       gap: current_gap
     }); // Make grid cells transparent so the app is seen beneath them
 
-    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app 
+    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app
 
     make_toggle_switch_1.make_toggle_switch(document.querySelector("#header .code_btns"), "Edit layout", "Interact mode", function (interact_is_on) {
       var update_el = function update_el(el) {
@@ -1278,6 +1283,13 @@ window.onload = function () {
     if (opts.gap) {
       // To give a consistant gap around everything we also add margin of same size
       grid_holder.style.setProperty("--grid-gap", opts.gap);
+
+      if (app_mode === App_Mode.ShinyExisting) {
+        // We dont use css variables in the exported css that existing apps used
+        // so we need to modify both gap and padding
+        styles_for_container["gap"] = opts.gap;
+        styles_for_container["padding"] = opts.gap;
+      }
     }
 
     if (grid_numbers_changed) fill_grid_cells();

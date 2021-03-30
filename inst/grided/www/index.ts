@@ -122,11 +122,13 @@ window.onload = function () {
     : Shiny
     ? App_Mode.ShinyNew
     : App_Mode.ClientSide;
-    
+
   // Container styles are in this object
-  const styles_for_container = find_rules_by_selector("#grid_page", "gridTemplateColumns");
+  const styles_for_container = find_rules_by_selector(
+    "#grid_page",
+    "gridTemplateColumns"
+  );
   if (app_mode === App_Mode.ShinyExisting) {
-    
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
     // I dont know why this is just .gap and not gridGap
@@ -154,7 +156,7 @@ window.onload = function () {
     // Make grid cells transparent so the app is seen beneath them
     find_rules_by_selector(".grid-cell").background = "none";
 
-    // And edit mode toggle to allow user to interact with app 
+    // And edit mode toggle to allow user to interact with app
     make_toggle_switch(
       document.querySelector("#header .code_btns"),
       "Edit layout",
@@ -172,7 +174,6 @@ window.onload = function () {
         update_el(document.querySelector("#drag_canvas"));
       }
     );
-
   } else if (app_mode === App_Mode.ShinyNew) {
     Shiny.addCustomMessageHandler("update-grid", function (opts) {
       update_grid(opts);
@@ -543,12 +544,12 @@ window.onload = function () {
     if (opts.gap) {
       // To give a consistant gap around everything we also add margin of same size
       grid_holder.style.setProperty("--grid-gap", opts.gap);
-      
-      if(app_mode === App_Mode.ShinyExisting){
+
+      if (app_mode === App_Mode.ShinyExisting) {
         // We dont use css variables in the exported css that existing apps used
         // so we need to modify both gap and padding
-        styles_for_container['gap'] = opts.gap;
-        styles_for_container['padding'] = opts.gap;
+        styles_for_container["gap"] = opts.gap;
+        styles_for_container["padding"] = opts.gap;
       }
     }
 
