@@ -135,6 +135,18 @@ window.onload = function () {
   styles_for_container.gap = "1rem";
   styles_for_container.padding = "1rem";
 
+  let connected_to_shiny: boolean = false;
+  Shiny?.addCustomMessageHandler("shiny-loaded", function (event) {
+    connected_to_shiny = true;
+    console.log("connected to shiny")
+  });
+
+  function setShinyInput(input_id: string, input_value: any){
+    if(connected_to_shiny){
+      Shiny.setInputValue(input_id, input_value);
+    }
+  }
+
   if (app_mode === App_Mode.ShinyExisting) {
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
@@ -563,13 +575,13 @@ window.onload = function () {
 
     if (grid_numbers_changed || opts.force) fill_grid_cells();
 
-    if (app_mode == App_Mode.ShinyNew) {
-      Shiny.setInputValue("grid_sizing", {
+    setShinyInput(
+      "grid_sizing", {
         rows: styles_for_container.gridTemplateRows.split(" "),
         cols: styles_for_container.gridTemplateColumns.split(" "),
         gap: styles_for_container.gap,
-      });
-    }
+      }
+    );
 
     return grid_holder;
   }
@@ -930,13 +942,12 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (app_mode == App_Mode.ShinyNew) {
-      const elements_by_id = {};
-      current_elements().forEach(function (el) {
-        elements_by_id[el.id] = el;
-      });
-      Shiny.setInputValue("elements", elements_by_id);
-    }
+    const elements_by_id = {};
+    current_elements().forEach(function (el) {
+      elements_by_id[el.id] = el;
+    });
+    
+    setShinyInput("elements", elements_by_id);
   }
 
   function gen_code_for_layout(): Array<Code_Text> {
