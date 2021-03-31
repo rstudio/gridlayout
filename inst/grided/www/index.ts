@@ -128,6 +128,13 @@ window.onload = function () {
     "#grid_page",
     "gridTemplateColumns"
   );
+
+  styles_for_container.height = "100%";
+  styles_for_container.width = "100%";
+  styles_for_container.display = "grid";
+  styles_for_container.gap = "1rem";
+  styles_for_container.padding = "1rem";
+
   if (app_mode === App_Mode.ShinyExisting) {
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
@@ -151,6 +158,7 @@ window.onload = function () {
       rows: current_rows,
       cols: current_cols,
       gap: current_gap,
+      force: true,
     });
 
     // Make grid cells transparent so the app is seen beneath them
@@ -251,7 +259,7 @@ window.onload = function () {
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             gridTemplateRows: "1fr, auto",
-            gridGap: "4px",
+            gap: "4px",
             gridTemplateAreas: concat_nl(
               `"code_type copy_btn"`,
               `"code_text code_text"`
@@ -415,11 +423,12 @@ window.onload = function () {
     rows?: Array<string>;
     cols?: Array<string>;
     gap?: string;
+    force?: boolean;
   }
   function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
-    const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
+    const old_gap = styles_for_container.gap;
     const new_gap = opts.gap || old_gap;
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
@@ -536,30 +545,28 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      grid_holder.style.gridTemplateRows = sizes_to_template_def(opts.rows);
+      styles_for_container.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      grid_holder.style.gridTemplateColumns = sizes_to_template_def(opts.cols);
+      styles_for_container.gridTemplateColumns = sizes_to_template_def(opts.cols);
     }
     if (opts.gap) {
-      // To give a consistant gap around everything we also add margin of same size
-      grid_holder.style.setProperty("--grid-gap", opts.gap);
-
-      if (app_mode === App_Mode.ShinyExisting) {
-        // We dont use css variables in the exported css that existing apps used
-        // so we need to modify both gap and padding
-        styles_for_container["gap"] = opts.gap;
-        styles_for_container["padding"] = opts.gap;
-      }
+      // This sets the --grid-gap variable so that the controls that need the 
+      // info can use it to keep a constant distance from the grid holder
+      grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
+      // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+      styles_for_container.gap = opts.gap;
+      styles_for_container.padding = opts.gap;
     }
 
-    if (grid_numbers_changed) fill_grid_cells();
+    if (grid_numbers_changed || opts.force) fill_grid_cells();
 
     if (app_mode == App_Mode.ShinyNew) {
       Shiny.setInputValue("grid_sizing", {
-        rows: grid_holder.style.gridTemplateRows.split(" "),
-        cols: grid_holder.style.gridTemplateColumns.split(" "),
-        gap: grid_holder.style.getPropertyValue("--grid-gap"),
+        rows: styles_for_container.gridTemplateRows.split(" "),
+        cols: styles_for_container.gridTemplateColumns.split(" "),
+        gap: styles_for_container.gap,
       });
     }
 
@@ -947,9 +954,9 @@ window.onload = function () {
     const css_code = concat_nl(
       `${container_selector} {`,
       `  display: grid;`,
-      `  grid-template-columns: ${grid_holder.style.gridTemplateColumns};`,
-      `  grid-template-rows: ${grid_holder.style.gridTemplateRows};`,
-      `  grid-gap: ${grid_holder.style.getPropertyValue("--grid-gap")}`,
+      `  grid-template-columns: ${styles_for_container.gridTemplateColumns};`,
+      `  grid-template-rows: ${styles_for_container.gridTemplateRows};`,
+      `  gap: ${styles_for_container.gap}`,
       `}`,
       ...element_defs
     );
@@ -969,11 +976,11 @@ window.onload = function () {
   }
 
   function get_current_rows() {
-    return grid_holder.style.gridTemplateRows.split(" ");
+    return styles_for_container.gridTemplateRows.split(" ");
   }
 
   function get_current_cols() {
-    return grid_holder.style.gridTemplateColumns.split(" ");
+    return styles_for_container.gridTemplateColumns.split(" ");
   }
 
   // Get the next color in our list of colors.

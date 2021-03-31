@@ -107,6 +107,8 @@ ui <- shiny::tags$body(
     <span> www.myShinyApp.com </span>
   </div>
 </div>'),
+    shiny::div(
+      id = "editor-app-window",
       grid_container(
         id = "grid_page",
         layout = my_layout,
@@ -116,6 +118,7 @@ ui <- shiny::tags$body(
           plot = plotOutput("distPlot", height = "100%")
         )
       )
+    )
     )
   )
 )
