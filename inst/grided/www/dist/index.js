@@ -942,6 +942,17 @@ window.onload = function () {
   styles_for_container.display = "grid";
   styles_for_container.gap = "1rem";
   styles_for_container.padding = "1rem";
+  var connected_to_shiny = false;
+  exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.addCustomMessageHandler("shiny-loaded", function (event) {
+    connected_to_shiny = true;
+    console.log("connected to shiny");
+  });
+
+  function setShinyInput(input_id, input_value) {
+    if (connected_to_shiny) {
+      exports.Shiny.setInputValue(input_id, input_value);
+    }
+  }
 
   if (app_mode === App_Mode.ShinyExisting) {
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
@@ -984,21 +995,13 @@ window.onload = function () {
       update_el(document.querySelector("#drag_canvas"));
     });
   } else if (app_mode === App_Mode.ShinyNew) {
-    exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
-      update_grid(opts);
-    });
+    exports.Shiny.addCustomMessageHandler("update-grid", update_grid);
     exports.Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el) {
         add_element({
           id: el.id,
           grid_pos: el
         });
-      });
-    });
-    exports.Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show
       });
     });
   } else {
@@ -1013,6 +1016,13 @@ window.onload = function () {
       show_code("Place the following in your CSS:", current_layout);
     });
   }
+
+  exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
+    show_code("Paste the following code into your app to update the layout", {
+      type: "R",
+      code: code_to_show
+    });
+  });
 
   function show_code(message, code_blocks) {
     var code_modal = focused_modal_1.focused_modal({
@@ -1298,15 +1308,11 @@ window.onload = function () {
     }
 
     if (grid_numbers_changed || opts.force) fill_grid_cells();
-
-    if (app_mode == App_Mode.ShinyNew) {
-      exports.Shiny.setInputValue("grid_sizing", {
-        rows: styles_for_container.gridTemplateRows.split(" "),
-        cols: styles_for_container.gridTemplateColumns.split(" "),
-        gap: styles_for_container.gap
-      });
-    }
-
+    setShinyInput("grid_sizing", {
+      rows: styles_for_container.gridTemplateRows.split(" "),
+      cols: styles_for_container.gridTemplateColumns.split(" "),
+      gap: styles_for_container.gap
+    });
     return grid_holder;
   }
 
@@ -1609,13 +1615,11 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (app_mode == App_Mode.ShinyNew) {
-      var elements_by_id_1 = {};
-      current_elements().forEach(function (el) {
-        elements_by_id_1[el.id] = el;
-      });
-      exports.Shiny.setInputValue("elements", elements_by_id_1);
-    }
+    var elements_by_id = {};
+    current_elements().forEach(function (el) {
+      elements_by_id[el.id] = el;
+    });
+    setShinyInput("elements", elements_by_id);
   }
 
   function gen_code_for_layout() {
@@ -1689,7 +1693,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60152" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59826" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -942,7 +942,11 @@ window.onload = function () {
   styles_for_container.display = "grid";
   styles_for_container.gap = "1rem";
   styles_for_container.padding = "1rem";
-  styles_for_container.position = "relative"; // debugger;
+  var connected_to_shiny = false;
+  exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.addCustomMessageHandler("shiny-loaded", function (event) {
+    connected_to_shiny = true;
+    console.log("connected to shiny");
+  });
 
   if (app_mode === App_Mode.ShinyExisting) {
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
@@ -964,7 +968,8 @@ window.onload = function () {
     update_grid({
       rows: current_rows,
       cols: current_cols,
-      gap: current_gap
+      gap: current_gap,
+      force: true
     }); // Make grid cells transparent so the app is seen beneath them
 
     find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app
@@ -978,14 +983,13 @@ window.onload = function () {
         }
       };
 
-      document.querySelectorAll(".added-element").forEach(update_el);
+      document.querySelectorAll("#grid_page .added-element").forEach(update_el);
       document.querySelectorAll(".grid-cell").forEach(update_el);
+      update_el(document.querySelector("#added_elements"));
       update_el(document.querySelector("#drag_canvas"));
     });
   } else if (app_mode === App_Mode.ShinyNew) {
-    exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
-      update_grid(opts);
-    });
+    exports.Shiny.addCustomMessageHandler("update-grid", update_grid);
     exports.Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el) {
         add_element({
@@ -1296,7 +1300,7 @@ window.onload = function () {
       styles_for_container.padding = opts.gap;
     }
 
-    if (grid_numbers_changed) fill_grid_cells();
+    if (grid_numbers_changed || opts.force) fill_grid_cells();
 
     if (app_mode == App_Mode.ShinyNew) {
       exports.Shiny.setInputValue("grid_sizing", {
@@ -1608,13 +1612,11 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (app_mode == App_Mode.ShinyNew) {
-      var elements_by_id_1 = {};
-      current_elements().forEach(function (el) {
-        elements_by_id_1[el.id] = el;
-      });
-      exports.Shiny.setInputValue("elements", elements_by_id_1);
-    }
+    var elements_by_id = {};
+    current_elements().forEach(function (el) {
+      elements_by_id[el.id] = el;
+    });
+    exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.setInputValue("elements", elements_by_id);
   }
 
   function gen_code_for_layout() {
@@ -1688,7 +1690,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61928" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58949" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

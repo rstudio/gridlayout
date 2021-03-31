@@ -58,6 +58,9 @@ const enum App_Mode {
   ShinyExisting,
   ClientSide,
 }
+
+
+
 window.onload = function () {
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -196,9 +199,7 @@ window.onload = function () {
       }
     );
   } else if (app_mode === App_Mode.ShinyNew) {
-    Shiny.addCustomMessageHandler("update-grid", function (opts) {
-      update_grid(opts);
-    });
+    Shiny.addCustomMessageHandler("update-grid", update_grid);
 
     interface Shiny_Element_Msg {
       id: string;
