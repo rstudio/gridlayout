@@ -85,6 +85,16 @@ elements_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0
                              <path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />
                              </svg>)")
 
+browser_header_html <- '<div id="editor-browser-header">
+  <div id="buttons-container">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div id="url-box">
+    <span> www.myShinyApp.com </span>
+  </div>
+</div>'
 
 grided_ui_wrapper <- function(grid_container, update_btn_text){
   shiny::tags$body(
@@ -142,17 +152,11 @@ grided_ui_wrapper <- function(grid_container, update_btn_text){
       id = "editor",
       shiny::div(
         id = "editor-wrapper",
-        shiny::HTML('<div id="editor-browser-header">
-  <div id="buttons-container">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  <div id="url-box">
-    <span> www.myShinyApp.com </span>
-  </div>
-</div>'),
-        grid_container
+        shiny::HTML(browser_header_html),
+        shiny::div(
+          id = "editor-app-window",
+          grid_container
+        )
       )
     )
   )

@@ -937,6 +937,11 @@ window.onload = function () {
   var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide; // Container styles are in this object
 
   var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
+  styles_for_container.height = "100%";
+  styles_for_container.width = "100%";
+  styles_for_container.display = "grid";
+  styles_for_container.gap = "1rem";
+  styles_for_container.padding = "1rem";
 
   if (app_mode === App_Mode.ShinyExisting) {
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
@@ -958,7 +963,8 @@ window.onload = function () {
     update_grid({
       rows: current_rows,
       cols: current_cols,
-      gap: current_gap
+      gap: current_gap,
+      force: true
     }); // Make grid cells transparent so the app is seen beneath them
 
     find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app
@@ -1030,7 +1036,7 @@ window.onload = function () {
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
           gridTemplateRows: "1fr, auto",
-          gridGap: "4px",
+          gap: "4px",
           gridTemplateAreas: misc_helpers_1.concat_nl("\"code_type copy_btn\"", "\"code_text code_text\"")
         }
       });
@@ -1195,7 +1201,7 @@ window.onload = function () {
   function update_grid(opts) {
     var old_num_rows = get_current_rows().length;
     var old_num_cols = get_current_cols().length;
-    var old_gap = grid_holder.style.getPropertyValue("--grid-gap");
+    var old_gap = styles_for_container.gap;
     var new_gap = opts.gap || old_gap;
     var new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     var new_num_cols = opts.cols ? opts.cols.length : old_num_cols; // Make sure settings panel is up-to-date
@@ -1273,32 +1279,30 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      grid_holder.style.gridTemplateRows = misc_helpers_1.sizes_to_template_def(opts.rows);
+      styles_for_container.gridTemplateRows = misc_helpers_1.sizes_to_template_def(opts.rows);
     }
 
     if (opts.cols) {
-      grid_holder.style.gridTemplateColumns = misc_helpers_1.sizes_to_template_def(opts.cols);
+      styles_for_container.gridTemplateColumns = misc_helpers_1.sizes_to_template_def(opts.cols);
     }
 
     if (opts.gap) {
-      // To give a consistant gap around everything we also add margin of same size
-      grid_holder.style.setProperty("--grid-gap", opts.gap);
+      // This sets the --grid-gap variable so that the controls that need the 
+      // info can use it to keep a constant distance from the grid holder
+      grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
 
-      if (app_mode === App_Mode.ShinyExisting) {
-        // We dont use css variables in the exported css that existing apps used
-        // so we need to modify both gap and padding
-        styles_for_container["gap"] = opts.gap;
-        styles_for_container["padding"] = opts.gap;
-      }
+      styles_for_container.gap = opts.gap;
+      styles_for_container.padding = opts.gap;
     }
 
-    if (grid_numbers_changed) fill_grid_cells();
+    if (grid_numbers_changed || opts.force) fill_grid_cells();
 
     if (app_mode == App_Mode.ShinyNew) {
       exports.Shiny.setInputValue("grid_sizing", {
-        rows: grid_holder.style.gridTemplateRows.split(" "),
-        cols: grid_holder.style.gridTemplateColumns.split(" "),
-        gap: grid_holder.style.getPropertyValue("--grid-gap")
+        rows: styles_for_container.gridTemplateRows.split(" "),
+        cols: styles_for_container.gridTemplateColumns.split(" "),
+        gap: styles_for_container.gap
       });
     }
 
@@ -1619,7 +1623,7 @@ window.onload = function () {
     var element_defs = elements.map(function (el) {
       return misc_helpers_1.concat_nl("#" + el.id + " {", "  grid-column: " + misc_helpers_1.make_template_start_end(el.start_col, el.end_col) + ";", "  grid-row: " + misc_helpers_1.make_template_start_end(el.start_row, el.end_row) + ";", "}");
     });
-    var css_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray([container_selector + " {", "  display: grid;", "  grid-template-columns: " + grid_holder.style.gridTemplateColumns + ";", "  grid-template-rows: " + grid_holder.style.gridTemplateRows + ";", "  grid-gap: " + grid_holder.style.getPropertyValue("--grid-gap"), "}"], element_defs));
+    var css_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray([container_selector + " {", "  display: grid;", "  grid-template-columns: " + styles_for_container.gridTemplateColumns + ";", "  grid-template-rows: " + styles_for_container.gridTemplateRows + ";", "  gap: " + styles_for_container.gap, "}"], element_defs));
     var html_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray(__spreadArray(["<div id = " + container_selector + ">"], elements.map(function (el) {
       return misc_helpers_1.concat_nl("  <div id = \"#" + el.id + "\">", "  </div>");
     })), ["</div>"]));
@@ -1633,11 +1637,11 @@ window.onload = function () {
   }
 
   function get_current_rows() {
-    return grid_holder.style.gridTemplateRows.split(" ");
+    return styles_for_container.gridTemplateRows.split(" ");
   }
 
   function get_current_cols() {
-    return grid_holder.style.gridTemplateColumns.split(" ");
+    return styles_for_container.gridTemplateColumns.split(" ");
   } // Get the next color in our list of colors.
 
 
@@ -1684,7 +1688,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63979" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63528" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
