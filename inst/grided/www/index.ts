@@ -138,16 +138,19 @@ window.onload = function () {
   styles_for_container.gap = "1rem";
   styles_for_container.padding = "1rem";
 
-  let connected_to_shiny: boolean = false;
-  Shiny?.addCustomMessageHandler("shiny-loaded", function (event) {
-    connected_to_shiny = true;
-    console.log("connected to shiny")
-  });
+  add_shiny_listener(
+    "shiny-loaded",
+    function (event) {
+      console.log("connected to shiny");
+      // Send elements to Shiny so app is aware of what it's working with
+      send_elements_to_shiny();
+      send_grid_sizing_to_shiny();
+    }
+  );
 
   function setShinyInput(input_id: string, input_value: any){
-    if(connected_to_shiny){
-      Shiny.setInputValue(input_id, input_value);
-    }
+    // Sent input value to shiny but only if it's initialized
+    Shiny.setInputValue?.(input_id, input_value);
   }
 
   if (app_mode === App_Mode.ShinyExisting) {
@@ -167,6 +170,8 @@ window.onload = function () {
         existing_element: el as HTMLElement,
       });
     });
+
+
 
     // Make sure grid matches the one the app is working with
     update_grid({
@@ -192,14 +197,16 @@ window.onload = function () {
             el.classList.remove("disabled");
           }
         };
-        document.querySelectorAll("#grid_page .added-element").forEach(update_el);
+        document
+          .querySelectorAll("#grid_page .added-element")
+          .forEach(update_el);
         document.querySelectorAll(".grid-cell").forEach(update_el);
         update_el(document.querySelector("#added_elements"));
         update_el(document.querySelector("#drag_canvas"));
       }
     );
   } else if (app_mode === App_Mode.ShinyNew) {
-    Shiny.addCustomMessageHandler("update-grid", update_grid);
+    add_shiny_listener("update-grid", update_grid);
 
     interface Shiny_Element_Msg {
       id: string;
@@ -208,7 +215,7 @@ window.onload = function () {
       start_col: number;
       end_col: number;
     }
-    Shiny.addCustomMessageHandler("add-elements", function (
+    add_shiny_listener("add-elements", function (
       elements_to_add: Shiny_Element_Msg[]
     ) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
@@ -218,7 +225,6 @@ window.onload = function () {
         });
       });
     });
-
   } else {
     // If in pure-client-side mode we need to provide a default grid and also wireup the code button
     update_grid({
@@ -228,17 +234,19 @@ window.onload = function () {
     });
 
     document.getElementById("get_code").addEventListener("click", function () {
-      const current_layout = gen_code_for_layout();
-      show_code("Place the following in your CSS:", current_layout);
+      show_code("Place the following in your CSS:", gen_code_for_layout());
     });
   }
 
-  Shiny?.addCustomMessageHandler("code_modal", function (code_to_show) {
-    show_code("Paste the following code into your app to update the layout", {
-      type: "R",
-      code: code_to_show,
-    });
-  });
+  add_shiny_listener(
+    "code_modal",
+    function (code_to_show) {
+      show_code("Paste the following code into your app to update the layout", {
+        type: "R",
+        code: code_to_show,
+      });
+    }
+  )
 
   interface Code_Text {
     type: string;
@@ -578,13 +586,7 @@ window.onload = function () {
 
     if (grid_numbers_changed || opts.force) fill_grid_cells();
 
-    setShinyInput(
-      "grid_sizing", {
-        rows: styles_for_container.gridTemplateRows.split(" "),
-        cols: styles_for_container.gridTemplateColumns.split(" "),
-        gap: styles_for_container.gap,
-      }
-    );
+    send_grid_sizing_to_shiny();
 
     return grid_holder;
   }
@@ -944,6 +946,14 @@ window.onload = function () {
     return elements;
   }
 
+  // These are functions for communicating with Shiny. They are all optional
+  // chained so they won't spit errors if Shiny isn't connected or initialized
+  // yet.
+
+  function add_shiny_listener(event_id : string, callback_func: Function){
+    Shiny?.addCustomMessageHandler(event_id , callback_func);
+  }
+
   function send_elements_to_shiny() {
     const elements_by_id = {};
     current_elements().forEach(function (el) {
@@ -951,6 +961,16 @@ window.onload = function () {
     });
     
     setShinyInput("elements", elements_by_id);
+  }
+
+  function send_grid_sizing_to_shiny(){
+    setShinyInput(
+      "grid_sizing", {
+        rows: styles_for_container.gridTemplateRows.split(" "),
+        cols: styles_for_container.gridTemplateColumns.split(" "),
+        gap: styles_for_container.gap,
+      }
+    );
   }
 
   function gen_code_for_layout(): Array<Code_Text> {
