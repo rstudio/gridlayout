@@ -336,6 +336,23 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
+#added_elements {
+  position: relative;
+}
+#added_elements.disabled::after{
+  content: "Interaction mode on:\AReturn to edit mode to modify elements";
+  white-space: break-spaces;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  padding-top: 1rem;
+  text-align: center;
+  background:#ffffffd4;
+  cursor: not-allowed;
+}
+
+
 
 #current_selection_box.added-element {
   border-style: dashed;
@@ -422,10 +439,6 @@ button.minus_btn.disabled {
   align-content: center;
   justify-content: end;
 }
-
-
-
-
 
 .rows-controls {
   height: 100%;

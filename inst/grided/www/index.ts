@@ -177,8 +177,9 @@ window.onload = function () {
             el.classList.remove("disabled");
           }
         };
-        document.querySelectorAll(".added-element").forEach(update_el);
+        document.querySelectorAll("#grid_page .added-element").forEach(update_el);
         document.querySelectorAll(".grid-cell").forEach(update_el);
+        update_el(document.querySelector("#added_elements"));
         update_el(document.querySelector("#drag_canvas"));
       }
     );
