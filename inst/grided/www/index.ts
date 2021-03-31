@@ -218,12 +218,6 @@ window.onload = function () {
       });
     });
 
-    Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show,
-      });
-    });
   } else {
     // If in pure-client-side mode we need to provide a default grid and also wireup the code button
     update_grid({
@@ -237,6 +231,14 @@ window.onload = function () {
       show_code("Place the following in your CSS:", current_layout);
     });
   }
+
+  Shiny?.addCustomMessageHandler("code_modal", function (code_to_show) {
+    show_code("Paste the following code into your app to update the layout", {
+      type: "R",
+      code: code_to_show,
+    });
+  });
+
   interface Code_Text {
     type: string;
     code: string;
