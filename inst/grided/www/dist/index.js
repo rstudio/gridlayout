@@ -978,8 +978,9 @@ window.onload = function () {
         }
       };
 
-      document.querySelectorAll(".added-element").forEach(update_el);
+      document.querySelectorAll("#grid_page .added-element").forEach(update_el);
       document.querySelectorAll(".grid-cell").forEach(update_el);
+      update_el(document.querySelector("#added_elements"));
       update_el(document.querySelector("#drag_canvas"));
     });
   } else if (app_mode === App_Mode.ShinyNew) {
@@ -1688,7 +1689,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63528" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60152" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

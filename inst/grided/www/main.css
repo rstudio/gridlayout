@@ -449,19 +449,7 @@ button.minus_btn.disabled {
   position: absolute;
   right: calc(100% + var(--grid-gap));
   width: var(--editor-left-pad);
-
-  /* grid-template-rows: 1rem 1fr 1rem; */
 }
-
-/* .rows-controls .css-unit-input-form {
-  grid-row: 2/3;
-}
-
- */
-/* .rows-controls .css-unit-input-dragger {
-  max-width: 60px;
-} */
-
 
 
 .background-blurrer {
