@@ -30,7 +30,6 @@ options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
 
 
-
 ui <- tags$body(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
@@ -90,12 +89,15 @@ ui <- tags$body(
     <span> www.myShinyApp.com </span>
   </div>
 </div>'),
+shiny::div(
+  id = "editor-app-window",
       uiOutput("grid_page")
+)
     )
   )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required to draw a histogra m
 server <- function(input, output, session) {
 
   session$sendCustomMessage(
@@ -113,18 +115,7 @@ server <- function(input, output, session) {
 
   current_layout <- reactive({
     shiny::req(input$elements)
-
-    grid_mat <- matrix(".",
-                       nrow = length(input$gridd_sizing$rows),
-                       ncol = length(input$grid_sizing$cols) )
-    for(el in input$elements){
-      grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
-    }
-
-    new_gridlayout(layout_mat = grid_mat,
-                   col_sizes = as.character(input$grid_sizing$cols),
-                   row_sizes = as.character(input$grid_sizing$rows),
-                   gap = input$grid_sizing$gap)
+    layout_from_grided(input$elements, input$grid_sizing)
   })
 
   shiny::bindEvent(
@@ -144,6 +135,7 @@ server <- function(input, output, session) {
     shiny::stopApp()
   }), input$updated_code)
 }
+
 
 shinyApp(ui, server)
 

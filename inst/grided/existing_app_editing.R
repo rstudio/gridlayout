@@ -126,7 +126,7 @@ ui <- shiny::tags$body(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-
+  session$sendCustomMessage("shiny-loaded", 1)
   # session$sendCustomMessage(
   #   "add-elements",
   #   starting_elements
@@ -172,6 +172,23 @@ server <- function(input, output, session) {
   #   on_update(current_layout())
   #   shiny::stopApp()
   # }), input$updated_code)
+
+
+  current_layout <- reactive({
+    shiny::req(input$elements)
+    layout_from_grided(input$elements, input$grid_sizing)
+  })
+
+  shiny::bindEvent(
+    shiny::observe({
+      layout_call <- paste(
+        "layout <- grid_layout_from_md(layout_table = \"",
+        "    ", to_md(current_layout()), "\")",
+        sep = "\n")
+
+      session$sendCustomMessage("code_modal", layout_call)
+    }),
+    input$get_code)
 
   output$distPlot <- renderPlot({
     x    <- faithful[, 2]

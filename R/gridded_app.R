@@ -161,3 +161,12 @@ grided_ui_wrapper <- function(grid_container, update_btn_text){
     )
   )
 }
+
+# Slightly easier way to build a layout from the elements and grid_sizing inputs
+# provided by grided UI
+layout_from_grided <- function(elements, grid_sizing){
+  new_gridlayout(element_list = elements,
+                 col_sizes = as.character(grid_sizing$cols),
+                 row_sizes = as.character(grid_sizing$rows),
+                 gap = grid_sizing$gap)
+}
