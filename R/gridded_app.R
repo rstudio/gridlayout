@@ -162,6 +162,9 @@ grided_ui_wrapper <- function(grid_container, update_btn_text){
   )
 }
 
+
+
+
 # Slightly easier way to build a layout from the elements and grid_sizing inputs
 # provided by grided UI
 layout_from_grided <- function(elements, grid_sizing){
@@ -170,3 +173,82 @@ layout_from_grided <- function(elements, grid_sizing){
                  row_sizes = as.character(grid_sizing$rows),
                  gap = grid_sizing$gap)
 }
+
+
+
+#' Run existing app in grided layout editing mode
+#'
+#'
+#' @param app Shiny app object as produced by \code{\link[shiny]{shinyApp()}}
+#'
+#' @return Shiny app object with original app encapuslated by grided editor
+#' @export
+#'
+run_with_grided <- function(app){
+
+  # Start by modifying the server code to respond to messages from the grided
+  # javascript
+  origServerFuncSource <- app[["serverFuncSource"]]
+
+  app[["serverFuncSource"]] <- function() {
+
+    origServerFunc <- origServerFuncSource()
+    function(input, output, session, ...) {
+
+      current_layout <- reactive({
+        shiny::req(input$elements)
+        layout_from_grided(input$elements, input$grid_sizing)
+      })
+
+      shiny::bindEvent(
+        shiny::observe({
+          layout_call <- paste(
+            "layout <- grid_layout_from_md(layout_table = \"",
+            "    ", to_md(current_layout()), "\")",
+            sep = "\n")
+
+          session$sendCustomMessage("code_modal", layout_call)
+        }),
+        input$get_code)
+
+      if (!"session" %in% names(formals(origServerFunc))) {
+        origServerFunc(input, output, ...)
+      } else {
+        origServerFunc(input, output, session, ...)
+      }
+    }
+  }
+
+  # Next we go into the UI function of the grid_page function
+  # and force the app to enter the layout editing mode by overriding the
+  # boolean for edit mode.
+
+  # Grab existing UI function out of app
+  existing_ui <- environment(app[["httpHandler"]])$ui
+
+  send_bad_ui_msg <- function(){
+    stop("run_with_grided needs to be used with an app that uses grid_page as its UI function.")
+  }
+  if(!is.function(existing_ui)) send_bad_ui_msg()
+
+  # Convert it to an expression list and insert argument forcing layout edit mode
+  ui_body <- as.list(body(existing_ui))
+
+  # Check to make sure UI was done with grid_page. We do this by checking for the existance of the
+  # layout_edit_mode variable in the function body. This is sort of brittle but I think it's acceptable
+  # as we already depend on that variable when we override it to turn on the grided UI later.
+  main_body_text <- as.character(ui_body[[2]])
+  missing_layout_edit_mode <- !any(str_detect(main_body_text, "layout_edit_mode"))
+  if(missing_layout_edit_mode) send_bad_ui_msg()
+
+  ui_body <- as.call(append(ui_body, quote(layout_edit_mode <- TRUE), 1))
+
+  # Replace the old ui body with the new one
+  body(environment(app[["httpHandler"]])$ui) <- ui_body
+
+  app
+}
+
+
+
+
