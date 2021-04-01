@@ -1,11 +1,8 @@
 # The geyser app... but in grid!
+
 library(gridlayout)
 library(shiny)
 requireNamespace("bslib", quietly = TRUE)
-
-options(shiny.autoreload = TRUE)
-shiny::devmode(TRUE)
-
 my_layout <- "
 |      |        |       |
 |------|--------|-------|
@@ -16,10 +13,9 @@ my_layout <- "
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
-    layout_edit_mode = TRUE,
     layout = my_layout,
     theme = bslib::bs_theme(),
-    header = h2(id = "header", "This is my header content 2"),
+    header = h2(id = "header", "This is my header"),
     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
     plot = plotOutput("distPlot", height = "100%")
   ),
@@ -31,3 +27,4 @@ app <- shinyApp(
     })
   }
 )
+run_with_grided(app)
