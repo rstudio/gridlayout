@@ -4,7 +4,7 @@
       grid_page(layout = "\n    |      |        |\n    |------|--------|\n    |2rem  |200px   |\n    |1fr   |header  |\n    |1fr   |plot    |\n    |1fr   |footer  |",
         header = shiny::h2(id = "header", "This is my header content"), footer = shiny::sliderInput(
           "bins", "Number of bins:", min = 1, max = 50, value = 30), plot = shiny::plotOutput(
-          "myPlot"))()
+          "myPlot"))
     Output
       <div class="container-fluid">
         <div id="grid_page" class="grid-container">
