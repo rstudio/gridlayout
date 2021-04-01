@@ -195,6 +195,15 @@ run_with_grided <- function(app){
     origServerFunc <- origServerFuncSource()
     function(input, output, session, ...) {
 
+      if (!"session" %in% names(formals(origServerFunc))) {
+        origServerFunc(input, output, ...)
+      } else {
+        origServerFunc(input, output, session, ...)
+      }
+
+      # Lets grided know it should send over initial app state
+      session$sendCustomMessage("shiny-loaded", 1)
+
       current_layout <- reactive({
         shiny::req(input$elements)
         layout_from_grided(input$elements, input$grid_sizing)
@@ -211,40 +220,43 @@ run_with_grided <- function(app){
         }),
         input$get_code)
 
-      if (!"session" %in% names(formals(origServerFunc))) {
-        origServerFunc(input, output, ...)
-      } else {
-        origServerFunc(input, output, session, ...)
-      }
     }
   }
 
-  # Next we go into the UI function of the grid_page function
-  # and force the app to enter the layout editing mode by overriding the
-  # boolean for edit mode.
+  # Next we go into the UI and extract the body and place it within the grided
+  # UI
 
   # Grab existing UI function out of app
   existing_ui <- environment(app[["httpHandler"]])$ui
 
-  send_bad_ui_msg <- function(){
-    stop("run_with_grided needs to be used with an app that uses grid_page as its UI function.")
+  find_grid_tags <- function(x) {
+    is_shinytag <- inherits(x, "shiny.tag")
+    has_class <- is_shinytag && !is.null(x$attribs$class)
+
+    if (has_class && x$attribs$class == "container-fluid") {
+      x$children
+    } else if (is_shinytag | inherits(x, "list")) {
+      children <- if(is_shinytag) x[["children"]] else x
+      for (child in children) {
+        ret <- Recall(child)
+        if (!is.null(ret)) return(ret)
+      }
+    } else {
+      NULL
+    }
   }
-  if(!is.function(existing_ui)) send_bad_ui_msg()
 
-  # Convert it to an expression list and insert argument forcing layout edit mode
-  ui_body <- as.list(body(existing_ui))
+  grid_page_tags <- find_grid_tags(existing_ui)
 
-  # Check to make sure UI was done with grid_page. We do this by checking for the existance of the
-  # layout_edit_mode variable in the function body. This is sort of brittle but I think it's acceptable
-  # as we already depend on that variable when we override it to turn on the grided UI later.
-  main_body_text <- as.character(ui_body[[2]])
-  missing_layout_edit_mode <- !any(str_detect(main_body_text, "layout_edit_mode"))
-  if(missing_layout_edit_mode) send_bad_ui_msg()
+  couldnt_find_tags <- is.null(grid_page_tags)
+  # This should be "grid_page" if we're looking at output of grid_page function
+  no_grid_page_div <- grid_page_tags[[1]][[2]]$attribs$id != "grid_page"
+  if(couldnt_find_tags || no_grid_page_div){
+    stop("run_with_grided needs to be used with an app that uses grid_page as its UI.")
+  }
 
-  ui_body <- as.call(append(ui_body, quote(layout_edit_mode <- TRUE), 1))
-
-  # Replace the old ui body with the new one
-  body(environment(app[["httpHandler"]])$ui) <- ui_body
+  # Replace the old ui with the new wrapped one
+  environment(app[["httpHandler"]])$ui <- grided_ui_wrapper(grid_page_tags, update_btn_text = "Finish editing")
 
   app
 }
