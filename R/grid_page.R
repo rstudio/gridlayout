@@ -76,18 +76,14 @@ grid_page <- function(layout, ..., theme = NULL, layout_edit_mode = FALSE, .veri
     container_height = if(layout_edit_mode) "100%" else "viewport"
   )
 
-  # Return UI as a function
-  function(){
-    if(layout_edit_mode){
-      grided_ui_wrapper(container, update_btn_text = "Finish editing")
-    } else {
-      shiny::fluidPage(
-        theme = theme,
-        container,
-        #any extra args not matched to layout will get added after
-        if(length(extra_args) != 0) extra_args
-      )
-    }
+  if(layout_edit_mode){
+    grided_ui_wrapper(container, update_btn_text = "Finish editing")
+  } else {
+    shiny::fluidPage(
+      theme = theme,
+      container,
+      #any extra args not matched to layout will get added after
+      if(length(extra_args) != 0) extra_args
+    )
   }
-
 }
