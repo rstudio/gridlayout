@@ -229,23 +229,6 @@ run_with_grided <- function(app){
   # Grab existing UI function out of app
   existing_ui <- environment(app[["httpHandler"]])$ui
 
-  find_grid_tags <- function(x) {
-    is_shinytag <- inherits(x, "shiny.tag")
-    has_class <- is_shinytag && !is.null(x$attribs$class)
-
-    if (has_class && x$attribs$class == "container-fluid") {
-      x$children
-    } else if (is_shinytag | inherits(x, "list")) {
-      children <- if(is_shinytag) x[["children"]] else x
-      for (child in children) {
-        ret <- Recall(child)
-        if (!is.null(ret)) return(ret)
-      }
-    } else {
-      NULL
-    }
-  }
-
   grid_page_tags <- find_grid_tags(existing_ui)
 
   couldnt_find_tags <- is.null(grid_page_tags)
@@ -259,6 +242,23 @@ run_with_grided <- function(app){
   environment(app[["httpHandler"]])$ui <- grided_ui_wrapper(grid_page_tags, update_btn_text = "Finish editing")
 
   app
+}
+
+find_grid_tags <- function(x) {
+  is_shinytag <- inherits(x, "shiny.tag")
+  has_class <- is_shinytag && !is.null(x$attribs$class)
+
+  if (has_class && x$attribs$class == "container-fluid") {
+    x$children
+  } else if (is_shinytag | inherits(x, "list")) {
+    children <- if(is_shinytag) x[["children"]] else x
+    for (child in children) {
+      ret <- Recall(child)
+      if (!is.null(ret)) return(ret)
+    }
+  } else {
+    NULL
+  }
 }
 
 
