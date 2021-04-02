@@ -70,6 +70,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+    </li>
+  </ul>
+</li>
         
       </ul>
 </div>
@@ -222,7 +234,7 @@
     <span class="op">}</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/basic_grid_demo.png" width="100%"><em>Screenshot of grided geyser app running</em></p>
+<p><img src="reference/figures/geyser_demo.png" width="100%"><em>Screenshot of grided geyser app running</em></p>
 <p><code><a href="reference/grid_page.html">grid_page()</a></code> will automatically make your gridlayout fill the entire page. If you are interested in having a finer-grain control over the size and position of your grid layout you can use the <code><a href="reference/grid_container.html">grid_container()</a></code> function to place your grid layout wherever you want. The equivalent app to above can be created by replacing the UI definition with a <code>fluidPage</code> containing a <code><a href="reference/grid_container.html">grid_container()</a></code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">...</span>

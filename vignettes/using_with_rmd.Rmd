@@ -1,0 +1,140 @@
+---
+title: "Using gridlayout with .Rmds"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{using_with_rmd}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+
+# Generate screenshots for this vignette
+# source(here::here("tools/generate_screenshots.R"))
+# 
+# lapply(
+#   c("base", 
+#     "only_grid_panel",
+#     "extra_grid_panel_styles",
+#     "extra_child_styles"),
+#   function(mode){
+#     screenshot_demo_app(
+#       app_path = here::here('inst/rmarkdown_demo/grid_markdown_options.Rmd'),
+#       screenshot_name = paste0("use_gridlayout_rmd_", mode, ".png"),
+#       screenshot_root = "vignettes",
+#       rmd_params = list(mode = mode),
+#       vwidth = 1100
+#     )
+#   }
+# )
+ 
+```
+
+```{r}
+library(gridlayout)
+```
+
+
+By placing the function `use_gridlayout_rmd` in the `setup` chunk of an Rmd you can define a gridlayout table using the a code chunk with the "language" set to `gridlayout`. Any markdown style table (see `md_to_gridlayout()`) will be used to setup a grid-layout for your page. Just make sure your sections are given headers corresponding to the respective grid elements (either using their name or by using the `#My header text {#custom_id}` syntax after the header.)
+
+
+The following shows how you can customize the appearance of the elements of your layout using "card styles" and custom css. 
+
+
+# Starting point
+
+All the screenshots below will assume an `.Rmd` that looks like this
+
+````
+## Main
+
+```{gridlayout}
+|      |        |         |
+|------|--------|---------|
+|2rem  |200px   |1fr      |
+|150px |header  |header   |
+|1fr   |sidebar |main     |
+|120px |footer  |footer   |
+```
+
+
+## Sidebar {.grid_panel}
+
+Here is some content for the sidebar
+
+## Footer
+
+Anything you want could go in the footer.
+````
+
+
+## Default settings
+
+The default settings will give every element a card-like styling. 
+```{r, eval = FALSE}
+use_gridlayout_rmd()
+```
+
+
+```{r, echo = FALSE, message=FALSE}
+knitr::include_graphics("use_gridlayout_rmd_base.png")
+```
+
+
+## Targeting specific elements for card styling
+
+By adjusting the argument `is_card_styled` you can customize what gets these card styles. For instance, here we give the card styles to elements with the `grid_panel` class.
+
+Note that in the `.Rmd` above that only the sidebar had the class of `grid_panel` added to it using the syntax `{.grid_panel}`.
+
+```{r, eval = FALSE}
+use_gridlayout_rmd(is_card_styled = "grid_panel")
+```
+
+
+```{r, echo = FALSE, message=FALSE}
+knitr::include_graphics("use_gridlayout_rmd_only_grid_panel.png")
+```
+
+
+
+## Adding extra styles to card elements
+
+These cards can be additionally styled with any arbitrary styles you want. These simply get appended to the existing styles that target the cards. For instance we can make all the card-styled elements have a "floralwhite" background.
+
+```{r, eval = FALSE}
+use_gridlayout_rmd(
+  is_card_styled = "grid_panel",
+  additional_card_styles = c("background" = "floralwhite")
+)
+```
+
+
+```{r, echo = FALSE, message=FALSE}
+knitr::include_graphics("use_gridlayout_rmd_extra_grid_panel_styles.png")
+```
+
+
+
+## Adding extra styles to all elements
+
+If we don't have every element as a card, we can still apply additional styles to every grid-element via the `element_styles` argument. Here we give every element the background of "honeydew". Note that the card-specific styles will override these.
+
+```{r, eval = FALSE}
+use_gridlayout_rmd(
+  is_card_styled = "grid_panel",
+  element_styles = c("background" = "honeydew"),
+  additional_card_styles = c("background" = "floralwhite")
+)
+```
+
+
+```{r, echo = FALSE, message=FALSE}
+knitr::include_graphics("use_gridlayout_rmd_extra_child_styles.png")
+```
+

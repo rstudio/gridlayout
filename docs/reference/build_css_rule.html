@@ -111,6 +111,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+    </li>
+  </ul>
+</li>
         
       </ul>
       
@@ -141,12 +153,14 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>selector</th>
-      <td><p>valid css selector to target. E.g. <code>body</code> or <code>div.blue_boxes</code>...</p></td>
+      <td><p>valid css selector to target. E.g. <code>body</code> or
+<code>div.blue_boxes</code>... For inline styles where no selector is desired use
+<code>"inline"</code>.</p></td>
     </tr>
     <tr>
       <th>prop_list</th>
-      <td><p>A list of property-value pairs for additional styles to
-be added to each element. Pairs can be given as named elements: e.g.
+      <td><p>A list of property-value pairs for additional styles to be
+added to each element. Pairs can be given as named elements: e.g.
 <code>element_styles = c("background" = "blue")</code>, or simple as the whole
 character: e.g. <code>element_styles = c("background: blue")</code>. (Semicolon usage
 doesn't matter for single character declaration.)</p></td>
@@ -155,7 +169,8 @@ doesn't matter for single character declaration.)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A concatenated string of property values to be used inside a css selector.</p>
+    <p>A concatenated string of property values to be used inside a css
+selector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
