@@ -228,10 +228,18 @@ use_gridlayout_shiny <- function(layout, ...){
 #'
 #' Adds required hooks to RMarkdown to process `gridlayout` chunks and style document accordingly.
 #'
+#' @inheritParams to_css
+#' @inheritDotParams to_css -layout
+#'
 #' @return NULL
 #' @export
 #'
-use_gridlayout_rmd <- function(){
+use_gridlayout_rmd <- function(
+  container = '.main-container',
+  container_height = 'viewport',
+  is_card_styled = "all",
+  ...
+  ){
 
   requireNamespace("knitr", quietly = TRUE)
 
@@ -241,7 +249,12 @@ use_gridlayout_rmd <- function(){
       layout <- md_to_gridlayout(code)
       css_for_layout <- paste(
         "<style>",
-        to_css(layout, container = '.main-container', container_height = 'viewport', use_card_style = "all"),
+        to_css(layout,
+               container = container,
+               container_height = container_height,
+               is_card_styled = is_card_styled,
+               ...
+               ),
         "</style>",
         sep = "\n"
       )
