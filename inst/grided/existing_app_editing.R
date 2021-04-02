@@ -40,16 +40,16 @@ update_btn_text <-  "Update button"
 
 ui <- shiny::tags$body(
   shiny::tags$head(
-    shiny::tags$title("GridEd")
-    # tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
-    # tags$script(src = "dist/index.js")
+    shiny::tags$title("GridEd"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
+    tags$script(src = "dist/index.js")
   ),
-  shiny::includeScript(
-    system.file("grided/www/dist/index.js", package = "gridlayout")
-  ),
-  shiny::includeCSS(
-    system.file("grided/www/main.css", package = "gridlayout")
-  ),
+  # shiny::includeScript(
+  #   system.file("grided/www/dist/index.js", package = "gridlayout")
+  # ),
+  # shiny::includeCSS(
+  #   system.file("grided/www/main.css", package = "gridlayout")
+  # ),
   shiny::div(id = "header",
              shiny::h2(shiny::HTML("GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app")),
              shiny::div(
@@ -127,68 +127,7 @@ ui <- shiny::tags$body(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   session$sendCustomMessage("shiny-loaded", 1)
-  # session$sendCustomMessage(
-  #   "add-elements",
-  #   starting_elements
-  # )
-  # session$sendCustomMessage(
-  #   "update-grid",
-  #   list(
-  #     rows =  attr(starting_layout, "row_sizes"),
-  #     cols = attr(starting_layout, "col_sizes"),
-  #     gap = attr(starting_layout, "gap")
-  #   )
-  # )
-  #
-  # current_layout <- reactive({
-  #   shiny::req(input$elements)
-  #
-  #   grid_mat <- matrix(".",
-  #                      nrow = length(input$gridd_sizing$rows),
-  #                      ncol = length(input$grid_sizing$cols) )
-  #   for(el in input$elements){
-  #     grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
-  #   }
-  #
-  #   new_gridlayout(layout_mat = grid_mat,
-  #                  col_sizes = as.character(input$grid_sizing$cols),
-  #                  row_sizes = as.character(input$grid_sizing$rows),
-  #                  gap = input$grid_sizing$gap)
-  # })
-  #
-  # shiny::bindEvent(
-  #   shiny::observe({
-  #     layout_call <- paste(
-  #       "layout <- grid_layout_from_md(layout_table = \"",
-  #       "    ", to_md(current_layout()), "\")",
-  #       sep = "\n")
-  #
-  #     session$sendCustomMessage("code_modal", layout_call)
-  #   }),
-  #   input$get_code)
-  #
-  # shiny::bindEvent(shiny::observe({
-  #   req(input$elements)
-  #   on_update(current_layout())
-  #   shiny::stopApp()
-  # }), input$updated_code)
 
-
-  # current_layout <- reactive({
-  #   shiny::req(input$elements)
-  #   layout_from_grided(input$elements, input$grid_sizing)
-  # })
-  #
-  # shiny::bindEvent(
-  #   shiny::observe({
-  #     layout_call <- paste(
-  #       "layout <- grid_layout_from_md(layout_table = \"",
-  #       "    ", to_md(current_layout()), "\")",
-  #       sep = "\n")
-  #
-  #     session$sendCustomMessage("code_modal", layout_call)
-  #   }),
-  #   input$get_code)
 
   output$distPlot <- renderPlot({
     x    <- faithful[, 2]
@@ -200,16 +139,5 @@ server <- function(input, output, session) {
 # setwd(here("inst/grided/"))
 
 app <- shinyApp(ui, server)
-
-tree::tree(app)
-
-
-class(environment(app[["httpHandler"]])$ui)
-
-names(environment(app[["httpHandler"]]))
-
-run_with_grided(
-  shinyApp(ui, server)
-)
 
 
