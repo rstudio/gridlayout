@@ -24,6 +24,7 @@ body {
   grid-gap: var(--side-gaps);
   align-items: stretch;
   justify-items: stretch;
+  background: white;
 }
 
 /* Styles that apply to every panel in grid */
@@ -65,10 +66,22 @@ img {
   margin: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 #header > h2 {
   margin: 0;
+}
+
+.code_btns {
+  display: flex;
+  align-items: center;
+}
+
+#header button {
+  font-size: 1.2rem;
+  height: 100%;
+  margin-left: 5px;
 }
 
 #settings {
@@ -150,43 +163,70 @@ button.minus_btn.disabled {
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
   padding-bottom: var(--editor-bottom-pad);
+  min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
 }
 
 #editor-wrapper {
+  --grid-gap: 1rem;
   border: 2px solid var(--outline-color);
   border-radius: var(--editor-radius);
   width: 100%;
   height: 100%;
   position: relative;
+  display: grid;
+  grid-template-rows: var(--browser-menu-height) 1fr;
 }
 
-#editor-browser-header {
-  height: var(--browser-menu-height);
+#editor-browser-header{
+  --bar-height: 35px; /* Height of the url bar */
+  --buttons-width: 70px;
   width: 100%;
+  height: 100%;
   border-bottom: 2px solid var(--outline-color);
   border-radius: var(--editor-radius) var(--editor-radius) 0 0;
   background: var(--off-white);
+  display: flex;
 }
 
-#editor-browser-header text {
-  font-family: monospace;
-  size: 12px;
-}
-
-#editor-browser-header circle {
-  fill: var(--blue);
-}
-
-#grid_holder {
-  --grid-gap: 1rem;
-  --padding: 0.5rem;
-  height: calc(100% - var(--browser-menu-height));
-  position: absolute;
+#editor-app-window {
+  position: relative;
   width: 100%;
-  display: grid;
-  grid-gap: var(--grid-gap);
-  top: var(--browser-menu-height);
-  padding: var(--grid-gap);
+  height: 100%;
+}
+/* Make position absolute so we can easily position the controls where we want them */
+#editor-app-window > div {
+  position: absolute;
+}
+
+#buttons-container {
+  width: var(--buttons-width);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#buttons-container > div {
+  --button-size: 12px;
+  background: var(--blue);
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: calc(var(--button-size)/2);
+}
+#url-box {
+  --vert-offset: 3px;
+  --url-box-height: calc(100% - 2 * var(--vert-offset));
+  width: calc(100% - var(--buttons-width) - var(--vert-offset));
+  margin-top: var(--vert-offset);
+  height: var(--url-box-height);
+  border: 1px solid black;
+  border-radius: calc(var(--bar-height) - 2 * var(--vert-offset));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+#url-box > span {
+  margin-left: 5px;
+  font-family: monospace;
 }
 
 .grid-cell {
@@ -201,7 +241,7 @@ button.minus_btn.disabled {
   border: 2px solid var(--light-gray);
 }
 
-#grid_holder .added-element {
+#grid_page .added-element {
   background: none;
   /* pointer-events: none; So the cells beneath the elements can be selected still */
   position: relative;
@@ -219,17 +259,17 @@ button.minus_btn.disabled {
   height: 35px;
   margin: 0 0 5px 0;
   padding: 0.65rem 1rem;
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 #added_elements .added-element.hovered {
   /* Emphasize by making a bit bigger */
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
-#grid_holder .added-element.hovered,
+#grid_page .added-element.hovered,
 #current_selection_box.added-element {
   border-width: 7px;
 }
@@ -289,6 +329,30 @@ button.minus_btn.disabled {
   border-radius: var(--element_roundness) 0;
 }
 
+.added-element.disabled,
+.grid-cell.disabled,
+#drag_canvas.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#added_elements {
+  position: relative;
+}
+#added_elements.disabled::after{
+  content: "Interaction mode on:\AReturn to edit mode to modify elements";
+  white-space: break-spaces;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  padding-top: 1rem;
+  text-align: center;
+  background:#ffffffd4;
+  cursor: not-allowed;
+}
+
+
 
 #current_selection_box.added-element {
   border-style: dashed;
@@ -302,7 +366,7 @@ button.minus_btn.disabled {
   grid-template-rows: 32px;
   grid-gap: 5px;
   align-content: center;
-  padding: var(--padding);
+  padding: 0.5rem;
   pointer-events: none;
 }
 
@@ -359,7 +423,7 @@ button.minus_btn.disabled {
 .cols-controls {
   position: absolute;
   grid-row: -2 / -1;
-  /* This is so when the columns are thin the unit selector sits to the right 
+  /* This is so when the columns are thin the unit selector sits to the right
   side. When everything is on a single row it has no effect */
   top: calc(100% + var(--grid-gap));
   height: var(--editor-bottom-pad);
@@ -376,10 +440,6 @@ button.minus_btn.disabled {
   justify-content: end;
 }
 
-
-
-
-
 .rows-controls {
   height: 100%;
   align-items: center;
@@ -389,19 +449,7 @@ button.minus_btn.disabled {
   position: absolute;
   right: calc(100% + var(--grid-gap));
   width: var(--editor-left-pad);
-
-  /* grid-template-rows: 1rem 1fr 1rem; */
-}  
-
-/* .rows-controls .css-unit-input-form {
-  grid-row: 2/3;
 }
-
- */
-/* .rows-controls .css-unit-input-dragger {
-  max-width: 60px;
-} */
-
 
 
 .background-blurrer {
@@ -497,6 +545,8 @@ form#name_form input[type="text"] {
     background-position: 100% 0, 0 100%, 0 0, 100% 100%;
   }
 }
+
+
 
 
 /*# sourceMappingURL=/main.af46ece4.css.map */

@@ -4,8 +4,8 @@ library(purrr)
 library(gridlayout)
 
 path_to_rmd <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- gridlayout::rmd_to_gridlayout(path_to_rmd)
-starting_elements <- gridlayout::get_elements(my_layout)
+starting_layout <- gridlayout::rmd_to_gridlayout(path_to_rmd)
+starting_elements <- gridlayout::get_elements(starting_layout)
 
 trashcan_icon <- shiny::HTML(r"(<svg style="width:24px;height:24px" viewBox="0 0 24 24">
 <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
@@ -28,6 +28,7 @@ setwd(here("inst/grided/"))
 
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
+
 
 ui <- tags$body(
   tags$head(
@@ -78,13 +79,25 @@ ui <- tags$body(
     id = "editor",
     div(
       id = "editor-wrapper",
-      tags$svg(id = "editor-browser-header"),
-      uiOutput("grid_holder")
+      shiny::HTML('<div id="editor-browser-header">
+  <div id="buttons-container">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div id="url-box">
+    <span> www.myShinyApp.com </span>
+  </div>
+</div>'),
+shiny::div(
+  id = "editor-app-window",
+      uiOutput("grid_page")
+)
     )
   )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required to draw a histogra m
 server <- function(input, output, session) {
 
   session$sendCustomMessage(
@@ -94,37 +107,35 @@ server <- function(input, output, session) {
   session$sendCustomMessage(
     "update-grid",
     list(
-      rows =  attr(my_layout, "row_sizes"),
-      cols = attr(my_layout, "col_sizes"),
-      gap = attr(my_layout, "gap")
+      rows =  attr(starting_layout, "row_sizes"),
+      cols = attr(starting_layout, "col_sizes"),
+      gap = attr(starting_layout, "gap")
     )
   )
 
-  observe({
+  current_layout <- reactive({
+    shiny::req(input$elements)
+    layout_from_grided(input$elements, input$grid_sizing)
+  })
+
+  shiny::bindEvent(
+    shiny::observe({
+      layout_call <- paste(
+        "layout <- grid_layout_from_md(layout_table = \"",
+        "    ", to_md(current_layout()), "\")",
+        sep = "\n")
+
+      session$sendCustomMessage("code_modal", layout_call)
+    }),
+    input$get_code)
+
+  shiny::bindEvent(shiny::observe({
     req(input$elements)
-
-    grid_mat <- matrix(".",
-                       nrow = length(input$grid_sizing$rows),
-                       ncol = length(input$grid_sizing$cols) )
-    for(el in input$elements){
-      grid_mat[el$start_row:el$end_row, el$start_col:el$end_col] <- el$id
-    }
-
-    layout_table <- to_md(
-      new_gridlayout(layout_mat = grid_mat,
-                     col_sizes = input$grid_sizing$cols,
-                     row_sizes = input$grid_sizing$rows,
-                     gap = input$grid_sizing$gap)
-    )
-
-    layout_call <- paste(
-      "layout <- grid_layout_from_md(layout_table = \"",
-      "    ", layout_table(), "\")",
-      sep = "\n")
-
-    session$sendCustomMessage("code_modal", layout_call)
-  }) %>% bindEvent(input$get_code)
+    on_update(current_layout())
+    shiny::stopApp()
+  }), input$updated_code)
 }
+
 
 shinyApp(ui, server)
 

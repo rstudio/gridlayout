@@ -1,0 +1,51 @@
+---
+title: "`gridlayout` in Rmarkdown"
+author: "Nick Strayer"
+date: "3/9/2021"
+output: html_document
+params: 
+  mode: base
+---
+
+```{r setup, include=FALSE}
+library(gridlayout)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+switch(
+  params$mode,
+  base = use_gridlayout_rmd(),
+  only_grid_panel = use_gridlayout_rmd(is_card_styled = "grid_panel"),
+  extra_grid_panel_styles = use_gridlayout_rmd(
+    is_card_styled = "grid_panel",
+    additional_card_styles = c("background" = "floralwhite")
+  ),
+  extra_child_styles = use_gridlayout_rmd(
+    is_card_styled = "grid_panel",
+    element_styles = c("background" = "honeydew"),
+    additional_card_styles = c("background" = "floralwhite")
+  ),
+  stop("That's not an optional mode!")
+)
+
+```
+
+## Main
+
+```{gridlayout}
+|      |        |         |
+|------|--------|---------|
+|2rem  |200px   |1fr      |
+|150px |header  |header   |
+|1fr   |sidebar |main     |
+|120px |footer  |footer   |
+```
+
+
+## Sidebar {.grid_panel}
+
+Here is some content for the sidebar
+
+## Footer
+
+Anything you want could go in the footer.

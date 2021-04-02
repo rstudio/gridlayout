@@ -1,6 +1,5 @@
 // JS entry point
 import { Event_Listener, make_el, remove_elements } from "./make_el";
-import { draw_browser_header } from "./draw_browser_header";
 import { make_incrementer } from "./make_incrementer";
 import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
@@ -21,29 +20,31 @@ import {
   XY_Pos,
   Drag_Type,
 } from "./misc-helpers";
+import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
+import { find_rules_by_selector } from "./find_rules_by_selector";
 
 export const Shiny = (window as any).Shiny;
 
-interface Grid_Settings {
+type Grid_Settings = {
   num_rows: (new_value: number) => void;
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
 }
 
-export interface Grid_Pos {
+export type Grid_Pos = {
   start_col?: number;
   end_col?: number;
   start_row?: number;
   end_row?: number;
 }
 
-interface Drag_Res {
+type Drag_Res = {
   xy: XY_Pos;
   grid: Grid_Pos;
 }
 
-interface Drag_Options {
+type Drag_Options = {
   watching_element: HTMLElement;
   drag_dir: Drag_Type;
   grid_element?: HTMLElement;
@@ -52,8 +53,17 @@ interface Drag_Options {
   on_end?: (drag_info: Drag_Res) => void;
 }
 
+type Element_Info = {
+  id: string;
+  start_row: number;
+  end_row: number;
+  start_col: number;
+  end_col: number;
+}
+
+
+
 window.onload = function () {
-  draw_browser_header();
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
   const grid_controls = { rows: [], cols: [] };
@@ -63,7 +73,8 @@ window.onload = function () {
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = document.querySelector("#grid_holder");
+  const grid_holder: HTMLElement = document.querySelector("#grid_page");
+
   const settings_panel: HTMLElement = document.querySelector(
     "#settings .card-body"
   );
@@ -111,31 +122,109 @@ window.onload = function () {
     update_grid({ [dir]: current_vals });
   }
 
-  if (Shiny) {
-    Shiny.addCustomMessageHandler("update-grid", function (opts) {
-      update_grid(opts);
+  const app_mode = grid_holder.hasChildNodes()
+    ? "ShinyExisting"
+    : Shiny
+    ? "ShinyNew"
+    : "ClientSide";
+
+  // Container styles are in this object
+  const styles_for_container = find_rules_by_selector(
+    "#grid_page",
+    "gridTemplateColumns"
+  );
+
+  styles_for_container.height = "100%";
+  styles_for_container.width = "100%";
+  styles_for_container.display = "grid";
+  styles_for_container.gap = "1rem";
+  styles_for_container.padding = "1rem";
+
+  add_shiny_listener(
+    "shiny-loaded",
+    function (event) {
+      console.log("connected to shiny");
+      // Send elements to Shiny so app is aware of what it's working with
+      send_elements_to_shiny();
+      send_grid_sizing_to_shiny();
+    }
+  );
+
+  function setShinyInput(input_id: string, input_value: any){
+    // Sent input value to shiny but only if it's initialized
+    Shiny.setInputValue?.(input_id, input_value);
+  }
+
+  if (app_mode === "ShinyExisting") {
+    const current_rows = styles_for_container.gridTemplateRows.split(" ");
+    const current_cols = styles_for_container.gridTemplateColumns.split(" ");
+    // I dont know why this is just .gap and not gridGap
+    const current_gap = styles_for_container.gap;
+
+    // If grided is running on an existing app, we need to parse the children and
+    // add them as elements;
+    const children = [...grid_holder.children];
+
+    children.forEach(function (el) {
+      add_element({
+        id: el.id,
+        grid_pos: get_grid_pos(el as HTMLElement),
+        existing_element: el as HTMLElement,
+      });
     });
 
-    Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-      interface Shiny_Element_Msg {
-        id: string;
-        start_row: number;
-        end_row: number;
-        start_col: number;
-        end_col: number;
-      };
+
+
+    // Make sure grid matches the one the app is working with
+    update_grid({
+      rows: current_rows,
+      cols: current_cols,
+      gap: current_gap,
+      force: true,
+    });
+
+    // Make grid cells transparent so the app is seen beneath them
+    find_rules_by_selector(".grid-cell").background = "none";
+
+    // And edit mode toggle to allow user to interact with app
+    make_toggle_switch(
+      document.querySelector("#header .code_btns"),
+      "Edit layout",
+      "Interact mode",
+      (interact_is_on: boolean) => {
+        const update_el = function (el: Element) {
+          if (interact_is_on) {
+            el.classList.add("disabled");
+          } else {
+            el.classList.remove("disabled");
+          }
+        };
+        document
+          .querySelectorAll("#grid_page .added-element")
+          .forEach(update_el);
+        document.querySelectorAll(".grid-cell").forEach(update_el);
+        update_el(document.querySelector("#added_elements"));
+        update_el(document.querySelector("#drag_canvas"));
+      }
+    );
+  } else if (app_mode === "ShinyNew") {
+    add_shiny_listener("update-grid", update_grid);
+
+    type Shiny_Element_Msg = {
+      id: string;
+      start_row: number;
+      end_row: number;
+      start_col: number;
+      end_col: number;
+    }
+    add_shiny_listener("add-elements", function (
+      elements_to_add: Shiny_Element_Msg[]
+    ) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
         add_element({
           id: el.id,
           grid_pos: el,
         });
-      });
-    });
-
-    Shiny.addCustomMessageHandler("code_modal", function (code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show,
       });
     });
   } else {
@@ -147,11 +236,21 @@ window.onload = function () {
     });
 
     document.getElementById("get_code").addEventListener("click", function () {
-      const current_layout = gen_code_for_layout();
-      show_code("Place the following in your CSS:", current_layout);
+      show_code("Place the following in your CSS:", gen_code_for_layout());
     });
   }
-  interface Code_Text {
+
+  add_shiny_listener(
+    "code_modal",
+    function (code_to_show) {
+      show_code("Paste the following code into your app to update the layout", {
+        type: "R",
+        code: code_to_show,
+      });
+    }
+  )
+
+  type Code_Text = {
     type: string;
     code: string;
   }
@@ -186,7 +285,7 @@ window.onload = function () {
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             gridTemplateRows: "1fr, auto",
-            gridGap: "4px",
+            gap: "4px",
             gridTemplateAreas: concat_nl(
               `"code_type copy_btn"`,
               `"code_text code_text"`
@@ -306,7 +405,7 @@ window.onload = function () {
       drag_on_grid({
         watching_element: drag_canvas,
         grid_element: current_selection_box,
-        drag_dir: Drag_Type.bottom_right,
+        drag_dir: "bottom-right",
         on_start: () => {
           current_selection_box.style.borderColor = get_next_color();
         },
@@ -346,15 +445,16 @@ window.onload = function () {
     return sel_bounds;
   }
 
-  interface Grid_Update_Options {
-    rows?: Array<string>;
-    cols?: Array<string>;
+  type Grid_Update_Options = {
+    rows?: string[];
+    cols?: string[];
     gap?: string;
+    force?: boolean;
   }
   function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
-    const old_gap = grid_holder.style.getPropertyValue("--grid-gap");
+    const old_gap = styles_for_container.gap;
     const new_gap = opts.gap || old_gap;
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
@@ -433,6 +533,7 @@ window.onload = function () {
                   const el_node: HTMLElement = grid_holder.querySelector(
                     `#${el.id}`
                   );
+
                   el_node.style.gridRow = make_template_start_end(
                     el.start_row,
                     Math.min(el.end_row, new_num_rows)
@@ -470,25 +571,24 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      grid_holder.style.gridTemplateRows = sizes_to_template_def(opts.rows);
+      styles_for_container.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      grid_holder.style.gridTemplateColumns = sizes_to_template_def(opts.cols);
+      styles_for_container.gridTemplateColumns = sizes_to_template_def(opts.cols);
     }
     if (opts.gap) {
-      // To give a consistant gap around everything we also add margin of same size
-      grid_holder.style.setProperty("--grid-gap", opts.gap);
+      // This sets the --grid-gap variable so that the controls that need the 
+      // info can use it to keep a constant distance from the grid holder
+      grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
+      // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+      styles_for_container.gap = opts.gap;
+      styles_for_container.padding = opts.gap;
     }
 
-    if (grid_numbers_changed) fill_grid_cells();
+    if (grid_numbers_changed || opts.force) fill_grid_cells();
 
-    if (Shiny) {
-      Shiny.setInputValue("grid_sizing", {
-        rows: grid_holder.style.gridTemplateRows.split(" "),
-        cols: grid_holder.style.gridTemplateColumns.split(" "),
-        gap: grid_holder.style.getPropertyValue("--grid-gap"),
-      });
-    }
+    send_grid_sizing_to_shiny();
 
     return grid_holder;
   }
@@ -605,7 +705,23 @@ window.onload = function () {
 
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
-  function add_element({ id, color = get_next_color(), grid_pos }) {
+  type New_Element = {
+    id: string;
+    color?: string;
+    grid_pos: Grid_Pos;
+    existing_element?: HTMLElement;
+  }
+
+  function add_element(el_props: New_Element) {
+    const { grid_pos, color = get_next_color(), existing_element } = el_props;
+    const mirrors_existing_element = existing_element !== undefined;
+    // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
+    const id = mirrors_existing_element
+      ? el_props.id.replace(/^.+?__/g, "")
+      : el_props.id;
+
     const element_in_grid = make_el(
       grid_holder,
       `div#${id}.el_${id}.added-element`,
@@ -618,24 +734,33 @@ window.onload = function () {
       }
     );
 
-    [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
-      function (handle_type) {
+    // Setup drag behavior
+    (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
+      function (handle_type: Drag_Type) {
         drag_on_grid({
           watching_element: make_el(
             element_in_grid,
             `div.dragger.visible.${handle_type}`,
             {
               styles: { background: color },
-              innerHTML: handle_type === "center"
-              ? drag_icon
-              : handle_type === Drag_Type.bottom_right
-                ? se_arrow
-                : nw_arrow
+              innerHTML:
+                handle_type === "center"
+                  ? drag_icon
+                  : handle_type === "bottom-right"
+                  ? se_arrow
+                  : nw_arrow,
             }
           ),
           grid_element: element_in_grid,
           drag_dir: handle_type,
-          on_end: () => {send_elements_to_shiny();}
+          on_drag: (res) => {
+            if (mirrors_existing_element) {
+              set_element_in_grid(existing_element, res.grid);
+            }
+          },
+          on_end: () => {
+            send_elements_to_shiny();
+          },
         });
       }
     );
@@ -666,27 +791,33 @@ window.onload = function () {
         ],
       }
     );
-    
-    make_el(element_in_list, "button.remove_el", {
-      innerHTML: trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function () {
-          remove_added_elements(id);
+
+    if (!mirrors_existing_element) {
+      // Turn of deleting if were editing an existing app
+      // This means that if were in app editing mode and the user adds a new element
+      // they can delete that new element but they can't delete the existing elements
+      make_el(element_in_list, "button.remove_el", {
+        innerHTML: trashcan_icon,
+        event_listener: {
+          event: "click",
+          func: function () {
+            remove_added_elements(id);
+          },
         },
-      },
-    });
+      });
+    }
 
     // Let shiny know we have a new element
     send_elements_to_shiny();
   }
 
   function get_grid_pos(grid_el: HTMLElement): Grid_Pos {
+    const el_styles = getComputedStyle(grid_el);
     return {
-      start_row: +grid_el.style.gridRowStart,
-      start_col: +grid_el.style.gridColumnStart,
-      end_row: +grid_el.style.gridRowEnd - 1,
-      end_col: +grid_el.style.gridColumnEnd - 1,
+      start_row: +el_styles.gridRowStart,
+      start_col: +el_styles.gridColumnStart,
+      end_row: +el_styles.gridRowEnd - 1,
+      end_col: +el_styles.gridColumnEnd - 1,
     };
   }
 
@@ -723,7 +854,7 @@ window.onload = function () {
         }
       );
 
-      // We start grid position here in case user selects by simply clicking, 
+      // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
       update_grid_pos(opts.grid_element, start_rect);
 
@@ -734,7 +865,10 @@ window.onload = function () {
       editor_el.addEventListener("mouseup", drag_end);
     };
 
-    function update_grid_pos(element: HTMLElement, bounding_rect: Selection_Rect): Grid_Pos{
+    function update_grid_pos(
+      element: HTMLElement,
+      bounding_rect: Selection_Rect
+    ): Grid_Pos {
       const grid_extent = get_drag_extent_on_grid(bounding_rect);
       set_element_in_grid(element, grid_extent);
       return grid_extent;
@@ -784,14 +918,7 @@ window.onload = function () {
     }
   }
 
-  interface Element_Info {
-    id: string;
-    start_row: number;
-    end_row: number;
-    start_col: number;
-    end_col: number;
-  }
-
+ 
   function current_elements(): Array<Element_Info> {
     let elements: Array<Element_Info> = [];
 
@@ -814,14 +941,31 @@ window.onload = function () {
     return elements;
   }
 
+  // These are functions for communicating with Shiny. They are all optional
+  // chained so they won't spit errors if Shiny isn't connected or initialized
+  // yet.
+
+  function add_shiny_listener(event_id : string, callback_func: Function){
+    Shiny?.addCustomMessageHandler(event_id , callback_func);
+  }
+
   function send_elements_to_shiny() {
-    if (Shiny) {
-      const elements_by_id = {};
-      current_elements().forEach(function (el) {
-        elements_by_id[el.id] = el;
-      });
-      Shiny.setInputValue("elements", elements_by_id);
-    }
+    const elements_by_id = {};
+    current_elements().forEach(function (el) {
+      elements_by_id[el.id] = el;
+    });
+    
+    setShinyInput("elements", elements_by_id);
+  }
+
+  function send_grid_sizing_to_shiny(){
+    setShinyInput(
+      "grid_sizing", {
+        rows: styles_for_container.gridTemplateRows.split(" "),
+        cols: styles_for_container.gridTemplateColumns.split(" "),
+        gap: styles_for_container.gap,
+      }
+    );
   }
 
   function gen_code_for_layout(): Array<Code_Text> {
@@ -840,9 +984,9 @@ window.onload = function () {
     const css_code = concat_nl(
       `${container_selector} {`,
       `  display: grid;`,
-      `  grid-template-columns: ${grid_holder.style.gridTemplateColumns};`,
-      `  grid-template-rows: ${grid_holder.style.gridTemplateRows};`,
-      `  grid-gap: ${grid_holder.style.getPropertyValue("--grid-gap")}`,
+      `  grid-template-columns: ${styles_for_container.gridTemplateColumns};`,
+      `  grid-template-rows: ${styles_for_container.gridTemplateRows};`,
+      `  gap: ${styles_for_container.gap}`,
       `}`,
       ...element_defs
     );
@@ -862,11 +1006,11 @@ window.onload = function () {
   }
 
   function get_current_rows() {
-    return grid_holder.style.gridTemplateRows.split(" ");
+    return styles_for_container.gridTemplateRows.split(" ");
   }
 
   function get_current_cols() {
-    return grid_holder.style.gridTemplateColumns.split(" ");
+    return styles_for_container.gridTemplateColumns.split(" ");
   }
 
   // Get the next color in our list of colors.
@@ -896,7 +1040,3 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-
-window.onresize = function () {
-  draw_browser_header();
-};

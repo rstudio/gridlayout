@@ -162,13 +162,21 @@ function make_template_start_end(start, end) {
 
 exports.make_template_start_end = make_template_start_end;
 
-function set_element_in_grid(el, grid_bounds) {
+function set_element_in_grid(el, grid_bounds, el_styles) {
   if (grid_bounds.start_row) {
-    el.style.gridRow = make_template_start_end(grid_bounds.start_row, grid_bounds.end_row);
+    el.style.gridRowStart = grid_bounds.start_row.toString();
+  }
+
+  if (grid_bounds.end_row) {
+    el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
   }
 
   if (grid_bounds.start_col) {
-    el.style.gridColumn = make_template_start_end(grid_bounds.start_col, grid_bounds.end_col);
+    el.style.gridColumnStart = grid_bounds.start_col.toString();
+  }
+
+  if (grid_bounds.end_col) {
+    el.style.gridColumnEnd = (grid_bounds.end_col + 1).toString();
   }
 
   el.style.display = "block"; // make sure we can see the element
@@ -343,12 +351,33 @@ exports.get_css_value = get_css_value;
 },{}],"make_el.ts":[function(require,module,exports) {
 "use strict";
 
+var __spreadArray = this && this.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.remove_elements = exports.make_el = void 0;
 
-var misc_helpers_1 = require("./misc-helpers"); // This is a heavy-lifter that takes care of building elements and placing them
+var misc_helpers_1 = require("./misc-helpers"); // Safari doesn't support lookbehinds for regex so we have to make it manually
+
+
+function extract_id(sel_txt) {
+  var id_match = sel_txt.match(/#([^\.]+)/g);
+  return id_match ? id_match[0].replace("#", "") : null;
+}
+
+function extract_classes(sel_txt) {
+  var class_list = sel_txt.match(/\.([^\.#]+)/g);
+  return class_list ? __spreadArray([], class_list).map(function (c) {
+    return c.replace("\.", "");
+  }) : null;
+} // This is a heavy-lifter that takes care of building elements and placing them
 // on the grid etc.. It only create's an element if it needs to, which means
 // that we dont get dom leaks caused by recalling stuff over and over again.
 
@@ -358,12 +387,9 @@ function make_el(parent, sel_txt, opts) {
     opts = {};
   }
 
-  var get_tag_regex = /^([^#\.]+)+/g;
-  var get_id_regex = /(?<=#)([^\.]+)/g;
-  var get_class_regex = /(?<=\.)([^\.#]+)/g;
-  var tag_type = sel_txt.match(get_tag_regex)[0];
-  var el_id = sel_txt.match(get_id_regex);
-  var class_list = sel_txt.match(get_class_regex);
+  var tag_type = sel_txt.match(/^([^#\.]+)+/g)[0];
+  var el_id = extract_id(sel_txt);
+  var class_list = extract_classes(sel_txt);
   var el = parent.querySelector(sel_txt);
 
   if (!el) {
@@ -371,7 +397,8 @@ function make_el(parent, sel_txt, opts) {
     el = document.createElement(tag_type);
 
     if (el_id) {
-      el.id = el_id[0];
+      // debugger;
+      el.id = el_id;
     }
 
     if (class_list) {
@@ -421,45 +448,7 @@ function remove_elements(els_to_remove) {
 }
 
 exports.remove_elements = remove_elements;
-},{"./misc-helpers":"misc-helpers.ts"}],"draw_browser_header.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.draw_browser_header = void 0;
-
-var index_1 = require("./index");
-
-function draw_browser_header() {
-  var header_svg = document.getElementById("editor-browser-header");
-
-  var _a = header_svg.getBoundingClientRect(),
-      width_of_bar = _a.width,
-      height_of_bar = _a.height; // Clear out anything that may be in the svg already
-
-
-  header_svg.innerHTML = ""; // First make the buttons for closing, minimizing and maximizing window
-
-  var button_r = height_of_bar / 4.5;
-
-  for (var i = 1; i <= 3; i++) {
-    header_svg.innerHTML += "\n    <circle cx=" + i * button_r * 3 + "px\n            cy = 50%\n            r = " + button_r + "px\n    > </circle>";
-  } // Next make the browser url bar
-
-
-  var url_bar_start = 4 * button_r * 3; // Bar is takes up middle 65% of header area
-
-  var url_bar_rel_height = 0.65;
-  var url_bar_height = height_of_bar * url_bar_rel_height;
-  var url_bar_margin = (height_of_bar - url_bar_height) / 2;
-  header_svg.innerHTML += "\n  <rect x = " + url_bar_start + "px\n        y = " + url_bar_margin + "px\n        width = " + (width_of_bar - url_bar_start - 10) + "px\n        height = " + height_of_bar * url_bar_rel_height + "px\n        stroke = \"black\"\n        stroke-width: 3px\n        fill = \"none\"\n        rx = " + url_bar_height / 2 + "px\n        ry = " + url_bar_height / 2 + "px\n  ></rect>";
-  var url_address = index_1.Shiny ? "www.myShinyApp.com" : "www.myGridApp.com";
-  header_svg.innerHTML += "\n  <text x = " + (url_bar_start + 13) + "px\n        y = " + height_of_bar / 2 + "px\n        alignment-baseline = \"central\"\n  >\n    " + url_address + "\n  </text>\n";
-}
-
-exports.draw_browser_header = draw_browser_header;
-},{"./index":"index.ts"}],"icons.ts":[function(require,module,exports) {
+},{"./misc-helpers":"misc-helpers.ts"}],"icons.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -729,7 +718,104 @@ function make_css_unit_input(_a) {
 }
 
 exports.make_css_unit_input = make_css_unit_input;
-},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"index.ts":[function(require,module,exports) {
+},{"./icons":"icons.ts","./make_el":"make_el.ts","./misc-helpers":"misc-helpers.ts"}],"make_toggle_switch.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.make_toggle_switch = void 0;
+
+var make_el_1 = require("./make_el");
+
+function make_toggle_switch(parent, off_text, on_text, on_change) {
+  var container = make_el_1.make_el(parent, "div.toggle-switch");
+  make_el_1.make_el(container, "span.off-text", {
+    innerHTML: off_text
+  });
+  var label = make_el_1.make_el(container, "label.switch");
+  make_el_1.make_el(container, "span.on-text", {
+    innerHTML: on_text
+  });
+  make_el_1.make_el(label, "input", {
+    props: {
+      type: "checkbox"
+    },
+    event_listener: {
+      event: "change",
+      func: function func(event) {
+        on_change(event.target.checked);
+      }
+    }
+  });
+  make_el_1.make_el(label, "span.slider"); // Add styles
+
+  var style_sheet = document.styleSheets[0];
+  style_sheet.insertRule("\n    div.toggle-switch {\n      display: inline-grid;\n      grid-template-columns: 1fr auto 1fr;\n      grid-gap: 3px;\n      width: 180px;\n      align-items: center;\n      justify-items: center;\n    }\n  ");
+  style_sheet.insertRule("\n  .toggle-switch > span {\n    font-size: 0.85rem;\n  }\n");
+  style_sheet.insertRule("\n    .toggle-switch > .off-text {\n      text-align: end;\n    }\n  ");
+  style_sheet.insertRule(".switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }", 0); // Hide default HTML checkbox
+
+  style_sheet.insertRule(".switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }", 0);
+  style_sheet.insertRule(".slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }", 0);
+  style_sheet.insertRule(".slider:before {\n    position: absolute;\n    content: \"\";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }", 0);
+  style_sheet.insertRule("input:checked + .slider {\n    background-color: #2196F3;\n  }", 0);
+  style_sheet.insertRule("input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }", 0);
+  style_sheet.insertRule("input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }", 0);
+}
+
+exports.make_toggle_switch = make_toggle_switch;
+},{"./make_el":"make_el.ts"}],"find_rules_by_selector.ts":[function(require,module,exports) {
+"use strict";
+
+var __spreadArray = this && this.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.find_rules_by_selector = void 0; // Assumes that only one stylesheet has rules for the given selector and
+// that only one rule targeting that selector alone is defined
+// If target_property is provided the function will chose the sheet that defines
+// that given property (if multiple exist)
+
+function find_rules_by_selector(selector_text, target_property) {
+  // Find the stylesheet which contains the containers styles
+  var defines_ruleset = function defines_ruleset(selector_text) {
+    return function (rule) {
+      return rule.selectorText === selector_text;
+    };
+  };
+
+  var all_sheets = __spreadArray([], document.styleSheets);
+
+  var rules_for_selector = all_sheets.filter(function (style_sheet) {
+    return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
+  }).map(function (x) {
+    return __spreadArray([], x.cssRules).find(defines_ruleset(selector_text)).style;
+  }).filter(function (x) {
+    return target_property ? x[target_property] : true;
+  });
+  var n_sheets = rules_for_selector.length;
+
+  if (n_sheets === 0) {
+    // No rules declared so make a new rule and append to last style sheet
+    var last_sheet = all_sheets[all_sheets.length - 1];
+    last_sheet.insertRule(selector_text + " { }", 0);
+    return __spreadArray([], last_sheet.cssRules).find(defines_ruleset(selector_text)).style;
+  } else {
+    // Take the latest style sheet and (hope) that's the correct one
+    return rules_for_selector[n_sheets - 1];
+  }
+}
+
+exports.find_rules_by_selector = find_rules_by_selector;
+},{}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -763,8 +849,6 @@ exports.Shiny = void 0; // JS entry point
 
 var make_el_1 = require("./make_el");
 
-var draw_browser_header_1 = require("./draw_browser_header");
-
 var make_incrementer_1 = require("./make_incrementer");
 
 var focused_modal_1 = require("./focused_modal");
@@ -773,14 +857,24 @@ var make_css_unit_input_1 = require("./make_css_unit_input");
 
 var misc_helpers_1 = require("./misc-helpers");
 
+var make_toggle_switch_1 = require("./make_toggle_switch");
+
 var icons_1 = require("./icons");
 
+var find_rules_by_selector_1 = require("./find_rules_by_selector");
+
 exports.Shiny = window.Shiny;
+var App_Mode;
+
+(function (App_Mode) {
+  App_Mode[App_Mode["ShinyNew"] = 0] = "ShinyNew";
+  App_Mode[App_Mode["ShinyExisting"] = 1] = "ShinyExisting";
+  App_Mode[App_Mode["ClientSide"] = 2] = "ClientSide";
+})(App_Mode || (App_Mode = {}));
 
 window.onload = function () {
-  draw_browser_header_1.draw_browser_header(); // Keep track of the grid controls here. Tradeoff of a global variable
+  // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
-
   var grid_controls = {
     rows: [],
     cols: []
@@ -790,7 +884,7 @@ window.onload = function () {
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
 
-  var grid_holder = document.querySelector("#grid_holder");
+  var grid_holder = document.querySelector("#grid_page");
   var settings_panel = document.querySelector("#settings .card-body");
   var grid_settings = {
     num_rows: make_incrementer_1.make_incrementer({
@@ -840,12 +934,63 @@ window.onload = function () {
     update_grid((_a = {}, _a[dir] = current_vals, _a));
   }
 
-  if (exports.Shiny) {
-    exports.Shiny.addCustomMessageHandler("update-grid", function (opts) {
-      update_grid(opts);
+  var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide; // Container styles are in this object
+
+  var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
+  styles_for_container.height = "100%";
+  styles_for_container.width = "100%";
+  styles_for_container.display = "grid";
+  styles_for_container.gap = "1rem";
+  styles_for_container.padding = "1rem";
+  var connected_to_shiny = false;
+  exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.addCustomMessageHandler("shiny-loaded", function (event) {
+    connected_to_shiny = true;
+    console.log("connected to shiny");
+  });
+
+  if (app_mode === App_Mode.ShinyExisting) {
+    var current_rows = styles_for_container.gridTemplateRows.split(" ");
+    var current_cols = styles_for_container.gridTemplateColumns.split(" "); // I dont know why this is just .gap and not gridGap
+
+    var current_gap = styles_for_container.gap; // If grided is running on an existing app, we need to parse the children and
+    // add them as elements;
+
+    var children = __spreadArray([], grid_holder.children);
+
+    children.forEach(function (el) {
+      add_element({
+        id: el.id,
+        grid_pos: get_grid_pos(el),
+        existing_element: el
+      });
+    }); // Make sure grid matches the one the app is working with
+
+    update_grid({
+      rows: current_rows,
+      cols: current_cols,
+      gap: current_gap,
+      force: true
+    }); // Make grid cells transparent so the app is seen beneath them
+
+    find_rules_by_selector_1.find_rules_by_selector(".grid-cell").background = "none"; // And edit mode toggle to allow user to interact with app
+
+    make_toggle_switch_1.make_toggle_switch(document.querySelector("#header .code_btns"), "Edit layout", "Interact mode", function (interact_is_on) {
+      var update_el = function update_el(el) {
+        if (interact_is_on) {
+          el.classList.add("disabled");
+        } else {
+          el.classList.remove("disabled");
+        }
+      };
+
+      document.querySelectorAll("#grid_page .added-element").forEach(update_el);
+      document.querySelectorAll(".grid-cell").forEach(update_el);
+      update_el(document.querySelector("#added_elements"));
+      update_el(document.querySelector("#drag_canvas"));
     });
+  } else if (app_mode === App_Mode.ShinyNew) {
+    exports.Shiny.addCustomMessageHandler("update-grid", update_grid);
     exports.Shiny.addCustomMessageHandler("add-elements", function (elements_to_add) {
-      ;
       elements_to_add.forEach(function (el) {
         add_element({
           id: el.id,
@@ -895,7 +1040,7 @@ window.onload = function () {
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
           gridTemplateRows: "1fr, auto",
-          gridGap: "4px",
+          gap: "4px",
           gridTemplateAreas: misc_helpers_1.concat_nl("\"code_type copy_btn\"", "\"code_text code_text\"")
         }
       });
@@ -1060,7 +1205,7 @@ window.onload = function () {
   function update_grid(opts) {
     var old_num_rows = get_current_rows().length;
     var old_num_cols = get_current_cols().length;
-    var old_gap = grid_holder.style.getPropertyValue("--grid-gap");
+    var old_gap = styles_for_container.gap;
     var new_gap = opts.gap || old_gap;
     var new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     var new_num_cols = opts.cols ? opts.cols.length : old_num_cols; // Make sure settings panel is up-to-date
@@ -1138,25 +1283,30 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      grid_holder.style.gridTemplateRows = misc_helpers_1.sizes_to_template_def(opts.rows);
+      styles_for_container.gridTemplateRows = misc_helpers_1.sizes_to_template_def(opts.rows);
     }
 
     if (opts.cols) {
-      grid_holder.style.gridTemplateColumns = misc_helpers_1.sizes_to_template_def(opts.cols);
+      styles_for_container.gridTemplateColumns = misc_helpers_1.sizes_to_template_def(opts.cols);
     }
 
     if (opts.gap) {
-      // To give a consistant gap around everything we also add margin of same size
-      grid_holder.style.setProperty("--grid-gap", opts.gap);
+      // This sets the --grid-gap variable so that the controls that need the 
+      // info can use it to keep a constant distance from the grid holder
+      grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+
+      styles_for_container.gap = opts.gap;
+      styles_for_container.padding = opts.gap;
     }
 
-    if (grid_numbers_changed) fill_grid_cells();
+    if (grid_numbers_changed || opts.force) fill_grid_cells();
 
-    if (exports.Shiny) {
+    if (app_mode == App_Mode.ShinyNew) {
       exports.Shiny.setInputValue("grid_sizing", {
-        rows: grid_holder.style.gridTemplateRows.split(" "),
-        cols: grid_holder.style.gridTemplateColumns.split(" "),
-        gap: grid_holder.style.getPropertyValue("--grid-gap")
+        rows: styles_for_container.gridTemplateRows.split(" "),
+        cols: styles_for_container.gridTemplateColumns.split(" "),
+        gap: styles_for_container.gap
       });
     }
 
@@ -1200,7 +1350,8 @@ window.onload = function () {
     var name_form = make_el_1.make_el(modal_div, "form#name_form", {
       event_listener: {
         event: "submit",
-        func: function func() {
+        func: function func(event) {
+          event.preventDefault();
           var id = this["name_input"].value.replace(/\s/g, "_");
           var element_exists = !!current_elements().find(function (el) {
             return el.id === id;
@@ -1277,22 +1428,26 @@ window.onload = function () {
 
       selection_box.style.display = "none";
     }
-  } // Adds a new element of a given id to the app. Both in the grid window
-  // and the addeded elements panel
+  }
 
+  function add_element(el_props) {
+    var grid_pos = el_props.grid_pos,
+        _a = el_props.color,
+        color = _a === void 0 ? get_next_color() : _a,
+        existing_element = el_props.existing_element;
+    var mirrors_existing_element = existing_element !== undefined; // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
 
-  function add_element(_a) {
-    var id = _a.id,
-        _b = _a.color,
-        color = _b === void 0 ? get_next_color() : _b,
-        grid_pos = _a.grid_pos;
+    var id = mirrors_existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
     var element_in_grid = make_el_1.make_el(grid_holder, "div#" + id + ".el_" + id + ".added-element", {
       grid_pos: grid_pos,
       styles: {
         borderColor: color,
         position: "relative"
       }
-    });
+    }); // Setup drag behavior
+
     [misc_helpers_1.Drag_Type.top_left, misc_helpers_1.Drag_Type.bottom_right, misc_helpers_1.Drag_Type.center].forEach(function (handle_type) {
       drag_on_grid({
         watching_element: make_el_1.make_el(element_in_grid, "div.dragger.visible." + handle_type, {
@@ -1302,7 +1457,15 @@ window.onload = function () {
           innerHTML: handle_type === "center" ? icons_1.drag_icon : handle_type === misc_helpers_1.Drag_Type.bottom_right ? icons_1.se_arrow : icons_1.nw_arrow
         }),
         grid_element: element_in_grid,
-        drag_dir: handle_type
+        drag_dir: handle_type,
+        on_drag: function on_drag(res) {
+          if (mirrors_existing_element) {
+            misc_helpers_1.set_element_in_grid(existing_element, res.grid);
+          }
+        },
+        on_end: function on_end() {
+          send_elements_to_shiny();
+        }
       });
     });
     var element_in_list = make_el_1.make_el(document.querySelector("#added_elements"), "div.el_" + id + ".added-element", {
@@ -1324,25 +1487,33 @@ window.onload = function () {
         }
       }]
     });
-    make_el_1.make_el(element_in_list, "button.remove_el", {
-      innerHTML: icons_1.trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function func() {
-          remove_added_elements(id);
+
+    if (!mirrors_existing_element) {
+      // Turn of deleting if were editing an existing app
+      // This means that if were in app editing mode and the user adds a new element
+      // they can delete that new element but they can't delete the existing elements
+      make_el_1.make_el(element_in_list, "button.remove_el", {
+        innerHTML: icons_1.trashcan_icon,
+        event_listener: {
+          event: "click",
+          func: function func() {
+            remove_added_elements(id);
+          }
         }
-      }
-    }); // Let shiny know we have a new element
+      });
+    } // Let shiny know we have a new element
+
 
     send_elements_to_shiny();
   }
 
   function get_grid_pos(grid_el) {
+    var el_styles = getComputedStyle(grid_el);
     return {
-      start_row: +grid_el.style.gridRowStart,
-      start_col: +grid_el.style.gridColumnStart,
-      end_row: +grid_el.style.gridRowEnd - 1,
-      end_col: +grid_el.style.gridColumnEnd - 1
+      start_row: +el_styles.gridRowStart,
+      start_col: +el_styles.gridColumnStart,
+      end_row: +el_styles.gridRowEnd - 1,
+      end_col: +el_styles.gridColumnEnd - 1
     };
   }
 
@@ -1367,12 +1538,21 @@ window.onload = function () {
       };
       drag_feedback_rect = make_el_1.make_el(grid_holder.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
         styles: __assign({}, bounding_rect_to_css_pos(start_rect))
-      });
+      }); // We start grid position here in case user selects by simply clicking,
+      // which would mean we never get to run the drag function
+
+      update_grid_pos(opts.grid_element, start_rect);
       if (opts.on_start) opts.on_start(start_loc); // Add listener to editor so we can continue to track this drag
 
       editor_el.addEventListener("mousemove", drag);
       editor_el.addEventListener("mouseup", drag_end);
     };
+
+    function update_grid_pos(element, bounding_rect) {
+      var grid_extent = get_drag_extent_on_grid(bounding_rect);
+      misc_helpers_1.set_element_in_grid(element, grid_extent);
+      return grid_extent;
+    }
 
     function drag(event) {
       var curr_loc = event; // Sometimes the drag event gets fired with nonsense zeros
@@ -1383,8 +1563,7 @@ window.onload = function () {
         y: curr_loc.y - start_loc.y
       }, opts.drag_dir);
       Object.assign(drag_feedback_rect.style, bounding_rect_to_css_pos(new_rect));
-      var grid_extent = get_drag_extent_on_grid(new_rect);
-      misc_helpers_1.set_element_in_grid(opts.grid_element, grid_extent);
+      var grid_extent = update_grid_pos(opts.grid_element, new_rect);
       if (opts.on_drag) opts.on_drag({
         xy: curr_loc,
         grid: grid_extent
@@ -1433,13 +1612,11 @@ window.onload = function () {
   }
 
   function send_elements_to_shiny() {
-    if (exports.Shiny) {
-      var elements_by_id_1 = {};
-      current_elements().forEach(function (el) {
-        elements_by_id_1[el.id] = el;
-      });
-      exports.Shiny.setInputValue("elements", elements_by_id_1);
-    }
+    var elements_by_id = {};
+    current_elements().forEach(function (el) {
+      elements_by_id[el.id] = el;
+    });
+    exports.Shiny === null || exports.Shiny === void 0 ? void 0 : exports.Shiny.setInputValue("elements", elements_by_id);
   }
 
   function gen_code_for_layout() {
@@ -1448,7 +1625,7 @@ window.onload = function () {
     var element_defs = elements.map(function (el) {
       return misc_helpers_1.concat_nl("#" + el.id + " {", "  grid-column: " + misc_helpers_1.make_template_start_end(el.start_col, el.end_col) + ";", "  grid-row: " + misc_helpers_1.make_template_start_end(el.start_row, el.end_row) + ";", "}");
     });
-    var css_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray([container_selector + " {", "  display: grid;", "  grid-template-columns: " + grid_holder.style.gridTemplateColumns + ";", "  grid-template-rows: " + grid_holder.style.gridTemplateRows + ";", "  grid-gap: " + grid_holder.style.getPropertyValue("--grid-gap"), "}"], element_defs));
+    var css_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray([container_selector + " {", "  display: grid;", "  grid-template-columns: " + styles_for_container.gridTemplateColumns + ";", "  grid-template-rows: " + styles_for_container.gridTemplateRows + ";", "  gap: " + styles_for_container.gap, "}"], element_defs));
     var html_code = misc_helpers_1.concat_nl.apply(void 0, __spreadArray(__spreadArray(["<div id = " + container_selector + ">"], elements.map(function (el) {
       return misc_helpers_1.concat_nl("  <div id = \"#" + el.id + "\">", "  </div>");
     })), ["</div>"]));
@@ -1462,16 +1639,16 @@ window.onload = function () {
   }
 
   function get_current_rows() {
-    return grid_holder.style.gridTemplateRows.split(" ");
+    return styles_for_container.gridTemplateRows.split(" ");
   }
 
   function get_current_cols() {
-    return grid_holder.style.gridTemplateColumns.split(" ");
+    return styles_for_container.gridTemplateColumns.split(" ");
   } // Get the next color in our list of colors.
 
 
   function get_next_color() {
-    var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf"];
+    var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
     var all_elements = grid_holder.querySelectorAll(".added-element"); // If we have more elements than colors we simply recycle
 
     return colors[all_elements.length % colors.length];
@@ -1485,12 +1662,7 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
-
-
-window.onresize = function () {
-  draw_browser_header_1.draw_browser_header();
-};
-},{"./make_el":"make_el.ts","./draw_browser_header":"draw_browser_header.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./icons":"icons.ts"}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./make_el":"make_el.ts","./make_incrementer":"make_incrementer.ts","./focused_modal":"focused_modal.ts","./make_css_unit_input":"make_css_unit_input.ts","./misc-helpers":"misc-helpers.ts","./make_toggle_switch":"make_toggle_switch.ts","./icons":"icons.ts","./find_rules_by_selector":"find_rules_by_selector.ts"}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1518,7 +1690,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52141" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58949" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -1694,5 +1866,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
+},{}]},{},["../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
 //# sourceMappingURL=/www.77de5100.js.map

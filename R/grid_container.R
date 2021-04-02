@@ -112,7 +112,11 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
       container = id,
       selector_prefix = paste0("#", id_prefix),
       container_height = container_height),
-    shiny::div(id = id, shiny::tagList(grid_elements))
+    shiny::div(
+      id = id,
+      class = "grid-container",
+      shiny::tagList(grid_elements)
+    )
   )
 }
 

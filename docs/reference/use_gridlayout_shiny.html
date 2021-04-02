@@ -114,6 +114,18 @@ adding this css though." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+    </li>
+  </ul>
+</li>
         
       </ul>
       
@@ -160,10 +172,19 @@ grids. If an simple name is passed it is assumed that it is an id: i.e. the
 css id selector <code>#</code> is apended to the name. If container contains css
 selector characters such as a dot, the selector will not be transformed
 into an id automatically. E.g. <code>container = ".main-content"</code>.</p></dd>
-    <dt><code>use_card_style</code></dt><dd><p>Should each section of the grid be given a card style
-to make it stand out?</p></dd>
+    <dt><code>is_card_styled</code></dt><dd><p>Should each section of the grid be given a card style
+to make it stand out? Options are <code>"grid_panel"</code>, where only elements with
+<code>"grid_panel"</code> class will get card styling, <code>"all"</code> where all children of
+the grid container will get card styling (useful for RMarkdown or other
+situations where you don't control child rendering) or <code>"none"</code> for no card
+styling.</p></dd>
+    <dt><code>additional_card_styles</code></dt><dd><p>A list of named property-value pairs for
+additional styles to be added to each card-element (as defined by
+<code>is_card_styled</code>. E.g. <code>element_styles = c("background" = "blue")</code>.</p></dd>
     <dt><code>element_styles</code></dt><dd><p>A list of named property-value pairs for additional
-styles to be added to each element. E.g. <code>element_styles = c("background" = "blue")</code>.</p></dd>
+styles to be added to each first child element of the grid container. E.g.
+under the css selector of <code>grid_container &gt; *</code>. If <code>is_card_styled = "all"</code>
+then this has the same purpose as as <code>additional_card_styles</code></p></dd>
     <dt><code>debug_mode</code></dt><dd><p>If set to <code>TRUE</code> then each element of the grid will have an
 outline applied so positioning can more easily be assessed.</p></dd>
     <dt><code>container_height</code></dt><dd><p>How tall should the grid-containing element be? If
