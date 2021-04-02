@@ -139,15 +139,7 @@ var __assign = this && this.__assign || function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.get_css_value = exports.get_css_unit = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = exports.sizes_to_template_def = exports.set_element_in_grid = exports.make_template_start_end = exports.Drag_Type = void 0;
-var Drag_Type;
-
-(function (Drag_Type) {
-  Drag_Type["top_left"] = "top-left";
-  Drag_Type["bottom_right"] = "bottom-right";
-  Drag_Type["center"] = "center";
-})(Drag_Type = exports.Drag_Type || (exports.Drag_Type = {})); // Builds the start/end css string for a grid-{row,column}
-
+exports.get_css_value = exports.get_css_unit = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = exports.sizes_to_template_def = exports.set_element_in_grid = exports.make_template_start_end = void 0; // Builds the start/end css string for a grid-{row,column}
 
 function make_template_start_end(start, end) {
   // If we only have a single value just assume we take up one row
@@ -303,10 +295,10 @@ function update_rect_with_delta(rect, delta, dir) {
   var new_rect = __assign({}, rect); // The bounding here means that we dont let the user drag the box "inside-out"
 
 
-  if (dir === Drag_Type.top_left) {
+  if (dir === "top-left") {
     new_rect.left = new_rect.left + delta.x;
     new_rect.top = new_rect.top + delta.y;
-  } else if (dir === Drag_Type.bottom_right) {
+  } else if (dir === "bottom-right") {
     new_rect.right = new_rect.right + delta.x, new_rect.left;
     new_rect.bottom = new_rect.bottom + delta.y, new_rect.top;
   } else {
@@ -864,13 +856,6 @@ var icons_1 = require("./icons");
 var find_rules_by_selector_1 = require("./find_rules_by_selector");
 
 exports.Shiny = window.Shiny;
-var App_Mode;
-
-(function (App_Mode) {
-  App_Mode[App_Mode["ShinyNew"] = 0] = "ShinyNew";
-  App_Mode[App_Mode["ShinyExisting"] = 1] = "ShinyExisting";
-  App_Mode[App_Mode["ClientSide"] = 2] = "ClientSide";
-})(App_Mode || (App_Mode = {}));
 
 window.onload = function () {
   // Keep track of the grid controls here. Tradeoff of a global variable
@@ -934,7 +919,7 @@ window.onload = function () {
     update_grid((_a = {}, _a[dir] = current_vals, _a));
   }
 
-  var app_mode = grid_holder.hasChildNodes() ? App_Mode.ShinyExisting : exports.Shiny ? App_Mode.ShinyNew : App_Mode.ClientSide; // Container styles are in this object
+  var app_mode = grid_holder.hasChildNodes() ? "ShinyExisting" : exports.Shiny ? "ShinyNew" : "ClientSide"; // Container styles are in this object
 
   var styles_for_container = find_rules_by_selector_1.find_rules_by_selector("#grid_page", "gridTemplateColumns");
   styles_for_container.height = "100%";
@@ -956,7 +941,7 @@ window.onload = function () {
     (_a = exports.Shiny.setInputValue) === null || _a === void 0 ? void 0 : _a.call(exports.Shiny, input_id, input_value);
   }
 
-  if (app_mode === App_Mode.ShinyExisting) {
+  if (app_mode === "ShinyExisting") {
     var current_rows = styles_for_container.gridTemplateRows.split(" ");
     var current_cols = styles_for_container.gridTemplateColumns.split(" "); // I dont know why this is just .gap and not gridGap
 
@@ -996,7 +981,7 @@ window.onload = function () {
       update_el(document.querySelector("#added_elements"));
       update_el(document.querySelector("#drag_canvas"));
     });
-  } else if (app_mode === App_Mode.ShinyNew) {
+  } else if (app_mode === "ShinyNew") {
     add_shiny_listener("update-grid", update_grid);
     add_shiny_listener("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el) {
@@ -1170,7 +1155,7 @@ window.onload = function () {
       drag_on_grid({
         watching_element: drag_canvas,
         grid_element: current_selection_box_1,
-        drag_dir: misc_helpers_1.Drag_Type.bottom_right,
+        drag_dir: "bottom-right",
         on_start: function on_start() {
           current_selection_box_1.style.borderColor = get_next_color();
         },
@@ -1448,13 +1433,13 @@ window.onload = function () {
       }
     }); // Setup drag behavior
 
-    [misc_helpers_1.Drag_Type.top_left, misc_helpers_1.Drag_Type.bottom_right, misc_helpers_1.Drag_Type.center].forEach(function (handle_type) {
+    ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
       drag_on_grid({
         watching_element: make_el_1.make_el(element_in_grid, "div.dragger.visible." + handle_type, {
           styles: {
             background: color
           },
-          innerHTML: handle_type === "center" ? icons_1.drag_icon : handle_type === misc_helpers_1.Drag_Type.bottom_right ? icons_1.se_arrow : icons_1.nw_arrow
+          innerHTML: handle_type === "center" ? icons_1.drag_icon : handle_type === "bottom-right" ? icons_1.se_arrow : icons_1.nw_arrow
         }),
         grid_element: element_in_grid,
         drag_dir: handle_type,
@@ -1705,7 +1690,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59826" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57305" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

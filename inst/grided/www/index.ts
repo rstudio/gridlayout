@@ -26,25 +26,25 @@ import { find_rules_by_selector } from "./find_rules_by_selector";
 
 export const Shiny = (window as any).Shiny;
 
-interface Grid_Settings {
+type Grid_Settings = {
   num_rows: (new_value: number) => void;
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
 }
 
-export interface Grid_Pos {
+export type Grid_Pos = {
   start_col?: number;
   end_col?: number;
   start_row?: number;
   end_row?: number;
 }
 
-interface Drag_Res {
+type Drag_Res = {
   xy: XY_Pos;
   grid: Grid_Pos;
 }
 
-interface Drag_Options {
+type Drag_Options = {
   watching_element: HTMLElement;
   drag_dir: Drag_Type;
   grid_element?: HTMLElement;
@@ -53,10 +53,12 @@ interface Drag_Options {
   on_end?: (drag_info: Drag_Res) => void;
 }
 
-const enum App_Mode {
-  ShinyNew,
-  ShinyExisting,
-  ClientSide,
+type Element_Info = {
+  id: string;
+  start_row: number;
+  end_row: number;
+  start_col: number;
+  end_col: number;
 }
 
 
@@ -120,11 +122,11 @@ window.onload = function () {
     update_grid({ [dir]: current_vals });
   }
 
-  const app_mode: App_Mode = grid_holder.hasChildNodes()
-    ? App_Mode.ShinyExisting
+  const app_mode = grid_holder.hasChildNodes()
+    ? "ShinyExisting"
     : Shiny
-    ? App_Mode.ShinyNew
-    : App_Mode.ClientSide;
+    ? "ShinyNew"
+    : "ClientSide";
 
   // Container styles are in this object
   const styles_for_container = find_rules_by_selector(
@@ -153,7 +155,7 @@ window.onload = function () {
     Shiny.setInputValue?.(input_id, input_value);
   }
 
-  if (app_mode === App_Mode.ShinyExisting) {
+  if (app_mode === "ShinyExisting") {
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
     // I dont know why this is just .gap and not gridGap
@@ -205,10 +207,10 @@ window.onload = function () {
         update_el(document.querySelector("#drag_canvas"));
       }
     );
-  } else if (app_mode === App_Mode.ShinyNew) {
+  } else if (app_mode === "ShinyNew") {
     add_shiny_listener("update-grid", update_grid);
 
-    interface Shiny_Element_Msg {
+    type Shiny_Element_Msg = {
       id: string;
       start_row: number;
       end_row: number;
@@ -248,7 +250,7 @@ window.onload = function () {
     }
   )
 
-  interface Code_Text {
+  type Code_Text = {
     type: string;
     code: string;
   }
@@ -403,7 +405,7 @@ window.onload = function () {
       drag_on_grid({
         watching_element: drag_canvas,
         grid_element: current_selection_box,
-        drag_dir: Drag_Type.bottom_right,
+        drag_dir: "bottom-right",
         on_start: () => {
           current_selection_box.style.borderColor = get_next_color();
         },
@@ -443,9 +445,9 @@ window.onload = function () {
     return sel_bounds;
   }
 
-  interface Grid_Update_Options {
-    rows?: Array<string>;
-    cols?: Array<string>;
+  type Grid_Update_Options = {
+    rows?: string[];
+    cols?: string[];
     gap?: string;
     force?: boolean;
   }
@@ -703,7 +705,7 @@ window.onload = function () {
 
   // Adds a new element of a given id to the app. Both in the grid window
   // and the addeded elements panel
-  interface New_Element {
+  type New_Element = {
     id: string;
     color?: string;
     grid_pos: Grid_Pos;
@@ -733,8 +735,8 @@ window.onload = function () {
     );
 
     // Setup drag behavior
-    [Drag_Type.top_left, Drag_Type.bottom_right, Drag_Type.center].forEach(
-      function (handle_type) {
+    (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
+      function (handle_type: Drag_Type) {
         drag_on_grid({
           watching_element: make_el(
             element_in_grid,
@@ -744,7 +746,7 @@ window.onload = function () {
               innerHTML:
                 handle_type === "center"
                   ? drag_icon
-                  : handle_type === Drag_Type.bottom_right
+                  : handle_type === "bottom-right"
                   ? se_arrow
                   : nw_arrow,
             }
@@ -916,14 +918,7 @@ window.onload = function () {
     }
   }
 
-  interface Element_Info {
-    id: string;
-    start_row: number;
-    end_row: number;
-    start_col: number;
-    end_col: number;
-  }
-
+ 
   function current_elements(): Array<Element_Info> {
     let elements: Array<Element_Info> = [];
 

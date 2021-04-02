@@ -2,7 +2,7 @@ import { horizontal_drag_icon, vertical_drag_icon } from "./icons";
 import { make_el } from "./make_el";
 import { get_css_value, get_css_unit } from "./misc-helpers";
 
-export interface CSS_Input {
+export type CSS_Input = {
   form: HTMLElement;
   current_value: () => string;
   update_value: (new_value: string) => void;

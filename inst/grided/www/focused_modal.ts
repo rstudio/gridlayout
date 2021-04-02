@@ -1,8 +1,8 @@
 import { make_el, Event_Listener } from "./make_el";
 
-interface Modal_Options {
-  background_callbacks?: Event_Listener | Array<Event_Listener>;
-  modal_callbacks?: Event_Listener | Array<Event_Listener>;
+type Modal_Options = {
+  background_callbacks?: Event_Listener | Event_Listener[];
+  modal_callbacks?: Event_Listener | Event_Listener[];
   header_text?: string;
 }
 export function focused_modal(opts: Modal_Options) {

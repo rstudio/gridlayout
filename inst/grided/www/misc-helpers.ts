@@ -1,16 +1,12 @@
 import { Grid_Pos } from "./index";
 // Functions related to grid construction
 
-export interface XY_Pos {
+export type XY_Pos = {
   x: number;
   y: number;
 }
 
-export enum Drag_Type {
-  top_left = "top-left",
-  bottom_right = "bottom-right",
-  center = "center",
-}
+export type Drag_Type = "top-left" | "bottom-right" | "center";
 
 // Builds the start/end css string for a grid-{row,column}
 export function make_template_start_end(start: number, end?: number): string {
@@ -96,7 +92,7 @@ export function max_w_missing(maybe_a: number | null, b: number) {
   return compare_w_missing(Math.max, maybe_a, b);
 }
 
-export interface Selection_Rect {
+export type Selection_Rect = {
   left: number;
   right: number;
   top: number;
@@ -156,10 +152,10 @@ export function update_rect_with_delta(
   const new_rect: Selection_Rect = { ...rect };
 
   // The bounding here means that we dont let the user drag the box "inside-out"
-  if (dir === Drag_Type.top_left) {
+  if (dir === "top-left") {
     new_rect.left = new_rect.left + delta.x;
     new_rect.top = new_rect.top + delta.y;
-  } else if (dir === Drag_Type.bottom_right) {
+  } else if (dir === "bottom-right") {
     (new_rect.right = new_rect.right + delta.x), new_rect.left;
     (new_rect.bottom = new_rect.bottom + delta.y), new_rect.top;
   } else {

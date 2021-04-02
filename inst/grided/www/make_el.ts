@@ -4,13 +4,13 @@ import {
   set_element_in_grid,
 } from "./misc-helpers";
 
-export interface Event_Listener {
+export type Event_Listener = {
   event: string;
   func: (event: Event) => void;
 }
 
-interface Element_Opts {
-  event_listener?: Event_Listener | Array<Event_Listener>;
+type Element_Opts = {
+  event_listener?: Event_Listener | Event_Listener[];
   styles?: object;
   innerHTML?: string;
   data_props?: object;
