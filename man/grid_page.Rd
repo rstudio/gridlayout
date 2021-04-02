@@ -4,7 +4,13 @@
 \alias{grid_page}
 \title{Setup gridlayout UI for shiny app}
 \usage{
-grid_page(layout, ..., theme, layout_edit_mode = FALSE, .verify_matches = TRUE)
+grid_page(
+  layout,
+  ...,
+  theme = NULL,
+  layout_edit_mode = FALSE,
+  .verify_matches = TRUE
+)
 }
 \arguments{
 \item{layout}{Either a markdown table representation (see
