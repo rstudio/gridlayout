@@ -1,8 +1,16 @@
 library(shiny)
 # Take screenshots of demo apps for use in documentation etc
-screenshot_demo_app <- function(app_path, screenshot_name, force_rerun = FALSE) {
+screenshot_demo_app <- function(
+  app_path,
+  screenshot_name,
+  force_rerun = FALSE,
+  rmd_params = list(),
+  screenshot_root = "man/figures",
+  vwidth = 1600,
+  vheight = 1200
+  ) {
 
-  screenshot_path <- here::here("man/figures", screenshot_name)
+  screenshot_path <- here::here(screenshot_root, screenshot_name)
 
   # Is the app already an app object or is it a string?
   is_app_obj <- class(app_path) == "shiny.appobj"
@@ -16,7 +24,8 @@ screenshot_demo_app <- function(app_path, screenshot_name, force_rerun = FALSE) 
     webshot_capture_fn <- if(is_rmd) {
 
       rendered_rmd_path <- tempfile(fileext = ".html")
-      rmarkdown::render(app_path, output_file = rendered_rmd_path, quiet = TRUE)
+      # Render markdown with specified parameters
+      rmarkdown::render(app_path, output_file = rendered_rmd_path, quiet = TRUE, params = rmd_params)
       # Replace with rendered path
       app_path <- rendered_rmd_path
       webshot2::webshot
@@ -29,8 +38,8 @@ screenshot_demo_app <- function(app_path, screenshot_name, force_rerun = FALSE) 
     webshot_capture_fn(
       app_path,
       file = screenshot_path,
-      vwidth = 1600,
-      vheight = 1200,
+      vwidth = vwidth,
+      vheight = vheight,
       cliprect = "viewport"
     )
   } else {
