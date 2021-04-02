@@ -4,7 +4,52 @@
 \alias{use_gridlayout_rmd}
 \title{Enable gridlayout usage in RMarkdown documents}
 \usage{
-use_gridlayout_rmd()
+use_gridlayout_rmd(
+  container = ".main-container",
+  container_height = "viewport",
+  is_card_styled = "all",
+  ...
+)
+}
+\arguments{
+\item{container}{Id of the element for grid to be placed in. Default value to
+apply grid styling to the whole app (aka the \code{body} element) for whole page
+grids. If an simple name is passed it is assumed that it is an id: i.e. the
+css id selector \verb{#} is apended to the name. If container contains css
+selector characters such as a dot, the selector will not be transformed
+into an id automatically. E.g. \code{container = ".main-content"}.}
+
+\item{container_height}{How tall should the grid-containing element be? If
+set to \code{"viewport"} then the container will take up the entire available
+vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
+value of \code{"100\%"} will enable the the nested grid to take up the full
+vertical space provided by its parent container. Any other css size unit is
+also valid such as \code{"400px"} or \code{"100\%"}.}
+
+\item{is_card_styled}{Should each section of the grid be given a card style
+to make it stand out? Options are \code{"grid_panel"}, where only elements with
+\code{"grid_panel"} class will get card styling, \code{"all"} where all children of
+the grid container will get card styling (useful for RMarkdown or other
+situations where you don't control child rendering) or \code{"none"} for no card
+styling.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=to_css]{to_css}}
+  \describe{
+    \item{\code{additional_card_styles}}{A list of named property-value pairs for
+additional styles to be added to each card-element (as defined by
+\code{is_card_styled}. E.g. \code{element_styles = c("background" = "blue")}.}
+    \item{\code{element_styles}}{A list of named property-value pairs for additional
+styles to be added to each first child element of the grid container. E.g.
+under the css selector of \verb{grid_container > *}. If \code{is_card_styled = "all"}
+then this has the same purpose as as \code{additional_card_styles}}
+    \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
+outline applied so positioning can more easily be assessed.}
+    \item{\code{selector_prefix}}{CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the \code{"#"} prefix) with because they are not available or are used for
+other reasons.}
+  }}
 }
 \description{
 Adds required hooks to RMarkdown to process \code{gridlayout} chunks and style document accordingly.

@@ -7,7 +7,8 @@
 to_css(
   layout,
   container,
-  use_card_style = "grid_panel",
+  is_card_styled = "grid_panel",
+  additional_card_styles = c(),
   element_styles = c(),
   debug_mode = FALSE,
   container_height = "viewport",
@@ -24,15 +25,21 @@ css id selector \verb{#} is apended to the name. If container contains css
 selector characters such as a dot, the selector will not be transformed
 into an id automatically. E.g. \code{container = ".main-content"}.}
 
-\item{use_card_style}{Should each section of the grid be given a card style
+\item{is_card_styled}{Should each section of the grid be given a card style
 to make it stand out? Options are \code{"grid_panel"}, where only elements with
 \code{"grid_panel"} class will get card styling, \code{"all"} where all children of
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
 
+\item{additional_card_styles}{A list of named property-value pairs for
+additional styles to be added to each card-element (as defined by
+\code{is_card_styled}. E.g. \code{element_styles = c("background" = "blue")}.}
+
 \item{element_styles}{A list of named property-value pairs for additional
-styles to be added to each element. E.g. \code{element_styles = c("background" = "blue")}.}
+styles to be added to each first child element of the grid container. E.g.
+under the css selector of \verb{grid_container > *}. If \code{is_card_styled = "all"}
+then this has the same purpose as as \code{additional_card_styles}}
 
 \item{debug_mode}{If set to \code{TRUE} then each element of the grid will have an
 outline applied so positioning can more easily be assessed.}
