@@ -183,6 +183,14 @@ run_with_grided <- function(app){
         layout_from_grided(input$elements, input$grid_sizing)
       })
 
+      initial_layout <- NULL
+      observe({
+        shiny::req(input$elements, input$grid_sizing)
+        if(is.null(initial_layout)){
+          initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
+        }
+      })
+
       shiny::bindEvent(
         shiny::observe({
           layout_call <- paste(
@@ -198,39 +206,25 @@ run_with_grided <- function(app){
         req(input$elements)
         editor_selection <- rstudioapi::getSourceEditorContext()
 
-        # All the lines that start with a pipe and end with one as well
-        md_table_lines <- rle(str_detect(editor_selection$contents, '^\\s*\\|.+\\|\\s*\\"*\\s*$'))
-        section_end <- cumsum(md_table_lines$lengths)
-        section_start <- section_end - md_table_lines$lengths + 1
-        table_sections <- lapply(which(md_table_lines$values), function(rle_index){
-          start_line <- section_start[rle_index]
-          end_line <- section_end[rle_index]
-          contents <- paste(
-            str_remove_all(editor_selection$contents[start_line:end_line],'\"'),
-            collapse = "\n")
+        layout_table <- find_layout_table(editor_selection$contents, initial_layout)
 
-          list(start_line = start_line,
-               end_line = end_line,
-               contents = contents,
-               md_to_gridlayout(contents))
-        })
+        if(is.null(layout_table)){
+          warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
+        }
 
-        #
-        # chunk_deliniators <- which(grepl("\\`\\`\\`", editor_selection$contents))
-        # end_of_layout_chunk_index <- chunk_deliniators[chunk_deliniators > start_of_layout_chunk_index][1]
-        # selected_range <- rstudioapi::document_range(
-        #   start = rstudioapi::document_position(row = start_of_layout_chunk_index, column = 1),
-        #   end = rstudioapi::document_position(row = end_of_layout_chunk_index - 1, column = Inf)
-        # )
+        selected_range <- rstudioapi::document_range(
+          start = rstudioapi::document_position(
+            row = layout_table$start_row,
+            column = layout_table$start_col),
+          end = rstudioapi::document_position(
+            row = layout_table$end_row,
+            column = layout_table$end_col + 1)
+        )
 
-
-
-        app_editor_id <- editor_selection$id
-
-        # on_update(current_layout())
-        # shiny::stopApp()
+        rstudioapi::setSelectionRanges(selected_range, id = editor_selection$id)
+        rstudioapi::modifyRange(selected_range, to_md(current_layout()), id = NULL)
+        shiny::stopApp()
       }), input$updated_code)
-
     }
   }
 
@@ -254,6 +248,8 @@ run_with_grided <- function(app){
 
   app
 }
+
+
 
 find_grid_tags <- function(x) {
   is_shinytag <- inherits(x, "shiny.tag")
