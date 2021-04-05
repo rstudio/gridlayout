@@ -194,6 +194,43 @@ run_with_grided <- function(app){
         }),
         input$get_code)
 
+      shiny::bindEvent(shiny::observe({
+        req(input$elements)
+        editor_selection <- rstudioapi::getSourceEditorContext()
+
+        # All the lines that start with a pipe and end with one as well
+        md_table_lines <- rle(str_detect(editor_selection$contents, '^\\s*\\|.+\\|\\s*\\"*\\s*$'))
+        section_end <- cumsum(md_table_lines$lengths)
+        section_start <- section_end - md_table_lines$lengths + 1
+        table_sections <- lapply(which(md_table_lines$values), function(rle_index){
+          start_line <- section_start[rle_index]
+          end_line <- section_end[rle_index]
+          contents <- paste(
+            str_remove_all(editor_selection$contents[start_line:end_line],'\"'),
+            collapse = "\n")
+
+          list(start_line = start_line,
+               end_line = end_line,
+               contents = contents,
+               md_to_gridlayout(contents))
+        })
+
+        #
+        # chunk_deliniators <- which(grepl("\\`\\`\\`", editor_selection$contents))
+        # end_of_layout_chunk_index <- chunk_deliniators[chunk_deliniators > start_of_layout_chunk_index][1]
+        # selected_range <- rstudioapi::document_range(
+        #   start = rstudioapi::document_position(row = start_of_layout_chunk_index, column = 1),
+        #   end = rstudioapi::document_position(row = end_of_layout_chunk_index - 1, column = Inf)
+        # )
+
+
+
+        app_editor_id <- editor_selection$id
+
+        # on_update(current_layout())
+        # shiny::stopApp()
+      }), input$updated_code)
+
     }
   }
 
