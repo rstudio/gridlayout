@@ -123,6 +123,10 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
   )
 }
 
+layouts_are_equal <- function(layout_a, layout_b){
+  identical(to_md(layout_a), to_md(layout_b))
+}
+
 #' @export
 print.gridlayout <- function(layout){
 
