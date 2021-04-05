@@ -134,11 +134,16 @@ window.onload = function () {
     "gridTemplateColumns"
   );
 
+  // Setup some basic styles for the container to make sure it fits into the
+  // grided interface properly. 
   styles_for_container.height = "100%";
   styles_for_container.width = "100%";
-  styles_for_container.display = "grid";
-  styles_for_container.gap = "1rem";
-  styles_for_container.padding = "1rem";
+  // Only set a default gap sizing if it isn't already provided
+  if(app_mode !== "ShinyExisting"){
+    styles_for_container.display = "grid";
+    set_gap_size(styles_for_container, "1rem");
+    styles_for_container.padding = "1rem";
+  }
 
   add_shiny_listener(
     "shiny-loaded",
@@ -159,7 +164,7 @@ window.onload = function () {
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
     // I dont know why this is just .gap and not gridGap
-    const current_gap = styles_for_container.gap;
+    const current_gap = get_gap_size(styles_for_container);
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
@@ -454,7 +459,7 @@ window.onload = function () {
   function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
-    const old_gap = styles_for_container.gap;
+    const old_gap = get_gap_size(styles_for_container);
     const new_gap = opts.gap || old_gap;
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
@@ -582,7 +587,7 @@ window.onload = function () {
       grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
       // We dont use css variables in the exported css that existing apps used
       // so we need to modify both gap and padding
-      styles_for_container.gap = opts.gap;
+      set_gap_size(styles_for_container, opts.gap);
       styles_for_container.padding = opts.gap;
     }
 
@@ -959,11 +964,12 @@ window.onload = function () {
   }
 
   function send_grid_sizing_to_shiny(){
+
     setShinyInput(
       "grid_sizing", {
         rows: styles_for_container.gridTemplateRows.split(" "),
         cols: styles_for_container.gridTemplateColumns.split(" "),
-        gap: styles_for_container.gap,
+        gap: get_gap_size(styles_for_container),
       }
     );
   }
@@ -986,7 +992,7 @@ window.onload = function () {
       `  display: grid;`,
       `  grid-template-columns: ${styles_for_container.gridTemplateColumns};`,
       `  grid-template-rows: ${styles_for_container.gridTemplateRows};`,
-      `  gap: ${styles_for_container.gap}`,
+      `  gap: ${get_gap_size(styles_for_container)}`,
       `}`,
       ...element_defs
     );
@@ -1040,3 +1046,16 @@ window.onload = function () {
     send_elements_to_shiny();
   }
 }; // End of the window.onload callback
+
+function get_gap_size(container_styles: CSSStyleDeclaration){
+  // Older browsers give back both row-gap and column-gap in same query
+  // so we need to reduce to a single value before returning
+  const gap_size_vec = container_styles.gap.split(" ");
+
+  return gap_size_vec[0];
+}
+
+function set_gap_size(container_styles: CSSStyleDeclaration, new_val: string){
+  container_styles.gap = new_val;
+  return new_val;
+}
