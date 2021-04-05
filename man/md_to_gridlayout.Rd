@@ -4,12 +4,17 @@
 \alias{md_to_gridlayout}
 \title{Build grid layout obj from markdown table}
 \usage{
-md_to_gridlayout(layout_table)
+md_to_gridlayout(layout_table, null_instead_of_error = FALSE)
 }
 \arguments{
 \item{layout_table}{Character string with a markdown table. First row and
 column are reserved for sizing (any valid css sizing works). An optional
 grid-gap can be provided using the very first cell.}
+
+\item{null_instead_of_error}{When the input fails to be parsed as a layout,
+should the function return \code{NULL} instead of throwing an error? Useful for
+situations where you're parsing multiple tables simply want to check if a
+table can be parsed instead of relying on it being parsable.}
 }
 \value{
 An object of class "grid_layout", which stores the layout as a
