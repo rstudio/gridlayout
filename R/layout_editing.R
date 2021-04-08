@@ -3,6 +3,7 @@
 # an element in the vector. For example this is the way the rstudioapi gives you
 # back the open-files context.
 find_layouts_in_file <- function(file_text){
+
   # This is a semi-complicated regex that looks for lines that appear to be
   # markdown table lines. This means they start with pipes and end with pipes.
   # Exceptions are made for the start and end which may contain a quote and
@@ -54,6 +55,8 @@ find_layouts_in_file <- function(file_text){
 
 
 update_layout_in_file <- function(editor_selection, layout_loc, new_layout){
+  requireNamespace("rstudioapi", quietly = TRUE)
+
   selected_range <- rstudioapi::document_range(
     start = rstudioapi::document_position(
       row = layout_loc$start_row,

@@ -36,6 +36,7 @@ grided_addin <- function() {
 #' @return NULL
 #' @export
 grided_new_app <- function() {
+  requireNamespace("rstudioapi", quietly = TRUE)
 
   gridded_app(
     update_btn_text = "Generate app code",
