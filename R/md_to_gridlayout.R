@@ -100,7 +100,7 @@ coerce_to_layout <- function(layout_def){
 # file_text is a character vector with each line of a file being represented as
 # an element in the vector. For example this is the way the rstudioapi gives you
 # back the open-files context.
-find_layout_table <- function(file_text, layout_to_match){
+find_layouts_in_file <- function(file_text){
   # This is a semi-complicated regex that looks for lines that appear to be
   # markdown table lines. This means they start with pipes and end with pipes.
   # Exceptions are made for the start and end which may contain a quote and
@@ -112,40 +112,38 @@ find_layout_table <- function(file_text, layout_to_match){
 
   section_end <- cumsum(md_table_lines$lengths)
   section_start <- section_end - md_table_lines$lengths + 1
-  for(rle_index in which(md_table_lines$values)){
-    start_row <- section_start[rle_index]
-    start_line <- file_text[start_row]
-    end_row <- section_end[rle_index]
-    end_line <- file_text[end_row]
 
-    # Get the position of the start of the table and end of the table
-    # so we can perfectly extract it without any extraneous text like
-    # quotes or assignment operators
-    start_col <- min(which(strsplit(start_line, split = "")[[1]] == "|"))
-    end_col <- max(which(strsplit(end_line, split = "")[[1]] == "|"))
-    table_text <- file_text[start_row:end_row]
-    table_text[1] <- substring(table_text[1], first = start_col)
-    n_row <- md_table_lines$lengths[rle_index]
-    table_text[n_row] <- substring(table_text[n_row], first = 1, last = end_col)
+  lapply(
+    which(md_table_lines$values),
+    function(rle_index) {
+      start_row <- section_start[rle_index]
+      start_line <- file_text[start_row]
+      end_row <- section_end[rle_index]
+      end_line <- file_text[end_row]
 
-    contents <- paste(table_text, collapse = "\n")
+      # Get the position of the start of the table and end of the table
+      # so we can perfectly extract it without any extraneous text like
+      # quotes or assignment operators
+      start_col <- min(which(strsplit(start_line, split = "")[[1]] == "|"))
+      end_col <- max(which(strsplit(end_line, split = "")[[1]] == "|"))
+      table_text <- file_text[start_row:end_row]
+      table_text[1] <- substring(table_text[1], first = start_col)
+      n_row <- md_table_lines$lengths[rle_index]
+      table_text[n_row] <- substring(table_text[n_row], first = 1, last = end_col)
 
-    layout <- md_to_gridlayout(contents, null_instead_of_error = TRUE)
+      contents <- paste(table_text, collapse = "\n")
 
-    is_a_match <- layouts_are_equal(layout, layout_to_match)
-    if(is_a_match){
-      return(
-        list(start_row = start_row,
-             start_col = start_col,
-             end_row  = end_row,
-             end_col = end_col,
-             contents = contents)
+      list(
+        start_row = start_row,
+        start_col = start_col,
+        end_row  = end_row,
+        end_col = end_col,
+        contents = contents,
+        layout = md_to_gridlayout(contents, null_instead_of_error = TRUE)
       )
     }
-  }
-
-  # If nothing matched, return a null value
-  NULL
+  )
 }
+
 
 

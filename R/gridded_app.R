@@ -206,23 +206,17 @@ run_with_grided <- function(app){
         req(input$elements)
         editor_selection <- rstudioapi::getSourceEditorContext()
 
-        layout_table <- find_layout_table(editor_selection$contents, initial_layout)
+        layout_table <- Find(
+          x = find_layouts_in_file(editor_selection$contents),
+          f = function(x) layouts_are_equal(x$layout, initial_layout)
+        )
 
         if(is.null(layout_table)){
           warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
         }
 
-        selected_range <- rstudioapi::document_range(
-          start = rstudioapi::document_position(
-            row = layout_table$start_row,
-            column = layout_table$start_col),
-          end = rstudioapi::document_position(
-            row = layout_table$end_row,
-            column = layout_table$end_col + 1)
-        )
+        update_layout_in_file(editor_selection, layout_table, current_layout())
 
-        rstudioapi::setSelectionRanges(selected_range, id = editor_selection$id)
-        rstudioapi::modifyRange(selected_range, to_md(current_layout()), id = NULL)
         shiny::stopApp()
       }), input$updated_code)
     }
@@ -249,6 +243,14 @@ run_with_grided <- function(app){
   app
 }
 
+find_layout_table <- function(file_text, layout_to_match){
+
+  Find(
+    x = find_layouts_in_file(file_text),
+    f = function(x) layouts_are_equal(x$layout, layout_to_match)
+  )
+
+}
 find_grid_tags <- function(x) {
   is_shinytag <- inherits(x, "shiny.tag")
   has_class <- is_shinytag && !is.null(x$attribs$class)
@@ -264,6 +266,23 @@ find_grid_tags <- function(x) {
   } else {
     NULL
   }
+}
+
+
+update_layout_in_file <- function(editor_selection, layout_loc, new_layout){
+  selected_range <- rstudioapi::document_range(
+    start = rstudioapi::document_position(
+      row = layout_loc$start_row,
+      column = layout_loc$start_col
+    ),
+    end = rstudioapi::document_position(
+      row = layout_loc$end_row,
+      column = layout_loc$end_col + 1
+    )
+  )
+
+  rstudioapi::setSelectionRanges(selected_range, id = editor_selection$id)
+  rstudioapi::modifyRange(selected_range, to_md(new_layout), id = NULL)
 }
 
 
