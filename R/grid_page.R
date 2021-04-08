@@ -8,9 +8,6 @@
 #'   do things like things to the `head` or `meta` sections of the page.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
-#' @param layout_edit_mode Set to `TRUE` to setup layout with live app running.
-#'   Most functionality of your app will not be available during this more so
-#'   only use it for getting your layout as desired.
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
@@ -51,7 +48,7 @@
 #' )
 #'
 #' }
-grid_page <- function(layout, ..., theme = NULL, layout_edit_mode = FALSE, .verify_matches = TRUE){
+grid_page <- function(layout, ..., theme = NULL, .verify_matches = TRUE){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
@@ -73,17 +70,14 @@ grid_page <- function(layout, ..., theme = NULL, layout_edit_mode = FALSE, .veri
     id = "grid_page",
     layout = layout,
     elements = grid_element_args,
-    container_height = if(layout_edit_mode) "100%" else "viewport"
+    container_height = "viewport"
   )
 
-  if(layout_edit_mode){
-    grided_ui_wrapper(container, update_btn_text = "Finish editing")
-  } else {
-    shiny::fluidPage(
-      theme = theme,
-      container,
-      #any extra args not matched to layout will get added after
-      if(length(extra_args) != 0) extra_args
-    )
-  }
+  shiny::fluidPage(
+    theme = theme,
+    container,
+    #any extra args not matched to layout will get added after
+    if(length(extra_args) != 0) extra_args
+  )
+
 }

@@ -4,13 +4,7 @@
 \alias{grid_page}
 \title{Setup gridlayout UI for shiny app}
 \usage{
-grid_page(
-  layout,
-  ...,
-  theme = NULL,
-  layout_edit_mode = FALSE,
-  .verify_matches = TRUE
-)
+grid_page(layout, ..., theme = NULL, .verify_matches = TRUE)
 }
 \arguments{
 \item{layout}{Either a markdown table representation (see
@@ -24,10 +18,6 @@ do things like things to the \code{head} or \code{meta} sections of the page.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}
-
-\item{layout_edit_mode}{Set to \code{TRUE} to setup layout with live app running.
-Most functionality of your app will not be available during this more so
-only use it for getting your layout as desired.}
 }
 \value{
 A UI definition that can be passed to the
