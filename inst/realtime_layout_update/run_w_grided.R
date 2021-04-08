@@ -12,8 +12,7 @@ my_layout <- "|      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
 |115px |header  |header |
-|1fr   |sidebar |plot   |
-|1fr   |footer  |footer |" #an important comment
+|1fr   |sidebar |plot   |" #an important comment
 
 another_layout <- "
 |      |        |       |
@@ -41,5 +40,4 @@ app <- shinyApp(
   }
 )
 run_with_grided(app)
-
 
