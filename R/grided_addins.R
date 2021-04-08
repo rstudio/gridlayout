@@ -12,6 +12,10 @@ grided_addin <- function() {
       "No layouts found in currently active editor. ",
       "Make sure you've clicked on correct editor pane before running addin."
     )
+  } else if (length(layout_tables) > 1) {
+    message(
+      "More than one layout table found in open editor, using the first one."
+    )
   }
 
   # If multiple are found we use the first. This will eventually let the user
