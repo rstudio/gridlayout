@@ -14,13 +14,31 @@ grided_addin <- function() {
     )
   } else if (length(layout_tables) > 1) {
     message(
-      "More than one layout table found in open editor, using the first one."
+      "More than one layout table found in open editor, using one closest to cursor."
     )
   }
 
-  # If multiple are found we use the first. This will eventually let the user
-  # choose which one to use
-  layout <- layout_tables[[1]]
+  cursor_row <- editor_selection$selection[[1]]$range$end[1]
+  distance_to_tables <- vapply(
+    layout_tables,
+    function(t){
+      from_start <- cursor_row - t$start_row
+      from_end <- cursor_row - t$end_row
+      if (from_start >= 0 && from_end <= 0) {
+        # Cursor is inside the table
+        0
+      } else {
+        # Give the shortest absolute distance to the table
+        min(abs(from_start), abs(from_end))
+      }
+    },
+    FUN.VALUE = numeric(1)
+  )
+
+  chosen_layout_index <- which.min(distance_to_tables)
+
+
+  layout <- layout_tables[[chosen_layout_index]]
 
   gridded_app(
     starting_layout = layout$layout,
