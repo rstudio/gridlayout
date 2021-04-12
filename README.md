@@ -268,6 +268,10 @@ cat(to_css(my_layout))
 #> }
 #> 
 #> body > * {
+#> 
+#> }
+#> 
+#> body .grid_panel {
 #>   box-sizing: border-box;
 #>   padding: 0.8rem;
 #>   overflow: hidden;
