@@ -1,4 +1,5 @@
-source(here::here("tools/generate_screenshots.R"))
+requireNamespace("here", quietly = TRUE)
+source("../../tools/generate_screenshots.R")
 
 test_that("geyser app", {
   skip_on_cran()

@@ -113,7 +113,7 @@ server <- function(input, output, session) {
     )
   )
 
-  current_layout <- reactive({
+  current_layout <- shiny::reactive({
     shiny::req(input$elements)
     layout_from_grided(input$elements, input$grid_sizing)
   })
@@ -130,7 +130,7 @@ server <- function(input, output, session) {
     input$get_code)
 
   shiny::bindEvent(shiny::observe({
-    req(input$elements)
+    shiny::req(input$elements)
     on_update(current_layout())
     shiny::stopApp()
   }), input$updated_code)

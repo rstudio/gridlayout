@@ -1,4 +1,3 @@
-source(here::here("tools/generate_screenshots.R"))
 
 test_that("Wont try and run on non grid_page apps", {
   expect_error(
@@ -22,7 +21,12 @@ test_that("Wont try and run on non grid_page apps", {
 
 
 test_that("geyser app", {
+  skip_if_not_installed("webshot2")
   skip_on_cran()
+
+  requireNamespace("here", quietly = TRUE)
+  source("../../tools/generate_screenshots.R")
+
   expect_snapshot_file(
     screenshot_demo_app(
       here::here('inst/realtime_layout_update/app.R'),

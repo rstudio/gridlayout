@@ -8,8 +8,9 @@ screenshot_demo_app <- function(
   screenshot_root = "man/figures",
   vwidth = 1600,
   vheight = 1200
-  ) {
-
+) {
+  requireNamespace("webshot2", quietly = TRUE)
+  requireNamespace("here", quietly = TRUE)
   screenshot_path <- here::here(screenshot_root, screenshot_name)
 
   # Is the app already an app object or is it a string?
@@ -49,10 +50,3 @@ screenshot_demo_app <- function(
   # Return screenshot path (for use in testing)
   invisible(screenshot_path)
 }
-
-
-
-
-# screenshot_demo_app(here::here('inst/demo_app/app.R'), "geyser_demo.png", force_rerun = TRUE)
-# screenshot_demo_app(here::here('inst/nested_grids/app.R'), "nested_demo.png")
-# screenshot_demo_app(here::here('inst/rmarkdown_demo/grid_markdown.Rmd'), "basic_markdown.png")

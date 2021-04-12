@@ -3,6 +3,7 @@
 #' @return NULL
 #' @export
 grided_addin <- function() {
+  requireNamespace("rstudioapi", quietly = TRUE)
   editor_selection <- rstudioapi::getSourceEditorContext()
 
   layout_tables <- find_layouts_in_file(editor_selection$contents)

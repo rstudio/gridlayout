@@ -1,7 +1,7 @@
 #' Run existing app in grided layout editing mode
 #'
 #'
-#' @param app Shiny app object as produced by \code{\link[shiny]{shinyApp()}}
+#' @param app Shiny app object as produced by [shiny::shinyApp()].
 #'
 #' @return Shiny app object with original app encapuslated by grided editor
 #' @export
@@ -28,13 +28,13 @@ run_with_grided <- function(app) {
       # Lets grided know it should send over initial app state
       session$sendCustomMessage("shiny-loaded", 1)
 
-      current_layout <- reactive({
+      current_layout <- shiny::reactive({
         shiny::req(input$elements)
         layout_from_grided(input$elements, input$grid_sizing)
       })
 
       initial_layout <- NULL
-      observe({
+      shiny::observe({
         shiny::req(input$elements, input$grid_sizing)
         if (is.null(initial_layout)) {
           initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
@@ -49,7 +49,7 @@ run_with_grided <- function(app) {
       )
 
       shiny::bindEvent(shiny::observe({
-        req(input$elements)
+        shiny::req(input$elements)
 
         if (in_rstudio) {
           editor_selection <- rstudioapi::getSourceEditorContext()

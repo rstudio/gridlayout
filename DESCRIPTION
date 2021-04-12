@@ -16,7 +16,10 @@ Suggests:
     crayon,
     knitr,
     rmarkdown,
-    fontawesome
+    fontawesome,
+    here,
+    webshot2,
+    rstudioapi
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
