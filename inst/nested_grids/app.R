@@ -22,7 +22,7 @@ app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    header = grid_panel(
+    header = gridlayout::grid_panel(
       h2(id = "header", "This is my header content"),
       v_align = "center"
     ),
