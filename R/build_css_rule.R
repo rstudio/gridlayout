@@ -12,6 +12,7 @@
 #' @return A concatenated string of property values to be used inside a css
 #'   selector.
 #'
+#' @export
 #' @examples
 #'
 #' custom_styles <- c(
