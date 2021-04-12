@@ -19,7 +19,9 @@
 #'   |    |         |            |
 #'   |----|---------|------------|
 #'   |    |1fr      |4fr         |
-#'   |1fr |icon     |bin_chooser |
+#'   |1fr |icon     |bin_chooser |"
+#'
+#' requireNamespace("fontawesome", quietly = TRUE)
 #'
 #' # Grid container with a fully centered R icon and a vertically aligned slider input
 #' grid_container(
@@ -36,7 +38,6 @@
 #'     )
 #'   )
 #' )
-#'
 grid_panel <- function(..., v_align, h_align) {
   panel_styles <- c(
     display = "grid",

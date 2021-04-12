@@ -22,3 +22,27 @@ Elements from \code{...} wrapped in a \code{shiny::div()} with \code{class = "gr
 \description{
 Panel for grid page
 }
+\examples{
+
+content_layout <- "
+  |    |         |            |
+  |----|---------|------------|
+  |    |1fr      |4fr         |
+  |1fr |icon     |bin_chooser |"
+
+# Grid container with a fully centered R icon and a vertically aligned slider input
+grid_container(
+  layout = content_layout,
+  elements = list(
+    icon = grid_panel(
+      h2(fontawesome::fa("r-project", fill = "steelblue"), height = "80px"),
+      v_align = "center",
+      h_align = "center"
+    ),
+    bin_chooser = grid_panel(
+      sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
+      v_align = "center"
+    )
+  )
+)
+}
