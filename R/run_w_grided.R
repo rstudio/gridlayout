@@ -97,15 +97,6 @@ run_with_grided <- function(app) {
 }
 
 
-send_layoutcall_popup <- function(session, current_layout){
-  layout_call <- paste(
-    "layout <- grid_layout_from_md(layout_table = \"",
-    "    ", to_md(current_layout()), "\")",
-    sep = "\n")
-
-  session$sendCustomMessage("code_modal", layout_call)
-}
-
 find_grid_tags <- function(x) {
   is_shinytag <- inherits(x, "shiny.tag")
   has_class <- is_shinytag && !is.null(x$attribs$class)

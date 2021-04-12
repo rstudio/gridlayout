@@ -92,24 +92,19 @@ gridded_app <- function(starting_layout = new_gridlayout(),
       )
     )
 
-    current_layout <- reactive({
+    current_layout <- shiny::reactive({
       shiny::req(input$elements)
       layout_from_grided(input$elements, input$grid_sizing)
     })
 
     shiny::bindEvent(
       shiny::observe({
-        layout_call <- paste(
-          "layout <- grid_layout_from_md(layout_table = \"",
-          "    ", to_md(current_layout()), "\")",
-          sep = "\n")
-
-        session$sendCustomMessage("code_modal", layout_call)
+        send_layoutcall_popup(session, current_layout)
       }),
       input$get_code)
 
     shiny::bindEvent(shiny::observe({
-      req(input$elements)
+      shiny::req(input$elements)
       on_update(current_layout())
       shiny::stopApp()
     }), input$updated_code)
@@ -124,3 +119,16 @@ gridded_app <- function(starting_layout = new_gridlayout(),
   }
 
 }
+
+send_layoutcall_popup <- function(session, current_layout){
+  layout_call <- paste(
+    "layout <- grid_layout_from_md(layout_table = \"",
+    "    ", to_md(current_layout()), "\")",
+    sep = "\n")
+
+  session$sendCustomMessage("code_modal", layout_call)
+}
+
+
+utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
+
