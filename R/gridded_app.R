@@ -39,7 +39,7 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL){
         ),
         shiny::strong("Remove an element:"),
         shiny::tags$ul(
-          shiny::tags$li("Find element entry in “Added elements” panel and click the", trashcan_icon, " icon")
+          shiny::tags$li("Find element entry in \"Added elements\" panel and click the", trashcan_icon, " icon")
         ),
       )
     ),
