@@ -128,18 +128,18 @@ layouts_are_equal <- function(layout_a, layout_b){
 }
 
 #' @export
-print.gridlayout <- function(layout){
+print.gridlayout <- function(x, ...){
 
   # Make text bold
   emph <- if(is_installed("crayon")) crayon::bold else as.character
 
   cat(
     emph("gridlayout") %+% " object with " %+%
-      emph(length(attr(layout, 'row_sizes'))) %+% " rows, " %+%
-      emph(length(attr(layout, 'col_sizes'))) %+% " columns, and " %+%
-      "gap size: " %+% emph(attr(layout, 'gap')),
+      emph(length(attr(x, 'row_sizes'))) %+% " rows, " %+%
+      emph(length(attr(x, 'col_sizes'))) %+% " columns, and " %+%
+      "gap size: " %+% emph(attr(x, 'gap')),
     "\n",
-    to_table(layout, sizes_decorator = emph)
+    to_table(x, sizes_decorator = emph)
   )
 }
 
