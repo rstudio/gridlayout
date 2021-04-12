@@ -48,7 +48,7 @@
 #' )
 #'
 #' }
-grid_page <- function(layout, ..., theme = NULL, .verify_matches = TRUE){
+grid_page <- function(layout, ..., theme = NULL){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout

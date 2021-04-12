@@ -19,17 +19,17 @@
 #'   |1fr   |sidebar |plot_b |plot_b |")
 #' cat(to_md(my_layout))
 #'
-to_md <- function(layout, include_gap_size = TRUE, sep_char = "|") {
+to_md <- function(layout, include_gap_size = TRUE) {
   UseMethod("to_md")
 }
 
 #' @export
-to_md.default <- function(layout, include_gap_size = TRUE, sep_char = "|"){
+to_md.default <- function(layout, include_gap_size = TRUE){
   cat("to_md generic")
 }
 
 #' @export
-to_md.gridlayout <- function(layout, include_gap_size = TRUE, sep_char = "|"){
+to_md.gridlayout <- function(layout, include_gap_size = TRUE){
   to_table(layout, include_gap_size = include_gap_size, md_mode = TRUE)
 }
 
