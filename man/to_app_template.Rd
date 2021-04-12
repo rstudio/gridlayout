@@ -16,6 +16,3 @@ Character string of Shiny app that uses desired layout
 Returns the string of an entire shiny app built around a desired layout.
 Designed to be used with the \code{gridlayout} app-starter addin.
 }
-\examples{
-
-}

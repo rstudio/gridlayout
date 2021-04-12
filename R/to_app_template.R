@@ -8,8 +8,6 @@
 #' @return Character string of Shiny app that uses desired layout
 #' @export
 #'
-#' @examples
-#'
 to_app_template <- function(layout) {
   UseMethod("to_app_template")
 }
