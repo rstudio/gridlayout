@@ -22,6 +22,7 @@ test_that("Wont try and run on non grid_page apps", {
 
 
 test_that("geyser app", {
+  skip_on_cran()
   expect_snapshot_file(
     screenshot_demo_app(
       here::here('inst/realtime_layout_update/app.R'),

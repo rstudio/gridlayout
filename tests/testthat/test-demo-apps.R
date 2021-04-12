@@ -1,6 +1,7 @@
 source(here::here("tools/generate_screenshots.R"))
 
 test_that("geyser app", {
+  skip_on_cran()
   expect_snapshot_file(
     screenshot_demo_app(
       here::here('inst/demo_app/app.R'),
@@ -12,6 +13,7 @@ test_that("geyser app", {
 })
 
 test_that("Nested app", {
+  skip_on_cran()
   expect_snapshot_file(
     screenshot_demo_app(
       here::here('inst/nested_grids/app.R'),
@@ -23,6 +25,7 @@ test_that("Nested app", {
 })
 
 test_that("RMarkdown", {
+  skip_on_cran()
   expect_snapshot_file(
     screenshot_demo_app(
       here::here('inst/rmarkdown_demo/grid_markdown.Rmd'),
