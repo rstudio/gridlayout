@@ -22,7 +22,8 @@ import {
 } from "./misc-helpers";
 import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
-import { find_rules_by_selector } from "./find_rules_by_selector";
+import { find_element_by_property, find_rules_by_selector } from "./find_rules_by_selector";
+import {wrap_in_grided} from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
@@ -62,7 +63,6 @@ type Element_Info = {
 }
 
 
-
 window.onload = function () {
   // Keep track of the grid controls here. Tradeoff of a global variable
   // feels worth it for direct access to the values without doing a dom query
@@ -70,10 +70,21 @@ window.onload = function () {
   // All the currently existing cells making up the grid
   let current_cells = [];
 
+  const grid_holder_pair = find_element_by_property("display", "grid");
+
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = document.querySelector("#grid_page");
+  const already_wrapped: boolean =  document.querySelector("#grid_page") != null;
+
+  if (!already_wrapped) {
+    wrap_in_grided(grid_holder_pair.el);
+    grid_holder_pair.styles.width = `100%`;
+    grid_holder_pair.styles.height = `100%`;
+  }
+  
+  const grid_holder: HTMLElement = already_wrapped ? document.querySelector("#grid_page"): grid_holder_pair.el;
+  // debugger;
 
   const settings_panel: HTMLElement = document.querySelector(
     "#settings .card-body"

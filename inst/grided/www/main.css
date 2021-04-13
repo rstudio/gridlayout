@@ -1,5 +1,5 @@
 /* Styles for my app */
-body {
+#grided-holder {
   --side-gaps: 0.7rem;
   --blue: #007bff;
   --light-gray: #9e9e9e;
@@ -28,7 +28,7 @@ body {
 }
 
 /* Styles that apply to every panel in grid */
-body > *,
+#grided-holder > *,
 .modal {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: var(--side-gaps);

@@ -1,6 +1,17 @@
 // Assumes that only one stylesheet has rules for the given selector and
 // that only one rule targeting that selector alone is defined
 // If target_property is provided the function will chose the sheet that defines
+
+import { flatten } from "./misc-helpers";
+
+// Combines every style rule contained in all the style sheets on page into
+// a big array. Easier than navigating the nested structure of sheets => rules
+function get_all_style_rules() {
+  return flatten(
+    [...document.styleSheets].map((x) => [...x.cssRules]) as CSSStyleRule[][]
+  );
+}
+
 // that given property (if multiple exist)
 export function find_rules_by_selector(
   selector_text: string,
@@ -35,4 +46,24 @@ export function find_rules_by_selector(
     // Take the latest style sheet and (hope) that's the correct one
     return rules_for_selector[n_sheets - 1];
   }
+}
+
+export function find_element_by_property(
+  property_id: string,
+  property_value: string
+): { el: HTMLElement; styles: CSSStyleDeclaration } {
+  const all_styles = get_all_style_rules();
+
+  const first_rule_w_prop = all_styles
+    .filter((rule) => rule.style && rule.style[property_id] == property_value)
+    .find((rule) => document.querySelector(rule.selectorText));
+
+  const el_w_prop = document.querySelector(
+    first_rule_w_prop.selectorText
+  ) as HTMLElement;
+
+  return {
+    el: el_w_prop,
+    styles: el_w_prop.style,
+  };
 }
