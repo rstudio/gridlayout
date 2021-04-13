@@ -31,6 +31,14 @@ function extract_classes(sel_txt:string): Array<string>|null {
     : null;
 }
 
+export function parse_selector_text(sel_txt: string){
+  return {
+    tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
+    el_id: extract_id(sel_txt),
+    class_list: extract_classes(sel_txt),
+  }
+}
+
 // This is a heavy-lifter that takes care of building elements and placing them
 // on the grid etc.. It only create's an element if it needs to, which means
 // that we dont get dom leaks caused by recalling stuff over and over again.
@@ -40,9 +48,11 @@ export function make_el(
   opts: Element_Opts = {}
   ) {  
 
-  const tag_type: string = sel_txt.match(/^([^#\.]+)+/g)[0];
-  const el_id = extract_id(sel_txt);
-  const class_list = extract_classes(sel_txt);
+  const {
+    tag_type,
+    el_id,
+    class_list
+  } = parse_selector_text(sel_txt);
 
   let el: HTMLElement = parent.querySelector(sel_txt);
   if (!el) {

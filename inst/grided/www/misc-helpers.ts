@@ -189,4 +189,8 @@ export function get_css_value(css_size: string): number {
   return Number(css_size.match(/^[\d | \.]+/g)[0]);
 }
 
+export function flatten<Type>(arr: Type[][]): Type[]{
+  return [].concat(...arr);
+}
+
 
