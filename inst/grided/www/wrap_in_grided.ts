@@ -105,7 +105,7 @@ function El(opts: Element_Contents): HTMLElement {
   return el;
 }
 
-function Block_El(sel_txt: string, ...children: HTMLElement[]) {
+export function Block_El(sel_txt: string, ...children: HTMLElement[]) {
   return El({
     sel_txt,
     children,

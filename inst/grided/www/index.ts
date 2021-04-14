@@ -26,7 +26,7 @@ import {
   find_rules_by_selector,
   find_selector_by_property,
 } from "./find_rules_by_selector";
-import { wrap_in_grided } from "./wrap_in_grided";
+import { Block_El, wrap_in_grided } from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
@@ -73,29 +73,30 @@ window.onload = function () {
   const grid_controls = { rows: [], cols: [] };
   // All the currently existing cells making up the grid
   let current_cells = [];
-
   // Do we already have a div with id grid_page in our app? Aka the grided UI
   // has been already added?
-  const already_wrapped: boolean = document.querySelector("#grid_page") != null;
-
-  const grid_holder_selector = already_wrapped
-    ? "#grid_page"
-    : find_selector_by_property("display", "grid");
-
+  const grid_layout_rule = find_selector_by_property("display", "grid");
+  
+  const grid_holder_selector = grid_layout_rule.rule_exists 
+  ? grid_layout_rule.selector
+  : "#grid_page";
+  
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = document.querySelector(grid_holder_selector);
+  const grid_holder: HTMLElement = grid_layout_rule.rule_exists 
+  ? document.querySelector(grid_holder_selector)
+  : Block_El("div#grid_page");
+  
   const grid_styles = grid_holder.style;
 
-  if (!already_wrapped) {
-    wrap_in_grided(grid_holder, setShinyInput);
-  }
-
+  wrap_in_grided(grid_holder, setShinyInput);
+  
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
   grid_styles.height = "100%";
   grid_styles.width = "100%";
+  grid_styles.display = "grid";
   // Sometimes RMD styles will put a max-width of some amount which can mess
   // stuff up on large screens. The tradeoff is that the app may appear wider
   // than it eventually is. I think it's worth it.
@@ -156,7 +157,6 @@ window.onload = function () {
 
   // Only set a default gap sizing if it isn't already provided
   if (app_mode !== "ShinyExisting") {
-    grid_styles.display = "grid";
     set_gap_size(grid_styles, "1rem");
     grid_styles.padding = "1rem";
   }
@@ -172,7 +172,7 @@ window.onload = function () {
     if (debug_messages)
       console.log(`Setting input ${input_id} in Shiny to`, input_value);
     // Sent input value to shiny but only if it's initialized
-    Shiny?.setInputValue?.(input_id, input_value, is_event ? {priority: "Event"}: {});
+    Shiny?.setInputValue?.(input_id, input_value, is_event ? {priority: "event"}: {});
   }
 
   if (app_mode === "ShinyExisting") {
@@ -981,6 +981,8 @@ window.onload = function () {
   function add_shiny_listener(event_id: string, callback_func: Function) {
     if (debug_messages)
       console.log(`Adding listener for Shiny event ${event_id}`);
+
+      debugger;
     Shiny?.addCustomMessageHandler(event_id, callback_func);
   }
 

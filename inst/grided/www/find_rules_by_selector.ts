@@ -52,12 +52,16 @@ export function find_rules_by_selector(
 export function find_selector_by_property(
   property_id: string,
   property_value: string
-): string {
+): {rule_exists: boolean, selector: string} {
   const all_styles = get_all_style_rules();
 
   const first_rule_w_prop = all_styles
     .filter((rule) => rule.style && rule.style[property_id] == property_value)
     .find((rule) => document.querySelector(rule.selectorText));
 
-  return first_rule_w_prop.selectorText;
+  const rule_exists = Boolean(first_rule_w_prop);
+  return {
+    rule_exists,
+    selector: rule_exists ? first_rule_w_prop.selectorText: ""
+  };
 }
