@@ -7,7 +7,7 @@ type Modal_Options = {
 }
 export function focused_modal(opts: Modal_Options) {
   const background = make_el(
-    document.querySelector("body"),
+    document.querySelector("#grided__holder"),
     "div.background-blurrer",
     {
       event_listener: opts.background_callbacks,
