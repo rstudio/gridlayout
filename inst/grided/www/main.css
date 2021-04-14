@@ -241,7 +241,7 @@ button.minus_btn.disabled {
   border: 2px solid var(--light-gray);
 }
 
-#grid_page .added-element {
+#grided__editor .added-element {
   background: none;
   /* pointer-events: none; So the cells beneath the elements can be selected still */
   position: relative;
@@ -252,7 +252,7 @@ button.minus_btn.disabled {
   border-radius: var(--element_roundness);
   border-width: 3px;
   border-style: solid;
-  transition: all .2s ease-in-out;
+  transition: border-width .2s ease-in-out;
 }
 
 #added_elements .added-element {
@@ -269,7 +269,7 @@ button.minus_btn.disabled {
   transform: scale(1.05);
 }
 
-#grid_page .added-element.hovered,
+#grided__editor .added-element.hovered,
 #current_selection_box.added-element {
   border-width: 7px;
 }
