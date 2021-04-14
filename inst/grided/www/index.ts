@@ -70,7 +70,6 @@ window.onload = function () {
   // All the currently existing cells making up the grid
   let current_cells = [];
 
-  debugger;
   // Do we already have a div with id grid_page in our app? Aka the grided UI
   // has been already added?
   const already_wrapped: boolean = document.querySelector("#grid_page") != null;
@@ -98,6 +97,10 @@ window.onload = function () {
   // grided interface properly.
   styles_for_container.height = "100%";
   styles_for_container.width = "100%";
+  // Sometimes RMD styles will put a max-width of some amount which can mess 
+  // stuff up on large screens. The tradeoff is that the app may appear wider 
+  // than it eventually is. I think it's worth it.
+  styles_for_container.maxWidth = "100%";
 
   const settings_panel: HTMLElement = document.querySelector(
     "#grided__settings .card-body"
