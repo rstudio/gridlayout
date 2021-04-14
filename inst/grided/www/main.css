@@ -29,7 +29,7 @@
 
 /* Styles that apply to every panel in grid */
 #grided__holder > *,
-.modal {
+.focused_modal {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: var(--side-gaps);
   border-radius: var(--edge-round);
@@ -477,7 +477,7 @@ button.minus_btn.disabled {
   }
 }
 
-.background-blurrer .modal {
+.background-blurrer .focused_modal {
   width: 95%;
   max-width: 450px;
   background: white;
