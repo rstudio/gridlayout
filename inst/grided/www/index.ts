@@ -483,6 +483,10 @@ window.onload = function () {
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
 
+     // Make sure settings panel is up-to-date
+     grid_settings.num_rows(new_num_rows);
+     grid_settings.num_cols(new_num_cols);
+     grid_settings.gap.update_value(new_gap);
     
     const grid_numbers_changed =
     old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
@@ -611,10 +615,7 @@ window.onload = function () {
     }
     
     if (grid_numbers_changed || opts.force) {
-      // Make sure settings panel is up-to-date
-      grid_settings.num_rows(new_num_rows);
-      grid_settings.num_cols(new_num_cols);
-      grid_settings.gap.update_value(new_gap);
+     
        
       fill_grid_cells();
     }
