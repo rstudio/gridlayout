@@ -5,10 +5,12 @@ library(magrittr)
 library(here)
 library(shiny)
 library(glue)
-source(here("inst/grided/app.R"))
+# source(here("inst/grided/app.R"))
 
 in_development <- TRUE
 deploy_loc <- "docs/grided"
+
+ui <- grided_ui_wrapper(shiny::uiOutput("grid_page"), dev_mode = TRUE)
 
 shiny:::renderPage(ui) %>%
   str_remove_all(
@@ -18,6 +20,7 @@ shiny:::renderPage(ui) %>%
       '<script src="shared/jquery.min.js"></script>',
       '<link href="shared/shiny.min.css" rel="stylesheet" />',
       '<script src="shared/shiny.js"></script>',
+      '<script src="shared/shiny.min.js"></script>',
       sep = "\\s*\\n*|"
     )
   ) %>%
