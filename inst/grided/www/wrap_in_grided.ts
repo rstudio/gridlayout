@@ -7,8 +7,10 @@ import {
 } from "./icons";
 import { parse_selector_text } from "./make_el";
 
-export function wrap_in_grided(grid_el: HTMLElement) {
+export function wrap_in_grided(grid_el: HTMLElement, setShinyInput: (input_id: string, input_value: any, is_event?: boolean) => void) {
 
+  const get_code_btn = Text_El("button#get_code", "Get layout code");
+  const update_code_btn = Text_El("button#update_code", "Update app");
   const grided_ui = Block_El(
     "div#grided__holder",
     Block_El(
@@ -17,7 +19,7 @@ export function wrap_in_grided(grid_el: HTMLElement) {
         "h2",
         "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"
       ),
-      Block_El("div.code_btns", Text_El("button#get_code", "Get layout code"))
+      Block_El("div.code_btns", update_code_btn, get_code_btn)
     ),
     Block_El(
       "div#grided__settings",
@@ -62,6 +64,19 @@ export function wrap_in_grided(grid_el: HTMLElement) {
 
   // Make grided UI direct child of the body
   document.querySelector('body').appendChild(grided_ui);
+
+  // Hook up buttons
+  get_code_btn.addEventListener("click", function (event) {
+    setShinyInput("get_code", 1, true);
+  });
+
+  update_code_btn.addEventListener("click", function (event) {
+    setShinyInput("update_code", 1, true);
+  });
+
+  return {
+    get_code_btn
+  };
 }
 
 type Element_Contents = {

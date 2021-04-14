@@ -89,7 +89,7 @@ window.onload = function () {
   const grid_styles = grid_holder.style;
 
   if (!already_wrapped) {
-    wrap_in_grided(grid_holder);
+    wrap_in_grided(grid_holder, setShinyInput);
   }
 
   // Setup some basic styles for the container to make sure it fits into the
@@ -168,11 +168,11 @@ window.onload = function () {
     send_grid_sizing_to_shiny();
   });
 
-  function setShinyInput(input_id: string, input_value: any) {
+  function setShinyInput(input_id: string, input_value: any, is_event = false) {
     if (debug_messages)
       console.log(`Setting input ${input_id} in Shiny to`, input_value);
     // Sent input value to shiny but only if it's initialized
-    Shiny?.setInputValue?.(input_id, input_value);
+    Shiny?.setInputValue?.(input_id, input_value, is_event ? {priority: "Event"}: {});
   }
 
   if (app_mode === "ShinyExisting") {
