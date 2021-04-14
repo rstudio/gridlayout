@@ -83,7 +83,7 @@ window.onload = function () {
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
   const grid_holder: HTMLElement = document.querySelector(grid_holder_selector);
-  const styles_for_container = grid_holder.style; 
+  const grid_styles = grid_holder.style; 
 
   if (!already_wrapped) {
     wrap_in_grided(grid_holder);
@@ -92,12 +92,12 @@ window.onload = function () {
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
-  styles_for_container.height = "100%";
-  styles_for_container.width = "100%";
+  grid_styles.height = "100%";
+  grid_styles.width = "100%";
   // Sometimes RMD styles will put a max-width of some amount which can mess 
   // stuff up on large screens. The tradeoff is that the app may appear wider 
   // than it eventually is. I think it's worth it.
-  styles_for_container.maxWidth = "100%";
+  grid_styles.maxWidth = "100%";
 
   const settings_panel: HTMLElement = document.querySelector(
     "#grided__settings .card-body"
@@ -154,9 +154,9 @@ window.onload = function () {
 
   // Only set a default gap sizing if it isn't already provided
   if (app_mode !== "ShinyExisting") {
-    styles_for_container.display = "grid";
-    set_gap_size(styles_for_container, "1rem");
-    styles_for_container.padding = "1rem";
+    grid_styles.display = "grid";
+    set_gap_size(grid_styles, "1rem");
+    grid_styles.padding = "1rem";
   }
 
   add_shiny_listener("shiny-loaded", function (event) {
@@ -478,7 +478,7 @@ window.onload = function () {
   function update_grid(opts: Grid_Update_Options, send_to_shiny: boolean = true) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
-    const old_gap = get_gap_size(styles_for_container);
+    const old_gap = get_gap_size(grid_styles);
     const new_gap = opts.gap || old_gap;
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
@@ -596,10 +596,10 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      styles_for_container.gridTemplateRows = sizes_to_template_def(opts.rows);
+      grid_styles.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      styles_for_container.gridTemplateColumns = sizes_to_template_def(
+      grid_styles.gridTemplateColumns = sizes_to_template_def(
         opts.cols
       );
     }
@@ -609,8 +609,8 @@ window.onload = function () {
       grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
       // We dont use css variables in the exported css that existing apps used
       // so we need to modify both gap and padding
-      set_gap_size(styles_for_container, opts.gap);
-      styles_for_container.padding = opts.gap;
+      set_gap_size(grid_styles, opts.gap);
+      grid_styles.padding = opts.gap;
 
     }
     
@@ -996,9 +996,9 @@ window.onload = function () {
 
   function send_grid_sizing_to_shiny() {
     setShinyInput("grid_sizing", {
-      rows: styles_for_container.gridTemplateRows.split(" "),
-      cols: styles_for_container.gridTemplateColumns.split(" "),
-      gap: get_gap_size(styles_for_container),
+      rows: grid_styles.gridTemplateRows.split(" "),
+      cols: grid_styles.gridTemplateColumns.split(" "),
+      gap: get_gap_size(grid_styles),
     });
   }
 
@@ -1018,9 +1018,9 @@ window.onload = function () {
     const css_code = concat_nl(
       `${container_selector} {`,
       `  display: grid;`,
-      `  grid-template-columns: ${styles_for_container.gridTemplateColumns};`,
-      `  grid-template-rows: ${styles_for_container.gridTemplateRows};`,
-      `  gap: ${get_gap_size(styles_for_container)}`,
+      `  grid-template-columns: ${grid_styles.gridTemplateColumns};`,
+      `  grid-template-rows: ${grid_styles.gridTemplateRows};`,
+      `  gap: ${get_gap_size(grid_styles)}`,
       `}`,
       ...element_defs
     );
@@ -1040,11 +1040,11 @@ window.onload = function () {
   }
 
   function get_current_rows() {
-    return styles_for_container.gridTemplateRows.split(" ");
+    return grid_styles.gridTemplateRows.split(" ");
   }
 
   function get_current_cols() {
-    return styles_for_container.gridTemplateColumns.split(" ");
+    return grid_styles.gridTemplateColumns.split(" ");
   }
 
   // Get the next color in our list of colors.
