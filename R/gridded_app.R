@@ -17,9 +17,9 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode =
       )
     },
     shiny::div(
-      id = "grided-holder",
+      id = "grided__holder",
       shiny::div(
-        id = "header",
+        id = "grided__header",
         shiny::h2(shiny::HTML("GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app")),
         shiny::div(
           class = "code_btns",
@@ -28,14 +28,14 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode =
         )
       ),
       shiny::div(
-        id = "settings",
+        id = "grided__settings",
         shiny::h3(settings_icon, "Settings"),
         shiny::div(
           class = "card-body",
         )
       ),
       shiny::div(
-        id = "instructions",
+        id = "grided__instructions",
         shiny::h3(instructions_icon, "Instructions"),
         shiny::div(
           class = "card-body",
@@ -55,7 +55,7 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode =
         )
       ),
       shiny::div(
-        id = "elements",
+        id = "grided__elements",
         shiny::h3(elements_icon, "Added elements"),
         shiny::div(
           class = "card-body",
@@ -63,7 +63,7 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode =
         )
       ),
       shiny::div(
-        id = "editor",
+        id = "grided__editor",
         shiny::div(
           id = "editor-wrapper",
           shiny::HTML(browser_header_html),

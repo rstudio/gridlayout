@@ -70,6 +70,7 @@ window.onload = function () {
   // All the currently existing cells making up the grid
   let current_cells = [];
 
+  debugger;
   // Do we already have a div with id grid_page in our app? Aka the grided UI
   // has been already added?
   const already_wrapped: boolean = document.querySelector("#grid_page") != null;
@@ -99,7 +100,7 @@ window.onload = function () {
   styles_for_container.width = "100%";
 
   const settings_panel: HTMLElement = document.querySelector(
-    "#settings .card-body"
+    "#grided__settings .card-body"
   );
 
   const grid_settings: Grid_Settings = {
@@ -206,7 +207,7 @@ window.onload = function () {
 
     // And edit mode toggle to allow user to interact with app
     make_toggle_switch(
-      document.querySelector("#header .code_btns"),
+      document.querySelector("#grided__header .code_btns"),
       "Edit layout",
       "Interact mode",
       (interact_is_on: boolean) => {
@@ -218,10 +219,11 @@ window.onload = function () {
           }
         };
         document
-          .querySelectorAll("#grid_page .added-element")
+          .querySelectorAll(`${grid_holder_selector} .added-element`)
           .forEach(update_el);
         document.querySelectorAll(".grid-cell").forEach(update_el);
         update_el(document.querySelector("#added_elements"));
+        update_el(document.querySelector("#grided__settings > div"));
         update_el(document.querySelector("#drag_canvas"));
       }
     );
@@ -843,7 +845,7 @@ window.onload = function () {
     let start_rect: Selection_Rect;
     let start_loc: XY_Pos;
 
-    const editor_el: HTMLElement = document.querySelector("#editor");
+    const editor_el: HTMLElement = document.querySelector("#grided__editor");
 
     opts.watching_element.onmousedown = function (event: MouseEvent) {
       start_loc = event as DragEvent;

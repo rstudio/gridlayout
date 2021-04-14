@@ -33,7 +33,7 @@ ui <- shiny::tags$body(
   #   system.file("grided/www/main.css", package = "gridlayout")
   # ),
   shiny::div(
-    id = "grided-holder",
+    id = "grided__holder",
     shiny::div(
       id = "header",
       shiny::h2(shiny::HTML("GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app")),

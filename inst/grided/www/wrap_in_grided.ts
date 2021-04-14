@@ -10,9 +10,9 @@ import { parse_selector_text } from "./make_el";
 export function wrap_in_grided(grid_el: HTMLElement) {
 
   const grided_ui = Block_El(
-    "div#grided-holder",
+    "div#grided__holder",
     Block_El(
-      "div#header",
+      "div#grided__header",
       Text_El(
         "h2",
         "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"
@@ -20,12 +20,12 @@ export function wrap_in_grided(grid_el: HTMLElement) {
       Block_El("div.code_btns", Text_El("button#get_code", "Get layout code"))
     ),
     Block_El(
-      "div#settings",
+      "div#grided__settings",
       Text_El("h3", `${settings_icon} Settings`),
       Block_El("div.card-body")
     ),
     Block_El(
-      "div#instructions",
+      "div#grided__instructions",
       Text_El("h3", `${instructions_icon} Instructions`),
       Text_El(
         "div.card-body",
@@ -46,12 +46,12 @@ export function wrap_in_grided(grid_el: HTMLElement) {
       )
     ),
     Block_El(
-      "div#elements",
+      "div#grided__elements",
       Text_El("h3", `${elements_icon} Added elements`),
       Block_El("div.card-body", Block_El("div#added_elements"))
     ),
     Block_El(
-      "div#editor",
+      "div#grided__editor",
       Block_El(
         "div#editor-wrapper",
         Text_El("div#editor-browser-header", browser_header_html),
