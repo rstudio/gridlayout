@@ -11,8 +11,15 @@ inst/grided/www/.cache/
 
 # Ignore all the stuff in the dist folder
 inst/grided/dist/*
+inst/grided/www/dist/*
 # Except index.js becuse that's the bundled js we actually want
 !inst/grided/dist/index.js
 
 inst/rmarkdown_demo/grid_markdown.html
 inst/doc
+
+inst/grided/www/rmd_layout_editing_files/
+
+inst/rmarkdown_demo/rmd_layout_editing_files/
+
+inst/rmarkdown_demo/rmd_layout_editing.html
