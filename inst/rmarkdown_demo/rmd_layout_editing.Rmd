@@ -1,0 +1,40 @@
+---
+title: "`gridlayout` in Rmarkdown"
+author: "Nick Strayer"
+date: "3/9/2021"
+output:
+  html_document:
+    mathjax: null
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+library(gridlayout)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+use_gridlayout_rmd()
+```
+
+<!-- <script src="./index.ts"></script> -->
+
+
+## Main
+
+```{gridlayout}
+|      |        |         |
+|------|--------|---------|
+|2rem  |200px   |1fr      |
+|150px |header  |header   |
+|1fr   |sidebar |main     |
+|120px |footer  |footer   |
+```
+
+
+## Sidebar
+
+Here is some content for the sidebar
+
+## Footer
+
+Anything you want could go in the footer.
