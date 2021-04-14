@@ -62,6 +62,7 @@ type Element_Info = {
   end_col: number;
 }
 
+const debug_messages = true;
 
 window.onload = function () {
   // Keep track of the grid controls here. Tradeoff of a global variable
@@ -163,13 +164,14 @@ window.onload = function () {
   }
 
   add_shiny_listener("shiny-loaded", function (event) {
-    console.log("connected to shiny");
+    if (debug_messages) console.log("connected to shiny");
     // Send elements to Shiny so app is aware of what it's working with
     send_elements_to_shiny();
     send_grid_sizing_to_shiny();
   });
 
   function setShinyInput(input_id: string, input_value: any) {
+    if (debug_messages) console.log(`Setting input ${input_id} in Shiny to`, input_value);
     // Sent input value to shiny but only if it's initialized
     Shiny?.setInputValue?.(input_id, input_value);
   }
@@ -967,10 +969,12 @@ window.onload = function () {
   // yet.
 
   function add_shiny_listener(event_id: string, callback_func: Function) {
+    if (debug_messages) console.log(`Adding listener for Shiny event ${event_id}`);
     Shiny?.addCustomMessageHandler(event_id, callback_func);
   }
 
   function send_elements_to_shiny() {
+    
     const elements_by_id = {};
     current_elements().forEach(function (el) {
       elements_by_id[el.id] = el;
