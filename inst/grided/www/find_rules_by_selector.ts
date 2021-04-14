@@ -48,22 +48,16 @@ export function find_rules_by_selector(
   }
 }
 
-export function find_element_by_property(
+
+export function find_selector_by_property(
   property_id: string,
   property_value: string
-): { el: HTMLElement; styles: CSSStyleDeclaration } {
+): string {
   const all_styles = get_all_style_rules();
 
   const first_rule_w_prop = all_styles
     .filter((rule) => rule.style && rule.style[property_id] == property_value)
     .find((rule) => document.querySelector(rule.selectorText));
 
-  const el_w_prop = document.querySelector(
-    first_rule_w_prop.selectorText
-  ) as HTMLElement;
-
-  return {
-    el: el_w_prop,
-    styles: el_w_prop.style,
-  };
+  return first_rule_w_prop.selectorText;
 }

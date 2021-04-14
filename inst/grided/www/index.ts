@@ -22,7 +22,7 @@ import {
 } from "./misc-helpers";
 import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
-import { find_element_by_property, find_rules_by_selector } from "./find_rules_by_selector";
+import { find_rules_by_selector, find_selector_by_property } from "./find_rules_by_selector";
 import {wrap_in_grided} from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
@@ -70,21 +70,33 @@ window.onload = function () {
   // All the currently existing cells making up the grid
   let current_cells = [];
 
-  const grid_holder_pair = find_element_by_property("display", "grid");
+  // Do we already have a div with id grid_page in our app? Aka the grided UI
+  // has been already added?
+  const already_wrapped: boolean = document.querySelector("#grid_page") != null;
+
+  const grid_holder_selector = already_wrapped
+    ? "#grid_page"
+    : find_selector_by_property("display", "grid");
 
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const already_wrapped: boolean =  document.querySelector("#grid_page") != null;
+  const grid_holder: HTMLElement = document.querySelector(grid_holder_selector);
 
   if (!already_wrapped) {
-    wrap_in_grided(grid_holder_pair.el);
-    grid_holder_pair.styles.width = `100%`;
-    grid_holder_pair.styles.height = `100%`;
+    wrap_in_grided(grid_holder);
   }
-  
-  const grid_holder: HTMLElement = already_wrapped ? document.querySelector("#grid_page"): grid_holder_pair.el;
-  // debugger;
+
+  // Container styles are in this object
+  const styles_for_container = find_rules_by_selector(
+    grid_holder_selector,
+    "gridTemplateColumns"
+  );
+
+  // Setup some basic styles for the container to make sure it fits into the
+  // grided interface properly.
+  styles_for_container.height = "100%";
+  styles_for_container.width = "100%";
 
   const settings_panel: HTMLElement = document.querySelector(
     "#settings .card-body"
@@ -139,47 +151,39 @@ window.onload = function () {
     ? "ShinyNew"
     : "ClientSide";
 
-  // Container styles are in this object
-  const styles_for_container = find_rules_by_selector(
-    "#grid_page",
-    "gridTemplateColumns"
-  );
-
-  // Setup some basic styles for the container to make sure it fits into the
-  // grided interface properly. 
-  styles_for_container.height = "100%";
-  styles_for_container.width = "100%";
   // Only set a default gap sizing if it isn't already provided
-  if(app_mode !== "ShinyExisting"){
+  if (app_mode !== "ShinyExisting") {
     styles_for_container.display = "grid";
     set_gap_size(styles_for_container, "1rem");
     styles_for_container.padding = "1rem";
   }
 
-  add_shiny_listener(
-    "shiny-loaded",
-    function (event) {
-      console.log("connected to shiny");
-      // Send elements to Shiny so app is aware of what it's working with
-      send_elements_to_shiny();
-      send_grid_sizing_to_shiny();
-    }
-  );
+  add_shiny_listener("shiny-loaded", function (event) {
+    console.log("connected to shiny");
+    // Send elements to Shiny so app is aware of what it's working with
+    send_elements_to_shiny();
+    send_grid_sizing_to_shiny();
+  });
 
-  function setShinyInput(input_id: string, input_value: any){
+  function setShinyInput(input_id: string, input_value: any) {
     // Sent input value to shiny but only if it's initialized
-    Shiny.setInputValue?.(input_id, input_value);
+    Shiny?.setInputValue?.(input_id, input_value);
   }
 
   if (app_mode === "ShinyExisting") {
+    
     const current_rows = styles_for_container.gridTemplateRows.split(" ");
     const current_cols = styles_for_container.gridTemplateColumns.split(" ");
-    // I dont know why this is just .gap and not gridGap
     const current_gap = get_gap_size(styles_for_container);
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
-    const children = [...grid_holder.children];
+    const children = [...grid_holder.children].filter(node => {
+      const bbox = node.getBoundingClientRect();
+      // Only keep visible elements. This will (hopefully) filter out and
+      // script or style tags that find their way into the grid container
+      return bbox.width !== 0 && bbox.height !== 0;
+    });
 
     children.forEach(function (el) {
       add_element({
@@ -188,8 +192,6 @@ window.onload = function () {
         existing_element: el as HTMLElement,
       });
     });
-
-
 
     // Make sure grid matches the one the app is working with
     update_grid({
@@ -232,7 +234,7 @@ window.onload = function () {
       end_row: number;
       start_col: number;
       end_col: number;
-    }
+    };
     add_shiny_listener("add-elements", function (
       elements_to_add: Shiny_Element_Msg[]
     ) {
@@ -256,20 +258,17 @@ window.onload = function () {
     });
   }
 
-  add_shiny_listener(
-    "code_modal",
-    function (code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show,
-      });
-    }
-  )
+  add_shiny_listener("code_modal", function (code_to_show) {
+    show_code("Paste the following code into your app to update the layout", {
+      type: "R",
+      code: code_to_show,
+    });
+  });
 
   type Code_Text = {
     type: string;
     code: string;
-  }
+  };
   function show_code(
     message: string,
     code_blocks: Code_Text | Array<Code_Text>
@@ -466,7 +465,7 @@ window.onload = function () {
     cols?: string[];
     gap?: string;
     force?: boolean;
-  }
+  };
   function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
@@ -590,10 +589,12 @@ window.onload = function () {
       styles_for_container.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      styles_for_container.gridTemplateColumns = sizes_to_template_def(opts.cols);
+      styles_for_container.gridTemplateColumns = sizes_to_template_def(
+        opts.cols
+      );
     }
     if (opts.gap) {
-      // This sets the --grid-gap variable so that the controls that need the 
+      // This sets the --grid-gap variable so that the controls that need the
       // info can use it to keep a constant distance from the grid holder
       grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
       // We dont use css variables in the exported css that existing apps used
@@ -726,7 +727,7 @@ window.onload = function () {
     color?: string;
     grid_pos: Grid_Pos;
     existing_element?: HTMLElement;
-  }
+  };
 
   function add_element(el_props: New_Element) {
     const { grid_pos, color = get_next_color(), existing_element } = el_props;
@@ -751,35 +752,35 @@ window.onload = function () {
     );
 
     // Setup drag behavior
-    (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
-      function (handle_type: Drag_Type) {
-        drag_on_grid({
-          watching_element: make_el(
-            element_in_grid,
-            `div.dragger.visible.${handle_type}`,
-            {
-              styles: { background: color },
-              innerHTML:
-                handle_type === "center"
-                  ? drag_icon
-                  : handle_type === "bottom-right"
-                  ? se_arrow
-                  : nw_arrow,
-            }
-          ),
-          grid_element: element_in_grid,
-          drag_dir: handle_type,
-          on_drag: (res) => {
-            if (mirrors_existing_element) {
-              set_element_in_grid(existing_element, res.grid);
-            }
-          },
-          on_end: () => {
-            send_elements_to_shiny();
-          },
-        });
-      }
-    );
+    (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(function (
+      handle_type: Drag_Type
+    ) {
+      drag_on_grid({
+        watching_element: make_el(
+          element_in_grid,
+          `div.dragger.visible.${handle_type}`,
+          {
+            styles: { background: color },
+            innerHTML:
+              handle_type === "center"
+                ? drag_icon
+                : handle_type === "bottom-right"
+                ? se_arrow
+                : nw_arrow,
+          }
+        ),
+        grid_element: element_in_grid,
+        drag_dir: handle_type,
+        on_drag: (res) => {
+          if (mirrors_existing_element) {
+            set_element_in_grid(existing_element, res.grid);
+          }
+        },
+        on_end: () => {
+          send_elements_to_shiny();
+        },
+      });
+    });
 
     const element_in_list = make_el(
       document.querySelector("#added_elements"),
@@ -934,7 +935,6 @@ window.onload = function () {
     }
   }
 
- 
   function current_elements(): Array<Element_Info> {
     let elements: Array<Element_Info> = [];
 
@@ -961,8 +961,8 @@ window.onload = function () {
   // chained so they won't spit errors if Shiny isn't connected or initialized
   // yet.
 
-  function add_shiny_listener(event_id : string, callback_func: Function){
-    Shiny?.addCustomMessageHandler(event_id , callback_func);
+  function add_shiny_listener(event_id: string, callback_func: Function) {
+    Shiny?.addCustomMessageHandler(event_id, callback_func);
   }
 
   function send_elements_to_shiny() {
@@ -970,19 +970,16 @@ window.onload = function () {
     current_elements().forEach(function (el) {
       elements_by_id[el.id] = el;
     });
-    
+
     setShinyInput("elements", elements_by_id);
   }
 
-  function send_grid_sizing_to_shiny(){
-
-    setShinyInput(
-      "grid_sizing", {
-        rows: styles_for_container.gridTemplateRows.split(" "),
-        cols: styles_for_container.gridTemplateColumns.split(" "),
-        gap: get_gap_size(styles_for_container),
-      }
-    );
+  function send_grid_sizing_to_shiny() {
+    setShinyInput("grid_sizing", {
+      rows: styles_for_container.gridTemplateRows.split(" "),
+      cols: styles_for_container.gridTemplateColumns.split(" "),
+      gap: get_gap_size(styles_for_container),
+    });
   }
 
   function gen_code_for_layout(): Array<Code_Text> {
@@ -1056,7 +1053,7 @@ window.onload = function () {
 
     send_elements_to_shiny();
   }
-}; // End of the window.onload callback
+};; // End of the window.onload callback
 
 function get_gap_size(container_styles: CSSStyleDeclaration){
   // Older browsers give back both row-gap and column-gap in same query
