@@ -409,6 +409,7 @@ window.onload = function () {
             start_val: get_css_value(size),
             start_unit: get_css_unit(size),
             on_change: () => update_grid(get_layout_from_controls()),
+            on_drag: () => update_grid(get_layout_from_controls(), false),
             form_styles: {
               [`grid${
                 type === "rows" ? "Row" : "Column"
@@ -473,7 +474,7 @@ window.onload = function () {
     gap?: string;
     force?: boolean;
   };
-  function update_grid(opts: Grid_Update_Options) {
+  function update_grid(opts: Grid_Update_Options, send_to_shiny: boolean = true) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
     const old_gap = get_gap_size(styles_for_container);
@@ -611,8 +612,10 @@ window.onload = function () {
     }
 
     if (grid_numbers_changed || opts.force) fill_grid_cells();
+    if(send_to_shiny){
 
     send_grid_sizing_to_shiny();
+    }
 
     return grid_holder;
   }

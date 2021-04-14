@@ -18,6 +18,7 @@ export function make_css_unit_input({
   start_val = 1,
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
+  on_drag = on_change, 
   allowed_units = ["fr", "px", "rem"],
   form_styles = {},
   drag_dir = "none",
@@ -84,9 +85,15 @@ export function make_css_unit_input({
             +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
           );
           value_input.value = new_value.toString();
-          on_change(current_value());
+          on_drag();
         },
       },
+      {
+        event: "dragend",
+        func: function(event){
+          on_change(current_value());
+        }
+      }
     ],
   });
 
