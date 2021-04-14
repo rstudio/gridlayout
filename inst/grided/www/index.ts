@@ -22,8 +22,11 @@ import {
 } from "./misc-helpers";
 import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
-import { find_rules_by_selector, find_selector_by_property } from "./find_rules_by_selector";
-import {wrap_in_grided} from "./wrap_in_grided";
+import {
+  find_rules_by_selector,
+  find_selector_by_property,
+} from "./find_rules_by_selector";
+import { wrap_in_grided } from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
@@ -31,19 +34,19 @@ type Grid_Settings = {
   num_rows: (new_value: number) => void;
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
-}
+};
 
 export type Grid_Pos = {
   start_col?: number;
   end_col?: number;
   start_row?: number;
   end_row?: number;
-}
+};
 
 type Drag_Res = {
   xy: XY_Pos;
   grid: Grid_Pos;
-}
+};
 
 type Drag_Options = {
   watching_element: HTMLElement;
@@ -52,7 +55,7 @@ type Drag_Options = {
   on_start?: (start_loc: XY_Pos) => void;
   on_drag?: (drag_info: Drag_Res) => void;
   on_end?: (drag_info: Drag_Res) => void;
-}
+};
 
 type Element_Info = {
   id: string;
@@ -60,7 +63,7 @@ type Element_Info = {
   end_row: number;
   start_col: number;
   end_col: number;
-}
+};
 
 const debug_messages = true;
 
@@ -83,19 +86,18 @@ window.onload = function () {
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
   const grid_holder: HTMLElement = document.querySelector(grid_holder_selector);
-  const grid_styles = grid_holder.style; 
+  const grid_styles = grid_holder.style;
 
   if (!already_wrapped) {
     wrap_in_grided(grid_holder);
   }
-  
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
   grid_styles.height = "100%";
   grid_styles.width = "100%";
-  // Sometimes RMD styles will put a max-width of some amount which can mess 
-  // stuff up on large screens. The tradeoff is that the app may appear wider 
+  // Sometimes RMD styles will put a max-width of some amount which can mess
+  // stuff up on large screens. The tradeoff is that the app may appear wider
   // than it eventually is. I think it's worth it.
   grid_styles.maxWidth = "100%";
 
@@ -167,25 +169,26 @@ window.onload = function () {
   });
 
   function setShinyInput(input_id: string, input_value: any) {
-    if (debug_messages) console.log(`Setting input ${input_id} in Shiny to`, input_value);
+    if (debug_messages)
+      console.log(`Setting input ${input_id} in Shiny to`, input_value);
     // Sent input value to shiny but only if it's initialized
     Shiny?.setInputValue?.(input_id, input_value);
   }
 
   if (app_mode === "ShinyExisting") {
     // Container styles are in this object
-  const grid_stylesheet = find_rules_by_selector(
-    grid_holder_selector,
-    "gridTemplateColumns"
-  );
-    
+    const grid_stylesheet = find_rules_by_selector(
+      grid_holder_selector,
+      "gridTemplateColumns"
+    );
+
     const current_rows = grid_stylesheet.gridTemplateRows.split(" ");
     const current_cols = grid_stylesheet.gridTemplateColumns.split(" ");
     const current_gap = get_gap_size(grid_stylesheet);
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
-    const children = [...grid_holder.children].filter(node => {
+    const children = [...grid_holder.children].filter((node) => {
       const bbox = node.getBoundingClientRect();
       // Only keep visible elements. This will (hopefully) filter out and
       // script or style tags that find their way into the grid container
@@ -475,7 +478,10 @@ window.onload = function () {
     gap?: string;
     force?: boolean;
   };
-  function update_grid(opts: Grid_Update_Options, send_to_shiny: boolean = true) {
+  function update_grid(
+    opts: Grid_Update_Options,
+    send_to_shiny: boolean = true
+  ) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
     const old_gap = get_gap_size(grid_styles);
@@ -483,15 +489,14 @@ window.onload = function () {
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
 
-     // Make sure settings panel is up-to-date
-     grid_settings.num_rows(new_num_rows);
-     grid_settings.num_cols(new_num_cols);
-     grid_settings.gap.update_value(new_gap);
-    
-    const grid_numbers_changed =
-    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
-    if (grid_numbers_changed) {
+    // Make sure settings panel is up-to-date
+    grid_settings.num_rows(new_num_rows);
+    grid_settings.num_cols(new_num_cols);
+    grid_settings.gap.update_value(new_gap);
 
+    const grid_numbers_changed =
+      old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
+    if (grid_numbers_changed) {
       // Check for elements that may get dropped
       const all_els = current_elements();
       let in_danger_els = [];
@@ -599,9 +604,7 @@ window.onload = function () {
       grid_styles.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      grid_styles.gridTemplateColumns = sizes_to_template_def(
-        opts.cols
-      );
+      grid_styles.gridTemplateColumns = sizes_to_template_def(opts.cols);
     }
     if (opts.gap) {
       // This sets the --grid-gap variable so that the controls that need the
@@ -611,17 +614,13 @@ window.onload = function () {
       // so we need to modify both gap and padding
       set_gap_size(grid_styles, opts.gap);
       grid_styles.padding = opts.gap;
-
     }
-    
+
     if (grid_numbers_changed || opts.force) {
-     
-       
       fill_grid_cells();
     }
 
-    if(send_to_shiny){
-
+    if (send_to_shiny) {
       send_grid_sizing_to_shiny();
     }
 
@@ -980,12 +979,12 @@ window.onload = function () {
   // yet.
 
   function add_shiny_listener(event_id: string, callback_func: Function) {
-    if (debug_messages) console.log(`Adding listener for Shiny event ${event_id}`);
+    if (debug_messages)
+      console.log(`Adding listener for Shiny event ${event_id}`);
     Shiny?.addCustomMessageHandler(event_id, callback_func);
   }
 
   function send_elements_to_shiny() {
-    
     const elements_by_id = {};
     current_elements().forEach(function (el) {
       elements_by_id[el.id] = el;
@@ -1073,9 +1072,9 @@ window.onload = function () {
 
     send_elements_to_shiny();
   }
-};; // End of the window.onload callback
+}; // End of the window.onload callback
 
-function get_gap_size(container_styles: CSSStyleDeclaration){
+function get_gap_size(container_styles: CSSStyleDeclaration) {
   // Older browsers give back both row-gap and column-gap in same query
   // so we need to reduce to a single value before returning
   const gap_size_vec = container_styles.gap.split(" ");
@@ -1083,7 +1082,7 @@ function get_gap_size(container_styles: CSSStyleDeclaration){
   return gap_size_vec[0];
 }
 
-function set_gap_size(container_styles: CSSStyleDeclaration, new_val: string){
+function set_gap_size(container_styles: CSSStyleDeclaration, new_val: string) {
   container_styles.gap = new_val;
   return new_val;
 }
