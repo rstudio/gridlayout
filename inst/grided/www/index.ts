@@ -83,16 +83,12 @@ window.onload = function () {
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
   const grid_holder: HTMLElement = document.querySelector(grid_holder_selector);
+  const styles_for_container = grid_holder.style; 
 
   if (!already_wrapped) {
     wrap_in_grided(grid_holder);
   }
-
-  // Container styles are in this object
-  const styles_for_container = find_rules_by_selector(
-    grid_holder_selector,
-    "gridTemplateColumns"
-  );
+  
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
@@ -177,10 +173,15 @@ window.onload = function () {
   }
 
   if (app_mode === "ShinyExisting") {
+    // Container styles are in this object
+  const grid_stylesheet = find_rules_by_selector(
+    grid_holder_selector,
+    "gridTemplateColumns"
+  );
     
-    const current_rows = styles_for_container.gridTemplateRows.split(" ");
-    const current_cols = styles_for_container.gridTemplateColumns.split(" ");
-    const current_gap = get_gap_size(styles_for_container);
+    const current_rows = grid_stylesheet.gridTemplateRows.split(" ");
+    const current_cols = grid_stylesheet.gridTemplateColumns.split(" ");
+    const current_gap = get_gap_size(grid_stylesheet);
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
