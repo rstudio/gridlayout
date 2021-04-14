@@ -482,14 +482,11 @@ window.onload = function () {
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
 
-    // Make sure settings panel is up-to-date
-    grid_settings.num_rows(new_num_rows);
-    grid_settings.num_cols(new_num_cols);
-    grid_settings.gap.update_value(new_gap);
-
+    
     const grid_numbers_changed =
-      old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
+    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
     if (grid_numbers_changed) {
+
       // Check for elements that may get dropped
       const all_els = current_elements();
       let in_danger_els = [];
@@ -609,12 +606,21 @@ window.onload = function () {
       // so we need to modify both gap and padding
       set_gap_size(styles_for_container, opts.gap);
       styles_for_container.padding = opts.gap;
+
+    }
+    
+    if (grid_numbers_changed || opts.force) {
+      // Make sure settings panel is up-to-date
+      grid_settings.num_rows(new_num_rows);
+      grid_settings.num_cols(new_num_cols);
+      grid_settings.gap.update_value(new_gap);
+       
+      fill_grid_cells();
     }
 
-    if (grid_numbers_changed || opts.force) fill_grid_cells();
     if(send_to_shiny){
 
-    send_grid_sizing_to_shiny();
+      send_grid_sizing_to_shiny();
     }
 
     return grid_holder;
