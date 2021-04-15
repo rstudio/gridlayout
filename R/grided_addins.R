@@ -126,13 +126,17 @@ gridded_app <- function(starting_layout = new_gridlayout(),
 
 }
 
-send_layoutcall_popup <- function(session, current_layout){
+send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
   layout_call <- paste(
     "layout <- grid_layout_from_md(layout_table = \"",
     "    ", to_md(current_layout()), "\")",
     sep = "\n")
 
-  session$sendCustomMessage("code_modal", layout_call)
+  if (error_mode) {
+    session$sendCustomMessage("code_update_problem", layout_call)
+  } else {
+    session$sendCustomMessage("code_modal", layout_call)
+  }
 }
 
 

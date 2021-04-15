@@ -62,7 +62,7 @@ run_with_grided <- function(app) {
 
         if (is.null(layout_table) || !in_rstudio) {
           warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
-          send_layoutcall_popup(session, current_layout)
+          send_layoutcall_popup(session, current_layout, error_mode = TRUE)
         } else {
           update_layout_in_file(editor_selection, layout_table, current_layout())
           shiny::stopApp()

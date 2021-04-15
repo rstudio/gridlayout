@@ -193,6 +193,13 @@ window.onload = function () {
     });
   });
 
+  add_shiny_listener("code_update_problem", function (code_to_show) {
+    show_code("Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.", {
+      type: "R",
+      code: code_to_show,
+    });
+  });
+
   type Code_Text = {
     type: string;
     code: string;
