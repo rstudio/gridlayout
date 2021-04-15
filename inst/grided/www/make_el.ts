@@ -96,6 +96,18 @@ export function remove_elements(els_to_remove: NodeListOf<Element>): void {
   els_to_remove.forEach((e) => e.remove());
 }
 
+export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
+  const shadow_holder = Block_El(sel_txt);
+  shadow_holder.attachShadow({ mode: "open" });
+  const style_sheet = document.createElement("style");
+
+  shadow_holder.shadowRoot.appendChild(style_sheet);
+  children.forEach((child_el) => shadow_holder.shadowRoot.appendChild(child_el))
+  return {
+    el: shadow_holder,
+    style_sheet,
+  };
+}
 
 function El(opts: Element_Contents): HTMLElement {
   const { tag_type, el_id, class_list } = parse_selector_text(opts.sel_txt);
