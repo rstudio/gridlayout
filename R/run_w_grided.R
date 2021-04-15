@@ -67,33 +67,26 @@ run_with_grided <- function(app) {
           update_layout_in_file(editor_selection, layout_table, current_layout())
           shiny::stopApp()
         }
-
-      }), input$updated_code)
+      }), input$update_code)
     }
   }
 
-  # Next we go into the UI and extract the body and place it within the grided
-  # UI
-
-  # Grab existing UI function out of app
-  existing_ui <- environment(app[["httpHandler"]])$ui
-
-  grid_page_tags <- find_grid_tags(existing_ui)
-
-  couldnt_find_tags <- is.null(grid_page_tags)
-  # This should be "grid_page" if we're looking at output of grid_page function
-  no_grid_page_div <- grid_page_tags[[1]][[2]]$attribs$id != "grid_page"
-  if (couldnt_find_tags || no_grid_page_div) {
-    stop("run_with_grided needs to be used with an app that uses grid_page as its UI.")
-  }
-
-  # Replace the old ui with the new wrapped one
-  environment(app[["httpHandler"]])$ui <- grided_ui_wrapper(
-    grid_page_tags,
-    update_btn_text = if (in_rstudio) "Finish editing"
-  )
+  # Grab existing UI function out of app and inject the grided js and css into page
+  n_tags <- length(environment(app[["httpHandler"]])$ui)
+  environment(app[["httpHandler"]])$ui[[n_tags + 1]] <- grided_resources()
 
   app
+}
+
+grided_resources <- function(){
+  shiny::tags$head(
+    shiny::includeScript(
+      system.file("grided/www/dist/index.js", package = "gridlayout")
+    ),
+    shiny::includeCSS(
+      system.file("grided/www/main.css", package = "gridlayout")
+    )
+  )
 }
 
 

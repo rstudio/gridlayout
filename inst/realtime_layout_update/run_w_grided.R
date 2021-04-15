@@ -23,7 +23,7 @@ another_layout <- "
 
 
 # The classic Geyser app with grid layout
-app <- shinyApp(
+run_with_grided(shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
@@ -38,6 +38,8 @@ app <- shinyApp(
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
   }
-)
-run_with_grided(app)
+))
+
+
+
 

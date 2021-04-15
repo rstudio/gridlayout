@@ -76,7 +76,10 @@ gridded_app <- function(starting_layout = new_gridlayout(),
 
   starting_elements <- get_elements(starting_layout)
 
-  ui <- grided_ui_wrapper(shiny::uiOutput("grid_page"),update_btn_text = update_btn_text)
+
+  ui <- grid_page(
+    layout = starting_layout
+  )
 
   server <- function(input, output, session) {
 
@@ -111,12 +114,14 @@ gridded_app <- function(starting_layout = new_gridlayout(),
     }), input$updated_code)
   }
 
+  app <- run_with_grided(shiny::shinyApp(ui, server))
+
   if(return_app_obj){
-    shiny::shinyApp(ui, server)
+    app
   } else {
     # Open gadget in the external viewer
     viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
-    shiny::runGadget(ui, server, viewer = viewer)
+    shiny::runGadget(app, viewer = viewer)
   }
 
 }
