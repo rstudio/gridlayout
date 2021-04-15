@@ -19,7 +19,6 @@ import {
   XY_Pos,
   Drag_Type,
 } from "./misc-helpers";
-import { make_toggle_switch } from "./make_toggle_switch";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
 import {
   find_rules_by_selector,
@@ -97,13 +96,13 @@ window.onload = function () {
 
   const grid_styles = grid_holder.style;
 
-  const { grid_settings, grid_filled } = wrap_in_grided(
+  const { grid_settings, grid_is_filled, existing_children } = wrap_in_grided(
     grid_holder,
     update_grid,
     setShinyInput
   );
 
-  const app_mode = grid_filled
+  const app_mode = grid_is_filled
     ? "ShinyExisting"
     : Shiny
     ? "ShinyNew"
@@ -135,14 +134,7 @@ window.onload = function () {
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
-    const children = [...grid_holder.children].filter((node) => {
-      const bbox = node.getBoundingClientRect();
-      // Only keep visible elements. This will (hopefully) filter out and
-      // script or style tags that find their way into the grid container
-      return bbox.width !== 0 && bbox.height !== 0;
-    });
-
-    children.forEach(function (el) {
+    existing_children.forEach(function (el) {
       add_element({
         id: el.id,
         grid_pos: get_grid_pos(el as HTMLElement),
@@ -161,28 +153,6 @@ window.onload = function () {
     // Make grid cells transparent so the app is seen beneath them
     find_rules_by_selector(".grid-cell").background = "none";
 
-    // And edit mode toggle to allow user to interact with app
-    make_toggle_switch(
-      document.querySelector("#grided__header .code_btns"),
-      "Edit layout",
-      "Interact mode",
-      (interact_is_on: boolean) => {
-        const update_el = function (el: Element) {
-          if (interact_is_on) {
-            el.classList.add("disabled");
-          } else {
-            el.classList.remove("disabled");
-          }
-        };
-        document
-          .querySelectorAll(`${grid_holder_selector} .added-element`)
-          .forEach(update_el);
-        document.querySelectorAll(".grid-cell").forEach(update_el);
-        update_el(document.querySelector("#added_elements"));
-        update_el(document.querySelector("#grided__settings > div"));
-        update_el(document.querySelector("#drag_canvas"));
-      }
-    );
   } else if (app_mode === "ShinyNew") {
     add_shiny_listener("update-grid", update_grid);
 

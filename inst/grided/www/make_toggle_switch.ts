@@ -1,12 +1,12 @@
-import { make_el } from "./make_el";
+import { Block_El, make_el } from "./make_el";
 
 export function make_toggle_switch(
-  parent: HTMLElement,
   off_text: string,
   on_text: string,
   on_change: (is_on: boolean) => void
 ) {
-  const container = make_el(parent, "div.toggle-switch");
+
+  const container = Block_El("div.toggle-switch");
   make_el(container, "span.off-text", {
     innerHTML: off_text,
   });
@@ -121,4 +121,6 @@ export function make_toggle_switch(
   }`,
     0
   );
+
+  return container;
 }

@@ -5,10 +5,11 @@ import {
   settings_icon,
   trashcan_icon,
 } from "./icons";
-import { Block_El, Text_El, make_el, parse_selector_text } from "./make_el";
+import { Block_El, Text_El, make_el } from "./make_el";
 import { make_incrementer } from "./make_incrementer";
 import { make_css_unit_input } from "./make_css_unit_input";
 import { Grid_Settings, Grid_Update_Options } from "./index";
+import { make_toggle_switch } from "./make_toggle_switch";
 
 export function wrap_in_grided(
   grid_el: HTMLElement,
@@ -19,8 +20,22 @@ export function wrap_in_grided(
     is_event?: boolean
   ) => void
 ) {
-  const get_code_btn = Text_El("button#get_code", "Get layout code");
-  const update_code_btn = Text_El("button#update_code", "Update app");
+  const grid_is_filled = grid_el.hasChildNodes();
+
+  const buttons = [
+    action_button("get_code", "Get layout code"),
+    action_button("update_code", "Update app"),
+  ];
+  if (grid_is_filled) {
+    buttons.push(
+      make_toggle_switch(
+        "Edit layout",
+        "Interact mode",
+        toggle_interaction_mode
+      )
+    );
+  }
+
   const settings_panel = Block_El("div.card-body");
   const grided_ui = Block_El(
     "div#grided__holder",
@@ -30,7 +45,7 @@ export function wrap_in_grided(
         "h2",
         "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"
       ),
-      Block_El("div.code_btns", update_code_btn, get_code_btn)
+      Block_El("div.code_btns", ...buttons)
     ),
     Block_El(
       "div#grided__settings",
@@ -76,15 +91,6 @@ export function wrap_in_grided(
   // Make grided UI direct child of the body
   document.querySelector("body").appendChild(grided_ui);
 
-  // Hook up buttons
-  get_code_btn.addEventListener("click", function (event) {
-    setShinyInput("get_code", 1, true);
-  });
-
-  update_code_btn.addEventListener("click", function (event) {
-    setShinyInput("update_code", 1, true);
-  });
-
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
   grid_el.style.height = "100%";
@@ -94,21 +100,6 @@ export function wrap_in_grided(
   // stuff up on large screens. The tradeoff is that the app may appear wider
   // than it eventually is. I think it's worth it.
   grid_el.style.maxWidth = "100%";
-
-  function update_num_rows_or_cols(dir, new_count) {
-    const current_vals = grid_el.style[
-      `gridTemplate${dir === "rows" ? "Rows" : "Columns"}`
-    ].split(" ");
-
-    if (new_count > current_vals.length) {
-      current_vals.push("1fr");
-    } else if (new_count < current_vals.length) {
-      current_vals.pop();
-    } else {
-      // No change, shouldn't happen but maybe...
-    }
-    update_grid({ [dir]: current_vals });
-  }
 
   const grid_settings: Grid_Settings = {
     num_rows: make_incrementer({
@@ -139,11 +130,57 @@ export function wrap_in_grided(
     }),
   };
 
+  function update_num_rows_or_cols(dir, new_count) {
+    const current_vals = grid_el.style[
+      `gridTemplate${dir === "rows" ? "Rows" : "Columns"}`
+    ].split(" ");
+
+    if (new_count > current_vals.length) {
+      current_vals.push("1fr");
+    } else if (new_count < current_vals.length) {
+      current_vals.pop();
+    } else {
+      // No change, shouldn't happen but maybe...
+    }
+    update_grid({ [dir]: current_vals });
+  }
+
+  function toggle_interaction_mode(interact_is_on: boolean) {
+    [
+      ...grid_el.querySelectorAll(".added-element"),
+      ...grid_el.querySelectorAll(".grid-cell"),
+      settings_panel,
+      grided_ui.querySelector("#added_elements"),
+      grided_ui.querySelector("#drag_canvas"),
+    ].forEach(function (el: Element) {
+      if (interact_is_on) {
+        el.classList.add("disabled");
+      } else {
+        el.classList.remove("disabled");
+      }
+    });
+  }
+
+  function action_button(id: string, label: string) {
+    const button_el = Text_El(`button#${id}`, label);
+    button_el.addEventListener("click", function (event) {
+      setShinyInput(id, 1, true);
+    });
+
+    return button_el;
+  }
+
+  const existing_children = [...grid_el.children].filter((node) => {
+    const bbox = node.getBoundingClientRect();
+    // Only keep visible elements. This will (hopefully) filter out and
+    // script or style tags that find their way into the grid container
+    return bbox.width !== 0 && bbox.height !== 0;
+  });
+
   return {
-    get_code_btn,
     settings_panel,
     grid_settings,
-    grid_filled: grid_el.hasChildNodes()
+    grid_is_filled,
+    existing_children,
   };
 }
-
