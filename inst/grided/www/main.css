@@ -102,7 +102,7 @@ button.minus_btn.disabled {
   grid-gap: 1rem;
   padding: 0.5rem 1rem;
 }
-.settings-grid > .label {
+.settings-grid > .input-label {
   text-align: right;
   justify-self: end;
 }
@@ -116,7 +116,7 @@ button.minus_btn.disabled {
   justify-items: stretch;
 }
 
-.plus-minus-input .label {
+.plus-minus-input .input-label {
   text-align: right;
 }
 

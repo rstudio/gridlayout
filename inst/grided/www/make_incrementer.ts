@@ -14,7 +14,7 @@ export function make_incrementer({
     parent_el,
     `div#${id}_incrementer.plus-minus-input.settings-grid`,
     {
-      innerHTML: `<span class = "label">${label}</span>`,
+      innerHTML: `<span class = "input-label">${label}</span>`,
     }
   );
 
