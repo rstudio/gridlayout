@@ -9,6 +9,12 @@ export type Event_Listener = {
   func: (event: Event) => void;
 }
 
+type Element_Contents = {
+  sel_txt: string;
+  text?: string;
+  children?: HTMLElement[];
+};
+
 type Element_Opts = {
   event_listener?: Event_Listener | Event_Listener[];
   styles?: object;
@@ -48,24 +54,10 @@ export function make_el(
   opts: Element_Opts = {}
   ) {  
 
-  const {
-    tag_type,
-    el_id,
-    class_list
-  } = parse_selector_text(sel_txt);
-
   let el: HTMLElement = parent.querySelector(sel_txt);
   if (!el) {
     // Element doesn't exists so we need to make it
-    el = document.createElement(tag_type);
-    if (el_id) {
-      // debugger;
-      el.id = el_id;
-    }
-
-    if (class_list) {
-      class_list.forEach((x) => el.classList.add(x));
-    }
+    el = El({sel_txt});
 
     if (opts.props) {
       Object.assign(el, opts.props);
@@ -102,4 +94,39 @@ export function make_el(
 // Given a list of elements from a query selector, remove them all
 export function remove_elements(els_to_remove: NodeListOf<Element>): void {
   els_to_remove.forEach((e) => e.remove());
+}
+
+
+function El(opts: Element_Contents): HTMLElement {
+  const { tag_type, el_id, class_list } = parse_selector_text(opts.sel_txt);
+
+  const el: HTMLElement = document.createElement(tag_type);
+  if (el_id) el.id = el_id;
+  if (class_list) {
+    class_list.forEach((x) => el.classList.add(x));
+  }
+
+  if (opts.text) {
+    el.innerHTML = opts.text;
+  }
+
+  if (opts.children) {
+    opts.children.forEach((child_el) => el.appendChild(child_el));
+  }
+
+  return el;
+}
+
+export function Block_El(sel_txt: string, ...children: HTMLElement[]) {
+  return El({
+    sel_txt,
+    children,
+  });
+}
+
+export function Text_El(sel_txt: string, text: string) {
+  return El({
+    sel_txt,
+    text,
+  });
 }

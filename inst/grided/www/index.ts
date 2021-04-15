@@ -1,6 +1,5 @@
 // JS entry point
-import { Event_Listener, make_el, remove_elements } from "./make_el";
-import { make_incrementer } from "./make_incrementer";
+import { Block_El, make_el, remove_elements } from "./make_el";
 import { focused_modal } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
 import {
@@ -26,14 +25,22 @@ import {
   find_rules_by_selector,
   find_selector_by_property,
 } from "./find_rules_by_selector";
-import { Block_El, wrap_in_grided } from "./wrap_in_grided";
+import { wrap_in_grided } from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
-type Grid_Settings = {
+export type Grid_Settings = {
   num_rows: (new_value: number) => void;
   num_cols: (new_value: number) => void;
   gap: CSS_Input;
+};
+
+export type Grid_Update_Options = {
+  rows?: string[];
+  cols?: string[];
+  gap?: string;
+  force?: boolean;
+  dont_send_to_shiny?: boolean;
 };
 
 export type Grid_Pos = {
@@ -76,80 +83,27 @@ window.onload = function () {
   // Do we already have a div with id grid_page in our app? Aka the grided UI
   // has been already added?
   const grid_layout_rule = find_selector_by_property("display", "grid");
-  
-  const grid_holder_selector = grid_layout_rule.rule_exists 
-  ? grid_layout_rule.selector
-  : "#grid_page";
-  
+
+  const grid_holder_selector = grid_layout_rule.rule_exists
+    ? grid_layout_rule.selector
+    : "#grid_page";
+
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = grid_layout_rule.rule_exists 
-  ? document.querySelector(grid_holder_selector)
-  : Block_El("div#grid_page");
-  
+  const grid_holder: HTMLElement = grid_layout_rule.rule_exists
+    ? document.querySelector(grid_holder_selector)
+    : Block_El("div#grid_page");
+
   const grid_styles = grid_holder.style;
 
-  wrap_in_grided(grid_holder, setShinyInput);
-  
-  // Setup some basic styles for the container to make sure it fits into the
-  // grided interface properly.
-  grid_styles.height = "100%";
-  grid_styles.width = "100%";
-  grid_styles.display = "grid";
-  // Sometimes RMD styles will put a max-width of some amount which can mess
-  // stuff up on large screens. The tradeoff is that the app may appear wider
-  // than it eventually is. I think it's worth it.
-  grid_styles.maxWidth = "100%";
-
-  const settings_panel: HTMLElement = document.querySelector(
-    "#grided__settings .card-body"
+  const { grid_settings, grid_filled } = wrap_in_grided(
+    grid_holder,
+    update_grid,
+    setShinyInput
   );
 
-  const grid_settings: Grid_Settings = {
-    num_rows: make_incrementer({
-      parent_el: settings_panel,
-      id: "num_rows",
-      start_val: 2,
-      label: "Number of rows",
-      on_increment: (x) => update_num_rows_or_cols("rows", x),
-    }),
-    num_cols: make_incrementer({
-      parent_el: settings_panel,
-      id: "num_cols",
-      start_val: 2,
-      label: "Number of cols",
-      on_increment: (x) => update_num_rows_or_cols("cols", x),
-    }),
-    gap: make_css_unit_input({
-      parent_el: make_el(
-        settings_panel,
-        "div#gap_size_chooser.plus_minus_input.settings-grid",
-        {
-          innerHTML: `<span class = "label">Panel gap size</span>`,
-        }
-      ),
-      selector: "#gap_size_chooser",
-      on_change: (x) => update_grid({ gap: x }),
-      allowed_units: ["px", "rem"],
-    }),
-  };
-
-  function update_num_rows_or_cols(dir, new_count) {
-    const current_vals =
-      dir === "rows" ? get_current_rows() : get_current_cols();
-
-    if (new_count > current_vals.length) {
-      current_vals.push("1fr");
-    } else if (new_count < current_vals.length) {
-      current_vals.pop();
-    } else {
-      // No change, shouldn't happen but maybe...
-    }
-    update_grid({ [dir]: current_vals });
-  }
-
-  const app_mode = grid_holder.hasChildNodes()
+  const app_mode = grid_filled
     ? "ShinyExisting"
     : Shiny
     ? "ShinyNew"
@@ -167,13 +121,6 @@ window.onload = function () {
     send_elements_to_shiny();
     send_grid_sizing_to_shiny();
   });
-
-  function setShinyInput(input_id: string, input_value: any, is_event = false) {
-    if (debug_messages)
-      console.log(`Setting input ${input_id} in Shiny to`, input_value);
-    // Sent input value to shiny but only if it's initialized
-    Shiny?.setInputValue?.(input_id, input_value, is_event ? {priority: "event"}: {});
-  }
 
   if (app_mode === "ShinyExisting") {
     // Container styles are in this object
@@ -413,7 +360,11 @@ window.onload = function () {
             start_val: get_css_value(size),
             start_unit: get_css_unit(size),
             on_change: () => update_grid(get_layout_from_controls()),
-            on_drag: () => update_grid(get_layout_from_controls(), false),
+            on_drag: () =>
+              update_grid({
+                ...get_layout_from_controls(),
+                dont_send_to_shiny: true,
+              }),
             form_styles: {
               [`grid${
                 type === "rows" ? "Row" : "Column"
@@ -472,16 +423,7 @@ window.onload = function () {
     return sel_bounds;
   }
 
-  type Grid_Update_Options = {
-    rows?: string[];
-    cols?: string[];
-    gap?: string;
-    force?: boolean;
-  };
-  function update_grid(
-    opts: Grid_Update_Options,
-    send_to_shiny: boolean = true
-  ) {
+  function update_grid(opts: Grid_Update_Options) {
     const old_num_rows = get_current_rows().length;
     const old_num_cols = get_current_cols().length;
     const old_gap = get_gap_size(grid_styles);
@@ -620,7 +562,7 @@ window.onload = function () {
       fill_grid_cells();
     }
 
-    if (send_to_shiny) {
+    if (!opts.dont_send_to_shiny) {
       send_grid_sizing_to_shiny();
     }
 
@@ -978,11 +920,21 @@ window.onload = function () {
   // chained so they won't spit errors if Shiny isn't connected or initialized
   // yet.
 
+  function setShinyInput(input_id: string, input_value: any, is_event = false) {
+    if (debug_messages)
+      console.log(`Setting input ${input_id} in Shiny to`, input_value);
+    // Sent input value to shiny but only if it's initialized
+    Shiny?.setInputValue?.(
+      input_id,
+      input_value,
+      is_event ? { priority: "event" } : {}
+    );
+  }
+
   function add_shiny_listener(event_id: string, callback_func: Function) {
     if (debug_messages)
       console.log(`Adding listener for Shiny event ${event_id}`);
 
-      debugger;
     Shiny?.addCustomMessageHandler(event_id, callback_func);
   }
 

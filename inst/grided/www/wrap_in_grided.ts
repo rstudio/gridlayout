@@ -5,12 +5,23 @@ import {
   settings_icon,
   trashcan_icon,
 } from "./icons";
-import { parse_selector_text } from "./make_el";
+import { Block_El, Text_El, make_el, parse_selector_text } from "./make_el";
+import { make_incrementer } from "./make_incrementer";
+import { make_css_unit_input } from "./make_css_unit_input";
+import { Grid_Settings, Grid_Update_Options } from "./index";
 
-export function wrap_in_grided(grid_el: HTMLElement, setShinyInput: (input_id: string, input_value: any, is_event?: boolean) => void) {
-
+export function wrap_in_grided(
+  grid_el: HTMLElement,
+  update_grid: (opts: Grid_Update_Options, send_to_shiny?: boolean) => void,
+  setShinyInput: (
+    input_id: string,
+    input_value: any,
+    is_event?: boolean
+  ) => void
+) {
   const get_code_btn = Text_El("button#get_code", "Get layout code");
   const update_code_btn = Text_El("button#update_code", "Update app");
+  const settings_panel = Block_El("div.card-body");
   const grided_ui = Block_El(
     "div#grided__holder",
     Block_El(
@@ -24,7 +35,7 @@ export function wrap_in_grided(grid_el: HTMLElement, setShinyInput: (input_id: s
     Block_El(
       "div#grided__settings",
       Text_El("h3", `${settings_icon} Settings`),
-      Block_El("div.card-body")
+      settings_panel
     ),
     Block_El(
       "div#grided__instructions",
@@ -63,7 +74,7 @@ export function wrap_in_grided(grid_el: HTMLElement, setShinyInput: (input_id: s
   );
 
   // Make grided UI direct child of the body
-  document.querySelector('body').appendChild(grided_ui);
+  document.querySelector("body").appendChild(grided_ui);
 
   // Hook up buttons
   get_code_btn.addEventListener("click", function (event) {
@@ -74,47 +85,65 @@ export function wrap_in_grided(grid_el: HTMLElement, setShinyInput: (input_id: s
     setShinyInput("update_code", 1, true);
   });
 
+  // Setup some basic styles for the container to make sure it fits into the
+  // grided interface properly.
+  grid_el.style.height = "100%";
+  grid_el.style.width = "100%";
+  grid_el.style.display = "grid";
+  // Sometimes RMD styles will put a max-width of some amount which can mess
+  // stuff up on large screens. The tradeoff is that the app may appear wider
+  // than it eventually is. I think it's worth it.
+  grid_el.style.maxWidth = "100%";
+
+  function update_num_rows_or_cols(dir, new_count) {
+    const current_vals = grid_el.style[
+      `gridTemplate${dir === "rows" ? "Rows" : "Columns"}`
+    ].split(" ");
+
+    if (new_count > current_vals.length) {
+      current_vals.push("1fr");
+    } else if (new_count < current_vals.length) {
+      current_vals.pop();
+    } else {
+      // No change, shouldn't happen but maybe...
+    }
+    update_grid({ [dir]: current_vals });
+  }
+
+  const grid_settings: Grid_Settings = {
+    num_rows: make_incrementer({
+      parent_el: settings_panel,
+      id: "num_rows",
+      start_val: 2,
+      label: "Number of rows",
+      on_increment: (x) => update_num_rows_or_cols("rows", x),
+    }),
+    num_cols: make_incrementer({
+      parent_el: settings_panel,
+      id: "num_cols",
+      start_val: 2,
+      label: "Number of cols",
+      on_increment: (x) => update_num_rows_or_cols("cols", x),
+    }),
+    gap: make_css_unit_input({
+      parent_el: make_el(
+        settings_panel,
+        "div#gap_size_chooser.plus_minus_input.settings-grid",
+        {
+          innerHTML: `<span class = "input-label">Panel gap size</span>`,
+        }
+      ),
+      selector: "#gap_size_chooser",
+      on_change: (x) => update_grid({ gap: x }),
+      allowed_units: ["px", "rem"],
+    }),
+  };
+
   return {
-    get_code_btn
+    get_code_btn,
+    settings_panel,
+    grid_settings,
+    grid_filled: grid_el.hasChildNodes()
   };
 }
 
-type Element_Contents = {
-  sel_txt: string;
-  text?: string;
-  children?: HTMLElement[];
-};
-
-function El(opts: Element_Contents): HTMLElement {
-  const { tag_type, el_id, class_list } = parse_selector_text(opts.sel_txt);
-
-  const el: HTMLElement = document.createElement(tag_type);
-  if (el_id) el.id = el_id;
-  if (class_list) {
-    class_list.forEach((x) => el.classList.add(x));
-  }
-
-  if (opts.text) {
-    el.innerHTML = opts.text;
-  }
-
-  if (opts.children) {
-    opts.children.forEach((child_el) => el.appendChild(child_el));
-  }
-
-  return el;
-}
-
-export function Block_El(sel_txt: string, ...children: HTMLElement[]) {
-  return El({
-    sel_txt,
-    children,
-  });
-}
-
-function Text_El(sel_txt: string, text: string) {
-  return El({
-    sel_txt,
-    text,
-  });
-}
