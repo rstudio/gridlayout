@@ -11,6 +11,9 @@ import { make_css_unit_input } from "./make_css_unit_input";
 import { Grid_Settings, Grid_Update_Options } from "./index";
 import { make_toggle_switch } from "./make_toggle_switch";
 
+// Takes a grid element and wraps it in the grided ui. Also returns some useful
+// information such as if the element passed was empty and if not, the children
+// that it contains so they can be overlayed with editable element boxes 
 export function wrap_in_grided(
   grid_el: HTMLElement,
   update_grid: (opts: Grid_Update_Options, send_to_shiny?: boolean) => void,
