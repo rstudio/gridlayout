@@ -37,7 +37,7 @@ run_with_grided <- function(app) {
 }
 
 grided_server_code <- function(input, output, session){
-  print("Grided server code running")
+
   # Lets grided know it should send over initial app state
   session$sendCustomMessage("shiny-loaded", 1)
 
