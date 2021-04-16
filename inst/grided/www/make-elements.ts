@@ -1,8 +1,8 @@
 import { Grid_Pos } from ".";
+import { set_element_in_grid } from "./utils-grid";
 import {
   as_array,
-  set_element_in_grid,
-} from "./misc-helpers";
+} from "./utils-misc";
 
 export type Event_Listener = {
   event: string;

@@ -1,6 +1,6 @@
-import { horizontal_drag_icon, vertical_drag_icon } from "./icons";
-import { make_el } from "./make_el";
-import { get_css_value, get_css_unit } from "./misc-helpers";
+import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
+import { make_el } from "./make-elements";
+import { get_css_value, get_css_unit } from "./utils-misc";
 
 export type CSS_Input = {
   form: HTMLElement;

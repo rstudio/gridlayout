@@ -1,11 +1,8 @@
 // JS entry point
-import { Block_El, make_el, remove_elements } from "./make_el";
-import { focused_modal, show_code } from "./focused_modal";
-import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
+import { Block_El, make_el, remove_elements } from "./make-elements";
+import { focused_modal, show_code } from "./make-focused_modal";
+import { make_css_unit_input, CSS_Input } from "./make-css_unit_input";
 import {
-  make_template_start_end,
-  sizes_to_template_def,
-  set_element_in_grid,
   as_array,
   max_w_missing,
   min_w_missing,
@@ -17,23 +14,29 @@ import {
   update_rect_with_delta,
   XY_Pos,
   Drag_Type,
+} from "./utils-misc";
+import {
+  sizes_to_template_def,
+  set_element_in_grid,
   get_pos_on_grid,
   gen_code_for_layout,
   set_gap_size,
   get_gap_size,
-} from "./misc-helpers";
-import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
+  make_template_start_end,
+} from "./utils-grid";
+import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./utils-icons";
 import {
   find_rules_by_selector,
   find_selector_by_property,
-} from "./find_rules_by_selector";
+} from "./utils-cssom";
 import { wrap_in_grided } from "./wrap_in_grided";
 import {
   add_shiny_listener,
   send_elements_to_shiny,
   send_grid_sizing_to_shiny,
   setShinyInput,
-} from "./shiny_helpers";
+} from "./utils-shiny";
+import { get_cols, get_rows } from "./utils-grid";
 
 export const Shiny = (window as any).Shiny;
 
@@ -92,21 +95,19 @@ window.onload = function () {
   // has been already added?
   const grid_layout_rule = find_selector_by_property("display", "grid");
 
-  const grid_holder_selector = grid_layout_rule.rule_exists
+  const grid_container_selector = grid_layout_rule.rule_exists
     ? grid_layout_rule.selector
     : "#grid_page";
 
   // This holds the grid element dom node. Gets filled in the onload callback
   // I am using a global variable here because we query inside this so much that
   // it felt silly to regrab it every time as it never moves.
-  const grid_holder: HTMLElement = grid_layout_rule.rule_exists
-    ? document.querySelector(grid_holder_selector)
+  const grid_container: HTMLElement = grid_layout_rule.rule_exists
+    ? document.querySelector(grid_container_selector)
     : Block_El("div#grid_page");
 
-  const grid_styles = grid_holder.style;
-
   const { grid_settings, grid_is_filled, existing_children } = wrap_in_grided(
-    grid_holder,
+    grid_container,
     update_grid,
     setShinyInput
   );
@@ -119,32 +120,32 @@ window.onload = function () {
 
   // Only set a default gap sizing if it isn't already provided
   if (app_mode !== "ShinyExisting") {
-    set_gap_size(grid_styles, "1rem");
-    grid_styles.padding = "1rem";
+    set_gap_size(grid_container.style, "1rem");
+    grid_container.style.padding = "1rem";
   }
 
   add_shiny_listener("shiny-loaded", function (event) {
     if (debug_messages) console.log("connected to shiny");
     // Send elements to Shiny so app is aware of what it's working with
     send_elements_to_shiny(current_elements());
-    send_grid_sizing_to_shiny(grid_styles);
+    send_grid_sizing_to_shiny(grid_container.style);
   });
 
   if (app_mode === "ShinyExisting") {
     // Container styles are in this object
-    const grid_stylesheet = find_rules_by_selector(
-      grid_holder_selector,
+    const grid_container_stylesheet = find_rules_by_selector(
+      grid_container_selector,
       "gridTemplateColumns"
     );
 
-    const current_rows = grid_stylesheet.gridTemplateRows.split(" ");
-    const current_cols = grid_stylesheet.gridTemplateColumns.split(" ");
-    const current_gap = get_gap_size(grid_stylesheet);
+    const current_rows = get_rows(grid_container);
+    const current_cols = get_cols(grid_container);
+    const current_gap = get_gap_size(grid_container_stylesheet);
 
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
     existing_children.forEach(function (el) {
-      add_element(grid_holder, {
+      add_element(grid_container, {
         id: el.id,
         grid_pos: get_pos_on_grid(el as HTMLElement),
         existing_element: el as HTMLElement,
@@ -175,7 +176,7 @@ window.onload = function () {
       elements_to_add: Shiny_Element_Msg[]
     ) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
-        add_element(grid_holder, {
+        add_element(grid_container, {
           id: el.id,
           grid_pos: el,
         });
@@ -192,7 +193,7 @@ window.onload = function () {
     document.getElementById("get_code").addEventListener("click", function () {
       show_code(
         "Place the following in your CSS:",
-        gen_code_for_layout(current_elements(), grid_styles)
+        gen_code_for_layout(current_elements(), grid_container.style)
       );
     });
   }
@@ -215,7 +216,10 @@ window.onload = function () {
   });
 
   function fill_grid_cells() {
-    const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
+    const grid_dims = {
+      rows: get_rows(grid_container),
+      cols: get_cols(grid_container),
+    };
     const num_rows = grid_dims.rows.length;
     const num_cols = grid_dims.cols.length;
     // Grab currently drawn cells (if any) so we can check if we need to redraw
@@ -224,11 +228,11 @@ window.onload = function () {
     const need_to_reset_cells = current_cells.length != num_rows * num_cols;
 
     if (need_to_reset_cells) {
-      remove_elements(grid_holder.querySelectorAll(".grid-cell"));
+      remove_elements(grid_container.querySelectorAll(".grid-cell"));
       for (let row_i = 1; row_i <= num_rows; row_i++) {
         for (let col_i = 1; col_i <= num_cols; col_i++) {
           current_cells.push(
-            make_el(grid_holder, `div.r${row_i}.c${col_i}.grid-cell`, {
+            make_el(grid_container, `div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
               grid_pos: { start_row: row_i, start_col: col_i },
             })
@@ -239,7 +243,7 @@ window.onload = function () {
       // Build each column and row's sizing controler
       for (let type in grid_controls) {
         // Get rid of old ones to start with fresh slate
-        remove_elements(grid_holder.querySelectorAll(`.${type}-controls`));
+        remove_elements(grid_container.querySelectorAll(`.${type}-controls`));
         grid_controls[type] = grid_dims[type].map(function (
           size: string,
           i: number
@@ -248,7 +252,7 @@ window.onload = function () {
           const grid_i = i + 1;
 
           return make_css_unit_input({
-            parent_el: grid_holder,
+            parent_el: grid_container,
             selector: `#control_${type}${grid_i}.${type}-controls`,
             start_val: get_css_value(size),
             start_unit: get_css_unit(size),
@@ -268,10 +272,10 @@ window.onload = function () {
         });
       }
       const current_selection_box = make_el(
-        grid_holder,
+        grid_container,
         "div#current_selection_box.added-element"
       );
-      const drag_canvas = make_el(grid_holder, "div#drag_canvas");
+      const drag_canvas = make_el(grid_container, "div#drag_canvas");
 
       drag_on_grid({
         watching_element: drag_canvas,
@@ -292,8 +296,8 @@ window.onload = function () {
       // Make sure that the drag detector sits over everything
       [
         drag_canvas,
-        ...grid_holder.querySelectorAll(".added-element"),
-      ].forEach((el) => grid_holder.appendChild(el));
+        ...grid_container.querySelectorAll(".added-element"),
+      ].forEach((el) => grid_container.appendChild(el));
     } else {
     }
   }
@@ -318,9 +322,9 @@ window.onload = function () {
   }
 
   function update_grid(opts: Grid_Update_Options) {
-    const old_num_rows = get_current_rows().length;
-    const old_num_cols = get_current_cols().length;
-    const old_gap = get_gap_size(grid_styles);
+    const old_num_rows = get_rows(grid_container).length;
+    const old_num_cols = get_cols(grid_container).length;
+    const old_gap = get_gap_size(grid_container.style);
     const new_gap = opts.gap || old_gap;
     const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
     const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
@@ -396,7 +400,7 @@ window.onload = function () {
                   (d) => form[d.id].value === "shrink"
                 );
                 to_edit.forEach((el) => {
-                  const el_node: HTMLElement = grid_holder.querySelector(
+                  const el_node: HTMLElement = grid_container.querySelector(
                     `#${el.id}`
                   );
 
@@ -437,19 +441,21 @@ window.onload = function () {
     }
 
     if (opts.rows) {
-      grid_styles.gridTemplateRows = sizes_to_template_def(opts.rows);
+      grid_container.style.gridTemplateRows = sizes_to_template_def(opts.rows);
     }
     if (opts.cols) {
-      grid_styles.gridTemplateColumns = sizes_to_template_def(opts.cols);
+      grid_container.style.gridTemplateColumns = sizes_to_template_def(
+        opts.cols
+      );
     }
     if (opts.gap) {
       // This sets the --grid-gap variable so that the controls that need the
       // info can use it to keep a constant distance from the grid holder
-      grid_holder.parentElement.style.setProperty("--grid-gap", opts.gap);
+      grid_container.parentElement.style.setProperty("--grid-gap", opts.gap);
       // We dont use css variables in the exported css that existing apps used
       // so we need to modify both gap and padding
-      set_gap_size(grid_styles, opts.gap);
-      grid_styles.padding = opts.gap;
+      set_gap_size(grid_container.style, opts.gap);
+      grid_container.style.padding = opts.gap;
     }
 
     if (grid_numbers_changed || opts.force) {
@@ -457,10 +463,10 @@ window.onload = function () {
     }
 
     if (!opts.dont_send_to_shiny) {
-      send_grid_sizing_to_shiny(grid_styles);
+      send_grid_sizing_to_shiny(grid_container.style);
     }
 
-    return grid_holder;
+    return grid_container;
   }
 
   function get_layout_from_controls() {
@@ -525,7 +531,7 @@ window.onload = function () {
           }
 
           // Add the new element in to grid
-          add_element(grid_holder, {
+          add_element(grid_container, {
             id,
             color: selection_box.style.borderColor,
             grid_pos,
@@ -582,7 +588,7 @@ window.onload = function () {
     existing_element?: HTMLElement;
   };
 
-  function add_element(grid_holder: HTMLElement, el_props: New_Element) {
+  function add_element(grid_container: HTMLElement, el_props: New_Element) {
     const { grid_pos, color = get_next_color(), existing_element } = el_props;
     const mirrors_existing_element = existing_element !== undefined;
     // If element ids were generated with the grid_container R function then
@@ -593,7 +599,7 @@ window.onload = function () {
       : el_props.id;
 
     const element_in_grid = make_el(
-      grid_holder,
+      grid_container,
       `div#${id}.el_${id}.added-element`,
       {
         grid_pos,
@@ -692,7 +698,7 @@ window.onload = function () {
       start_loc = event as DragEvent;
 
       // make sure dragged element is on top
-      grid_holder.appendChild(opts.grid_element);
+      grid_container.appendChild(opts.grid_element);
 
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
@@ -705,7 +711,7 @@ window.onload = function () {
       };
 
       drag_feedback_rect = make_el(
-        grid_holder.querySelector("#drag_canvas"),
+        grid_container.querySelector("#drag_canvas"),
         "div.drag-feedback-rect",
         {
           styles: {
@@ -781,7 +787,7 @@ window.onload = function () {
   function current_elements(): Array<Element_Info> {
     let elements: Array<Element_Info> = [];
 
-    (grid_holder.querySelectorAll(".added-element") as NodeListOf<
+    (grid_container.querySelectorAll(".added-element") as NodeListOf<
       HTMLElement
     >).forEach(function (el: HTMLElement) {
       // Ignore the selection box
@@ -800,14 +806,6 @@ window.onload = function () {
     return elements;
   }
 
-  function get_current_rows() {
-    return grid_styles.gridTemplateRows.split(" ");
-  }
-
-  function get_current_cols() {
-    return grid_styles.gridTemplateColumns.split(" ");
-  }
-
   // Get the next color in our list of colors.
   function get_next_color() {
     const colors = [
@@ -819,7 +817,7 @@ window.onload = function () {
       "#a65628",
       "#f781bf",
     ];
-    const all_elements = grid_holder.querySelectorAll(".added-element");
+    const all_elements = grid_container.querySelectorAll(".added-element");
     // If we have more elements than colors we simply recycle
     return colors[all_elements.length % colors.length];
   }

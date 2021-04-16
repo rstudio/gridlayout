@@ -4,12 +4,12 @@ import {
   instructions_icon,
   settings_icon,
   trashcan_icon,
-} from "./icons";
-import { Block_El, Text_El, make_el } from "./make_el";
-import { make_incrementer } from "./make_incrementer";
-import { make_css_unit_input } from "./make_css_unit_input";
+} from "./utils-icons";
+import { Block_El, Text_El, make_el } from "./make-elements";
+import { make_incrementer } from "./make-incrementer";
+import { make_css_unit_input } from "./make-css_unit_input";
 import { Grid_Settings, Grid_Update_Options } from "./index";
-import { make_toggle_switch } from "./make_toggle_switch";
+import { make_toggle_switch } from "./make-toggle_switch";
 
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children

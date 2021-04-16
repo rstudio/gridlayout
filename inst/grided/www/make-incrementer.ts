@@ -1,5 +1,5 @@
-import { minus_icon, plus_icon } from "./icons";
-import { make_el } from "./make_el";
+import { minus_icon, plus_icon } from "./utils-icons";
+import { make_el } from "./make-elements";
 
 // Builds an up down button and value input
 export function make_incrementer({

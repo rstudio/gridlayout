@@ -2,7 +2,7 @@
 // that only one rule targeting that selector alone is defined
 // If target_property is provided the function will chose the sheet that defines
 
-import { flatten } from "./misc-helpers";
+import { flatten } from "./utils-misc";
 
 // Combines every style rule contained in all the style sheets on page into
 // a big array. Easier than navigating the nested structure of sheets => rules

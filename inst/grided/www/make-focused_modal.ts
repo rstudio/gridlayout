@@ -1,5 +1,5 @@
-import { make_el, Event_Listener } from "./make_el";
-import { as_array, concat_nl } from "./misc-helpers";
+import { make_el, Event_Listener } from "./make-elements";
+import { as_array, concat_nl } from "./utils-misc";
 
 type Modal_Options = {
   background_callbacks?: Event_Listener | Event_Listener[];

@@ -1,4 +1,4 @@
-import { Block_El, make_el, Shadow_El } from "./make_el";
+import { Block_El, make_el, Shadow_El } from "./make-elements";
 
 export function make_toggle_switch(
   off_text: string,

@@ -1,5 +1,5 @@
 import { Element_Info, Shiny } from "./index";
-import { get_gap_size } from "./misc-helpers";
+import { get_gap_size } from "./utils-grid";
 
 // These are functions for communicating with Shiny. They are all optional
 // chained so they won't spit errors if Shiny isn't connected or initialized
