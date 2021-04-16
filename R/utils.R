@@ -125,3 +125,9 @@ is_installed <- function(package, version = NULL) {
   }
   installed && isTRUE(utils::packageVersion(package) >= version)
 }
+
+in_rstudio <- function(){
+  # If we have access to the rstudio api we can enable editor manipulation.
+  # Otherwise we should hide the update button to not confuse the user.
+  requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()
+}
