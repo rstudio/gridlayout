@@ -151,3 +151,11 @@ export function get_css_value(css_size: string): number {
 export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
+
+export function set_class(elements: NodeListOf<HTMLElement>, class_name: string) {
+  
+  elements.forEach(el => {
+    el.classList.add(class_name);
+  });
+  
+}

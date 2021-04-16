@@ -14,6 +14,7 @@ import {
   update_rect_with_delta,
   XY_Pos,
   Drag_Type,
+  set_class,
 } from "./utils-misc";
 import {
   sizes_to_template_def,
@@ -26,8 +27,8 @@ import {
 } from "./utils-grid";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./utils-icons";
 import {
-  find_rules_by_selector,
   find_selector_by_property,
+  get_css_props_by_selector,
 } from "./utils-cssom";
 import { wrap_in_grided } from "./wrap_in_grided";
 import {
@@ -132,16 +133,6 @@ window.onload = function () {
   });
 
   if (app_mode === "ShinyExisting") {
-    // Container styles are in this object
-    const grid_container_stylesheet = find_rules_by_selector(
-      grid_container_selector,
-      "gridTemplateColumns"
-    );
-
-    const current_rows = get_rows(grid_container);
-    const current_cols = get_cols(grid_container);
-    const current_gap = get_gap_size(grid_container_stylesheet);
-
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
     existing_children.forEach(function (el) {
@@ -152,16 +143,28 @@ window.onload = function () {
       });
     });
 
+    // Container styles are in this object
+    const current_grid_props: {
+      gridTemplateRows?: string;
+      gridTemplateColumns?: string;
+      gap?: string;
+    } = get_css_props_by_selector(grid_container_selector, [
+      "gridTemplateColumns",
+      "gridTemplateRows",
+      "gap",
+    ]);
+
     // Make sure grid matches the one the app is working with
     update_grid({
-      rows: current_rows,
-      cols: current_cols,
-      gap: current_gap,
+      rows: current_grid_props.gridTemplateRows.split(" "),
+      cols: current_grid_props.gridTemplateColumns.split(" "),
+      gap: get_gap_size(current_grid_props.gap),
       force: true,
     });
 
     // Make grid cells transparent so the app is seen beneath them
-    find_rules_by_selector(".grid-cell").background = "none";
+    set_class(grid_container.querySelectorAll(".grid-cell"), "transparent");
+    
   } else if (app_mode === "ShinyNew") {
     add_shiny_listener("update-grid", update_grid);
 

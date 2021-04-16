@@ -6,12 +6,20 @@ import { Element_Info, Grid_Pos } from "./index";
 import { concat, concat_nl } from "./utils-misc";
 
 
-export function get_rows(grid_container: HTMLElement) {
-  return grid_container.style.gridTemplateRows.split(" ");
+function get_styles(container: HTMLElement|CSSStyleDeclaration){
+  if (container instanceof HTMLElement){
+    return container.style;
+  } else {
+    return container;
+  }
 }
 
-export function get_cols(grid_container: HTMLElement) {
-  return grid_container.style.gridTemplateColumns.split(" ");
+export function get_rows(grid_container: HTMLElement|CSSStyleDeclaration) {
+  return get_styles(grid_container).gridTemplateRows.split(" ");
+}
+
+export function get_cols(grid_container: HTMLElement|CSSStyleDeclaration) {
+  return get_styles(grid_container).gridTemplateColumns.split(" ");
 }
 
 // Builds the start/end css string for a grid-{row,column}
@@ -104,10 +112,14 @@ export function gen_code_for_layout(
   ];
 }
 
-export function get_gap_size(container_styles: CSSStyleDeclaration) {
+export function get_gap_size(style: CSSStyleDeclaration|string) {
   // Older browsers give back both row-gap and column-gap in same query
   // so we need to reduce to a single value before returning
-  const gap_size_vec = container_styles.gap.split(" ");
+
+  const gap_size_vec = (typeof style === "string"
+    ? style
+    : style.gap
+  ).split(" ");
 
   return gap_size_vec[0];
 }

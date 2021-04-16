@@ -236,6 +236,11 @@ button.minus_btn.disabled {
   border-radius: var(--element_roundness);
 }
 
+.grid-cell.transparent {
+  background: none;
+}
+
+
 .grid-cell.selected {
   background: currentColor;
   border: 2px solid var(--light-gray);

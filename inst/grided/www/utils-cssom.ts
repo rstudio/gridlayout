@@ -12,17 +12,12 @@ function get_all_style_rules() {
   );
 }
 
-// that given property (if multiple exist)
-export function find_rules_by_selector(
-  selector_text: string,
-  target_property?: string
-) {
+function get_all_rules_for_selector(selector_text: string) {
   // Find the stylesheet which contains the containers styles
   const defines_ruleset = (selector_text: string) => (rule: CSSRule) =>
     (rule as CSSStyleRule).selectorText === selector_text;
 
-  const all_sheets = [...document.styleSheets];
-  const rules_for_selector = all_sheets
+  return [...document.styleSheets]
     .filter((style_sheet: CSSStyleSheet) =>
       [...style_sheet.rules].find(defines_ruleset(selector_text))
     )
@@ -30,22 +25,26 @@ export function find_rules_by_selector(
       (x) =>
         ([...x.cssRules].find(defines_ruleset(selector_text)) as CSSStyleRule)
           .style
-    )
-    .filter((x) => (target_property ? x[target_property] : true));
+    );
+}
 
-  const n_sheets: number = rules_for_selector.length;
-  if (n_sheets === 0) {
-    // No rules declared so make a new rule and append to last style sheet
-    const last_sheet = all_sheets[all_sheets.length - 1];
-    last_sheet.insertRule(`${selector_text} { }`, 0);
+// that given property (if multiple exist)
+export function get_css_props_by_selector(
+  selector_text: string,
+  target_properties: string[],
+) {
 
-    return ([...last_sheet.cssRules].find(
-      defines_ruleset(selector_text)
-    ) as CSSStyleRule).style;
-  } else {
-    // Take the latest style sheet and (hope) that's the correct one
-    return rules_for_selector[n_sheets - 1];
-  }
+  const all_rules_for_selector = get_all_rules_for_selector(selector_text);
+
+  return target_properties.reduce((prop_values, prop) => {
+    const prop_val = all_rules_for_selector.find((rule) => rule[prop])?.[prop];
+
+    if (prop_val) {
+      prop_values[prop] = prop_val;
+    }
+    return prop_values;
+  }, {});
+
 }
 
 
