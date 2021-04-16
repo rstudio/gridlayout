@@ -1,10 +1,11 @@
-import { Grid_Pos } from "./index";
+import { Code_Text } from "./focused_modal";
+import { Element_Info, Grid_Pos } from "./index";
 // Functions related to grid construction
 
 export type XY_Pos = {
   x: number;
   y: number;
-}
+};
 
 export type Drag_Type = "top-left" | "bottom-right" | "center";
 
@@ -41,6 +42,16 @@ export function set_element_in_grid(
   }
 
   el.style.display = "block"; // make sure we can see the element
+}
+
+export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
+  const el_styles = getComputedStyle(grid_el);
+  return {
+    start_row: +el_styles.gridRowStart,
+    start_col: +el_styles.gridColumnStart,
+    end_row: +el_styles.gridRowEnd - 1,
+    end_col: +el_styles.gridColumnEnd - 1,
+  };
 }
 
 // grid-template-{column,row}: ...
@@ -97,7 +108,7 @@ export type Selection_Rect = {
   right: number;
   top: number;
   bottom: number;
-}
+};
 
 // Produce bounding rectangle relative to parent of any element
 export function get_bounding_rect(el: HTMLElement): Selection_Rect | null {
@@ -189,8 +200,59 @@ export function get_css_value(css_size: string): number {
   return Number(css_size.match(/^[\d | \.]+/g)[0]);
 }
 
-export function flatten<Type>(arr: Type[][]): Type[]{
+export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
 
+export function gen_code_for_layout(
+  elements: Element_Info[],
+  grid_styles: CSSStyleDeclaration
+): Array<Code_Text> {
+  const container_selector = "#container";
 
+  const element_defs = elements.map((el) =>
+    concat_nl(
+      `#${el.id} {`,
+      `  grid-column: ${make_template_start_end(el.start_col, el.end_col)};`,
+      `  grid-row: ${make_template_start_end(el.start_row, el.end_row)};`,
+      `}`
+    )
+  );
+
+  const css_code = concat_nl(
+    `${container_selector} {`,
+    `  display: grid;`,
+    `  grid-template-columns: ${grid_styles.gridTemplateColumns};`,
+    `  grid-template-rows: ${grid_styles.gridTemplateRows};`,
+    `  gap: ${get_gap_size(grid_styles)}`,
+    `}`,
+    ...element_defs
+  );
+
+  const html_code = concat_nl(
+    `<div id = ${container_selector}>`,
+    ...elements.map((el) => concat_nl(`  <div id = "#${el.id}">`, `  </div>`)),
+    `</div>`
+  );
+
+  return [
+    { type: "css", code: css_code },
+    { type: "html", code: html_code },
+  ];
+}
+
+export function get_gap_size(container_styles: CSSStyleDeclaration) {
+  // Older browsers give back both row-gap and column-gap in same query
+  // so we need to reduce to a single value before returning
+  const gap_size_vec = container_styles.gap.split(" ");
+
+  return gap_size_vec[0];
+}
+
+export function set_gap_size(
+  container_styles: CSSStyleDeclaration,
+  new_val: string
+) {
+  container_styles.gap = new_val;
+  return new_val;
+}

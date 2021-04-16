@@ -1,12 +1,11 @@
 // JS entry point
 import { Block_El, make_el, remove_elements } from "./make_el";
-import { focused_modal } from "./focused_modal";
+import { focused_modal, show_code } from "./focused_modal";
 import { make_css_unit_input, CSS_Input } from "./make_css_unit_input";
 import {
   make_template_start_end,
   sizes_to_template_def,
   set_element_in_grid,
-  concat_nl,
   as_array,
   max_w_missing,
   min_w_missing,
@@ -18,6 +17,10 @@ import {
   update_rect_with_delta,
   XY_Pos,
   Drag_Type,
+  get_pos_on_grid,
+  gen_code_for_layout,
+  set_gap_size,
+  get_gap_size,
 } from "./misc-helpers";
 import { trashcan_icon, drag_icon, se_arrow, nw_arrow } from "./icons";
 import {
@@ -25,6 +28,12 @@ import {
   find_selector_by_property,
 } from "./find_rules_by_selector";
 import { wrap_in_grided } from "./wrap_in_grided";
+import {
+  add_shiny_listener,
+  send_elements_to_shiny,
+  send_grid_sizing_to_shiny,
+  setShinyInput,
+} from "./shiny_helpers";
 
 export const Shiny = (window as any).Shiny;
 
@@ -63,7 +72,7 @@ type Drag_Options = {
   on_end?: (drag_info: Drag_Res) => void;
 };
 
-type Element_Info = {
+export type Element_Info = {
   id: string;
   start_row: number;
   end_row: number;
@@ -117,8 +126,8 @@ window.onload = function () {
   add_shiny_listener("shiny-loaded", function (event) {
     if (debug_messages) console.log("connected to shiny");
     // Send elements to Shiny so app is aware of what it's working with
-    send_elements_to_shiny();
-    send_grid_sizing_to_shiny();
+    send_elements_to_shiny(current_elements());
+    send_grid_sizing_to_shiny(grid_styles);
   });
 
   if (app_mode === "ShinyExisting") {
@@ -135,9 +144,9 @@ window.onload = function () {
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;
     existing_children.forEach(function (el) {
-      add_element({
+      add_element(grid_holder, {
         id: el.id,
-        grid_pos: get_grid_pos(el as HTMLElement),
+        grid_pos: get_pos_on_grid(el as HTMLElement),
         existing_element: el as HTMLElement,
       });
     });
@@ -152,7 +161,6 @@ window.onload = function () {
 
     // Make grid cells transparent so the app is seen beneath them
     find_rules_by_selector(".grid-cell").background = "none";
-
   } else if (app_mode === "ShinyNew") {
     add_shiny_listener("update-grid", update_grid);
 
@@ -167,7 +175,7 @@ window.onload = function () {
       elements_to_add: Shiny_Element_Msg[]
     ) {
       elements_to_add.forEach((el: Shiny_Element_Msg) => {
-        add_element({
+        add_element(grid_holder, {
           id: el.id,
           grid_pos: el,
         });
@@ -182,7 +190,10 @@ window.onload = function () {
     });
 
     document.getElementById("get_code").addEventListener("click", function () {
-      show_code("Place the following in your CSS:", gen_code_for_layout());
+      show_code(
+        "Place the following in your CSS:",
+        gen_code_for_layout(current_elements(), grid_styles)
+      );
     });
   }
 
@@ -194,109 +205,14 @@ window.onload = function () {
   });
 
   add_shiny_listener("code_update_problem", function (code_to_show) {
-    show_code("Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.", {
-      type: "R",
-      code: code_to_show,
-    });
+    show_code(
+      "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.",
+      {
+        type: "R",
+        code: code_to_show,
+      }
+    );
   });
-
-  type Code_Text = {
-    type: string;
-    code: string;
-  };
-  function show_code(
-    message: string,
-    code_blocks: Code_Text | Array<Code_Text>
-  ) {
-    const code_modal = focused_modal({
-      header_text: `${message}`,
-      modal_callbacks: {
-        event: "click",
-        func: function (event) {
-          // This is needed to stop clicks on modal from triggering the cancel
-          // event that is attached to the background
-          event.stopPropagation();
-        },
-      },
-      background_callbacks: {
-        event: "click",
-        func: close_modal,
-      },
-    });
-
-    as_array(code_blocks).forEach(function (code_to_show) {
-      const num_of_lines: number = code_to_show.code.match(/\n/g).length;
-
-      const code_section = make_el(
-        code_modal.modal,
-        `div#${code_to_show.type}.code_chunk`,
-        {
-          styles: {
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gridTemplateRows: "1fr, auto",
-            gap: "4px",
-            gridTemplateAreas: concat_nl(
-              `"code_type copy_btn"`,
-              `"code_text code_text"`
-            ),
-          },
-        }
-      );
-
-      let code_text: HTMLInputElement;
-
-      make_el(code_section, "strong", {
-        innerHTML: code_to_show.type,
-        styles: { gridArea: "code_type" },
-      });
-
-      make_el(code_section, "button#copy_code", {
-        innerHTML: "Copy to clipboard",
-        styles: { gridArea: "copy_btn" },
-        event_listener: {
-          event: "click",
-          func: function () {
-            code_text.select();
-            document.execCommand("copy");
-          },
-        },
-      });
-
-      code_text = make_el(code_section, "textarea#code_for_layout", {
-        innerHTML: code_to_show.code,
-        props: { rows: num_of_lines + 3 },
-        styles: {
-          width: "100%",
-          background: "#f3f2f2",
-          fontFamily: "monospace",
-          display: "block",
-          padding: "0.75rem",
-          marginBottom: "10px",
-          borderRadius: "5px",
-          gridArea: "code_text",
-        },
-      }) as HTMLInputElement;
-    });
-
-    const action_buttons = make_el(code_modal.modal, "div#action_buttons", {
-      styles: {
-        display: "flex",
-        justifyContent: "space-around",
-      },
-    });
-    make_el(action_buttons, "button#close_code_model", {
-      innerHTML: "Close",
-      event_listener: {
-        event: "click",
-        func: close_modal,
-      },
-    });
-
-    function close_modal() {
-      code_modal.remove();
-    }
-  }
 
   function fill_grid_cells() {
     const grid_dims = { rows: get_current_rows(), cols: get_current_cols() };
@@ -381,6 +297,7 @@ window.onload = function () {
     } else {
     }
   }
+
   function get_drag_extent_on_grid(selection_rect: Selection_Rect): Grid_Pos {
     // Reset bounding box definitions so we only use current selection extent
     const sel_bounds: Grid_Pos = { start_col: null, start_row: null };
@@ -540,7 +457,7 @@ window.onload = function () {
     }
 
     if (!opts.dont_send_to_shiny) {
-      send_grid_sizing_to_shiny();
+      send_grid_sizing_to_shiny(grid_styles);
     }
 
     return grid_holder;
@@ -608,7 +525,7 @@ window.onload = function () {
           }
 
           // Add the new element in to grid
-          add_element({
+          add_element(grid_holder, {
             id,
             color: selection_box.style.borderColor,
             grid_pos,
@@ -665,7 +582,7 @@ window.onload = function () {
     existing_element?: HTMLElement;
   };
 
-  function add_element(el_props: New_Element) {
+  function add_element(grid_holder: HTMLElement, el_props: New_Element) {
     const { grid_pos, color = get_next_color(), existing_element } = el_props;
     const mirrors_existing_element = existing_element !== undefined;
     // If element ids were generated with the grid_container R function then
@@ -713,7 +630,7 @@ window.onload = function () {
           }
         },
         on_end: () => {
-          send_elements_to_shiny();
+          send_elements_to_shiny(current_elements());
         },
       });
     });
@@ -761,17 +678,7 @@ window.onload = function () {
     }
 
     // Let shiny know we have a new element
-    send_elements_to_shiny();
-  }
-
-  function get_grid_pos(grid_el: HTMLElement): Grid_Pos {
-    const el_styles = getComputedStyle(grid_el);
-    return {
-      start_row: +el_styles.gridRowStart,
-      start_col: +el_styles.gridColumnStart,
-      end_row: +el_styles.gridRowEnd - 1,
-      end_col: +el_styles.gridColumnEnd - 1,
-    };
+    send_elements_to_shiny(current_elements());
   }
 
   function drag_on_grid(opts: Drag_Options): void {
@@ -854,7 +761,7 @@ window.onload = function () {
       if (opts.on_end)
         opts.on_end({
           xy: end_loc,
-          grid: get_grid_pos(opts.grid_element || this.parentElement),
+          grid: get_pos_on_grid(opts.grid_element || this.parentElement),
         });
 
       editor_el.removeEventListener("mousemove", drag);
@@ -893,82 +800,6 @@ window.onload = function () {
     return elements;
   }
 
-  // These are functions for communicating with Shiny. They are all optional
-  // chained so they won't spit errors if Shiny isn't connected or initialized
-  // yet.
-
-  function setShinyInput(input_id: string, input_value: any, is_event = false) {
-    if (debug_messages)
-      console.log(`Setting input ${input_id} in Shiny to`, input_value);
-    // Sent input value to shiny but only if it's initialized
-    Shiny?.setInputValue?.(
-      input_id,
-      input_value,
-      is_event ? { priority: "event" } : {}
-    );
-  }
-
-  function add_shiny_listener(event_id: string, callback_func: Function) {
-    if (debug_messages)
-      console.log(`Adding listener for Shiny event ${event_id}`);
-
-    Shiny?.addCustomMessageHandler(event_id, callback_func);
-  }
-
-  function send_elements_to_shiny() {
-    const elements_by_id = {};
-    current_elements().forEach(function (el) {
-      elements_by_id[el.id] = el;
-    });
-
-    setShinyInput("elements", elements_by_id);
-  }
-
-  function send_grid_sizing_to_shiny() {
-    setShinyInput("grid_sizing", {
-      rows: grid_styles.gridTemplateRows.split(" "),
-      cols: grid_styles.gridTemplateColumns.split(" "),
-      gap: get_gap_size(grid_styles),
-    });
-  }
-
-  function gen_code_for_layout(): Array<Code_Text> {
-    const container_selector = "#container";
-    const elements = current_elements();
-
-    const element_defs = elements.map((el) =>
-      concat_nl(
-        `#${el.id} {`,
-        `  grid-column: ${make_template_start_end(el.start_col, el.end_col)};`,
-        `  grid-row: ${make_template_start_end(el.start_row, el.end_row)};`,
-        `}`
-      )
-    );
-
-    const css_code = concat_nl(
-      `${container_selector} {`,
-      `  display: grid;`,
-      `  grid-template-columns: ${grid_styles.gridTemplateColumns};`,
-      `  grid-template-rows: ${grid_styles.gridTemplateRows};`,
-      `  gap: ${get_gap_size(grid_styles)}`,
-      `}`,
-      ...element_defs
-    );
-
-    const html_code = concat_nl(
-      `<div id = ${container_selector}>`,
-      ...elements.map((el) =>
-        concat_nl(`  <div id = "#${el.id}">`, `  </div>`)
-      ),
-      `</div>`
-    );
-
-    return [
-      { type: "css", code: css_code },
-      { type: "html", code: html_code },
-    ];
-  }
-
   function get_current_rows() {
     return grid_styles.gridTemplateRows.split(" ");
   }
@@ -1001,19 +832,6 @@ window.onload = function () {
       );
     });
 
-    send_elements_to_shiny();
+    send_elements_to_shiny(current_elements());
   }
 }; // End of the window.onload callback
-
-function get_gap_size(container_styles: CSSStyleDeclaration) {
-  // Older browsers give back both row-gap and column-gap in same query
-  // so we need to reduce to a single value before returning
-  const gap_size_vec = container_styles.gap.split(" ");
-
-  return gap_size_vec[0];
-}
-
-function set_gap_size(container_styles: CSSStyleDeclaration, new_val: string) {
-  container_styles.gap = new_val;
-  return new_val;
-}
