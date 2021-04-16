@@ -33,6 +33,8 @@ shinyApp(
         gap = attr(starting_layout, "gap")
       )
     )
+
+    grided_server_code(input, output, session)
   }
 )
 

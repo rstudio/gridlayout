@@ -25,49 +25,7 @@ run_with_grided <- function(app) {
         origServerFunc(input, output, session, ...)
       }
 
-      # Lets grided know it should send over initial app state
-      session$sendCustomMessage("shiny-loaded", 1)
-
-      current_layout <- shiny::reactive({
-        shiny::req(input$elements)
-        layout_from_grided(input$elements, input$grid_sizing)
-      })
-
-      initial_layout <- NULL
-      shiny::observe({
-        shiny::req(input$elements, input$grid_sizing)
-        if (is.null(initial_layout)) {
-          initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
-        }
-      })
-
-      shiny::bindEvent(
-        shiny::observe({
-          send_layoutcall_popup(session, current_layout)
-        }),
-        input$get_code
-      )
-
-      shiny::bindEvent(shiny::observe({
-        shiny::req(input$elements)
-
-        if (in_rstudio) {
-          editor_selection <- rstudioapi::getSourceEditorContext()
-
-          layout_table <- Find(
-            x = find_layouts_in_file(editor_selection$contents),
-            f = function(x) layouts_are_equal(x$layout, initial_layout)
-          )
-        }
-
-        if (is.null(layout_table) || !in_rstudio) {
-          warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
-          send_layoutcall_popup(session, current_layout, error_mode = TRUE)
-        } else {
-          update_layout_in_file(editor_selection, layout_table, current_layout())
-          shiny::stopApp()
-        }
-      }), input$update_code)
+      grided_server_code(input, output, session)
     }
   }
 
@@ -76,6 +34,53 @@ run_with_grided <- function(app) {
   environment(app[["httpHandler"]])$ui[[n_tags + 1]] <- grided_resources()
 
   app
+}
+
+grided_server_code <- function(input, output, session){
+  print("Grided server code running")
+  # Lets grided know it should send over initial app state
+  session$sendCustomMessage("shiny-loaded", 1)
+
+  current_layout <- shiny::reactive({
+    shiny::req(input$elements)
+    layout_from_grided(input$elements, input$grid_sizing)
+  })
+
+  initial_layout <- NULL
+  shiny::observe({
+    shiny::req(input$elements, input$grid_sizing)
+    if (is.null(initial_layout)) {
+      initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
+    }
+  })
+
+  shiny::bindEvent(
+    shiny::observe({
+      send_layoutcall_popup(session, current_layout)
+    }),
+    input$get_code
+  )
+
+  shiny::bindEvent(shiny::observe({
+    shiny::req(input$elements)
+
+    if (in_rstudio) {
+      editor_selection <- rstudioapi::getSourceEditorContext()
+
+      layout_table <- Find(
+        x = find_layouts_in_file(editor_selection$contents),
+        f = function(x) layouts_are_equal(x$layout, initial_layout)
+      )
+    }
+
+    if (is.null(layout_table) || !in_rstudio) {
+      warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
+      send_layoutcall_popup(session, current_layout, error_mode = TRUE)
+    } else {
+      update_layout_in_file(editor_selection, layout_table, current_layout())
+      shiny::stopApp()
+    }
+  }), input$update_code)
 }
 
 grided_resources <- function(){
