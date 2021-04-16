@@ -146,7 +146,7 @@
     <p>Build grid layout obj from markdown table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>md_to_gridlayout</span><span class='op'>(</span><span class='va'>layout_table</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>md_to_gridlayout</span><span class='op'>(</span><span class='va'>layout_table</span>, null_instead_of_error <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,6 +156,13 @@
       <td><p>Character string with a markdown table. First row and
 column are reserved for sizing (any valid css sizing works). An optional
 grid-gap can be provided using the very first cell.</p></td>
+    </tr>
+    <tr>
+      <th>null_instead_of_error</th>
+      <td><p>When the input fails to be parsed as a layout,
+should the function return <code>NULL</code> instead of throwing an error? Useful for
+situations where you're parsing multiple tables simply want to check if a
+table can be parsed instead of relying on it being parsable.</p></td>
     </tr>
     </table>
 

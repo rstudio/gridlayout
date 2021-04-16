@@ -222,23 +222,23 @@ other reasons.</p></dd>
 |1fr   |sidebar |distPlot |"</span>
 
 <span class='co'># The classic Geyser app with grid layout</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
-  ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+<span class='fu'>shinyApp</span><span class='op'>(</span>
+  ui <span class='op'>=</span> <span class='fu'>fluidPage</span><span class='op'>(</span>
     <span class='fu'>use_gridlayout_shiny</span><span class='op'>(</span><span class='va'>my_layout</span>, <span class='st'>"app-container"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>
+    <span class='fu'>div</span><span class='op'>(</span>
       id <span class='op'>=</span> <span class='st'>"app-container"</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>,
-          <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"app-title"</span>, <span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>
+      <span class='fu'>div</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>,
+          <span class='fu'>h2</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"app-title"</span>, <span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>
       <span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"sidebar"</span>,
-          <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>,
+      <span class='fu'>div</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"sidebar"</span>,
+          <span class='fu'>sliderInput</span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>,
                       min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
       <span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span><span class='op'>)</span>
+      <span class='fu'>plotOutput</span><span class='op'>(</span><span class='st'>"distPlot"</span><span class='op'>)</span>
     <span class='op'>)</span>
   <span class='op'>)</span>,
   server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>output</span><span class='op'>$</span><span class='va'>distPlot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
+    <span class='va'>output</span><span class='op'>$</span><span class='va'>distPlot</span> <span class='op'>&lt;-</span> <span class='fu'>renderPlot</span><span class='op'>(</span><span class='op'>{</span>
       <span class='va'>x</span>    <span class='op'>&lt;-</span> <span class='va'>faithful</span><span class='op'>[</span>, <span class='fl'>2</span><span class='op'>]</span>
       <span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>bins</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='va'>x</span>, breaks <span class='op'>=</span> <span class='va'>bins</span>, col <span class='op'>=</span> <span class='st'>'darkgray'</span>, border <span class='op'>=</span> <span class='st'>'white'</span><span class='op'>)</span>
@@ -246,7 +246,7 @@ other reasons.</p></dd>
   <span class='op'>}</span>
 <span class='op'>)</span>
 <span class='op'>}</span>
-</div></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error in shinyApp(ui = fluidPage(use_gridlayout_shiny(my_layout, "app-container"),     div(id = "app-container", div(id = "header", h2(id = "app-title",         "Old Faithful Geyser Data")), div(id = "sidebar", sliderInput("bins",         "Number of bins:", min = 1, max = 50, value = 30)), plotOutput("distPlot"))),     server = function(input, output) {        output$distPlot &lt;- renderPlot({            x &lt;- faithful[, 2]            bins &lt;- seq(min(x), max(x), length.out = input$bins +                 1)            hist(x, breaks = bins, col = "darkgray", border = "white")        })    }): could not find function "shinyApp"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

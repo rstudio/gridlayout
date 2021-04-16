@@ -25,14 +25,17 @@ reference:
 - contents:
   - grid_page
   - grid_container
+  - grid_panel
   - starts_with("use_gridlayout")
   - to_css
   - to_app_template
+  - build_css_rule
 - title: "Grided layout builder app"
   desc: >
     Functions for using the grided app for generating layouts with a graphical interface.
     These are typically called by the RStudio addin functionality and thus not called directly.
 - contents:
+  - run_with_grided
   - update_rmd
   - grided_addin
   - grided_new_app
