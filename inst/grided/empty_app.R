@@ -3,6 +3,8 @@ library(here)
 library(gridlayout)
 
 
+# This is an app that allows live reloading when developing the typescript for grided
+# It loads links to the hosted script and stylesheets so they get updated when saved
 setwd(here("inst/grided/"))
 
 options(shiny.autoreload = TRUE)
