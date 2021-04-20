@@ -28,6 +28,8 @@ grided_app <- function(
   }
 }
 
+utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
+
 
 grided_server_code <- function(
   input, output, session,
@@ -110,7 +112,6 @@ grided_server_code <- function(
     }
   }), input$update_code)
 }
-
 
 
 # This is all the UI related code that needs to be included for grided to wrap app

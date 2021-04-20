@@ -63,9 +63,3 @@ grided_create_new_app <- function() {
       shiny::stopApp()
     })
 }
-
-
-
-
-utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
-
