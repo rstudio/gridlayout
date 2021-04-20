@@ -40,7 +40,7 @@ grided_edit_existing_layout <- function() {
 
   layout <- layout_tables[[chosen_layout_index]]
 
-  gridded_app(
+  gridded_addin(
     starting_layout = layout$layout,
     update_btn_text = "Update selected layout"
   )
@@ -54,7 +54,7 @@ grided_edit_existing_layout <- function() {
 grided_create_new_app <- function() {
   requireNamespace("rstudioapi", quietly = TRUE)
 
-  gridded_app(
+  gridded_addin(
     update_btn_text = "Generate app code",
     on_finish = function(new_layout){
       rstudioapi::documentNew(
@@ -64,7 +64,7 @@ grided_create_new_app <- function() {
     })
 }
 
-gridded_app <- function(
+gridded_addin <- function(
   starting_layout = new_gridlayout(),
   update_btn_text,
   on_finish = NULL,
