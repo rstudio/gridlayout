@@ -1,8 +1,39 @@
+grided_app <- function(
+  starting_layout = new_gridlayout(),
+  on_finish = NULL,
+  finish_button_text = NULL,
+  return_app_obj = FALSE
+) {
+  requireNamespace("miniUI", quietly = TRUE)
+  requireNamespace("shiny", quietly = TRUE)
+
+  app <- shiny::shinyApp(
+    ui = shiny::fluidPage(grided_resources()),
+    server = function(input, output, session) {
+      grided_server_code(
+        input, output, session,
+        starting_layout,
+        on_finish = on_finish,
+        finish_button_text = finish_button_text
+      )
+    }
+  )
+
+  if (return_app_obj) {
+    app
+  } else {
+    # Open gadget in the external viewer
+    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
+    shiny::runGadget(app, viewer = viewer)
+  }
+}
+
+
 grided_server_code <- function(
   input, output, session,
   starting_layout = NULL,
   on_finish = NULL,
-  finish_button_text = "Update App Code"
+  finish_button_text = NULL
 ){
 
   # Lets grided know it should send over initial app state
@@ -18,11 +49,12 @@ grided_server_code <- function(
       )
     )
 
-    session$sendCustomMessage(
-      "finish-button-text",
-      finish_button_text
-    )
+    if (!is.null(finish_button_text)) {
+      # Update the "finish" button to whatever is desired by the user
+      session$sendCustomMessage("finish-button-text", finish_button_text)
+    }
 
+    # Let grided know about the starting elements
     session$sendCustomMessage(
       "add-elements",
       get_elements(starting_layout)
@@ -78,6 +110,8 @@ grided_server_code <- function(
     }
   }), input$update_code)
 }
+
+
 
 # This is all the UI related code that needs to be included for grided to wrap app
 grided_resources <- function(){

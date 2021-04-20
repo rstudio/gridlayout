@@ -40,7 +40,7 @@ grided_edit_existing_layout <- function() {
 
   layout <- layout_tables[[chosen_layout_index]]
 
-  gridded_addin(
+  grided_app(
     starting_layout = layout$layout,
     finish_button_text = "Update selected layout"
   )
@@ -54,7 +54,7 @@ grided_edit_existing_layout <- function() {
 grided_create_new_app <- function() {
   requireNamespace("rstudioapi", quietly = TRUE)
 
-  gridded_addin(
+  grided_app(
     finish_button_text = "Generate app code",
     on_finish = function(new_layout){
       rstudioapi::documentNew(
@@ -64,35 +64,6 @@ grided_create_new_app <- function() {
     })
 }
 
-gridded_addin <- function(
-  starting_layout = new_gridlayout(),
-  on_finish = NULL,
-  finish_button_text,
-  return_app_obj = FALSE
-) {
-  requireNamespace("miniUI", quietly = TRUE)
-  requireNamespace("shiny", quietly = TRUE)
-
-  app <- shiny::shinyApp(
-    ui = shiny::fluidPage(grided_resources()),
-    server = function(input, output, session) {
-      grided_server_code(
-        input, output, session,
-        starting_layout,
-        on_finish = on_finish,
-        finish_button_text = finish_button_text
-      )
-    }
-  )
-
-  if (return_app_obj) {
-    app
-  } else {
-    # Open gadget in the external viewer
-    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
-    shiny::runGadget(app, viewer = viewer)
-  }
-}
 
 
 
