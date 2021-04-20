@@ -1386,6 +1386,9 @@ window.onload = function () {
     utils_shiny_1.send_elements_to_shiny(current_elements());
     utils_shiny_1.send_grid_sizing_to_shiny(grid_container.style);
   });
+  utils_shiny_1.add_shiny_listener("finish-button-text", function (label_text) {
+    document.querySelector("button#update_code").innerHTML = label_text;
+  });
 
   if (app_mode === "ShinyExisting") {
     // If grided is running on an existing app, we need to parse the children and
@@ -1991,7 +1994,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57645" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55956" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

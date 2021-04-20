@@ -132,6 +132,10 @@ window.onload = function () {
     send_grid_sizing_to_shiny(grid_container.style);
   });
 
+  add_shiny_listener( "finish-button-text", function(label_text: string){
+    document.querySelector("button#update_code").innerHTML = label_text;
+  })
+
   if (app_mode === "ShinyExisting") {
     // If grided is running on an existing app, we need to parse the children and
     // add them as elements;

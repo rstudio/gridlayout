@@ -42,7 +42,7 @@ grided_edit_existing_layout <- function() {
 
   gridded_addin(
     starting_layout = layout$layout,
-    update_btn_text = "Update selected layout"
+    finish_button_text = "Update selected layout"
   )
 }
 
@@ -55,7 +55,7 @@ grided_create_new_app <- function() {
   requireNamespace("rstudioapi", quietly = TRUE)
 
   gridded_addin(
-    update_btn_text = "Generate app code",
+    finish_button_text = "Generate app code",
     on_finish = function(new_layout){
       rstudioapi::documentNew(
         text = to_app_template(new_layout)
@@ -66,8 +66,8 @@ grided_create_new_app <- function() {
 
 gridded_addin <- function(
   starting_layout = new_gridlayout(),
-  update_btn_text,
   on_finish = NULL,
+  finish_button_text,
   return_app_obj = FALSE
 ) {
   requireNamespace("miniUI", quietly = TRUE)
@@ -79,7 +79,8 @@ gridded_addin <- function(
       grided_server_code(
         input, output, session,
         starting_layout,
-        on_finish = on_finish
+        on_finish = on_finish,
+        finish_button_text = finish_button_text
       )
     }
   )

@@ -1,7 +1,8 @@
 grided_server_code <- function(
   input, output, session,
   starting_layout = NULL,
-  on_finish = NULL
+  on_finish = NULL,
+  finish_button_text = "Update App Code"
 ){
 
   # Lets grided know it should send over initial app state
@@ -15,6 +16,11 @@ grided_server_code <- function(
         cols = attr(starting_layout, "col_sizes"),
         gap = attr(starting_layout, "gap")
       )
+    )
+
+    session$sendCustomMessage(
+      "finish-button-text",
+      finish_button_text
     )
 
     session$sendCustomMessage(
