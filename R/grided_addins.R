@@ -42,10 +42,8 @@ grided_edit_existing_layout <- function() {
 
   gridded_app(
     starting_layout = layout$layout,
-    update_btn_text = "Update selected layout",
-    on_update = function(new_layout){
-      update_layout_in_file(editor_selection, layout, new_layout)
-    })
+    update_btn_text = "Update selected layout"
+  )
 }
 
 
@@ -62,23 +60,27 @@ grided_create_new_app <- function() {
       rstudioapi::documentNew(
         text = to_app_template(new_layout)
       )
+      shiny::stopApp()
     })
 }
 
-gridded_app <- function(starting_layout = new_gridlayout(),
-                        update_btn_text = "update button",
-                        on_finish = function(new_layout) print(new_layout),
-                        return_app_obj = FALSE) {
+gridded_app <- function(
+  starting_layout = new_gridlayout(),
+  update_btn_text,
+  on_finish = NULL,
+  return_app_obj = FALSE
+) {
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
   app <- shiny::shinyApp(
     ui = shiny::fluidPage(grided_resources()),
     server = function(input, output, session) {
-      grided_server_code(input, output, session, starting_layout, on_finish = function(current_layout) {
-        on_finish(current_layout)
-        shiny::stopApp()
-      })
+      grided_server_code(
+        input, output, session,
+        starting_layout,
+        on_finish = on_finish
+      )
     }
   )
 
