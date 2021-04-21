@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 use_gridlayout_rmd()
 ```
 
-## Main
+# main {.no-header}
 
 ```{gridlayout}
 |      |        |         |
@@ -25,10 +25,10 @@ use_gridlayout_rmd()
 ```
 
 
-## Sidebar
+# Sidebar {.v_center}
 
 Here is some content for the sidebar
 
-## Footer
+# Footer
 
 Anything you want could go in the footer.

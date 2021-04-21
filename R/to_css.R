@@ -255,6 +255,7 @@ use_gridlayout_rmd <- function(
                is_card_styled = is_card_styled,
                ...
                ),
+        utility_css,
         "</style>",
         sep = "\n"
       )
@@ -268,4 +269,32 @@ use_gridlayout_rmd <- function(
     )
   })
 }
+
+utility_css <- "
+.tabbable { height: 100% }
+.tabbable > .nav { height: 42px; }
+.tabbable .tab-content { height: calc(100% - 42px); }
+.tabbable .tab-pane { height: 100%; }
+
+.section.no-header > h1:first-child {
+  display: none;
+}
+
+.section.v_start,
+.section.v_center,
+.section.v_end,
+.section.h_start,
+.section.h_center,
+.section.h_end {
+  display: grid;
+}
+
+.section.v_start  { align-items: start; }
+.section.v_center { align-items: center; }
+.section.v_end    { align-items: end; }
+
+.section.h_start  { justify-items: start; }
+.section.h_center { justify-items: center; }
+.section.h_end    { justify-items: end; }
+"
 
