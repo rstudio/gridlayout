@@ -124,13 +124,21 @@ to_css.gridlayout <- function(
     c()
   }
 
+  card_style_list <- c(
+    "box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
+    "border-radius" = "0.5rem",
+    additional_card_styles
+  )
+
   # These will apply to all grid_panel items, which will be almost all
   panel_styles <- build_css_rule(
-    selector = paste0(container_query, if(is_card_styled == "all") " > *" else " .grid_panel"),
+    selector = paste0(container_query, if (is_card_styled == "all") " > *" else " .grid_panel"),
     prop_list = c(
       "box-sizing" = "border-box",
       "padding" = "var(--card-padding, 0.8rem)",
       "overflow" = "hidden",
+      # Put shadows on all elements if we're doing all-card-styles
+      if (is_card_styled == "all") card_style_list,
       debug_style_list
     )
   )
@@ -138,11 +146,7 @@ to_css.gridlayout <- function(
   # These styles will only apply when the card-styled option is set
   card_styles <- build_css_rule(
     selector = paste0(container_query, " .grid_panel.gridlayout-card"),
-    prop_list = c(
-      "box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
-      "border-radius" = "0.5rem",
-      additional_card_styles
-    )
+    prop_list = card_style_list
   )
 
   all_elements_styles <- build_css_rule(
