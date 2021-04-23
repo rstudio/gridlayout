@@ -27,45 +27,6 @@ test_that("Can change body target", {
   )
 })
 
-test_that("Card styling can be disabled", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
-    |      |120px   |1fr    |1fr    |
-    |:-----|:-------|:------|:------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
-  )
-
-  expect_false(
-    str_detect(
-      to_css(grid_obj, is_card_styled = "none"),
-      "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);", fixed = TRUE
-    )
-  )
-  expect_false(
-    str_detect(
-      to_css(grid_obj, is_card_styled = "none"),
-      "border-radius: 0.5rem;",
-      fixed = TRUE
-    )
-  )
-
-  expect_true(
-    str_detect(
-      to_css(grid_obj, is_card_styled = ""),
-      "box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);",
-      fixed = TRUE
-    )
-  )
-  expect_true(
-    str_detect(
-      to_css(grid_obj, is_card_styled = TRUE),
-      "border-radius: 0.5rem;",
-      fixed = TRUE
-    )
-  )
-})
 
 test_that("Debug mode adds outline to all elements", {
   grid_obj <- md_to_gridlayout(
