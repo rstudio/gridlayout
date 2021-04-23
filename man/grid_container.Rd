@@ -30,10 +30,12 @@ value of \code{"100\%"} will enable the the nested grid to take up the full
 vertical space provided by its parent container. Any other css size unit is
 also valid such as \code{"400px"} or \code{"100\%"}.}
 
-\item{use_bslib_card_styles}{Should the elemeents within the grid be given
-the current bootstrap theme's card styling? This will only apply to
-elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
-explitely for those elements.}
+\item{use_bslib_card_styles}{Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with \link{\code{grid_panel()}}.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as \code{FALSE}
+and set styles manually on each panel.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class

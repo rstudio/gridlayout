@@ -139,7 +139,6 @@ to_css.gridlayout <- function(
   card_styles <- build_css_rule(
     selector = paste0(container_query, " .grid_panel.gridlayout-card"),
     prop_list = c(
-      "padding" = "var(--card-padding, 0.8rem)",
       "box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
       "border-radius" = "0.5rem",
       additional_card_styles
@@ -151,10 +150,37 @@ to_css.gridlayout <- function(
     element_styles
   )
 
+  panel_title_styles <- build_css_rule(
+    ".grid_panel .panel-title",
+    c(
+      "margin" = "0",
+      "height" = "35px",
+      "border-bottom" = "1px solid #dae0e5"
+    )
+  )
+
+  panel_content_styles <- build_css_rule(
+    paste(container_query, ".panel-content"),
+    c(
+      "height" = "100%",
+      "display" = "grid"
+    )
+  )
+  # Need to adjust for the the title in height for content if it exists
+  content_with_title_styles <- build_css_rule(
+    paste(container_query, ".grid_panel > .panel-content"),
+    c(
+      "height" = "calc(100% - 35px)"
+    )
+  )
+
   paste(
     main_container_styles,
     all_elements_styles,
     panel_styles,
+    panel_title_styles,
+    panel_content_styles,
+    content_with_title_styles,
     card_styles,
     element_grid_areas,
     sep = "\n\n"

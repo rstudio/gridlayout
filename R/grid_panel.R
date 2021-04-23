@@ -90,36 +90,90 @@
 #'
 grid_panel <- function(
   ...,
-  v_align, h_align,
+  v_align = "stretch", h_align = "stretch",
+  title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE
 ) {
-  panel_styles <- c(
-    display = "grid",
-    if (!missing(h_align)) {
-      validate_alignment(h_align)
-      c("justify-content" = h_align)
-    },
-    if (!missing(v_align)) {
-      validate_alignment(v_align)
-      c("align-content" = v_align)
-    }
-  )
 
-  card_styling_class <- if (use_bslib_card_styles) {
+  panel_styles <- make_alignment_styles(h_align = h_align, v_align = v_align)
+  card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
+
+  if (!is.null(title)) {
+    shiny::div(
+      class = paste("grid_panel", card_styling_class),
+      h3(title, class = "panel-title"),
+      shiny::div(..., style = panel_styles, class = "panel-content")
+    )
+  } else {
+    shiny::div(
+      class = paste("grid_panel panel-content", card_styling_class),
+      style = panel_styles,
+      ...
+    )
+  }
+}
+
+make_card_classes <- function(use_card_styles, use_bslib_card_styles) {
+  if (use_bslib_card_styles) {
     "card"
   } else if (use_card_styles) {
     "gridlayout-card"
   } else {
     ""
   }
+}
 
-  shiny::div(
-    style = build_css_rule("inline", panel_styles),
-    class = paste("grid_panel", card_styling_class),
-    # This is used by layout wrapper functions to check if the element being
-    # wrapped is already a grid-panel and thus can be left alone
-    is_grid_panel = TRUE,
+make_alignment_styles <- function(v_align, h_align) {
+  build_css_rule(
+    "inline",
+    c(
+      if (!missing(h_align)) {
+        validate_alignment(h_align)
+        c("justify-content" = h_align)
+      },
+      if (!missing(v_align)) {
+        validate_alignment(v_align)
+        c("align-content" = v_align)
+      }
+    )
+  )
+}
+
+
+#' Make header panel
+#'
+#' This is just a helper function that wraps your content in a vertically
+#' centered header (`h2`) tag.
+#'
+#' @param title_content Whatever you want the title to say. If you want to
+#'   include things other than text, like an image, you can pass a tag-list or
+#'   span tag.
+#' @inheritDotParams grid_panel
+#'
+#' @examples
+#'
+#' # Typically you'll just pass a character string to the function
+#' title_panel("This is my header")
+#'
+#' # You can adjust the horizontal alignment of your header with h_align
+#' title_panel("I'm on the right side!", h_align = "end")
+#'
+#' # If you want more than just text in your title, just wrap content in a span tag
+#' requireNamespace("fontawesome", quietly = TRUE)
+#' title_panel(
+#'   htmltools::span(
+#'     fontawesome::fa("r-project", fill = "steelblue"),
+#'     "This is my header"
+#'   )
+#' )
+#'
+#' @export
+title_panel <- function(title_content,
+                        ...) {
+  grid_panel(
+    h2(title_content, style = "margin: 0;"),
+    v_align = "center",
     ...
   )
 }

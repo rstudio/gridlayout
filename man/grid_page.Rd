@@ -16,10 +16,12 @@ header (as defined in \code{layout}) would be set with \code{header = h2("App Ti
 definition are added to the page after the container. This can be used to
 do things like things to the \code{head} or \code{meta} sections of the page.}
 
-\item{use_bslib_card_styles}{Should the elemeents within the grid be given
-the current bootstrap theme's card styling? This will only apply to
-elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
-explitely for those elements.}
+\item{use_bslib_card_styles}{Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with \link{\code{grid_panel()}}.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as \code{FALSE}
+and set styles manually on each panel.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}

@@ -5,10 +5,12 @@
 #'
 #' @param id ID unique to this container (note that the HTML will be prefixed
 #'   with `grid-` to avoid namespace clashes)
-#' @param use_bslib_card_styles Should the elemeents within the grid be given
-#'   the current bootstrap theme's card styling? This will only apply to
-#'   elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
-#'   explitely for those elements.
+#' @param use_bslib_card_styles Should the elements within the grid be given the
+#'   current bootstrap theme's card styling? Note that this setting will
+#'   override card styling for elements built with \link{\code{grid_panel()}}.
+#'   This is so you don't have to manually change styles for each card. If you
+#'   want a mixture of card styles, then you'll need to leave this as `FALSE`
+#'   and set styles manually on each panel.
 #' @inheritParams use_gridlayout_shiny
 #' @inheritParams to_css
 #' @inheritParams grid_panel
@@ -107,10 +109,24 @@ grid_container <- function(
       prefixed_id <- paste0(id_prefix, el_id)
       el_class <- el$attribs$class
 
-      if(!is.null(el$attribs$is_grid_panel)){
+      if(el_has_class(el, "grid_panel")){
         # If element is already wrapped in a grid_panel, we just need to update
         # the id
         el$attribs$id <- prefixed_id
+
+
+        # Preference for bootstrap card styling at page level overwrites the
+        # card level This is so if the user just wants bootstrap styles they
+        # dont need to manually add them to all their grid_panel() calls.
+        if (use_bslib_card_styles && !el_has_class(el, "card")) {
+          # Remove the "gridlayout-card" class if it exists
+          class_attr_locs <- names(el$attribs) == "class"
+          el$attribs[class_attr_locs] <- str_remove_all(el$attribs[class_attr_locs],  "gridlayout-card")
+
+          # Add just plain "card" class
+          el$attribs$class <- paste(el$attribs$class, "card")
+        }
+
         el
       } else {
         grid_panel(id = prefixed_id, el, use_bslib_card_styles = use_bslib_card_styles)
@@ -133,4 +149,14 @@ grid_container <- function(
   )
 }
 
+el_has_class <- function(el, class_name) {
+  # It's possible to have multiple "class" attributes if they were set at
+  # different times. Here we just collapse all of them into one big character
+  # string we can seach through
+  all_classes <- paste(el$attribs[names(el$attribs) == "class"], collapse = " ")
+
+  # Look for the class name isolated from other classes. E.g if searching for
+  # class of  "card"  this wont get incorectly triggered by "panel-card"
+  str_detect(all_classes, paste0("(\\s|^)", class_name, "(\\s|$)"))
+}
 
