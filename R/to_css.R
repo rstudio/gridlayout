@@ -113,16 +113,10 @@ to_css.gridlayout <- function(
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
+      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height),
+      "--card-padding" = "0.8rem"
     )
   )
-
-  card_style_list <- if(is_card_styled == "none") {
-    c()
-  } else {
-    c("box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
-      "border-radius" = "0.5rem")
-  }
 
   debug_style_list <- if(debug_mode){
     c("outline" = "1px solid black")
@@ -130,28 +124,37 @@ to_css.gridlayout <- function(
     c()
   }
 
-  card_styles <- build_css_rule(
+  # These will apply to all grid_panel items, which will be almost all
+  panel_styles <- build_css_rule(
     selector = paste0(container_query, if(is_card_styled == "all") " > *" else " .grid_panel"),
     prop_list = c(
       "box-sizing" = "border-box",
-      "padding" = "0.8rem",
+      "padding" = "var(--card-padding, 0.8rem)",
       "overflow" = "hidden",
-      card_style_list,
-      debug_style_list,
+      debug_style_list
+    )
+  )
+
+  # These styles will only apply when the card-styled option is set
+  card_styles <- build_css_rule(
+    selector = paste0(container_query, " .grid_panel.gridlayout-card"),
+    prop_list = c(
+      "padding" = "var(--card-padding, 0.8rem)",
+      "box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
+      "border-radius" = "0.5rem",
       additional_card_styles
     )
   )
 
-  element_styles <- build_css_rule(
+  all_elements_styles <- build_css_rule(
     selector = paste0(container_query," > *"),
     element_styles
   )
 
-
-
   paste(
     main_container_styles,
-    element_styles,
+    all_elements_styles,
+    panel_styles,
     card_styles,
     element_grid_areas,
     sep = "\n\n"

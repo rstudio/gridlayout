@@ -19,7 +19,8 @@ doesn't matter for single character declaration.)}
 }
 \value{
 A concatenated string of property values to be used inside a css
-selector.
+selector. If the \code{prop_list} is empty, an empty string (\code{""}) is returned
+to avoid placing empty css rules on the webpage.
 }
 \description{
 Build css properties named or unnamed list of property values

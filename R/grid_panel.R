@@ -1,6 +1,11 @@
 #' Panel for grid page
 #'
 #' @param ... Elements to include within the panel
+#' @param use_card_style Should the element contained in panel be made to look
+#'   like an enclosed card?
+#' @param use_bslib_card_styles Should the card styles from bslib be used
+#'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
+#'   will override `use_card_style`.
 #' @param v_align,h_align Vertical and Horizontal alignment of content in panel.
 #'   Options include `"center", "start", "end", "stretch"`. These are a direct
 #'   mapping to the the [css-spec for
@@ -83,7 +88,12 @@
 #' )
 #' }
 #'
-grid_panel <- function(..., v_align, h_align) {
+grid_panel <- function(
+  ...,
+  v_align, h_align,
+  use_card_styles = TRUE,
+  use_bslib_card_styles = FALSE
+) {
   panel_styles <- c(
     display = "grid",
     if (!missing(h_align)) {
@@ -95,9 +105,21 @@ grid_panel <- function(..., v_align, h_align) {
       c("align-content" = v_align)
     }
   )
+
+  card_styling_class <- if (use_bslib_card_styles) {
+    "card"
+  } else if (use_card_styles) {
+    "gridlayout-card"
+  } else {
+    ""
+  }
+
   shiny::div(
     style = build_css_rule("inline", panel_styles),
-    class = "grid_panel",
+    class = paste("grid_panel", card_styling_class),
+    # This is used by layout wrapper functions to check if the element being
+    # wrapped is already a grid-panel and thus can be left alone
+    is_grid_panel = TRUE,
     ...
   )
 }
