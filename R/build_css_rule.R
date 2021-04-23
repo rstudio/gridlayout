@@ -10,7 +10,8 @@
 #'   doesn't matter for single character declaration.)
 #'
 #' @return A concatenated string of property values to be used inside a css
-#'   selector.
+#'   selector. If the `prop_list` is empty, an empty string (`""`) is returned
+#'   to avoid placing empty css rules on the webpage.
 #'
 #' @export
 #' @examples
@@ -23,6 +24,9 @@
 #' cat(build_css_rule("#myDiv", custom_styles))
 #'
 build_css_rule <- function(selector, prop_list){
+  # Empty css rules are best avoided
+  if (length(prop_list) == 0) return("")
+
   prop_names <- names(prop_list)
   if(is.null(prop_names)) prop_names <- rep_len("", length(prop_list))
 
