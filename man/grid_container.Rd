@@ -8,12 +8,13 @@ grid_container(
   id = "grid-container",
   layout,
   elements,
-  container_height = "100\%"
+  container_height = "100\%",
+  use_bslib_card_styles = FALSE
 )
 }
 \arguments{
-\item{id}{ID unique to this container (note that the HTML will be prefixed with
-\verb{grid-} to avoid namespace clashes)}
+\item{id}{ID unique to this container (note that the HTML will be prefixed
+with \verb{grid-} to avoid namespace clashes)}
 
 \item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
@@ -28,9 +29,15 @@ vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
 value of \code{"100\%"} will enable the the nested grid to take up the full
 vertical space provided by its parent container. Any other css size unit is
 also valid such as \code{"400px"} or \code{"100\%"}.}
+
+\item{use_bslib_card_styles}{Should the elemeents within the grid be given
+the current bootstrap theme's card styling? This will only apply to
+elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
+explitely for those elements.}
 }
 \value{
-A taglist with grid elements wrapped inside a container div of class \code{id}.
+A taglist with grid elements wrapped inside a container div of class
+\code{id}.
 }
 \description{
 Builds a gridlayout within a div of specified id. Not typically called

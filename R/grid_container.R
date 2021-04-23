@@ -3,14 +3,20 @@
 #' Builds a gridlayout within a div of specified id. Not typically called
 #' directly but can be used to create nested grids
 #'
-#' @param id ID unique to this container (note that the HTML will be prefixed with
-#'   `grid-` to avoid namespace clashes)
+#' @param id ID unique to this container (note that the HTML will be prefixed
+#'   with `grid-` to avoid namespace clashes)
+#' @param use_bslib_card_styles Should the elemeents within the grid be given
+#'   the current bootstrap theme's card styling? This will only apply to
+#'   elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
+#'   explitely for those elements.
 #' @inheritParams use_gridlayout_shiny
 #' @inheritParams to_css
+#' @inheritParams grid_panel
 #' @param elements Named list of the UI definitions that will be used to fill
 #'   all cells. Names must match those provided in `layout`.
 #'
-#' @return A taglist with grid elements wrapped inside a container div of class `id`.
+#' @return A taglist with grid elements wrapped inside a container div of class
+#'   `id`.
 #' @export
 #'
 #' @examples
@@ -51,7 +57,13 @@
 #' )
 #' }
 #'
-grid_container <- function(id = "grid-container", layout, elements, container_height = "100%"){
+grid_container <- function(
+  id = "grid-container",
+  layout,
+  elements,
+  container_height = "100%",
+  use_bslib_card_styles = FALSE
+){
 
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
@@ -94,13 +106,14 @@ grid_container <- function(id = "grid-container", layout, elements, container_he
     function(el_id, el){
       prefixed_id <- paste0(id_prefix, el_id)
       el_class <- el$attribs$class
-      if(!is.null(el_class) && str_detect("grid_panel", el_class)){
+
+      if(!is.null(el$attribs$is_grid_panel)){
         # If element is already wrapped in a grid_panel, we just need to update
         # the id
         el$attribs$id <- prefixed_id
         el
       } else {
-        grid_panel(id = prefixed_id, el)
+        grid_panel(id = prefixed_id, el, use_bslib_card_styles = use_bslib_card_styles)
       }
     }
   )

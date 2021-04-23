@@ -4,7 +4,7 @@
 \alias{grid_page}
 \title{Setup gridlayout UI for shiny app}
 \usage{
-grid_page(layout, ..., theme = NULL)
+grid_page(layout, ..., use_bslib_card_styles = FALSE, theme = NULL)
 }
 \arguments{
 \item{layout}{Either a markdown table representation (see
@@ -15,6 +15,11 @@ desired layout for your Shiny app.}
 header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}. Any arguments that don't match the names used in the layout
 definition are added to the page after the container. This can be used to
 do things like things to the \code{head} or \code{meta} sections of the page.}
+
+\item{use_bslib_card_styles}{Should the elemeents within the grid be given
+the current bootstrap theme's card styling? This will only apply to
+elements not wrapped in \link{\code{grid_panel()}}. Card styles must be set
+explitely for those elements.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}

@@ -1,6 +1,7 @@
 #' Setup gridlayout UI for shiny app
 #'
 #' @inheritParams use_gridlayout_shiny
+#' @inheritParams grid_container
 #' @param ... Contents of each grid element. For instance the contents of the
 #'   header (as defined in `layout`) would be set with `header = h2("App
 #'   Title")`. Any arguments that don't match the names used in the layout
@@ -48,7 +49,7 @@
 #' )
 #'
 #' }
-grid_page <- function(layout, ..., theme = NULL){
+grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
@@ -70,7 +71,8 @@ grid_page <- function(layout, ..., theme = NULL){
     id = "grid_page",
     layout = layout,
     elements = grid_element_args,
-    container_height = "viewport"
+    container_height = "viewport",
+    use_bslib_card_styles = use_bslib_card_styles
   )
 
   shiny::fluidPage(
