@@ -103,8 +103,6 @@ to_css.gridlayout <- function(
     collapse = "\n"
   )
 
-  collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
-
   main_container_styles <- build_css_rule(
     selector = container_query,
     prop_list = c(
@@ -114,7 +112,8 @@ to_css.gridlayout <- function(
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
       "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height),
-      "--card-padding" = "0.8rem"
+      "--card-padding" = "0.8rem",
+      "--card-title-height" = "calc(35px + var(--card-padding))"
     )
   )
 
@@ -154,15 +153,6 @@ to_css.gridlayout <- function(
     element_styles
   )
 
-  panel_title_styles <- build_css_rule(
-    ".grid_panel .panel-title",
-    c(
-      "margin" = "0",
-      "height" = "35px",
-      "border-bottom" = "1px solid #dae0e5"
-    )
-  )
-
   panel_content_styles <- build_css_rule(
     paste(container_query, ".panel-content"),
     c(
@@ -170,27 +160,110 @@ to_css.gridlayout <- function(
       "display" = "grid"
     )
   )
+
   # Need to adjust for the the title in height for content if it exists
   content_with_title_styles <- build_css_rule(
     paste(container_query, ".grid_panel > .panel-content"),
     c(
-      "height" = "calc(100% - 35px)"
+      "height" = "calc(100% - var(--card-title-height))",
+      "padding-top" = "var(--card-padding)"
     )
+  )
+
+  layout_rules <- generate_layout_rules(
+    layout = layout,
+    container_query = container_query,
+    container_height = container_height,
+    selector_prefix = selector_prefix
+  )
+
+  paste(
+    layout_rules,
+    all_elements_styles,
+    panel_styles,
+    panel_content_styles,
+    content_with_title_styles,
+    card_styles,
+    grid_panel_styles,
+    sep = "\n\n"
+  )
+}
+
+generate_layout_rules <- function(layout, container_query, container_height, selector_prefix) {
+
+  main_container_styles <- build_css_rule(
+    selector = container_query,
+    prop_list = c(
+      "display" = "grid",
+      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
+      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
+      "grid-gap" = attr(layout, 'gap'),
+      "padding" = attr(layout, 'gap'),
+      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height),
+      # if (container_height != "auto") {
+      # },
+      "--card-padding" = "0.8rem",
+      "--card-title-height" = "calc(35px + var(--card-padding))"
+    )
+  )
+
+  # Build the mapping for each element to its grid area.
+  element_grid_areas <- paste(
+    sapply(
+      layout,
+      function(el){
+        build_css_rule(
+          selector = paste0(selector_prefix, el$id),
+          prop_list = c(
+            "grid-column-start" = el$start_col,
+            "grid-column-end" = el$end_col + 1,
+            "grid-row-start" = el$start_row,
+            "grid-row-end" = el$end_row + 1)
+        )
+      }
+    ),
+    collapse = "\n"
   )
 
   paste(
     main_container_styles,
-    all_elements_styles,
-    panel_styles,
-    panel_title_styles,
-    panel_content_styles,
-    content_with_title_styles,
-    card_styles,
     element_grid_areas,
     sep = "\n\n"
   )
 }
 
+
+grid_panel_styles <- "
+.grid_panel .panel-title {
+  height: var(--card-title-height);
+  width: calc(100% + 2*var(--card-padding));
+  padding: calc(0.5 * var(--card-padding)) var(--card-padding);
+  margin-left: calc(-1 * var(--card-padding));
+  margin-top: calc(-1 * var(--card-padding));
+  border-bottom: 1px solid #dae0e5;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.grid_panel .panel-title > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+.grid_panel .panel-title > svg {
+  outline: 1px solid red;
+}
+
+.grid_panel.collapsed  {
+  height: var(--card-title-height);
+  overflow: hidden;
+}
+
+.grid_panel.collapsed .panel-content {
+  display: none;
+}
+"
 
 
 #' Convert layout to css for Shiny
