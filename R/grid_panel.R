@@ -6,6 +6,9 @@
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
 #'   will override `use_card_style`.
+#' @param collapsable Should the card be able to be collapsed? Only really
+#'   functional when panel takes up entire width of page. Requires a title so
+#'   the user knows what panel is in collapsed state.
 #' @param v_align,h_align Vertical and Horizontal alignment of content in panel.
 #'   Options include `"center", "start", "end", "stretch"`. These are a direct
 #'   mapping to the the [css-spec for
@@ -93,23 +96,32 @@ grid_panel <- function(
   v_align = "stretch", h_align = "stretch",
   title = NULL,
   use_card_styles = TRUE,
-  use_bslib_card_styles = FALSE
+  use_bslib_card_styles = FALSE,
+  collapsable = FALSE
 ) {
 
   panel_styles <- make_alignment_styles(h_align = h_align, v_align = v_align)
   card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
 
-  if (!is.null(title)) {
-    shiny::div(
-      class = paste("grid_panel", card_styling_class),
-      h3(title, class = "panel-title"),
-      shiny::div(..., style = panel_styles, class = "panel-content")
-    )
-  } else {
+  no_title <- is.null(title)
+  if (collapsable && no_title) stop("Collapsable cards need a title")
+
+  if (no_title) {
     shiny::div(
       class = paste("grid_panel panel-content", card_styling_class),
       style = panel_styles,
       ...
+    )
+  } else {
+    shiny::div(
+      class = paste("grid_panel", card_styling_class),
+      shiny::div(
+        class = "panel-title",
+        h3(title),
+        if (collapsable) make_collapser_icon(),
+        style = if (collapsable) "justify-content: space-between;"
+      ),
+      shiny::div(..., style = panel_styles, class = "panel-content")
     )
   }
 }
@@ -140,6 +152,23 @@ make_alignment_styles <- function(v_align, h_align) {
   )
 }
 
+make_collapser_icon <- function(parent_id = "") {
+  shiny::span(
+    fontawesome::fa("chevron-up"),
+    "onclick" = '
+    var card = this.parentElement.parentElement;
+    var card_content = card.querySelector(".panel-content");
+    var card_classes = card.classList;
+    if (card_classes.contains("collapsed")) {
+      card_classes.remove("collapsed");
+      card_content.style.display = "unset";
+    } else {
+      card_classes.add("collapsed");
+      card_content.style.display = "none";
+    }
+    '
+  )
+}
 
 #' Make header panel
 #'
