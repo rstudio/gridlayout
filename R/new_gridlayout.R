@@ -140,6 +140,23 @@ layouts_are_equal <- function(layout_a, layout_b){
   identical(to_md(layout_a), to_md(layout_b))
 }
 
+layouts_have_same_elements <- function(layout_a, layout_b){
+  a_element_ids <- extract_chr(layout_a, "id")
+  b_element_ids <- extract_chr(layout_b, "id")
+
+  if (setequal(a_element_ids, b_element_ids)) return(TRUE)
+
+  mismatched <- c(
+    setdiff(a_element_ids, b_element_ids),
+    setdiff(b_element_ids, a_element_ids)
+  )
+  stop(
+    "Layouts have mismatched elements: ",
+    paste(mismatched, collapse = ", ")
+  )
+}
+
+
 #' @export
 print.gridlayout <- function(x, ...){
 
@@ -154,5 +171,24 @@ print.gridlayout <- function(x, ...){
     "\n",
     to_table(x, sizes_decorator = emph)
   )
+
+  alternate_layouts <- attr(x, "alternates")
+  if (notNull(alternate_layouts)) {
+    cat("\n\n", emph("Alternative layouts:"), "\n", sep = "")
+    for (alternate in alternate_layouts) {
+      cat("When width of page")
+
+      if (is.null(alternate$upper)) {
+        cat(" <", emph(alternate$lower))
+      } else if (is.null(alternate$lower)) {
+        cat(" >", emph(alternate$upper))
+      } else {
+        cat(" between", emph(alternate$lower), "and", alternate$upper)
+      }
+
+      cat("\n")
+      print(alternate$layout)
+    }
+  }
 }
 
