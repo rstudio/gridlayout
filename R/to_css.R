@@ -288,7 +288,7 @@ use_gridlayout_rmd <- function(
                is_card_styled = is_card_styled,
                ...
                ),
-        utility_css,
+        rmd_utility_css,
         "</style>",
         sep = "\n"
       )
@@ -303,7 +303,8 @@ use_gridlayout_rmd <- function(
   })
 }
 
-utility_css <- "
+# Makes tab panels work properly and gives utility classes for alignment
+rmd_utility_css <- "
 .tabbable { height: 100% }
 .tabbable > .nav { height: 42px; }
 .tabbable .tab-content { height: calc(100% - 42px); }
@@ -330,4 +331,18 @@ utility_css <- "
 .section.h_center { justify-items: center; }
 .section.h_end    { justify-items: end; }
 "
+
+make_card_styles <- function(bslib_styles = FALSE) {
+  # Taken from here
+  # https://github.com/rstudio/bslib/blob/master/inst/lib/bs/scss/_card.scss The
+  # reason this is being generated here instead of simply applying the card
+  # class is that we want to be able to put these styles inline, which is not
+  # fully possible without bslib present.
+
+
+  bs_get_variables(
+    bs_theme(),
+    c("card-border-width", "card-border-color")
+  )
+}
 
