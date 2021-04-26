@@ -10,7 +10,8 @@ grid_panel(
   h_align = "stretch",
   title = NULL,
   use_card_styles = TRUE,
-  use_bslib_card_styles = FALSE
+  use_bslib_card_styles = FALSE,
+  collapsable = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,10 @@ mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justif
 \item{use_bslib_card_styles}{Should the card styles from bslib be used
 instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
 will override \code{use_card_style}.}
+
+\item{collapsable}{Should the card be able to be collapsed? Only really
+functional when panel takes up entire width of page. Requires a title so
+the user knows what panel is in collapsed state.}
 
 \item{use_card_style}{Should the element contained in panel be made to look
 like an enclosed card?}

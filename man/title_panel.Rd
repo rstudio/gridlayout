@@ -17,6 +17,9 @@ span tag.}
     \item{\code{use_bslib_card_styles}}{Should the card styles from bslib be used
 instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
 will override \code{use_card_style}.}
+    \item{\code{collapsable}}{Should the card be able to be collapsed? Only really
+functional when panel takes up entire width of page. Requires a title so
+the user knows what panel is in collapsed state.}
     \item{\code{v_align}}{Vertical and Horizontal alignment of content in panel.
 Options include \verb{"center", "start", "end", "stretch"}. These are a direct
 mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
