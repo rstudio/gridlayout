@@ -48,6 +48,9 @@ str_extract <- function(text, pattern){
 `%+%` <- function (lhs, rhs) paste0(lhs, rhs)
 
 
+collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
+
+
 # extract from a list of lists to whatever level is desired
 extract <- function(x, ...) {
   for (key in list(...)) {
@@ -98,6 +101,10 @@ is_atomic_val <- function(x){
   is.atomic(x) & (length(x) == 1)
 }
 
+notNull <- function(x) {
+  !is.null(x)
+}
+
 # Taken from the shiny source
 validCssUnit <- function(x)
 {
@@ -116,6 +123,21 @@ validCssUnit <- function(x)
     x <- paste(x, "px", sep = "")
   }
   x
+}
+
+as_pixel_value <- function(val) {
+
+  if (is.numeric(val) || str_detect(val, "^\\d+$")) {
+    return(paste0(val, "px"))
+  }
+
+  val <- str_trim(as.character(val), side = "both")
+
+  if (!str_detect(val, "^\\d+px$")) {
+    stop('Pixel value needed (number or "<num>px"), but "', val, '" provided')
+  }
+
+  val
 }
 
 is_installed <- function(package, version = NULL) {
