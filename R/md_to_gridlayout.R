@@ -85,17 +85,6 @@ md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE){
 }
 
 
-# Function to allow layout being defined with markdown or with standard object
-coerce_to_layout <- function(layout_def){
-  if(inherits(layout_def, "character")){
-    # If we were passed a string directly then convert to a grid layout before
-    # proceeding
-    layout_def <- md_to_gridlayout(layout_def)
-  } else if(!inherits(layout_def, "gridlayout")){
-    stop("Passed layout must either be a markdown table or a gridlayout object.")
-  }
-  layout_def
-}
 
 
 
