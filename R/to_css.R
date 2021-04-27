@@ -103,15 +103,45 @@ to_css.gridlayout <- function(
     selector_prefix = selector_prefix
   )
 
+
+  alternative_layout_queries <- ""
+  if (notNull(attr(layout, "alternates"))) {
+
+    alternative_layout_queries <- paste(
+      lapply(
+        attr(layout, "alternates"),
+        function(alt_layout) {
+          generate_layout_rules(
+            layout = alt_layout$layout,
+            container_query = container_query,
+            container_height = container_height,
+            selector_prefix = selector_prefix,
+            bounds = alt_layout$bounds
+          )
+        }
+      ),
+      collapse = "\n\n"
+    )
+  }
+
+
   paste(
     layout_rules,
+    alternative_layout_queries,
     accessory_css,
     all_elements_styles,
     sep = "\n\n"
   )
 }
 
-generate_layout_rules <- function(layout, container_query, container_height, selector_prefix) {
+
+generate_layout_rules <- function(
+  layout,
+  container_query,
+  container_height,
+  selector_prefix,
+  bounds = NULL
+){
 
   main_container_styles <- build_css_rule(
     selector = container_query,
@@ -121,11 +151,7 @@ generate_layout_rules <- function(layout, container_query, container_height, sel
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height),
-      # if (container_height != "auto") {
-      # },
-      "--card-padding" = "0.8rem",
-      "--card-title-height" = "calc(35px + var(--card-padding))"
+      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
     )
   )
 
@@ -146,9 +172,26 @@ generate_layout_rules <- function(layout, container_query, container_height, sel
     ),
     collapse = "\n"
   )
+
+  media_query_open <- ""
+  media_query_close <- ""
+  if (notNull(bounds)) {
+    media_query_open <- paste0(
+      "@media ",
+      if (notNull(bounds$lower)) paste0("(max-width: ", bounds$lower,")"),
+      if (notNull(bounds$upper) && notNull(bounds$lower)) " and ",
+      if (notNull(bounds$upper)) paste0("(min-width:", bounds$upper, ")"),
+      " {"
+    )
+
+    media_query_close <- "}"
+  }
+
   paste(
+    media_query_open,
     main_container_styles,
     element_grid_areas,
+    media_query_close,
     sep = "\n\n"
   )
 }
