@@ -176,11 +176,12 @@ generate_layout_rules <- function(
   media_query_open <- ""
   media_query_close <- ""
   if (notNull(bounds)) {
+    browser()
     media_query_open <- paste0(
       "@media ",
-      if (notNull(bounds$lower)) paste0("(max-width: ", bounds$lower,")"),
+      if (notNull(bounds$lower)) paste0("(min-width: ", bounds$lower,")"),
       if (notNull(bounds$upper) && notNull(bounds$lower)) " and ",
-      if (notNull(bounds$upper)) paste0("(min-width:", bounds$upper, ")"),
+      if (notNull(bounds$upper)) paste0("(max-width:", bounds$upper, ")"),
       " {"
     )
 

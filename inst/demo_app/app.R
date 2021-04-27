@@ -21,7 +21,7 @@ my_layout <- add_alternate_layout(
 |80px |header  |
 |auto |sidebar |
 |400px |plot    |",
-lower_bound_width = 600
+upper_bound_width = 600
 )
 
 
