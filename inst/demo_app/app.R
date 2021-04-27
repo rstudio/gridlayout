@@ -3,12 +3,28 @@
 library(gridlayout)
 library(shiny)
 requireNamespace("bslib", quietly = TRUE)
-my_layout <- "
+
+my_layout <- md_to_gridlayout("
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
 |80px  |header  |header |
-|1fr   |sidebar |plot   |"
+|1fr   |sidebar |plot   |")
+
+
+my_layout <- add_alternate_layout(
+  layout = my_layout,
+  alternate_layout = "
+|     |        |
+|-----|--------|
+|2rem |1fr     |
+|80px |header  |
+|auto |sidebar |
+|400px |plot    |",
+lower_bound_width = 600
+)
+
+
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
@@ -20,6 +36,7 @@ app <- shinyApp(
     sidebar = grid_panel(
       title = "Settings",
       v_align = "center",
+      collapsable = TRUE,
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
     plot = plotOutput("distPlot", height = "100%")
