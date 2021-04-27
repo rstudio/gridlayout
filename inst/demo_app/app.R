@@ -15,13 +15,13 @@ my_layout <- md_to_gridlayout("
 my_layout <- add_alternate_layout(
   layout = my_layout,
   alternate_layout = "
-|     |        |
-|-----|--------|
-|2rem |1fr     |
-|80px |header  |
-|auto |sidebar |
-|400px |plot    |",
-upper_bound_width = 600
+  |----- |--------|
+  |2rem  |1fr     |
+  |80px  |header  |
+  |auto  |sidebar |
+  |400px |plot    |",
+  upper_bound_width = 600,
+  container_height = "auto"
 )
 
 

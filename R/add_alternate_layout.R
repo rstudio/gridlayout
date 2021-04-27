@@ -15,18 +15,27 @@ add_alternate_layout <- function(layout, ...) {
 #'   layout.
 #' @param upper_bound_width Width in pixels below which this layout is used
 #' @param lower_bound_width Width in pixels above which this layout is used
+#' @param container_height How tall the layout should be. If left as `NULL` this
+#'   will simply inherit the main layout's height. Often this should be set to
+#'   `"auto"` to allow mobile user's to scroll. Beware though, you will want to
+#'   absolutely size any plot outputs in these cases.
 #'
 #' @export
 add_alternate_layout.gridlayout <- function(
   layout,
   alternate_layout,
   lower_bound_width = NULL,
-  upper_bound_width = NULL
+  upper_bound_width = NULL,
+  container_height = NULL
 ) {
   alternate <- list(
     layout = coerce_to_layout(alternate_layout),
     bounds = list()
   )
+
+  if (notNull(container_height)) {
+    alternate$container_height <- container_height
+  }
 
   # Check to make sure the same elements match between layout and the main one
   layouts_have_same_elements(layout, alternate$layout)
