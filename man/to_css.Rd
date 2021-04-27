@@ -4,16 +4,7 @@
 \alias{to_css}
 \title{Convert grid layout to css string}
 \usage{
-to_css(
-  layout,
-  container,
-  is_card_styled = "grid_panel",
-  additional_card_styles = c(),
-  element_styles = c(),
-  debug_mode = FALSE,
-  container_height = "viewport",
-  selector_prefix = "#"
-)
+to_css(layout, ...)
 }
 \arguments{
 \item{layout}{Object of class \code{"gridlayout"}.}

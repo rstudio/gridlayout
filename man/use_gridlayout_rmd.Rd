@@ -36,19 +36,7 @@ styling.}
 \item{...}{
   Arguments passed on to \code{\link[=to_css]{to_css}}
   \describe{
-    \item{\code{additional_card_styles}}{A list of named property-value pairs for
-additional styles to be added to each card-element (as defined by
-\code{is_card_styled}. E.g. \code{element_styles = c("background" = "blue")}.}
-    \item{\code{element_styles}}{A list of named property-value pairs for additional
-styles to be added to each first child element of the grid container. E.g.
-under the css selector of \verb{grid_container > *}. If \code{is_card_styled = "all"}
-then this has the same purpose as as \code{additional_card_styles}}
-    \item{\code{debug_mode}}{If set to \code{TRUE} then each element of the grid will have an
-outline applied so positioning can more easily be assessed.}
-    \item{\code{selector_prefix}}{CSS prefix used to target grid elements. This will
-change if you're integrating grid with a system that you don't want to use
-ids (the \code{"#"} prefix) with because they are not available or are used for
-other reasons.}
+    \item{\code{}}{}
   }}
 }
 \description{
