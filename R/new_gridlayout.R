@@ -174,21 +174,25 @@ print.gridlayout <- function(x, ...){
 
   alternate_layouts <- attr(x, "alternates")
   if (notNull(alternate_layouts)) {
-    cat("\n\n", emph("Alternative layouts:"), "\n", sep = "")
+    cat("\n\n", emph("Alternative layouts:"), sep = "")
     for (alternate in alternate_layouts) {
-      cat("When width of page")
+      bounds <- alternate$bounds
+      cat("\n\nWhen width of page", emph(print_size_range(bounds)), "\n")
 
-      if (is.null(alternate$upper)) {
-        cat(" <", emph(alternate$lower))
-      } else if (is.null(alternate$lower)) {
-        cat(" >", emph(alternate$upper))
-      } else {
-        cat(" between", emph(alternate$lower), "and", alternate$upper)
-      }
-
-      cat("\n")
       print(alternate$layout)
     }
   }
 }
+
+print_size_range <- function(bounds) {
+
+  if (is.null(bounds$upper)) {
+    return(paste("<", bounds$lower))
+  } else if (is.null(bounds$lower)) {
+    return(paste(">", bounds$upper))
+  } else {
+    return(paste("between", bounds$lower, "and", bounds$upper))
+  }
+}
+
 
