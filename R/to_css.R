@@ -76,36 +76,6 @@ to_css.gridlayout <- function(
     if(has_css_selector) container else paste0("#", container)
   }
 
-  # Build the mapping for each element to its grid area.
-  element_grid_areas <- paste(
-    sapply(
-      layout,
-      function(el){
-        build_css_rule(
-          selector = paste0(selector_prefix, el$id),
-          prop_list = c(
-            "grid-column-start" = el$start_col,
-            "grid-column-end" = el$end_col + 1,
-            "grid-row-start" = el$start_row,
-            "grid-row-end" = el$end_row + 1)
-        )
-      }
-    ),
-    collapse = "\n"
-  )
-
-  main_container_styles <- build_css_rule(
-    selector = container_query,
-    prop_list = c(
-      "display" = "grid",
-      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
-      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
-      "grid-gap" = attr(layout, 'gap'),
-      "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
-    )
-  )
-
   all_grid_els_selector <- paste0(container_query," > *")
 
   accessory_css <- paste(readLines(system.file("resources/gridlayout.css", package = "gridlayout")), collapse = "\n")
