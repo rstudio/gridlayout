@@ -119,9 +119,6 @@ grid_container <- function(
         # card level This is so if the user just wants bootstrap styles they
         # dont need to manually add them to all their grid_panel() calls.
         if (use_bslib_card_styles && !el_has_class(el, "card")) {
-          # Remove the "gridlayout-card" class if it exists
-          class_attr_locs <- names(el$attribs) == "class"
-          el$attribs[class_attr_locs] <- str_remove_all(el$attribs[class_attr_locs],  "gridlayout-card")
 
           # Add just plain "card" class
           el$attribs$class <- paste(el$attribs$class, "card")

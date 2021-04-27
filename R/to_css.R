@@ -50,14 +50,7 @@
 #' cat(to_css(grid_obj))
 #'
 #' @export
-to_css <- function(layout,
-                   container,
-                   is_card_styled = "grid_panel",
-                   additional_card_styles = c(),
-                   element_styles = c(),
-                   debug_mode = FALSE,
-                   container_height = "viewport",
-                   selector_prefix = "#") {
+to_css <- function(layout, ...) {
   UseMethod("to_css")
 }
 
@@ -71,12 +64,10 @@ to_css.gridlayout <- function(
   layout,
   container,
   is_card_styled = "grid_panel",
-  additional_card_styles = c(),
   element_styles = c(),
-  debug_mode = FALSE,
   container_height = "viewport",
-  selector_prefix = "#"){
-
+  selector_prefix = "#"
+){
   container_query <- if(missing(container)){
     "body"
   }  else {
@@ -111,63 +102,28 @@ to_css.gridlayout <- function(
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height),
-      "--card-padding" = "0.8rem",
-      "--card-title-height" = "calc(35px + var(--card-padding))"
+      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
     )
   )
 
-  debug_style_list <- if(debug_mode){
-    c("outline" = "1px solid black")
-  } else {
-    c()
+  all_grid_els_selector <- paste0(container_query," > *")
+
+  accessory_css <- paste(readLines(system.file("resources/gridlayout.css", package = "gridlayout")), collapse = "\n")
+  if (is_card_styled == "all") {
+    # Make .grid_panel simply apply to every first-level div
+    accessory_css <- str_replace_all(
+      accessory_css,
+      ".grid_panel",
+      all_grid_els_selector,
+      fixed = TRUE
+    )
   }
 
-  card_style_list <- c(
-    "box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
-    "border-radius" = "0.5rem",
-    additional_card_styles
-  )
-
-  # These will apply to all grid_panel items, which will be almost all
-  panel_styles <- build_css_rule(
-    selector = paste0(container_query, if (is_card_styled == "all") " > *" else " .grid_panel"),
-    prop_list = c(
-      "box-sizing" = "border-box",
-      "padding" = "var(--card-padding, 0.8rem)",
-      "overflow" = "hidden",
-      # Put shadows on all elements if we're doing all-card-styles
-      if (is_card_styled == "all") card_style_list,
-      debug_style_list
-    )
-  )
-
-  # These styles will only apply when the card-styled option is set
-  card_styles <- build_css_rule(
-    selector = paste0(container_query, " .grid_panel.gridlayout-card"),
-    prop_list = card_style_list
-  )
-
+  # User-defined styles for all the grid-elements. Goes after the accessory
+  # rules so they can override any desired properties
   all_elements_styles <- build_css_rule(
-    selector = paste0(container_query," > *"),
+    selector = all_grid_els_selector,
     element_styles
-  )
-
-  panel_content_styles <- build_css_rule(
-    paste(container_query, ".panel-content"),
-    c(
-      "height" = "100%",
-      "display" = "grid"
-    )
-  )
-
-  # Need to adjust for the the title in height for content if it exists
-  content_with_title_styles <- build_css_rule(
-    paste(container_query, ".grid_panel > .panel-content"),
-    c(
-      "height" = "calc(100% - var(--card-title-height))",
-      "padding-top" = "var(--card-padding)"
-    )
   )
 
   layout_rules <- generate_layout_rules(
@@ -179,12 +135,8 @@ to_css.gridlayout <- function(
 
   paste(
     layout_rules,
+    accessory_css,
     all_elements_styles,
-    panel_styles,
-    panel_content_styles,
-    content_with_title_styles,
-    card_styles,
-    grid_panel_styles,
     sep = "\n\n"
   )
 }
@@ -224,7 +176,6 @@ generate_layout_rules <- function(layout, container_query, container_height, sel
     ),
     collapse = "\n"
   )
-
   paste(
     main_container_styles,
     element_grid_areas,

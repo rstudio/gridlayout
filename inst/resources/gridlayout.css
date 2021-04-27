@@ -1,0 +1,54 @@
+.grid_panel {
+  --card-padding: 0.8rem;
+  --card-title-height: calc(35px + var(--card-padding));
+  box-sizing: border-box;
+  padding: var(--card-padding);
+  overflow: hidden;
+}
+
+/* Only set card styles if we're not using the bslib card component */
+.grid_panel:not(.card) {
+  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+  border-radius: 0.5rem;
+}
+
+.grid_panel .panel-title {
+  height: var(--card-title-height);
+  width: calc(100% + 2*var(--card-padding));
+  padding: calc(0.5 * var(--card-padding)) var(--card-padding);
+  margin-left: calc(-1 * var(--card-padding));
+  margin-top: calc(-1 * var(--card-padding));
+  border-bottom: 1px solid #dae0e5;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.grid_panel .panel-title > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+.grid_panel .panel-title > svg {
+  outline: 1px solid red;
+}
+
+.panel-content {
+  height: 100%;
+  display: grid;
+}
+
+.grid_panel.collapsed  {
+  height: var(--card-title-height);
+  overflow: hidden;
+}
+
+.grid_panel.collapsed .panel-content {
+  display: none;
+}
+
+/* Makes it so tabpanels work in gridpanels */
+.grid_panel .tabbable { height: 100% }
+.grid_panel .tabbable > .nav { height: 42px; }
+.grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
+.grid_panel .tabbable .tab-pane { height: 100%; }
