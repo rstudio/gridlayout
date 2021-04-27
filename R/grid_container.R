@@ -117,7 +117,7 @@ grid_container <- function(
 
         # Preference for bootstrap card styling at page level overwrites the
         # card level This is so if the user just wants bootstrap styles they
-        # dont need to manually add them to all their grid_panel() calls.
+        # don't need to manually add them to all their grid_panel() calls.
         if (use_bslib_card_styles && !el_has_class(el, "card")) {
 
           # Add just plain "card" class
