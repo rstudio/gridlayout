@@ -105,6 +105,12 @@ notNull <- function(x) {
   !is.null(x)
 }
 
+`%||%` <- function(val, alt) {
+  if (is.null(val)) alt else val
+}
+
+
+
 # Taken from the shiny source
 validCssUnit <- function(x)
 {

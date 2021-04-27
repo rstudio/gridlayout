@@ -161,4 +161,31 @@ test_that("Alternate layouts can be added for different sized screens", {
     regexp = "Layouts have mismatched elements: plota",
     fixed = TRUE
   )
+
+  big_screen_layout <- new_gridlayout(
+    layout_mat = matrix(c(
+      "header", "plota",  "plotb"
+    ), ncol = 3, byrow = TRUE),
+    col_sizes = c("200px", "1fr", "1fr"),
+    row_sizes = c("1fr"),
+  )
+#
+#   add_alternate_layout(
+#     layout = main_layout,
+#     alternate_layout = mobile_wo_plota,
+#     lower_bound_width = 400
+#   )
+#
+
+  expect_error(
+    add_alternate_layout(
+      main_w_alternate,
+      alternate_layout = big_screen_layout,
+      upper_bound_width = 350
+    ),
+    regexp = "New alternate interval overlaps with previous interval",
+    fixed = TRUE
+  )
+
+
 })
