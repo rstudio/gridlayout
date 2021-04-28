@@ -84,6 +84,57 @@ md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE){
   }
 }
 
+parse_md_table_layout <- function(
+  layout_table,
+  col_sizes = NULL,
+  row_sizes = NULL,
+  gap = NULL
+){
+  by_row <- strsplit(layout_table, "\n")[[1]]
+  is_header_divider <- grepl("^[\\| \\- :]+$", by_row, perl = TRUE)
+  is_empty_row <- by_row == ""
+
+  # Get rid of empty rows and columns caused by table boundaries
+  clean_rows <- str_remove_all(
+    by_row[!(is_header_divider | is_empty_row)],
+    "^\\s*\\|\\s*"
+  )
+
+  # Does the table itself provide us size info?
+  sizes_in_table <- grepl("[\\s|\\|][0-9]", clean_rows[1])
+
+  rows_list <- strsplit(clean_rows, "\\s*\\|\\s*", perl = TRUE)
+
+  layout_mat <- matrix(unlist(rows_list), nrow = length(clean_rows), byrow = TRUE)
+
+  if (sizes_in_table) {
+    if (notNull(col_sizes)) {
+      warning("Column sizing provided both in layout table and via col_sizes argument. Ignoring col_sizes argument.")
+    }
+    col_sizes <- layout_mat[1,-1]
+
+    if (notNull(row_sizes)) {
+      warning("Row sizing provided both in layout table and via row_sizes argument. Ignoring row_sizes argument.")
+    }
+    row_sizes <- layout_mat[-1,1]
+
+    if (layout_mat[1,1] != "") {
+      if (notNull(gap)) {
+        warning("Gap sizing provided both in layout table and via gap argument. Ignoring gap argument.")
+      }
+      gap <- layout_mat[1,1]
+    }
+
+    layout_mat <- layout_mat[-1,-1, drop = FALSE]
+  }
+
+  list(
+    elements = elements_from_mat(layout_mat),
+    row_sizes = row_sizes,
+    col_sizes = col_sizes,
+    gap = gap
+  )
+}
 
 
 

@@ -76,12 +76,12 @@ add_alternate_layout.gridlayout <- function(
 
 overlaps_with_existing_alternates <- function(new_layout, alternates) {
 
-  upper_new <- new_layout$upper %||% Inf
-  lower_new <- new_layout$lower %||% 0
+  upper_new <- unpixelify(new_layout$bounds$upper %||% Inf)
+  lower_new <- unpixelify(new_layout$bounds$lower %||% 0)
 
   for (alternate in alternates) {
-    upper_old <- alternate$bounds$upper %||% Inf
-    lower_old <- alternate$bounds$lower %||% 0
+    upper_old <- unpixelify(alternate$bounds$upper %||% Inf)
+    lower_old <- unpixelify(alternate$bounds$lower %||% 0)
 
     if (upper_new >= lower_old && lower_new <= upper_old) {
       stop("New alternate interval overlaps with previous interval covering the range ",

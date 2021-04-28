@@ -1,16 +1,15 @@
 #' Construct a gridlayout object from basic parts
 #'
-#' @param layout_mat A character matrix where each entry controls what element
-#'   id will take up that given position in the grid. For instance a header
-#'   element would take up every cell in the first row.
+#' @param layout_def Either a list of elements with the `id`, `start_row`, `end_row`,
+#'   `start_col`, and `end_col` format, or a markdown table defining a layout.
 #' @param col_sizes A character vector of valid css sizes for the width of each
 #'   column in your grid as given by `layout_mat`. If a single value is passed,
 #'   it will be repeated for all columns.
 #' @param row_sizes Same as `col_sizes`, but for row heights.
 #' @param gap Valid css sizing for gap to be left between each element in your
-#'   grid. Defaults to `"1rem"`.
-#' @param element_list List of elements with the `id`, `start_row`, `end_row`,
-#'   `start_col`, and `end_col` format.
+#'   grid. Defaults to `"1rem"`. This is a relative unit that scales with
+#'   the base text size of a page. E.g. setting font-size: 16px on the body
+#'   element of a page means 1rem = 16px;
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -30,40 +29,88 @@
 #' )
 #'
 #' new_gridlayout(
+#'   elements_list,
 #'   col_sizes = c("1fr", "2fr"),
-#'   row_sizes = c("100px", "1fr", "1fr"),
-#'   element_list = elements_list
+#'   row_sizes = c("100px", "1fr", "1fr")
 #' )
 #'
 #' # Can also use a matrix for more visually intuitive laying out
-#' elements_mat <- matrix(c(
-#'   "header", "header",
-#'   "plot",   "table",
-#'   "footer", "footer"),
-#'   ncol = 2, byrow = TRUE
-#' )
-#'
 #' new_gridlayout(
+#'   layout_def = "
+#'       | header | header |
+#'       | plota  | plotb  |",
 #'   col_sizes = c("1fr", "2fr"),
-#'   row_sizes = c("100px", "1fr", "1fr"),
-#'   layout_mat = elements_mat
+#'   row_sizes = c("100px", "1fr"),
+#'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list){
-  have_element_list <- !missing(element_list)
-  have_layout_mat <- !missing(layout_mat)
+new_gridlayout <- function(
+  layout_def = list(),
+  col_sizes = NULL,
+  row_sizes = NULL,
+  gap = NULL,
+  alternate_layouts = NULL
+){
+  elements <- list()
+  # Figure out what type of layout definition we were passed
+  if (is_char_string(layout_def)) {
+    # MD table representation
+    layout_info <- parse_md_table_layout(
+      layout_def,
+      col_sizes = col_sizes,
+      row_sizes = row_sizes,
+      gap = gap
+    )
+    elements <- layout_info$elements
+    col_sizes <-  layout_info$col_sizes
+    row_sizes <- layout_info$row_sizes
+    gap <-  layout_info$gap
 
-  elements <- if(have_element_list & have_layout_mat){
-    stop("Both element list and layout matrix inputs supplied. Only use one")
-  } else if(have_element_list){
-    # TODO: Validate form of elements
-    element_list
-  } else if(have_layout_mat){
-    elements_from_mat(layout_mat)
+  } else if (is.list(layout_def)) {
+    elements <- layout_def
   } else {
-    list()
+    stop(
+      "Unknown layout definition type. ",
+      "Layouts can be defined using markdown table syntax or element lists. ",
+      "See ?gridlayout::new_gridlayout for more info"
+    )
   }
 
+  if (is.null(gap)) gap <- "1rem"
+
+  # Validate row and column sizes.
+  sizes <- create_row_and_col_size_vecs(
+    row_sizes = row_sizes,
+    col_sizes = col_sizes,
+    elements = elements
+  )
+
+  layout <- structure(
+    elements,
+    class = "gridlayout",
+    row_sizes = sizes$row,
+    col_sizes = sizes$col,
+    gap = gap
+  )
+
+  if (notNull(alternate_layouts)) {
+    for (alternate in alternate_layouts) {
+      layout <- add_alternate_layout(
+        layout,
+        alternate_layout = alternate$layout,
+        lower_bound_width = alternate$lower_bound_width,
+        upper_bound_width = alternate$upper_bound_width,
+        container_height = alternate$container_height
+      )
+    }
+  }
+
+  layout
+}
+
+
+
+create_row_and_col_size_vecs <- function(row_sizes, col_sizes, elements) {
   empty_grid <- length(elements) == 0
 
   # Validate row and column sizes.
@@ -72,7 +119,7 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
     function(dir, sizes){
       start_vals <- extract_dbl(elements, "start_" %+% dir)
       end_vals <- extract_dbl(elements, "end_" %+% dir)
-      auto_sizing <- identical(sizes, "auto")
+      auto_sizing <- is.null(sizes)
 
       if(!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
 
@@ -89,38 +136,21 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
       if(length(sizes) == 1 & num_sections != 1){
         sizes <- rep_len(sizes, num_sections)
       }
-
       # Make sure that the elements sit within the defined grid
-      if(!empty_grid && (max(end_vals) > num_sections)){
-        bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
-        stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
-      }
+      if (!empty_grid) {
 
-      if(have_layout_mat){
-        mat_dim_size <- if(dir == "row") nrow(layout_mat) else ncol(layout_mat)
-        if(mat_dim_size != length(sizes)){
-          stop("The provided ", dir,
-               " sizes need to match the number of ", dir,
-               "s in your layout matrix")
+        if (max(end_vals) > num_sections) {
+          bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
+          stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
         }
 
+        if (max(end_vals) < length(sizes)) {
+          stop("The provided ", dir, " sizes need to match the number of ", dir, "s in your layout")
+        }
       }
 
       sizes
     })
-
-  # Default gap is a single rem unit. This is a relative unit that scales with
-  # the base text size of a page. E.g. setting font-size: 16px on the body
-  # element of a page means 1rem = 16px;
-  gap <- validate_argument(gap, default = "1rem")
-
-  structure(
-    elements,
-    class = "gridlayout",
-    row_sizes = sizes$row,
-    col_sizes = sizes$col,
-    gap = gap
-  )
 }
 
 # Function to allow layout being defined with markdown or with standard object
@@ -139,6 +169,7 @@ coerce_to_layout <- function(layout_def){
 layouts_are_equal <- function(layout_a, layout_b){
   identical(to_md(layout_a), to_md(layout_b))
 }
+
 
 layouts_have_same_elements <- function(layout_a, layout_b){
   a_element_ids <- extract_chr(layout_a, "id")
