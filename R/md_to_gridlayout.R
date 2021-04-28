@@ -90,42 +90,80 @@ parse_md_table_layout <- function(
   row_sizes = NULL,
   gap = NULL
 ){
-  by_row <- strsplit(layout_table, "\n")[[1]]
-  is_header_divider <- grepl("^[\\| \\- :]+$", by_row, perl = TRUE)
-  is_empty_row <- by_row == ""
+  layout_rows <- strsplit(layout_table, "\n")[[1]]
+  is_header_divider <- grepl("^[\\| \\- :]+$", layout_rows, perl = TRUE)
+  is_empty_row <- layout_rows == ""
 
-  # Get rid of empty rows and columns caused by table boundaries
-  clean_rows <- str_remove_all(
-    by_row[!(is_header_divider | is_empty_row)],
-    "^\\s*\\|\\s*"
-  )
+  # Get rid of empty rows and columns caused by leading and trailing whitespace
+  layout_rows <- layout_rows[!(is_header_divider | is_empty_row)]
 
-  # Does the table itself provide us size info?
-  sizes_in_table <- grepl("[\\s|\\|][0-9]", clean_rows[1])
+  # Trim off any leading whitespace around lines
+  layout_rows <- str_trim(layout_rows, side = "both")
 
-  rows_list <- strsplit(clean_rows, "\\s*\\|\\s*", perl = TRUE)
+  # Make sure everything is enclosed in pipes
+  if (any(!str_detect(layout_rows, "^\\|.+\\|$"))) {
+    stop("The provided text does not appear to be a markdown table.")
+  }
 
-  layout_mat <- matrix(unlist(rows_list), nrow = length(clean_rows), byrow = TRUE)
+  # Get rid of the enclosing pipes now so we just have interior separating pipes
+  # to split on
+  layout_rows <- str_remove_all(layout_rows, "^\\||\\|$")
 
-  if (sizes_in_table) {
-    if (notNull(col_sizes)) {
-      warning("Column sizing provided both in layout table and via col_sizes argument. Ignoring col_sizes argument.")
+  # Split on the internal pipes
+  rows_list <- strsplit(layout_rows, "|", fixed = TRUE)
+
+  # Trim whitespace. We do this hear instead of earlier to avoid erasing empty
+  # cells entirely
+  rows_list <- lapply(rows_list, str_trim, side = "both")
+
+  layout_mat <- matrix(unlist(rows_list), nrow = length(layout_rows), byrow = TRUE)
+
+  # Does the table itself provide us size info? To find this we simply look for
+  # a number as the first entry in the first row
+  has_row_size_col <- all_css_or_empty(layout_mat[,1])
+  has_col_size_row <- all_css_or_empty(layout_mat[1,])
+
+  gap_size_in_table <- has_row_size_col & has_col_size_row & are_css_sizes(layout_mat[1,1])
+  if (gap_size_in_table) {
+    if (notNull(gap)) {
+      warning("Gap sizing provided both in layout table and via gap argument. Ignoring gap argument.")
     }
-    col_sizes <- layout_mat[1,-1]
+    gap <- layout_mat[1,1]
+  }
 
-    if (notNull(row_sizes)) {
-      warning("Row sizing provided both in layout table and via row_sizes argument. Ignoring row_sizes argument.")
-    }
-    row_sizes <- layout_mat[-1,1]
+  if (has_row_size_col) {
+    row_sizes_from_table <- layout_mat[,1]
+    # Need to take off the first element if we have column sizing as well
+    # as it will either be empty or contain the grid size
+    if (has_col_size_row) row_sizes_from_table <- row_sizes_from_table[-1]
 
-    if (layout_mat[1,1] != "") {
-      if (notNull(gap)) {
-        warning("Gap sizing provided both in layout table and via gap argument. Ignoring gap argument.")
+    if (are_css_sizes(row_sizes_from_table)) {
+      if (notNull(row_sizes)) {
+        warning("Row sizing provided both in layout table and via row_sizes argument. Ignoring row_sizes argument.")
       }
-      gap <- layout_mat[1,1]
+      row_sizes <- row_sizes_from_table
     }
+  }
 
-    layout_mat <- layout_mat[-1,-1, drop = FALSE]
+  if (has_col_size_row) {
+    col_sizes_from_table <- layout_mat[1,]
+    if (has_row_size_col) col_sizes_from_table <- col_sizes_from_table[-1]
+
+    if (are_css_sizes(col_sizes_from_table)) {
+      if (notNull(col_sizes)) {
+        warning("Row sizing provided both in layout table and via col_sizes argument. Ignoring row_sizes argument.")
+      }
+      col_sizes <- col_sizes_from_table
+    }
+  }
+
+  # If the user provided a gap size but not a row or column size we will have an
+  # empty vector where the row or column sizes would be. We should remove this
+  if (has_row_size_col) {
+    layout_mat <- layout_mat[, -1, drop = FALSE]
+  }
+  if (has_col_size_row) {
+    layout_mat <- layout_mat[-1, , drop = FALSE]
   }
 
   list(
@@ -134,6 +172,17 @@ parse_md_table_layout <- function(
     col_sizes = col_sizes,
     gap = gap
   )
+}
+
+are_css_sizes <- function(vals) {
+  all(grepl("^[0-9]", vals))
+}
+
+
+all_css_or_empty <- function(vals) {
+  is_css_size <- grepl("^[0-9]", vals)
+  is_empty <- vals == ""
+  all(is_css_size | is_empty)
 }
 
 
