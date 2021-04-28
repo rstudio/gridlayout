@@ -1,6 +1,6 @@
 test_that("Works with default body target", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
+  grid_obj <- new_gridlayout(
+    "
       |      |120px   |1fr    |1fr    |
       |:-----|:-------|:------|:------|
       |100px |header  |header |header |
@@ -11,8 +11,7 @@ test_that("Works with default body target", {
 })
 
 test_that("Can change body target", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
+  grid_obj <- new_gridlayout("
       |      |120px   |1fr    |1fr    |
       |:-----|:-------|:------|:------|
       |100px |header  |header |header |
@@ -28,33 +27,9 @@ test_that("Can change body target", {
 })
 
 
-test_that("Debug mode adds outline to all elements", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
-    |      |120px   |1fr    |1fr    |
-    |:-----|:-------|:------|:------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
-  )
-
-  expect_true(
-    str_detect(
-      to_css(grid_obj, debug_mode = TRUE),
-      "outline: 1px solid black;"
-    )
-  )
-  expect_false(
-    str_detect(
-      to_css(grid_obj, debug_mode = FALSE),
-      "outline: 1px solid black;"
-    )
-  )
-})
 
 test_that("Custom styles can be added by the user for further customization of card style", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
+  grid_obj <- new_gridlayout("
     |      |120px   |1fr    |1fr    |
     |:-----|:-------|:------|:------|
     |100px |header  |header |header |
@@ -84,8 +59,7 @@ test_that("Custom styles can be added by the user for further customization of c
 
 
 test_that("Height setting can be customized", {
-  grid_obj <- md_to_gridlayout(
-    layout_table = "
+  grid_obj <- new_gridlayout("
     |      |120px   |1fr    |1fr    |
     |:-----|:-------|:------|:------|
     |100px |header  |header |header |
