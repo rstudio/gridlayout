@@ -4,12 +4,7 @@
 \alias{md_to_gridlayout}
 \title{Build grid layout obj from markdown table}
 \usage{
-md_to_gridlayout(
-  layout_table,
-  null_instead_of_error = FALSE,
-  col_sizes = NULL,
-  row_sizes = NULL
-)
+md_to_gridlayout(layout_table, null_instead_of_error = FALSE)
 }
 \arguments{
 \item{layout_table}{Character string with a markdown table. First row and
