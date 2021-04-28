@@ -146,6 +146,17 @@ as_pixel_value <- function(val) {
   val
 }
 
+unpixelify <- function(px_val) {
+  if (is.numeric(px_val)) return(px_val)
+
+  as.numeric(str_remove_all(px_val, "px"))
+}
+
+
+is_char_string <- function(x) {
+  is.character(x) && length(x) == 1L
+}
+
 is_installed <- function(package, version = NULL) {
   installed <- nzchar(system.file(package = package))
   if (is.null(version)) {
