@@ -15,6 +15,23 @@
   min-height: 100px;
 }
 
+.grid_panel .shiny-plot-output > img {
+  /* The way grid sizing works can through off the plot sizing in shiny.
+     This is because the size of the parent grows to its largest child
+     element. Shiny's plot output uses fixed pixel sizing. Shiny tries to
+     update these sizes by looking at the parent div's dimensions after a
+     resize. When the window has been made smaller, this means that the parent
+     element is spilling outside of its box because the plot image size is
+     still sitting at a fixed pixel width of the previous size. So when Shiny
+     queries the size of the parent after resizing it thinks that nothing has
+     changed. By setting a max width and height, we make sure the plot always
+     gets shrunk to at most the size of the grid element, thus allowing the
+     resize observer to work properly.
+  */
+  max-width: 100%;
+  max-height: 100%;
+}
+
 /* Only set card styles if we're not using the bslib card component */
 .grid_panel:not(.card) {
   box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
