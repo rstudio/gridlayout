@@ -131,7 +131,7 @@ grided_resources <- function(){
 # provided by grided UI
 layout_from_grided <- function(elements, grid_sizing) {
   new_gridlayout(
-    element_list = elements,
+    elements,
     col_sizes = as.character(grid_sizing$cols),
     row_sizes = as.character(grid_sizing$rows),
     gap = grid_sizing$gap
