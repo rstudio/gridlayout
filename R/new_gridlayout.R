@@ -214,7 +214,7 @@ print.gridlayout <- function(x, ...){
     emph(length(attr(x, 'col_sizes'))), " columns, and ",
     "gap size of ", emph(attr(x, 'gap')), ".",
     " Total height of ", emph(attr(x, "container_height")),".",
-    # "\n",
+    "\n",
     to_table(x, sizes_decorator = emph),
     sep = ""
   )
