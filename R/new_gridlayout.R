@@ -49,6 +49,7 @@ new_gridlayout <- function(
   col_sizes = NULL,
   row_sizes = NULL,
   gap = NULL,
+  container_height = "viewport",
   alternate_layouts = NULL
 ){
   elements <- list()
@@ -90,7 +91,8 @@ new_gridlayout <- function(
     class = "gridlayout",
     row_sizes = sizes$row,
     col_sizes = sizes$col,
-    gap = gap
+    gap = gap,
+    container_height = container_height
   )
 
   if (notNull(alternate_layouts)) {
