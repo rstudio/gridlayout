@@ -95,6 +95,13 @@ new_gridlayout <- function(
 
   if (notNull(alternate_layouts)) {
     for (alternate in alternate_layouts) {
+      if (is.null(alternate$layout)) {
+        stop(
+          "Altnernate layouts need to be provided as a list with ",
+          "a layout element along with one or more bounds ",
+          "(lower_bound_width, upper bound_width)."
+        )
+      }
       layout <- add_alternate_layout(
         layout,
         alternate_layout = alternate$layout,
