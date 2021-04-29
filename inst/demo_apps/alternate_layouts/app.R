@@ -19,19 +19,20 @@ mobile_layout <- "
 big_screen_layout <- "
 |-----|-------|--------|-----|
 |2rem |250px  | 250px  |1fr  |
-|1fr  |header |sidebar |plot |"
+|1fr  |header |sidebar |plot |
+"
 
 my_layout <- new_gridlayout(
   main_layout,
   alternate_layouts = list(
     list(
       layout = mobile_layout,
-      upper_bound_width = 600,
+      width_bounds = c(max = 600),
       container_height = "auto"
     ),
     list(
       layout = big_screen_layout,
-      lower_bound_width = 1200
+      width_bounds = c(min = 1200)
     )
   )
 )
@@ -60,5 +61,7 @@ app <- shinyApp(
     })
   }
 )
+
 app
+
 
