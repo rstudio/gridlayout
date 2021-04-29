@@ -110,6 +110,11 @@ notNull <- function(x) {
 }
 
 
+valid_css_unit_regex <- "^(auto|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|fr|ch|pt|pc|px|vh|vw|vmin|vmax))$"
+
+is_css_unit <- function(x){
+  grepl(pattern = valid_css_unit_regex, x)
+}
 
 # Taken from the shiny source
 validCssUnit <- function(x)
@@ -121,8 +126,7 @@ validCssUnit <- function(x)
   if (is.character(x) && nchar(x) > 0 && gsub("\\d*", "", x) ==
       "")
     x <- as.numeric(x)
-  pattern <- "^(auto|inherit|fit-content|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|fr|ch|pt|pc|px|vh|vw|vmin|vmax))$"
-  if (is.character(x) && !grepl(pattern, x)) {
+  if (is.character(x) && !is_css_unit(x)) {
     stop("\"", x, "\" is not a valid CSS unit (e.g., \"100%\", \"400px\", \"auto\")")
   }
   else if (is.numeric(x)) {
