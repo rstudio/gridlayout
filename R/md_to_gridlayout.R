@@ -1,5 +1,9 @@
 #' Build grid layout obj from markdown table
 #'
+#' This is just a wrapper around [new_gridlayout()] that is more explicit about
+#' its input format. Also adds the ability to absorb errors for use when parsing
+#' free text that may or may not represent a layout table.
+#'
 #' @param layout_table Character string with a markdown table. First row and
 #'   column are reserved for sizing (any valid css sizing works). An optional
 #'   grid-gap can be provided using the very first cell.
@@ -7,6 +11,7 @@
 #'   should the function return `NULL` instead of throwing an error? Useful for
 #'   situations where you're parsing multiple tables simply want to check if a
 #'   table can be parsed instead of relying on it being parsable.
+#' @inheritDotParams new_gridlayout
 #'
 #' @return An object of class "grid_layout", which stores the layout as a
 #'   matrix. This can be passed to other functions such as `layout_to_css()`.
@@ -50,38 +55,19 @@
 #'     |plot   |table  |
 #'     |footer |footer |"
 #' )
-#'
-md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE){
-  by_row <- strsplit(layout_table, "\n")[[1]]
-  is_header_divider <- grepl("^[\\| \\- :]+$", by_row, perl = TRUE)
-  is_empty_row <- by_row == ""
-  clean_rows <- by_row[!(is_header_divider | is_empty_row)]
-
-  # Is the table just raw? In that case assume sizing of 1fr for everything
-  has_sizes <- grepl("[\\s|\\|][0-9]", clean_rows[1])
-
-  # Get rid of empty first el caused by table boundaries
-  raw_mat <- t(sapply(
-    strsplit(clean_rows, "\\s*\\|\\s*", perl = TRUE),
-    function(row){row[-1]}
-  ))
-
-  if(!is.character(raw_mat[1,1])){
-    if(null_instead_of_error) return(NULL)
-    stop("The provided text does not appear to be a markdown table.")
-  }
-
-  if(has_sizes){
-    new_gridlayout(
-      col_sizes = raw_mat[1,-1],
-      row_sizes = raw_mat[-1,1],
-      # Stop single column or row layouts from getting collapsed to vectors
-      element_list = elements_from_mat(raw_mat[-1,-1, drop = FALSE]),
-      gap = if(raw_mat[1,1] != "") raw_mat[1,1] else "1rem"
-    )
-  } else {
-    new_gridlayout(element_list = elements_from_mat(raw_mat))
-  }
+md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE, ...) {
+  tryCatch(
+    {
+      new_gridlayout(layout_table, ...)
+    },
+    error = function(err) {
+      if (null_instead_of_error) {
+        NULL
+      } else {
+        stop(err)
+      }
+    }
+  )
 }
 
 parse_md_table_layout <- function(
