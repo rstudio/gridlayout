@@ -105,8 +105,16 @@ notNull <- function(x) {
   !is.null(x)
 }
 
+notNA <- function(x) {
+  !is.na(x)
+}
+
+doesExist <- function(x) {
+  notNull(x) && notNA(x)
+}
+
 `%||%` <- function(val, alt) {
-  if (is.null(val)) alt else val
+  if (is.null(val) || is.na(val)) alt else val
 }
 
 
