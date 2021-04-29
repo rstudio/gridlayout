@@ -107,15 +107,13 @@ new_gridlayout <- function(
       if (is.null(alternate$layout)) {
         stop(
           "Altnernate layouts need to be provided as a list with ",
-          "a layout element along with one or more bounds ",
-          "(lower_bound_width, upper bound_width)."
+          "a layout element along with width bounds."
         )
       }
       layout <- add_alternate_layout(
         layout,
         alternate_layout = alternate$layout,
-        lower_bound_width = alternate$lower_bound_width,
-        upper_bound_width = alternate$upper_bound_width,
+        width_bounds = alternate$width_bounds,
         container_height = alternate$container_height
       )
     }
@@ -211,20 +209,21 @@ print.gridlayout <- function(x, ...){
   emph <- if(is_installed("crayon")) crayon::bold else as.character
 
   cat(
-    emph("gridlayout") %+% " object with " %+%
-      emph(length(attr(x, 'row_sizes'))) %+% " rows, " %+%
-      emph(length(attr(x, 'col_sizes'))) %+% " columns, and " %+%
-      "gap size: " %+% emph(attr(x, 'gap')),
-    "\n",
-    to_table(x, sizes_decorator = emph)
+    emph("gridlayout"), " with ",
+    emph(length(attr(x, 'row_sizes'))), " rows, ",
+    emph(length(attr(x, 'col_sizes'))), " columns, and ",
+    "gap size of ", emph(attr(x, 'gap')), ".",
+    " Total height of ", emph(attr(x, "container_height")),".",
+    # "\n",
+    to_table(x, sizes_decorator = emph),
+    sep = ""
   )
 
   alternate_layouts <- attr(x, "alternates")
   if (notNull(alternate_layouts)) {
     cat("\n\n", emph("Alternative layouts:"), sep = "")
     for (alternate in alternate_layouts) {
-      bounds <- alternate$bounds
-      cat("\n\nWhen width of page", emph(print_size_range(bounds)), "\n")
+      cat("\n\nWhen width of page", emph(print_size_range(alternate$width_bounds)), "\n")
 
       print(alternate$layout)
     }
@@ -232,13 +231,16 @@ print.gridlayout <- function(x, ...){
 }
 
 print_size_range <- function(bounds) {
-
-  if (is.null(bounds$upper)) {
-    return(paste("<", bounds$lower))
-  } else if (is.null(bounds$lower)) {
-    return(paste(">", bounds$upper))
+  has_min <- doesExist(bounds["min"])
+  has_max <- doesExist(bounds["max"])
+  if (has_min && has_max) {
+    return(paste("between", bounds["min"], "and", bounds["max"]))
+  } else if (has_min) {
+    return(paste(">", bounds["min"]))
+  } else if (has_max) {
+    return(paste("<", bounds["max"]))
   } else {
-    return(paste("between", bounds$lower, "and", bounds$upper))
+    return("Malformed bounds")
   }
 }
 

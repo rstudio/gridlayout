@@ -134,7 +134,7 @@ test_that("Alternate layouts can be added for different sized screens", {
   main_w_alternate <- add_alternate_layout(
     layout = main_layout,
     alternate_layout = mobile_layout,
-    lower_bound_width = 400
+    width_bounds = c(max = 400)
   )
 
   expect_equal(
@@ -154,7 +154,7 @@ test_that("Alternate layouts can be added for different sized screens", {
     add_alternate_layout(
       layout = main_layout,
       alternate_layout = mobile_wo_plota,
-      lower_bound_width = 400
+      width_bounds = c(max = 400)
     ),
     regexp = "Layouts have mismatched elements: plotb",
     fixed = TRUE
@@ -170,7 +170,7 @@ test_that("Alternate layouts can be added for different sized screens", {
     add_alternate_layout(
       main_w_alternate,
       alternate_layout = big_screen_layout,
-      lower_bound_width = 350
+      width_bounds = c(min = 350)
     ),
     regexp = "New alternate interval overlaps with previous interval",
     fixed = TRUE
@@ -202,12 +202,12 @@ test_that("Alternate layouts can be added with alternate layouts argument or cha
     alternate_layouts = list(
       list(
         layout = mobile_layout,
-        upper_bound_width = 600,
+        width_bounds = c(max = 600),
         container_height = "auto"
       ),
       list(
         layout = big_screen_layout,
-        lower_bound_width = 1200
+        width_bounds = c(min = 1200)
       )
     )
   )
@@ -217,14 +217,14 @@ test_that("Alternate layouts can be added with alternate layouts argument or cha
   chained_alternates <- add_alternate_layout(
     chained_alternates,
     mobile_layout,
-    upper_bound_width = 600,
+    width_bounds = c(max = 600),
     container_height = "auto"
   )
 
   chained_alternates <- add_alternate_layout(
     chained_alternates,
     big_screen_layout,
-    lower_bound_width = 1200
+    width_bounds = c(min = 1200)
   )
 
   expect_identical(
@@ -254,7 +254,7 @@ test_that("A single alternate layout does not need to be double nested", {
       main_layout,
       alternate_layouts = list(
         layout = mobile_layout,
-        upper_bound_width = 600,
+        width_bounds = c(min = 600),
         container_height = "auto"
       )
     ),
@@ -263,7 +263,7 @@ test_that("A single alternate layout does not need to be double nested", {
       alternate_layouts = list(
         list(
           layout = mobile_layout,
-          upper_bound_width = 600,
+          width_bounds = c(min = 600),
           container_height = "auto"
         )
       )

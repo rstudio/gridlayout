@@ -116,7 +116,7 @@ to_css.gridlayout <- function(
             container_query = container_query,
             container_height = alt_layout$container_height %||% container_height,
             selector_prefix = selector_prefix,
-            bounds = alt_layout$bounds
+            width_bounds = alt_layout$width_bounds
           )
         }
       ),
@@ -140,7 +140,7 @@ generate_layout_rules <- function(
   container_query,
   container_height,
   selector_prefix,
-  bounds = NULL
+  width_bounds = NULL
 ){
 
   main_container_styles <- build_css_rule(
@@ -175,12 +175,14 @@ generate_layout_rules <- function(
 
   media_query_open <- ""
   media_query_close <- ""
-  if (notNull(bounds)) {
+  if (notNull(width_bounds)) {
+    has_min <- doesExist(width_bounds["min"])
+    has_max <- doesExist(width_bounds["max"])
     media_query_open <- paste0(
       "@media ",
-      if (notNull(bounds$lower)) paste0("(min-width: ", bounds$lower,")"),
-      if (notNull(bounds$upper) && notNull(bounds$lower)) " and ",
-      if (notNull(bounds$upper)) paste0("(max-width:", bounds$upper, ")"),
+      if (has_min) paste0("(min-width: ", width_bounds["min"],")"),
+      if (has_max && has_min) " and ",
+      if (has_max) paste0("(max-width:", width_bounds["max"], ")"),
       " {"
     )
 
@@ -195,39 +197,6 @@ generate_layout_rules <- function(
     sep = "\n\n"
   )
 }
-
-
-grid_panel_styles <- "
-.grid_panel .panel-title {
-  height: var(--card-title-height);
-  width: calc(100% + 2*var(--card-padding));
-  padding: calc(0.5 * var(--card-padding)) var(--card-padding);
-  margin-left: calc(-1 * var(--card-padding));
-  margin-top: calc(-1 * var(--card-padding));
-  border-bottom: 1px solid #dae0e5;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
-
-.grid_panel .panel-title > h3 {
-  margin: 0;
-  height: 100%;
-}
-
-.grid_panel .panel-title > svg {
-  outline: 1px solid red;
-}
-
-.grid_panel.collapsed  {
-  height: var(--card-title-height);
-  overflow: hidden;
-}
-
-.grid_panel.collapsed .panel-content {
-  display: none;
-}
-"
 
 
 #' Convert layout to css for Shiny

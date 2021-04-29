@@ -24,40 +24,47 @@ add_alternate_layout <- function(layout, ...) {
 add_alternate_layout.gridlayout <- function(
   layout,
   alternate_layout,
-  lower_bound_width = NULL,
-  upper_bound_width = NULL,
+  width_bounds = c(max = 500),
   container_height = NULL
 ) {
-  alternate <- list(
-    layout = coerce_to_layout(alternate_layout),
-    bounds = list()
-  )
 
-  if (notNull(container_height)) {
-    alternate$container_height <- container_height
+  # Check form of the width_bounds
+  has_width_min <- hasName(width_bounds, "min")
+  has_width_max <- hasName(width_bounds, "max")
+
+  if (has_width_max) {
+    width_bounds["max"] <- as_pixel_value(width_bounds["max"])
   }
 
-  # Check to make sure the same elements match between layout and the main one
-  layouts_have_same_elements(layout, alternate$layout)
+  if (has_width_min) {
+    width_bounds["min"] <- as_pixel_value(width_bounds["min"])
+  }
 
-  if (is.null(upper_bound_width) && is.null(lower_bound_width)) {
+  if (!(has_width_min || has_width_max)) {
     stop("Need at least one width bound for alternative layout")
   }
 
-  if (notNull(lower_bound_width)) {
-    alternate$bounds$lower <- as_pixel_value(lower_bound_width)
-  }
-
-  if (notNull(upper_bound_width)) {
-    alternate$bounds$upper <- as_pixel_value(upper_bound_width)
-  }
-
-  if (notNull(upper_bound_width) && notNull(lower_bound_width)) {
-    if (upper_bound_width < lower_bound_width) {
-      stop("Lower bound of layout apperance is greater than upper.",
+  if (has_width_min && has_width_max) {
+    if (unpixelify(width_bounds["min"]) >= unpixelify(width_bounds["max"]) ) {
+      stop("Min bound of layout apperance is not smaller than max.",
            "You probably want to flip them.")
     }
   }
+
+  if (!all(names(width_bounds) %in% c("min", "max"))) {
+    warning(
+      "Only min and max bounds supported.",
+      "Ignoring other bounds values passed to alternate_layout()"
+    )
+  }
+
+  alternate <- list(
+    layout = new_gridlayout(alternate_layout),
+    width_bounds = width_bounds
+  )
+
+  # Make sure layouts map to same elements
+  layouts_have_same_elements(layout, alternate$layout)
 
   existing_alternates <- attr(layout, "alternates")
   if (is.null(existing_alternates)) {
@@ -76,12 +83,11 @@ add_alternate_layout.gridlayout <- function(
 
 overlaps_with_existing_alternates <- function(new_layout, alternates) {
 
-  upper_new <- unpixelify(new_layout$bounds$upper %||% Inf)
-  lower_new <- unpixelify(new_layout$bounds$lower %||% 0)
-
+  upper_new <- unpixelify(new_layout$width_bounds["max"] %||% Inf)
+  lower_new <- unpixelify(new_layout$width_bounds["min"] %||% 0)
   for (alternate in alternates) {
-    upper_old <- unpixelify(alternate$bounds$upper %||% Inf)
-    lower_old <- unpixelify(alternate$bounds$lower %||% 0)
+    upper_old <- unpixelify(alternate$width_bounds["max"] %||% Inf)
+    lower_old <- unpixelify(alternate$width_bounds["min"] %||% 0)
 
     if (upper_new >= lower_old && lower_new <= upper_old) {
       stop("New alternate interval overlaps with previous interval covering the range ",
