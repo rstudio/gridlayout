@@ -16,11 +16,11 @@
 }
 
 .grid_panel .shiny-plot-output > img {
-  /* The way grid sizing works can through off the plot sizing in shiny.
-     This is because the size of the parent grows to its largest child
-     element. Shiny's plot output uses fixed pixel sizing. Shiny tries to
-     update these sizes by looking at the parent div's dimensions after a
-     resize. When the window has been made smaller, this means that the parent
+  /* The way grid sizing works can throw off the plot sizing in shiny. This
+     is because the size of the parent grows to its largest child element.
+     Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+     these sizes by looking at the parent div's dimensions after a resize.
+     When the window has been made smaller, this means that the parent
      element is spilling outside of its box because the plot image size is
      still sitting at a fixed pixel width of the previous size. So when Shiny
      queries the size of the parent it thinks that nothing has changed. By
