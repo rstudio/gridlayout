@@ -94,6 +94,13 @@ new_gridlayout <- function(
   )
 
   if (notNull(alternate_layouts)) {
+
+    single_alternate <- "layout" %in% names(alternate_layouts)
+
+    if (single_alternate) {
+      alternate_layouts <- list(alternate_layouts)
+    }
+
     for (alternate in alternate_layouts) {
       if (is.null(alternate$layout)) {
         stop(
