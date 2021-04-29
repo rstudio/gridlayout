@@ -51,6 +51,28 @@
       1fr header  header
       1fr sidebar plot  
 
+# Markdown parsing -- Single column
+
+    Code
+      new_gridlayout(
+        "\n|----- |--------|\n|2rem  |1fr     |\n|80px  |header  |\n|auto  |sidebar |\n|400px |plot    |")
+    Output
+      gridlayout object with 3 rows, 1 columns, and gap size: 2rem 
+             1fr    
+      80px  header 
+      auto  sidebar
+      400px plot   
+
+# Markdown parsing -- Single row
+
+    Code
+      new_gridlayout(
+        "\n|2rem  |auto   | 200px  | 1fr    |\n|80px  |header |sidebar |sidebar |")
+    Output
+      gridlayout object with 1 rows, 3 columns, and gap size: 2rem 
+            auto   200px   1fr    
+      80px header sidebar sidebar
+
 # Markdown parsing -- No sizes
 
     Code

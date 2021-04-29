@@ -177,143 +177,98 @@ test_that("Alternate layouts can be added for different sized screens", {
   )
 })
 
-test_that("Basic table works", {
-  my_layout <- new_gridlayout("
-      |      |120px   |1fr    |1fr    |
-      |------|--------|-------|-------|
-      |100px |header  |header |header |
-      |1fr   |sidebar |plot_a |plot_c |
-      |1fr   |sidebar |plot_b |plot_b |"
-  )
-
-  expect_s3_class(my_layout, "gridlayout")
-
-  expect_equal(attr(my_layout, "col_sizes"),
-               c("120px", "1fr", "1fr"))
-
-  expect_equal(attr(my_layout, "row_sizes"),
-               c("100px", "1fr", "1fr"))
-
-  expect_equal(attr(my_layout, "gap"),
-               "1rem")
-})
-
-test_that("Can put gap size in upper left", {
-  my_layout <- new_gridlayout("
-      | 2rem |120px   |1fr    |1fr    |
-      |------|--------|-------|-------|
-      |100px |header  |header |header |
-      |1fr   |sidebar |plot_a |plot_c |
-      |1fr   |sidebar |plot_b |plot_b |"
-  )
-
-  expect_equal(attr(my_layout, "gap"),
-               "2rem")
-})
-
-test_that("Doesn't matter if col sizes are given in table header or simply first row", {
-  my_layout <-
-
-    expect_equal(
-      new_gridlayout("
-      | 2rem |120px   |1fr    |1fr    |
-      |------|--------|-------|-------|
-      |100px |header  |header |header |
-      |1fr   |sidebar |plot_a |plot_c |
-      |1fr   |sidebar |plot_b |plot_b |"
-      ),
-      new_gridlayout("
-      |      |        |       |       |
-      |------|--------|-------|-------|
-      | 2rem |120px   |1fr    |1fr    |
-      |100px |header  |header |header |
-      |1fr   |sidebar |plot_a |plot_c |
-      |1fr   |sidebar |plot_b |plot_b |"
-      ))
-})
-
-test_that("No sizes will give you constant sizes rows and cols", {
-  my_layout <- new_gridlayout("
-      |        |       |       |
-      |:-------|:------|:------|
-      |header  |header |header |
-      |sidebar |plot_a |plot_c |
-      |sidebar |plot_b |plot_b |"
-  )
-
-  expect_equal(attr(my_layout, "col_sizes"),
-               c("1fr", "1fr", "1fr"))
-
-  expect_equal(attr(my_layout, "row_sizes"),
-               c("1fr", "1fr", "1fr"))
-})
-
-test_that("Nonsense will give a usefull error message", {
-  expect_error(
-    new_gridlayout("## THis was an accidentally
-    selected chunk of text
-    that is not a table at all"
-    ),
-    "The provided text does not appear to be a markdown table.")
-})
-
-
-test_that("Markdown parsing -- All sizes provided", {
-  expect_snapshot(
-    new_gridlayout("
+test_that("Alternate layouts can be added with alternate layouts argument or chained with add_alternate_layout()", {
+  main_layout <- "
+|      |        |       |
+|------|--------|-------|
 |2rem  |200px   |1fr    |
 |80px  |header  |header |
 |1fr   |sidebar |plot   |"
+
+  mobile_layout <- "
+|----- |--------|
+|2rem  |1fr     |
+|80px  |header  |
+|auto  |sidebar |
+|400px |plot    |"
+
+  big_screen_layout <- "
+|-----|-------|--------|-----|
+|2rem |250px  | 250px  |1fr  |
+|1fr  |header |sidebar |plot |"
+
+  alternate_layouts_argument <- new_gridlayout(
+    main_layout,
+    alternate_layouts = list(
+      list(
+        layout = mobile_layout,
+        upper_bound_width = 600,
+        container_height = "auto"
+      ),
+      list(
+        layout = big_screen_layout,
+        lower_bound_width = 1200
+      )
     )
+  )
+
+  chained_alternates <- new_gridlayout(main_layout)
+
+  chained_alternates <- add_alternate_layout(
+    chained_alternates,
+    mobile_layout,
+    upper_bound_width = 600,
+    container_height = "auto"
+  )
+
+  chained_alternates <- add_alternate_layout(
+    chained_alternates,
+    big_screen_layout,
+    lower_bound_width = 1200
+  )
+
+  expect_identical(
+    alternate_layouts_argument,
+    chained_alternates
   )
 })
 
-test_that("Markdown parsing -- Only row sizes", {
-  expect_snapshot(
-    new_gridlayout("
+test_that("A single alternate layout does not need to be double nested", {
+  main_layout <- "
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
 |80px  |header  |header |
 |1fr   |sidebar |plot   |"
+
+  mobile_layout <- "
+|----- |--------|
+|2rem  |1fr     |
+|80px  |header  |
+|auto  |sidebar |
+|400px |plot    |"
+
+
+  expect_identical(
+    new_gridlayout(
+      main_layout,
+      alternate_layouts = list(
+        layout = mobile_layout,
+        upper_bound_width = 600,
+        container_height = "auto"
+      )
+    ),
+    new_gridlayout(
+      main_layout,
+      alternate_layouts = list(
+        list(
+          layout = mobile_layout,
+          upper_bound_width = 600,
+          container_height = "auto"
+        )
+      )
     )
   )
 })
 
-
-test_that("Markdown parsing -- Only col sizes", {
-  expect_snapshot(
-    new_gridlayout("
-|200px   |1fr    |
-|header  |header |
-|sidebar |plot   |"
-    )
-  )
-})
-
-test_that("Markdown parsing -- Gap and row sizes", {
-  expect_snapshot(
-    new_gridlayout("
-|2rem  |        |       |
-|80px  |header  |header |
-|1fr   |sidebar |plot   |"
-    )
-  )
-})
-
-test_that("Markdown parsing -- Only gap size", {
-  expect_snapshot(
-    new_gridlayout("
-|2rem  |        |       |
-|      |header  |header |
-|      |sidebar |plot   |"
-    )
-  )
-})
-
-test_that("Markdown parsing -- No sizes", {
-  expect_snapshot(
-    new_gridlayout("
-|header  |header |
-|sidebar |plot   |"
-    )
-  )
-})
 
