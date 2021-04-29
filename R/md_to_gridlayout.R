@@ -89,7 +89,7 @@ parse_md_table_layout <- function(
   col_sizes = NULL,
   row_sizes = NULL,
   gap = NULL
-){
+) {
   layout_rows <- strsplit(layout_table, "\n")[[1]]
   is_header_divider <- grepl("^[\\| \\- :]+$", layout_rows, perl = TRUE)
   is_empty_row <- layout_rows == ""
@@ -120,19 +120,19 @@ parse_md_table_layout <- function(
 
   # Does the table itself provide us size info? To find this we simply look for
   # a number as the first entry in the first row
-  has_row_size_col <- all_css_or_empty(layout_mat[,1])
-  has_col_size_row <- all_css_or_empty(layout_mat[1,])
+  has_row_size_col <- all_css_or_empty(layout_mat[, 1])
+  has_col_size_row <- all_css_or_empty(layout_mat[1, ])
 
-  gap_size_in_table <- has_row_size_col & has_col_size_row & are_css_sizes(layout_mat[1,1])
+  gap_size_in_table <- has_row_size_col & has_col_size_row & are_css_sizes(layout_mat[1, 1])
   if (gap_size_in_table) {
     if (notNull(gap)) {
       warning("Gap sizing provided both in layout table and via gap argument. Ignoring gap argument.")
     }
-    gap <- layout_mat[1,1]
+    gap <- layout_mat[1, 1]
   }
 
   if (has_row_size_col) {
-    row_sizes_from_table <- layout_mat[,1]
+    row_sizes_from_table <- layout_mat[, 1]
     # Need to take off the first element if we have column sizing as well
     # as it will either be empty or contain the grid size
     if (has_col_size_row) row_sizes_from_table <- row_sizes_from_table[-1]
@@ -146,7 +146,7 @@ parse_md_table_layout <- function(
   }
 
   if (has_col_size_row) {
-    col_sizes_from_table <- layout_mat[1,]
+    col_sizes_from_table <- layout_mat[1, ]
     if (has_row_size_col) col_sizes_from_table <- col_sizes_from_table[-1]
 
     if (are_css_sizes(col_sizes_from_table)) {
@@ -175,16 +175,10 @@ parse_md_table_layout <- function(
 }
 
 are_css_sizes <- function(vals) {
-  all(grepl("^[0-9]", vals))
+  all(is_css_unit(vals))
 }
 
 
 all_css_or_empty <- function(vals) {
-  is_css_size <- grepl("^[0-9]", vals)
-  is_empty <- vals == ""
-  all(is_css_size | is_empty)
+  all(is_css_unit(vals) | vals == "")
 }
-
-
-
-
