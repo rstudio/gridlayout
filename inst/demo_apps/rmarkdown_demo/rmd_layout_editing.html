@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Nick Strayer" />
+
+
+<title>gridlayout in Rmarkdown</title>
+
+<script src="rmd_layout_editing_files/header-attrs-2.7.1/header-attrs.js"></script>
+<script src="rmd_layout_editing_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="rmd_layout_editing_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="rmd_layout_editing_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="rmd_layout_editing_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="rmd_layout_editing_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="rmd_layout_editing_files/navigation-1.1/tabsets.js"></script>
+<link href="rmd_layout_editing_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="rmd_layout_editing_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><code>gridlayout</code> in Rmarkdown</h1>
+<h4 class="author">Nick Strayer</h4>
+<h4 class="date">3/9/2021</h4>
+
+</div>
+
+
+<!-- <script src="./index.ts"></script> -->
+<div id="main" class="section level2">
+<h2>Main</h2>
+<style>
+
+
+.main-container {
+  display: grid;
+  grid-template-rows: 150px 1fr 120px;
+  grid-template-columns: 200px 1fr;
+  grid-gap: 2rem;
+  padding: 2rem;
+  height: 100vh;
+}
+
+#header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+#sidebar {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+#footer {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+#main {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+
+
+
+
+.main-container > * {
+  --card-padding: 0.8rem;
+  --card-title-height: calc(35px + var(--card-padding));
+  box-sizing: border-box;
+  padding: var(--card-padding);
+  overflow: hidden;
+}
+
+.main-container > * .shiny-plot-output {
+  /* Don't let plot outputs get accidentally swallowed by auto sizing
+     This probably isn't what people want, but it will at least alert them
+     to the fact they need to set an explicite plot height if the containing
+     panel is auto-sized
+  */
+  min-height: 100px;
+}
+
+/* Only set card styles if we're not using the bslib card component */
+.main-container > *:not(.card) {
+  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+  border-radius: 0.5rem;
+}
+
+.main-container > * .panel-title {
+  height: var(--card-title-height);
+  width: calc(100% + 2*var(--card-padding));
+  padding: calc(0.5 * var(--card-padding)) var(--card-padding);
+  margin-left: calc(-1 * var(--card-padding));
+  margin-top: calc(-1 * var(--card-padding));
+  border-bottom: 1px solid #dae0e5;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.main-container > * .panel-title > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+.main-container > * .panel-title > svg {
+  outline: 1px solid red;
+}
+
+.panel-content {
+  height: 100%;
+  display: grid;
+}
+
+.main-container > *.collapsed  {
+  height: var(--card-title-height);
+  overflow: hidden;
+}
+
+.main-container > *.collapsed .panel-content {
+  display: none;
+}
+
+/* Makes it so tabpanels work in gridpanels */
+.main-container > * .tabbable { height: 100% }
+.main-container > * .tabbable > .nav { height: 42px; }
+.main-container > * .tabbable .tab-content { height: calc(100% - 42px); }
+.main-container > * .tabbable .tab-pane { height: 100%; }
+
+
+
+.tabbable { height: 100% }
+.tabbable > .nav { height: 42px; }
+.tabbable .tab-content { height: calc(100% - 42px); }
+.tabbable .tab-pane { height: 100%; }
+
+.section.no-header > h1:first-child {
+  display: none;
+}
+
+.section.v_start,
+.section.v_center,
+.section.v_end,
+.section.h_start,
+.section.h_center,
+.section.h_end {
+  display: grid;
+}
+
+.section.v_start  { align-items: start; }
+.section.v_center { align-items: center; }
+.section.v_end    { align-items: end; }
+
+.section.h_start  { justify-items: start; }
+.section.h_center { justify-items: center; }
+.section.h_end    { justify-items: end; }
+
+</style>
+</div>
+<div id="sidebar" class="section level2">
+<h2>Sidebar</h2>
+<p>Here is some content for the sidebar</p>
+</div>
+<div id="footer" class="section level2">
+<h2>Footer</h2>
+<p>Anything you want could go in the footer.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
