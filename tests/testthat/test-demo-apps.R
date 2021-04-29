@@ -1,7 +1,7 @@
 test_that("geyser app", {
   skip_on_cran()
   expect_snapshot_file(
-    test_demo_app("demo_app/app.R"),
+    test_demo_app("geyser/app.R"),
     "geyser-app.png"
   )
 })

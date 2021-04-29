@@ -1,7 +1,7 @@
 library(shiny)
 
 get_demo_app <- function(rel_path){
-  system.file(rel_path, package = "gridlayout")
+  system.file(paste0("demo_apps/", rel_path), package = "gridlayout")
 }
 
 # # Take screenshots of demo apps for use in documentation etc
