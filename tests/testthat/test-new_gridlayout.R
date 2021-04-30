@@ -44,6 +44,37 @@ test_that("Sizing defaults work", {
                "1rem")
 })
 
+test_that("Default row sizes react properly to auto-height container", {
+
+  mobile_layout <-"
+    |--------|
+    |1fr     |
+    |header  |
+    |sidebar |
+    |plot    |"
+
+  expect_false(
+    identical(
+      attr(new_gridlayout(mobile_layout,container_height = "auto"), "row_sizes"),
+      attr(new_gridlayout(mobile_layout,container_height = "viewport"), "row_sizes")
+    )
+  )
+})
+
+test_that("Users are warned about relative height rows with auto-height containers", {
+
+  mobile_layout <-"
+    | 50px  |header  |
+    | 100px |sidebar |
+    | 1fr   |plot    |"
+
+  expect_warning(
+    new_gridlayout(mobile_layout,container_height = "auto"),
+    regexp = "Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.",
+    fixed = TRUE
+  )
+})
+
 test_that("A single size can be passed for row and column sizes and it will be recycled", {
 
   my_layout <- new_gridlayout(

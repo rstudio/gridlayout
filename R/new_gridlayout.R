@@ -85,14 +85,23 @@ new_gridlayout <- function(
     )
   }
 
+  # Set defaults if unspecified
   if (is.null(gap)) gap <- "1rem"
 
   # Validate row and column sizes.
   sizes <- create_row_and_col_size_vecs(
     row_sizes = row_sizes,
     col_sizes = col_sizes,
-    elements = elements
+    elements = elements,
+    container_height = container_height
   )
+
+  # If container height is not a fixed value then relative unit row heights will
+  # not work. Issue a warning in this case
+  has_relative_row_heights <- any(str_detect(row_sizes, "fr", fixed = TRUE))
+  if (container_height == "auto" && has_relative_row_heights) {
+    warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
+  }
 
   layout <- structure(
     elements,
@@ -132,7 +141,12 @@ new_gridlayout <- function(
 
 
 
-create_row_and_col_size_vecs <- function(row_sizes, col_sizes, elements) {
+create_row_and_col_size_vecs <- function(
+  row_sizes,
+  col_sizes,
+  elements,
+  container_height
+) {
   empty_grid <- length(elements) == 0
 
   # Validate row and column sizes.
@@ -153,7 +167,11 @@ create_row_and_col_size_vecs <- function(row_sizes, col_sizes, elements) {
         max(end_vals)
       }
 
-      if(auto_sizing) sizes <- "1fr"
+      if (auto_sizing) {
+        # Don't give layouts with auto-height relative units
+        auto_unit <- if (dir == "row" && container_height == "auto") "300px" else "1fr"
+        sizes <- auto_unit
+      }
 
       if(length(sizes) == 1 & num_sections != 1){
         sizes <- rep_len(sizes, num_sections)
