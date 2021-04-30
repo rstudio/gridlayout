@@ -23,13 +23,6 @@ desired layout for your Shiny app.}
 \item{elements}{Named list of the UI definitions that will be used to fill
 all cells. Names must match those provided in \code{layout}.}
 
-\item{container_height}{How tall should the grid-containing element be? If
-set to \code{"viewport"} then the container will take up the entire available
-vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
-value of \code{"100\%"} will enable the the nested grid to take up the full
-vertical space provided by its parent container. Any other css size unit is
-also valid such as \code{"400px"} or \code{"100\%"}.}
-
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
 override card styling for elements built with \link{\code{grid_panel()}}.

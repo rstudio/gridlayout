@@ -20,8 +20,8 @@ table can be parsed instead of relying on it being parsable.}
   Arguments passed on to \code{\link[=new_gridlayout]{new_gridlayout}}
   \describe{
     \item{\code{layout_def}}{Either a list of elements with the \code{id}, \code{start_row},
-\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining
-a layout.}
+\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
+layout.}
     \item{\code{col_sizes}}{A character vector of valid css sizes for the width of each
 column in your grid as given by \code{layout_mat}. If a single value is passed,
 it will be repeated for all columns.}
@@ -32,9 +32,16 @@ base text size of a page. E.g. setting font-size: 16px on the body element
 of a page means 1rem = 16px;}
     \item{\code{container_height}}{How tall should the containing element be for this
 layout? Defaults to \code{"viewport"} which means the layout will take up the
-whole vertical space of the webpage. Values such as \code{"auto"} will let the
-page grow to as large as it needs to be to fit all content. This will cause
-issues with row heights in relative units, however.}
+whole vertical space of the webpage  (equivalent to the CSS value of
+\verb{100vh}). Values such as \code{"auto"} will let the page grow to as large as it
+needs to be to fit all content. This will cause issues with row heights in
+relative units, however.}
+    \item{\code{alternate_layouts}}{A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
+when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details.}
   }}
 }
 \value{

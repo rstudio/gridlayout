@@ -19,13 +19,6 @@ css id selector \verb{#} is apended to the name. If container contains css
 selector characters such as a dot, the selector will not be transformed
 into an id automatically. E.g. \code{container = ".main-content"}.}
 
-\item{container_height}{How tall should the grid-containing element be? If
-set to \code{"viewport"} then the container will take up the entire available
-vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
-value of \code{"100\%"} will enable the the nested grid to take up the full
-vertical space provided by its parent container. Any other css size unit is
-also valid such as \code{"400px"} or \code{"100\%"}.}
-
 \item{is_card_styled}{Should each section of the grid be given a card style
 to make it stand out? Options are \code{"grid_panel"}, where only elements with
 \code{"grid_panel"} class will get card styling, \code{"all"} where all children of

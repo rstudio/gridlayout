@@ -12,18 +12,21 @@
 )
 }
 \arguments{
+\item{layout}{Main (or default) layout object}
+
 \item{alternate_layout}{A \code{gridlayout} object or layout-as-markdown-table
-defining layout. The elements in this layout must match those in your main
-layout.}
+defining layout. See \link{Declaring your layout} for more info on format. The
+elements in this layout must match those in your main layout.}
+
+\item{width_bounds}{A named vector with at least one element of name \code{min},
+or \code{max}. These two values are used to set when the layout occurs. For
+instance, \code{c(max = 600)} means the layout will occur up until the page is
+wider than \verb{600px}.}
 
 \item{container_height}{How tall the layout should be. If left as \code{NULL} this
 will simply inherit the main layout's height. Often this should be set to
 \code{"auto"} to allow mobile user's to scroll. Beware though, you will want to
 absolutely size any plot outputs in these cases.}
-
-\item{upper_bound_width}{Width in pixels below which this layout is used}
-
-\item{lower_bound_width}{Width in pixels above which this layout is used}
 }
 \description{
 Adds a layout that will be triggered based upon the size of the viewport.

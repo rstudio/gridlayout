@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_gridlayout.R
 \name{new_gridlayout}
 \alias{new_gridlayout}
-\title{Construct a gridlayout object from basic parts}
+\title{Construct a gridlayout object}
 \usage{
 new_gridlayout(
   layout_def = list(),
@@ -15,8 +15,8 @@ new_gridlayout(
 }
 \arguments{
 \item{layout_def}{Either a list of elements with the \code{id}, \code{start_row},
-\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining
-a layout.}
+\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
+layout.}
 
 \item{col_sizes}{A character vector of valid css sizes for the width of each
 column in your grid as given by \code{layout_mat}. If a single value is passed,
@@ -31,16 +31,58 @@ of a page means 1rem = 16px;}
 
 \item{container_height}{How tall should the containing element be for this
 layout? Defaults to \code{"viewport"} which means the layout will take up the
-whole vertical space of the webpage. Values such as \code{"auto"} will let the
-page grow to as large as it needs to be to fit all content. This will cause
-issues with row heights in relative units, however.}
+whole vertical space of the webpage  (equivalent to the CSS value of
+\verb{100vh}). Values such as \code{"auto"} will let the page grow to as large as it
+needs to be to fit all content. This will cause issues with row heights in
+relative units, however.}
+
+\item{alternate_layouts}{A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
+when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details.}
 }
 \value{
 Object of class \code{"gridlayout"}
 }
 \description{
-Construct a gridlayout object from basic parts
+Builds the gridlayout s3 class that holds information needed to draw a given
+layout.
 }
+\section{Declaring your layout}{
+
+
+There are two current ways to declare layouts (aka inputs to \code{layout_def}).
+\subsection{Markdown tables The first is the easiest: a markdown table wrapped in a}{
+
+character string. In this format you define a grid using the table and then
+place your grid "elements" within that grid using their grid id. So for a
+2x2 layout with a header along the top and two plots side-by-side the layout
+would look as follows: \verb{\{r\} new_gridlayout( "| header | header | | plota | plotb  |" ) }
+}
+
+\subsection{Element lists The second method is to supply a list of elements by}{
+
+providing the following information for each:
+\itemize{
+\item \code{id}: Identifying id of the element (e.g. \verb{"header}) -
+\code{start_row/end_row}: The (1-indexed) start and end row of your element's
+span - \code{start_col/end_col}: The start and end column for your element's span
+}
+
+This is a bit more verbose but allows for greater control. Here you can have
+overlapping elements etc.. Most of the time you will just want to use the
+markdown syntax
+
+The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,">}}\preformatted{start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
+start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
+start_col = 2, end_col = 2) ) ) ```
+
+}\if{html}{\out{</div>}}
+}
+}
+
 \examples{
 
 # Assemble list of elements along with their positions

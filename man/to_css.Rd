@@ -23,24 +23,11 @@ the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
 
-\item{additional_card_styles}{A list of named property-value pairs for
-additional styles to be added to each card-element (as defined by
-\code{is_card_styled}. E.g. \code{element_styles = c("background" = "blue")}.}
-
-\item{element_styles}{A list of named property-value pairs for additional
-styles to be added to each first child element of the grid container. E.g.
-under the css selector of \verb{grid_container > *}. If \code{is_card_styled = "all"}
-then this has the same purpose as as \code{additional_card_styles}}
-
-\item{debug_mode}{If set to \code{TRUE} then each element of the grid will have an
-outline applied so positioning can more easily be assessed.}
-
-\item{container_height}{How tall should the grid-containing element be? If
-set to \code{"viewport"} then the container will take up the entire available
-vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
-value of \code{"100\%"} will enable the the nested grid to take up the full
-vertical space provided by its parent container. Any other css size unit is
-also valid such as \code{"400px"} or \code{"100\%"}.}
+\item{element_styles}{A list of named property-value pairs ( E.g.
+\code{element_styles = c("background" = "blue")}.) for additional styles to be
+added to each first child element of the grid container. E.g. under the css
+selector of \verb{grid_container > *}. If \code{is_card_styled = "all"} then this has
+the same purpose as as \code{additional_card_styles}}
 
 \item{selector_prefix}{CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
