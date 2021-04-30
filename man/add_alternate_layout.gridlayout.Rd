@@ -7,8 +7,7 @@
 \method{add_alternate_layout}{gridlayout}(
   layout,
   alternate_layout,
-  lower_bound_width = NULL,
-  upper_bound_width = NULL,
+  width_bounds = c(max = 500),
   container_height = NULL
 )
 }
@@ -17,14 +16,14 @@
 defining layout. The elements in this layout must match those in your main
 layout.}
 
-\item{lower_bound_width}{Width in pixels above which this layout is used}
-
-\item{upper_bound_width}{Width in pixels below which this layout is used}
-
 \item{container_height}{How tall the layout should be. If left as \code{NULL} this
 will simply inherit the main layout's height. Often this should be set to
 \code{"auto"} to allow mobile user's to scroll. Beware though, you will want to
 absolutely size any plot outputs in these cases.}
+
+\item{upper_bound_width}{Width in pixels below which this layout is used}
+
+\item{lower_bound_width}{Width in pixels above which this layout is used}
 }
 \description{
 Adds a layout that will be triggered based upon the size of the viewport.

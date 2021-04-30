@@ -19,16 +19,22 @@ table can be parsed instead of relying on it being parsable.}
 \item{...}{
   Arguments passed on to \code{\link[=new_gridlayout]{new_gridlayout}}
   \describe{
-    \item{\code{layout_def}}{Either a list of elements with the \code{id}, \code{start_row}, \code{end_row},
-\code{start_col}, and \code{end_col} format, or a markdown table defining a layout.}
+    \item{\code{layout_def}}{Either a list of elements with the \code{id}, \code{start_row},
+\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining
+a layout.}
     \item{\code{col_sizes}}{A character vector of valid css sizes for the width of each
 column in your grid as given by \code{layout_mat}. If a single value is passed,
 it will be repeated for all columns.}
     \item{\code{row_sizes}}{Same as \code{col_sizes}, but for row heights.}
     \item{\code{gap}}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with
-the base text size of a page. E.g. setting font-size: 16px on the body
-element of a page means 1rem = 16px;}
+grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;}
+    \item{\code{container_height}}{How tall should the containing element be for this
+layout? Defaults to \code{"viewport"} which means the layout will take up the
+whole vertical space of the webpage. Values such as \code{"auto"} will let the
+page grow to as large as it needs to be to fit all content. This will cause
+issues with row heights in relative units, however.}
   }}
 }
 \value{

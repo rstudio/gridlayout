@@ -59,7 +59,10 @@ add_alternate_layout.gridlayout <- function(
   }
 
   alternate <- list(
-    layout = new_gridlayout(alternate_layout),
+    layout = new_gridlayout(
+      alternate_layout,
+      container_height = container_height
+    ),
     width_bounds = width_bounds
   )
 

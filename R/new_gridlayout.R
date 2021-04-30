@@ -1,15 +1,21 @@
 #' Construct a gridlayout object from basic parts
 #'
-#' @param layout_def Either a list of elements with the `id`, `start_row`, `end_row`,
-#'   `start_col`, and `end_col` format, or a markdown table defining a layout.
+#' @param layout_def Either a list of elements with the `id`, `start_row`,
+#'   `end_row`, `start_col`, and `end_col` format, or a markdown table defining
+#'   a layout.
 #' @param col_sizes A character vector of valid css sizes for the width of each
 #'   column in your grid as given by `layout_mat`. If a single value is passed,
 #'   it will be repeated for all columns.
 #' @param row_sizes Same as `col_sizes`, but for row heights.
 #' @param gap Valid css sizing for gap to be left between each element in your
-#'   grid. Defaults to `"1rem"`. This is a relative unit that scales with
-#'   the base text size of a page. E.g. setting font-size: 16px on the body
-#'   element of a page means 1rem = 16px;
+#'   grid. Defaults to `"1rem"`. This is a relative unit that scales with the
+#'   base text size of a page. E.g. setting font-size: 16px on the body element
+#'   of a page means 1rem = 16px;
+#' @param container_height How tall should the containing element be for this
+#'   layout? Defaults to `"viewport"` which means the layout will take up the
+#'   whole vertical space of the webpage. Values such as `"auto"` will let the
+#'   page grow to as large as it needs to be to fit all content. This will cause
+#'   issues with row heights in relative units, however.
 #'
 #' @return Object of class `"gridlayout"`
 #' @export
@@ -49,9 +55,11 @@ new_gridlayout <- function(
   col_sizes = NULL,
   row_sizes = NULL,
   gap = NULL,
-  container_height = "viewport",
+  container_height = NULL,
   alternate_layouts = NULL
 ){
+  if (is.null(container_height)) container_height <- "viewport"
+
   elements <- list()
   # Figure out what type of layout definition we were passed
   if (is_char_string(layout_def)) {
