@@ -10,11 +10,14 @@ add_alternate_layout <- function(layout, ...) {
 #' This is typically used to add a mobile view (or a desktop view if your app is
 #' mobile first.)
 #'
+#' @param layout Main (or default) layout object
 #' @param alternate_layout A `gridlayout` object or layout-as-markdown-table
-#'   defining layout. The elements in this layout must match those in your main
-#'   layout.
-#' @param upper_bound_width Width in pixels below which this layout is used
-#' @param lower_bound_width Width in pixels above which this layout is used
+#'   defining layout. See [Declaring your layout] for more info on format. The
+#'   elements in this layout must match those in your main layout.
+#' @param width_bounds A named vector with at least one element of name `min`,
+#'   or `max`. These two values are used to set when the layout occurs. For
+#'   instance, `c(max = 600)` means the layout will occur up until the page is
+#'   wider than `600px`.
 #' @param container_height How tall the layout should be. If left as `NULL` this
 #'   will simply inherit the main layout's height. Often this should be set to
 #'   `"auto"` to allow mobile user's to scroll. Beware though, you will want to
