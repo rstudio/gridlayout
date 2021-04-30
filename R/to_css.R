@@ -327,18 +327,3 @@ rmd_utility_css <- "
 .section.h_center { justify-items: center; }
 .section.h_end    { justify-items: end; }
 "
-
-make_card_styles <- function(bslib_styles = FALSE) {
-  # Taken from here
-  # https://github.com/rstudio/bslib/blob/master/inst/lib/bs/scss/_card.scss The
-  # reason this is being generated here instead of simply applying the card
-  # class is that we want to be able to put these styles inline, which is not
-  # fully possible without bslib present.
-
-
-  bs_get_variables(
-    bs_theme(),
-    c("card-border-width", "card-border-color")
-  )
-}
-
