@@ -32,7 +32,7 @@ my_layout <- new_gridlayout(
     ),
     list(
       layout = big_screen_layout,
-      width_bounds = c(min = 1200)
+      width_bounds = c(min = 1600)
     )
   )
 )
