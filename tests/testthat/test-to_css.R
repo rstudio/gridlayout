@@ -64,21 +64,23 @@ test_that("Height setting can be customized", {
     |:-----|:-------|:------|:------|
     |100px |header  |header |header |
     |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
+    |1fr   |sidebar |plot_b |plot_b |",
+    container_height = "viewport"
   )
 
 
   expect_true(
     str_detect(
-      to_css(grid_obj, container_height = "viewport"),
+      to_css(grid_obj),
       "height: 100vh",
       fixed = TRUE
     )
   )
 
+
   expect_true(
     str_detect(
-      to_css(grid_obj, container_height = "800px"),
+      to_css(new_gridlayout(grid_obj,container_height = "800px")),
       "height: 800px",
       fixed = TRUE
     )

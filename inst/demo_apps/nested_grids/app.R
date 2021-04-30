@@ -30,7 +30,7 @@ app <- shinyApp(
     sidebar = p("Here is my sidebar and all the content that may be desired within it!"),
     content = grid_container(
       id = "content",
-      layout = content_layout,
+      layout = new_gridlayout(content_layout, container_height = "100%"),
       elements = list(
         icon = grid_panel(
           h2(fontawesome::fa("r-project", fill = "steelblue"), height = "80px"),

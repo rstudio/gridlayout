@@ -63,7 +63,6 @@ grid_container <- function(
   id = "grid-container",
   layout,
   elements,
-  container_height = "100%",
   use_bslib_card_styles = FALSE
 ){
 
@@ -136,8 +135,8 @@ grid_container <- function(
     use_gridlayout_shiny(
       layout,
       container = id,
-      selector_prefix = paste0("#", id_prefix),
-      container_height = container_height),
+      selector_prefix = paste0("#", id_prefix)
+    ),
     shiny::div(
       id = id,
       class = "grid-container",

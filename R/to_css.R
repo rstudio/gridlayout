@@ -55,7 +55,6 @@ to_css.gridlayout <- function(
   container,
   is_card_styled = "grid_panel",
   element_styles = c(),
-  container_height = "viewport",
   selector_prefix = "#"
 ){
   container_query <- if(missing(container)){
@@ -89,7 +88,6 @@ to_css.gridlayout <- function(
   layout_rules <- generate_layout_rules(
     layout = layout,
     container_query = container_query,
-    container_height = container_height,
     selector_prefix = selector_prefix
   )
 
@@ -104,7 +102,6 @@ to_css.gridlayout <- function(
           generate_layout_rules(
             layout = alt_layout$layout,
             container_query = container_query,
-            container_height = alt_layout$container_height %||% container_height,
             selector_prefix = selector_prefix,
             width_bounds = alt_layout$width_bounds
           )
@@ -128,7 +125,6 @@ to_css.gridlayout <- function(
 generate_layout_rules <- function(
   layout,
   container_query,
-  container_height,
   selector_prefix,
   width_bounds = NULL
 ){
@@ -141,7 +137,7 @@ generate_layout_rules <- function(
       "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
       "grid-gap" = attr(layout, 'gap'),
       "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
+      "height" = validCssUnit(attr(layout, "container_height"))
     )
   )
 
@@ -265,7 +261,6 @@ use_gridlayout_shiny <- function(layout, ...){
 #'
 use_gridlayout_rmd <- function(
   container = '.main-container',
-  container_height = 'viewport',
   is_card_styled = "all",
   ...
   ){
@@ -280,7 +275,6 @@ use_gridlayout_rmd <- function(
         "<style>",
         to_css(layout,
                container = container,
-               container_height = container_height,
                is_card_styled = is_card_styled,
                ...
                ),

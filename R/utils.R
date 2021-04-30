@@ -127,6 +127,11 @@ is_css_unit <- function(x){
 # Taken from the shiny source
 validCssUnit <- function(x)
 {
+  # We use this alias for 100vh to make things a bit less confusing for users
+  # who may not get that "vh" stands for viewheight etc.
+  if (identical(x, "viewport")) {
+    x <- "100vh"
+  }
   if (is.null(x) || is.na(x))
     return(x)
   if (length(x) > 1 || (!is.character(x) && !is.numeric(x)))

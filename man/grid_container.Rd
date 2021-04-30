@@ -8,7 +8,6 @@ grid_container(
   id = "grid-container",
   layout,
   elements,
-  container_height = "100\%",
   use_bslib_card_styles = FALSE
 )
 }

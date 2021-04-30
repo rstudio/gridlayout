@@ -4,12 +4,7 @@
 \alias{use_gridlayout_rmd}
 \title{Enable gridlayout usage in RMarkdown documents}
 \usage{
-use_gridlayout_rmd(
-  container = ".main-container",
-  container_height = "viewport",
-  is_card_styled = "all",
-  ...
-)
+use_gridlayout_rmd(container = ".main-container", is_card_styled = "all", ...)
 }
 \arguments{
 \item{container}{Id of the element for grid to be placed in. Default value to
