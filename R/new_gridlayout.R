@@ -85,68 +85,9 @@ new_gridlayout <- function(
     )
   }
 
-  # Set defaults if unspecified
+  # Set default if unspecified
   if (is.null(gap)) gap <- "1rem"
 
-  # Validate row and column sizes.
-  sizes <- create_row_and_col_size_vecs(
-    row_sizes = row_sizes,
-    col_sizes = col_sizes,
-    elements = elements,
-    container_height = container_height
-  )
-
-  # If container height is not a fixed value then relative unit row heights will
-  # not work. Issue a warning in this case
-  has_relative_row_heights <- any(str_detect(row_sizes, "fr", fixed = TRUE))
-  if (container_height == "auto" && has_relative_row_heights) {
-    warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
-  }
-
-  layout <- structure(
-    elements,
-    class = "gridlayout",
-    row_sizes = sizes$row,
-    col_sizes = sizes$col,
-    gap = gap,
-    container_height = container_height
-  )
-
-  if (notNull(alternate_layouts)) {
-
-    single_alternate <- "layout" %in% names(alternate_layouts)
-
-    if (single_alternate) {
-      alternate_layouts <- list(alternate_layouts)
-    }
-
-    for (alternate in alternate_layouts) {
-      if (is.null(alternate$layout)) {
-        stop(
-          "Altnernate layouts need to be provided as a list with ",
-          "a layout element along with width bounds."
-        )
-      }
-      layout <- add_alternate_layout(
-        layout,
-        alternate_layout = alternate$layout,
-        width_bounds = alternate$width_bounds,
-        container_height = alternate$container_height
-      )
-    }
-  }
-
-  layout
-}
-
-
-
-create_row_and_col_size_vecs <- function(
-  row_sizes,
-  col_sizes,
-  elements,
-  container_height
-) {
   empty_grid <- length(elements) == 0
 
   # Validate row and column sizes.
@@ -191,7 +132,50 @@ create_row_and_col_size_vecs <- function(
 
       sizes
     })
+
+  # If container height is not a fixed value then relative unit row heights will
+  # not work. Issue a warning in this case
+  has_relative_row_heights <- any(str_detect(row_sizes, "fr", fixed = TRUE))
+  if (container_height == "auto" && has_relative_row_heights) {
+    warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
+  }
+
+  layout <- structure(
+    elements,
+    class = "gridlayout",
+    row_sizes = sizes$row,
+    col_sizes = sizes$col,
+    gap = gap,
+    container_height = container_height
+  )
+
+  if (notNull(alternate_layouts)) {
+
+    single_alternate <- "layout" %in% names(alternate_layouts)
+
+    if (single_alternate) {
+      alternate_layouts <- list(alternate_layouts)
+    }
+
+    for (alternate in alternate_layouts) {
+      if (is.null(alternate$layout)) {
+        stop(
+          "Altnernate layouts need to be provided as a list with ",
+          "a layout element along with width bounds."
+        )
+      }
+      layout <- add_alternate_layout(
+        layout,
+        alternate_layout = alternate$layout,
+        width_bounds = alternate$width_bounds,
+        container_height = alternate$container_height
+      )
+    }
+  }
+
+  layout
 }
+
 
 # Function to allow layout being defined with markdown or with standard object
 coerce_to_layout <- function(layout_def){
