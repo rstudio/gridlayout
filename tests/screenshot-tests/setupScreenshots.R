@@ -1,5 +1,6 @@
 library(shiny)
 
+devtools::load_all(".")
 get_demo_app <- function(rel_path){
   system.file(paste0("demo_apps/", rel_path), package = "gridlayout")
 }
@@ -98,4 +99,13 @@ test_demo_app <- function(
 
   # Return screenshot path (for use in testing)
   invisible(screenshot_path)
+}
+
+screenshot_snapshot_test <- function(screenshot_name, ...) {
+  if (notNull(getOption("gridlayout.run_webshot_tests"))) {
+    expect_snapshot_file(
+      test_demo_app(...),
+      screenshot_name
+    )
+  }
 }
