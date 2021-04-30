@@ -13,21 +13,11 @@
 #'   the grid container will get card styling (useful for RMarkdown or other
 #'   situations where you don't control child rendering) or `"none"` for no card
 #'   styling.
-#' @param additional_card_styles A list of named property-value pairs for
-#'   additional styles to be added to each card-element (as defined by
-#'   `is_card_styled`. E.g. `element_styles = c("background" = "blue")`.
-#' @param element_styles A list of named property-value pairs for additional
-#'   styles to be added to each first child element of the grid container. E.g.
-#'   under the css selector of `grid_container > *`. If `is_card_styled = "all"`
-#'   then this has the same purpose as as `additional_card_styles`
-#' @param debug_mode If set to `TRUE` then each element of the grid will have an
-#'   outline applied so positioning can more easily be assessed.
-#' @param container_height How tall should the grid-containing element be? If
-#'   set to `"viewport"` then the container will take up the entire available
-#'   vertical space (equivalent to the CSS value of `100vh`). For nested grids a
-#'   value of `"100%"` will enable the the nested grid to take up the full
-#'   vertical space provided by its parent container. Any other css size unit is
-#'   also valid such as `"400px"` or `"100%"`.
+#' @param element_styles A list of named property-value pairs ( E.g.
+#'   `element_styles = c("background" = "blue")`.) for additional styles to be
+#'   added to each first child element of the grid container. E.g. under the css
+#'   selector of `grid_container > *`. If `is_card_styled = "all"` then this has
+#'   the same purpose as as `additional_card_styles`
 #' @param selector_prefix CSS prefix used to target grid elements. This will
 #'   change if you're integrating grid with a system that you don't want to use
 #'   ids (the `"#"` prefix) with because they are not available or are used for
