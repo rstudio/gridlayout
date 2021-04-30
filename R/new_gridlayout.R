@@ -1,24 +1,65 @@
-#' Construct a gridlayout object from basic parts
+#' Construct a gridlayout object
 #'
-#' @param layout_def Either a list of elements with the `id`, `start_row`,
-#'   `end_row`, `start_col`, and `end_col` format, or a markdown table defining
-#'   a layout.
-#' @param col_sizes A character vector of valid css sizes for the width of each
-#'   column in your grid as given by `layout_mat`. If a single value is passed,
-#'   it will be repeated for all columns.
-#' @param row_sizes Same as `col_sizes`, but for row heights.
-#' @param gap Valid css sizing for gap to be left between each element in your
-#'   grid. Defaults to `"1rem"`. This is a relative unit that scales with the
-#'   base text size of a page. E.g. setting font-size: 16px on the body element
-#'   of a page means 1rem = 16px;
-#' @param container_height How tall should the containing element be for this
-#'   layout? Defaults to `"viewport"` which means the layout will take up the
-#'   whole vertical space of the webpage. Values such as `"auto"` will let the
-#'   page grow to as large as it needs to be to fit all content. This will cause
-#'   issues with row heights in relative units, however.
+#' Builds the gridlayout s3 class that holds information needed to draw a given
+#' layout.
 #'
-#' @return Object of class `"gridlayout"`
-#' @export
+#'
+#'@section Declaring your layout:
+#'
+#'  There are two current ways to declare layouts (aka inputs to `layout_def`).
+#'
+#'  ### Markdown tables The first is the easiest: a markdown table wrapped in a
+#'  character string. In this format you define a grid using the table and then
+#'  place your grid "elements" within that grid using their grid id. So for a
+#'  2x2 layout with a header along the top and two plots side-by-side the layout
+#'  would look as follows: ```{r} new_gridlayout( "| header | header | | plota |
+#'  plotb  |" ) ```
+#'
+#'  ### Element lists The second method is to supply a list of elements by
+#'  providing the following information for each:
+#'
+#'  - `id`: Identifying id of the element (e.g. `"header`) -
+#'  `start_row/end_row`: The (1-indexed) start and end row of your element's
+#'  span - `start_col/end_col`: The start and end column for your element's span
+#'
+#'  This is a bit more verbose but allows for greater control. Here you can have
+#'  overlapping elements etc.. Most of the time you will just want to use the
+#'  markdown syntax
+#'
+#'  The same layout as declared above can be accomplished with the following:
+#'
+#'  ```{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,
+#'  start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
+#'  start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
+#'  start_col = 2, end_col = 2) ) ) ```
+#'
+#'
+#'@param layout_def Either a list of elements with the `id`, `start_row`,
+#'  `end_row`, `start_col`, and `end_col` format, or a markdown table defining a
+#'  layout.
+#'@param col_sizes A character vector of valid css sizes for the width of each
+#'  column in your grid as given by `layout_mat`. If a single value is passed,
+#'  it will be repeated for all columns.
+#'@param row_sizes Same as `col_sizes`, but for row heights.
+#'@param gap Valid css sizing for gap to be left between each element in your
+#'  grid. Defaults to `"1rem"`. This is a relative unit that scales with the
+#'  base text size of a page. E.g. setting font-size: 16px on the body element
+#'  of a page means 1rem = 16px;
+#'@param container_height How tall should the containing element be for this
+#'  layout? Defaults to `"viewport"` which means the layout will take up the
+#'  whole vertical space of the webpage  (equivalent to the CSS value of
+#'  `100vh`). Values such as `"auto"` will let the page grow to as large as it
+#'  needs to be to fit all content. This will cause issues with row heights in
+#'  relative units, however.
+#'@param alternate_layouts A list of layouts to be used for different viewport
+#'  widths. This is enables your app to adapt to different screensizes such as a
+#'  phone or an ultra-wide monitor. Each entry in this list must contain a
+#'  `layout`: or valid layout declaration (see [Declaring your layout]), and
+#'  `width_bounds`: or a list with at least one of a `min` and `max` value for
+#'  when your page appears. See [add_alternate_layout()] for more details.
+#'
+#'@return Object of class `"gridlayout"`
+#'@export
 #'
 #' @examples
 #'
