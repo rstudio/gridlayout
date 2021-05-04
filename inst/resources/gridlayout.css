@@ -73,6 +73,14 @@
   display: none;
 }
 
+/* Make everything line up nice and cleanly like it should in the middle */
+.grid_panel > .title_panel {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
 /* Makes it so tabpanels work in gridpanels */
 .grid_panel .tabbable { height: 100% }
 .grid_panel .tabbable > .nav { height: 42px; }

@@ -1,20 +1,19 @@
 // JS entry point
 import { Block_El, make_el, remove_elements } from "./make-elements";
 import { focused_modal, show_code } from "./make-focused_modal";
-import { make_css_unit_input, CSS_Input } from "./make-css_unit_input";
+import { make_css_unit_input, CSS_Input, get_css_unit, get_css_value } from "./make-css_unit_input";
 import {
   as_array,
   max_w_missing,
   min_w_missing,
   boxes_overlap,
   get_bounding_rect,
-  get_css_unit,
-  get_css_value,
   Selection_Rect,
   update_rect_with_delta,
   XY_Pos,
   Drag_Type,
   set_class,
+  filler_text,
 } from "./utils-misc";
 import {
   sizes_to_template_def,
@@ -610,6 +609,8 @@ window.onload = function () {
       `div#${id}.el_${id}.added-element`,
       {
         grid_pos,
+        // Add filler text for new elements so that auto-height will work
+        innerHTML: mirrors_existing_element ? "" : filler_text,
         styles: {
           borderColor: color,
           position: "relative",

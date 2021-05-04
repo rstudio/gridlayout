@@ -140,14 +140,6 @@ export function update_rect_with_delta(
   return new_rect;
 }
 
-export function get_css_unit(css_size: string): string {
-  return css_size.match(/[^ \d | \.]+$/g)[0] || "px";
-}
-
-export function get_css_value(css_size: string): number {
-  return Number(css_size.match(/^[\d | \.]+/g)[0]);
-}
-
 export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
@@ -159,3 +151,11 @@ export function set_class(elements: NodeListOf<HTMLElement>, class_name: string)
   });
   
 }
+
+export const filler_text = `
+<div class = "filler_text">
+  Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+  when an unknown printer took a galley of type and scrambled it to make a type 
+  specimen book.
+</div>`;

@@ -1,12 +1,33 @@
-import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
+import {
+  browser_header_html,
+  horizontal_drag_icon,
+  vertical_drag_icon,
+} from "./utils-icons";
 import { make_el } from "./make-elements";
-import { get_css_value, get_css_unit } from "./utils-misc";
 
 export type CSS_Input = {
   form: HTMLElement;
   current_value: () => string;
   update_value: (new_value: string) => void;
+};
+
+type unit_options = "fr" | "px" | "rem" | "auto";
+
+const default_values = {
+  fr: "1",
+  px: "100",
+  rem: "2",
+};
+
+export function get_css_unit(css_size: string): unit_options {
+  return (css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px") as unit_options;
 }
+
+export function get_css_value(css_size: string): number | null {
+  const value = css_size.match(/^[\d|\.]*/g)[0];
+  return value === "" ? null : Number(value);
+}
+
 // =============================================================================
 // From here on are a series of general purpose helper functions not
 // specifically related to the app and its state
@@ -18,12 +39,13 @@ export function make_css_unit_input({
   start_val = 1,
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
-  on_drag = on_change, 
-  allowed_units = ["fr", "px", "rem"],
+  on_drag = on_change,
+  allowed_units = ["fr", "px", "rem", "auto"],
   form_styles = {},
   drag_dir = "none",
 }): CSS_Input {
   const allow_drag = drag_dir !== "none";
+  let current_unit = start_unit;
 
   const form = make_el(parent_el, `form${selector}.css-unit-input`, {
     styles: form_styles,
@@ -90,10 +112,10 @@ export function make_css_unit_input({
       },
       {
         event: "dragend",
-        func: function(event){
+        func: function (event) {
           on_change(current_value());
-        }
-      }
+        },
+      },
     ],
   });
 
@@ -109,9 +131,18 @@ export function make_css_unit_input({
       unit_option.selected = true;
     }
   });
-  function current_value() {
-    return `${value_input.value}${unit_selector.value}`;
+
+  function unit_type(): unit_options {
+    return unit_selector.value as unit_options;
   }
+  function num_units() {
+    return value_input.value;
+  }
+  function current_value() {
+    if (unit_type() === "auto") return "auto";
+    return `${num_units()}${unit_type()}`;
+  }
+
   function on_update() {
     const val = current_value();
     update_value(val);
@@ -119,20 +150,36 @@ export function make_css_unit_input({
   }
 
   function update_value(new_value: string) {
-    value_input.value = get_css_value(new_value).toString();
-    const new_unit = get_css_unit(new_value);
+    const units = get_css_unit(new_value);
+    const count = get_css_value(new_value);
+
+    if (count === null && units === "auto") {
+      // Using a unit without values so disable value input
+      value_input.classList.add("disabled");
+      value_input.value = "";
+    } else {
+      value_input.classList.remove("disabled");
+
+      const using_old_units_default = value_input.value === default_values[current_unit];
+      value_input.value =
+        count === null || using_old_units_default 
+        ? default_values[units] 
+        : count.toString();
+    }
 
     for (let opt of unit_selector.children as HTMLCollectionOf<
       HTMLOptionElement
     >) {
-      opt.selected = opt.value === new_unit;
+      opt.selected = opt.value === units;
     }
 
-    if (new_unit === "px" && allow_drag) {
+    if (units === "px" && allow_drag) {
       form.classList.add("with-drag");
     } else {
       form.classList.remove("with-drag");
     }
+
+    current_unit = units;
   }
 
   update_value(`${start_val}${start_unit}`);
