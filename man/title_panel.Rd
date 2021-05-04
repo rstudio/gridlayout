@@ -4,12 +4,11 @@
 \alias{title_panel}
 \title{Make header panel}
 \usage{
-title_panel(title_content, ...)
+title_panel(title_content, ..., logo = NULL)
 }
 \arguments{
-\item{title_content}{Whatever you want the title to say. If you want to
-include things other than text, like an image, you can pass a tag-list or
-span tag.}
+\item{title_content}{Whatever you want the title to say. Typically just text
+but any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 
 \item{...}{
   Arguments passed on to \code{\link[=grid_panel]{grid_panel}}
@@ -33,6 +32,8 @@ mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justif
 \href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
 (= \code{v_align}).}
   }}
+
+\item{logo}{Optional image source for logo to be placed left of title}
 }
 \description{
 This is just a helper function that wraps your content in a vertically

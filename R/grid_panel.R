@@ -175,10 +175,10 @@ make_collapser_icon <- function(parent_id = "") {
 #' This is just a helper function that wraps your content in a vertically
 #' centered header (`h2`) tag.
 #'
-#' @param title_content Whatever you want the title to say. If you want to
-#'   include things other than text, like an image, you can pass a tag-list or
-#'   span tag.
+#' @param title_content Whatever you want the title to say. Typically just text
+#'   but any tag or tag-list is possible. All will get wrapped in an `h3` tag.
 #' @inheritDotParams grid_panel
+#' @param logo Optional image source for logo to be placed left of title
 #'
 #' @examples
 #'
@@ -198,10 +198,21 @@ make_collapser_icon <- function(parent_id = "") {
 #' )
 #'
 #' @export
-title_panel <- function(title_content,
-                        ...) {
+title_panel <- function(
+  title_content,
+  ...,
+  logo = NULL
+) {
+
+  if (notNull(logo)) {
+    title_content <- tagList(
+      img(src = logo, height = "60px"),
+      title_content
+    )
+  }
+
   grid_panel(
-    h2(title_content, style = "margin: 0;"),
+    h2(title_content, class = "title_panel"),
     v_align = "center",
     ...
   )
