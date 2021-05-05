@@ -1,7 +1,7 @@
-#' Construct a gridlayout object
+#'Construct a gridlayout object
 #'
-#' Builds the gridlayout s3 class that holds information needed to draw a given
-#' layout.
+#'Builds the gridlayout s3 class that holds information needed to draw a given
+#'layout.
 #'
 #'
 #'@section Declaring your layout:
@@ -56,7 +56,9 @@
 #'  phone or an ultra-wide monitor. Each entry in this list must contain a
 #'  `layout`: or valid layout declaration (see [Declaring your layout]), and
 #'  `width_bounds`: or a list with at least one of a `min` and `max` value for
-#'  when your page appears. See [add_alternate_layout()] for more details.
+#'  when your page appears. See [add_alternate_layout()] for more details. If no
+#'  alternate layouts are given a single-column layout will be automatically
+#'  applied for mobile screens (viewports less than 600px wide).
 #'
 #'@return Object of class `"gridlayout"`
 #'@export

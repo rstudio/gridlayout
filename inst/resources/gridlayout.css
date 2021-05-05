@@ -6,14 +6,6 @@
   overflow: hidden;
 }
 
-.grid_panel .shiny-plot-output {
-  /* Don't let plot outputs get accidentally swallowed by auto sizing
-     This probably isn't what people want, but it will at least alert them
-     to the fact they need to set an explicite plot height if the containing
-     panel is auto-sized
-  */
-  min-height: 100px;
-}
 
 .grid_panel .shiny-plot-output > img {
   /* The way grid sizing works can throw off the plot sizing in shiny. This

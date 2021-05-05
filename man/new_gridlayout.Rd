@@ -41,7 +41,9 @@ widths. This is enables your app to adapt to different screensizes such as a
 phone or an ultra-wide monitor. Each entry in this list must contain a
 \code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
 \code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
-when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details.}
+when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
+alternate layouts are given a single-column layout will be automatically
+applied for mobile screens (viewports less than 600px wide).}
 }
 \value{
 Object of class \code{"gridlayout"}

@@ -92,10 +92,9 @@ to_css.gridlayout <- function(
   )
 
 
-  alternative_layout_queries <- ""
-  if (notNull(attr(layout, "alternates"))) {
+  alternative_layout_queries <- if (notNull(attr(layout, "alternates"))) {
 
-    alternative_layout_queries <- paste(
+    paste(
       lapply(
         attr(layout, "alternates"),
         function(alt_layout) {
@@ -109,13 +108,40 @@ to_css.gridlayout <- function(
       ),
       collapse = "\n\n"
     )
+  } else {
+    # Add a default layout of a single column that occurs at sizes narrower than 600px
+    paste(
+      "@media (max-width: 600px) {",
+      build_css_rule(
+        selector = container_query,
+        prop_list = c(
+          "display"= "block",
+          "height" = "auto"
+        )
+      ),
+      build_css_rule(
+        selector = paste(container_query, "> *"),
+        prop_list = c(
+          "margin-bottom"= attr(layout, 'gap')
+        )
+      ),
+      build_css_rule(
+        # Don't let plots get swallowed to nothing
+        selector = ".shiny-plot-output",
+        prop_list = c(
+          "min-height"= "300px"
+        )
+      ),
+      "}",
+      sep = "\n"
+    )
   }
 
 
   paste(
     layout_rules,
-    alternative_layout_queries,
     accessory_css,
+    alternative_layout_queries,
     all_elements_styles,
     sep = "\n\n"
   )
