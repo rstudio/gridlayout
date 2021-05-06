@@ -120,6 +120,9 @@ directly but can be used to create nested grids" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
     </li>
   </ul>
@@ -152,7 +155,7 @@ directly but can be used to create nested grids</p>
   id <span class='op'>=</span> <span class='st'>"grid-container"</span>,
   <span class='va'>layout</span>,
   <span class='va'>elements</span>,
-  container_height <span class='op'>=</span> <span class='st'>"100%"</span>
+  use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -160,8 +163,8 @@ directly but can be used to create nested grids</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>id</th>
-      <td><p>ID unique to this container (note that the HTML will be prefixed with
-<code>grid-</code> to avoid namespace clashes)</p></td>
+      <td><p>ID unique to this container (note that the HTML will be prefixed
+with <code>grid-</code> to avoid namespace clashes)</p></td>
     </tr>
     <tr>
       <th>layout</th>
@@ -175,19 +178,20 @@ desired layout for your Shiny app.</p></td>
 all cells. Names must match those provided in <code>layout</code>.</p></td>
     </tr>
     <tr>
-      <th>container_height</th>
-      <td><p>How tall should the grid-containing element be? If
-set to <code>"viewport"</code> then the container will take up the entire available
-vertical space (equivalent to the CSS value of <code>100vh</code>). For nested grids a
-value of <code>"100%"</code> will enable the the nested grid to take up the full
-vertical space provided by its parent container. Any other css size unit is
-also valid such as <code>"400px"</code> or <code>"100%"</code>.</p></td>
+      <th>use_bslib_card_styles</th>
+      <td><p>Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with <code><a href='grid_panel.html'>grid_panel()</a></code>.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as <code>FALSE</code>
+and set styles manually on each panel.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A taglist with grid elements wrapped inside a container div of class <code>id</code>.</p>
+    <p>A taglist with grid elements wrapped inside a container div of class
+<code>id</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

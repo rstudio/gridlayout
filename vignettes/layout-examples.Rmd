@@ -1,5 +1,5 @@
 ---
-title: "layout-examples"
+title: "Layout Examples"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{layout-examples}

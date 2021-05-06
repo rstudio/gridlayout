@@ -119,6 +119,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
     </li>
   </ul>
@@ -146,7 +149,7 @@
     <p>Setup gridlayout UI for shiny app</p>
     </div>
 
-    <pre class="usage"><span class='fu'>grid_page</span><span class='op'>(</span><span class='va'>layout</span>, <span class='va'>...</span>, theme <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>grid_page</span><span class='op'>(</span><span class='va'>layout</span>, <span class='va'>...</span>, use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>, theme <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,6 +166,15 @@ desired layout for your Shiny app.</p></td>
 header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>. Any arguments that don't match the names used in the layout
 definition are added to the page after the container. This can be used to
 do things like things to the <code>head</code> or <code>meta</code> sections of the page.</p></td>
+    </tr>
+    <tr>
+      <th>use_bslib_card_styles</th>
+      <td><p>Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with <code><a href='grid_panel.html'>grid_panel()</a></code>.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as <code>FALSE</code>
+and set styles manually on each panel.</p></td>
     </tr>
     <tr>
       <th>theme</th>

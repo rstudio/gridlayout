@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Using gridlayout with .Rmds • gridlayout</title>
+<title>Layout Examples • gridlayout</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="../tidyverse.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -13,7 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../tidyverse-2.css" rel="stylesheet">
 <link href="../rmd.css" rel="stylesheet">
-<meta property="og:title" content="Using gridlayout with .Rmds">
+<meta property="og:title" content="Layout Examples">
 <meta property="og:description" content="gridlayout">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -90,14 +90,14 @@
 
       
 
-      </header><script src="using_with_rmd_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
+      </header><script src="layout-examples_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Using gridlayout with .Rmds</h1>
+      <h1 data-toc-skip>Layout Examples</h1>
             
       
       
-      <div class="hidden name"><code>using_with_rmd.Rmd</code></div>
+      <div class="hidden name"><code>layout-examples.Rmd</code></div>
 
     </div>
 
@@ -105,72 +105,77 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></code></pre></div>
-<p>By placing the function <code>use_gridlayout_rmd</code> in the <code>setup</code> chunk of an Rmd you can define a gridlayout table using the a code chunk with the “language” set to <code>gridlayout</code>. Any markdown style table (see <code><a href="../reference/md_to_gridlayout.html">md_to_gridlayout()</a></code>) will be used to setup a grid-layout for your page. Just make sure your sections are given headers corresponding to the respective grid elements (either using their name or by using the <code>#My header text {#custom_id}</code> syntax after the header.)</p>
-<p>The following shows how you can customize the appearance of the elements of your layout using “card styles” and custom css.</p>
-<div id="starting-point" class="section level1">
-<h1 class="hasAnchor">
-<a href="#starting-point" class="anchor"></a>Starting point</h1>
-<p>All the screenshots below will assume an <code>.Rmd</code> that looks like this</p>
-<pre><code>## Main
-
-
-```gridlayout
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |main     |
-|120px |footer  |footer   |
-```
-
-
-## Sidebar {.grid_panel}
-
-Here is some content for the sidebar
-
-## Footer
-
-Anything you want could go in the footer.</code></pre>
-<div id="default-settings" class="section level2">
+<div id="basic-stack" class="section level2">
 <h2 class="hasAnchor">
-<a href="#default-settings" class="anchor"></a>Default settings</h2>
-<p>The default settings will give every element a card-like styling.</p>
+<a href="#basic-stack" class="anchor"></a>Basic stack</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
+  |      |         |
+  |------|---------|
+  |1rem  |1fr      |
+  |80px  |header   |
+  |1fr   |chickens |
+  |1fr   |treePlot |
+  |1fr   |yarnPlot |"</span><span class="op">)</span></code></pre></div>
+<p><img src="layouts_demo_stack.png" width="100%"></p>
+</div>
+<div id="scrolling-stack" class="section level2">
+<h2 class="hasAnchor">
+<a href="#scrolling-stack" class="anchor"></a>Scrolling stack</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_base.png" width="100%"></p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
+  |      |           |
+  |------|-----------|
+  |1rem  |1fr        |
+  |80px  |header     |
+  |400px |chickPlot  |
+  |400px |chickTable |
+  |400px |treePlot   |
+  |400px |yarnPlot   |"</span>,
+  container_height <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
+<p><img src="layouts_demo_scrolling_stack.png" width="100%"></p>
 </div>
-<div id="targeting-specific-elements-for-card-styling" class="section level2">
+<div id="x2-equal-grid" class="section level2">
 <h2 class="hasAnchor">
-<a href="#targeting-specific-elements-for-card-styling" class="anchor"></a>Targeting specific elements for card styling</h2>
-<p>By adjusting the argument <code>is_card_styled</code> you can customize what gets these card styles. For instance, here we give the card styles to elements with the <code>grid_panel</code> class.</p>
-<p>Note that in the <code>.Rmd</code> above that only the sidebar had the class of <code>grid_panel</code> added to it using the syntax <code>{.grid_panel}</code>.</p>
+<a href="#x2-equal-grid" class="anchor"></a>2x2 equal grid</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span><span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_only_grid_panel.png" width="100%"></p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
+  |     |           |         |
+  |-----|-----------|---------|
+  |1rem |1fr        |1fr      |
+  |80px |header     |header   |
+  |1fr  |chickPlot  |yarnPlot |
+  |1fr  |chickTable |treePlot |
+  "</span><span class="op">)</span></code></pre></div>
+<p><img src="layouts_demo_four_panel.png" width="100%"></p>
 </div>
-<div id="adding-extra-styles-to-card-elements" class="section level2">
+<div id="focal-chart-top" class="section level2">
 <h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-card-elements" class="anchor"></a>Adding extra styles to card elements</h2>
-<p>These cards can be additionally styled with any arbitrary styles you want. These simply get appended to the existing styles that target the cards. For instance we can make all the card-styled elements have a “floralwhite” background.</p>
+<a href="#focal-chart-top" class="anchor"></a>Focal chart – top</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
-  is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_extra_grid_panel_styles.png" width="100%"></p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
+  |     |          |         |
+  |-----|----------|---------|
+  |1rem |1fr       |1fr      |
+  |80px |header    |header   |
+  |2fr  |chickens  |chickens |
+  |1fr  |treePlot  |yarnPlot |
+  "</span><span class="op">)</span></code></pre></div>
+<p><img src="layouts_demo_focal_chart_top.png" width="100%"></p>
 </div>
-<div id="adding-extra-styles-to-all-elements" class="section level2">
+<div id="focal-chart-side" class="section level2">
 <h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-all-elements" class="anchor"></a>Adding extra styles to all elements</h2>
-<p>If we don’t have every element as a card, we can still apply additional styles to every grid-element via the <code>element_styles</code> argument. Here we give every element the background of “honeydew”. Note that the card-specific styles will override these.</p>
+<a href="#focal-chart-side" class="anchor"></a>Focal chart – side</h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
-  is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  element_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"honeydew"</span><span class="op">)</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_extra_child_styles.png" width="100%"></p>
-</div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
+  |     |         |         |
+  |-----|---------|---------|
+  |1rem |2fr      |1fr      |
+  |80px |header   |header   |
+  |1fr  |chickens |treePlot |
+  |1fr  |chickens |yarnPlot |
+  "</span><span class="op">)</span></code></pre></div>
+<p><img src="layouts_demo_focal_chart_side.png" width="100%"></p>
 </div>
   </div>
 
