@@ -159,7 +159,11 @@ export function make_css_unit_input({
       value_input.value = "";
     } else {
       value_input.classList.remove("disabled");
-
+    
+      // If the user is flipping through multiple units we dont want to just 
+      // stick to whatever value was last set as the unit unless they've changed
+      // it from the default. E.g. flipping from default of 100px to rem 
+      // shouldn't result in a 100rem wide track which then needs to be adjusted
       const using_old_units_default = value_input.value === default_values[current_unit];
       value_input.value =
         count === null || using_old_units_default 

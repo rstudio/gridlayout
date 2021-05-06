@@ -252,7 +252,7 @@ button.minus_btn.disabled {
   position: relative;
   /* This is neccesary so that content doesn't force tracks to be larger than 
      requested */
-  overflow: hidden; 
+  /* overflow: hidden;  */
 }
 
 /* Apply to both the list of elements and the elements in the grid itself */
