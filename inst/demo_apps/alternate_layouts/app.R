@@ -6,14 +6,14 @@ main_layout <- "
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
-|1fr  |header  |header |
-|1000px   |sidebar |plot   |"
+|100px |header  |header |
+|1fr   |sidebar |plot   |"
 
 mobile_layout <- "
 |----- |--------|
 |2rem  |1fr     |
-|1fr  |header  |
-|2fr  |sidebar |
+|100px |header  |
+|250px |sidebar |
 |400px |plot    |"
 
 big_screen_layout <- "
@@ -34,8 +34,7 @@ my_layout <- new_gridlayout(
       layout = big_screen_layout,
       width_bounds = c(min = 1600)
     )
-  ),
-  container_height = "auto"
+  )
 )
 
 
