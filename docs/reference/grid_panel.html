@@ -156,7 +156,8 @@
   title <span class='op'>=</span> <span class='cn'>NULL</span>,
   use_card_styles <span class='op'>=</span> <span class='cn'>TRUE</span>,
   use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  collapsable <span class='op'>=</span> <span class='cn'>FALSE</span>
+  collapsable <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  scrollable <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -186,6 +187,11 @@ will override <code>use_card_style</code>.</p></td>
       <td><p>Should the card be able to be collapsed? Only really
 functional when panel takes up entire width of page. Requires a title so
 the user knows what panel is in collapsed state.</p></td>
+    </tr>
+    <tr>
+      <th>scrollable</th>
+      <td><p>Should scroll-bars be added so content that is larger than
+the panel can be seen?</p></td>
     </tr>
     <tr>
       <th>use_card_style</th>

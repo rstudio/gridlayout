@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make header panel — title_panel • gridlayout</title>
+<title>Get ids of element in layout — get_element_ids • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,9 +40,8 @@
 
 
 
-<meta property="og:title" content="Make header panel — title_panel" />
-<meta property="og:description" content="This is just a helper function that wraps your content in a vertically
-centered header (h2) tag." />
+<meta property="og:title" content="Get ids of element in layout — get_element_ids" />
+<meta property="og:description" content="Get ids of element in layout" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -141,76 +140,43 @@ centered header (h2) tag." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make header panel</h1>
+    <h1>Get ids of element in layout</h1>
     
-    <div class="hidden name"><code>title_panel.Rd</code></div>
+    <div class="hidden name"><code>get_element_ids.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is just a helper function that wraps your content in a vertically
-centered header (<code>h2</code>) tag.</p>
+    <p>Get ids of element in layout</p>
     </div>
 
-    <pre class="usage"><span class='fu'>title_panel</span><span class='op'>(</span><span class='va'>title_content</span>, <span class='va'>...</span>, logo <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_element_ids</span><span class='op'>(</span><span class='va'>layout</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>title_content</th>
-      <td><p>Whatever you want the title to say. Typically just text
-but any tag or tag-list is possible. All will get wrapped in an <code>h3</code> tag.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed on to <code><a href='grid_panel.html'>grid_panel</a></code></p><dl>
-    <dt><code>use_bslib_card_styles</code></dt><dd><p>Should the card styles from bslib be used
-instead of default <code>gridlayout</code> card styles? If this is set to <code>TRUE</code> it
-will override <code>use_card_style</code>.</p></dd>
-    <dt><code>collapsable</code></dt><dd><p>Should the card be able to be collapsed? Only really
-functional when panel takes up entire width of page. Requires a title so
-the user knows what panel is in collapsed state.</p></dd>
-    <dt><code>scrollable</code></dt><dd><p>Should scroll-bars be added so content that is larger than
-the panel can be seen?</p></dd>
-    <dt><code>v_align</code></dt><dd><p>Vertical and Horizontal alignment of content in panel.
-Options include <code>"center", "start", "end", "stretch"</code>. These are a direct
-mapping to the the <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items'>css-spec for <code>justify-items</code></a>
-(=<code>h_align</code>) and
-<a href='https://developer.mozilla.org/en-US/docs/Web/CSS/align-items'><code>align-items</code></a>
-(= <code>v_align</code>).</p></dd>
-    <dt><code>h_align</code></dt><dd><p>Vertical and Horizontal alignment of content in panel.
-Options include <code>"center", "start", "end", "stretch"</code>. These are a direct
-mapping to the the <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items'>css-spec for <code>justify-items</code></a>
-(=<code>h_align</code>) and
-<a href='https://developer.mozilla.org/en-US/docs/Web/CSS/align-items'><code>align-items</code></a>
-(= <code>v_align</code>).</p></dd>
-  
-</dl></td>
-    </tr>
-    <tr>
-      <th>logo</th>
-      <td><p>Optional image source for logo to be placed left of title</p></td>
+      <th>layout</th>
+      <td><p>Object of class <code>"gridlayout"</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Character vector of ids of all elements in layout</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># Typically you'll just pass a character string to the function</span>
-<span class='fu'>title_panel</span><span class='op'>(</span><span class='st'>"This is my header"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h2(title_content, class = "title_panel"): could not find function "h2"</span></div><div class='input'>
-<span class='co'># You can adjust the horizontal alignment of your header with h_align</span>
-<span class='fu'>title_panel</span><span class='op'>(</span><span class='st'>"I'm on the right side!"</span>, h_align <span class='op'>=</span> <span class='st'>"end"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h2(title_content, class = "title_panel"): could not find function "h2"</span></div><div class='input'>
-<span class='co'># If you want more than just text in your title, just wrap content in a span tag</span>
-<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"fontawesome"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'>title_panel</span><span class='op'>(</span>
-  <span class='fu'>htmltools</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>span</a></span><span class='op'>(</span>
-    <span class='fu'>fontawesome</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/fontawesome/man/fa.html'>fa</a></span><span class='op'>(</span><span class='st'>"r-project"</span>, fill <span class='op'>=</span> <span class='st'>"steelblue"</span><span class='op'>)</span>,
-    <span class='st'>"This is my header"</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in h2(title_content, class = "title_panel"): could not find function "h2"</span></div><div class='input'>
+<span class='va'>grid_obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='md_to_gridlayout.html'>md_to_gridlayout</a></span><span class='op'>(</span>
+  layout_table <span class='op'>=</span> <span class='st'>"
+        |      |120px   |1fr    |1fr    |
+        |------|--------|-------|-------|
+        |100px |header  |header |header |
+        |1fr   |sidebar |plot_a |plot_a |
+        |1fr   |sidebar |plot_b |plot_c |"</span>
+ <span class='op'>)</span>
+
+<span class='fu'>get_element_ids</span><span class='op'>(</span><span class='va'>grid_obj</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "header"  "sidebar" "plot_a"  "plot_b"  "plot_c" </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
