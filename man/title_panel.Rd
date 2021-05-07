@@ -19,6 +19,8 @@ will override \code{use_card_style}.}
     \item{\code{collapsable}}{Should the card be able to be collapsed? Only really
 functional when panel takes up entire width of page. Requires a title so
 the user knows what panel is in collapsed state.}
+    \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
+the panel can be seen?}
     \item{\code{v_align}}{Vertical and Horizontal alignment of content in panel.
 Options include \verb{"center", "start", "end", "stretch"}. These are a direct
 mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}

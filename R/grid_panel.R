@@ -9,6 +9,8 @@
 #' @param collapsable Should the card be able to be collapsed? Only really
 #'   functional when panel takes up entire width of page. Requires a title so
 #'   the user knows what panel is in collapsed state.
+#' @param scrollable Should scroll-bars be added so content that is larger than
+#'   the panel can be seen?
 #' @param v_align,h_align Vertical and Horizontal alignment of content in panel.
 #'   Options include `"center", "start", "end", "stretch"`. These are a direct
 #'   mapping to the the [css-spec for
@@ -97,10 +99,26 @@ grid_panel <- function(
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
-  collapsable = FALSE
+  collapsable = FALSE,
+  scrollable = FALSE
 ) {
 
-  panel_styles <- make_alignment_styles(h_align = h_align, v_align = v_align)
+  panel_styles <- build_css_rule(
+    "inline",
+    c(
+      if (!missing(h_align)) {
+        validate_alignment(h_align)
+        c("justify-content" = h_align)
+      },
+      if (!missing(v_align)) {
+        validate_alignment(v_align)
+        c("align-content" = v_align)
+      },
+      if (scrollable) {
+        c("overflow" = "scroll")
+      }
+    )
+  )
   card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
 
   no_title <- is.null(title)
@@ -134,22 +152,6 @@ make_card_classes <- function(use_card_styles, use_bslib_card_styles) {
   } else {
     ""
   }
-}
-
-make_alignment_styles <- function(v_align, h_align) {
-  build_css_rule(
-    "inline",
-    c(
-      if (!missing(h_align)) {
-        validate_alignment(h_align)
-        c("justify-content" = h_align)
-      },
-      if (!missing(v_align)) {
-        validate_alignment(v_align)
-        c("align-content" = v_align)
-      }
-    )
-  )
 }
 
 make_collapser_icon <- function(parent_id = "") {

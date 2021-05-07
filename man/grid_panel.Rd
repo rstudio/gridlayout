@@ -11,7 +11,8 @@ grid_panel(
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
-  collapsable = FALSE
+  collapsable = FALSE,
+  scrollable = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ will override \code{use_card_style}.}
 \item{collapsable}{Should the card be able to be collapsed? Only really
 functional when panel takes up entire width of page. Requires a title so
 the user knows what panel is in collapsed state.}
+
+\item{scrollable}{Should scroll-bars be added so content that is larger than
+the panel can be seen?}
 
 \item{use_card_style}{Should the element contained in panel be made to look
 like an enclosed card?}
