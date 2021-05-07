@@ -29,12 +29,13 @@ grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
 base text size of a page. E.g. setting font-size: 16px on the body element
 of a page means 1rem = 16px;}
 
-\item{container_height}{How tall should the containing element be for this
-layout? Defaults to \code{"viewport"} which means the layout will take up the
-whole vertical space of the webpage  (equivalent to the CSS value of
-\verb{100vh}). Values such as \code{"auto"} will let the page grow to as large as it
-needs to be to fit all content. This will cause issues with row heights in
-relative units, however.}
+\item{container_height}{Valid css unit determining how tall the containing
+element should be for this layout. Defaults to \code{"viewport"} (full page
+height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
+\code{fr} or \code{auto}) are included in row sizes and \code{auto} otherwise. Values such
+as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.}
 
 \item{alternate_layouts}{A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a

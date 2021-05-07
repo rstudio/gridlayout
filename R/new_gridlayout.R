@@ -45,12 +45,13 @@
 #'  grid. Defaults to `"1rem"`. This is a relative unit that scales with the
 #'  base text size of a page. E.g. setting font-size: 16px on the body element
 #'  of a page means 1rem = 16px;
-#'@param container_height How tall should the containing element be for this
-#'  layout? Defaults to `"viewport"` which means the layout will take up the
-#'  whole vertical space of the webpage  (equivalent to the CSS value of
-#'  `100vh`). Values such as `"auto"` will let the page grow to as large as it
-#'  needs to be to fit all content. This will cause issues with row heights in
-#'  relative units, however.
+#'@param container_height Valid css unit determining how tall the containing
+#'  element should be for this layout. Defaults to `"viewport"` (full page
+#'  height: equivalent to the CSS value of `100vh`) if any relative units (e.g.
+#'  `fr` or `auto`) are included in row sizes and `auto` otherwise. Values such
+#'  as `"auto"` will let the page grow to as large as it needs to be to fit all
+#'  content. This should most likely be avoided when using row heights in
+#'  relative units.
 #'@param alternate_layouts A list of layouts to be used for different viewport
 #'  widths. This is enables your app to adapt to different screensizes such as a
 #'  phone or an ultra-wide monitor. Each entry in this list must contain a
@@ -101,7 +102,6 @@ new_gridlayout <- function(
   container_height = NULL,
   alternate_layouts = NULL
 ){
-  if (is.null(container_height)) container_height <- "viewport"
 
   elements <- list()
   # Figure out what type of layout definition we were passed
@@ -128,8 +128,15 @@ new_gridlayout <- function(
     )
   }
 
-  # Set default if unspecified
+  # Set defaults if unspecified
   if (is.null(gap)) gap <- "1rem"
+
+  # If using default container_height and all the rows are definitely sized then
+  # make container height auto. Otherwise use "viewport"
+  if (is.null(container_height) ) {
+    all_definite_row_sizes <- all(!str_detect(row_sizes, "fr|auto"))
+    container_height <- if (all_definite_row_sizes) "auto" else "viewport"
+  }
 
   empty_grid <- length(elements) == 0
 
