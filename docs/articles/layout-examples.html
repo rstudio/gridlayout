@@ -112,24 +112,8 @@
 <h2 class="hasAnchor">
 <a href="#app-ui-code" class="anchor"></a>App UI code:</h2>
 <p>The following code is the UI definition used for all the screenshots. The only thing that changes is the layout definition.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
-  layout <span class="op">=</span> <span class="va">my_layout</span>,
-  header <span class="op">=</span> <span class="fu"><a href="../reference/title_panel.html">title_panel</a></span><span class="op">(</span><span class="st">"My gridlayout app"</span><span class="op">)</span>,
-  chickens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html">tabsetPanel</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span>,
-  treePlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
-  yarnPlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
-  stockTable <span class="op">=</span> <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
-    <span class="fu">gt_output</span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span>,
-  <span class="co"># Allows us to use layouts without some elements declared</span>
-  flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> 
-<span class="op">)</span></code></pre></div>
 <p>The only slightly wonky thing here is the setting of <code>flag_mismatches</code> to <code>FALSE</code>. This just disables the checks that makes sure elements declared in layout match those in the <code>ui</code> definition. Here we sometimes don’t include the <code>stockTable</code> element in our layout.</p>
-<p>While it’s not important, for the demo’s here, the whole app code is provided at the end of this document if you want to copy each layout and try yourself.</p>
+<p>While it’s not important, for the demo’s here, the whole app code is provided at <a href="#full-app-code">the end of this document</a> if you want to copy each layout and try yourself.</p>
 </div>
 <div id="basic-stack" class="section level2">
 <h2 class="hasAnchor">
@@ -141,12 +125,13 @@
   |80px  |header   |
   |1fr   |chickens |
   |1fr   |treePlot |
-  |1fr   |yarnPlot |")</code></pre>
-<p><img src="layouts_demo_stack.png" width="100%"></p>
+  |1fr   |yarnPlot |")  </code></pre>
+<p><img src="layouts_demo_stack.png" width="100%/"></p>
 </div>
 <div id="scrolling-stack" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scrolling-stack" class="anchor"></a>Scrolling stack</h2>
+<p><em>Note the use of all definite sizes (e.g. no <code>fr</code> or <code>auto</code> units) for row heights.</em></p>
 <pre><code>my_layout &lt;- new_gridlayout("
   |      |           |
   |------|-----------|
@@ -155,8 +140,8 @@
   |400px |chickens   |
   |400px |treePlot   |
   |400px |yarnPlot   |
-  |400px |stockTable |", container_height = auto)</code></pre>
-<p><img src="layouts_demo_scrolling_stack.png" width="100%"></p>
+  |400px |stockTable |")  </code></pre>
+<p><img src="layouts_demo_scrolling_stack.png" width="100%/"></p>
 </div>
 <div id="x2-equal-grid" class="section level2">
 <h2 class="hasAnchor">
@@ -167,8 +152,8 @@
   |1rem |1fr        |1fr      |
   |80px |header     |header   |
   |1fr  |chickens   |yarnPlot |
-  |1fr  |stockTable |treePlot |")</code></pre>
-<p><img src="layouts_demo_four_panel.png" width="100%"></p>
+  |1fr  |stockTable |treePlot |")  </code></pre>
+<p><img src="layouts_demo_four_panel.png" width="100%/"></p>
 </div>
 <div id="focal-chart-top" class="section level2">
 <h2 class="hasAnchor">
@@ -179,8 +164,8 @@
   |1rem |1fr       |1fr      |
   |80px |header    |header   |
   |2fr  |chickens  |chickens |
-  |1fr  |treePlot  |yarnPlot |")</code></pre>
-<p><img src="layouts_demo_focal_chart_top.png" width="100%"></p>
+  |1fr  |treePlot  |yarnPlot |")  </code></pre>
+<p><img src="layouts_demo_focal_chart_top.png" width="100%/"></p>
 </div>
 <div id="focal-chart-side" class="section level2">
 <h2 class="hasAnchor">
@@ -191,14 +176,14 @@
   |1rem |2fr      |1fr      |
   |80px |header   |header   |
   |1fr  |chickens |treePlot |
-  |1fr  |chickens |yarnPlot |")</code></pre>
-<p><img src="layouts_demo_focal_chart_side.png" width="100%"></p>
+  |1fr  |chickens |yarnPlot |")  </code></pre>
+<p><img src="layouts_demo_focal_chart_side.png" width="100%/"></p>
 </div>
 </div>
 <div id="full-app-code" class="section level1">
 <h1 class="hasAnchor">
 <a href="#full-app-code" class="anchor"></a>Full app code</h1>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>

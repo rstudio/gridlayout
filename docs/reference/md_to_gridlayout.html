@@ -185,12 +185,13 @@ it will be repeated for all columns.</p></dd>
 grid. Defaults to <code>"1rem"</code>. This is a relative unit that scales with the
 base text size of a page. E.g. setting font-size: 16px on the body element
 of a page means 1rem = 16px;</p></dd>
-    <dt><code>container_height</code></dt><dd><p>How tall should the containing element be for this
-layout? Defaults to <code>"viewport"</code> which means the layout will take up the
-whole vertical space of the webpage  (equivalent to the CSS value of
-<code>100vh</code>). Values such as <code>"auto"</code> will let the page grow to as large as it
-needs to be to fit all content. This will cause issues with row heights in
-relative units, however.</p></dd>
+    <dt><code>container_height</code></dt><dd><p>Valid css unit determining how tall the containing
+element should be for this layout. Defaults to <code>"viewport"</code> (full page
+height: equivalent to the CSS value of <code>100vh</code>) if any relative units (e.g.
+<code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code> otherwise. Values such
+as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.</p></dd>
     <dt><code>alternate_layouts</code></dt><dd><p>A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a
 phone or an ultra-wide monitor. Each entry in this list must contain a
@@ -259,11 +260,11 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |plot   |table  |
     |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
-#&gt; </span><span style='font-weight: bold;'>   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> footer footer</div></span></pre>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> header header
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot   table 
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer footer</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
