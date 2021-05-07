@@ -16,6 +16,9 @@
 #' @inheritParams grid_panel
 #' @param elements Named list of the UI definitions that will be used to fill
 #'   all cells. Names must match those provided in `layout`.
+#' @param flag_mismatches Should a mismatch between supplied `elements` ui
+#'   definitions and layout trigger a warning? In advanced cases you may want to
+#'   dynamically set your layout and sometimes omit panels.
 #'
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
@@ -63,7 +66,8 @@ grid_container <- function(
   id = "grid-container",
   layout,
   elements,
-  use_bslib_card_styles = FALSE
+  use_bslib_card_styles = FALSE,
+  flag_mismatches = TRUE
 ){
 
   # Check to make sure we match all the names in the layout to all the names in
@@ -76,26 +80,35 @@ grid_container <- function(
     in_layout_not_elements <- setdiff(layout_ids, element_ids)
     in_elements_not_layout <- setdiff(element_ids, layout_ids)
 
-    id_mismatch_err <- paste0(
-      "\nMismatch between the provided elements and the defined elements in layout definition.\n",
-      if(length(in_layout_not_elements) > 0) {
-        paste0(
-          "In layout declaration but not passed to `elements` argument\n",
-          paste0("  - \"", in_layout_not_elements, "\"", collapse = "\n"),
-          "\n"
-        )
-      },
-      if(length(in_elements_not_layout) > 0) {
-        paste0(
-          "Passed to `elements` argument but not in layout declaration:\n",
-          paste0("  - \"", in_elements_not_layout, "\"", collapse = "\n"),
-          "\n"
-        )
-      }
-    )
+    if (flag_mismatches) {
+      id_mismatch_err <- paste0(
+        "\nMismatch between the provided elements and the defined elements in layout definition.\n",
+        if(length(in_layout_not_elements) > 0) {
+          paste0(
+            "In layout declaration but not passed to `elements` argument\n",
+            paste0("  - \"", in_layout_not_elements, "\"", collapse = "\n"),
+            "\n"
+          )
+        },
+        if(length(in_elements_not_layout) > 0) {
+          paste0(
+            "Passed to `elements` argument but not in layout declaration:\n",
+            paste0("  - \"", in_elements_not_layout, "\"", collapse = "\n"),
+            "\n"
+          )
+        }
+      )
 
-    stop(id_mismatch_err, call. = FALSE)
+      stop(id_mismatch_err, call. = FALSE)
+    } else {
+
+      # Remove ui elements that don't match layout. We leave layout elements
+      # that dont match UI in case the user is somehow adding them later via
+      # elements made outside of the normal UI function.
+      elements[[in_elements_not_layout]] <- NULL
+    }
   }
+
 
   # Prefix all grid-element ids with the containers id to avoid namespace
   # conflicts if multiple grids are defined with the same element ids.

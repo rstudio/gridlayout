@@ -4,9 +4,11 @@
 #' @inheritParams grid_container
 #' @param ... Contents of each grid element. For instance the contents of the
 #'   header (as defined in `layout`) would be set with `header = h2("App
-#'   Title")`. Any arguments that don't match the names used in the layout
-#'   definition are added to the page after the container. This can be used to
-#'   do things like things to the `head` or `meta` sections of the page.
+#'   Title")`. Every grid element argument must be named. If a named argument
+#'   doesn't match the layout's declared elements than an error will be thrown.
+#'   This behavior can be overridden using the `flag_mismatches` argument. Any
+#'   unnamed arguments are added to the page after the container. This can be
+#'   used to do things like things to the `head` or `meta` sections of the page.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
 #'
@@ -49,7 +51,7 @@
 #' )
 #'
 #' }
-grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL){
+grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
@@ -61,11 +63,12 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL){
   # the passed arg_sections
   layout <- coerce_to_layout(layout)
   layout_ids <- extract_chr(get_elements(layout), 'id')
+
+  # Named arguments represent grid panels elements. Unnamed ones are assumed to
+  # be extra tags that are appended after grid container.
   arg_sections <- list(...)
   arg_ids <- names(arg_sections)
-
-  grid_element_args <- arg_sections[arg_ids %in% layout_ids]
-  extra_args <- arg_sections[!(arg_ids %in% layout_ids)]
+  grid_elements <- arg_sections[arg_ids != ""]
 
   if (attr(layout, "container_height") != "viewport") {
     warning("Container height for layout is not set at default of viewport.",
@@ -75,15 +78,16 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL){
   container <- grid_container(
     id = "grid_page",
     layout = layout,
-    elements = grid_element_args,
-    use_bslib_card_styles = use_bslib_card_styles
+    elements = grid_elements,
+    use_bslib_card_styles = use_bslib_card_styles,
+    flag_mismatches = flag_mismatches
   )
 
   shiny::fluidPage(
     theme = theme,
     container,
     #any extra args not matched to layout will get added after
-    if(length(extra_args) != 0) extra_args
+    arg_sections[arg_ids == ""]
   )
 
 }
