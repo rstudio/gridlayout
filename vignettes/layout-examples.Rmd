@@ -201,12 +201,10 @@ app_w_layout <- function(my_layout) {
 
 ```{r, eval = FALSE}
 # Run this code manually to build screenshots
-library(here)
-
 for (layout_type in names(layout_tables)) {
   webshot2::appshot(
     app_w_layout(new_gridlayout(layout_tables[[layout_type]])),
-    file = here(glue("vignettes/layouts_demo_{layout_type}.png")),
+    file = here::here(glue("vignettes/layouts_demo_{layout_type}.png")),
     cliprect = "viewport",
     delay = 1.5,
     vwidth = 1200,
