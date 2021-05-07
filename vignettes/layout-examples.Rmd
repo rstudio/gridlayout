@@ -12,12 +12,14 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "",
-  out.width = "100%"
+  out.width = "100%",
+  echo = FALSE, 
+  results='asis'
 )
 ```
 
 
-```{r setup, echo = FALSE}
+```{r setup}
 library(gridlayout)
 library(glue)
 layout_tables <- list(
@@ -62,31 +64,14 @@ layout_tables <- list(
 )
 
 
-all_layouts <- list(
-  stack = new_gridlayout(layout_tables[["stack"]]),
-  scrolling_stack = new_gridlayout(
-    layout_tables[["scrolling_stack"]],
-    container_height = "auto"
-  ),
-  four_panel = new_gridlayout(layout_tables[["four_panel"]]),
-  focal_chart_top = new_gridlayout(layout_tables[["focal_chart_top"]]),
-  focal_chart_side = new_gridlayout(layout_tables[["focal_chart_side"]])
-)
-
-print_layout_def <- function(layout_id = "stack") {
-  height_val <- attr(all_layouts[[layout_id]], "container_height")
-  height_arg <- if (height_val != 'viewport') {
-    glue(", container_height = {height_val}")
-  } else ""
-  cat(glue(
+print_layout_info <- function(layout_id = "stack") {
+  glue(
+    "```  \n",
     "my_layout <- new_gridlayout(\"",
-    "{layout_tables[[layout_id]]}",
-    "\"{height_arg})"
-  ))
-}
-
-show_layout_screenshot <- function(layout_id = "stack") {
-  knitr::include_graphics(glue("layouts_demo_{layout_id}.png"))
+    "{layout_tables[[layout_id]]}\")  \n",
+    "```  \n",
+    "<img src=layouts_demo_{layout_id}.png width = 100%/>"
+  )
 }
 ```
 
@@ -95,9 +80,10 @@ show_layout_screenshot <- function(layout_id = "stack") {
 # Run this code manually to build screenshots
 library(here)
 
-for (layout_type in names(all_layouts)) {
+for (layout_type in names(layout_tables)) {
+  
   withr::with_options(
-    list("current_layout" = all_layouts[[layout_type]]),
+    list("layout_table" = layout_tables[[layout_type]]),
     webshot2::appshot(
       shiny::shinyAppFile(
         here("inst/demo_apps/layout_examples/app.R")
@@ -143,69 +129,50 @@ ui <- grid_page(
 
 The only slightly wonky thing here is the setting of `flag_mismatches` to `FALSE`. This just disables the checks that makes sure elements declared in layout match those in the `ui` definition. Here we sometimes don't include the `stockTable` element in our layout.
 
-While it's not important, for the demo's here, the whole app code is provided at the end of this document if you want to copy each layout and try yourself.
+While it's not important, for the demo's here, the whole app code is provided at [the end of this document](#full-app-code) if you want to copy each layout and try yourself.
 
 
 ## Basic stack
 
-```{r, results = "markup", echo = FALSE}
-print_layout_def("stack")
+```{r}
+print_layout_info("stack")
 ```
-
-```{r, echo = FALSE, message=FALSE}
-show_layout_screenshot("stack")
-```
-
 
 
 ## Scrolling stack
 
-```{r, results = "markup", echo = FALSE}
-print_layout_def("scrolling_stack")
-```
+_Note the use of all definite sizes (e.g. no `fr` or `auto` units) for row heights._
 
-```{r, echo = FALSE, message=FALSE}
-show_layout_screenshot("scrolling_stack")
+```{r}
+print_layout_info("scrolling_stack")
 ```
 
 
 ## 2x2 equal grid 
 
-```{r, results = "markup", echo = FALSE}
-print_layout_def("four_panel")
+```{r}
+print_layout_info("four_panel")
 ```
-
-```{r, echo = FALSE, message=FALSE}
-show_layout_screenshot("four_panel")
-```
-
 
 
 ## Focal chart -- top
 
-```{r, results = "markup", echo = FALSE}
-print_layout_def("focal_chart_top")
-```
-
-```{r, echo = FALSE, message=FALSE}
-show_layout_screenshot("focal_chart_top")
+```{r}
+print_layout_info("focal_chart_top")
 ```
 
 
 ## Focal chart -- side
 
-```{r, results = "markup", echo = FALSE}
-print_layout_def("focal_chart_side")
+```{r}
+print_layout_info("focal_chart_side")
 ```
 
-```{r, echo = FALSE, message=FALSE}
-show_layout_screenshot("focal_chart_side")
-```
 
 
 # Full app code
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo = TRUE, collapse=TRUE}
 library(shiny)
 library(gridlayout)
 library(ggplot2)

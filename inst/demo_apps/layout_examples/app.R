@@ -8,21 +8,21 @@ library(gt)
 library(dplyr)
 library(glue)
 
-my_layout <- getOption("current_layout")
+layout_table <- getOption("layout_table")
 
-if (is.null(my_layout)) {
-  my_layout <- new_gridlayout(
-    "
-    |      |         |
-    |------|---------|
-    |1rem  |1fr      |
-    |80px  |header   |
-    |1fr   |chickens |
-    |1fr   |treePlot |
-    |1fr   |yarnPlot |"
-  )
+if (is.null(layout_table)) {
+  layout_table <- "
+  |      |           |
+  |------|-----------|
+  |1rem  |1fr        |
+  |80px  |header     |
+  |400px |chickens   |
+  |400px |treePlot   |
+  |400px |yarnPlot   |
+  |400px |stockTable |"
 }
 
+my_layout <- new_gridlayout(layout_table)
 
 shinyApp(
   ui = grid_page(
