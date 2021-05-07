@@ -8,38 +8,36 @@ library(gt)
 library(dplyr)
 library(glue)
 
-my_layout <- getOption("current_layout") %||% new_gridlayout(
-  "
-  |      |         |
-  |------|---------|
-  |1rem  |1fr      |
-  |80px  |header   |
-  |1fr   |chickens |
-  |1fr   |treePlot |
-  |1fr   |yarnPlot |"
-)
+my_layout <- getOption("current_layout")
+
+if (is.null(my_layout)) {
+  my_layout <- new_gridlayout(
+    "
+    |      |         |
+    |------|---------|
+    |1rem  |1fr      |
+    |80px  |header   |
+    |1fr   |chickens |
+    |1fr   |treePlot |
+    |1fr   |yarnPlot |"
+  )
+}
 
 
-chick_plot <- plotOutput("chickPlot", height = "100%")
-chick_table <- gt_output("chickTable")
-
-no_tab_layout <- "chickPlot" %in% extract_chr(get_elements(my_layout), "id")
-
-# The classic Geyser app with grid layout
-app <- shinyApp(
+shinyApp(
   ui = grid_page(
     layout = my_layout,
-    theme = bslib::bs_theme(),
-    use_bslib_card_styles = TRUE,
     header = title_panel("My gridlayout app"),
-    chickens = if(!no_tab_layout) tabsetPanel(
-      tabPanel("Plot", chick_plot),
-      tabPanel("Fastest growing", chick_table)
+    chickens = tabsetPanel(
+      tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
+      tabPanel("Fastest growing", gt_output("chickTable"))
     ),
-    chickPlot =  if(no_tab_layout) chick_plot,
-    chickTable = if(no_tab_layout) chick_table,
     treePlot = plotOutput("treePlot", height = "100%"),
-    yarnPlot = plotOutput("yarnPlot", height = "100%")
+    yarnPlot = plotOutput("yarnPlot", height = "100%"),
+    stockTable = grid_panel(
+      gt_output("stockTable"), scrollable = TRUE
+    ),
+    flag_mismatches = FALSE # Allows us to use layouts without some elements declared
   ),
   server = function(input, output) {
 
