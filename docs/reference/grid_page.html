@@ -119,6 +119,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
     </li>
   </ul>
@@ -149,9 +152,9 @@
     <pre class="usage"><span class='fu'>grid_page</span><span class='op'>(</span>
   <span class='va'>layout</span>,
   <span class='va'>...</span>,
+  use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>,
   theme <span class='op'>=</span> <span class='cn'>NULL</span>,
-  layout_edit_mode <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  .verify_matches <span class='op'>=</span> <span class='cn'>TRUE</span>
+  flag_mismatches <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -166,9 +169,20 @@ desired layout for your Shiny app.</p></td>
     <tr>
       <th>...</th>
       <td><p>Contents of each grid element. For instance the contents of the
-header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>. Any arguments that don't match the names used in the layout
-definition are added to the page after the container. This can be used to
-do things like things to the <code>head</code> or <code>meta</code> sections of the page.</p></td>
+header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>. Every grid element argument must be named. If a named argument
+doesn't match the layout's declared elements than an error will be thrown.
+This behavior can be overridden using the <code>flag_mismatches</code> argument. Any
+unnamed arguments are added to the page after the container. This can be
+used to do things like things to the <code>head</code> or <code>meta</code> sections of the page.</p></td>
+    </tr>
+    <tr>
+      <th>use_bslib_card_styles</th>
+      <td><p>Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with <code><a href='grid_panel.html'>grid_panel()</a></code>.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as <code>FALSE</code>
+and set styles manually on each panel.</p></td>
     </tr>
     <tr>
       <th>theme</th>
@@ -176,10 +190,10 @@ do things like things to the <code>head</code> or <code>meta</code> sections of 
 <code><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></code>.</p></td>
     </tr>
     <tr>
-      <th>layout_edit_mode</th>
-      <td><p>Set to <code>TRUE</code> to setup layout with live app running.
-Most functionality of your app will not be available during this more so
-only use it for getting your layout as desired.</p></td>
+      <th>flag_mismatches</th>
+      <td><p>Should a mismatch between supplied <code>elements</code> ui
+definitions and layout trigger a warning? In advanced cases you may want to
+dynamically set your layout and sometimes omit panels.</p></td>
     </tr>
     </table>
 

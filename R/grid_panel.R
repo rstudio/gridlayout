@@ -1,6 +1,16 @@
 #' Panel for grid page
 #'
 #' @param ... Elements to include within the panel
+#' @param use_card_style Should the element contained in panel be made to look
+#'   like an enclosed card?
+#' @param use_bslib_card_styles Should the card styles from bslib be used
+#'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
+#'   will override `use_card_style`.
+#' @param collapsable Should the card be able to be collapsed? Only really
+#'   functional when panel takes up entire width of page. Requires a title so
+#'   the user knows what panel is in collapsed state.
+#' @param scrollable Should scroll-bars be added so content that is larger than
+#'   the panel can be seen?
 #' @param v_align,h_align Vertical and Horizontal alignment of content in panel.
 #'   Options include `"center", "start", "end", "stretch"`. These are a direct
 #'   mapping to the the [css-spec for
@@ -83,21 +93,129 @@
 #' )
 #' }
 #'
-grid_panel <- function(..., v_align, h_align) {
-  panel_styles <- c(
-    display = "grid",
-    if (!missing(h_align)) {
-      validate_alignment(h_align)
-      c("justify-content" = h_align)
-    },
-    if (!missing(v_align)) {
-      validate_alignment(v_align)
-      c("align-content" = v_align)
-    }
+grid_panel <- function(
+  ...,
+  v_align = "stretch", h_align = "stretch",
+  title = NULL,
+  use_card_styles = TRUE,
+  use_bslib_card_styles = FALSE,
+  collapsable = FALSE,
+  scrollable = FALSE
+) {
+
+  panel_styles <- build_css_rule(
+    "inline",
+    c(
+      if (!missing(h_align)) {
+        validate_alignment(h_align)
+        c("justify-content" = h_align)
+      },
+      if (!missing(v_align)) {
+        validate_alignment(v_align)
+        c("align-content" = v_align)
+      },
+      if (scrollable) {
+        c("overflow" = "scroll")
+      }
+    )
   )
-  shiny::div(
-    style = build_css_rule("inline", panel_styles),
-    class = "grid_panel",
+  card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
+
+  no_title <- is.null(title)
+  if (collapsable && no_title) stop("Collapsable cards need a title")
+
+  if (no_title) {
+    shiny::div(
+      class = paste("grid_panel panel-content", card_styling_class),
+      style = panel_styles,
+      ...
+    )
+  } else {
+    shiny::div(
+      class = paste("grid_panel", card_styling_class),
+      shiny::div(
+        class = "panel-title",
+        h3(title),
+        if (collapsable) make_collapser_icon(),
+        style = if (collapsable) "justify-content: space-between;"
+      ),
+      shiny::div(..., style = panel_styles, class = "panel-content")
+    )
+  }
+}
+
+make_card_classes <- function(use_card_styles, use_bslib_card_styles) {
+  if (use_bslib_card_styles) {
+    "card"
+  } else if (use_card_styles) {
+    "gridlayout-card"
+  } else {
+    ""
+  }
+}
+
+make_collapser_icon <- function(parent_id = "") {
+  shiny::span(
+    fontawesome::fa("chevron-up"),
+    "onclick" = '
+    var card = this.parentElement.parentElement;
+    var card_content = card.querySelector(".panel-content");
+    var card_classes = card.classList;
+    if (card_classes.contains("collapsed")) {
+      card_classes.remove("collapsed");
+      card_content.style.display = "unset";
+    } else {
+      card_classes.add("collapsed");
+      card_content.style.display = "none";
+    }
+    '
+  )
+}
+
+#' Make header panel
+#'
+#' This is just a helper function that wraps your content in a vertically
+#' centered header (`h2`) tag.
+#'
+#' @param title_content Whatever you want the title to say. Typically just text
+#'   but any tag or tag-list is possible. All will get wrapped in an `h3` tag.
+#' @inheritDotParams grid_panel
+#' @param logo Optional image source for logo to be placed left of title
+#'
+#' @examples
+#'
+#' # Typically you'll just pass a character string to the function
+#' title_panel("This is my header")
+#'
+#' # You can adjust the horizontal alignment of your header with h_align
+#' title_panel("I'm on the right side!", h_align = "end")
+#'
+#' # If you want more than just text in your title, just wrap content in a span tag
+#' requireNamespace("fontawesome", quietly = TRUE)
+#' title_panel(
+#'   htmltools::span(
+#'     fontawesome::fa("r-project", fill = "steelblue"),
+#'     "This is my header"
+#'   )
+#' )
+#'
+#' @export
+title_panel <- function(
+  title_content,
+  ...,
+  logo = NULL
+) {
+
+  if (notNull(logo)) {
+    title_content <- tagList(
+      img(src = logo, height = "60px"),
+      title_content
+    )
+  }
+
+  grid_panel(
+    h2(title_content, class = "title_panel"),
+    v_align = "center",
     ...
   )
 }

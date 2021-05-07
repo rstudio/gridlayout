@@ -8,16 +8,16 @@
     Output
       <div class="container-fluid">
         <div id="grid_page" class="grid-container">
-          <div style="display: grid;" class="grid_panel" id="grid_page__header">
+          <div class="grid_panel panel-content gridlayout-card" style="" id="grid_page__header">
             <h2 id="header">This is my header content</h2>
           </div>
-          <div style="display: grid;" class="grid_panel" id="grid_page__footer">
+          <div class="grid_panel panel-content gridlayout-card" style="" id="grid_page__footer">
             <div class="form-group shiny-input-container">
               <label class="control-label" id="bins-label" for="bins">Number of bins:</label>
               <input class="js-range-slider" id="bins" data-skin="shiny" data-min="1" data-max="50" data-from="30" data-step="1" data-grid="true" data-grid-num="9.8" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number"/>
             </div>
           </div>
-          <div style="display: grid;" class="grid_panel" id="grid_page__plot">
+          <div class="grid_panel panel-content gridlayout-card" style="" id="grid_page__plot">
             <div id="myPlot" class="shiny-plot-output" style="width:100%;height:400px;"></div>
           </div>
         </div>

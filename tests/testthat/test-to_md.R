@@ -7,7 +7,7 @@ test_that("Can reacreate input table", {
 |1fr   |sidebar |plot_a |plot_c |
 |1fr   |sidebar |plot_b |plot_b |"
 
-  my_layout <- md_to_gridlayout(layout_table = start_table)
+  my_layout <- new_gridlayout(start_table)
   expect_equal(
     to_md(my_layout),
     start_table
@@ -23,7 +23,7 @@ test_that("Gap size can be omitted if desired", {
 |1fr   |sidebar |plot_a |plot_c |
 |1fr   |sidebar |plot_b |plot_b |"
 
-  my_layout <- md_to_gridlayout(layout_table = start_table)
+  my_layout <- new_gridlayout(start_table)
   expect_equal(
     to_md(my_layout, include_gap_size = FALSE),
     "|      |        |       |       |

@@ -1,0 +1,80 @@
+.grid_panel {
+  --card-padding: 0.8rem;
+  --card-title-height: calc(35px + var(--card-padding));
+  box-sizing: border-box;
+  padding: var(--card-padding);
+  overflow: hidden;
+}
+
+
+.grid_panel .shiny-plot-output > img {
+  /* The way grid sizing works can throw off the plot sizing in shiny. This
+     is because the size of the parent grows to its largest child element.
+     Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+     these sizes by looking at the parent div's dimensions after a resize.
+     When the window has been made smaller, this means that the parent
+     element is spilling outside of its box because the plot image size is
+     still sitting at a fixed pixel width of the previous size. So when Shiny
+     queries the size of the parent it thinks that nothing has changed. By
+     setting a max width and height, we make sure the plot always gets shrunk
+     to at most the size of the grid element, thus allowing the resize observer
+     to work properly.
+  */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Only set card styles if we're not using the bslib card component */
+.grid_panel:not(.card) {
+  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+  border-radius: 0.5rem;
+}
+
+.grid_panel .panel-title {
+  height: var(--card-title-height);
+  width: calc(100% + 2*var(--card-padding));
+  padding: calc(0.5 * var(--card-padding)) var(--card-padding);
+  margin-left: calc(-1 * var(--card-padding));
+  margin-top: calc(-1 * var(--card-padding));
+  border-bottom: 1px solid #dae0e5;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.grid_panel .panel-title > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+.grid_panel .panel-title > svg {
+  outline: 1px solid red;
+}
+
+.panel-content {
+  height: 100%;
+  display: grid;
+}
+
+.grid_panel.collapsed  {
+  height: var(--card-title-height);
+  overflow: hidden;
+}
+
+.grid_panel.collapsed .panel-content {
+  display: none;
+}
+
+/* Make everything line up nice and cleanly like it should in the middle */
+.grid_panel > .title_panel {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Makes it so tabpanels work in gridpanels */
+.grid_panel .tabbable { height: 100% }
+.grid_panel .tabbable > .nav { height: 42px; }
+.grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
+.grid_panel .tabbable .tab-pane { height: 100%; }

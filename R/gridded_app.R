@@ -1,78 +1,127 @@
+grided_app <- function(
+  starting_layout = new_gridlayout(),
+  on_finish = NULL,
+  finish_button_text = NULL,
+  return_app_obj = FALSE
+) {
+  requireNamespace("miniUI", quietly = TRUE)
+  requireNamespace("shiny", quietly = TRUE)
 
-grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode = FALSE) {
-  shiny::tags$body(
-    shiny::tags$head(
-      shiny::tags$title("GridEd"),
-      if (dev_mode) tags$link(rel = "stylesheet", type = "text/css", href = "main.css"),
-      if (dev_mode) tags$script(src = "dist/index.js"),
+  app <- shiny::shinyApp(
+    ui = shiny::fluidPage(grided_resources()),
+    server = function(input, output, session) {
+      grided_server_code(
+        input, output, session,
+        starting_layout,
+        on_finish = on_finish,
+        finish_button_text = finish_button_text
+      )
+    }
+  )
+
+  if (return_app_obj) {
+    app
+  } else {
+    # Open gadget in the external viewer
+    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
+    shiny::runGadget(app, viewer = viewer)
+  }
+}
+
+utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
+
+
+grided_server_code <- function(
+  input, output, session,
+  starting_layout = NULL,
+  on_finish = NULL,
+  finish_button_text = NULL
+){
+
+  # Lets grided know it should send over initial app state
+  session$sendCustomMessage("shiny-loaded", 1)
+
+  if(!is.null(starting_layout)){
+    session$sendCustomMessage(
+      "update-grid",
+      list(
+        rows =  attr(starting_layout, "row_sizes"),
+        cols = attr(starting_layout, "col_sizes"),
+        gap = attr(starting_layout, "gap")
+      )
+    )
+
+    if (!is.null(finish_button_text)) {
+      # Update the "finish" button to whatever is desired by the user
+      session$sendCustomMessage("finish-button-text", finish_button_text)
+    }
+
+    # Let grided know about the starting elements
+    session$sendCustomMessage(
+      "add-elements",
+      get_elements(starting_layout)
+    )
+  }
+
+  current_layout <- shiny::reactive({
+    shiny::req(input$elements)
+    layout_from_grided(input$elements, input$grid_sizing)
+  })
+
+  initial_layout <- NULL
+  shiny::observe({
+    shiny::req(input$elements, input$grid_sizing)
+    if (is.null(initial_layout)) {
+      initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
+    }
+  })
+
+  # Get code button will send a popup with the code needed to define currently viewed layout
+  shiny::bindEvent(
+    shiny::observe({
+      send_layoutcall_popup(session, current_layout)
+    }),
+    input$get_code
+  )
+
+  # Get update code button will try and find the layout being edited in the currently open editor and update the code
+  # This can be overridden by setting the on_finish argument to a function that takes the current layout as input
+  shiny::bindEvent(shiny::observe({
+    shiny::req(input$elements)
+
+    if(!is.null(on_finish)){
+      on_finish(current_layout())
+      return()
+    }
+
+    if (in_rstudio()) {
+      editor_selection <- rstudioapi::getSourceEditorContext()
+
+      layout_table <- Find(
+        x = find_layouts_in_file(editor_selection$contents),
+        f = function(x) layouts_are_equal(x$layout, initial_layout)
+      )
+    }
+
+    if (is.null(layout_table) || !in_rstudio()) {
+      warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
+      send_layoutcall_popup(session, current_layout, error_mode = TRUE)
+    } else {
+      update_layout_in_file(editor_selection, layout_table, current_layout())
+      shiny::stopApp()
+    }
+  }), input$update_code)
+}
+
+
+# This is all the UI related code that needs to be included for grided to wrap app
+grided_resources <- function(){
+  shiny::tags$head(
+    shiny::includeScript(
+      system.file("grided/www/dist/index.js", package = "gridlayout")
     ),
-    if (!dev_mode) {
-      shiny::includeScript(
-        system.file("grided/www/dist/index.js", package = "gridlayout")
-      )
-    },
-    if (!dev_mode) {
-      shiny::includeCSS(
-        system.file("grided/www/main.css", package = "gridlayout")
-      )
-    },
-    shiny::div(
-      id = "grided__holder",
-      shiny::div(
-        id = "grided__header",
-        shiny::h2(shiny::HTML("GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app")),
-        shiny::div(
-          class = "code_btns",
-          if (!is.null(update_btn_text)) shiny::actionButton("updated_code", update_btn_text),
-          shiny::actionButton("get_code", "Get layout code")
-        )
-      ),
-      shiny::div(
-        id = "grided__settings",
-        shiny::h3(settings_icon, "Settings"),
-        shiny::div(
-          class = "card-body",
-        )
-      ),
-      shiny::div(
-        id = "grided__instructions",
-        shiny::h3(instructions_icon, "Instructions"),
-        shiny::div(
-          class = "card-body",
-          shiny::strong("Add an element:"),
-          shiny::tags$ul(
-            shiny::tags$li("Click and drag over the grid to define a region"),
-            shiny::tags$li("Enter id of element in popup")
-          ),
-          shiny::strong("Edit an element:"),
-          shiny::tags$ul(
-            shiny::tags$li("Drag the upper left, middle, or bottom right corners of the element to reposition")
-          ),
-          shiny::strong("Remove an element:"),
-          shiny::tags$ul(
-            shiny::tags$li("Find element entry in \"Added elements\" panel and click the", trashcan_icon, " icon")
-          ),
-        )
-      ),
-      shiny::div(
-        id = "grided__elements",
-        shiny::h3(elements_icon, "Added elements"),
-        shiny::div(
-          class = "card-body",
-          shiny::div(id = "added_elements")
-        )
-      ),
-      shiny::div(
-        id = "grided__editor",
-        shiny::div(
-          id = "editor-wrapper",
-          shiny::HTML(browser_header_html),
-          shiny::div(
-            id = "editor-app-window",
-            grid_container
-          )
-        )
-      )
+    shiny::includeCSS(
+      system.file("grided/www/main.css", package = "gridlayout")
     )
   )
 }
@@ -82,7 +131,7 @@ grided_ui_wrapper <- function(grid_container, update_btn_text = NULL, dev_mode =
 # provided by grided UI
 layout_from_grided <- function(elements, grid_sizing) {
   new_gridlayout(
-    element_list = elements,
+    elements,
     col_sizes = as.character(grid_sizing$cols),
     row_sizes = as.character(grid_sizing$rows),
     gap = grid_sizing$gap
@@ -90,23 +139,16 @@ layout_from_grided <- function(elements, grid_sizing) {
 }
 
 
+send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
+  layout_call <- paste(
+    "layout <- grid_layout_from_md(layout_table = \"",
+    "    ", to_md(current_layout()), "\")",
+    sep = "\n")
 
-
-find_grid_tags <- function(x) {
-  is_shinytag <- inherits(x, "shiny.tag")
-  has_class <- is_shinytag && !is.null(x$attribs$class)
-
-  if (has_class && x$attribs$class == "container-fluid") {
-    x$children
-  } else if (is_shinytag | inherits(x, "list")) {
-    children <- if (is_shinytag) x[["children"]] else x
-    for (child in children) {
-      ret <- Recall(child)
-      if (!is.null(ret)) {
-        return(ret)
-      }
-    }
+  if (error_mode) {
+    session$sendCustomMessage("code_update_problem", layout_call)
   } else {
-    NULL
+    session$sendCustomMessage("code_modal", layout_call)
   }
 }
+

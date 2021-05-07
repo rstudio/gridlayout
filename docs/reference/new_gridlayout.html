@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Construct a gridlayout object from basic parts — new_gridlayout • gridlayout</title>
+<title>Construct a gridlayout object — new_gridlayout • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,8 +40,9 @@
 
 
 
-<meta property="og:title" content="Construct a gridlayout object from basic parts — new_gridlayout" />
-<meta property="og:description" content="Construct a gridlayout object from basic parts" />
+<meta property="og:title" content="Construct a gridlayout object — new_gridlayout" />
+<meta property="og:description" content="Builds the gridlayout s3 class that holds information needed to draw a given
+layout." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,6 +120,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
     </li>
   </ul>
@@ -137,31 +141,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Construct a gridlayout object from basic parts</h1>
+    <h1>Construct a gridlayout object</h1>
     
     <div class="hidden name"><code>new_gridlayout.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Construct a gridlayout object from basic parts</p>
+    <p>Builds the gridlayout s3 class that holds information needed to draw a given
+layout.</p>
     </div>
 
     <pre class="usage"><span class='fu'>new_gridlayout</span><span class='op'>(</span>
-  <span class='va'>layout_mat</span>,
-  col_sizes <span class='op'>=</span> <span class='st'>"auto"</span>,
-  row_sizes <span class='op'>=</span> <span class='st'>"auto"</span>,
-  <span class='va'>gap</span>,
-  <span class='va'>element_list</span>
+  layout_def <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  col_sizes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  row_sizes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gap <span class='op'>=</span> <span class='cn'>NULL</span>,
+  container_height <span class='op'>=</span> <span class='cn'>NULL</span>,
+  alternate_layouts <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>layout_mat</th>
-      <td><p>A character matrix where each entry controls what element
-id will take up that given position in the grid. For instance a header
-element would take up every cell in the first row.</p></td>
+      <th>layout_def</th>
+      <td><p>Either a list of elements with the <code>id</code>, <code>start_row</code>,
+<code>end_row</code>, <code>start_col</code>, and <code>end_col</code> format, or a markdown table defining a
+layout.</p></td>
     </tr>
     <tr>
       <th>col_sizes</th>
@@ -176,18 +182,67 @@ it will be repeated for all columns.</p></td>
     <tr>
       <th>gap</th>
       <td><p>Valid css sizing for gap to be left between each element in your
-grid. Defaults to <code>"1rem"</code>.</p></td>
+grid. Defaults to <code>"1rem"</code>. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;</p></td>
     </tr>
     <tr>
-      <th>element_list</th>
-      <td><p>List of elements with the <code>id</code>, <code>start_row</code>, <code>end_row</code>,
-<code>start_col</code>, and <code>end_col</code> format.</p></td>
+      <th>container_height</th>
+      <td><p>Valid css unit determining how tall the containing
+element should be for this layout. Defaults to <code>"viewport"</code> (full page
+height: equivalent to the CSS value of <code>100vh</code>) if any relative units (e.g.
+<code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code> otherwise. Values such
+as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.</p></td>
+    </tr>
+    <tr>
+      <th>alternate_layouts</th>
+      <td><p>A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+<code>layout</code>: or valid layout declaration (see Declaring your layout), and
+<code>width_bounds</code>: or a list with at least one of a <code>min</code> and <code>max</code> value for
+when your page appears. See <code>add_alternate_layout()</code> for more details. If no
+alternate layouts are given a single-column layout will be automatically
+applied for mobile screens (viewports less than 600px wide).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Object of class <code>"gridlayout"</code></p>
+    <h2 class="hasAnchor" id="declaring-your-layout"><a class="anchor" href="#declaring-your-layout"></a>Declaring your layout</h2>
+
+    
+
+
+<p>There are two current ways to declare layouts (aka inputs to <code>layout_def</code>).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Markdown tables The first is the easiest: a markdown table wrapped in a</h3>
+
+
+<p>character string. In this format you define a grid using the table and then
+place your grid "elements" within that grid using their grid id. So for a
+2x2 layout with a header along the top and two plots side-by-side the layout
+would look as follows: <code>{r} new_gridlayout( "| header | header | | plota | plotb  |" ) </code></p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Element lists The second method is to supply a list of elements by</h3>
+
+
+<p>providing the following information for each:</p><ul>
+<li><p><code>id</code>: Identifying id of the element (e.g. <code>"header</code>) -
+<code>start_row/end_row</code>: The (1-indexed) start and end row of your element's
+span - <code>start_col/end_col</code>: The start and end column for your element's span</p></li>
+</ul>
+
+<p>This is a bit more verbose but allows for greater control. Here you can have
+overlapping elements etc.. Most of the time you will just want to use the
+markdown syntax</p>
+<p>The same layout as declared above can be accomplished with the following:<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,"></p><pre>start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
+start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
+start_col = 2, end_col = 2) ) ) ```
+
+</pre><p></div></p>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -204,33 +259,28 @@ grid. Defaults to <code>"1rem"</code>.</p></td>
 <span class='op'>)</span>
 
 <span class='fu'>new_gridlayout</span><span class='op'>(</span>
+  <span class='va'>elements_list</span>,
   col_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1fr"</span>, <span class='st'>"2fr"</span><span class='op'>)</span>,
-  row_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"100px"</span>, <span class='st'>"1fr"</span>, <span class='st'>"1fr"</span><span class='op'>)</span>,
-  element_list <span class='op'>=</span> <span class='va'>elements_list</span>
+  row_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"100px"</span>, <span class='st'>"1fr"</span>, <span class='st'>"1fr"</span><span class='op'>)</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size: </span><span style='font-weight: bold;'>1rem</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
+</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer</div><div class='input'>
 <span class='co'># Can also use a matrix for more visually intuitive laying out</span>
-<span class='va'>elements_mat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-  <span class='st'>"header"</span>, <span class='st'>"header"</span>,
-  <span class='st'>"plot"</span>,   <span class='st'>"table"</span>,
-  <span class='st'>"footer"</span>, <span class='st'>"footer"</span><span class='op'>)</span>,
-  ncol <span class='op'>=</span> <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
 <span class='fu'>new_gridlayout</span><span class='op'>(</span>
+  layout_def <span class='op'>=</span> <span class='st'>"
+      | header | header |
+      | plota  | plotb  |"</span>,
   col_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1fr"</span>, <span class='st'>"2fr"</span><span class='op'>)</span>,
-  row_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"100px"</span>, <span class='st'>"1fr"</span>, <span class='st'>"1fr"</span><span class='op'>)</span>,
-  layout_mat <span class='op'>=</span> <span class='va'>elements_mat</span>
+  row_sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"100px"</span>, <span class='st'>"1fr"</span><span class='op'>)</span>,
+  gap <span class='op'>=</span> <span class='st'>"2rem"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size: </span><span style='font-weight: bold;'>1rem</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>2</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>2rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer</div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plota  plotb </div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

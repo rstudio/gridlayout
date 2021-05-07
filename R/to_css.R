@@ -13,21 +13,11 @@
 #'   the grid container will get card styling (useful for RMarkdown or other
 #'   situations where you don't control child rendering) or `"none"` for no card
 #'   styling.
-#' @param additional_card_styles A list of named property-value pairs for
-#'   additional styles to be added to each card-element (as defined by
-#'   `is_card_styled`. E.g. `element_styles = c("background" = "blue")`.
-#' @param element_styles A list of named property-value pairs for additional
-#'   styles to be added to each first child element of the grid container. E.g.
-#'   under the css selector of `grid_container > *`. If `is_card_styled = "all"`
-#'   then this has the same purpose as as `additional_card_styles`
-#' @param debug_mode If set to `TRUE` then each element of the grid will have an
-#'   outline applied so positioning can more easily be assessed.
-#' @param container_height How tall should the grid-containing element be? If
-#'   set to `"viewport"` then the container will take up the entire available
-#'   vertical space (equivalent to the CSS value of `100vh`). For nested grids a
-#'   value of `"100%"` will enable the the nested grid to take up the full
-#'   vertical space provided by its parent container. Any other css size unit is
-#'   also valid such as `"400px"` or `"100%"`.
+#' @param element_styles A list of named property-value pairs ( E.g.
+#'   `element_styles = c("background" = "blue")`.) for additional styles to be
+#'   added to each first child element of the grid container. E.g. under the css
+#'   selector of `grid_container > *`. If `is_card_styled = "all"` then this has
+#'   the same purpose as as `additional_card_styles`
 #' @param selector_prefix CSS prefix used to target grid elements. This will
 #'   change if you're integrating grid with a system that you don't want to use
 #'   ids (the `"#"` prefix) with because they are not available or are used for
@@ -50,14 +40,7 @@
 #' cat(to_css(grid_obj))
 #'
 #' @export
-to_css <- function(layout,
-                   container,
-                   is_card_styled = "grid_panel",
-                   additional_card_styles = c(),
-                   element_styles = c(),
-                   debug_mode = FALSE,
-                   container_height = "viewport",
-                   selector_prefix = "#") {
+to_css <- function(layout, ...) {
   UseMethod("to_css")
 }
 
@@ -71,12 +54,9 @@ to_css.gridlayout <- function(
   layout,
   container,
   is_card_styled = "grid_panel",
-  additional_card_styles = c(),
   element_styles = c(),
-  debug_mode = FALSE,
-  container_height = "viewport",
-  selector_prefix = "#"){
-
+  selector_prefix = "#"
+){
   container_query <- if(missing(container)){
     "body"
   }  else {
@@ -84,6 +64,108 @@ to_css.gridlayout <- function(
 
     if(has_css_selector) container else paste0("#", container)
   }
+
+  all_grid_els_selector <- paste0(container_query," > *")
+
+  accessory_css <- paste(readLines(system.file("resources/gridlayout.css", package = "gridlayout")), collapse = "\n")
+  if (is_card_styled == "all") {
+    # Make .grid_panel simply apply to every first-level div
+    accessory_css <- str_replace_all(
+      accessory_css,
+      ".grid_panel",
+      all_grid_els_selector,
+      fixed = TRUE
+    )
+  }
+
+  # User-defined styles for all the grid-elements. Goes after the accessory
+  # rules so they can override any desired properties
+  all_elements_styles <- build_css_rule(
+    selector = all_grid_els_selector,
+    element_styles
+  )
+
+  layout_rules <- generate_layout_rules(
+    layout = layout,
+    container_query = container_query,
+    selector_prefix = selector_prefix
+  )
+
+
+  alternative_layout_queries <- if (notNull(attr(layout, "alternates"))) {
+
+    paste(
+      lapply(
+        attr(layout, "alternates"),
+        function(alt_layout) {
+          generate_layout_rules(
+            layout = alt_layout$layout,
+            container_query = container_query,
+            selector_prefix = selector_prefix,
+            width_bounds = alt_layout$width_bounds
+          )
+        }
+      ),
+      collapse = "\n\n"
+    )
+  } else {
+    # Add a default layout of a single column that occurs at sizes narrower than 600px
+    paste(
+      "@media (max-width: 600px) {",
+      build_css_rule(
+        selector = container_query,
+        prop_list = c(
+          "display"= "block",
+          "height" = "auto"
+        )
+      ),
+      build_css_rule(
+        selector = paste(container_query, "> *"),
+        prop_list = c(
+          "margin-bottom"= attr(layout, 'gap')
+        )
+      ),
+      build_css_rule(
+        # Don't let plots get swallowed to nothing
+        selector = ".shiny-plot-output",
+        prop_list = c(
+          "min-height"= "300px"
+        )
+      ),
+      "}",
+      sep = "\n"
+    )
+  }
+
+
+  paste(
+    layout_rules,
+    accessory_css,
+    alternative_layout_queries,
+    all_elements_styles,
+    sep = "\n\n"
+  )
+}
+
+
+generate_layout_rules <- function(
+  layout,
+  container_query,
+  selector_prefix,
+  width_bounds = NULL
+){
+
+  main_container_styles <- build_css_rule(
+    selector = container_query,
+    prop_list = c(
+      "display" = "grid",
+      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
+      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
+      "grid-gap" = attr(layout, 'gap'),
+      "padding" = attr(layout, 'gap'),
+      "height" = validCssUnit(attr(layout, "container_height"))
+    )
+  )
 
   # Build the mapping for each element to its grid area.
   element_grid_areas <- paste(
@@ -103,61 +185,30 @@ to_css.gridlayout <- function(
     collapse = "\n"
   )
 
-  collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
-
-  main_container_styles <- build_css_rule(
-    selector = container_query,
-    prop_list = c(
-      "display" = "grid",
-      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
-      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
-      "grid-gap" = attr(layout, 'gap'),
-      "padding" = attr(layout, 'gap'),
-      "height" = if(container_height == "viewport") "100vh" else validCssUnit(container_height)
+  media_query_open <- ""
+  media_query_close <- ""
+  if (notNull(width_bounds)) {
+    has_min <- doesExist(width_bounds["min"])
+    has_max <- doesExist(width_bounds["max"])
+    media_query_open <- paste0(
+      "@media ",
+      if (has_min) paste0("(min-width: ", width_bounds["min"],")"),
+      if (has_max && has_min) " and ",
+      if (has_max) paste0("(max-width:", width_bounds["max"], ")"),
+      " {"
     )
-  )
 
-  card_style_list <- if(is_card_styled == "none") {
-    c()
-  } else {
-    c("box-shadow" = "0 0 0.5rem rgb(0 0 0 / 35%)",
-      "border-radius" = "0.5rem")
+    media_query_close <- "}"
   }
-
-  debug_style_list <- if(debug_mode){
-    c("outline" = "1px solid black")
-  } else {
-    c()
-  }
-
-  card_styles <- build_css_rule(
-    selector = paste0(container_query, if(is_card_styled == "all") " > *" else " .grid_panel"),
-    prop_list = c(
-      "box-sizing" = "border-box",
-      "padding" = "0.8rem",
-      "overflow" = "hidden",
-      card_style_list,
-      debug_style_list,
-      additional_card_styles
-    )
-  )
-
-  element_styles <- build_css_rule(
-    selector = paste0(container_query," > *"),
-    element_styles
-  )
-
-
 
   paste(
+    media_query_open,
     main_container_styles,
-    element_styles,
-    card_styles,
     element_grid_areas,
+    media_query_close,
     sep = "\n\n"
   )
 }
-
 
 
 #' Convert layout to css for Shiny
@@ -236,7 +287,6 @@ use_gridlayout_shiny <- function(layout, ...){
 #'
 use_gridlayout_rmd <- function(
   container = '.main-container',
-  container_height = 'viewport',
   is_card_styled = "all",
   ...
   ){
@@ -251,10 +301,10 @@ use_gridlayout_rmd <- function(
         "<style>",
         to_css(layout,
                container = container,
-               container_height = container_height,
                is_card_styled = is_card_styled,
                ...
                ),
+        rmd_utility_css,
         "</style>",
         sep = "\n"
       )
@@ -269,3 +319,31 @@ use_gridlayout_rmd <- function(
   })
 }
 
+# Makes tab panels work properly and gives utility classes for alignment
+rmd_utility_css <- "
+.tabbable { height: 100% }
+.tabbable > .nav { height: 42px; }
+.tabbable .tab-content { height: calc(100% - 42px); }
+.tabbable .tab-pane { height: 100%; }
+
+.section.no-header > h1:first-child {
+  display: none;
+}
+
+.section.v_start,
+.section.v_center,
+.section.v_end,
+.section.h_start,
+.section.h_center,
+.section.h_end {
+  display: grid;
+}
+
+.section.v_start  { align-items: start; }
+.section.v_center { align-items: center; }
+.section.v_end    { align-items: end; }
+
+.section.h_start  { justify-items: start; }
+.section.h_center { justify-items: center; }
+.section.h_end    { justify-items: end; }
+"

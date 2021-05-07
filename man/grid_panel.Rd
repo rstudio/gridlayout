@@ -4,7 +4,16 @@
 \alias{grid_panel}
 \title{Panel for grid page}
 \usage{
-grid_panel(..., v_align, h_align)
+grid_panel(
+  ...,
+  v_align = "stretch",
+  h_align = "stretch",
+  title = NULL,
+  use_card_styles = TRUE,
+  use_bslib_card_styles = FALSE,
+  collapsable = FALSE,
+  scrollable = FALSE
+)
 }
 \arguments{
 \item{...}{Elements to include within the panel}
@@ -15,6 +24,20 @@ mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justif
 (=\code{h_align}) and
 \href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
 (= \code{v_align}).}
+
+\item{use_bslib_card_styles}{Should the card styles from bslib be used
+instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
+will override \code{use_card_style}.}
+
+\item{collapsable}{Should the card be able to be collapsed? Only really
+functional when panel takes up entire width of page. Requires a title so
+the user knows what panel is in collapsed state.}
+
+\item{scrollable}{Should scroll-bars be added so content that is larger than
+the panel can be seen?}
+
+\item{use_card_style}{Should the element contained in panel be made to look
+like an enclosed card?}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with \code{class = "grid_panel"} and vertical/horizontal alignment css applied.

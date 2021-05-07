@@ -33,3 +33,28 @@ get_elements.gridlayout <- function(layout){
   # Just remove the gridlayout class so printing doesn't confuse people
   unclass(layout)
 }
+
+#' Get ids of element in layout
+#'
+#' @param layout Object of class `"gridlayout"`.
+#'
+#' @return Character vector of ids of all elements in layout
+#' @export
+#'
+#' @examples
+#'
+#' grid_obj <- md_to_gridlayout(
+#'   layout_table = "
+#'         |      |120px   |1fr    |1fr    |
+#'         |------|--------|-------|-------|
+#'         |100px |header  |header |header |
+#'         |1fr   |sidebar |plot_a |plot_a |
+#'         |1fr   |sidebar |plot_b |plot_c |"
+#'  )
+#'
+#' get_element_ids(grid_obj)
+#'
+get_element_ids <- function(layout) {
+
+  extract_chr(get_elements(layout), "id")
+}

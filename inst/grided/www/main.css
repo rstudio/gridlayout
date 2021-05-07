@@ -236,6 +236,11 @@ button.minus_btn.disabled {
   border-radius: var(--element_roundness);
 }
 
+.grid-cell.transparent {
+  background: none;
+}
+
+
 .grid-cell.selected {
   background: currentColor;
   border: 2px solid var(--light-gray);
@@ -245,6 +250,9 @@ button.minus_btn.disabled {
   background: none;
   /* pointer-events: none; So the cells beneath the elements can be selected still */
   position: relative;
+  /* This is neccesary so that content doesn't force tracks to be larger than 
+     requested */
+  /* overflow: hidden;  */
 }
 
 /* Apply to both the list of elements and the elements in the grid itself */
@@ -363,6 +371,15 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
+/* This is filler text to make auto sizing work. It's invisible to the user
+   so it doesn't distract. Not sure if this is the best way to do it but I think
+   it's worth a go. 
+*/
+.added-element .filler_text {
+  color: rgba(128, 128, 128, 0.5);
+  user-select: none;
+}
+
 .css-unit-input {
   display: grid;
   grid-template-columns: 60px 54px;
@@ -374,6 +391,7 @@ button.minus_btn.disabled {
   /* Prevents card styling when set to every child from spilling into input divs */
   box-shadow: none !important; 
 }
+
 
 .css-unit-input.with-drag {
   grid-template-rows: 32px 18px;
@@ -423,6 +441,11 @@ button.minus_btn.disabled {
   pointer-events: all;
 }
 
+
+.css-unit-input-value.disabled {
+  opacity: 0.15;
+  pointer-events: none;
+}
 
 
 .cols-controls {

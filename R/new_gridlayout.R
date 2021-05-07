@@ -1,19 +1,68 @@
-#' Construct a gridlayout object from basic parts
+#'Construct a gridlayout object
 #'
-#' @param layout_mat A character matrix where each entry controls what element
-#'   id will take up that given position in the grid. For instance a header
-#'   element would take up every cell in the first row.
-#' @param col_sizes A character vector of valid css sizes for the width of each
-#'   column in your grid as given by `layout_mat`. If a single value is passed,
-#'   it will be repeated for all columns.
-#' @param row_sizes Same as `col_sizes`, but for row heights.
-#' @param gap Valid css sizing for gap to be left between each element in your
-#'   grid. Defaults to `"1rem"`.
-#' @param element_list List of elements with the `id`, `start_row`, `end_row`,
-#'   `start_col`, and `end_col` format.
+#'Builds the gridlayout s3 class that holds information needed to draw a given
+#'layout.
 #'
-#' @return Object of class `"gridlayout"`
-#' @export
+#'
+#'@section Declaring your layout:
+#'
+#'  There are two current ways to declare layouts (aka inputs to `layout_def`).
+#'
+#'  ### Markdown tables The first is the easiest: a markdown table wrapped in a
+#'  character string. In this format you define a grid using the table and then
+#'  place your grid "elements" within that grid using their grid id. So for a
+#'  2x2 layout with a header along the top and two plots side-by-side the layout
+#'  would look as follows: ```{r} new_gridlayout( "| header | header | | plota |
+#'  plotb  |" ) ```
+#'
+#'  ### Element lists The second method is to supply a list of elements by
+#'  providing the following information for each:
+#'
+#'  - `id`: Identifying id of the element (e.g. `"header`) -
+#'  `start_row/end_row`: The (1-indexed) start and end row of your element's
+#'  span - `start_col/end_col`: The start and end column for your element's span
+#'
+#'  This is a bit more verbose but allows for greater control. Here you can have
+#'  overlapping elements etc.. Most of the time you will just want to use the
+#'  markdown syntax
+#'
+#'  The same layout as declared above can be accomplished with the following:
+#'
+#'  ```{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,
+#'  start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
+#'  start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
+#'  start_col = 2, end_col = 2) ) ) ```
+#'
+#'
+#'@param layout_def Either a list of elements with the `id`, `start_row`,
+#'  `end_row`, `start_col`, and `end_col` format, or a markdown table defining a
+#'  layout.
+#'@param col_sizes A character vector of valid css sizes for the width of each
+#'  column in your grid as given by `layout_mat`. If a single value is passed,
+#'  it will be repeated for all columns.
+#'@param row_sizes Same as `col_sizes`, but for row heights.
+#'@param gap Valid css sizing for gap to be left between each element in your
+#'  grid. Defaults to `"1rem"`. This is a relative unit that scales with the
+#'  base text size of a page. E.g. setting font-size: 16px on the body element
+#'  of a page means 1rem = 16px;
+#'@param container_height Valid css unit determining how tall the containing
+#'  element should be for this layout. Defaults to `"viewport"` (full page
+#'  height: equivalent to the CSS value of `100vh`) if any relative units (e.g.
+#'  `fr` or `auto`) are included in row sizes and `auto` otherwise. Values such
+#'  as `"auto"` will let the page grow to as large as it needs to be to fit all
+#'  content. This should most likely be avoided when using row heights in
+#'  relative units.
+#'@param alternate_layouts A list of layouts to be used for different viewport
+#'  widths. This is enables your app to adapt to different screensizes such as a
+#'  phone or an ultra-wide monitor. Each entry in this list must contain a
+#'  `layout`: or valid layout declaration (see [Declaring your layout]), and
+#'  `width_bounds`: or a list with at least one of a `min` and `max` value for
+#'  when your page appears. See [add_alternate_layout()] for more details. If no
+#'  alternate layouts are given a single-column layout will be automatically
+#'  applied for mobile screens (viewports less than 600px wide).
+#'
+#'@return Object of class `"gridlayout"`
+#'@export
 #'
 #' @examples
 #'
@@ -30,38 +79,63 @@
 #' )
 #'
 #' new_gridlayout(
+#'   elements_list,
 #'   col_sizes = c("1fr", "2fr"),
-#'   row_sizes = c("100px", "1fr", "1fr"),
-#'   element_list = elements_list
+#'   row_sizes = c("100px", "1fr", "1fr")
 #' )
 #'
 #' # Can also use a matrix for more visually intuitive laying out
-#' elements_mat <- matrix(c(
-#'   "header", "header",
-#'   "plot",   "table",
-#'   "footer", "footer"),
-#'   ncol = 2, byrow = TRUE
-#' )
-#'
 #' new_gridlayout(
+#'   layout_def = "
+#'       | header | header |
+#'       | plota  | plotb  |",
 #'   col_sizes = c("1fr", "2fr"),
-#'   row_sizes = c("100px", "1fr", "1fr"),
-#'   layout_mat = elements_mat
+#'   row_sizes = c("100px", "1fr"),
+#'   gap = "2rem"
 #' )
 #'
-new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", gap, element_list){
-  have_element_list <- !missing(element_list)
-  have_layout_mat <- !missing(layout_mat)
+new_gridlayout <- function(
+  layout_def = list(),
+  col_sizes = NULL,
+  row_sizes = NULL,
+  gap = NULL,
+  container_height = NULL,
+  alternate_layouts = NULL
+){
 
-  elements <- if(have_element_list & have_layout_mat){
-    stop("Both element list and layout matrix inputs supplied. Only use one")
-  } else if(have_element_list){
-    # TODO: Validate form of elements
-    element_list
-  } else if(have_layout_mat){
-    elements_from_mat(layout_mat)
+  elements <- list()
+  # Figure out what type of layout definition we were passed
+  if (is_char_string(layout_def)) {
+    # MD table representation
+    layout_info <- parse_md_table_layout(
+      layout_def,
+      col_sizes = col_sizes,
+      row_sizes = row_sizes,
+      gap = gap
+    )
+    elements <- layout_info$elements
+    col_sizes <-  layout_info$col_sizes
+    row_sizes <- layout_info$row_sizes
+    gap <-  layout_info$gap
+
+  } else if (is.list(layout_def)) {
+    elements <- layout_def
   } else {
-    list()
+    stop(
+      "Unknown layout definition type. ",
+      "Layouts can be defined using markdown table syntax or element lists. ",
+      "See ?gridlayout::new_gridlayout for more info"
+    )
+  }
+
+  # Set defaults if unspecified
+  if (is.null(gap)) gap <- "1rem"
+
+  # If using default container_height and all the rows are definitely sized then
+  # make container height auto. Otherwise use "viewport"
+  if (is.null(container_height) ) {
+    all_definite_row_sizes <- all(!str_detect(row_sizes, "fr|auto"))
+    container_height <- if (all_definite_row_sizes) "auto" else "viewport"
   }
 
   empty_grid <- length(elements) == 0
@@ -72,7 +146,7 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
     function(dir, sizes){
       start_vals <- extract_dbl(elements, "start_" %+% dir)
       end_vals <- extract_dbl(elements, "end_" %+% dir)
-      auto_sizing <- identical(sizes, "auto")
+      auto_sizing <- is.null(sizes)
 
       if(!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
 
@@ -84,48 +158,109 @@ new_gridlayout <- function(layout_mat, col_sizes = "auto", row_sizes = "auto", g
         max(end_vals)
       }
 
-      if(auto_sizing) sizes <- "1fr"
+      if (auto_sizing) {
+        # Don't give layouts with auto-height relative units
+        auto_unit <- if (dir == "row" && container_height == "auto") "300px" else "1fr"
+        sizes <- auto_unit
+      }
 
       if(length(sizes) == 1 & num_sections != 1){
         sizes <- rep_len(sizes, num_sections)
       }
-
       # Make sure that the elements sit within the defined grid
-      if(!empty_grid && (max(end_vals) > num_sections)){
-        bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
-        stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
-      }
+      if (!empty_grid) {
 
-      if(have_layout_mat){
-        mat_dim_size <- if(dir == "row") nrow(layout_mat) else ncol(layout_mat)
-        if(mat_dim_size != length(sizes)){
-          stop("The provided ", dir,
-               " sizes need to match the number of ", dir,
-               "s in your layout matrix")
+        if (max(end_vals) > num_sections) {
+          bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
+          stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
         }
 
+        if (max(end_vals) < length(sizes)) {
+          stop("The provided ", dir, " sizes need to match the number of ", dir, "s in your layout")
+        }
       }
 
       sizes
     })
 
-  # Default gap is a single rem unit. This is a relative unit that scales with
-  # the base text size of a page. E.g. setting font-size: 16px on the body
-  # element of a page means 1rem = 16px;
-  gap <- validate_argument(gap, default = "1rem")
+  # If container height is not a fixed value then relative unit row heights will
+  # not work. Issue a warning in this case
+  has_relative_row_heights <- any(str_detect(row_sizes, "fr", fixed = TRUE))
+  if (container_height == "auto" && has_relative_row_heights) {
+    warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
+  }
 
-  structure(
+  layout <- structure(
     elements,
     class = "gridlayout",
     row_sizes = sizes$row,
     col_sizes = sizes$col,
-    gap = gap
+    gap = gap,
+    container_height = container_height
   )
+
+  if (notNull(alternate_layouts)) {
+
+    single_alternate <- "layout" %in% names(alternate_layouts)
+
+    if (single_alternate) {
+      alternate_layouts <- list(alternate_layouts)
+    }
+
+    for (alternate in alternate_layouts) {
+      if (is.null(alternate$layout)) {
+        stop(
+          "Altnernate layouts need to be provided as a list with ",
+          "a layout element along with width bounds."
+        )
+      }
+      layout <- add_alternate_layout(
+        layout,
+        alternate_layout = alternate$layout,
+        width_bounds = alternate$width_bounds,
+        container_height = alternate$container_height
+      )
+    }
+  }
+
+  layout
 }
+
+
+# Function to allow layout being defined with markdown or with standard object
+coerce_to_layout <- function(layout_def){
+  if(inherits(layout_def, "character")){
+    # If we were passed a string directly then convert to a grid layout before
+    # proceeding
+    layout_def <- md_to_gridlayout(layout_def)
+  } else if(!inherits(layout_def, "gridlayout")){
+    stop("Passed layout must either be a markdown table or a gridlayout object.")
+  }
+  layout_def
+}
+
 
 layouts_are_equal <- function(layout_a, layout_b){
   identical(to_md(layout_a), to_md(layout_b))
 }
+
+
+layouts_have_same_elements <- function(layout_a, layout_b){
+  a_element_ids <- extract_chr(layout_a, "id")
+  b_element_ids <- extract_chr(layout_b, "id")
+
+  if (setequal(a_element_ids, b_element_ids)) return(TRUE)
+
+  mismatched <- c(
+    setdiff(a_element_ids, b_element_ids),
+    setdiff(b_element_ids, a_element_ids)
+  )
+  stop(
+    "Layouts have mismatched elements: ",
+    paste(mismatched, collapse = ", ")
+  )
+}
+
 
 #' @export
 print.gridlayout <- function(x, ...){
@@ -134,12 +269,39 @@ print.gridlayout <- function(x, ...){
   emph <- if(is_installed("crayon")) crayon::bold else as.character
 
   cat(
-    emph("gridlayout") %+% " object with " %+%
-      emph(length(attr(x, 'row_sizes'))) %+% " rows, " %+%
-      emph(length(attr(x, 'col_sizes'))) %+% " columns, and " %+%
-      "gap size: " %+% emph(attr(x, 'gap')),
+    emph("gridlayout"), " with ",
+    emph(length(attr(x, 'row_sizes'))), " rows, ",
+    emph(length(attr(x, 'col_sizes'))), " columns, and ",
+    "gap size of ", emph(attr(x, 'gap')), ".",
+    " Total height of ", emph(attr(x, "container_height")),".",
     "\n",
-    to_table(x, sizes_decorator = emph)
+    to_table(x, sizes_decorator = emph),
+    sep = ""
   )
+
+  alternate_layouts <- attr(x, "alternates")
+  if (notNull(alternate_layouts)) {
+    cat("\n\n", emph("Alternative layouts:"), sep = "")
+    for (alternate in alternate_layouts) {
+      cat("\n\nWhen width of page", emph(print_size_range(alternate$width_bounds)), "\n")
+
+      print(alternate$layout)
+    }
+  }
 }
+
+print_size_range <- function(bounds) {
+  has_min <- doesExist(bounds["min"])
+  has_max <- doesExist(bounds["max"])
+  if (has_min && has_max) {
+    return(paste("between", bounds["min"], "and", bounds["max"]))
+  } else if (has_min) {
+    return(paste(">", bounds["min"]))
+  } else if (has_max) {
+    return(paste("<", bounds["max"]))
+  } else {
+    return("Malformed bounds")
+  }
+}
+
 

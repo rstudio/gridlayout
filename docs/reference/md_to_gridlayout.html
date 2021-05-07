@@ -41,7 +41,9 @@
 
 
 <meta property="og:title" content="Build grid layout obj from markdown table — md_to_gridlayout" />
-<meta property="og:description" content="Build grid layout obj from markdown table" />
+<meta property="og:description" content="This is just a wrapper around new_gridlayout() that is more explicit about
+its input format. Also adds the ability to absorb errors for use when parsing
+free text that may or may not represent a layout table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,6 +121,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
     </li>
   </ul>
@@ -143,10 +148,12 @@
     </div>
 
     <div class="ref-description">
-    <p>Build grid layout obj from markdown table</p>
+    <p>This is just a wrapper around <code><a href='new_gridlayout.html'>new_gridlayout()</a></code> that is more explicit about
+its input format. Also adds the ability to absorb errors for use when parsing
+free text that may or may not represent a layout table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>md_to_gridlayout</span><span class='op'>(</span><span class='va'>layout_table</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>md_to_gridlayout</span><span class='op'>(</span><span class='va'>layout_table</span>, null_instead_of_error <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,6 +163,45 @@
       <td><p>Character string with a markdown table. First row and
 column are reserved for sizing (any valid css sizing works). An optional
 grid-gap can be provided using the very first cell.</p></td>
+    </tr>
+    <tr>
+      <th>null_instead_of_error</th>
+      <td><p>When the input fails to be parsed as a layout,
+should the function return <code>NULL</code> instead of throwing an error? Useful for
+situations where you're parsing multiple tables simply want to check if a
+table can be parsed instead of relying on it being parsable.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed on to <code><a href='new_gridlayout.html'>new_gridlayout</a></code></p><dl>
+    <dt><code>layout_def</code></dt><dd><p>Either a list of elements with the <code>id</code>, <code>start_row</code>,
+<code>end_row</code>, <code>start_col</code>, and <code>end_col</code> format, or a markdown table defining a
+layout.</p></dd>
+    <dt><code>col_sizes</code></dt><dd><p>A character vector of valid css sizes for the width of each
+column in your grid as given by <code>layout_mat</code>. If a single value is passed,
+it will be repeated for all columns.</p></dd>
+    <dt><code>row_sizes</code></dt><dd><p>Same as <code>col_sizes</code>, but for row heights.</p></dd>
+    <dt><code>gap</code></dt><dd><p>Valid css sizing for gap to be left between each element in your
+grid. Defaults to <code>"1rem"</code>. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;</p></dd>
+    <dt><code>container_height</code></dt><dd><p>Valid css unit determining how tall the containing
+element should be for this layout. Defaults to <code>"viewport"</code> (full page
+height: equivalent to the CSS value of <code>100vh</code>) if any relative units (e.g.
+<code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code> otherwise. Values such
+as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.</p></dd>
+    <dt><code>alternate_layouts</code></dt><dd><p>A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+<code>layout</code>: or valid layout declaration (see Declaring your layout), and
+<code>width_bounds</code>: or a list with at least one of a <code>min</code> and <code>max</code> value for
+when your page appears. See <code>add_alternate_layout()</code> for more details. If no
+alternate layouts are given a single-column layout will be automatically
+applied for mobile screens (viewports less than 600px wide).</p></dd>
+  
+</dl></td>
     </tr>
     </table>
 
@@ -173,8 +219,8 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |sidebar |plot_a |plot_c |
     |1fr   |sidebar |plot_b |plot_b |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>3</span><span> columns, and gap size: </span><span style='font-weight: bold;'>1rem</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px  </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>3</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px  </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header  header header
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> sidebar plot_a plot_c
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> sidebar plot_b plot_b</div><div class='input'>
@@ -188,8 +234,8 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |plot   |table  |
     |1fr   |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size: </span><span style='font-weight: bold;'>25px</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>25px</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer</div><div class='input'>
@@ -202,8 +248,8 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |plot   |table  |
     |1fr   |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size: </span><span style='font-weight: bold;'>25px</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>25px</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer</div><div class='input'>
@@ -214,12 +260,11 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |plot   |table  |
     |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> object with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size: </span><span style='font-weight: bold;'>1rem</span><span> 
-#&gt;  </span><span style='font-weight: bold;'>   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> footer footer</div><div class='input'>
-</div></span></pre>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> header header
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot   table 
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer footer</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

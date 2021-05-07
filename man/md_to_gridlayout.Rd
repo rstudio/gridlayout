@@ -4,7 +4,7 @@
 \alias{md_to_gridlayout}
 \title{Build grid layout obj from markdown table}
 \usage{
-md_to_gridlayout(layout_table, null_instead_of_error = FALSE)
+md_to_gridlayout(layout_table, null_instead_of_error = FALSE, ...)
 }
 \arguments{
 \item{layout_table}{Character string with a markdown table. First row and
@@ -15,13 +15,46 @@ grid-gap can be provided using the very first cell.}
 should the function return \code{NULL} instead of throwing an error? Useful for
 situations where you're parsing multiple tables simply want to check if a
 table can be parsed instead of relying on it being parsable.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=new_gridlayout]{new_gridlayout}}
+  \describe{
+    \item{\code{layout_def}}{Either a list of elements with the \code{id}, \code{start_row},
+\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
+layout.}
+    \item{\code{col_sizes}}{A character vector of valid css sizes for the width of each
+column in your grid as given by \code{layout_mat}. If a single value is passed,
+it will be repeated for all columns.}
+    \item{\code{row_sizes}}{Same as \code{col_sizes}, but for row heights.}
+    \item{\code{gap}}{Valid css sizing for gap to be left between each element in your
+grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;}
+    \item{\code{container_height}}{Valid css unit determining how tall the containing
+element should be for this layout. Defaults to \code{"viewport"} (full page
+height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
+\code{fr} or \code{auto}) are included in row sizes and \code{auto} otherwise. Values such
+as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.}
+    \item{\code{alternate_layouts}}{A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
+when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
+alternate layouts are given a single-column layout will be automatically
+applied for mobile screens (viewports less than 600px wide).}
+  }}
 }
 \value{
 An object of class "grid_layout", which stores the layout as a
 matrix. This can be passed to other functions such as \code{layout_to_css()}.
 }
 \description{
-Build grid layout obj from markdown table
+This is just a wrapper around \code{\link[=new_gridlayout]{new_gridlayout()}} that is more explicit about
+its input format. Also adds the ability to absorb errors for use when parsing
+free text that may or may not represent a layout table.
 }
 \examples{
 md_to_gridlayout(
@@ -61,5 +94,4 @@ md_to_gridlayout(
     |plot   |table  |
     |footer |footer |"
 )
-
 }

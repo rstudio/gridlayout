@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Panel element for a grid layout — grid_panel • gridlayout</title>
+<title>Panel for grid page — grid_panel • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,8 +40,8 @@
 
 
 
-<meta property="og:title" content="Panel element for a grid layout — grid_panel" />
-<meta property="og:description" content="Panel element for a grid layout" />
+<meta property="og:title" content="Panel for grid page — grid_panel" />
+<meta property="og:description" content="Panel for grid page" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,6 +111,21 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
+      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+    </li>
+  </ul>
+</li>
         
       </ul>
       
@@ -125,56 +140,128 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Panel element for a grid layout</h1>
+    <h1>Panel for grid page</h1>
     
     <div class="hidden name"><code>grid_panel.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Panel element for a grid layout</p>
+    <p>Panel for grid page</p>
     </div>
 
-    <pre class="usage"><span class='fu'>grid_panel</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>grid_panel</span><span class='op'>(</span>
+  <span class='va'>...</span>,
+  v_align <span class='op'>=</span> <span class='st'>"stretch"</span>,
+  h_align <span class='op'>=</span> <span class='st'>"stretch"</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  use_card_styles <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  collapsable <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  scrollable <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>Id of element in grid. This should match one of the ids in layout declaration given to <code><a href='grid_page.html'>grid_page</a></code>.</p></td>
+      <th>...</th>
+      <td><p>Elements to include within the panel</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Any children elements or arguments to be passed to containing <code><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></code>.</p></td>
+      <th>v_align, h_align</th>
+      <td><p>Vertical and Horizontal alignment of content in panel.
+Options include <code>"center", "start", "end", "stretch"</code>. These are a direct
+mapping to the the <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items'>css-spec for <code>justify-items</code></a>
+(=<code>h_align</code>) and
+<a href='https://developer.mozilla.org/en-US/docs/Web/CSS/align-items'><code>align-items</code></a>
+(= <code>v_align</code>).</p></td>
+    </tr>
+    <tr>
+      <th>use_bslib_card_styles</th>
+      <td><p>Should the card styles from bslib be used
+instead of default <code>gridlayout</code> card styles? If this is set to <code>TRUE</code> it
+will override <code>use_card_style</code>.</p></td>
+    </tr>
+    <tr>
+      <th>collapsable</th>
+      <td><p>Should the card be able to be collapsed? Only really
+functional when panel takes up entire width of page. Requires a title so
+the user knows what panel is in collapsed state.</p></td>
+    </tr>
+    <tr>
+      <th>scrollable</th>
+      <td><p>Should scroll-bars be added so content that is larger than
+the panel can be seen?</p></td>
+    </tr>
+    <tr>
+      <th>use_card_style</th>
+      <td><p>Should the element contained in panel be made to look
+like an enclosed card?</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <div class='dont-index'><p>grid_page, grid_container</p></div>
+    <p>Elements from <code>...</code> wrapped in a <code><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>shiny::div()</a></code> with <code>class = "grid_panel"</code> and vertical/horizontal alignment css applied.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Only run these examples in interactive R sessions</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># Simply a wrapper for shiny::div(...)</span>
+<span class='fu'>grid_panel</span><span class='op'>(</span>
+  <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span><span class='st'>"R"</span><span class='op'>)</span>,
+  v_align <span class='op'>=</span> <span class='st'>"center"</span>,
+  h_align <span class='op'>=</span> <span class='st'>"center"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; &lt;div class="grid_panel panel-content gridlayout-card" style="justify-content: center; align-content: center;"&gt;
+#&gt;   &lt;h2&gt;R&lt;/h2&gt;
+#&gt; &lt;/div&gt;</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>gridlayout</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"bslib"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"fontawesome"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>my_layout</span> <span class='op'>&lt;-</span> <span class='st'>"
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |distPlot |"</span>
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|80px  |header  |header |
+|1fr   |sidebar |content|"</span>
+
+<span class='va'>content_layout</span> <span class='op'>&lt;-</span> <span class='st'>"
+|    |         |            |
+|----|---------|------------|
+|    |1fr      |4fr         |
+|1fr |icon     |bin_chooser |
+|4fr |settings |plot        |"</span>
 
 <span class='co'># The classic Geyser app with grid layout</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
+<span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
   ui <span class='op'>=</span> <span class='fu'><a href='grid_page.html'>grid_page</a></span><span class='op'>(</span>
     layout <span class='op'>=</span> <span class='va'>my_layout</span>,
     theme <span class='op'>=</span> <span class='fu'>bslib</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/bslib//reference/bs_theme.html'>bs_theme</a></span><span class='op'>(</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>, <span class='st'>"This is my header content"</span><span class='op'>)</span>,
-    <span class='fu'>grid_panel</span><span class='op'>(</span>
-      id <span class='op'>=</span> <span class='st'>"sidebar"</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
+    header <span class='op'>=</span> <span class='fu'>gridlayout</span><span class='fu'>::</span><span class='fu'>grid_panel</span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>, <span class='st'>"This is my header content"</span><span class='op'>)</span>,
+      v_align <span class='op'>=</span> <span class='st'>"center"</span>
     <span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
+    sidebar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>p</a></span><span class='op'>(</span><span class='st'>"Here is my sidebar and all the content that may be desired within it!"</span><span class='op'>)</span>,
+    content <span class='op'>=</span> <span class='fu'><a href='grid_container.html'>grid_container</a></span><span class='op'>(</span>
+      id <span class='op'>=</span> <span class='st'>"content"</span>,
+      layout <span class='op'>=</span> <span class='va'>content_layout</span>,
+      elements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        icon <span class='op'>=</span> <span class='fu'>grid_panel</span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span><span class='fu'>fontawesome</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/fontawesome/man/fa.html'>fa</a></span><span class='op'>(</span><span class='st'>"r-project"</span>, fill <span class='op'>=</span> <span class='st'>"steelblue"</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='st'>"80px"</span><span class='op'>)</span>,
+          v_align <span class='op'>=</span> <span class='st'>"center"</span>,
+          h_align <span class='op'>=</span> <span class='st'>"center"</span>
+        <span class='op'>)</span>,
+        bin_chooser <span class='op'>=</span> <span class='fu'>grid_panel</span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>, label <span class='op'>=</span> <span class='st'>"Number of bins"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
+          v_align <span class='op'>=</span> <span class='st'>"center"</span>
+        <span class='op'>)</span>,
+        settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>textOutput</a></span><span class='op'>(</span><span class='st'>'current_bin_num'</span><span class='op'>)</span>,
+        plot <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
   <span class='op'>)</span>,
   server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='va'>output</span><span class='op'>$</span><span class='va'>distPlot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
@@ -182,10 +269,13 @@
       <span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>bins</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='va'>x</span>, breaks <span class='op'>=</span> <span class='va'>bins</span>, col <span class='op'>=</span> <span class='st'>'darkgray'</span>, border <span class='op'>=</span> <span class='st'>'white'</span><span class='op'>)</span>
     <span class='op'>}</span><span class='op'>)</span>
+    <span class='va'>output</span><span class='op'>$</span><span class='va'>current_bin_num</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"There are currently"</span>, <span class='va'>input</span><span class='op'>$</span><span class='va'>bins</span>, <span class='st'>"bins in our histogram."</span><span class='op'>)</span>
+    <span class='op'>}</span><span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>)</span>
-
 <span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

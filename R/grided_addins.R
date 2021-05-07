@@ -2,7 +2,7 @@
 #'
 #' @return NULL
 #' @export
-grided_addin <- function() {
+grided_edit_existing_layout <- function() {
   requireNamespace("rstudioapi", quietly = TRUE)
   editor_selection <- rstudioapi::getSourceEditorContext()
 
@@ -38,15 +38,12 @@ grided_addin <- function() {
 
   chosen_layout_index <- which.min(distance_to_tables)
 
-
   layout <- layout_tables[[chosen_layout_index]]
 
-  gridded_app(
+  grided_app(
     starting_layout = layout$layout,
-    update_btn_text = "Update selected layout",
-    on_update = function(new_layout){
-      update_layout_in_file(editor_selection, layout, new_layout)
-    })
+    finish_button_text = "Update selected layout"
+  )
 }
 
 
@@ -54,87 +51,15 @@ grided_addin <- function() {
 #'
 #' @return NULL
 #' @export
-grided_new_app <- function() {
+grided_create_new_app <- function() {
   requireNamespace("rstudioapi", quietly = TRUE)
 
-  gridded_app(
-    update_btn_text = "Generate app code",
-    on_update = function(new_layout){
+  grided_app(
+    finish_button_text = "Generate app code",
+    on_finish = function(new_layout){
       rstudioapi::documentNew(
         text = to_app_template(new_layout)
       )
-    })
-}
-
-gridded_app <- function(starting_layout = new_gridlayout(),
-                        update_btn_text = "update button",
-                        on_update = function(new_layout) print(new_layout),
-                        return_app_obj = FALSE){
-
-  requireNamespace("miniUI", quietly = TRUE)
-  requireNamespace("shiny", quietly = TRUE)
-
-  starting_elements <- get_elements(starting_layout)
-
-
-  ui <- grid_page(
-    layout = starting_layout
-  )
-
-  server <- function(input, output, session) {
-
-    session$sendCustomMessage(
-      "add-elements",
-      starting_elements
-    )
-    session$sendCustomMessage(
-      "update-grid",
-      list(
-        rows =  attr(starting_layout, "row_sizes"),
-        cols = attr(starting_layout, "col_sizes"),
-        gap = attr(starting_layout, "gap")
-      )
-    )
-
-    current_layout <- shiny::reactive({
-      shiny::req(input$elements)
-      layout_from_grided(input$elements, input$grid_sizing)
-    })
-
-    shiny::bindEvent(
-      shiny::observe({
-        send_layoutcall_popup(session, current_layout)
-      }),
-      input$get_code)
-
-    shiny::bindEvent(shiny::observe({
-      shiny::req(input$elements)
-      on_update(current_layout())
       shiny::stopApp()
-    }), input$updated_code)
-  }
-
-  app <- run_with_grided(shiny::shinyApp(ui, server))
-
-  if(return_app_obj){
-    app
-  } else {
-    # Open gadget in the external viewer
-    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
-    shiny::runGadget(app, viewer = viewer)
-  }
-
+    })
 }
-
-send_layoutcall_popup <- function(session, current_layout){
-  layout_call <- paste(
-    "layout <- grid_layout_from_md(layout_table = \"",
-    "    ", to_md(current_layout()), "\")",
-    sep = "\n")
-
-  session$sendCustomMessage("code_modal", layout_call)
-}
-
-
-utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
-

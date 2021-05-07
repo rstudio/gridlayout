@@ -8,12 +8,13 @@ grid_container(
   id = "grid-container",
   layout,
   elements,
-  container_height = "100\%"
+  use_bslib_card_styles = FALSE,
+  flag_mismatches = TRUE
 )
 }
 \arguments{
-\item{id}{ID unique to this container (note that the HTML will be prefixed with
-\verb{grid-} to avoid namespace clashes)}
+\item{id}{ID unique to this container (note that the HTML will be prefixed
+with \verb{grid-} to avoid namespace clashes)}
 
 \item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
@@ -22,15 +23,20 @@ desired layout for your Shiny app.}
 \item{elements}{Named list of the UI definitions that will be used to fill
 all cells. Names must match those provided in \code{layout}.}
 
-\item{container_height}{How tall should the grid-containing element be? If
-set to \code{"viewport"} then the container will take up the entire available
-vertical space (equivalent to the CSS value of \verb{100vh}). For nested grids a
-value of \code{"100\%"} will enable the the nested grid to take up the full
-vertical space provided by its parent container. Any other css size unit is
-also valid such as \code{"400px"} or \code{"100\%"}.}
+\item{use_bslib_card_styles}{Should the elements within the grid be given the
+current bootstrap theme's card styling? Note that this setting will
+override card styling for elements built with \link{\code{grid_panel()}}.
+This is so you don't have to manually change styles for each card. If you
+want a mixture of card styles, then you'll need to leave this as \code{FALSE}
+and set styles manually on each panel.}
+
+\item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
+definitions and layout trigger a warning? In advanced cases you may want to
+dynamically set your layout and sometimes omit panels.}
 }
 \value{
-A taglist with grid elements wrapped inside a container div of class \code{id}.
+A taglist with grid elements wrapped inside a container div of class
+\code{id}.
 }
 \description{
 Builds a gridlayout within a div of specified id. Not typically called

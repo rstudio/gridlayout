@@ -2,20 +2,21 @@
 % Please edit documentation in R/new_gridlayout.R
 \name{new_gridlayout}
 \alias{new_gridlayout}
-\title{Construct a gridlayout object from basic parts}
+\title{Construct a gridlayout object}
 \usage{
 new_gridlayout(
-  layout_mat,
-  col_sizes = "auto",
-  row_sizes = "auto",
-  gap,
-  element_list
+  layout_def = list(),
+  col_sizes = NULL,
+  row_sizes = NULL,
+  gap = NULL,
+  container_height = NULL,
+  alternate_layouts = NULL
 )
 }
 \arguments{
-\item{layout_mat}{A character matrix where each entry controls what element
-id will take up that given position in the grid. For instance a header
-element would take up every cell in the first row.}
+\item{layout_def}{Either a list of elements with the \code{id}, \code{start_row},
+\code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
+layout.}
 
 \item{col_sizes}{A character vector of valid css sizes for the width of each
 column in your grid as given by \code{layout_mat}. If a single value is passed,
@@ -24,17 +25,67 @@ it will be repeated for all columns.}
 \item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
 
 \item{gap}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}.}
+grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;}
 
-\item{element_list}{List of elements with the \code{id}, \code{start_row}, \code{end_row},
-\code{start_col}, and \code{end_col} format.}
+\item{container_height}{Valid css unit determining how tall the containing
+element should be for this layout. Defaults to \code{"viewport"} (full page
+height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
+\code{fr} or \code{auto}) are included in row sizes and \code{auto} otherwise. Values such
+as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.}
+
+\item{alternate_layouts}{A list of layouts to be used for different viewport
+widths. This is enables your app to adapt to different screensizes such as a
+phone or an ultra-wide monitor. Each entry in this list must contain a
+\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
+when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
+alternate layouts are given a single-column layout will be automatically
+applied for mobile screens (viewports less than 600px wide).}
 }
 \value{
 Object of class \code{"gridlayout"}
 }
 \description{
-Construct a gridlayout object from basic parts
+Builds the gridlayout s3 class that holds information needed to draw a given
+layout.
 }
+\section{Declaring your layout}{
+
+
+There are two current ways to declare layouts (aka inputs to \code{layout_def}).
+\subsection{Markdown tables The first is the easiest: a markdown table wrapped in a}{
+
+character string. In this format you define a grid using the table and then
+place your grid "elements" within that grid using their grid id. So for a
+2x2 layout with a header along the top and two plots side-by-side the layout
+would look as follows: \verb{\{r\} new_gridlayout( "| header | header | | plota | plotb  |" ) }
+}
+
+\subsection{Element lists The second method is to supply a list of elements by}{
+
+providing the following information for each:
+\itemize{
+\item \code{id}: Identifying id of the element (e.g. \verb{"header}) -
+\code{start_row/end_row}: The (1-indexed) start and end row of your element's
+span - \code{start_col/end_col}: The start and end column for your element's span
+}
+
+This is a bit more verbose but allows for greater control. Here you can have
+overlapping elements etc.. Most of the time you will just want to use the
+markdown syntax
+
+The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,">}}\preformatted{start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
+start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
+start_col = 2, end_col = 2) ) ) ```
+
+}\if{html}{\out{</div>}}
+}
+}
+
 \examples{
 
 # Assemble list of elements along with their positions
@@ -50,23 +101,19 @@ elements_list <- list(
 )
 
 new_gridlayout(
+  elements_list,
   col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  element_list = elements_list
+  row_sizes = c("100px", "1fr", "1fr")
 )
 
 # Can also use a matrix for more visually intuitive laying out
-elements_mat <- matrix(c(
-  "header", "header",
-  "plot",   "table",
-  "footer", "footer"),
-  ncol = 2, byrow = TRUE
-)
-
 new_gridlayout(
+  layout_def = "
+      | header | header |
+      | plota  | plotb  |",
   col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  layout_mat = elements_mat
+  row_sizes = c("100px", "1fr"),
+  gap = "2rem"
 )
 
 }

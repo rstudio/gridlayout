@@ -27,10 +27,9 @@ to_app_template.gridlayout <- function(layout){
       get_elements(layout),
       function(el){
         paste_nl(
-          "    div(",
-          paste0("      id = \"", el$id, "\","),
-          paste0("      h3(\"", el$id, "\"),"),
-          "    )")
+          paste0("  ", el$id, " = grid_panel("),
+          paste0("    h3(\"", el$id, "\")"),
+          "  )")
       }
     ), collapse = ",\n")
 
@@ -38,17 +37,15 @@ to_app_template.gridlayout <- function(layout){
     "library(shiny)",
     "library(gridlayout)",
     "",
-    "app_layout <- md_to_gridlayout(\"",
+    "app_layout <- \"",
     to_md(layout),
-    "\")",
+    "\"",
     "",
-    "ui <- fluidPage(",
-    "  use_gridlayout_shiny(app_layout, \"app-container\", use_card_style = TRUE),",
-    "  div(id = \"app-container\",",
+    "ui <- grid_page(",
+    "  layout = app_layout,",
     element_divs,
-    "  )",
     ")",
-    "server <- function(input, output) {",
+    "server <- function(input, output, session) {",
     "  # Place server code here",
     "}",
     "",
