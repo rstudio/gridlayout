@@ -8,7 +8,8 @@ grid_container(
   id = "grid-container",
   layout,
   elements,
-  use_bslib_card_styles = FALSE
+  use_bslib_card_styles = FALSE,
+  flag_mismatches = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ override card styling for elements built with \link{\code{grid_panel()}}.
 This is so you don't have to manually change styles for each card. If you
 want a mixture of card styles, then you'll need to leave this as \code{FALSE}
 and set styles manually on each panel.}
+
+\item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
+definitions and layout trigger a warning? In advanced cases you may want to
+dynamically set your layout and sometimes omit panels.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class

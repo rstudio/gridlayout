@@ -4,7 +4,13 @@
 \alias{grid_page}
 \title{Setup gridlayout UI for shiny app}
 \usage{
-grid_page(layout, ..., use_bslib_card_styles = FALSE, theme = NULL)
+grid_page(
+  layout,
+  ...,
+  use_bslib_card_styles = FALSE,
+  theme = NULL,
+  flag_mismatches = TRUE
+)
 }
 \arguments{
 \item{layout}{Either a markdown table representation (see
@@ -12,9 +18,11 @@ grid_page(layout, ..., use_bslib_card_styles = FALSE, theme = NULL)
 desired layout for your Shiny app.}
 
 \item{...}{Contents of each grid element. For instance the contents of the
-header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}. Any arguments that don't match the names used in the layout
-definition are added to the page after the container. This can be used to
-do things like things to the \code{head} or \code{meta} sections of the page.}
+header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}. Every grid element argument must be named. If a named argument
+doesn't match the layout's declared elements than an error will be thrown.
+This behavior can be overridden using the \code{flag_mismatches} argument. Any
+unnamed arguments are added to the page after the container. This can be
+used to do things like things to the \code{head} or \code{meta} sections of the page.}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
@@ -25,6 +33,10 @@ and set styles manually on each panel.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}
+
+\item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
+definitions and layout trigger a warning? In advanced cases you may want to
+dynamically set your layout and sometimes omit panels.}
 }
 \value{
 A UI definition that can be passed to the
