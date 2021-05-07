@@ -1,4 +1,5 @@
-# The geyser app... but in grid!
+# App that takes its layout from options. Used to demo different layouts in the
+# layout-examples.Rmd vignette.
 
 library(gridlayout)
 library(shiny)
@@ -7,62 +8,22 @@ library(gt)
 library(dplyr)
 library(glue)
 
-print(getOption("layout-mode"))
-
-layout_mode <- getOption("layout-mode") %||% "focal_chart_side"
-
-my_layout <- switch(
-  EXPR = layout_mode,
-  scrolling_stack = new_gridlayout("
-    |      |           |
-    |------|-----------|
-    |1rem  |1fr        |
-    |80px  |header     |
-    |400px |chickPlot  |
-    |400px |chickTable |
-    |400px |treePlot   |
-    |400px |yarnPlot   |",
-    container_height = "auto"),
-  four_panel = new_gridlayout("
-    |     |           |         |
-    |-----|-----------|---------|
-    |1rem |1fr        |1fr      |
-    |80px |header     |header   |
-    |1fr  |chickPlot  |yarnPlot |
-    |1fr  |chickTable |treePlot |
-    "),
-  focal_chart_top = new_gridlayout("
-    |     |          |         |
-    |-----|----------|---------|
-    |1rem |1fr       |1fr      |
-    |80px |header    |header   |
-    |2fr  |chickens  |chickens |
-    |1fr  |treePlot  |yarnPlot |
-    "),
-  focal_chart_side = new_gridlayout("
-    |     |         |         |
-    |-----|---------|---------|
-    |1rem |2fr      |1fr      |
-    |80px |header   |header   |
-    |1fr  |chickens |treePlot |
-    |1fr  |chickens |yarnPlot |
-    "),
-  new_gridlayout("
-    |      |         |
-    |------|---------|
-    |1rem  |1fr      |
-    |80px  |header   |
-    |1fr   |chickens |
-    |1fr   |treePlot |
-    |1fr   |yarnPlot |")
+my_layout <- getOption("current_layout") %||% new_gridlayout(
+  "
+  |      |         |
+  |------|---------|
+  |1rem  |1fr      |
+  |80px  |header   |
+  |1fr   |chickens |
+  |1fr   |treePlot |
+  |1fr   |yarnPlot |"
 )
-
 
 
 chick_plot <- plotOutput("chickPlot", height = "100%")
 chick_table <- gt_output("chickTable")
 
-no_tab_layout <- layout_mode %in% c("four_panel", "scrolling_stack")
+no_tab_layout <- "chickPlot" %in% extract_chr(get_elements(my_layout), "id")
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
@@ -109,7 +70,7 @@ app <- shinyApp(
         head(8) %>%
         gt() %>%
         tab_header(
-          title = "8 Fastest growing chicks"
+          title = "8 fastest growing chicks"
         ) %>%
         fmt_number(
           columns = c(`start weight`,`end weight`),

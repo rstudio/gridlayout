@@ -8,33 +8,97 @@ vignette: >
 ---
 
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "",
   out.width = "100%"
 )
+```
+
+
+
+```{r setup, echo = FALSE}
+library(gridlayout)
+library(glue)
+layout_tables <- list(
+    stack = "
+  |      |         |
+  |------|---------|
+  |1rem  |1fr      |
+  |80px  |header   |
+  |1fr   |chickens |
+  |1fr   |treePlot |
+  |1fr   |yarnPlot |",
+  scrolling_stack = "
+  |      |           |
+  |------|-----------|
+  |1rem  |1fr        |
+  |80px  |header     |
+  |400px |chickPlot  |
+  |400px |chickTable |
+  |400px |treePlot   |
+  |400px |yarnPlot   |",
+  four_panel = "
+  |     |           |         |
+  |-----|-----------|---------|
+  |1rem |1fr        |1fr      |
+  |80px |header     |header   |
+  |1fr  |chickPlot  |yarnPlot |
+  |1fr  |chickTable |treePlot |",
+  focal_chart_top = "
+  |     |          |         |
+  |-----|----------|---------|
+  |1rem |1fr       |1fr      |
+  |80px |header    |header   |
+  |2fr  |chickens  |chickens |
+  |1fr  |treePlot  |yarnPlot |",
+  focal_chart_side = "
+  |     |         |         |
+  |-----|---------|---------|
+  |1rem |2fr      |1fr      |
+  |80px |header   |header   |
+  |1fr  |chickens |treePlot |
+  |1fr  |chickens |yarnPlot |"
+)
+
+
+all_layouts <- list(
+  stack = new_gridlayout(layout_tables[["stack"]]),
+  scrolling_stack = new_gridlayout(
+    layout_tables[["scrolling_stack"]],
+    container_height = "auto"
+  ),
+  four_panel = new_gridlayout(layout_tables[["four_panel"]]),
+  focal_chart_top = new_gridlayout(layout_tables[["focal_chart_top"]]),
+  focal_chart_side = new_gridlayout(layout_tables[["focal_chart_side"]])
+)
+
+print_layout_def <- function(layout_id = "stack") {
+  height_val <- attr(all_layouts[[layout_id]], "container_height")
+  height_arg <- if (height_val != 'viewport') {
+    glue(", container_height = {height_val}")
+  } else ""
+  cat(glue(
+    "new_gridlayout(\"",
+    "{layout_tables[[layout_id]]}",
+    "\"{height_arg})"
+  ))
+}
+
+show_layout_screenshot <- function(layout_id = "stack") {
+  knitr::include_graphics(glue("layouts_demo_{layout_id}.png"))
+}
 ```
 
 
 ```{r, eval = FALSE, echo=FALSE}
 # Run this code manually to build screenshots
 library(here)
-library(glue)
-source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
-layouts <- c(
-  "stack",
-  "scrolling_stack",
-  "four_panel",
-  "focal_chart_top",
-  "focal_chart_side"
-)
-
-for (layout_type in layouts) {
+for (layout_type in names(all_layouts)) {
   withr::with_options(
-    list("layout-mode" = layout_type),
+    list("current_layout" = all_layouts[[layout_type]]),
     webshot2::appshot(
       shiny::shinyAppFile(
         here("inst/demo_apps/layout_examples/app.R")
@@ -50,98 +114,62 @@ for (layout_type in layouts) {
 
 ```
 
-```{r setup}
-library(gridlayout)
-```
-
 
 ## Basic stack
-```{r, eval = FALSE}
-new_gridlayout("
-  |      |         |
-  |------|---------|
-  |1rem  |1fr      |
-  |80px  |header   |
-  |1fr   |chickens |
-  |1fr   |treePlot |
-  |1fr   |yarnPlot |")
+
+
+```{r, results = "markup", echo = FALSE}
+print_layout_def("stack")
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("layouts_demo_stack.png")
+show_layout_screenshot("stack")
 ```
 
 
 
 ## Scrolling stack
-```{r, eval = FALSE}
-new_gridlayout("
-  |      |           |
-  |------|-----------|
-  |1rem  |1fr        |
-  |80px  |header     |
-  |400px |chickPlot  |
-  |400px |chickTable |
-  |400px |treePlot   |
-  |400px |yarnPlot   |",
-  container_height = "auto")
+
+```{r, results = "markup", echo = FALSE}
+print_layout_def("scrolling_stack")
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("layouts_demo_scrolling_stack.png")
+show_layout_screenshot("scrolling_stack")
 ```
 
 
 ## 2x2 equal grid 
-```{r, eval = FALSE}
-new_gridlayout("
-  |     |           |         |
-  |-----|-----------|---------|
-  |1rem |1fr        |1fr      |
-  |80px |header     |header   |
-  |1fr  |chickPlot  |yarnPlot |
-  |1fr  |chickTable |treePlot |
-  ")
+
+```{r, results = "markup", echo = FALSE}
+print_layout_def("four_panel")
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("layouts_demo_four_panel.png")
+show_layout_screenshot("four_panel")
 ```
+
 
 
 ## Focal chart -- top
-```{r, eval = FALSE}
-new_gridlayout("
-  |     |          |         |
-  |-----|----------|---------|
-  |1rem |1fr       |1fr      |
-  |80px |header    |header   |
-  |2fr  |chickens  |chickens |
-  |1fr  |treePlot  |yarnPlot |
-  ")
+
+```{r, results = "markup", echo = FALSE}
+print_layout_def("focal_chart_top")
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("layouts_demo_focal_chart_top.png")
+show_layout_screenshot("focal_chart_top")
 ```
 
 
 ## Focal chart -- side
-```{r, eval = FALSE}
-new_gridlayout("
-  |     |         |         |
-  |-----|---------|---------|
-  |1rem |2fr      |1fr      |
-  |80px |header   |header   |
-  |1fr  |chickens |treePlot |
-  |1fr  |chickens |yarnPlot |
-  ")
+
+```{r, results = "markup", echo = FALSE}
+print_layout_def("focal_chart_side")
 ```
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("layouts_demo_focal_chart_side.png")
+show_layout_screenshot("focal_chart_side")
 ```
-
-
 
 
