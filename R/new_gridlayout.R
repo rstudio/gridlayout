@@ -164,7 +164,7 @@ new_gridlayout <- function(
   # If using default container_height and all the rows are definitely sized then
   # make container height auto. Otherwise use "viewport"
   if (is.null(container_height)) {
-    all_definite_row_sizes <- all(!str_detect(row_sizes, "fr|auto"))
+    all_definite_row_sizes <- notNull(row_sizes) && all(!str_detect(row_sizes, "fr|auto"))
     container_height <- if (all_definite_row_sizes) "auto" else "viewport"
   }
 
