@@ -119,6 +119,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+    </li>
+    <li>
       <a href="../articles/layout-examples.html">Layout Examples</a>
     </li>
     <li>
@@ -335,17 +338,48 @@ other reasons.</p></td>
 #&gt; .grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
 #&gt; .grid_panel .tabbable .tab-pane { height: 100%; }
 #&gt; 
-#&gt; @media (max-width: 600px) {
+#&gt; @media (max-width:600px) {
+#&gt; 
 #&gt; body {
-#&gt;   display: block;
+#&gt;   display: grid;
+#&gt;   grid-template-rows: 300px 300px 300px 300px 300px;
+#&gt;   grid-template-columns: 1fr;
+#&gt;   grid-gap: 1rem;
+#&gt;   padding: 1rem;
 #&gt;   height: auto;
 #&gt; }
-#&gt; body &gt; * {
-#&gt;   margin-bottom: 1rem;
+#&gt; 
+#&gt; #header {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 1;
+#&gt;   grid-row-end: 2;
 #&gt; }
-#&gt; .shiny-plot-output {
-#&gt;   min-height: 300px;
+#&gt; #sidebar {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 2;
+#&gt;   grid-row-end: 3;
 #&gt; }
+#&gt; #plot_a {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 3;
+#&gt;   grid-row-end: 4;
+#&gt; }
+#&gt; #plot_b {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 4;
+#&gt;   grid-row-end: 5;
+#&gt; }
+#&gt; #plot_c {
+#&gt;   grid-column-start: 1;
+#&gt;   grid-column-end: 2;
+#&gt;   grid-row-start: 5;
+#&gt;   grid-row-end: 6;
+#&gt; }
+#&gt; 
 #&gt; }
 #&gt; </div><div class='input'>
 </div></pre>

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Using gridlayout with .Rmds • gridlayout</title>
+<title>alternate-layouts • gridlayout</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="../tidyverse.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -13,7 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../tidyverse-2.css" rel="stylesheet">
 <link href="../rmd.css" rel="stylesheet">
-<meta property="og:title" content="Using gridlayout with .Rmds">
+<meta property="og:title" content="alternate-layouts">
 <meta property="og:description" content="gridlayout">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -93,87 +93,87 @@
 
       
 
-      </header><script src="using_with_rmd_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
+      </header><script src="alternate-layouts_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Using gridlayout with .Rmds</h1>
+      <h1 data-toc-skip>alternate-layouts</h1>
             
       
       
-      <div class="hidden name"><code>using_with_rmd.Rmd</code></div>
+      <div class="hidden name"><code>alternate-layouts.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></code></pre></div>
-<p>By placing the function <code>use_gridlayout_rmd</code> in the <code>setup</code> chunk of an Rmd you can define a gridlayout table using the a code chunk with the “language” set to <code>gridlayout</code>. Any markdown style table (see <code><a href="../reference/md_to_gridlayout.html">md_to_gridlayout()</a></code>) will be used to setup a grid-layout for your page. Just make sure your sections are given headers corresponding to the respective grid elements (either using their name or by using the <code>#My header text {#custom_id}</code> syntax after the header.)</p>
-<p>The following shows how you can customize the appearance of the elements of your layout using “card styles” and custom css.</p>
-<div id="starting-point" class="section level1">
+<p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
+<p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range. Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
+<pre><code>## gridlayout with 2 rows, 2 columns, and gap size of 2rem. Total height of viewport.
+##       200px   1fr   
+## 100px header  header
+## 1fr   sidebar plot  
+## 
+## Alternative layouts:
+## 
+## When width of page &lt; 600px 
+## gridlayout with 3 rows, 1 columns, and gap size of 2rem. Total height of auto.
+##       1fr    
+## 100px header 
+## 250px sidebar
+## 400px plot   
+## 
+## When width of page &gt; 1600px 
+## gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of viewport.
+##     250px  250px   1fr 
+## 1fr header sidebar plot</code></pre>
+<div id="syntax" class="section level2">
+<h2 class="hasAnchor">
+<a href="#syntax" class="anchor"></a>Syntax</h2>
+<p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts defined by their <code>layout</code> table and the <code>width_bounds</code> that the layout should occur for. For instance, out <code>mobile_layout</code> is active when the viewing device’s screen is narrower than <code>600</code> pixels and our <code>big_screen_layout</code> is active when the screen is larger than <code>1600</code> pixels. You can also set upper and lower bounds in case you wanted to have intermediate layouts (perhaps a tablet layout for between <code>600</code> and <code>1000</code> pixels in width.)</p>
+</div>
+<div id="output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#output" class="anchor"></a>Output</h2>
+<p>The following are screenshots of the exact same app at different screen sizes using the layouts above.</p>
+<div id="pixels-wide" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pixels-wide" class="anchor"></a>2000 pixels wide</h3>
+<p><img src="alternate_layouts_w2000_h1000.png" style="max-width: 100%;"></p>
+</div>
+<div id="pixels-wide-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pixels-wide-1" class="anchor"></a>1000 pixels wide</h3>
+<p><img src="alternate_layouts_w1000_h1000.png" style="max-width: 100%;"></p>
+</div>
+<div id="pixels-wide-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pixels-wide-2" class="anchor"></a>500 pixels wide</h3>
+<p><img src="alternate_layouts_w500_h1000.png" style="max-width: 100%;"></p>
+</div>
+</div>
+<div id="in-action" class="section level2">
+<h2 class="hasAnchor">
+<a href="#in-action" class="anchor"></a>In-action</h2>
+<p><img src="alternate_layouts_resizing.gif" style="max-width: 100%;"></p>
+</div>
+<div id="default-mobile-layout" class="section level1">
 <h1 class="hasAnchor">
-<a href="#starting-point" class="anchor"></a>Starting point</h1>
-<p>All the screenshots below will assume an <code>.Rmd</code> that looks like this</p>
-<pre><code>## Main
-
-
-```gridlayout
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |main     |
-|120px |footer  |footer   |
-```
-
-
-## Sidebar {.grid_panel}
-
-Here is some content for the sidebar
-
-## Footer
-
-Anything you want could go in the footer.</code></pre>
-<div id="default-settings" class="section level2">
-<h2 class="hasAnchor">
-<a href="#default-settings" class="anchor"></a>Default settings</h2>
-<p>The default settings will give every element a card-like styling.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_base.png" width="100%"></p>
-</div>
-<div id="targeting-specific-elements-for-card-styling" class="section level2">
-<h2 class="hasAnchor">
-<a href="#targeting-specific-elements-for-card-styling" class="anchor"></a>Targeting specific elements for card styling</h2>
-<p>By adjusting the argument <code>is_card_styled</code> you can customize what gets these card styles. For instance, here we give the card styles to elements with the <code>grid_panel</code> class.</p>
-<p>Note that in the <code>.Rmd</code> above that only the sidebar had the class of <code>grid_panel</code> added to it using the syntax <code>{.grid_panel}</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span><span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_only_grid_panel.png" width="100%"></p>
-</div>
-<div id="adding-extra-styles-to-card-elements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-card-elements" class="anchor"></a>Adding extra styles to card elements</h2>
-<p>These cards can be additionally styled with any arbitrary styles you want. These simply get appended to the existing styles that target the cards. For instance we can make all the card-styled elements have a “floralwhite” background.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
-  is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_extra_grid_panel_styles.png" width="100%"></p>
-</div>
-<div id="adding-extra-styles-to-all-elements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-all-elements" class="anchor"></a>Adding extra styles to all elements</h2>
-<p>If we don’t have every element as a card, we can still apply additional styles to every grid-element via the <code>element_styles</code> argument. Here we give every element the background of “honeydew”. Note that the card-specific styles will override these.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
-  is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  element_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"honeydew"</span><span class="op">)</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_extra_child_styles.png" width="100%"></p>
-</div>
+<a href="#default-mobile-layout" class="anchor"></a>Default mobile layout</h1>
+<p>If no alternate layouts are specified, a mobile layout is automatically generated by simply stacking all the panels in your app at <code>300px</code> in height.</p>
+<pre><code>## gridlayout with 2 rows, 2 columns, and gap size of 2rem. Total height of viewport.
+##       200px   1fr   
+## 100px header  header
+## 1fr   sidebar plot  
+## 
+## Alternative layouts:
+## 
+## When width of page &lt; 600px 
+## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+##       1fr    
+## 300px header 
+## 300px sidebar
+## 300px plot</code></pre>
+<p>If you don’t want this (say you’re targeting mobile by default already) you can set <code>alternate_layouts</code> to <code>NULL</code>.</p>
 </div>
   </div>
 

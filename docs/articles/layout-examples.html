@@ -72,6 +72,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+    </li>
+    <li>
       <a href="../articles/layout-examples.html">Layout Examples</a>
     </li>
     <li>
@@ -112,6 +115,22 @@
 <h2 class="hasAnchor">
 <a href="#app-ui-code" class="anchor"></a>App UI code:</h2>
 <p>The following code is the UI definition used for all the screenshots. The only thing that changes is the layout definition.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
+  layout <span class="op">=</span> <span class="va">my_layout</span>,
+  header <span class="op">=</span> <span class="fu"><a href="../reference/title_panel.html">title_panel</a></span><span class="op">(</span><span class="st">"My gridlayout app"</span><span class="op">)</span>,
+  chickens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html">tabsetPanel</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span>,
+  treePlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
+  yarnPlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
+  stockTable <span class="op">=</span> <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+    <span class="fu">gt_output</span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>,
+  <span class="co"># Allows us to use layouts without some elements declared</span>
+  flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> 
+<span class="op">)</span></code></pre></div>
 <p>The only slightly wonky thing here is the setting of <code>flag_mismatches</code> to <code>FALSE</code>. This just disables the checks that makes sure elements declared in layout match those in the <code>ui</code> definition. Here we sometimes don’t include the <code>stockTable</code> element in our layout.</p>
 <p>While it’s not important, for the demo’s here, the whole app code is provided at <a href="#full-app-code">the end of this document</a> if you want to copy each layout and try yourself.</p>
 </div>
@@ -183,142 +202,132 @@
 <div id="full-app-code" class="section level1">
 <h1 class="hasAnchor">
 <a href="#full-app-code" class="anchor"></a>Full app code</h1>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
+<p>The following is the function used to generate the apps shown above. Simply pass your layout of interest as an argument (or unwrap from the function entirely.)</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/">gt</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidyverse/glue">glue</a></span><span class="op">)</span>
 
-<span class="co"># Replace with layout of choice</span>
-<span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
-  <span class="st">"
-  |      |         |
-  |------|---------|
-  |1rem  |1fr      |
-  |80px  |header   |
-  |1fr   |chickens |
-  |1fr   |treePlot |
-  |1fr   |yarnPlot |"</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
-    layout <span class="op">=</span> <span class="va">my_layout</span>,
-    header <span class="op">=</span> <span class="fu"><a href="../reference/title_panel.html">title_panel</a></span><span class="op">(</span><span class="st">"My gridlayout app"</span><span class="op">)</span>,
-    chickens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html">tabsetPanel</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">app_w_layout</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
+    ui <span class="op">=</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
+      layout <span class="op">=</span> <span class="va">my_layout</span>,
+      header <span class="op">=</span> <span class="fu"><a href="../reference/title_panel.html">title_panel</a></span><span class="op">(</span><span class="st">"My gridlayout app"</span><span class="op">)</span>,
+      chickens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html">tabsetPanel</a></span><span class="op">(</span>
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
+      <span class="op">)</span>,
+      treePlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
+      yarnPlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
+      stockTable <span class="op">=</span> <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+        <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
+      <span class="op">)</span>,
+      flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># Allows us to use layouts without some elements declared</span>
     <span class="op">)</span>,
-    treePlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
-    yarnPlot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>,
-    stockTable <span class="op">=</span> <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
-    <span class="op">)</span>,
-    flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># Allows us to use layouts without some elements declared</span>
-  <span class="op">)</span>,
-  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span>
-
-    <span class="va">output</span><span class="op">$</span><span class="va">chickPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
-        <span class="va">ChickWeight</span>,
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>
-          x <span class="op">=</span> <span class="va">Time</span>,
-          y <span class="op">=</span> <span class="va">weight</span>,
-          group <span class="op">=</span> <span class="va">Chick</span>,
-          color <span class="op">=</span> <span class="va">Diet</span>
-        <span class="op">)</span>
-      <span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Chick weights by diet"</span><span class="op">)</span>
-    <span class="op">}</span><span class="op">)</span>
-
-    <span class="va">output</span><span class="op">$</span><span class="va">chickTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://gt.rstudio.com/reference/render_gt.html">render_gt</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="va">ChickWeight</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Chick</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
-          `Diet` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">Diet</span><span class="op">)</span>,
-          `start weight` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span>,
-          `end weight` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span>,
-          `weight change rate` <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">`weight change rate`</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>
-          title <span class="op">=</span> <span class="st">"8 fastest growing chicks"</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
-          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">`start weight`</span>,<span class="va">`end weight`</span><span class="op">)</span>,
-          pattern <span class="op">=</span> <span class="st">"{x}&lt;sub&gt;g&lt;/sub&gt;"</span>,
-          decimals <span class="op">=</span> <span class="fl">1</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
-          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">`weight change rate`</span><span class="op">)</span>,
-          pattern <span class="op">=</span> <span class="st">"{x}&lt;sub&gt;g/day&lt;/sub&gt;"</span>,
-          decimals <span class="op">=</span> <span class="fl">2</span>
-        <span class="op">)</span>
-    <span class="op">}</span>,
-    height <span class="op">=</span> <span class="st">"100%"</span>,
-    width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
-
-    <span class="va">output</span><span class="op">$</span><span class="va">treePlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
-        <span class="va">trees</span>,
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Height</span>, x <span class="op">=</span> <span class="va">Volume</span>, size <span class="op">=</span> <span class="va">Girth</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_radius</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
-          title <span class="op">=</span> <span class="st">"Tree height and volume and diameter"</span>,
-          size <span class="op">=</span> <span class="st">"Diameter"</span>
-        <span class="op">)</span>
-    <span class="op">}</span><span class="op">)</span>
-
-    <span class="va">output</span><span class="op">$</span><span class="va">yarnPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
-        <span class="va">warpbreaks</span>,
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">breaks</span>, fill <span class="op">=</span> <span class="va">wool</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html">geom_dotplot</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"histodot"</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">tension</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span><span class="cn">NULL</span>, breaks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Breaks in different yarns by tension"</span><span class="op">)</span>
-    <span class="op">}</span><span class="op">)</span>
-
-    <span class="va">output</span><span class="op">$</span><span class="va">stockTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://gt.rstudio.com/reference/render_gt.html">render_gt</a></span><span class="op">(</span><span class="op">{</span>
-      <span class="co"># Define the start and end dates for the data range</span>
-      <span class="va">start_date</span> <span class="op">&lt;-</span> <span class="st">"2010-06-07"</span>
-      <span class="va">end_date</span> <span class="op">&lt;-</span> <span class="st">"2010-06-14"</span>
-
-      <span class="co"># Create a gt table based on preprocessed</span>
-      <span class="co"># `sp500` table data</span>
-      <span class="va">sp500</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="va">start_date</span> <span class="op">&amp;</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="va">end_date</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">adj_close</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>
-          title <span class="op">=</span> <span class="st">"S&amp;P 500"</span>,
-          subtitle <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"{start_date} to {end_date}"</span><span class="op">)</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_date.html">fmt_date</a></span><span class="op">(</span>
-          columns <span class="op">=</span> <span class="va">date</span>,
-          date_style <span class="op">=</span> <span class="fl">3</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html">fmt_currency</a></span><span class="op">(</span>
-          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">open</span>, <span class="va">high</span>, <span class="va">low</span>, <span class="va">close</span><span class="op">)</span>,
-          currency <span class="op">=</span> <span class="st">"USD"</span>
-        <span class="op">)</span> <span class="op">%&gt;%</span>
-        <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
-          columns <span class="op">=</span> <span class="va">volume</span>,
-          suffixing <span class="op">=</span> <span class="cn">TRUE</span>
-        <span class="op">)</span>
-    <span class="op">}</span>,
-    height <span class="op">=</span> <span class="st">"100%"</span>,
-    width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span>
+      
+      <span class="va">output</span><span class="op">$</span><span class="va">chickPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
+          <span class="va">ChickWeight</span>,
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>
+            x <span class="op">=</span> <span class="va">Time</span>,
+            y <span class="op">=</span> <span class="va">weight</span>,
+            group <span class="op">=</span> <span class="va">Chick</span>,
+            color <span class="op">=</span> <span class="va">Diet</span>
+          <span class="op">)</span>
+        <span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Chick weights by diet"</span><span class="op">)</span>
+      <span class="op">}</span><span class="op">)</span>
+      
+      <span class="va">output</span><span class="op">$</span><span class="va">chickTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://gt.rstudio.com/reference/render_gt.html">render_gt</a></span><span class="op">(</span><span class="op">{</span>
+        <span class="va">ChickWeight</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Chick</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+            `Diet` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">Diet</span><span class="op">)</span>,
+            `start weight` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span>,
+            `end weight` <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span>,
+            `weight change rate` <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">last</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">`weight change rate`</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>
+            title <span class="op">=</span> <span class="st">"8 fastest growing chicks"</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
+            columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">`start weight`</span>,<span class="va">`end weight`</span><span class="op">)</span>,
+            pattern <span class="op">=</span> <span class="st">"{x}&lt;sub&gt;g&lt;/sub&gt;"</span>,
+            decimals <span class="op">=</span> <span class="fl">1</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
+            columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">`weight change rate`</span><span class="op">)</span>,
+            pattern <span class="op">=</span> <span class="st">"{x}&lt;sub&gt;g/day&lt;/sub&gt;"</span>,
+            decimals <span class="op">=</span> <span class="fl">2</span>
+          <span class="op">)</span>
+      <span class="op">}</span>,
+      height <span class="op">=</span> <span class="st">"100%"</span>,
+      width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+      
+      <span class="va">output</span><span class="op">$</span><span class="va">treePlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
+          <span class="va">trees</span>,
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Height</span>, x <span class="op">=</span> <span class="va">Volume</span>, size <span class="op">=</span> <span class="va">Girth</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span>
+        <span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_radius</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+            title <span class="op">=</span> <span class="st">"Tree height and volume and diameter"</span>,
+            size <span class="op">=</span> <span class="st">"Diameter"</span>
+          <span class="op">)</span>
+      <span class="op">}</span><span class="op">)</span>
+      
+      <span class="va">output</span><span class="op">$</span><span class="va">yarnPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
+          <span class="va">warpbreaks</span>,
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">breaks</span>, fill <span class="op">=</span> <span class="va">wool</span><span class="op">)</span>
+        <span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html">geom_dotplot</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"histodot"</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">tension</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span><span class="cn">NULL</span>, breaks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Breaks in different yarns by tension"</span><span class="op">)</span>
+      <span class="op">}</span><span class="op">)</span>
+      
+      <span class="va">output</span><span class="op">$</span><span class="va">stockTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://gt.rstudio.com/reference/render_gt.html">render_gt</a></span><span class="op">(</span><span class="op">{</span>
+        <span class="co"># Define the start and end dates for the data range</span>
+        <span class="va">start_date</span> <span class="op">&lt;-</span> <span class="st">"2010-06-07"</span>
+        <span class="va">end_date</span> <span class="op">&lt;-</span> <span class="st">"2010-06-14"</span>
+        
+        <span class="co"># Create a gt table based on preprocessed</span>
+        <span class="co"># `sp500` table data</span>
+        <span class="va">sp500</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="va">start_date</span> <span class="op">&amp;</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="va">end_date</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">adj_close</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>
+            title <span class="op">=</span> <span class="st">"S&amp;P 500"</span>,
+            subtitle <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"{start_date} to {end_date}"</span><span class="op">)</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_date.html">fmt_date</a></span><span class="op">(</span>
+            columns <span class="op">=</span> <span class="va">date</span>,
+            date_style <span class="op">=</span> <span class="fl">3</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html">fmt_currency</a></span><span class="op">(</span>
+            columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">open</span>, <span class="va">high</span>, <span class="va">low</span>, <span class="va">close</span><span class="op">)</span>,
+            currency <span class="op">=</span> <span class="st">"USD"</span>
+          <span class="op">)</span> <span class="op">%&gt;%</span>
+          <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html">fmt_number</a></span><span class="op">(</span>
+            columns <span class="op">=</span> <span class="va">volume</span>,
+            suffixing <span class="op">=</span> <span class="cn">TRUE</span>
+          <span class="op">)</span>
+      <span class="op">}</span>,
+      height <span class="op">=</span> <span class="st">"100%"</span>,
+      width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+    <span class="op">}</span>
+  <span class="op">)</span>
+<span class="op">}</span> </code></pre></div>
 </div>
   </div>
 

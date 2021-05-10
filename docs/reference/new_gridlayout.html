@@ -120,6 +120,9 @@ layout." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+    </li>
+    <li>
       <a href="../articles/layout-examples.html">Layout Examples</a>
     </li>
     <li>
@@ -157,7 +160,7 @@ layout.</p>
   row_sizes <span class='op'>=</span> <span class='cn'>NULL</span>,
   gap <span class='op'>=</span> <span class='cn'>NULL</span>,
   container_height <span class='op'>=</span> <span class='cn'>NULL</span>,
-  alternate_layouts <span class='op'>=</span> <span class='cn'>NULL</span>
+  alternate_layouts <span class='op'>=</span> <span class='st'>"auto"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -205,7 +208,8 @@ phone or an ultra-wide monitor. Each entry in this list must contain a
 <code>width_bounds</code>: or a list with at least one of a <code>min</code> and <code>max</code> value for
 when your page appears. See <code>add_alternate_layout()</code> for more details. If no
 alternate layouts are given a single-column layout will be automatically
-applied for mobile screens (viewports less than 600px wide).</p></td>
+applied for mobile screens (viewports less than 600px wide). Set to <code>NULL</code>
+to avoid this.</p></td>
     </tr>
     </table>
 
@@ -217,7 +221,8 @@ applied for mobile screens (viewports less than 600px wide).</p></td>
     
 
 
-<p>There are two current ways to declare layouts (aka inputs to <code>layout_def</code>).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Markdown tables The first is the easiest: a markdown table wrapped in a</h3>
+<p>There are three current ways to declare layouts (aka inputs to
+<code>layout_def</code>).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Markdown tables The first is the easiest: a markdown table wrapped in a</h3>
 
 
 <p>character string. In this format you define a grid using the table and then
@@ -240,6 +245,13 @@ markdown syntax</p>
 <p>The same layout as declared above can be accomplished with the following:<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,"></p><pre>start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
 start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
 start_col = 2, end_col = 2) ) ) ```
+
+### An existing `gridlayout`
+
+The last way is to pass an existing `gridlayout` object in. This allows you to
+do things like modify the grid sizing or container sizes of an existing
+layout.
+
 
 </pre><p></div></p>
 
@@ -267,7 +279,17 @@ start_col = 2, end_col = 2) ) ) ```
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
 #&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer</div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
+#&gt; 
+#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
+#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> header
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot  
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> table 
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer</div><div class='input'>
 <span class='co'># Can also use a matrix for more visually intuitive laying out</span>
 <span class='fu'>new_gridlayout</span><span class='op'>(</span>
   layout_def <span class='op'>=</span> <span class='st'>"
@@ -280,7 +302,16 @@ start_col = 2, end_col = 2) ) ) ```
 </div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>2</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>2rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>2fr   </span><span>
 #&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plota  plotb </div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plota  plotb 
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
+#&gt; 
+#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
+#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
+#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> header
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> plota 
+#&gt; </span><span style='font-weight: bold;'>300px</span><span> plotb </div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
