@@ -10,7 +10,7 @@ new_gridlayout(
   row_sizes = NULL,
   gap = NULL,
   container_height = NULL,
-  alternate_layouts = NULL
+  alternate_layouts = "auto"
 )
 }
 \arguments{
@@ -44,7 +44,8 @@ phone or an ultra-wide monitor. Each entry in this list must contain a
 \code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
 when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
 alternate layouts are given a single-column layout will be automatically
-applied for mobile screens (viewports less than 600px wide).}
+applied for mobile screens (viewports less than 600px wide). Set to \code{NULL}
+to avoid this.}
 }
 \value{
 Object of class \code{"gridlayout"}
@@ -56,7 +57,8 @@ layout.
 \section{Declaring your layout}{
 
 
-There are two current ways to declare layouts (aka inputs to \code{layout_def}).
+There are three current ways to declare layouts (aka inputs to
+\code{layout_def}).
 \subsection{Markdown tables The first is the easiest: a markdown table wrapped in a}{
 
 character string. In this format you define a grid using the table and then
@@ -81,6 +83,13 @@ markdown syntax
 The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,">}}\preformatted{start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
 start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
 start_col = 2, end_col = 2) ) ) ```
+
+### An existing `gridlayout`
+
+The last way is to pass an existing `gridlayout` object in. This allows you to
+do things like modify the grid sizing or container sizes of an existing
+layout.
+
 
 }\if{html}{\out{</div>}}
 }

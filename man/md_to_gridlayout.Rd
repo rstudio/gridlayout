@@ -44,7 +44,8 @@ phone or an ultra-wide monitor. Each entry in this list must contain a
 \code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
 when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
 alternate layouts are given a single-column layout will be automatically
-applied for mobile screens (viewports less than 600px wide).}
+applied for mobile screens (viewports less than 600px wide). Set to \code{NULL}
+to avoid this.}
   }}
 }
 \value{

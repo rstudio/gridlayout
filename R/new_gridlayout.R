@@ -6,7 +6,8 @@
 #'
 #'@section Declaring your layout:
 #'
-#'  There are two current ways to declare layouts (aka inputs to `layout_def`).
+#'  There are three current ways to declare layouts (aka inputs to
+#'  `layout_def`).
 #'
 #'  ### Markdown tables The first is the easiest: a markdown table wrapped in a
 #'  character string. In this format you define a grid using the table and then
@@ -32,6 +33,13 @@
 #'  start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
 #'  start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
 #'  start_col = 2, end_col = 2) ) ) ```
+#'
+#'  ### An existing `gridlayout`
+#'
+#'  The last way is to pass an existing `gridlayout` object in. This allows you to
+#'  do things like modify the grid sizing or container sizes of an existing
+#'  layout.
+#'
 #'
 #'
 #'@param layout_def Either a list of elements with the `id`, `start_row`,
@@ -59,7 +67,8 @@
 #'  `width_bounds`: or a list with at least one of a `min` and `max` value for
 #'  when your page appears. See [add_alternate_layout()] for more details. If no
 #'  alternate layouts are given a single-column layout will be automatically
-#'  applied for mobile screens (viewports less than 600px wide).
+#'  applied for mobile screens (viewports less than 600px wide). Set to `NULL`
+#'  to avoid this.
 #'
 #'@return Object of class `"gridlayout"`
 #'@export
@@ -100,9 +109,8 @@ new_gridlayout <- function(
   row_sizes = NULL,
   gap = NULL,
   container_height = NULL,
-  alternate_layouts = NULL
-){
-
+  alternate_layouts = "auto"
+) {
   elements <- list()
   # Figure out what type of layout definition we were passed
   if (is_char_string(layout_def)) {
@@ -114,11 +122,12 @@ new_gridlayout <- function(
       gap = gap
     )
     elements <- layout_info$elements
-    col_sizes <-  layout_info$col_sizes
+    col_sizes <- layout_info$col_sizes
     row_sizes <- layout_info$row_sizes
-    gap <-  layout_info$gap
-
+    gap <- layout_info$gap
   } else if (is.list(layout_def)) {
+    # If an existing layout is passed its sizes can and container size etc can
+    # be modified
     elements <- layout_def
   } else {
     stop(
@@ -133,7 +142,7 @@ new_gridlayout <- function(
 
   # If using default container_height and all the rows are definitely sized then
   # make container height auto. Otherwise use "viewport"
-  if (is.null(container_height) ) {
+  if (is.null(container_height)) {
     all_definite_row_sizes <- all(!str_detect(row_sizes, "fr|auto"))
     container_height <- if (all_definite_row_sizes) "auto" else "viewport"
   }
@@ -143,16 +152,16 @@ new_gridlayout <- function(
   # Validate row and column sizes.
   sizes <- map_w_names(
     list(row = row_sizes, col = col_sizes),
-    function(dir, sizes){
+    function(dir, sizes) {
       start_vals <- extract_dbl(elements, "start_" %+% dir)
       end_vals <- extract_dbl(elements, "end_" %+% dir)
       auto_sizing <- is.null(sizes)
 
-      if(!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
+      if (!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
 
-      num_sections <- if(auto_sizing & empty_grid) {
+      num_sections <- if (auto_sizing & empty_grid) {
         2
-      } else if(empty_grid){
+      } else if (empty_grid) {
         length(sizes)
       } else {
         max(end_vals)
@@ -164,12 +173,11 @@ new_gridlayout <- function(
         sizes <- auto_unit
       }
 
-      if(length(sizes) == 1 & num_sections != 1){
+      if (length(sizes) == 1 & num_sections != 1) {
         sizes <- rep_len(sizes, num_sections)
       }
       # Make sure that the elements sit within the defined grid
       if (!empty_grid) {
-
         if (max(end_vals) > num_sections) {
           bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
           stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
@@ -181,7 +189,8 @@ new_gridlayout <- function(
       }
 
       sizes
-    })
+    }
+  )
 
   # If container height is not a fixed value then relative unit row heights will
   # not work. Issue a warning in this case
@@ -200,26 +209,38 @@ new_gridlayout <- function(
   )
 
   if (notNull(alternate_layouts)) {
-
-    single_alternate <- "layout" %in% names(alternate_layouts)
-
-    if (single_alternate) {
-      alternate_layouts <- list(alternate_layouts)
-    }
-
-    for (alternate in alternate_layouts) {
-      if (is.null(alternate$layout)) {
-        stop(
-          "Altnernate layouts need to be provided as a list with ",
-          "a layout element along with width bounds."
-        )
-      }
+    if (identical(alternate_layouts, "auto")) {
+      # Build a default mobile layout for the user
       layout <- add_alternate_layout(
         layout,
-        alternate_layout = alternate$layout,
-        width_bounds = alternate$width_bounds,
-        container_height = alternate$container_height
+        alternate_layout = build_mobile_layout_table(layout),
+        width_bounds = c(max = 600),
+        container_height = "auto"
       )
+    } else {
+
+      # Check to see if we're working with a list of lists or a single alternate
+      # layout
+      single_alternate <- "layout" %in% names(alternate_layouts)
+
+      if (single_alternate) {
+        alternate_layouts <- list(alternate_layouts)
+      }
+
+      for (alternate in alternate_layouts) {
+        if (is.null(alternate$layout)) {
+          stop(
+            "Altnernate layouts need to be provided as a list with ",
+            "a layout element along with width bounds."
+          )
+        }
+        layout <- add_alternate_layout(
+          layout,
+          alternate_layout = alternate$layout,
+          width_bounds = alternate$width_bounds,
+          container_height = alternate$container_height
+        )
+      }
     }
   }
 
@@ -239,6 +260,32 @@ coerce_to_layout <- function(layout_def){
   layout_def
 }
 
+build_mobile_layout_table <- function(layout) {
+  mobile_rows <- vapply(
+    layout,
+    function(el) {
+      # Be smart about headers but everything else is 350px
+      if (el$id == "header") "85px" else "350px"
+    },
+    FUN.VALUE = character(1)
+  )
+  new_gridlayout(
+    layout_def = lapply(
+      seq_along(layout),
+      function(i) {
+        list(
+          id = layout[[i]]$id,
+          start_row = i,
+          end_row = i,
+          start_col = 1,
+          end_col = 1
+        )
+      }
+    ),
+    row_sizes = mobile_rows,
+    alternate_layouts = NULL
+  )
+}
 
 layouts_are_equal <- function(layout_a, layout_b){
   identical(to_md(layout_a), to_md(layout_b))

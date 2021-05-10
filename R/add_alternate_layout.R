@@ -60,11 +60,11 @@ add_alternate_layout.gridlayout <- function(
       "Ignoring other bounds values passed to alternate_layout()"
     )
   }
-
   alternate <- list(
     layout = new_gridlayout(
       alternate_layout,
-      container_height = container_height
+      container_height = container_height,
+      alternate_layouts = NULL
     ),
     width_bounds = width_bounds
   )
