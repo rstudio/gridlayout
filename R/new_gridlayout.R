@@ -9,19 +9,27 @@
 #'  There are three current ways to declare layouts (aka inputs to
 #'  `layout_def`).
 #'
-#'  ### Markdown tables The first is the easiest: a markdown table wrapped in a
-#'  character string. In this format you define a grid using the table and then
-#'  place your grid "elements" within that grid using their grid id. So for a
-#'  2x2 layout with a header along the top and two plots side-by-side the layout
-#'  would look as follows: ```{r} new_gridlayout( "| header | header | | plota |
-#'  plotb  |" ) ```
+#'  ### Markdown tables
 #'
-#'  ### Element lists The second method is to supply a list of elements by
-#'  providing the following information for each:
+#'  The first is the easiest: a markdown table wrapped in a character string. In
+#'  this format you define a grid using the table and then place your grid
+#'  "elements" within that grid using their grid id. So for a 2x2 layout with a
+#'  header along the top and two plots side-by-side the layout would look as
+#'  follows:
+#'  ```{r}
+#'    new_gridlayout( "| header | header |
+#'                     | plota  | plotb  |" )
+#'  ```
 #'
-#'  - `id`: Identifying id of the element (e.g. `"header`) -
-#'  `start_row/end_row`: The (1-indexed) start and end row of your element's
-#'  span - `start_col/end_col`: The start and end column for your element's span
+#'  ### Element lists
+#'
+#'  The second method is to supply a list of elements by providing the following
+#'  information for each:
+#'
+#'  - `id`: Identifying id of the element (e.g. `"header`)
+#'  - `start_row/end_row`: The (1-indexed) start and end row of your element's
+#'  span
+#'  - `start_col/end_col`: The start and end column for your element's span
 #'
 #'  This is a bit more verbose but allows for greater control. Here you can have
 #'  overlapping elements etc.. Most of the time you will just want to use the
@@ -29,15 +37,18 @@
 #'
 #'  The same layout as declared above can be accomplished with the following:
 #'
-#'  ```{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,
-#'  start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
-#'  start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
-#'  start_col = 2, end_col = 2) ) ) ```
+#'  ```{r}
+#'  new_gridlayout( list(
+#'    list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
+#'    list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
+#'    list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2) )
+#'  )
+#'  ```
 #'
 #'  ### An existing `gridlayout`
 #'
-#'  The last way is to pass an existing `gridlayout` object in. This allows you to
-#'  do things like modify the grid sizing or container sizes of an existing
+#'  The last way is to pass an existing `gridlayout` object in. This allows you
+#'  to do things like modify the grid sizing or container sizes of an existing
 #'  layout.
 #'
 #'

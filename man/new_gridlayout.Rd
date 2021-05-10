@@ -59,39 +59,71 @@ layout.
 
 There are three current ways to declare layouts (aka inputs to
 \code{layout_def}).
-\subsection{Markdown tables The first is the easiest: a markdown table wrapped in a}{
+\subsection{Markdown tables}{
 
-character string. In this format you define a grid using the table and then
-place your grid "elements" within that grid using their grid id. So for a
-2x2 layout with a header along the top and two plots side-by-side the layout
-would look as follows: \verb{\{r\} new_gridlayout( "| header | header | | plota | plotb  |" ) }
+The first is the easiest: a markdown table wrapped in a character string. In
+this format you define a grid using the table and then place your grid
+"elements" within that grid using their grid id. So for a 2x2 layout with a
+header along the top and two plots side-by-side the layout would look as
+follows:\if{html}{\out{<div class="r">}}\preformatted{  new_gridlayout( "| header | header |
+                   | plota  | plotb  |" )
+}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.
+##       1fr    1fr   
+## 300px header header
+## 300px plota  plotb 
+## 
+## Alternative layouts:
+## 
+## When width of page < 600px 
+## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+##       1fr   
+## 300px header
+## 300px plota 
+## 300px plotb
+}
 }
 
-\subsection{Element lists The second method is to supply a list of elements by}{
+\subsection{Element lists}{
 
-providing the following information for each:
+The second method is to supply a list of elements by providing the following
+information for each:
 \itemize{
-\item \code{id}: Identifying id of the element (e.g. \verb{"header}) -
-\code{start_row/end_row}: The (1-indexed) start and end row of your element's
-span - \code{start_col/end_col}: The start and end column for your element's span
+\item \code{id}: Identifying id of the element (e.g. \verb{"header})
+\item \code{start_row/end_row}: The (1-indexed) start and end row of your element's
+span
+\item \code{start_col/end_col}: The start and end column for your element's span
 }
 
 This is a bit more verbose but allows for greater control. Here you can have
 overlapping elements etc.. Most of the time you will just want to use the
 markdown syntax
 
-The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,">}}\preformatted{start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
-start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
-start_col = 2, end_col = 2) ) ) ```
+The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout( list(
+  list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
+  list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
+  list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2) )
+)
+}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.
+##       1fr    1fr   
+## 300px header header
+## 300px plot_a plot_b
+## 
+## Alternative layouts:
+## 
+## When width of page < 600px 
+## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+##       1fr   
+## 300px header
+## 300px plot_a
+## 300px plot_b
+}
+}
 
-### An existing `gridlayout`
+\subsection{An existing \code{gridlayout}}{
 
-The last way is to pass an existing `gridlayout` object in. This allows you to
-do things like modify the grid sizing or container sizes of an existing
+The last way is to pass an existing \code{gridlayout} object in. This allows you
+to do things like modify the grid sizing or container sizes of an existing
 layout.
-
-
-}\if{html}{\out{</div>}}
 }
 }
 

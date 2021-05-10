@@ -222,38 +222,72 @@ to avoid this.</p></td>
 
 
 <p>There are three current ways to declare layouts (aka inputs to
-<code>layout_def</code>).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Markdown tables The first is the easiest: a markdown table wrapped in a</h3>
+<code>layout_def</code>).</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Markdown tables</h3>
 
 
-<p>character string. In this format you define a grid using the table and then
-place your grid "elements" within that grid using their grid id. So for a
-2x2 layout with a header along the top and two plots side-by-side the layout
-would look as follows: <code>{r} new_gridlayout( "| header | header | | plota | plotb  |" ) </code></p>
+<p>The first is the easiest: a markdown table wrapped in a character string. In
+this format you define a grid using the table and then place your grid
+"elements" within that grid using their grid id. So for a 2x2 layout with a
+header along the top and two plots side-by-side the layout would look as
+follows:<div class="r"></p><pre>  <span class='fu'>new_gridlayout</span><span class='op'>(</span> <span class='st'>"| header | header |
+                   | plota  | plotb  |"</span> <span class='op'>)</span>
+</pre><p></div></p><pre><span class='co'>## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.</span>
+<span class='co'>##       1fr    1fr   </span>
+<span class='co'>## 300px header header</span>
+<span class='co'>## 300px plota  plotb </span>
+<span class='co'>## </span>
+<span class='co'>## Alternative layouts:</span>
+<span class='co'>## </span>
+<span class='co'>## When width of page &lt; 600px </span>
+<span class='co'>## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.</span>
+<span class='co'>##       1fr   </span>
+<span class='co'>## 300px header</span>
+<span class='co'>## 300px plota </span>
+<span class='co'>## 300px plotb</span>
+</pre>
 
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Element lists The second method is to supply a list of elements by</h3>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Element lists</h3>
 
 
-<p>providing the following information for each:</p><ul>
-<li><p><code>id</code>: Identifying id of the element (e.g. <code>"header</code>) -
-<code>start_row/end_row</code>: The (1-indexed) start and end row of your element's
-span - <code>start_col/end_col</code>: The start and end column for your element's span</p></li>
+<p>The second method is to supply a list of elements by providing the following
+information for each:</p><ul>
+<li><p><code>id</code>: Identifying id of the element (e.g. <code>"header</code>)</p></li>
+<li><p><code>start_row/end_row</code>: The (1-indexed) start and end row of your element's
+span</p></li>
+<li><p><code>start_col/end_col</code>: The start and end column for your element's span</p></li>
 </ul>
 
 <p>This is a bit more verbose but allows for greater control. Here you can have
 overlapping elements etc.. Most of the time you will just want to use the
 markdown syntax</p>
-<p>The same layout as declared above can be accomplished with the following:<div class="{r} new_gridlayout( list( list(id = "header", start_row = 1, end_row = 1,"></p><pre>start_col = 1, end_col = 2), list(id = "plot_a", start_row = 2, end_row = 2,
-start_col = 1, end_col = 1), list(id = "plot_b", start_row = 2, end_row = 2,
-start_col = 2, end_col = 2) ) ) ```
+<p>The same layout as declared above can be accomplished with the following:<div class="r"></p><pre><span class='fu'>new_gridlayout</span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"header"</span>, start_row <span class='op'>=</span> <span class='fl'>1</span>, end_row <span class='op'>=</span> <span class='fl'>1</span>, start_col <span class='op'>=</span> <span class='fl'>1</span>, end_col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"plot_a"</span>, start_row <span class='op'>=</span> <span class='fl'>2</span>, end_row <span class='op'>=</span> <span class='fl'>2</span>, start_col <span class='op'>=</span> <span class='fl'>1</span>, end_col <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"plot_b"</span>, start_row <span class='op'>=</span> <span class='fl'>2</span>, end_row <span class='op'>=</span> <span class='fl'>2</span>, start_col <span class='op'>=</span> <span class='fl'>2</span>, end_col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>)</span>
+<span class='op'>)</span>
+</pre><p></div></p><pre><span class='co'>## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.</span>
+<span class='co'>##       1fr    1fr   </span>
+<span class='co'>## 300px header header</span>
+<span class='co'>## 300px plot_a plot_b</span>
+<span class='co'>## </span>
+<span class='co'>## Alternative layouts:</span>
+<span class='co'>## </span>
+<span class='co'>## When width of page &lt; 600px </span>
+<span class='co'>## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.</span>
+<span class='co'>##       1fr   </span>
+<span class='co'>## 300px header</span>
+<span class='co'>## 300px plot_a</span>
+<span class='co'>## 300px plot_b</span>
+</pre>
 
-### An existing `gridlayout`
 
-The last way is to pass an existing `gridlayout` object in. This allows you to
-do things like modify the grid sizing or container sizes of an existing
-layout.
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>An existing <code>gridlayout</code></h3>
 
 
-</pre><p></div></p>
+<p>The last way is to pass an existing <code>gridlayout</code> object in. This allows you
+to do things like modify the grid sizing or container sizes of an existing
+layout.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
