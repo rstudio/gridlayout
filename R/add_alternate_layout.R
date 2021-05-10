@@ -60,6 +60,15 @@ add_alternate_layout.gridlayout <- function(
       "Ignoring other bounds values passed to alternate_layout()"
     )
   }
+
+
+  if (class(alternate_layout) == "gridlayout") {
+    # Alternate layouts themselves cant have alternates.
+    # This only happens if the user has created the alternate layout
+    # as its own layout object beforehand.
+    attr(alternate_layout, 'alternates') <- NULL
+  }
+
   alternate <- list(
     layout = new_gridlayout(
       alternate_layout,
@@ -71,6 +80,14 @@ add_alternate_layout.gridlayout <- function(
 
   # Make sure layouts map to same elements
   layouts_have_same_elements(layout, alternate$layout)
+
+  # Auto-generated mobile layout gets removed if it already exists so we don't
+  # try get errors if the user is trying to add their own mobile layout with
+  # stand-alone usage of add_alternate_layout()
+  if (identical(attr(layout, "auto_mobile_layout"), TRUE)) {
+    attr(layout, "alternates") <- NULL
+    attr(layout, "auto_mobile_layout") <- NULL
+  }
 
   existing_alternates <- attr(layout, "alternates")
   if (is.null(existing_alternates)) {

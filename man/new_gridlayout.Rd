@@ -67,19 +67,19 @@ this format you define a grid using the table and then place your grid
 header along the top and two plots side-by-side the layout would look as
 follows:\if{html}{\out{<div class="r">}}\preformatted{  new_gridlayout( "| header | header |
                    | plota  | plotb  |" )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.
-##       1fr    1fr   
-## 300px header header
-## 300px plota  plotb 
+}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of viewport.
+##     1fr    1fr   
+## 1fr header header
+## 1fr plota  plotb 
 ## 
 ## Alternative layouts:
 ## 
 ## When width of page < 600px 
 ## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
 ##       1fr   
-## 300px header
-## 300px plota 
-## 300px plotb
+## 85px  header
+## 350px plota 
+## 350px plotb
 }
 }
 
@@ -103,19 +103,19 @@ The same layout as declared above can be accomplished with the following:\if{htm
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2) )
 )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of auto.
-##       1fr    1fr   
-## 300px header header
-## 300px plot_a plot_b
+}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of viewport.
+##     1fr    1fr   
+## 1fr header header
+## 1fr plot_a plot_b
 ## 
 ## Alternative layouts:
 ## 
 ## When width of page < 600px 
 ## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
 ##       1fr   
-## 300px header
-## 300px plot_a
-## 300px plot_b
+## 85px  header
+## 350px plot_a
+## 350px plot_b
 }
 }
 

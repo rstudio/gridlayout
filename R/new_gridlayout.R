@@ -136,6 +136,16 @@ new_gridlayout <- function(
     col_sizes <- layout_info$col_sizes
     row_sizes <- layout_info$row_sizes
     gap <- layout_info$gap
+  } else if (class(layout_def) == "gridlayout") {
+
+    # Use existing row and column heights unless they have been explicitly overridden
+    col_sizes <- col_sizes %||% attr(layout_def, "col_sizes")
+    row_sizes <- row_sizes %||% attr(layout_def, "row_sizes")
+    gap <- gap %||% attr(layout_def, "gap")
+    container_height <- container_height %||% attr(layout_def, "container_height")
+    elements <- get_elements(layout_def)
+
+    # Get rid of existing alternate layouts
   } else if (is.list(layout_def)) {
     # If an existing layout is passed its sizes can and container size etc can
     # be modified
@@ -228,6 +238,11 @@ new_gridlayout <- function(
         width_bounds = c(max = 600),
         container_height = "auto"
       )
+
+      # Tag this layout as auto generated so add_alternate_layout can ignore it
+      # if future layouts are added.
+      attr(layout, "auto_mobile_layout") <- TRUE
+
     } else {
 
       # Check to see if we're working with a list of lists or a single alternate

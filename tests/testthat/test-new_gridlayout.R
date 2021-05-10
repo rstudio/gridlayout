@@ -161,7 +161,6 @@ test_that("Alternate layouts can be added for different sized screens", {
     gap = "2rem"
   )
 
-
   main_w_alternate <- add_alternate_layout(
     layout = main_layout,
     alternate_layout = mobile_layout,

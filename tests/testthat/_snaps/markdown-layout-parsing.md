@@ -8,6 +8,15 @@
            200px   1fr   
       80px header  header
       1fr  sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Only row sizes
 
@@ -18,6 +27,15 @@
            1fr     1fr   
       80px header  header
       1fr  sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Only col sizes
 
@@ -28,6 +46,15 @@
           200px   1fr   
       1fr header  header
       1fr sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Gap and row sizes
 
@@ -39,6 +66,15 @@
            1fr     1fr   
       80px header  header
       1fr  sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Only gap size
 
@@ -50,6 +86,15 @@
           1fr     1fr   
       1fr header  header
       1fr sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Single column
 
@@ -62,6 +107,15 @@
       80px  header 
       auto  sidebar
       400px plot   
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 
 # Markdown parsing -- Single row
 
@@ -69,9 +123,17 @@
       new_gridlayout(
         "\n|2rem  |auto   | 200px  | 1fr    |\n|80px  |header |sidebar |sidebar |")
     Output
-      gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of viewport.
+      gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of auto.
            auto   200px   1fr    
       80px header sidebar sidebar
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 2 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
 
 # Markdown parsing -- No sizes
 
@@ -82,4 +144,13 @@
           1fr     1fr   
       1fr header  header
       1fr sidebar plot  
+      
+      Alternative layouts:
+      
+      When width of page < 600px 
+      gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
+            1fr    
+      85px  header 
+      350px sidebar
+      350px plot   
 

@@ -6,7 +6,7 @@ main_layout <- "
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
-|100px |header  |header |
+|70px  |header  |header |
 |1fr   |sidebar |plot   |"
 
 mobile_layout <- "
