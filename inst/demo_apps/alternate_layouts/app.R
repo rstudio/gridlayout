@@ -27,8 +27,7 @@ my_layout <- new_gridlayout(
   alternate_layouts = list(
     list(
       layout = mobile_layout,
-      width_bounds = c(max = 600),
-      container_height = "auto"
+      width_bounds = c(max = 600)
     ),
     list(
       layout = big_screen_layout,
@@ -44,7 +43,7 @@ app <- shinyApp(
     layout = my_layout,
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
-    header = title_panel("This is my header"),
+    header = title_panel("Geysers!"),
     sidebar = grid_panel(
       title = "Settings",
       v_align = "center",
