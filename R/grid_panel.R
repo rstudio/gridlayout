@@ -97,7 +97,8 @@
 #'
 grid_panel <- function(
   ...,
-  v_align = "stretch", h_align = "stretch",
+  v_align = NULL,
+  h_align = NULL,
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
@@ -106,14 +107,17 @@ grid_panel <- function(
   panel_id = NULL
 ) {
 
+  has_alignment <- notNull(h_align) || notNull(v_align)
+
   panel_styles <- build_css_rule(
     "inline",
     c(
-      if (!missing(h_align)) {
+      if (has_alignment) c("display" = "grid"),
+      if (notNull(h_align)) {
         validate_alignment(h_align)
         c("justify-content" = h_align)
       },
-      if (!missing(v_align)) {
+      if (notNull(v_align)) {
         validate_alignment(v_align)
         c("align-content" = v_align)
       },
