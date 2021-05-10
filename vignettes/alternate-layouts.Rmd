@@ -1,5 +1,5 @@
 ---
-title: "alternate-layouts"
+title: "Alternate Layouts"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{alternate-layouts}
@@ -10,8 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  out.width = "100%",
-  echo = FALSE
+  echo = FALSE,
+  out.width = "100%"
 )
 
 screen_sizes <- list(
@@ -29,7 +29,7 @@ for (sizes in screen_sizes) {
   height <- sizes$height
   webshot2::appshot(
     here::here("inst/demo_apps/alternate_layouts/app.R"),
-    file = here::here(glue::glue("vignettes/alternate_layouts_w{width}_h{height}.png")),
+    file = here::here(glue::glue("vignettes/alternate-layouts_w{width}_h{height}.png")),
     cliprect = "viewport",
     delay = 1.5,
     vwidth = width,
@@ -47,7 +47,7 @@ Your app is likely to be viewed in different scenarios on different devices. Thi
 
 To account for these situations `gridlayout` allows you to specify "alternate" layouts for your app. These are distinct layout's that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range. Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the "sidebar" now just below the header. There's also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side. 
 
-```{r}
+```{r, echo = TRUE}
 main_layout <- "
 |      |        |       |
 |------|--------|-------|
@@ -92,27 +92,29 @@ The alternate layouts are provided via the `alternate_layouts` argument in `new_
 The following are screenshots of the exact same app at different screen sizes using the layouts above. 
 
 
-```{r, results='asis'}
-for (sizes in screen_sizes) {
-  width <- sizes$width
-  height <- sizes$height
-  
-  cat(glue::glue(
-    "### {width} pixels wide",
-    "\n",
-    "<img",
-    "  src=alternate_layouts_w{width}_h{height}.png",
-    "  style = 'max-width: 100%;'",
-    "/>",
-    "\n\n\n",
-    .trim = FALSE
-  ))
-}
+###  Screen width = 2000px
+
+```{r}
+knitr::include_graphics("alternate-layouts_w2000_h1000.png")
+```
+
+
+### Screen width = 1000px
+
+```{r}
+knitr::include_graphics("alternate-layouts_w1000_h1000.png")
+```
+
+
+### Screen width = 500px
+
+```{r, out.width = "500px"}
+knitr::include_graphics("alternate-layouts_w500_h1000.png")
 ```
 
 ## In-action
 
-<img src = alternate_layouts_resizing.gif style = 'max-width: 100%;'/>
+<img src='alternate-layouts_resizing.gif' style='max-width: 100%;'/>
 
 
 # Default mobile layout

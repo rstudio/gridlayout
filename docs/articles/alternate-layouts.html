@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>alternate-layouts • gridlayout</title>
+<title>Alternate Layouts • gridlayout</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="../tidyverse.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -13,7 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../tidyverse-2.css" rel="stylesheet">
 <link href="../rmd.css" rel="stylesheet">
-<meta property="og:title" content="alternate-layouts">
+<meta property="og:title" content="Alternate Layouts">
 <meta property="og:description" content="gridlayout">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -72,7 +72,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
       <a href="../articles/layout-examples.html">Layout Examples</a>
@@ -96,7 +96,7 @@
       </header><script src="alternate-layouts_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>alternate-layouts</h1>
+      <h1 data-toc-skip>Alternate Layouts</h1>
             
       
       
@@ -108,24 +108,58 @@
     
 <p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
 <p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range. Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
-<pre><code>## gridlayout with 2 rows, 2 columns, and gap size of 2rem. Total height of viewport.
-##       200px   1fr   
-## 100px header  header
-## 1fr   sidebar plot  
-## 
-## Alternative layouts:
-## 
-## When width of page &lt; 600px 
-## gridlayout with 3 rows, 1 columns, and gap size of 2rem. Total height of auto.
-##       1fr    
-## 100px header 
-## 250px sidebar
-## 400px plot   
-## 
-## When width of page &gt; 1600px 
-## gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of viewport.
-##     250px  250px   1fr 
-## 1fr header sidebar plot</code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="st">"
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|100px |header  |header |
+|1fr   |sidebar |plot   |"</span>
+
+<span class="va">mobile_layout</span> <span class="op">&lt;-</span> <span class="st">"
+|----- |--------|
+|2rem  |1fr     |
+|100px |header  |
+|250px |sidebar |
+|400px |plot    |"</span>
+
+<span class="va">big_screen_layout</span> <span class="op">&lt;-</span> <span class="st">"
+|-----|-------|--------|-----|
+|2rem |250px  | 250px  |1fr  |
+|1fr  |header |sidebar |plot |
+"</span>
+
+<span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
+  <span class="va">main_layout</span>,
+  alternate_layouts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+      layout <span class="op">=</span> <span class="va">mobile_layout</span>,
+      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
+    <span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+      layout <span class="op">=</span> <span class="va">big_screen_layout</span>,
+      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">1600</span><span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+<span class="co">## gridlayout with 2 rows, 2 columns, and gap size of 2rem. Total height of viewport.</span>
+<span class="co">##       200px   1fr   </span>
+<span class="co">## 100px header  header</span>
+<span class="co">## 1fr   sidebar plot  </span>
+<span class="co">## </span>
+<span class="co">## Alternative layouts:</span>
+<span class="co">## </span>
+<span class="co">## When width of page &lt; 600px </span>
+<span class="co">## gridlayout with 3 rows, 1 columns, and gap size of 2rem. Total height of auto.</span>
+<span class="co">##       1fr    </span>
+<span class="co">## 100px header </span>
+<span class="co">## 250px sidebar</span>
+<span class="co">## 400px plot   </span>
+<span class="co">## </span>
+<span class="co">## When width of page &gt; 1600px </span>
+<span class="co">## gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of viewport.</span>
+<span class="co">##     250px  250px   1fr </span>
+<span class="co">## 1fr header sidebar plot</span></code></pre></div>
 <div id="syntax" class="section level2">
 <h2 class="hasAnchor">
 <a href="#syntax" class="anchor"></a>Syntax</h2>
@@ -135,26 +169,26 @@
 <h2 class="hasAnchor">
 <a href="#output" class="anchor"></a>Output</h2>
 <p>The following are screenshots of the exact same app at different screen sizes using the layouts above.</p>
-<div id="pixels-wide" class="section level3">
+<div id="screen-width-2000px" class="section level3">
 <h3 class="hasAnchor">
-<a href="#pixels-wide" class="anchor"></a>2000 pixels wide</h3>
-<p><img src="alternate_layouts_w2000_h1000.png" style="max-width: 100%;"></p>
+<a href="#screen-width-2000px" class="anchor"></a>Screen width = 2000px</h3>
+<p><img src="alternate-layouts_w2000_h1000.png" width="100%"></p>
 </div>
-<div id="pixels-wide-1" class="section level3">
+<div id="screen-width-1000px" class="section level3">
 <h3 class="hasAnchor">
-<a href="#pixels-wide-1" class="anchor"></a>1000 pixels wide</h3>
-<p><img src="alternate_layouts_w1000_h1000.png" style="max-width: 100%;"></p>
+<a href="#screen-width-1000px" class="anchor"></a>Screen width = 1000px</h3>
+<p><img src="alternate-layouts_w1000_h1000.png" width="100%"></p>
 </div>
-<div id="pixels-wide-2" class="section level3">
+<div id="screen-width-500px" class="section level3">
 <h3 class="hasAnchor">
-<a href="#pixels-wide-2" class="anchor"></a>500 pixels wide</h3>
-<p><img src="alternate_layouts_w500_h1000.png" style="max-width: 100%;"></p>
+<a href="#screen-width-500px" class="anchor"></a>Screen width = 500px</h3>
+<p><img src="alternate-layouts_w500_h1000.png" width="500px"></p>
 </div>
 </div>
 <div id="in-action" class="section level2">
 <h2 class="hasAnchor">
 <a href="#in-action" class="anchor"></a>In-action</h2>
-<p><img src="alternate_layouts_resizing.gif" style="max-width: 100%;"></p>
+<p><img src="alternate-layouts_resizing.gif" style="max-width: 100%;"></p>
 </div>
 <div id="default-mobile-layout" class="section level1">
 <h1 class="hasAnchor">
