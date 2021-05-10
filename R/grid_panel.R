@@ -1,8 +1,8 @@
 #' Panel for grid page
 #'
 #' @param ... Elements to include within the panel
-#' @param use_card_style Should the element contained in panel be made to look
-#'   like an enclosed card?
+#' @param use_card_style Should the
+#'   element contained in panel be made to look like an enclosed card?
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
 #'   will override `use_card_style`.
@@ -18,6 +18,8 @@
 #'    (=`h_align`) and
 #'   [`align-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
 #'    (= `v_align`).
+#' @param panel_id ID of `grid_panel` div. Usually this is automatically set by
+#'   `grid_page()` or `grid_container()`.
 #'
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
@@ -100,7 +102,8 @@ grid_panel <- function(
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
   collapsable = FALSE,
-  scrollable = FALSE
+  scrollable = FALSE,
+  panel_id = NULL
 ) {
 
   panel_styles <- build_css_rule(
@@ -121,27 +124,24 @@ grid_panel <- function(
   )
   card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
 
+  has_title <- notNull(title)
   no_title <- is.null(title)
   if (collapsable && no_title) stop("Collapsable cards need a title")
 
-  if (no_title) {
-    shiny::div(
-      class = paste("grid_panel panel-content", card_styling_class),
-      style = panel_styles,
-      ...
-    )
-  } else {
-    shiny::div(
-      class = paste("grid_panel", card_styling_class),
+  shiny::div(
+    id = panel_id,
+    class = paste("grid_panel", card_styling_class),
+    if (has_title) {
       shiny::div(
-        class = "panel-title",
+        class = "title-bar",
         h3(title),
         if (collapsable) make_collapser_icon(),
         style = if (collapsable) "justify-content: space-between;"
-      ),
-      shiny::div(..., style = panel_styles, class = "panel-content")
-    )
-  }
+      )
+    },
+    shiny::div(..., style = panel_styles, class = "panel-content")
+  )
+
 }
 
 make_card_classes <- function(use_card_styles, use_bslib_card_styles) {

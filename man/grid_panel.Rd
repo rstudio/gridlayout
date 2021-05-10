@@ -12,7 +12,8 @@ grid_panel(
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
   collapsable = FALSE,
-  scrollable = FALSE
+  scrollable = FALSE,
+  panel_id = NULL
 )
 }
 \arguments{
@@ -36,8 +37,11 @@ the user knows what panel is in collapsed state.}
 \item{scrollable}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
 
-\item{use_card_style}{Should the element contained in panel be made to look
-like an enclosed card?}
+\item{panel_id}{ID of \code{grid_panel} div. Usually this is automatically set by
+\code{grid_page()} or \code{grid_container()}.}
+
+\item{use_card_style}{Should the
+element contained in panel be made to look like an enclosed card?}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with \code{class = "grid_panel"} and vertical/horizontal alignment css applied.

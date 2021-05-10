@@ -138,7 +138,7 @@ grid_container <- function(
 
         el
       } else {
-        grid_panel(id = prefixed_id, el, use_bslib_card_styles = use_bslib_card_styles)
+        grid_panel(panel_id = prefixed_id, el, use_bslib_card_styles = use_bslib_card_styles)
       }
     }
   )
