@@ -261,6 +261,7 @@ use_gridlayout_shiny <- function(layout, ...){
 use_gridlayout_rmd <- function(
   container = '.main-container',
   is_card_styled = "all",
+  element_styles = NULL,
   ...
   ){
 
@@ -275,6 +276,11 @@ use_gridlayout_rmd <- function(
         to_css(layout,
                container = container,
                is_card_styled = is_card_styled,
+               element_styles = c(
+                 element_styles,
+                 "display" = "block",
+                 "padding" = "var(--card-padding)"
+               ),
                ...
                ),
         rmd_utility_css,
@@ -294,14 +300,11 @@ use_gridlayout_rmd <- function(
 
 # Makes tab panels work properly and gives utility classes for alignment
 rmd_utility_css <- "
-.tabbable { height: 100% }
-.tabbable > .nav { height: 42px; }
-.tabbable .tab-content { height: calc(100% - 42px); }
-.tabbable .tab-pane { height: 100%; }
-
 .section.no-header > h1:first-child {
   display: none;
 }
+
+
 
 .section.v_start,
 .section.v_center,
