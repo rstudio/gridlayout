@@ -6,8 +6,8 @@
 \usage{
 grid_panel(
   ...,
-  v_align = "stretch",
-  h_align = "stretch",
+  v_align = NULL,
+  h_align = NULL,
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,

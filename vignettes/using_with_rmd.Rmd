@@ -15,23 +15,24 @@ knitr::opts_chunk$set(
 )
 
 # Generate screenshots for this vignette
-# source("tests/testthat/setupScreenshots.R")
-# 
-# lapply(
-#   c("base", 
-#     "only_grid_panel",
-#     "extra_grid_panel_styles",
-#     "extra_child_styles"),
-#   function(mode){
-#     screenshot_demo_app(
-#       app_path = here::here('inst/rmarkdown_demo/grid_markdown_options.Rmd'),
-#       screenshot_name = paste0("use_gridlayout_rmd_", mode, ".png"),
-#       screenshot_root = "vignettes",
-#       rmd_params = list(mode = mode),
-#       vwidth = 1100
-#     )
-#   }
-# )
+source(here::here("tests/screenshot-tests/setupScreenshots.R"))
+
+
+lapply(
+  c("base",
+    "only_grid_panel",
+    "extra_grid_panel_styles",
+    "extra_child_styles"),
+  function(mode){
+    screenshot_demo_app(
+      app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown_options.Rmd'),
+      screenshot_name = paste0("use_gridlayout_rmd_", mode, ".png"),
+      screenshot_root = "vignettes",
+      rmd_params = list(mode = mode),
+      vwidth = 1100
+    )
+  }
+)
  
 ```
 

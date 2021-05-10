@@ -23,7 +23,6 @@ app <- shinyApp(
     header = title_panel("This is my header"),
     sidebar = grid_panel(
       title = "Settings",
-      v_align = "center",
       collapsable = TRUE,
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
