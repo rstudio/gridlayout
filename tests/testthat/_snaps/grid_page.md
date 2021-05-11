@@ -23,7 +23,7 @@
           </div>
           <div id="grid_page__plot" class="grid_panel gridlayout-card">
             <div style="" class="panel-content">
-              <div id="myPlot" class="shiny-plot-output" style="width:100%;height:400px;"></div>
+              <div id="myPlot" class="shiny-plot-output" style="height:100%;width:100%;"></div>
             </div>
           </div>
         </div>

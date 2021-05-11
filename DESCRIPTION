@@ -11,7 +11,6 @@ Suggests:
     testthat (>= 3.0.0),
     shiny,
     miniUI,
-    htmltools,
     bslib,
     crayon,
     knitr,
@@ -25,3 +24,5 @@ Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+Imports: 
+    htmltools

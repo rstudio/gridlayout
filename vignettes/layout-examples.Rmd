@@ -88,8 +88,8 @@ app_w_layout <- function(my_layout) {
         tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
         tabPanel("Fastest growing", gt_output("chickTable"))
       ),
-      treePlot = plotOutput("treePlot", height = "100%"),
-      yarnPlot = plotOutput("yarnPlot", height = "100%"),
+      treePlot = plotOutput("treePlot"),
+      yarnPlot = plotOutput("yarnPlot"),
       stockTable = grid_panel(
         gt_output("stockTable"), scrollable = TRUE
       ),
