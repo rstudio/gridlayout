@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_panel.R
 \name{grid_panel}
 \alias{grid_panel}
-\title{Panel for grid page}
+\title{Panel for grid page element}
 \usage{
 grid_panel(
   ...,
@@ -40,14 +40,19 @@ the panel can be seen?}
 \item{panel_id}{ID of \code{grid_panel} div. Usually this is automatically set by
 \code{grid_page()} or \code{grid_container()}.}
 
-\item{use_card_style}{Should the
-element contained in panel be made to look like an enclosed card?}
+\item{use_card_style}{Should the element contained in panel be made to look
+like an enclosed card?}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with \code{class = "grid_panel"} and vertical/horizontal alignment css applied.
 }
 \description{
-Panel for grid page
+Allows you to customize the appearance of an element within your gridlayout.
+When using \link{grid_page} or \link{grid_container} all items will be automatically
+wrapped in this function with default values. However, if further
+customization is needed you can do this wrapping yourself. Some examples of
+things you can customize are settings a specific element to use a given card
+style, or to align the content of the card vertically or horizontally.
 }
 \examples{
 
@@ -119,4 +124,7 @@ app <- shinyApp(
 )
 }
 
+}
+\seealso{
+\link{title_panel}
 }

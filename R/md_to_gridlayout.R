@@ -15,6 +15,8 @@
 #'
 #' @return An object of class "grid_layout", which stores the layout as a
 #'   matrix. This can be passed to other functions such as `layout_to_css()`.
+#'
+#' @seealso [new_gridlayout]
 #' @export
 #'
 #' @examples

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Panel for grid page — grid_panel • gridlayout</title>
+<title>Panel for grid page element — grid_panel • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,8 +40,13 @@
 
 
 
-<meta property="og:title" content="Panel for grid page — grid_panel" />
-<meta property="og:description" content="Panel for grid page" />
+<meta property="og:title" content="Panel for grid page element — grid_panel" />
+<meta property="og:description" content="Allows you to customize the appearance of an element within your gridlayout.
+When using grid_page or grid_container all items will be automatically
+wrapped in this function with default values. However, if further
+customization is needed you can do this wrapping yourself. Some examples of
+things you can customize are settings a specific element to use a given card
+style, or to align the content of the card vertically or horizontally." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -143,13 +148,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Panel for grid page</h1>
+    <h1>Panel for grid page element</h1>
     
     <div class="hidden name"><code>grid_panel.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Panel for grid page</p>
+    <p>Allows you to customize the appearance of an element within your gridlayout.
+When using <a href='grid_page.html'>grid_page</a> or <a href='grid_container.html'>grid_container</a> all items will be automatically
+wrapped in this function with default values. However, if further
+customization is needed you can do this wrapping yourself. Some examples of
+things you can customize are settings a specific element to use a given card
+style, or to align the content of the card vertically or horizontally.</p>
     </div>
 
     <pre class="usage"><span class='fu'>grid_panel</span><span class='op'>(</span>
@@ -204,14 +214,17 @@ the panel can be seen?</p></td>
     </tr>
     <tr>
       <th>use_card_style</th>
-      <td><p>Should the
-element contained in panel be made to look like an enclosed card?</p></td>
+      <td><p>Should the element contained in panel be made to look
+like an enclosed card?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Elements from <code>...</code> wrapped in a <code><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>shiny::div()</a></code> with <code>class = "grid_panel"</code> and vertical/horizontal alignment css applied.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='title_panel.html'>title_panel</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

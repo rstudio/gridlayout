@@ -1,8 +1,15 @@
-#' Panel for grid page
+#' Panel for grid page element
+#'
+#' Allows you to customize the appearance of an element within your gridlayout.
+#' When using [grid_page] or [grid_container] all items will be automatically
+#' wrapped in this function with default values. However, if further
+#' customization is needed you can do this wrapping yourself. Some examples of
+#' things you can customize are settings a specific element to use a given card
+#' style, or to align the content of the card vertically or horizontally.
 #'
 #' @param ... Elements to include within the panel
-#' @param use_card_style Should the
-#'   element contained in panel be made to look like an enclosed card?
+#' @param use_card_style Should the element contained in panel be made to look
+#'   like an enclosed card?
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
 #'   will override `use_card_style`.
@@ -23,6 +30,8 @@
 #'
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
+#'
+#' @seealso [title_panel]
 #' @export
 #'
 #' @examples
@@ -212,13 +221,13 @@ title_panel <- function(
 
   if (notNull(logo)) {
     title_content <- tagList(
-      img(src = logo, height = "60px"),
+      shiny::img(src = logo, height = "60px"),
       title_content
     )
   }
 
   grid_panel(
-    h2(title_content, class = "title_panel"),
+    shiny::h2(title_content, class = "title_panel"),
     v_align = "center",
     ...
   )

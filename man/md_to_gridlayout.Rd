@@ -96,3 +96,6 @@ md_to_gridlayout(
     |footer |footer |"
 )
 }
+\seealso{
+\link{new_gridlayout}
+}

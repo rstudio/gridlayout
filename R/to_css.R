@@ -259,6 +259,8 @@ use_gridlayout_shiny <- function(layout, ...){
 #' ```
 #' ````
 #'
+#' See [`vignette("using_with_rmd", package = "gridlayout")`] for a more in-depth overview.
+#'
 #' @inheritParams to_css
 #'
 #' @return NULL

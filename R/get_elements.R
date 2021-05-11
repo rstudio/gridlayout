@@ -6,6 +6,7 @@
 #'   `{start,end}_row`, and `{start,end}_col`. Positions are indexed starting at
 #'   1
 #'
+#' @seealso [get_element_ids]
 #' @examples
 #' grid_obj <- md_to_gridlayout(
 #'   layout_table = "
@@ -41,6 +42,7 @@ get_elements.gridlayout <- function(layout){
 #' @return Character vector of ids of all elements in layout
 #' @export
 #'
+#' @seealso [get_elements]
 #' @examples
 #'
 #' grid_obj <- md_to_gridlayout(

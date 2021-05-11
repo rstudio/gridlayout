@@ -41,7 +41,12 @@
 
 
 <meta property="og:title" content="Setup gridlayout UI for shiny app — grid_page" />
-<meta property="og:description" content="Setup gridlayout UI for shiny app" />
+<meta property="og:description" content="This is the typical way to use gridlayout in your Shiny app. grid_page
+will make up the entire ui declaration of the app. Under the hood it uses
+shiny::fluidPage() and grid_container. Elements of the layout are
+declared as named parameters which will then be matched to the provided
+layout. For instance the contents of the header (as defined in layout)
+would be set with header = title_panel(&quot;App Title&quot;)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -149,7 +154,12 @@
     </div>
 
     <div class="ref-description">
-    <p>Setup gridlayout UI for shiny app</p>
+    <p>This is the typical way to use <code>gridlayout</code> in your <code>Shiny</code> app. <code>grid_page</code>
+will make up the entire <code>ui</code> declaration of the app. Under the hood it uses
+<code><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>shiny::fluidPage()</a></code> and <a href='grid_container.html'>grid_container</a>. Elements of the layout are
+declared as named parameters which will then be matched to the provided
+<code>layout</code>. For instance the contents of the header (as defined in <code>layout</code>)
+would be set with <code>header = title_panel("App Title")</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>grid_page</span><span class='op'>(</span>
@@ -171,12 +181,12 @@ desired layout for your Shiny app.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Contents of each grid element. For instance the contents of the
-header (as defined in <code>layout</code>) would be set with <code>header = h2("App Title")</code>. Every grid element argument must be named. If a named argument
-doesn't match the layout's declared elements than an error will be thrown.
-This behavior can be overridden using the <code>flag_mismatches</code> argument. Any
-unnamed arguments are added to the page after the container. This can be
-used to do things like things to the <code>head</code> or <code>meta</code> sections of the page.</p></td>
+      <td><p>Contents of each grid element.  Every grid element argument must
+be named. If a named argument doesn't match the layout's declared elements
+than an error will be thrown. This behavior can be overridden using the
+<code>flag_mismatches</code> argument. Any unnamed arguments are added to the page
+after the container. This can be used to do things like things to the
+<code>head</code> or <code>meta</code> sections of the page.</p></td>
     </tr>
     <tr>
       <th>use_bslib_card_styles</th>
@@ -194,9 +204,8 @@ and set styles manually on each panel.</p></td>
     </tr>
     <tr>
       <th>flag_mismatches</th>
-      <td><p>Should a mismatch between supplied <code>elements</code> ui
-definitions and layout trigger a warning? In advanced cases you may want to
-dynamically set your layout and sometimes omit panels.</p></td>
+      <td><p>Should mismatches between the named arguments and
+layout elements trigger an error?</p></td>
     </tr>
     </table>
 
@@ -206,28 +215,28 @@ dynamically set your layout and sometimes omit panels.</p></td>
 <code><a href='https://rdrr.io/pkg/shiny/man/shinyUI.html'>shinyUI</a></code> function.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>grid_container</p></div>
+    <div class='dont-index'><p><a href='grid_container.html'>grid_container</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Only run these examples in interactive R sessions</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"shiny"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"bslib"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
 <span class='va'>my_layout</span> <span class='op'>&lt;-</span> <span class='st'>"
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |distPlot |"</span>
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"</span>
 
 <span class='co'># The classic Geyser app with grid layout</span>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
   ui <span class='op'>=</span> <span class='fu'>grid_page</span><span class='op'>(</span>
     layout <span class='op'>=</span> <span class='va'>my_layout</span>,
     theme <span class='op'>=</span> <span class='fu'>bslib</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/bslib//reference/bs_theme.html'>bs_theme</a></span><span class='op'>(</span><span class='op'>)</span>,
-    header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>h2</a></span><span class='op'>(</span><span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>,
+    header <span class='op'>=</span> <span class='fu'><a href='title_panel.html'>title_panel</a></span><span class='op'>(</span><span class='st'>"Old Faithful Geyser Data"</span><span class='op'>)</span>,
     sidebar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='op'>(</span><span class='st'>"bins"</span>,<span class='st'>"Number of bins:"</span>, min <span class='op'>=</span> <span class='fl'>1</span>, max <span class='op'>=</span> <span class='fl'>50</span>, value <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>,
     plot <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='st'>"distPlot"</span>, height <span class='op'>=</span> <span class='st'>"100%"</span><span class='op'>)</span>
   <span class='op'>)</span>,
@@ -239,7 +248,6 @@ dynamically set your layout and sometimes omit panels.</p></td>
     <span class='op'>}</span><span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>)</span>
-
 <span class='op'>}</span>
 </div></pre>
   </div>

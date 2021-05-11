@@ -1,43 +1,51 @@
 #' Setup gridlayout UI for shiny app
 #'
+#' This is the typical way to use `gridlayout` in your `Shiny` app. `grid_page`
+#' will make up the entire `ui` declaration of the app. Under the hood it uses
+#' [shiny::fluidPage()] and [grid_container]. Elements of the layout are
+#' declared as named parameters which will then be matched to the provided
+#' `layout`. For instance the contents of the header (as defined in `layout`)
+#' would be set with `header = title_panel("App Title")`.
+#'
 #' @inheritParams use_gridlayout_shiny
 #' @inheritParams grid_container
-#' @param ... Contents of each grid element. For instance the contents of the
-#'   header (as defined in `layout`) would be set with `header = h2("App
-#'   Title")`. Every grid element argument must be named. If a named argument
-#'   doesn't match the layout's declared elements than an error will be thrown.
-#'   This behavior can be overridden using the `flag_mismatches` argument. Any
-#'   unnamed arguments are added to the page after the container. This can be
-#'   used to do things like things to the `head` or `meta` sections of the page.
+#' @param ... Contents of each grid element.  Every grid element argument must
+#'   be named. If a named argument doesn't match the layout's declared elements
+#'   than an error will be thrown. This behavior can be overridden using the
+#'   `flag_mismatches` argument. Any unnamed arguments are added to the page
+#'   after the container. This can be used to do things like things to the
+#'   `head` or `meta` sections of the page.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
+#' @param flag_mismatches Should mismatches between the named arguments and
+#'   layout elements trigger an error?
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
 #' @export
 #'
-#' @seealso grid_container
+#' @seealso [grid_container]
 #'
 #' @examples
 #' # Only run these examples in interactive R sessions
-#' if (interactive()) {
+#' if (FALSE) {
 #' requireNamespace("shiny", quietly = TRUE)
 #' requireNamespace("bslib", quietly = TRUE)
 #'
 #' library(shiny)
 #' my_layout <- "
-#' |      |        |         |
-#' |------|--------|---------|
-#' |2rem  |200px   |1fr      |
-#' |150px |header  |header   |
-#' |1fr   |sidebar |distPlot |"
+#' |      |        |       |
+#' |------|--------|-------|
+#' |2rem  |200px   |1fr    |
+#' |150px |header  |header |
+#' |1fr   |sidebar |plot   |"
 #'
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = grid_page(
 #'     layout = my_layout,
 #'     theme = bslib::bs_theme(),
-#'     header = h2("Old Faithful Geyser Data"),
+#'     header = title_panel("Old Faithful Geyser Data"),
 #'     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
 #'     plot = plotOutput("distPlot", height = "100%")
 #'   ),
@@ -49,7 +57,6 @@
 #'     })
 #'   }
 #' )
-#'
 #' }
 grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE){
 

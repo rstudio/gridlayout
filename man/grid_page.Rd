@@ -17,12 +17,12 @@ grid_page(
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{Contents of each grid element. For instance the contents of the
-header (as defined in \code{layout}) would be set with \code{header = h2("App Title")}. Every grid element argument must be named. If a named argument
-doesn't match the layout's declared elements than an error will be thrown.
-This behavior can be overridden using the \code{flag_mismatches} argument. Any
-unnamed arguments are added to the page after the container. This can be
-used to do things like things to the \code{head} or \code{meta} sections of the page.}
+\item{...}{Contents of each grid element.  Every grid element argument must
+be named. If a named argument doesn't match the layout's declared elements
+than an error will be thrown. This behavior can be overridden using the
+\code{flag_mismatches} argument. Any unnamed arguments are added to the page
+after the container. This can be used to do things like things to the
+\code{head} or \code{meta} sections of the page.}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
@@ -34,37 +34,41 @@ and set styles manually on each panel.}
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}
 
-\item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
-definitions and layout trigger a warning? In advanced cases you may want to
-dynamically set your layout and sometimes omit panels.}
+\item{flag_mismatches}{Should mismatches between the named arguments and
+layout elements trigger an error?}
 }
 \value{
 A UI definition that can be passed to the
 \code{\link[shiny]{shinyUI}} function.
 }
 \description{
-Setup gridlayout UI for shiny app
+This is the typical way to use \code{gridlayout} in your \code{Shiny} app. \code{grid_page}
+will make up the entire \code{ui} declaration of the app. Under the hood it uses
+\code{\link[shiny:fluidPage]{shiny::fluidPage()}} and \link{grid_container}. Elements of the layout are
+declared as named parameters which will then be matched to the provided
+\code{layout}. For instance the contents of the header (as defined in \code{layout})
+would be set with \code{header = title_panel("App Title")}.
 }
 \examples{
 # Only run these examples in interactive R sessions
-if (interactive()) {
+if (FALSE) {
 requireNamespace("shiny", quietly = TRUE)
 requireNamespace("bslib", quietly = TRUE)
 
 library(shiny)
 my_layout <- "
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |distPlot |"
+|      |        |       |
+|------|--------|-------|
+|2rem  |200px   |1fr    |
+|150px |header  |header |
+|1fr   |sidebar |plot   |"
 
 # The classic Geyser app with grid layout
 shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    header = h2("Old Faithful Geyser Data"),
+    header = title_panel("Old Faithful Geyser Data"),
     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
     plot = plotOutput("distPlot", height = "100\%")
   ),
@@ -76,9 +80,8 @@ shinyApp(
     })
   }
 )
-
 }
 }
 \seealso{
-grid_container
+\link{grid_container}
 }

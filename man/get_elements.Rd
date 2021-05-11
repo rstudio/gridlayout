@@ -30,3 +30,6 @@ grid_obj <- md_to_gridlayout(
  get_elements(grid_obj)
 
 }
+\seealso{
+\link{get_element_ids}
+}

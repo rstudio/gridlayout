@@ -22,11 +22,13 @@
 #'
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
+#'
+#' @seealso [grid_page], [grid_panel]
 #' @export
 #'
 #' @examples
 #'
-#' if (interactive()) {
+#' if (FALSE) {
 #' library(gridlayout)
 #' library(shiny)
 #' requireNamespace("bslib", quietly = TRUE)
@@ -40,16 +42,14 @@
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = fluidPage(
-#'     theme = bslib::bs_theme(),
 #'     grid_container(
 #'       id = "main_grid",
 #'       layout = my_layout,
 #'       elements = list(
-#'         header = h2(id = "header", "This is my header content"),
+#'         header = title_panel("This is my header content"),
 #'         sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
 #'         plot = plotOutput("distPlot", height = "100%")
-#'       ),
-#'       container_height = "800px"
+#'       )
 #'     )
 #'   ),
 #'   server = function(input, output) {
