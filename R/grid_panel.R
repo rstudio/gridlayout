@@ -113,8 +113,26 @@ grid_panel <- function(
   use_bslib_card_styles = FALSE,
   collapsable = FALSE,
   scrollable = FALSE,
-  panel_id = NULL
+  panel_id = NULL,
+  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
 ) {
+  contents <- list(...)
+
+  already_grid_panel <- length(contents) == 1 && el_has_class(contents[[1]], "grid_panel")
+
+  if (already_grid_panel) {
+    # If element is already wrapped in a grid_panel, we just need to update
+    # the id
+    el <- contents[[1]]
+    el$attribs$id <- panel_id
+
+    # Preference for bootstrap card styling at page-level overwrites the card
+    # level This is so if the user just wants bootstrap styles they don't need
+    # to manually add them to all their grid_panel() calls because
+    # grid_container() auto wraps all elements in grid_panel.
+    el$attribs$class <- panel_class
+    return(el)
+  }
 
   has_alignment <- notNull(h_align) || notNull(v_align)
 
@@ -135,15 +153,31 @@ grid_panel <- function(
       }
     )
   )
-  card_styling_class <- make_card_classes(use_card_styles, use_bslib_card_styles)
 
   has_title <- notNull(title)
   no_title <- is.null(title)
   if (collapsable && no_title) stop("Collapsable cards need a title")
 
+  # Go through contents and set plot sizes if necessary
+  contents <- lapply(
+    contents,
+    function(el){
+      if (el_has_class(el, "shiny-plot-output")) {
+        set_plot_sizes(el)
+      } else {
+        # Will only ever happen if the parent isn't a plot output itself because
+        # plot outputs can't have children
+        htmltools::tagQuery(el)$
+          find(".shiny-plot-output")$
+          each(set_plot_sizes)$
+          allTags()
+      }
+    }
+  )
+
   shiny::div(
     id = panel_id,
-    class = paste("grid_panel", card_styling_class),
+    class = panel_class,
     if (has_title) {
       shiny::div(
         class = "title-bar",
@@ -152,19 +186,20 @@ grid_panel <- function(
         style = if (collapsable) "justify-content: space-between;"
       )
     },
-    shiny::div(..., style = panel_styles, class = "panel-content")
+    shiny::div(contents, style = panel_styles, class = "panel-content")
   )
-
 }
 
-make_card_classes <- function(use_card_styles, use_bslib_card_styles) {
-  if (use_bslib_card_styles) {
+# Build the class list for the panel based on the desired card styles
+make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
+  card_styling_class <- if (use_bslib_card_styles) {
     "card"
   } else if (use_card_styles) {
     "gridlayout-card"
   } else {
     ""
   }
+  paste("grid_panel", card_styling_class)
 }
 
 make_collapser_icon <- function(parent_id = "") {
@@ -242,3 +277,37 @@ validate_alignment <- function(arg_val) {
     stop("Alignment argument must be one of ", paste(align_options, collapse = ", "))
   }
 }
+
+el_has_class <- function(el, class_name) {
+  # It's possible to have multiple "class" attributes if they were set at
+  # different times. Here we just collapse all of them into one big character
+  # string we can seach through
+  all_classes <- paste(el$attribs[names(el$attribs) == "class"], collapse = " ")
+
+  # Look for the class name isolated from other classes. E.g if searching for
+  # class of  "card"  this wont get incorectly triggered by "panel-card"
+  str_detect(all_classes, paste0("(\\s|^)", class_name, "(\\s|$)"))
+}
+
+el_add_class <- function(el, class_name) {
+  if (!el_has_class(el, class_name)) {
+    el$attribs$class <- paste(el$attribs$class, class_name)
+  }
+  el
+}
+
+
+set_plot_sizes <- function(el, i = "ignored") {
+
+  using_default_settings <- identical(
+    htmltools::tagGetAttribute(el, "style"),
+    htmltools::tagGetAttribute(shiny::plotOutput("test"), "style")
+  )
+  if (using_default_settings) {
+    # We give ourselves permission to modify plot styles
+    el$attribs$style <- "height:100%;width:100%;min-height:150px"
+  }
+
+  el
+}
+

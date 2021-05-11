@@ -118,38 +118,11 @@ grid_container <- function(
   grid_elements <- map_w_names(
     elements,
     function(el_id, el){
-      prefixed_id <- paste0(id_prefix, el_id)
-
-      # Make plots "just fit" if they haven't been customized by the user
-      if(el_has_class(el, "shiny-plot-output")) {
-        el <- set_plot_sizes(el)
-      } else {
-        # Will only ever happen if the parent isn't a plot output itself because
-        # plot outputs can't have children
-        el <- htmltools::tagQuery(el)$
-          find(".shiny-plot-output")$
-          each(set_plot_sizes)$
-          allTags()
-      }
-
-      if(el_has_class(el, "grid_panel")){
-        # If element is already wrapped in a grid_panel, we just need to update
-        # the id
-        el$attribs$id <- prefixed_id
-
-        # Preference for bootstrap card styling at page level overwrites the
-        # card level This is so if the user just wants bootstrap styles they
-        # don't need to manually add them to all their grid_panel() calls.
-        if (use_bslib_card_styles) el <- el_add_class(el, "card")
-
-        el
-      } else {
-        grid_panel(
-          panel_id = prefixed_id,
-          el,
-          use_bslib_card_styles = use_bslib_card_styles
-        )
-      }
+      grid_panel(
+        panel_id = paste0(id_prefix, el_id),
+        el,
+        use_bslib_card_styles = use_bslib_card_styles
+      )
     }
   )
 
@@ -168,38 +141,6 @@ grid_container <- function(
   )
 }
 
-el_has_class <- function(el, class_name) {
-  # It's possible to have multiple "class" attributes if they were set at
-  # different times. Here we just collapse all of them into one big character
-  # string we can seach through
-  all_classes <- paste(el$attribs[names(el$attribs) == "class"], collapse = " ")
-
-  # Look for the class name isolated from other classes. E.g if searching for
-  # class of  "card"  this wont get incorectly triggered by "panel-card"
-  str_detect(all_classes, paste0("(\\s|^)", class_name, "(\\s|$)"))
-}
-
-el_add_class <- function(el, class_name) {
-  if (!el_has_class(el, class_name)) {
-    el$attribs$class <- paste(el$attribs$class, class_name)
-  }
-  el
-}
-
-
-set_plot_sizes <- function(el, i = "ignored") {
-
-  using_default_settings <- identical(
-    htmltools::tagGetAttribute(el, "style"),
-    htmltools::tagGetAttribute(shiny::plotOutput("test"), "style")
-  )
-  if (using_default_settings) {
-    # We give ourselves permission to modify plot styles
-    el$attribs$style <- "height:100%;width:100%;"
-  }
-
-  el
-}
 
 
 
