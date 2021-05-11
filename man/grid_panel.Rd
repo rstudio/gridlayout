@@ -13,7 +13,8 @@ grid_panel(
   use_bslib_card_styles = FALSE,
   collapsable = FALSE,
   scrollable = FALSE,
-  panel_id = NULL
+  panel_id = NULL,
+  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
 )
 }
 \arguments{
@@ -39,6 +40,10 @@ the panel can be seen?}
 
 \item{panel_id}{ID of \code{grid_panel} div. Usually this is automatically set by
 \code{grid_page()} or \code{grid_container()}.}
+
+\item{panel_class}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
+typically automatically generated and should only be touched in advanced
+usage.}
 
 \item{use_card_style}{Should the element contained in panel be made to look
 like an enclosed card?}

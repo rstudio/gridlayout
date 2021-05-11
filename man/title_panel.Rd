@@ -35,6 +35,9 @@ mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justif
 (= \code{v_align}).}
     \item{\code{panel_id}}{ID of \code{grid_panel} div. Usually this is automatically set by
 \code{grid_page()} or \code{grid_container()}.}
+    \item{\code{panel_class}}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
+typically automatically generated and should only be touched in advanced
+usage.}
   }}
 
 \item{logo}{Optional image source for logo to be placed left of title}

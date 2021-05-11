@@ -27,6 +27,9 @@
 #'    (= `v_align`).
 #' @param panel_id ID of `grid_panel` div. Usually this is automatically set by
 #'   `grid_page()` or `grid_container()`.
+#' @param panel_class Class(es) of `grid_panel` div. Like `panel_id` this is
+#'   typically automatically generated and should only be touched in advanced
+#'   usage.
 #'
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
