@@ -41,7 +41,13 @@
 
 
 <meta property="og:title" content="Enable gridlayout usage in RMarkdown documents — use_gridlayout_rmd" />
-<meta property="og:description" content="Adds required hooks to RMarkdown to process gridlayout chunks and style document accordingly." />
+<meta property="og:description" content="Adds required hooks to RMarkdown to process gridlayout chunks and style
+document accordingly. Layout will be generated from a chunk identified with
+the syntax```{gridlayout}
+&amp;lt;insert layout table here&amp;gt;
+```
+
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,14 +108,9 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -119,17 +120,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -149,10 +155,21 @@
     </div>
 
     <div class="ref-description">
-    <p>Adds required hooks to RMarkdown to process <code>gridlayout</code> chunks and style document accordingly.</p>
+    <p>Adds required hooks to RMarkdown to process <code>gridlayout</code> chunks and style
+document accordingly. Layout will be generated from a chunk identified with
+the syntax</p><pre>```{gridlayout}
+&lt;insert layout table here&gt;
+```
+</pre>
+
     </div>
 
-    <pre class="usage"><span class='fu'>use_gridlayout_rmd</span><span class='op'>(</span>container <span class='op'>=</span> <span class='st'>".main-container"</span>, is_card_styled <span class='op'>=</span> <span class='st'>"all"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>use_gridlayout_rmd</span><span class='op'>(</span>
+  container <span class='op'>=</span> <span class='st'>".main-container"</span>,
+  is_card_styled <span class='op'>=</span> <span class='st'>"all"</span>,
+  element_styles <span class='op'>=</span> <span class='cn'>NULL</span>,
+  selector_prefix <span class='op'>=</span> <span class='st'>"#"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,11 +193,19 @@ situations where you don't control child rendering) or <code>"none"</code> for n
 styling.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Arguments passed on to <code><a href='to_css.html'>to_css</a></code></p><dl>
-    <dt><code></code></dt><dd><p></p></dd>
-  
-</dl></td>
+      <th>element_styles</th>
+      <td><p>A list of named property-value pairs ( E.g.
+<code>element_styles = c("background" = "blue")</code>.) for additional styles to be
+added to each first child element of the grid container. E.g. under the css
+selector of <code>grid_container &gt; *</code>. If <code>is_card_styled = "all"</code> then this has
+the same purpose as as <code>additional_card_styles</code></p></td>
+    </tr>
+    <tr>
+      <th>selector_prefix</th>
+      <td><p>CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the <code>"#"</code> prefix) with because they are not available or are used for
+other reasons.</p></td>
     </tr>
     </table>
 

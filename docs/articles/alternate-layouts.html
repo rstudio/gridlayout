@@ -56,13 +56,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -75,14 +69,19 @@
       <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
 </div>
 <!--/.nav-collapse -->
@@ -107,7 +106,11 @@
     
     
 <p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
-<p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range. Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
+<p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range.</p>
+<div id="example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h2>
+<p>Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="st">"
 |      |        |       |
@@ -160,10 +163,17 @@
 <span class="co">## gridlayout with 1 rows, 3 columns, and gap size of 2rem. Total height of viewport.</span>
 <span class="co">##     250px  250px   1fr </span>
 <span class="co">## 1fr header sidebar plot</span></code></pre></div>
+</div>
 <div id="syntax" class="section level2">
 <h2 class="hasAnchor">
 <a href="#syntax" class="anchor"></a>Syntax</h2>
-<p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts defined by their <code>layout</code> table and the <code>width_bounds</code> that the layout should occur for. For instance, out <code>mobile_layout</code> is active when the viewing device’s screen is narrower than <code>600</code> pixels and our <code>big_screen_layout</code> is active when the screen is larger than <code>1600</code> pixels. You can also set upper and lower bounds in case you wanted to have intermediate layouts (perhaps a tablet layout for between <code>600</code> and <code>1000</code> pixels in width.)</p>
+<p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts containing:</p>
+<ul>
+<li>A <code>layout</code> table (or existing <code>gridlayout</code> object)</li>
+<li>
+<code>width_bounds</code> that the layout should occur for. For instance, out <code>mobile_layout</code> is active when the viewing device’s screen is narrower than <code>600</code> pixels and our <code>big_screen_layout</code> is active when the screen is larger than <code>1600</code> pixels. You can also set upper and lower bounds in case you wanted to have intermediate layouts (perhaps a tablet layout for between <code>600</code> and <code>1000</code> pixels in width.)</li>
+<li>An optional <code>container_height</code>. Typically <code>gridlayout</code> is smart enough to figure this one out for you, however.</li>
+</ul>
 </div>
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
@@ -204,10 +214,14 @@
 ## When width of page &lt; 600px 
 ## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
 ##       1fr    
-## 300px header 
-## 300px sidebar
-## 300px plot</code></pre>
+## 85px  header 
+## 350px sidebar
+## 350px plot</code></pre>
 <p>If you don’t want this (say you’re targeting mobile by default already) you can set <code>alternate_layouts</code> to <code>NULL</code>.</p>
+<pre><code>## gridlayout with 2 rows, 2 columns, and gap size of 2rem. Total height of viewport.
+##       200px   1fr   
+## 100px header  header
+## 1fr   sidebar plot</code></pre>
 </div>
   </div>
 

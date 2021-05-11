@@ -104,14 +104,9 @@ free text that may or may not represent a layout table." />
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -121,17 +116,22 @@ free text that may or may not represent a layout table." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -234,11 +234,11 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 #&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
 #&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>5</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr    </span><span>
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> header 
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> sidebar
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot_a 
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot_b 
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot_c </div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>85px </span><span> header 
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> sidebar
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_a 
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_b 
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_c </div><div class='input'>
 
 <span class='co'># Can specify gap size in upper left cell</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
@@ -260,10 +260,10 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 #&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
 #&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> header
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> table </div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div><div class='input'>
 <span class='co'># Don't need to follow full md table with</span>
 <span class='co'># header row if not desired</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
@@ -284,10 +284,10 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 #&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
 #&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> header
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> table </div><div class='input'>
+#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div><div class='input'>
 <span class='co'># Can omit sizing as well if desired</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
   layout_table <span class='op'>=</span> <span class='st'>"
@@ -295,21 +295,21 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |plot   |table  |
     |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer footer
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
+#&gt; </span><span style='font-weight: bold;'>   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
+#&gt; </span><span style='font-weight: bold;'>1fr</span><span> header header
+#&gt; </span><span style='font-weight: bold;'>1fr</span><span> plot   table 
+#&gt; </span><span style='font-weight: bold;'>1fr</span><span> footer footer
 #&gt; 
 #&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
 #&gt; 
 #&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
 #&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
 #&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> header
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>300px</span><span> table </div></span></pre>
+#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
+#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -102,14 +102,9 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -119,17 +114,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -259,12 +259,36 @@ other reasons.</p></td>
 #&gt; 
 #&gt; .grid_panel {
 #&gt;   --card-padding: 0.8rem;
-#&gt;   --card-title-height: calc(35px + var(--card-padding));
 #&gt;   box-sizing: border-box;
-#&gt;   padding: var(--card-padding);
 #&gt;   overflow: hidden;
+#&gt;   display: grid;
+#&gt;   grid-template-areas: "title"
+#&gt;                        "content";
+#&gt;   /* When there's no title the column will dissapear */
+#&gt;   grid-template-rows: min-content 1fr;
 #&gt; }
 #&gt; 
+#&gt; .grid_panel .title-bar {
+#&gt;   grid-area: title;
+#&gt;   height: 100%;
+#&gt;   width: 100%;
+#&gt;   display: flex;
+#&gt;   justify-content: start;
+#&gt;   align-items: center;
+#&gt;   border-bottom: 1px solid rgba(0,0,0,0.125);
+#&gt;   padding: calc(var(--card-padding)/2) var(--card-padding);
+#&gt; }
+#&gt; .grid_panel .title-bar &gt; h3 {
+#&gt;   margin: 0;
+#&gt;   height: 100%;
+#&gt; }
+#&gt; 
+#&gt; .panel-content {
+#&gt;   height: 100%;
+#&gt;   width: 100%;
+#&gt;   padding: var(--card-padding);
+#&gt;   grid-area: content;
+#&gt; }
 #&gt; 
 #&gt; .grid_panel .shiny-plot-output &gt; img {
 #&gt;   /* The way grid sizing works can throw off the plot sizing in shiny. This
@@ -289,31 +313,6 @@ other reasons.</p></td>
 #&gt;   border-radius: 0.5rem;
 #&gt; }
 #&gt; 
-#&gt; .grid_panel .panel-title {
-#&gt;   height: var(--card-title-height);
-#&gt;   width: calc(100% + 2*var(--card-padding));
-#&gt;   padding: calc(0.5 * var(--card-padding)) var(--card-padding);
-#&gt;   margin-left: calc(-1 * var(--card-padding));
-#&gt;   margin-top: calc(-1 * var(--card-padding));
-#&gt;   border-bottom: 1px solid #dae0e5;
-#&gt;   display: flex;
-#&gt;   justify-content: start;
-#&gt;   align-items: center;
-#&gt; }
-#&gt; 
-#&gt; .grid_panel .panel-title &gt; h3 {
-#&gt;   margin: 0;
-#&gt;   height: 100%;
-#&gt; }
-#&gt; 
-#&gt; .grid_panel .panel-title &gt; svg {
-#&gt;   outline: 1px solid red;
-#&gt; }
-#&gt; 
-#&gt; .panel-content {
-#&gt;   height: 100%;
-#&gt;   display: grid;
-#&gt; }
 #&gt; 
 #&gt; .grid_panel.collapsed  {
 #&gt;   height: var(--card-title-height);
@@ -325,7 +324,7 @@ other reasons.</p></td>
 #&gt; }
 #&gt; 
 #&gt; /* Make everything line up nice and cleanly like it should in the middle */
-#&gt; .grid_panel &gt; .title_panel {
+#&gt; .title_panel {
 #&gt;   margin: 0;
 #&gt;   height: 100%;
 #&gt;   display: flex;
@@ -342,7 +341,7 @@ other reasons.</p></td>
 #&gt; 
 #&gt; body {
 #&gt;   display: grid;
-#&gt;   grid-template-rows: 300px 300px 300px 300px 300px;
+#&gt;   grid-template-rows: 85px 350px 350px 350px 350px;
 #&gt;   grid-template-columns: 1fr;
 #&gt;   grid-gap: 1rem;
 #&gt;   padding: 1rem;

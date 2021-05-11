@@ -56,13 +56,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -72,17 +66,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
 </div>
 <!--/.nav-collapse -->
@@ -151,26 +150,14 @@ Anything you want could go in the footer.</code></pre>
 <code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span><span class="op">)</span></code></pre></div>
 <p><img src="use_gridlayout_rmd_only_grid_panel.png" width="100%"></p>
 </div>
-<div id="adding-extra-styles-to-card-elements" class="section level2">
+<div id="adding-extra-styles-to-elements" class="section level2">
 <h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-card-elements" class="anchor"></a>Adding extra styles to card elements</h2>
-<p>These cards can be additionally styled with any arbitrary styles you want. These simply get appended to the existing styles that target the cards. For instance we can make all the card-styled elements have a “floralwhite” background.</p>
+<a href="#adding-extra-styles-to-elements" class="anchor"></a>Adding extra styles to elements</h2>
+<p>The elements can be additionally styled with any arbitrary styles you want via the <code>element_styles</code> argument. Here we give every element the background of “honeydew”.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
   is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="use_gridlayout_rmd_extra_grid_panel_styles.png" width="100%"></p>
-</div>
-<div id="adding-extra-styles-to-all-elements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-extra-styles-to-all-elements" class="anchor"></a>Adding extra styles to all elements</h2>
-<p>If we don’t have every element as a card, we can still apply additional styles to every grid-element via the <code>element_styles</code> argument. Here we give every element the background of “honeydew”. Note that the card-specific styles will override these.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span>
-  is_card_styled <span class="op">=</span> <span class="st">"grid_panel"</span>,
-  element_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"honeydew"</span><span class="op">)</span>,
-  additional_card_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"floralwhite"</span><span class="op">)</span>
+  element_styles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"background"</span> <span class="op">=</span> <span class="st">"honeydew"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="use_gridlayout_rmd_extra_child_styles.png" width="100%"></p>
 </div>

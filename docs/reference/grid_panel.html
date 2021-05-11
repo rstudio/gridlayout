@@ -102,14 +102,9 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -119,17 +114,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/alternate-layouts.html">alternate-layouts</a>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
-      <a href="../articles/layout-examples.html">Layout Examples</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using gridlayout with .Rmds</a>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul>
 </li>
-        
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="https://github.com/rstudio/gridlayout">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -154,13 +154,14 @@
 
     <pre class="usage"><span class='fu'>grid_panel</span><span class='op'>(</span>
   <span class='va'>...</span>,
-  v_align <span class='op'>=</span> <span class='st'>"stretch"</span>,
-  h_align <span class='op'>=</span> <span class='st'>"stretch"</span>,
+  v_align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  h_align <span class='op'>=</span> <span class='cn'>NULL</span>,
   title <span class='op'>=</span> <span class='cn'>NULL</span>,
   use_card_styles <span class='op'>=</span> <span class='cn'>TRUE</span>,
   use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>,
   collapsable <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  scrollable <span class='op'>=</span> <span class='cn'>FALSE</span>
+  scrollable <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  panel_id <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -197,9 +198,14 @@ the user knows what panel is in collapsed state.</p></td>
 the panel can be seen?</p></td>
     </tr>
     <tr>
+      <th>panel_id</th>
+      <td><p>ID of <code>grid_panel</code> div. Usually this is automatically set by
+<code><a href='grid_page.html'>grid_page()</a></code> or <code><a href='grid_container.html'>grid_container()</a></code>.</p></td>
+    </tr>
+    <tr>
       <th>use_card_style</th>
-      <td><p>Should the element contained in panel be made to look
-like an enclosed card?</p></td>
+      <td><p>Should the
+element contained in panel be made to look like an enclosed card?</p></td>
     </tr>
     </table>
 
@@ -215,8 +221,10 @@ like an enclosed card?</p></td>
   v_align <span class='op'>=</span> <span class='st'>"center"</span>,
   h_align <span class='op'>=</span> <span class='st'>"center"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="grid_panel panel-content gridlayout-card" style="justify-content: center; align-content: center;"&gt;
-#&gt;   &lt;h2&gt;R&lt;/h2&gt;
+</div><div class='output co'>#&gt; &lt;div class="grid_panel gridlayout-card"&gt;
+#&gt;   &lt;div style="display: grid; justify-content: center; align-content: center;" class="panel-content"&gt;
+#&gt;     &lt;h2&gt;R&lt;/h2&gt;
+#&gt;   &lt;/div&gt;
 #&gt; &lt;/div&gt;</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
