@@ -102,7 +102,7 @@
       new_gridlayout(
         "\n|----- |--------|\n|2rem  |1fr     |\n|80px  |header  |\n|auto  |sidebar |\n|400px |plot    |")
     Output
-      gridlayout with 3 rows, 1 columns, and gap size of 2rem. Total height of viewport.
+      gridlayout with 3 rows, 1 columns, and gap size of 2rem. Total height of auto.
             1fr    
       80px  header 
       auto  sidebar
