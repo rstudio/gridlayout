@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
   comment = "#>",
   out.width = "100%"
 )
+```
 
+```{r, eval = FALSE, echo = FALSE}
 # Generate screenshots for this vignette
 source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
@@ -21,7 +23,6 @@ source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 lapply(
   c("base",
     "only_grid_panel",
-    "extra_grid_panel_styles",
     "extra_child_styles"),
   function(mode){
     screenshot_demo_app(
@@ -33,8 +34,9 @@ lapply(
     )
   }
 )
- 
+
 ```
+
 
 ```{r}
 library(gridlayout)
@@ -104,33 +106,15 @@ knitr::include_graphics("use_gridlayout_rmd_only_grid_panel.png")
 
 
 
-## Adding extra styles to card elements
 
-These cards can be additionally styled with any arbitrary styles you want. These simply get appended to the existing styles that target the cards. For instance we can make all the card-styled elements have a "floralwhite" background.
+## Adding extra styles to elements
 
-```{r, eval = FALSE}
-use_gridlayout_rmd(
-  is_card_styled = "grid_panel",
-  additional_card_styles = c("background" = "floralwhite")
-)
-```
-
-
-```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("use_gridlayout_rmd_extra_grid_panel_styles.png")
-```
-
-
-
-## Adding extra styles to all elements
-
-If we don't have every element as a card, we can still apply additional styles to every grid-element via the `element_styles` argument. Here we give every element the background of "honeydew". Note that the card-specific styles will override these.
+The elements can be additionally styled with any arbitrary styles you want via the `element_styles` argument. Here we give every element the background of "honeydew". 
 
 ```{r, eval = FALSE}
 use_gridlayout_rmd(
   is_card_styled = "grid_panel",
-  element_styles = c("background" = "honeydew"),
-  additional_card_styles = c("background" = "floralwhite")
+  element_styles = c("background" = "honeydew")
 )
 ```
 
