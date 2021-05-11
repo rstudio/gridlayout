@@ -200,7 +200,7 @@ new_gridlayout <- function(
       # Make sure that the elements sit within the defined grid
       if (!empty_grid) {
         if (max(end_vals) > num_sections) {
-          bad_elements <- extract_chr(element_list[end_vals > num_sections], "id")
+          bad_elements <- extract_chr(elements[end_vals > num_sections], "id")
           stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
         }
 

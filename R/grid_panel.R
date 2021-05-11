@@ -147,7 +147,7 @@ grid_panel <- function(
     if (has_title) {
       shiny::div(
         class = "title-bar",
-        h3(title),
+        shiny::h3(title),
         if (collapsable) make_collapser_icon(),
         style = if (collapsable) "justify-content: space-between;"
       )

@@ -113,6 +113,10 @@ doesExist <- function(x) {
   notNull(x) && notNA(x)
 }
 
+hasName <- function(x, name) {
+  name %in% names(x)
+}
+
 `%||%` <- function(val, alt) {
   if (is.null(val) || is.na(val)) alt else val
 }
