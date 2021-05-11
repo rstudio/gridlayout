@@ -56,7 +56,8 @@
 
 
 .grid_panel.collapsed  {
-  height: var(--card-title-height);
+  grid-template-rows: min-content 0;
+  height: min-content;
   overflow: hidden;
 }
 
