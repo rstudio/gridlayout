@@ -67,7 +67,7 @@ print_layout_info <- function(layout_id = "stack") {
     "my_layout <- new_gridlayout(\"",
     "{layout_tables[[layout_id]]}\")  \n",
     "```  \n",
-    "<img src=layouts_demo_{layout_id}.png width = 100%/>"
+    "<img src=layout-examples_{layout_id}.png width = 100%/>"
   )
 }
 ```
@@ -202,14 +202,22 @@ app_w_layout <- function(my_layout) {
 ```{r, eval = FALSE}
 # Run this code manually to build screenshots
 for (layout_type in names(layout_tables)) {
+  screenshot_loc <- here::here(glue("vignettes/layout-examples_{layout_type}.png"))
   webshot2::appshot(
     app_w_layout(new_gridlayout(layout_tables[[layout_type]])),
-    file = here::here(glue("vignettes/layouts_demo_{layout_type}.png")),
+    file = screenshot_loc,
     cliprect = "viewport",
     delay = 1.5,
     vwidth = 1200,
     vheight = 1000
   )
+  
+  # Move into pkdown folder too because autodetection seems to not work
+  file.copy(
+    screenshot_loc,
+    here::here(glue("docs/articles/layout-examples_{layout_type}.png"))
+  )
+  
 }
 ```
 
