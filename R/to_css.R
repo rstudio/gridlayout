@@ -250,10 +250,16 @@ use_gridlayout_shiny <- function(layout, ...){
 
 #' Enable gridlayout usage in RMarkdown documents
 #'
-#' Adds required hooks to RMarkdown to process `gridlayout` chunks and style document accordingly.
+#' Adds required hooks to RMarkdown to process `gridlayout` chunks and style
+#' document accordingly. Layout will be generated from a chunk identified with
+#' the syntax
+#' ````
+#' ```{gridlayout}
+#' <insert layout table here>
+#' ```
+#' ````
 #'
 #' @inheritParams to_css
-#' @inheritDotParams to_css -layout
 #'
 #' @return NULL
 #' @export
@@ -262,7 +268,7 @@ use_gridlayout_rmd <- function(
   container = '.main-container',
   is_card_styled = "all",
   element_styles = NULL,
-  ...
+  selector_prefix = "#"
   ){
 
   requireNamespace("knitr", quietly = TRUE)
@@ -280,9 +286,8 @@ use_gridlayout_rmd <- function(
                  element_styles,
                  "display" = "block",
                  "padding" = "var(--card-padding)"
-               ),
-               ...
-               ),
+               )
+        ),
         rmd_utility_css,
         "</style>",
         sep = "\n"

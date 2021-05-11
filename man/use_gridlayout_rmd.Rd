@@ -8,7 +8,7 @@ use_gridlayout_rmd(
   container = ".main-container",
   is_card_styled = "all",
   element_styles = NULL,
-  ...
+  selector_prefix = "#"
 )
 }
 \arguments{
@@ -32,12 +32,16 @@ added to each first child element of the grid container. E.g. under the css
 selector of \verb{grid_container > *}. If \code{is_card_styled = "all"} then this has
 the same purpose as as \code{additional_card_styles}}
 
-\item{...}{
-  Arguments passed on to \code{\link[=to_css]{to_css}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{selector_prefix}{CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the \code{"#"} prefix) with because they are not available or are used for
+other reasons.}
 }
 \description{
-Adds required hooks to RMarkdown to process \code{gridlayout} chunks and style document accordingly.
+Adds required hooks to RMarkdown to process \code{gridlayout} chunks and style
+document accordingly. Layout will be generated from a chunk identified with
+the syntax\preformatted{```\{gridlayout\}
+<insert layout table here>
+```
+}
 }
