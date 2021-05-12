@@ -10,16 +10,15 @@ test_that("Basic setup with all options filled works", {
     gap = "2rem"
   )
 
-
   expect_s3_class(my_layout, "gridlayout")
 
-  expect_equal(attr(my_layout, "col_sizes"),
+  expect_equal(get_info(my_layout, "col_sizes"),
                c("1fr", "2fr"))
 
-  expect_equal(attr(my_layout, "row_sizes"),
+  expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr"))
 
-  expect_equal(attr(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap"),
                "2rem")
 })
 
@@ -34,13 +33,13 @@ test_that("Sizing defaults work", {
 
   expect_s3_class(my_layout, "gridlayout")
 
-  expect_equal(attr(my_layout, "col_sizes"),
+  expect_equal(get_info(my_layout, "col_sizes"),
                c("1fr", "1fr"))
 
-  expect_equal(attr(my_layout, "row_sizes"),
+  expect_equal(get_info(my_layout, "row_sizes"),
                c("1fr", "1fr"))
 
-  expect_equal(attr(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap"),
                "1rem")
 })
 
@@ -55,8 +54,8 @@ test_that("Default row sizes react properly to auto-height container", {
 
   expect_false(
     identical(
-      attr(new_gridlayout(mobile_layout,container_height = "auto"), "row_sizes"),
-      attr(new_gridlayout(mobile_layout,container_height = "viewport"), "row_sizes")
+      get_info(new_gridlayout(mobile_layout,container_height = "auto"), "row_sizes"),
+      get_info(new_gridlayout(mobile_layout,container_height = "viewport"), "row_sizes")
     )
   )
 })
@@ -88,10 +87,10 @@ test_that("A single size can be passed for row and column sizes and it will be r
 
   expect_s3_class(my_layout, "gridlayout")
 
-  expect_equal(attr(my_layout, "col_sizes"),
+  expect_equal(get_info(my_layout, "col_sizes"),
                c("100px", "100px"))
 
-  expect_equal(attr(my_layout, "row_sizes"),
+  expect_equal(get_info(my_layout, "row_sizes"),
                c("200px", "200px"))
 })
 
@@ -139,166 +138,4 @@ test_that("Can initialize a layout with the element_list argument instead of a m
   )
 
 })
-
-test_that("Alternate layouts can be added for different sized screens", {
-
-  main_layout <- new_gridlayout(
-    layout_def = "
-      | header | header |
-      | plota  | plotb  |",
-    col_sizes = c("1fr", "2fr"),
-    row_sizes = c("100px", "1fr"),
-    gap = "2rem"
-  )
-
-  mobile_layout <- new_gridlayout(
-    layout_def = "
-      |header|
-      |plota |
-      |plotb |",
-    col_sizes = c("1fr"),
-    row_sizes = c("100px", "400px", "500px"),
-    gap = "2rem"
-  )
-
-  main_w_alternate <- add_alternate_layout(
-    layout = main_layout,
-    alternate_layout = mobile_layout,
-    width_bounds = c(max = 400)
-  )
-
-  expect_equal(
-    mobile_layout,
-    attr(main_w_alternate, "alternates")[[1]]$layout,
-    ignore_attr = TRUE
-  )
-
-  mobile_wo_plota <- new_gridlayout(
-    layout_def = "
-      |header|
-      |plota |",
-    row_sizes = c("100px", "500px")
-  )
-
-  expect_error(
-    add_alternate_layout(
-      layout = main_layout,
-      alternate_layout = mobile_wo_plota,
-      width_bounds = c(max = 400)
-    ),
-    regexp = "Layouts have mismatched elements: plotb",
-    fixed = TRUE
-  )
-
-  big_screen_layout <- new_gridlayout(
-    layout_def = "|header|plota|plotb|",
-    col_sizes = c("200px", "1fr", "1fr"),
-    row_sizes = c("1fr")
-  )
-
-  expect_error(
-    add_alternate_layout(
-      main_w_alternate,
-      alternate_layout = big_screen_layout,
-      width_bounds = c(min = 350)
-    ),
-    regexp = "New alternate interval overlaps with previous interval",
-    fixed = TRUE
-  )
-})
-
-test_that("Alternate layouts can be added with alternate layouts argument or chained with add_alternate_layout()", {
-  main_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|80px  |header  |header |
-|1fr   |sidebar |plot   |"
-
-  mobile_layout <- "
-|----- |--------|
-|2rem  |1fr     |
-|80px  |header  |
-|auto  |sidebar |
-|400px |plot    |"
-
-  big_screen_layout <- "
-|-----|-------|--------|-----|
-|2rem |250px  | 250px  |1fr  |
-|1fr  |header |sidebar |plot |"
-
-  alternate_layouts_argument <- new_gridlayout(
-    main_layout,
-    alternate_layouts = list(
-      list(
-        layout = mobile_layout,
-        width_bounds = c(max = 600),
-        container_height = "auto"
-      ),
-      list(
-        layout = big_screen_layout,
-        width_bounds = c(min = 1200)
-      )
-    )
-  )
-
-  chained_alternates <- new_gridlayout(main_layout)
-
-  chained_alternates <- add_alternate_layout(
-    chained_alternates,
-    mobile_layout,
-    width_bounds = c(max = 600),
-    container_height = "auto"
-  )
-
-  chained_alternates <- add_alternate_layout(
-    chained_alternates,
-    big_screen_layout,
-    width_bounds = c(min = 1200)
-  )
-
-  expect_identical(
-    alternate_layouts_argument,
-    chained_alternates
-  )
-})
-
-test_that("A single alternate layout does not need to be double nested", {
-  main_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|80px  |header  |header |
-|1fr   |sidebar |plot   |"
-
-  mobile_layout <- "
-|----- |--------|
-|2rem  |1fr     |
-|80px  |header  |
-|auto  |sidebar |
-|400px |plot    |"
-
-
-  expect_identical(
-    new_gridlayout(
-      main_layout,
-      alternate_layouts = list(
-        layout = mobile_layout,
-        width_bounds = c(min = 600),
-        container_height = "auto"
-      )
-    ),
-    new_gridlayout(
-      main_layout,
-      alternate_layouts = list(
-        list(
-          layout = mobile_layout,
-          width_bounds = c(min = 600),
-          container_height = "auto"
-        )
-      )
-    )
-  )
-})
-
 

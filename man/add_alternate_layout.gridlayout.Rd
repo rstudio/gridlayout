@@ -6,8 +6,8 @@
 \usage{
 \method{add_alternate_layout}{gridlayout}(
   layout,
-  alternate_layout,
-  width_bounds = c(max = 500),
+  alternate_layout = NULL,
+  width_bounds = NULL,
   container_height = NULL
 )
 }

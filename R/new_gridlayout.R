@@ -4,7 +4,7 @@
 #'layout.
 #'
 #'
-#'@section Declaring your layout:
+#' @section Declaring your layout:
 #'
 #'  There are three current ways to declare layouts (aka inputs to
 #'  `layout_def`).
@@ -16,7 +16,7 @@
 #'  "elements" within that grid using their grid id. So for a 2x2 layout with a
 #'  header along the top and two plots side-by-side the layout would look as
 #'  follows:
-#'  ```{r}
+#'  ```{r, eval = FALSE}
 #'    new_gridlayout( "| header | header |
 #'                     | plota  | plotb  |" )
 #'  ```
@@ -37,7 +37,7 @@
 #'
 #'  The same layout as declared above can be accomplished with the following:
 #'
-#'  ```{r}
+#'  ```{r, eval = FALSE}
 #'  new_gridlayout( list(
 #'    list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
 #'    list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
@@ -122,6 +122,73 @@ new_gridlayout <- function(
   container_height = NULL,
   alternate_layouts = "auto"
 ) {
+
+  default_template <- new_gridlayout_template(
+    layout_def = layout_def,
+    col_sizes = col_sizes,
+    row_sizes = row_sizes,
+    gap = gap,
+    container_height = container_height
+  )
+
+  elements <- default_template$elements
+
+  layout <- structure(
+    list(
+      element_ids = extract_chr(elements, "id"),
+      layout = default_template,
+      alternates = list()
+    ),
+    class = "gridlayout"
+  )
+
+  if (notNull(alternate_layouts)) {
+    if (identical(alternate_layouts, "auto")) {
+      # Build a default mobile layout for the user
+      layout <- add_alternate_layout(
+        layout,
+        width_bounds = c(max = 600),
+        container_height = "auto"
+      )
+
+    } else {
+
+      # Check to see if we're working with a list of lists or a single alternate
+      # layout
+      single_alternate <- "layout" %in% names(alternate_layouts)
+      if (single_alternate) {
+        # Wrap single layout in list to keep syntax same for both single and
+        # multi alternates cases
+        alternate_layouts <- list(alternate_layouts)
+      }
+
+      for (alternate in alternate_layouts) {
+        if (is.null(alternate$layout)) {
+          stop(
+            "Altnernate layouts need to be provided as a list with ",
+            "a layout element along with width bounds."
+          )
+        }
+        layout <- add_alternate_layout(
+          layout,
+          alternate_layout = alternate$layout,
+          width_bounds = alternate$width_bounds,
+          container_height = alternate$container_height
+        )
+      }
+    }
+  }
+
+  layout
+}
+
+new_gridlayout_template <- function(
+  layout_def = list(),
+  col_sizes = NULL,
+  row_sizes = NULL,
+  gap = NULL,
+  container_height = NULL
+) {
   elements <- list()
   # Figure out what type of layout definition we were passed
   if (is_char_string(layout_def)) {
@@ -139,10 +206,10 @@ new_gridlayout <- function(
   } else if (class(layout_def) == "gridlayout") {
 
     # Use existing row and column heights unless they have been explicitly overridden
-    col_sizes <- col_sizes %||% attr(layout_def, "col_sizes")
-    row_sizes <- row_sizes %||% attr(layout_def, "row_sizes")
-    gap <- gap %||% attr(layout_def, "gap")
-    container_height <- container_height %||% attr(layout_def, "container_height")
+    col_sizes <- col_sizes %||% get_info(layout_def, "col_sizes")
+    row_sizes <- row_sizes %||% get_info(layout_def, "row_sizes")
+    gap <- gap %||% get_info(layout_def, "gap")
+    container_height <- container_height %||% get_info(layout_def, "container_height")
     elements <- get_elements(layout_def)
 
     # Get rid of existing alternate layouts
@@ -220,96 +287,18 @@ new_gridlayout <- function(
     warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
   }
 
-  layout <- structure(
+  structure(
     list(
-      element_ids = extract_chr(elements, "id"),
-      layout = list(
-        elements = elements,
-        row_sizes = sizes$row,
-        col_sizes = sizes$col,
-        container_height = container_height,
-        gap = gap
-      ),
-      alternates = list()
+      elements = elements,
+      row_sizes = sizes$row,
+      col_sizes = sizes$col,
+      container_height = container_height,
+      gap = gap
     ),
-    class = "gridlayout"
+    class = "gridlayout_template"
   )
-
-  if (notNull(alternate_layouts)) {
-    if (identical(alternate_layouts, "auto")) {
-      # Build a default mobile layout for the user
-      layout <- add_alternate_layout(
-        layout,
-        alternate_layout = build_mobile_layout_table(layout),
-        width_bounds = c(max = 600),
-        container_height = "auto"
-      )
-
-      # Tag this layout as auto generated so add_alternate_layout can ignore it
-      # if future layouts are added.
-      attr(layout, "auto_mobile_layout") <- TRUE
-
-    } else {
-
-      # Check to see if we're working with a list of lists or a single alternate
-      # layout
-      single_alternate <- "layout" %in% names(alternate_layouts)
-
-      if (single_alternate) {
-        alternate_layouts <- list(alternate_layouts)
-      }
-
-      for (alternate in alternate_layouts) {
-        if (is.null(alternate$layout)) {
-          stop(
-            "Altnernate layouts need to be provided as a list with ",
-            "a layout element along with width bounds."
-          )
-        }
-        layout <- add_alternate_layout(
-          layout,
-          alternate_layout = alternate$layout,
-          width_bounds = alternate$width_bounds,
-          container_height = alternate$container_height
-        )
-      }
-    }
-  }
-
-  layout
 }
 
-# Helpers to access parts of the layout
-get_layout_info <- function(layout)  {
-  # If we're just working with the base gridlayout class then we want the
-  # default layout
-  if (class(layout) == "gridlayout") {
-    return(layout$layout)
-  }
-
-  if (is.null(layout$elements)) stop("Does not appear to be a layout or layout information")
-
-  layout
-}
-
-get_elements <- function(layout) {
-  get_layout_info(layout)$elements
-}
-get_row_sizes <- function(layout) {
-  get_layout_info(layout)$row_sizes
-}
-get_col_sizes <- function(layout) {
-  get_layout_info(layout)$col_sizes
-}
-get_gap_size <- function(layout) {
-  get_layout_info(layout)$gap
-}
-get_gap_size <- function(layout) {
-  get_layout_info(layout)$gap
-}
-get_container_height <- function(layout) {
-  get_layout_info(layout)$container_height
-}
 
 # Function to allow layout being defined with markdown or with standard object
 coerce_to_layout <- function(layout_def){
@@ -323,80 +312,46 @@ coerce_to_layout <- function(layout_def){
   layout_def
 }
 
-build_mobile_layout_table <- function(layout) {
-  mobile_rows <- vapply(
-    layout,
-    function(el) {
-      # Be smart about headers but everything else is 350px
-      if (el$id == "header") "85px" else "350px"
-    },
-    FUN.VALUE = character(1)
-  )
-  new_gridlayout(
-    layout_def = lapply(
-      seq_along(layout),
-      function(i) {
-        list(
-          id = layout[[i]]$id,
-          start_row = i,
-          end_row = i,
-          start_col = 1,
-          end_col = 1
-        )
-      }
-    ),
-    row_sizes = mobile_rows,
-    alternate_layouts = NULL
-  )
-}
-
 layouts_are_equal <- function(layout_a, layout_b){
   identical(to_md(layout_a), to_md(layout_b))
 }
 
 
-layouts_have_same_elements <- function(layout_a, layout_b){
-  a_element_ids <- extract_chr(layout_a, "id")
-  b_element_ids <- extract_chr(layout_b, "id")
-
-  if (setequal(a_element_ids, b_element_ids)) return(TRUE)
-
-  mismatched <- c(
-    setdiff(a_element_ids, b_element_ids),
-    setdiff(b_element_ids, a_element_ids)
-  )
-  stop(
-    "Layouts have mismatched elements: ",
-    paste(mismatched, collapse = ", ")
+#' @export
+format.gridlayout_template <- function(x, ...) {
+  # Make text bold
+  emph <- if(is_installed("crayon")) crayon::bold else as.character
+  paste(
+    emph("layout"), " with ",
+    emph(length(get_info(x, "row_sizes"))), " rows, ",
+    emph(length(get_info(x, "col_sizes"))), " columns, and ",
+    "gap size of ", emph(get_info(x, "gap")), ".",
+    " Total height of ", emph(get_info(x, "container_height")),".",
+    "\n",
+    to_table(x, sizes_decorator = emph),
+    sep = ""
   )
 }
 
+#' @export
+print.gridlayout_template <- function(x, ...) {
+  # Make text bold
+  cat(format.gridlayout_template(x))
+}
 
 #' @export
 print.gridlayout <- function(x, ...){
 
   # Make text bold
   emph <- if(is_installed("crayon")) crayon::bold else as.character
-  cat(
-    emph("gridlayout"), " with ",
-    emph(length(get_row_sizes(x))), " rows, ",
-    emph(length(get_col_sizes(x))), " columns, and ",
-    "gap size of ", emph(get_gap_size(x)), ".",
-    " Total height of ", emph(get_container_height(x)),".",
-    "\n",
-    to_table(x, sizes_decorator = emph),
-    sep = ""
-  )
-#
-#   alternate_layouts <- attr(x, "alternates")
-#   if (notNull(alternate_layouts)) {
-#     cat("\n\n", emph("Alternative layouts:"), sep = "")
-#     for (alternate in alternate_layouts) {
-#       cat("\n\nWhen width of page", emph(print_size_range(alternate$width_bounds)), "\n")
-#
-#       print(alternate$layout)
-#     }
-#   }
+  print(x$layout)
+  if (length(x$alternates) == 0) return()
+
+  cat("\n\nAlternate layouts:\n")
+  for (alternate in x$alternates) {
+    cat("When ", print_size_range(alternate$width_bounds), "\n")
+    print(alternate$layout)
+  }
 }
 
 print_size_range <- function(bounds) {
