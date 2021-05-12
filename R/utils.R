@@ -72,6 +72,10 @@ map_w_names <- function(x, fn){
   Map(names(x), x, f = fn)
 }
 
+map_chr <- function(x, fn) {
+  vapply(X = x, FUN = fn, FUN.VALUE = character(1))
+}
+
 list_in_quotes <- function(name_ids){
   paste0("\"", name_ids, "\"", collapse = ", ")
 }
