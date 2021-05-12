@@ -27,51 +27,17 @@ build_css_rule <- function(selector, prop_list){
   # Empty css rules are best avoided
   if (length(prop_list) == 0) return("")
 
-  prop_names <- names(prop_list)
-  if(is.null(prop_names)) prop_names <- rep_len("", length(prop_list))
-
-  prop_lines <- c()
-
-  for(i in seq_along(prop_list)){
-    property <- prop_names[i]
-    value <- prop_list[i]
-
-    if(property == ""){
-      # Get rid of any whitespace that may be present
-      line_txt <- str_trim(value)
-
-      # Strip off ending semi-colon if it exists. (We add it later when combining)
-      line_txt <- str_remove_all(line_txt, ";$")
-    } else {
-      # Assemble property from name and value
-      line_txt <- paste0(property, ": ", value)
-    }
-
-    # Check if this is a valid css property structure
-    single_name <- str_detect(line_txt, "^\\S+:")
-    non_terminating_semicolon <- str_detect(line_txt, ";(?!$)")
-
-    valid_property <- single_name & !non_terminating_semicolon
-    if(valid_property){
-      prop_lines <- c(prop_lines, paste0("  ", line_txt, ";"))
-    } else {
-      warning("The passed css property \"", line_txt, "\" doesn't appear to be valid. Ignoring it.")
-    }
-  }
-  css_text <- paste(prop_lines, collapse = "\n")
-
-  # Inline mode means we just give all the css on oneline with no sector needed.
+  # Inline mode means we just give all the css on one line with no sector
+  # needed.
   inline_mode <- selector == "inline"
 
-  # Make sure we dont have any whitespace at the end of our lines We need to do
-  # this again because the user may have passed some text with spaces etc at the
-  # end of the lines...
-  css_text <- paste(
-    str_trim(
-      strsplit(x = css_text, split = "\n")[[1]],
-      side = if(inline_mode) "both" else "right"
-    ),
-    collapse = if(inline_mode) " " else "\n"
+  css_text <- indent_text(
+    do.call(
+      htmltools::css,
+      as.list(c(
+        prop_list,
+        collapse_ = if (inline_mode) " " else "\n")
+      ))
   )
 
   if(inline_mode){
