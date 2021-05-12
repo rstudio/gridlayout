@@ -224,8 +224,8 @@ make_collapser_icon <- function(parent_id = "") {
     } else {
       card_classes.add("collapsed");
       card_content.style.display = "none";
-    }
-    '
+    }',
+    class = "collapser-icon"
   )
 }
 

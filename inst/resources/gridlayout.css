@@ -61,6 +61,15 @@
   overflow: hidden;
 }
 
+/* Make flip arrow point down when collapsed and
+   up when expanded to show result of clicking */
+.grid_panel .collapser-icon svg {
+  transition: transform 0.2s ease;
+}
+.grid_panel.collapsed .collapser-icon svg {
+  transform: scaleY(-1);
+}
+
 .grid_panel.collapsed .panel-content {
   display: none;
 }
