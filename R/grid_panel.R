@@ -165,16 +165,22 @@ grid_panel <- function(
   contents <- lapply(
     contents,
     function(el){
+      if (! inherits(el, "shiny.tag") || inherits(el, "shiny.tag.list")) return(el)
+
       if (el_has_class(el, "shiny-plot-output")) {
-        set_plot_sizes(el)
-      } else {
-        # Will only ever happen if the parent isn't a plot output itself because
-        # plot outputs can't have children
-        htmltools::tagQuery(el)$
-          find(".shiny-plot-output")$
-          each(set_plot_sizes)$
-          allTags()
+        el <- set_plot_sizes(el)
       }
+      # else {
+      #   # Will only ever happen if the parent isn't a plot output itself because
+      #   # plot outputs can't have children
+      #   post_tq <- htmltools::tagQuery(el)$
+      #     find(".shiny-plot-output")$
+      #     each(set_plot_sizes)$
+      #     allTags()
+      #
+      #   el <- post_tq
+      # }
+      el
     }
   )
 
@@ -285,6 +291,9 @@ el_has_class <- function(el, class_name) {
   # It's possible to have multiple "class" attributes if they were set at
   # different times. Here we just collapse all of them into one big character
   # string we can seach through
+
+  if (!inherits(el, "shiny.tag")) return(FALSE)
+
   all_classes <- paste(el$attribs[names(el$attribs) == "class"], collapse = " ")
 
   # Look for the class name isolated from other classes. E.g if searching for
