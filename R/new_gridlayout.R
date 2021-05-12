@@ -317,41 +317,51 @@ layouts_are_equal <- function(layout_a, layout_b){
 }
 
 
+
 #' @export
 format.gridlayout_template <- function(x, ...) {
-  # Make text bold
-  emph <- if(is_installed("crayon")) crayon::bold else as.character
   paste(
-    emph("layout"), " with ",
-    emph(length(get_info(x, "row_sizes"))), " rows, ",
-    emph(length(get_info(x, "col_sizes"))), " columns, and ",
-    "gap size of ", emph(get_info(x, "gap")), ".",
+    indent_text(to_table(x, sizes_decorator = emph)),
+    "\nGap of ", emph(get_info(x, "gap")), ".",
     " Total height of ", emph(get_info(x, "container_height")),".",
-    "\n",
-    to_table(x, sizes_decorator = emph),
     sep = ""
   )
 }
 
 #' @export
+format.gridlayout <- function(x, ...) {
+  emph <- if(is_installed("crayon")) crayon::bold else as.character
+
+  lines <- c(
+    emph("gridlayout"), " of ", length(get_element_ids(x)), " elements: \n",
+    format(x$layout)
+  )
+
+  if (length(x$alternates) != 0) {
+    lines <- c(lines, "\n\nAlternate layouts:\n")
+    for (alternate in x$alternates) {
+      alternate_text <- paste(
+        "When width", print_size_range(alternate$width_bounds), "\n",
+        format(alternate$layout),
+        collapse = ""
+      )
+      lines <- c(
+        lines,
+        indent_text(alternate_text)
+      )
+    }
+  }
+  paste(lines, collapse = "")
+}
+
+#' @export
 print.gridlayout_template <- function(x, ...) {
-  # Make text bold
   cat(format.gridlayout_template(x))
 }
 
 #' @export
 print.gridlayout <- function(x, ...){
-
-  # Make text bold
-  emph <- if(is_installed("crayon")) crayon::bold else as.character
-  print(x$layout)
-  if (length(x$alternates) == 0) return()
-
-  cat("\n\nAlternate layouts:\n")
-  for (alternate in x$alternates) {
-    cat("When ", print_size_range(alternate$width_bounds), "\n")
-    print(alternate$layout)
-  }
+  cat(format.gridlayout(x))
 }
 
 print_size_range <- function(bounds) {
@@ -366,6 +376,21 @@ print_size_range <- function(bounds) {
   } else {
     return("Malformed bounds")
   }
+}
+
+# Make text bold
+emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
+
+indent_text <- function(text, num_spaces = 2) {
+  lines <- strsplit(
+    text,
+    split = "\n"
+  )[[1]]
+
+  indent <- paste(rep(" ", times = num_spaces), collapse = "")
+  indented_lines <- map_chr(lines, function(line) paste(indent, line))
+
+  paste(indented_lines, collapse = "\n")
 }
 
 
