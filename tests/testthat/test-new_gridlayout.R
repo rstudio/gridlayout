@@ -22,6 +22,10 @@ test_that("Basic setup with all options filled works", {
                "2rem")
 })
 
+test_that("Works with no values at all", {
+  expect_snapshot(new_gridlayout())
+})
+
 test_that("Sizing defaults work", {
 
   my_layout <- new_gridlayout(
