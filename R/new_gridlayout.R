@@ -221,12 +221,18 @@ new_gridlayout <- function(
   }
 
   layout <- structure(
-    elements,
-    class = "gridlayout",
-    row_sizes = sizes$row,
-    col_sizes = sizes$col,
-    gap = gap,
-    container_height = container_height
+    list(
+      element_ids = extract_chr(elements, "id"),
+      layout = list(
+        elements = elements,
+        row_sizes = sizes$row,
+        col_sizes = sizes$col,
+        container_height = container_height,
+        gap = gap
+      ),
+      alternates = list()
+    ),
+    class = "gridlayout"
   )
 
   if (notNull(alternate_layouts)) {
@@ -273,6 +279,37 @@ new_gridlayout <- function(
   layout
 }
 
+# Helpers to access parts of the layout
+get_layout_info <- function(layout)  {
+  # If we're just working with the base gridlayout class then we want the
+  # default layout
+  if (class(layout) == "gridlayout") {
+    return(layout$layout)
+  }
+
+  if (is.null(layout$elements)) stop("Does not appear to be a layout or layout information")
+
+  layout
+}
+
+get_elements <- function(layout) {
+  get_layout_info(layout)$elements
+}
+get_row_sizes <- function(layout) {
+  get_layout_info(layout)$row_sizes
+}
+get_col_sizes <- function(layout) {
+  get_layout_info(layout)$col_sizes
+}
+get_gap_size <- function(layout) {
+  get_layout_info(layout)$gap
+}
+get_gap_size <- function(layout) {
+  get_layout_info(layout)$gap
+}
+get_container_height <- function(layout) {
+  get_layout_info(layout)$container_height
+}
 
 # Function to allow layout being defined with markdown or with standard object
 coerce_to_layout <- function(layout_def){
@@ -340,27 +377,26 @@ print.gridlayout <- function(x, ...){
 
   # Make text bold
   emph <- if(is_installed("crayon")) crayon::bold else as.character
-
   cat(
     emph("gridlayout"), " with ",
-    emph(length(attr(x, 'row_sizes'))), " rows, ",
-    emph(length(attr(x, 'col_sizes'))), " columns, and ",
-    "gap size of ", emph(attr(x, 'gap')), ".",
-    " Total height of ", emph(attr(x, "container_height")),".",
+    emph(length(get_row_sizes(x))), " rows, ",
+    emph(length(get_col_sizes(x))), " columns, and ",
+    "gap size of ", emph(get_gap_size(x)), ".",
+    " Total height of ", emph(get_container_height(x)),".",
     "\n",
     to_table(x, sizes_decorator = emph),
     sep = ""
   )
-
-  alternate_layouts <- attr(x, "alternates")
-  if (notNull(alternate_layouts)) {
-    cat("\n\n", emph("Alternative layouts:"), sep = "")
-    for (alternate in alternate_layouts) {
-      cat("\n\nWhen width of page", emph(print_size_range(alternate$width_bounds)), "\n")
-
-      print(alternate$layout)
-    }
-  }
+#
+#   alternate_layouts <- attr(x, "alternates")
+#   if (notNull(alternate_layouts)) {
+#     cat("\n\n", emph("Alternative layouts:"), sep = "")
+#     for (alternate in alternate_layouts) {
+#       cat("\n\nWhen width of page", emph(print_size_range(alternate$width_bounds)), "\n")
+#
+#       print(alternate$layout)
+#     }
+#   }
 }
 
 print_size_range <- function(bounds) {

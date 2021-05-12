@@ -38,16 +38,17 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell
-  col_sizes <- attr(layout, "col_sizes")
+  col_sizes <- get_col_sizes(layout)
   num_cols <- length(col_sizes)
-  row_sizes <- attr(layout, "row_sizes")
+  row_sizes <- get_row_sizes(layout)
   num_rows <- length(row_sizes)
+  elements <- get_elements(layout)
 
   # Now we can start checking for overlaps in element ranges. We will do this by
   # building a matrix and then filling it with each element If we try and fill a
   # cell that already has something in it, we have an overlap
   layout_mat <- matrix("", nrow = num_rows, ncol = num_cols)
-  for(el in layout){
+  for(el in elements){
     row_span <- el$start_row:el$end_row
     col_span <- el$start_col:el$end_col
     current_cells <- layout_mat[row_span, col_span, drop = FALSE]
@@ -60,7 +61,7 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
   # Empty cells get a dot
   layout_mat[layout_mat == ""] <- "."
 
-  first_row <- c(if(include_gap_size) attr(layout, "gap") else "", col_sizes)
+  first_row <- c(if(include_gap_size) get_gap_size(layout) else "", col_sizes)
 
   layout_mat <- rbind(
     first_row,
