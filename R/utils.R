@@ -47,8 +47,23 @@ str_extract <- function(text, pattern){
 # String concatenation
 `%+%` <- function (lhs, rhs) paste0(lhs, rhs)
 
-
 collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
+
+
+# Make text bold
+emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
+
+indent_text <- function(text, num_spaces = 2) {
+  lines <- strsplit(
+    text,
+    split = "\n"
+  )[[1]]
+
+  indent <- paste(rep(" ", times = num_spaces), collapse = "")
+  indented_lines <- map_chr(lines, function(line) paste(indent, line))
+
+  paste(indented_lines, collapse = "\n")
+}
 
 
 # extract from a list of lists to whatever level is desired

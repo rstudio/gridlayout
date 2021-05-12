@@ -349,6 +349,8 @@ print.gridlayout <- function(x, ...){
   cat(format.gridlayout(x))
 }
 
+# A separate function because it is also used in error messages for alternate
+# layout adding
 print_size_range <- function(bounds) {
   has_min <- doesExist(bounds["min"])
   has_max <- doesExist(bounds["max"])
@@ -363,19 +365,5 @@ print_size_range <- function(bounds) {
   }
 }
 
-# Make text bold
-emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
-
-indent_text <- function(text, num_spaces = 2) {
-  lines <- strsplit(
-    text,
-    split = "\n"
-  )[[1]]
-
-  indent <- paste(rep(" ", times = num_spaces), collapse = "")
-  indented_lines <- map_chr(lines, function(line) paste(indent, line))
-
-  paste(indented_lines, collapse = "\n")
-}
 
 
