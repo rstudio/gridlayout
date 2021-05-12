@@ -91,12 +91,12 @@ to_css.gridlayout <- function(
     selector_prefix = selector_prefix
   )
 
-
-  alternative_layout_queries <- if (notNull(attr(layout, "alternates"))) {
+  alternates <- get_info(layout, "alternates")
+  alternative_layout_queries <- if (length(alternates) > 0) {
 
     paste(
       lapply(
-        attr(layout, "alternates"),
+        alternates,
         function(alt_layout) {
           generate_layout_rules(
             layout = alt_layout$layout,
@@ -132,18 +132,18 @@ generate_layout_rules <- function(
     selector = container_query,
     prop_list = c(
       "display" = "grid",
-      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
-      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
-      "grid-gap" = attr(layout, 'gap'),
-      "padding" = attr(layout, 'gap'),
-      "height" = validCssUnit(attr(layout, "container_height"))
+      "grid-template-rows" = collapse_w_space(get_info(layout, 'row_sizes')),
+      "grid-template-columns" = collapse_w_space(get_info(layout, 'col_sizes')),
+      "grid-gap" = get_info(layout, 'gap'),
+      "padding" = get_info(layout, 'gap'),
+      "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
 
   # Build the mapping for each element to its grid area.
   element_grid_areas <- paste(
     sapply(
-      layout,
+      get_info(layout, "elements"),
       function(el){
         build_css_rule(
           selector = paste0(selector_prefix, el$id),

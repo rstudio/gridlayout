@@ -77,7 +77,7 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
   arg_ids <- names(arg_sections)
   grid_elements <- arg_sections[arg_ids != ""]
 
-  if (attr(layout, "container_height") != "viewport") {
+  if (get_info(layout, "container_height") != "viewport") {
     warning("Container height for layout is not set at default of viewport.",
             "This is likely a mistake for grid_page()")
   }

@@ -45,9 +45,9 @@ grided_server_code <- function(
     session$sendCustomMessage(
       "update-grid",
       list(
-        rows =  attr(starting_layout, "row_sizes"),
-        cols = attr(starting_layout, "col_sizes"),
-        gap = attr(starting_layout, "gap")
+        rows =  get_info(starting_layout, "row_sizes"),
+        cols = get_info(starting_layout, "col_sizes"),
+        gap = get_info(starting_layout, "gap")
       )
     )
 
