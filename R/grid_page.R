@@ -67,7 +67,7 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
   }
 
   # Make sure we're working with a layout
-  layout <- new_gridlayout(layout)
+  layout <- as_gridlayout(layout)
 
   # Named arguments represent grid panels elements. Unnamed ones are assumed to
   # be extra tags that are appended after grid container.

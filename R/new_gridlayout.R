@@ -299,6 +299,14 @@ new_gridlayout_template <- function(
 }
 
 
+as_gridlayout <- function(x){
+  if (is.character(x)) return(new_gridlayout(x))
+  if (inherits(x, "gridlayout")) return(x)
+
+  stop("Cant coerce a variable of class ", class(x), " to gridlayout")
+}
+
+
 #' @export
 format.gridlayout_template <- function(x, ...) {
   paste(

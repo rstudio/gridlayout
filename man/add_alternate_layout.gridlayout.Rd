@@ -6,7 +6,7 @@
 \usage{
 \method{add_alternate_layout}{gridlayout}(
   layout,
-  alternate_layout = NULL,
+  alternate_layout,
   width_bounds = NULL,
   container_height = NULL
 )

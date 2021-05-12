@@ -240,7 +240,7 @@ generate_layout_rules <- function(
 #' }
 use_gridlayout_shiny <- function(layout, ...){
   requireNamespace("htmltools", quietly = TRUE)
-  layout <- new_gridlayout(layout)
+  layout <- as_gridlayout(layout)
   htmltools::tags$head(
     htmltools::tags$style(
       htmltools::HTML(to_css(layout, ...))
