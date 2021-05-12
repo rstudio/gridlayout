@@ -67,7 +67,7 @@ to_css.gridlayout <- function(
 
   all_grid_els_selector <- paste0(container_query," > *")
 
-  accessory_css <- paste(readLines(system.file("resources/gridlayout.css", package = "gridlayout")), collapse = "\n")
+  accessory_css <- get_accessory_css("gridlayout.css")
   if (is_card_styled == "all") {
     # Make .grid_panel simply apply to every first-level div
     accessory_css <- str_replace_all(
@@ -290,7 +290,8 @@ use_gridlayout_rmd <- function(
                  "padding" = "var(--card-padding)"
                )
         ),
-        rmd_utility_css,
+        # Makes tab panels work properly and gives utility classes for alignment
+        get_accessory_css("gridlayout_rmd_styles.css"),
         "</style>",
         sep = "\n"
       )
@@ -305,28 +306,11 @@ use_gridlayout_rmd <- function(
   })
 }
 
-# Makes tab panels work properly and gives utility classes for alignment
-rmd_utility_css <- "
-.section.no-header > h1:first-child {
-  display: none;
+# Dump css file to string for inlining while still keeping in a .css file for
+# easier editing
+get_accessory_css <- function(file){
+  paste(
+    readLines(system.file(paste0("resources/", file), package = "gridlayout")),
+    collapse = "\n"
+  )
 }
-
-
-
-.section.v_start,
-.section.v_center,
-.section.v_end,
-.section.h_start,
-.section.h_center,
-.section.h_end {
-  display: grid;
-}
-
-.section.v_start  { align-items: start; }
-.section.v_center { align-items: center; }
-.section.v_end    { align-items: end; }
-
-.section.h_start  { justify-items: start; }
-.section.h_center { justify-items: center; }
-.section.h_end    { justify-items: end; }
-"

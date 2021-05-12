@@ -174,6 +174,8 @@ pre code {
 <div id="main" class="section level1 no-header">
 <h1 class="no-header">main</h1>
 <style>
+
+
 .main-container {
   display: grid;
   grid-template-rows: 150px 1fr 120px;
@@ -181,37 +183,6 @@ pre code {
   grid-gap: 2rem;
   padding: 2rem;
   height: 100vh;
-  --card-padding: 0.8rem;
-}
-
-
-
-.main-container > * {
-  box-sizing: border-box;
-  padding: var(--card-padding, 0.8rem);
-  overflow: hidden;
-  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-  border-radius: 0.5rem;
-}
-
-.grid_panel .panel-title {
-  margin: 0;
-  height: 35px;
-  border-bottom: 1px solid #dae0e5;
-}
-
-.main-container .panel-content {
-  height: 100%;
-  display: grid;
-}
-
-.main-container .grid_panel > .panel-content {
-  height: calc(100% - 35px);
-}
-
-.main-container .grid_panel.gridlayout-card {
-  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-  border-radius: 0.5rem;
 }
 
 #header {
@@ -239,14 +210,146 @@ pre code {
   grid-row-end: 3;
 }
 
-.tabbable { height: 100% }
-.tabbable > .nav { height: 42px; }
-.tabbable .tab-content { height: calc(100% - 42px); }
-.tabbable .tab-pane { height: 100%; }
+
+
+.main-container > * {
+  --card-padding: 0.8rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas: "title"
+                       "content";
+  /* When there's no title the column will dissapear */
+  grid-template-rows: min-content 1fr;
+}
+
+.main-container > * .title-bar {
+  grid-area: title;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,0.125);
+  padding: calc(var(--card-padding)/2) var(--card-padding);
+}
+.main-container > * .title-bar > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+.panel-content {
+  height: 100%;
+  width: 100%;
+  padding: var(--card-padding);
+  grid-area: content;
+}
+
+.main-container > * .shiny-plot-output > img {
+  /* The way grid sizing works can throw off the plot sizing in shiny. This
+     is because the size of the parent grows to its largest child element.
+     Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+     these sizes by looking at the parent div's dimensions after a resize.
+     When the window has been made smaller, this means that the parent
+     element is spilling outside of its box because the plot image size is
+     still sitting at a fixed pixel width of the previous size. So when Shiny
+     queries the size of the parent it thinks that nothing has changed. By
+     setting a max width and height, we make sure the plot always gets shrunk
+     to at most the size of the grid element, thus allowing the resize observer
+     to work properly.
+  */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Only set card styles if we're not using the bslib card component */
+.main-container > *:not(.card) {
+  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+  border-radius: 0.5rem;
+}
+
+
+.main-container > *.collapsed  {
+  grid-template-rows: min-content 0;
+  height: min-content;
+  overflow: hidden;
+}
+
+/* Make flip arrow point down when collapsed and
+   up when expanded to show result of clicking */
+.main-container > * .collapser-icon svg {
+  transition: transform 0.2s ease;
+}
+.main-container > *.collapsed .collapser-icon svg {
+  transform: scaleY(-1);
+}
+
+.main-container > *.collapsed .panel-content {
+  display: none;
+}
+
+/* Make everything line up nice and cleanly like it should in the middle */
+.title_panel {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Makes it so tabpanels work in gridpanels */
+.main-container > * .tabbable { height: 100% }
+.main-container > * .tabbable > .nav { height: 42px; }
+.main-container > * .tabbable .tab-content { height: calc(100% - 42px); }
+.main-container > * .tabbable .tab-pane { height: 100%; }
+
+@media (max-width:500px) {
+
+.main-container {
+  display: grid;
+  grid-template-rows: 85px 350px 350px 350px;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+  padding: 1rem;
+  height: auto;
+}
+
+#header {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+#sidebar {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+#footer {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+#main {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+}
+
+.main-container > * {
+  display: block;
+  padding: var(--card-padding);
+}
 
 .section.no-header > h1:first-child {
   display: none;
 }
+
+
 
 .section.v_start,
 .section.v_center,
