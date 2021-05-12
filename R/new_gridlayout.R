@@ -148,11 +148,7 @@ new_gridlayout <- function(
 
   if (identical(alternate_layouts, "auto")) {
     # Build a default mobile layout for the user
-    layout <- add_alternate_layout(
-      layout,
-      width_bounds = c(max = 600),
-      container_height = "auto"
-    )
+    layout$alternates <- list(build_mobile_alternate_layout(layout))
 
   } else {
 

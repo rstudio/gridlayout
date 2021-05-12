@@ -26,28 +26,10 @@ add_alternate_layout <- function(layout, ...) {
 #' @export
 add_alternate_layout.gridlayout <- function(
   layout,
-  alternate_layout = NULL,
+  alternate_layout,
   width_bounds = NULL,
   container_height = NULL
 ) {
-
-  alternate <- if (is.null(alternate_layout)) {
-    build_mobile_alternate_layout(layout)
-  } else {
-    width_bounds <- validate_bounds(width_bounds)
-
-    template <- new_gridlayout_template(
-      layout_def = alternate_layout,
-      container_height = container_height
-    )
-    # Make sure layouts map to same elements
-    layouts_have_same_elements(layout, template)
-
-    list(
-      layout = template,
-      width_bounds = width_bounds
-    )
-  }
 
   # Auto-generated mobile layout gets removed if it already exists so we don't
   # try get errors if the user is trying to add their own mobile layout with
@@ -57,10 +39,36 @@ add_alternate_layout.gridlayout <- function(
     layout$alternates[[1]] <- NULL
   }
 
-  overlaps_with_existing_alternates(alternate, layout$alternates)
+  width_bounds <- validate_bounds(width_bounds)
+
+  template <- new_gridlayout_template(
+    layout_def = alternate_layout,
+    container_height = container_height
+  )
+  # Make sure layouts map to same elements
+  layouts_have_same_elements(layout, template)
+
+  # Check for overlap with existing alternate layouts
+  upper_new <- unpixelify(width_bounds["max"] %||% Inf)
+  lower_new <- unpixelify(width_bounds["min"] %||% 0)
+  for (alternate in layout$alternates) {
+    upper_old <- unpixelify(alternate$width_bounds["max"] %||% Inf)
+    lower_old <- unpixelify(alternate$width_bounds["min"] %||% 0)
+
+    if (upper_new >= lower_old && lower_new <= upper_old) {
+      stop("New alternate interval overlaps with previous interval covering the range ",
+           print_size_range(alternate$width_bounds))
+    }
+  }
+
+  new_alternate <- list(
+    layout = template,
+    width_bounds = width_bounds
+  )
+
 
   # Add new element to alternates
-  layout$alternates[[length(layout$alternates) + 1]] <- alternate
+  layout$alternates[[length(layout$alternates) + 1]] <- new_alternate
 
   layout
 }
@@ -113,22 +121,6 @@ layouts_have_same_elements <- function(layout_a, layout_b){
     "Layouts have mismatched elements: ",
     paste(mismatched, collapse = ", ")
   )
-}
-
-
-overlaps_with_existing_alternates <- function(new_layout, alternates) {
-
-  upper_new <- unpixelify(new_layout$width_bounds["max"] %||% Inf)
-  lower_new <- unpixelify(new_layout$width_bounds["min"] %||% 0)
-  for (alternate in alternates) {
-    upper_old <- unpixelify(alternate$width_bounds["max"] %||% Inf)
-    lower_old <- unpixelify(alternate$width_bounds["min"] %||% 0)
-
-    if (upper_new >= lower_old && lower_new <= upper_old) {
-      stop("New alternate interval overlaps with previous interval covering the range ",
-           print_size_range(alternate$width_bounds))
-    }
-  }
 }
 
 
