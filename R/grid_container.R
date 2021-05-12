@@ -72,8 +72,8 @@ grid_container <- function(
 
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
-  layout <- coerce_to_layout(layout)
-  layout_ids <- extract_chr(get_elements(layout), 'id')
+  layout <- new_gridlayout(layout)
+  layout_ids <- get_element_ids(layout)
   element_ids <- names(elements)
 
   if(!setequal(layout_ids, element_ids)){
