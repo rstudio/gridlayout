@@ -142,42 +142,45 @@ new_gridlayout <- function(
     class = "gridlayout"
   )
 
-  if (notNull(alternate_layouts)) {
-    if (identical(alternate_layouts, "auto")) {
-      # Build a default mobile layout for the user
-      layout <- add_alternate_layout(
-        layout,
-        width_bounds = c(max = 600),
-        container_height = "auto"
-      )
+  # Dont make an alternate layout if the user has specifically told us not to or
+  # we have an empty grid (like is used in grided initialization)
+  if (is.null(alternate_layouts) || length(elements) == 0) return(layout)
 
-    } else {
+  if (identical(alternate_layouts, "auto")) {
+    # Build a default mobile layout for the user
+    layout <- add_alternate_layout(
+      layout,
+      width_bounds = c(max = 600),
+      container_height = "auto"
+    )
 
-      # Check to see if we're working with a list of lists or a single alternate
-      # layout
-      single_alternate <- "layout" %in% names(alternate_layouts)
-      if (single_alternate) {
-        # Wrap single layout in list to keep syntax same for both single and
-        # multi alternates cases
-        alternate_layouts <- list(alternate_layouts)
-      }
+  } else {
 
-      for (alternate in alternate_layouts) {
-        if (is.null(alternate$layout)) {
-          stop(
-            "Altnernate layouts need to be provided as a list with ",
-            "a layout element along with width bounds."
-          )
-        }
-        layout <- add_alternate_layout(
-          layout,
-          alternate_layout = alternate$layout,
-          width_bounds = alternate$width_bounds,
-          container_height = alternate$container_height
+    # Check to see if we're working with a list of lists or a single alternate
+    # layout
+    single_alternate <- "layout" %in% names(alternate_layouts)
+    if (single_alternate) {
+      # Wrap single layout in list to keep syntax same for both single and
+      # multi-alternates cases
+      alternate_layouts <- list(alternate_layouts)
+    }
+
+    for (alternate in alternate_layouts) {
+      if (is.null(alternate$layout)) {
+        stop(
+          "Altnernate layouts need to be provided as a list with ",
+          "a layout element along with width bounds."
         )
       }
+      layout <- add_alternate_layout(
+        layout,
+        alternate_layout = alternate$layout,
+        width_bounds = alternate$width_bounds,
+        container_height = alternate$container_height
+      )
     }
   }
+
 
   layout
 }
