@@ -161,7 +161,7 @@ build_mobile_alternate_layout <- function(layout) {
 
   alternate <- list(
     layout = mobile_layout,
-    width_bounds = c(max = 500)
+    width_bounds = c(max = "500px")
   )
 
   # Tag this layout as auto generated so add_alternate_layout can ignore it
