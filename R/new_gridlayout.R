@@ -303,13 +303,6 @@ new_gridlayout_template <- function(
 }
 
 
-
-layouts_are_equal <- function(layout_a, layout_b){
-  identical(to_md(layout_a), to_md(layout_b))
-}
-
-
-
 #' @export
 format.gridlayout_template <- function(x, ...) {
   paste(
