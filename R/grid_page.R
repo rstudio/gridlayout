@@ -66,35 +66,31 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
     stop("Need a defined layout for page")
   }
 
-  # Check to make sure we match all the names in the layout to all the names in
-  # the passed arg_sections
-  layout <- coerce_to_layout(layout)
-  layout_ids <- extract_chr(get_elements(layout), 'id')
+  # Make sure we're working with a layout
+  layout <- new_gridlayout(layout)
 
   # Named arguments represent grid panels elements. Unnamed ones are assumed to
   # be extra tags that are appended after grid container.
   arg_sections <- list(...)
-  arg_ids <- names(arg_sections)
-  grid_elements <- arg_sections[arg_ids != ""]
+  named_args <- arg_sections[names(arg_sections) != ""]
+  unnamed_args <- arg_sections[names(arg_sections) == ""]
 
   if (get_info(layout, "container_height") != "viewport") {
     warning("Container height for layout is not set at default of viewport.",
             "This is likely a mistake for grid_page()")
   }
 
-  container <- grid_container(
-    id = "grid_page",
-    layout = layout,
-    elements = grid_elements,
-    use_bslib_card_styles = use_bslib_card_styles,
-    flag_mismatches = flag_mismatches
-  )
-
   shiny::fluidPage(
     theme = theme,
-    container,
+    grid_container(
+      id = "grid_page",
+      layout = layout,
+      elements = named_args,
+      use_bslib_card_styles = use_bslib_card_styles,
+      flag_mismatches = flag_mismatches
+    ),
     #any extra args not matched to layout will get added after
-    arg_sections[arg_ids == ""]
+    unnamed_args
   )
 
 }
