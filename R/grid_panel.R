@@ -8,7 +8,9 @@
 #' style, or to align the content of the card vertically or horizontally.
 #'
 #' @param ... Elements to include within the panel
-#' @param use_card_style Should the element contained in panel be made to look
+#' @param title Character string to go across top of panel with label. If left
+#'   blank the card contents will take up entire space.
+#' @param use_card_styles Should the element contained in panel be made to look
 #'   like an enclosed card?
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
@@ -137,24 +139,11 @@ grid_panel <- function(
     return(el)
   }
 
-  has_alignment <- notNull(h_align) || notNull(v_align)
-
-  panel_styles <- build_css_rule(
-    "inline",
-    c(
-      if (has_alignment) c("display" = "grid"),
-      if (notNull(h_align)) {
-        validate_alignment(h_align)
-        c("justify-content" = h_align)
-      },
-      if (notNull(v_align)) {
-        validate_alignment(v_align)
-        c("align-content" = v_align)
-      },
-      if (scrollable) {
-        c("overflow" = "scroll")
-      }
-    )
+  panel_styles <- htmltools::css(
+    display = if (notNull(h_align) || notNull(v_align)) "grid",
+    `justify-content` = if (notNull(h_align)) validate_alignment(h_align),
+    `align-content` = if (notNull(v_align)) validate_alignment(v_align),
+    overflow = if (scrollable) "scroll"
   )
 
   has_title <- notNull(title)
@@ -264,7 +253,7 @@ title_panel <- function(
 ) {
 
   if (notNull(logo)) {
-    title_content <- tagList(
+    title_content <- htmltools::tagList(
       shiny::img(src = logo, height = "60px"),
       title_content
     )
@@ -285,6 +274,8 @@ validate_alignment <- function(arg_val) {
   if (!arg_val %in% align_options) {
     stop("Alignment argument must be one of ", paste(align_options, collapse = ", "))
   }
+
+  arg_val
 }
 
 el_has_class <- function(el, class_name) {

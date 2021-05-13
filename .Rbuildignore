@@ -5,3 +5,9 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
+^inst/grided/www/rmd_layout_editing_files$
+^tests/run-screenshot-tests\.R$
+^tests/screenshot-tests$
+^inst/grided/www/\.cache$
+^doc$
+^Meta$

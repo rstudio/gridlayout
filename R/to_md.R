@@ -34,20 +34,27 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
 }
 
 
-to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_decorator = I){
+to_table <- function(
+  layout,
+  md_mode = FALSE,
+  include_gap_size = FALSE,
+  sizes_decorator = I,
+  elements_dectorator = I
+){
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell
-  col_sizes <- attr(layout, "col_sizes")
+  col_sizes <- get_info(layout, "col_sizes")
   num_cols <- length(col_sizes)
-  row_sizes <- attr(layout, "row_sizes")
+  row_sizes <- get_info(layout, "row_sizes")
   num_rows <- length(row_sizes)
+  elements <- get_info(layout, "elements")
 
   # Now we can start checking for overlaps in element ranges. We will do this by
   # building a matrix and then filling it with each element If we try and fill a
   # cell that already has something in it, we have an overlap
   layout_mat <- matrix("", nrow = num_rows, ncol = num_cols)
-  for(el in layout){
+  for(el in elements){
     row_span <- el$start_row:el$end_row
     col_span <- el$start_col:el$end_col
     current_cells <- layout_mat[row_span, col_span, drop = FALSE]
@@ -60,7 +67,7 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
   # Empty cells get a dot
   layout_mat[layout_mat == ""] <- "."
 
-  first_row <- c(if(include_gap_size) attr(layout, "gap") else "", col_sizes)
+  first_row <- c(if(include_gap_size) get_info(layout, "gap") else "", col_sizes)
 
   layout_mat <- rbind(
     first_row,
@@ -78,6 +85,8 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
 
   # Make all cells in a column equal width
   layout_mat <- apply(layout_mat, FUN = format, MARGIN = 2)
+  colnames(layout_mat) <- NULL
+  rownames(layout_mat) <- NULL
 
   # decorate row sizes
   layout_mat[,1] <- sizes_decorator(layout_mat[,1])
@@ -85,6 +94,13 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
   # and column sizes
   col_sizes_i <- if(md_mode) 3 else 1
   layout_mat[col_sizes_i ,] <- sizes_decorator(layout_mat[col_sizes_i, ])
+
+  # and elements
+  layout_mat[-(col_sizes_i:1),-1] <- apply(
+    layout_mat[-(col_sizes_i:1),-1, drop = FALSE],
+    FUN = elements_dectorator,
+    MARGIN = 2
+  )
 
   if(md_mode){
     # Add border bars

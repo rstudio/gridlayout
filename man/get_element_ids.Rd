@@ -4,10 +4,10 @@
 \alias{get_element_ids}
 \title{Get ids of element in layout}
 \usage{
-get_element_ids(layout)
+get_element_ids(x)
 }
 \arguments{
-\item{layout}{Object of class \code{"gridlayout"}.}
+\item{x}{Object of class \code{"gridlayout"}.}
 }
 \value{
 Character vector of ids of all elements in layout
@@ -27,7 +27,6 @@ grid_obj <- md_to_gridlayout(
  )
 
 get_element_ids(grid_obj)
-
 }
 \seealso{
 \link{get_elements}

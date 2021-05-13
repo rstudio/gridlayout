@@ -47,8 +47,25 @@ str_extract <- function(text, pattern){
 # String concatenation
 `%+%` <- function (lhs, rhs) paste0(lhs, rhs)
 
-
 collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
+
+
+# Make text bold
+emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
+italicize <- function(...) if(is_installed("crayon")) crayon::italic(...) else as.character(...)
+invert_text <- function(...) if(is_installed("crayon")) crayon::inverse(...) else as.character(...)
+
+indent_text <- function(text, num_spaces = 2) {
+  lines <- strsplit(
+    text,
+    split = "\n"
+  )[[1]]
+
+  indent <- paste(rep(" ", times = num_spaces), collapse = "")
+  indented_lines <- map_chr(lines, function(line) paste(indent, line))
+
+  paste(indented_lines, collapse = "\n")
+}
 
 
 # extract from a list of lists to whatever level is desired
@@ -70,6 +87,10 @@ extract_chr <- function(x, ...){
 
 map_w_names <- function(x, fn){
   Map(names(x), x, f = fn)
+}
+
+map_chr <- function(x, fn) {
+  vapply(X = x, FUN = fn, FUN.VALUE = character(1))
 }
 
 list_in_quotes <- function(name_ids){

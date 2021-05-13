@@ -13,6 +13,10 @@ but any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 \item{...}{
   Arguments passed on to \code{\link[=grid_panel]{grid_panel}}
   \describe{
+    \item{\code{title}}{Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.}
+    \item{\code{use_card_styles}}{Should the element contained in panel be made to look
+like an enclosed card?}
     \item{\code{use_bslib_card_styles}}{Should the card styles from bslib be used
 instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
 will override \code{use_card_style}.}

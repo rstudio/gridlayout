@@ -10,13 +10,13 @@ test_that("Basic table works", {
 
   expect_s3_class(my_layout, "gridlayout")
 
-  expect_equal(attr(my_layout, "col_sizes"),
+  expect_equal(get_info(my_layout, "col_sizes"),
                c("120px", "1fr", "1fr"))
 
-  expect_equal(attr(my_layout, "row_sizes"),
+  expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr", "1fr"))
 
-  expect_equal(attr(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap"),
                "1rem")
 })
 
@@ -29,7 +29,7 @@ test_that("Can put gap size in upper left", {
       |1fr   |sidebar |plot_b |plot_b |"
   )
 
-  expect_equal(attr(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap"),
                "2rem")
 })
 
@@ -63,10 +63,10 @@ test_that("No sizes will give you constant sizes rows and cols", {
       |sidebar |plot_b |plot_b |"
   )
 
-  expect_equal(attr(my_layout, "col_sizes"),
+  expect_equal(get_info(my_layout, "col_sizes"),
                c("1fr", "1fr", "1fr"))
 
-  expect_equal(attr(my_layout, "row_sizes"),
+  expect_equal(get_info(my_layout, "row_sizes"),
                c("1fr", "1fr", "1fr"))
 })
 

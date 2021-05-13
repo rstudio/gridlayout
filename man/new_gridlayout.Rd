@@ -40,7 +40,7 @@ relative units.}
 \item{alternate_layouts}{A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a
 phone or an ultra-wide monitor. Each entry in this list must contain a
-\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{layout}: or valid layout declaration (see \emph{Declaring your layout} section), and
 \code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
 when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
 alternate layouts are given a single-column layout will be automatically
@@ -55,8 +55,6 @@ Builds the gridlayout s3 class that holds information needed to draw a given
 layout.
 }
 \section{Declaring your layout}{
-
-
 There are three current ways to declare layouts (aka inputs to
 \code{layout_def}).
 \subsection{Markdown tables}{
@@ -65,21 +63,23 @@ The first is the easiest: a markdown table wrapped in a character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
-follows:\if{html}{\out{<div class="r">}}\preformatted{  new_gridlayout( "| header | header |
-                   | plota  | plotb  |" )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of viewport.
-##     1fr    1fr   
-## 1fr header header
-## 1fr plota  plotb 
+follows:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
+  "| header | header |
+   | plota  | plotb  |" )
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##        1fr    1fr   
+##    1fr header header
+##    1fr plota  plotb 
+## Gap of 1rem. Total height of viewport.
 ## 
-## Alternative layouts:
-## 
-## When width of page < 600px 
-## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
-##       1fr   
-## 85px  header
-## 350px plota 
-## 350px plotb
+## Alternate layouts:   
+##    
+##    - Width < 500px 
+##              1fr   
+##       85px  header
+##       350px plota 
+##       350px plotb 
+##    Gap of 1rem. Total height of auto.
 }
 }
 
@@ -101,21 +101,22 @@ markdown syntax
 The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout( list(
   list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
-  list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2) )
-)
-}\if{html}{\out{</div>}}\preformatted{## gridlayout with 2 rows, 2 columns, and gap size of 1rem. Total height of viewport.
-##     1fr    1fr   
-## 1fr header header
-## 1fr plot_a plot_b
+  list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
+) )
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##        1fr    1fr   
+##    1fr header header
+##    1fr plot_a plot_b
+## Gap of 1rem. Total height of viewport.
 ## 
-## Alternative layouts:
-## 
-## When width of page < 600px 
-## gridlayout with 3 rows, 1 columns, and gap size of 1rem. Total height of auto.
-##       1fr   
-## 85px  header
-## 350px plot_a
-## 350px plot_b
+## Alternate layouts:   
+##    
+##    - Width < 500px 
+##              1fr   
+##       85px  header
+##       350px plot_a
+##       350px plot_b
+##    Gap of 1rem. Total height of auto.
 }
 }
 
@@ -125,6 +126,49 @@ The last way is to pass an existing \code{gridlayout} object in. This allows you
 to do things like modify the grid sizing or container sizes of an existing
 layout.
 }
+}
+
+\section{Adding alternate layouts}{
+By default a mobile-friendly layout is generated that is simply your
+elements stacked in a single column. If you want to adjust this or add
+layouts screen-sizes other than just a mobile view, you can with the
+\code{alternate_layouts} argument.
+
+Alternate layouts are simply other layouts that are used based upon the size
+of the viewport. This is typically used to add a mobile view (or a desktop
+view if your app is mobile first.)
+
+To define an alternate layout you need to pass a list containing \code{layout}
+and \code{width_bounds} elements.\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
+  "|header |header |
+   |plot_a |plot_b |",
+  alternate_layouts = list(
+    layout = "
+        |header |
+        |plot_a |
+        |plot_b |",
+    width_bounds = c(max = 500)
+  )
+)
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##        1fr    1fr   
+##    1fr header header
+##    1fr plot_a plot_b
+## Gap of 1rem. Total height of viewport.
+## 
+## Alternate layouts:   
+##    
+##    - Width < 500px 
+##            1fr   
+##       1fr header
+##       1fr plot_a
+##       1fr plot_b
+##    Gap of 1rem. Total height of viewport.
+}
+
+Multiple layouts can also be added. Simply enclose them as a list of lists.
+
+See \code{vignette("alternate-layouts", package = "gridlayout")} for a more in-depth overview.
 }
 
 \examples{

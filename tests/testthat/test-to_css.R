@@ -7,6 +7,7 @@ test_that("Works with default body target", {
       |1fr   |sidebar |plot_a |plot_c |
       |1fr   |sidebar |plot_b |plot_b |"
   )
+
   expect_snapshot(to_css(grid_obj))
 })
 
@@ -45,14 +46,14 @@ test_that("Custom styles can be added by the user for further customization of c
   expect_true(
     str_detect(
       to_css(grid_obj, element_styles = custom_styles),
-      "background: blue;"
+      "background:blue;"
     )
   )
 
   expect_true(
     str_detect(
       to_css(grid_obj, element_styles = custom_styles),
-      "border: 1px solid red;"
+      "border:1px solid red;"
     )
   )
 })
@@ -72,7 +73,7 @@ test_that("Height setting can be customized", {
   expect_true(
     str_detect(
       to_css(grid_obj),
-      "height: 100vh",
+      "height:100vh",
       fixed = TRUE
     )
   )
@@ -81,7 +82,7 @@ test_that("Height setting can be customized", {
   expect_true(
     str_detect(
       to_css(new_gridlayout(grid_obj,container_height = "800px")),
-      "height: 800px",
+      "height:800px",
       fixed = TRUE
     )
   )

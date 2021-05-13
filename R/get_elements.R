@@ -32,12 +32,12 @@ get_elements.default <- function(layout){
 #' @export
 get_elements.gridlayout <- function(layout){
   # Just remove the gridlayout class so printing doesn't confuse people
-  unclass(layout)
+  get_info(layout, "elements")
 }
 
 #' Get ids of element in layout
 #'
-#' @param layout Object of class `"gridlayout"`.
+#' @param x Object of class `"gridlayout"`.
 #'
 #' @return Character vector of ids of all elements in layout
 #' @export
@@ -55,8 +55,21 @@ get_elements.gridlayout <- function(layout){
 #'  )
 #'
 #' get_element_ids(grid_obj)
-#'
-get_element_ids <- function(layout) {
-
-  extract_chr(get_elements(layout), "id")
+get_element_ids <- function(x){
+  UseMethod("get_element_ids")
 }
+
+get_element_ids.default <- function(x){
+  cat("get_element_ids generic")
+}
+
+#' @export
+get_element_ids.gridlayout <- function(x){
+  get_info(x, "element_ids")
+}
+
+#' @export
+get_element_ids.gridlayout_template <- function(x){
+  extract_chr(get_info(x, "elements"), "id")
+}
+

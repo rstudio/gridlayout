@@ -46,5 +46,5 @@ the syntax\preformatted{```\{gridlayout\}
 }
 }
 \details{
-See \code{\link{vignette("using_with_rmd", package = "gridlayout")}} for a more in-depth overview.
+See \code{vignette("using_with_rmd", package = "gridlayout")} for a more in-depth overview.
 }

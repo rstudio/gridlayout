@@ -40,17 +40,7 @@
 #' cat(to_css(grid_obj))
 #'
 #' @export
-to_css <- function(layout, ...) {
-  UseMethod("to_css")
-}
-
-#' @export
-to_css.default <- function(layout, ...){
-  cat("to_css generic")
-}
-
-#' @export
-to_css.gridlayout <- function(
+to_css <- function(
   layout,
   container,
   is_card_styled = "grid_panel",
@@ -67,7 +57,7 @@ to_css.gridlayout <- function(
 
   all_grid_els_selector <- paste0(container_query," > *")
 
-  accessory_css <- paste(readLines(system.file("resources/gridlayout.css", package = "gridlayout")), collapse = "\n")
+  accessory_css <- get_accessory_css("gridlayout.css")
   if (is_card_styled == "all") {
     # Make .grid_panel simply apply to every first-level div
     accessory_css <- str_replace_all(
@@ -91,12 +81,12 @@ to_css.gridlayout <- function(
     selector_prefix = selector_prefix
   )
 
-
-  alternative_layout_queries <- if (notNull(attr(layout, "alternates"))) {
+  alternates <- get_info(layout, "alternates")
+  alternative_layout_queries <- if (length(alternates) > 0) {
 
     paste(
       lapply(
-        attr(layout, "alternates"),
+        alternates,
         function(alt_layout) {
           generate_layout_rules(
             layout = alt_layout$layout,
@@ -132,18 +122,18 @@ generate_layout_rules <- function(
     selector = container_query,
     prop_list = c(
       "display" = "grid",
-      "grid-template-rows" = collapse_w_space(attr(layout, 'row_sizes')),
-      "grid-template-columns" = collapse_w_space(attr(layout, 'col_sizes')),
-      "grid-gap" = attr(layout, 'gap'),
-      "padding" = attr(layout, 'gap'),
-      "height" = validCssUnit(attr(layout, "container_height"))
+      "grid-template-rows" = collapse_w_space(get_info(layout, 'row_sizes')),
+      "grid-template-columns" = collapse_w_space(get_info(layout, 'col_sizes')),
+      "grid-gap" = get_info(layout, 'gap'),
+      "padding" = get_info(layout, 'gap'),
+      "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
 
   # Build the mapping for each element to its grid area.
   element_grid_areas <- paste(
     sapply(
-      layout,
+      get_info(layout, "elements"),
       function(el){
         build_css_rule(
           selector = paste0(selector_prefix, el$id),
@@ -183,6 +173,38 @@ generate_layout_rules <- function(
   )
 }
 
+
+#' Build css properties named or unnamed list of property values
+#'
+#' @param selector valid css selector to target. E.g. `body` or
+#'   `div.blue_boxes`... For inline styles where no selector is desired use
+#'   `"inline"`.
+#' @param prop_list A list of property-value pairs for additional styles to be
+#'   added to each element. Pairs can be given as named elements: e.g.
+#'   `element_styles = c("background" = "blue")`. See [htmltools::css] for rules
+#'   on formatting.
+#'
+#' @return A concatenated string of property values to be used inside a css
+#'   selector. If the `prop_list` is empty, an empty string (`""`) is returned
+#'   to avoid placing empty css rules on the webpage.
+build_css_rule <- function(selector, prop_list) {
+  # Empty css rules are best avoided
+  if (length(prop_list) == 0) {
+    return("")
+  }
+
+  css_text <- do.call(
+    htmltools::css,
+    as.list(c(prop_list, collapse_ = "\n"))
+  )
+
+  paste0(
+    selector,
+    " {\n",
+    indent_text(css_text),
+    "\n}"
+  )
+}
 
 #' Convert layout to css for Shiny
 #'
@@ -240,7 +262,7 @@ generate_layout_rules <- function(
 #' }
 use_gridlayout_shiny <- function(layout, ...){
   requireNamespace("htmltools", quietly = TRUE)
-  layout <- coerce_to_layout(layout)
+  layout <- as_gridlayout(layout)
   htmltools::tags$head(
     htmltools::tags$style(
       htmltools::HTML(to_css(layout, ...))
@@ -259,7 +281,7 @@ use_gridlayout_shiny <- function(layout, ...){
 #' ```
 #' ````
 #'
-#' See [`vignette("using_with_rmd", package = "gridlayout")`] for a more in-depth overview.
+#' See `vignette("using_with_rmd", package = "gridlayout")` for a more in-depth overview.
 #'
 #' @inheritParams to_css
 #'
@@ -290,7 +312,8 @@ use_gridlayout_rmd <- function(
                  "padding" = "var(--card-padding)"
                )
         ),
-        rmd_utility_css,
+        # Makes tab panels work properly and gives utility classes for alignment
+        get_accessory_css("gridlayout_rmd_styles.css"),
         "</style>",
         sep = "\n"
       )
@@ -305,28 +328,11 @@ use_gridlayout_rmd <- function(
   })
 }
 
-# Makes tab panels work properly and gives utility classes for alignment
-rmd_utility_css <- "
-.section.no-header > h1:first-child {
-  display: none;
+# Dump css file to string for inlining while still keeping in a .css file for
+# easier editing
+get_accessory_css <- function(file){
+  paste(
+    readLines(system.file(paste0("resources/", file), package = "gridlayout")),
+    collapse = "\n"
+  )
 }
-
-
-
-.section.v_start,
-.section.v_center,
-.section.v_end,
-.section.h_start,
-.section.h_center,
-.section.h_end {
-  display: grid;
-}
-
-.section.v_start  { align-items: start; }
-.section.v_center { align-items: center; }
-.section.v_end    { align-items: end; }
-
-.section.h_start  { justify-items: start; }
-.section.h_center { justify-items: center; }
-.section.h_end    { justify-items: end; }
-"

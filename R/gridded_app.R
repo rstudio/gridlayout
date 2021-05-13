@@ -45,9 +45,9 @@ grided_server_code <- function(
     session$sendCustomMessage(
       "update-grid",
       list(
-        rows =  attr(starting_layout, "row_sizes"),
-        cols = attr(starting_layout, "col_sizes"),
-        gap = attr(starting_layout, "gap")
+        rows =  get_info(starting_layout, "row_sizes"),
+        cols = get_info(starting_layout, "col_sizes"),
+        gap = get_info(starting_layout, "gap")
       )
     )
 
@@ -97,9 +97,12 @@ grided_server_code <- function(
     if (in_rstudio()) {
       editor_selection <- rstudioapi::getSourceEditorContext()
 
+      is_initial_layout <- function(x) {
+        identical(to_md(x$layout), to_md(initial_layout))
+      }
       layout_table <- Find(
         x = find_layouts_in_file(editor_selection$contents),
-        f = function(x) layouts_are_equal(x$layout, initial_layout)
+        f = is_initial_layout
       )
     }
 
