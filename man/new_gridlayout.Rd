@@ -65,9 +65,7 @@ The first is the easiest: a markdown table wrapped in a character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
-follows:\if{html}{\out{<div class="r">}}\preformatted{  new_gridlayout( "| header | header |
-                   | plota  | plotb  |" )
-}\if{html}{\out{</div>}}
+follows: \verb{\{r, eval = FALSE\} new_gridlayout( "| header | header | | plota | plotb  |" ) }
 }
 
 \subsection{Element lists}{
@@ -75,30 +73,71 @@ follows:\if{html}{\out{<div class="r">}}\preformatted{  new_gridlayout( "| heade
 The second method is to supply a list of elements by providing the following
 information for each:
 \itemize{
-\item \code{id}: Identifying id of the element (e.g. \verb{"header})
-\item \code{start_row/end_row}: The (1-indexed) start and end row of your element's
-span
-\item \code{start_col/end_col}: The start and end column for your element's span
+\item \code{id}: Identifying id of the element (e.g. \verb{"header}) -
+\code{start_row/end_row}: The (1-indexed) start and end row of your element's
+span - \code{start_col/end_col}: The start and end column for your element's span
 }
 
 This is a bit more verbose but allows for greater control. Here you can have
 overlapping elements etc.. Most of the time you will just want to use the
 markdown syntax
 
-The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout( list(
-  list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
-  list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
-  list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2) )
-)
-}\if{html}{\out{</div>}}
-}
+The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="{r, eval = FALSE} new_gridlayout( list( list(id = "header", start_row =">}}\preformatted{1, end_row = 1, start_col = 1, end_col = 2), list(id = "plot_a", start_row =
+2, end_row = 2, start_col = 1, end_col = 1), list(id = "plot_b", start_row =
+2, end_row = 2, start_col = 2, end_col = 2) ) ) ```
 
-\subsection{An existing \code{gridlayout}}{
+### An existing `gridlayout`
 
-The last way is to pass an existing \code{gridlayout} object in. This allows you
+The last way is to pass an existing `gridlayout` object in. This allows you
 to do things like modify the grid sizing or container sizes of an existing
 layout.
+}\if{html}{\out{</div>}}
 }
+}
+
+\section{Adding alternate layouts}{
+
+
+By default a mobile-friendly layout is generated that is simply your
+elements stacked in a single column. If you want to adjust this or add
+layouts screen-sizes other than just a mobile view, you can with the
+\code{alternate_layouts} argument.
+
+Alternate layouts are simply other layouts that are used based upon the size
+of the viewport. This is typically used to add a mobile view (or a desktop
+view if your app is mobile first.)
+
+To define an alternate layout you need to pass a list containing \code{layout}
+and \code{width_bounds} elements.\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
+  "|header |header |
+   |plot_a |plot_b |",
+  alternate_layouts = list(
+    layout = "
+        |header |
+        |plot_a |
+        |plot_b |",
+    width_bounds = c(max = 500)
+  )
+)
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##        1fr    1fr   
+##    1fr header header
+##    1fr plot_a plot_b
+## Gap of 1rem. Total height of viewport.
+## 
+## Alternate layouts:   
+##    
+##    - Width < 500px 
+##            1fr   
+##       1fr header
+##       1fr plot_a
+##       1fr plot_b
+##    Gap of 1rem. Total height of viewport.
+}
+
+Multiple layouts can also be added. Simply enclose them as a list of lists.
+
+See \code{\link{vignette("alternate-layouts", package = "gridlayout")}} for a more in-depth overview.
 }
 
 \examples{

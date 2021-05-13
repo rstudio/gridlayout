@@ -1,9 +1,3 @@
-
-#' @export
-add_alternate_layout <- function(layout, ...) {
-  UseMethod("add_alternate_layout")
-}
-
 #' Add alternate layout options
 #'
 #' Adds a layout that will be triggered based upon the size of the viewport.
@@ -23,8 +17,7 @@ add_alternate_layout <- function(layout, ...) {
 #'   `"auto"` to allow mobile user's to scroll. Beware though, you will want to
 #'   absolutely size any plot outputs in these cases.
 #'
-#' @export
-add_alternate_layout.gridlayout <- function(
+add_alternate_layout <- function(
   layout,
   alternate_layout,
   width_bounds = NULL,
