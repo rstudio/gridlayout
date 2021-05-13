@@ -40,17 +40,7 @@
 #' cat(to_css(grid_obj))
 #'
 #' @export
-to_css <- function(layout, ...) {
-  UseMethod("to_css")
-}
-
-#' @export
-to_css.default <- function(layout, ...){
-  cat("to_css generic")
-}
-
-#' @export
-to_css.gridlayout <- function(
+to_css <- function(
   layout,
   container,
   is_card_styled = "grid_panel",
