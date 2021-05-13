@@ -308,30 +308,40 @@ as_gridlayout <- function(x){
 
 
 #' @export
-format.gridlayout_template <- function(x, ...) {
+format.gridlayout_template <- function(
+  x,
+  sizes_decorator = gridlayout:::italicize,
+  elements_decorator = gridlayout::invert_text
+){
+
+  table_text <- to_table(
+    x,
+    sizes_decorator = sizes_decorator,
+    elements_dectorator = elements_decorator
+  )
+
   paste(
-    indent_text(to_table(x, sizes_decorator = emph)),
-    "\nGap of ", emph(get_info(x, "gap")), ".",
-    " Total height of ", emph(get_info(x, "container_height")),".",
+    indent_text(table_text),
+    "\nGap of ", italicize(get_info(x, "gap")), ".",
+    " Total height of ", italicize(get_info(x, "container_height")),".",
     sep = ""
   )
 }
 
 #' @export
 format.gridlayout <- function(x, ...) {
-  emph <- if(is_installed("crayon")) crayon::bold else as.character
 
   lines <- c(
     emph("gridlayout"), " of ", length(get_element_ids(x)), " elements: \n",
-    format(x$layout)
+    format.gridlayout_template(x$layout, ...)
   )
 
   if (length(x$alternates) != 0) {
-    lines <- c(lines, "\n\nAlternate layouts:\n")
+    lines <- c(lines, "\n\nAlternate layouts:")
     for (alternate in x$alternates) {
       alternate_text <- paste(
-        "When width", print_size_range(alternate$width_bounds), "\n",
-        format(alternate$layout),
+        "\n\n- Width", print_size_range(alternate$width_bounds), "\n",
+        format(alternate$layout, ...),
         collapse = ""
       )
       lines <- c(

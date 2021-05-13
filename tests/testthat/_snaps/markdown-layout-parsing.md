@@ -10,8 +10,9 @@
          1fr  sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -29,8 +30,9 @@
          1fr  sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -48,8 +50,9 @@
          1fr sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -68,8 +71,9 @@
          1fr  sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -88,8 +92,9 @@
          1fr sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -109,8 +114,9 @@
          400px plot   
       Gap of 2rem. Total height of auto.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -128,8 +134,9 @@
          80px header sidebar sidebar
       Gap of 2rem. Total height of auto.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar
@@ -146,8 +153,9 @@
          1fr sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:
-         When width < 500px 
+      Alternate layouts:   
+         
+         - Width < 500px 
                    1fr    
             85px  header 
             350px sidebar

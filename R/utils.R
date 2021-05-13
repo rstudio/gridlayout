@@ -52,6 +52,8 @@ collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
 # Make text bold
 emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
+italicize <- function(...) if(is_installed("crayon")) crayon::italic(...) else as.character(...)
+invert_text <- function(...) if(is_installed("crayon")) crayon::inverse(...) else as.character(...)
 
 indent_text <- function(text, num_spaces = 2) {
   lines <- strsplit(

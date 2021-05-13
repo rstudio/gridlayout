@@ -34,7 +34,13 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
 }
 
 
-to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_decorator = I){
+to_table <- function(
+  layout,
+  md_mode = FALSE,
+  include_gap_size = FALSE,
+  sizes_decorator = I,
+  elements_dectorator = I
+){
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell
@@ -79,6 +85,8 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
 
   # Make all cells in a column equal width
   layout_mat <- apply(layout_mat, FUN = format, MARGIN = 2)
+  colnames(layout_mat) <- NULL
+  rownames(layout_mat) <- NULL
 
   # decorate row sizes
   layout_mat[,1] <- sizes_decorator(layout_mat[,1])
@@ -86,6 +94,13 @@ to_table <- function(layout, md_mode = FALSE, include_gap_size = FALSE, sizes_de
   # and column sizes
   col_sizes_i <- if(md_mode) 3 else 1
   layout_mat[col_sizes_i ,] <- sizes_decorator(layout_mat[col_sizes_i, ])
+
+  # and elements
+  layout_mat[-(col_sizes_i:1),-1] <- apply(
+    layout_mat[-(col_sizes_i:1),-1, drop = FALSE],
+    FUN = elements_dectorator,
+    MARGIN = 2
+  )
 
   if(md_mode){
     # Add border bars
