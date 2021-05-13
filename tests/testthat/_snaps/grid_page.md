@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div id="grid_page" class="grid-container">
           <div id="grid_page__header" class="grid_panel gridlayout-card">
-            <div style="" class="panel-content">
+            <div class="panel-content">
               <h2 id="header">This is my header content</h2>
             </div>
           </div>
           <div id="grid_page__footer" class="grid_panel gridlayout-card">
-            <div style="" class="panel-content">
+            <div class="panel-content">
               <div class="form-group shiny-input-container">
                 <label class="control-label" id="bins-label" for="bins">Number of bins:</label>
                 <input class="js-range-slider" id="bins" data-skin="shiny" data-min="1" data-max="50" data-from="30" data-step="1" data-grid="true" data-grid-num="9.8" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number"/>
@@ -22,7 +22,7 @@
             </div>
           </div>
           <div id="grid_page__plot" class="grid_panel gridlayout-card">
-            <div style="" class="panel-content">
+            <div class="panel-content">
               <div id="myPlot" class="shiny-plot-output" style="height:100%;width:100%;min-height:150px"></div>
             </div>
           </div>

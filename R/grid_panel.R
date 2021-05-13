@@ -137,24 +137,11 @@ grid_panel <- function(
     return(el)
   }
 
-  has_alignment <- notNull(h_align) || notNull(v_align)
-
-  panel_styles <- build_css_rule(
-    "inline",
-    c(
-      if (has_alignment) c("display" = "grid"),
-      if (notNull(h_align)) {
-        validate_alignment(h_align)
-        c("justify-content" = h_align)
-      },
-      if (notNull(v_align)) {
-        validate_alignment(v_align)
-        c("align-content" = v_align)
-      },
-      if (scrollable) {
-        c("overflow" = "scroll")
-      }
-    )
+  panel_styles <- htmltools::css(
+    display = if (notNull(h_align) || notNull(v_align)) "grid",
+    `justify-content` = if (notNull(h_align)) validate_alignment(h_align),
+    `align-content` = if (notNull(v_align)) validate_alignment(v_align),
+    overflow = if (scrollable) "scroll"
   )
 
   has_title <- notNull(title)
@@ -285,6 +272,8 @@ validate_alignment <- function(arg_val) {
   if (!arg_val %in% align_options) {
     stop("Alignment argument must be one of ", paste(align_options, collapse = ", "))
   }
+
+  arg_val
 }
 
 el_has_class <- function(el, class_name) {
