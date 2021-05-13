@@ -41,7 +41,7 @@
 
 
 <meta property="og:title" content="Build grid layout obj from markdown table — md_to_gridlayout" />
-<meta property="og:description" content="This is just a wrapper around new_gridlayout() that is more explicit about
+<meta property="og:description" content="This is just a wrapper around new_gridlayout that is more explicit about
 its input format. Also adds the ability to absorb errors for use when parsing
 free text that may or may not represent a layout table." />
 <meta name="twitter:card" content="summary" />
@@ -151,7 +151,7 @@ free text that may or may not represent a layout table." />
     </div>
 
     <div class="ref-description">
-    <p>This is just a wrapper around <code><a href='new_gridlayout.html'>new_gridlayout()</a></code> that is more explicit about
+    <p>This is just a wrapper around <a href='new_gridlayout.html'>new_gridlayout</a> that is more explicit about
 its input format. Also adds the ability to absorb errors for use when parsing
 free text that may or may not represent a layout table.</p>
     </div>
@@ -198,9 +198,9 @@ relative units.</p></dd>
     <dt><code>alternate_layouts</code></dt><dd><p>A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a
 phone or an ultra-wide monitor. Each entry in this list must contain a
-<code>layout</code>: or valid layout declaration (see Declaring your layout), and
+<code>layout</code>: or valid layout declaration (see <em>Declaring your layout</em> section), and
 <code>width_bounds</code>: or a list with at least one of a <code>min</code> and <code>max</code> value for
-when your page appears. See <code>add_alternate_layout()</code> for more details. If no
+when your page appears. See <code><a href='add_alternate_layout.html'>add_alternate_layout()</a></code> for more details. If no
 alternate layouts are given a single-column layout will be automatically
 applied for mobile screens (viewports less than 600px wide). Set to <code>NULL</code>
 to avoid this.</p></dd>
@@ -226,22 +226,23 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |sidebar |plot_a |plot_c |
     |1fr   |sidebar |plot_b |plot_b |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>3</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px  </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>100px</span><span> header  header header
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> sidebar plot_a plot_c
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> sidebar plot_b plot_b
+</div><div class='output co'>#&gt; <span style='font-weight: bold;'>gridlayout</span><span> of 5 elements: 
+#&gt;    </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>120px  </span><span> </span><span style='font-style: italic;'>1fr   </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;    </span><span style='font-style: italic;'>100px</span><span> </span><span style='font-weight: bold;'>header </span><span> </span><span style='font-weight: bold;'>header</span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>sidebar</span><span> </span><span style='font-weight: bold;'>plot_a</span><span> </span><span style='font-weight: bold;'>plot_c</span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>sidebar</span><span> </span><span style='font-weight: bold;'>plot_b</span><span> </span><span style='font-weight: bold;'>plot_b</span><span>
+#&gt; Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>viewport</span><span>.
 #&gt; 
-#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
-#&gt; 
-#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
-#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>5</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr    </span><span>
-#&gt; </span><span style='font-weight: bold;'>85px </span><span> header 
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> sidebar
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_a 
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_b 
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot_c </div><div class='input'>
+#&gt; Alternate layouts:   
+#&gt;    
+#&gt;    - Width &lt; 500px 
+#&gt;        </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>1fr    </span><span>
+#&gt;       </span><span style='font-style: italic;'>85px </span><span> </span><span style='font-weight: bold;'>header </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>sidebar</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot_a </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot_b </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot_c </span><span>
+#&gt;    Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>auto</span><span>.</div><div class='input'>
 
 <span class='co'># Can specify gap size in upper left cell</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
@@ -252,21 +253,22 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |plot   |table  |
     |1fr   |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>25px</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> of 4 elements: 
+#&gt;    </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>120px </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;    </span><span style='font-style: italic;'>100px</span><span> </span><span style='font-weight: bold;'>header</span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>plot  </span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>footer</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt; Gap of </span><span style='font-style: italic;'>25px</span><span>. Total height of </span><span style='font-style: italic;'>viewport</span><span>.
 #&gt; 
-#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
-#&gt; 
-#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
-#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div><div class='input'>
+#&gt; Alternate layouts:   
+#&gt;    
+#&gt;    - Width &lt; 500px 
+#&gt;        </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;       </span><span style='font-style: italic;'>85px </span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot  </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>auto</span><span>.</div><div class='input'>
 <span class='co'># Don't need to follow full md table with</span>
 <span class='co'># header row if not desired</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
@@ -276,21 +278,22 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |1fr   |plot   |table  |
     |1fr   |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>25px</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>120px </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>100px</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr  </span><span> footer footer
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> of 4 elements: 
+#&gt;    </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>120px </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;    </span><span style='font-style: italic;'>100px</span><span> </span><span style='font-weight: bold;'>header</span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>plot  </span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr  </span><span> </span><span style='font-weight: bold;'>footer</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt; Gap of </span><span style='font-style: italic;'>25px</span><span>. Total height of </span><span style='font-style: italic;'>viewport</span><span>.
 #&gt; 
-#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
-#&gt; 
-#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
-#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div><div class='input'>
+#&gt; Alternate layouts:   
+#&gt;    
+#&gt;    - Width &lt; 500px 
+#&gt;        </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;       </span><span style='font-style: italic;'>85px </span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot  </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>auto</span><span>.</div><div class='input'>
 <span class='co'># Can omit sizing as well if desired</span>
 <span class='fu'>md_to_gridlayout</span><span class='op'>(</span>
   layout_table <span class='op'>=</span> <span class='st'>"
@@ -298,21 +301,22 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
     |plot   |table  |
     |footer |footer |"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>3</span><span> rows, </span><span style='font-weight: bold;'>2</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>viewport</span><span>.
-#&gt; </span><span style='font-weight: bold;'>   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> header header
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> plot   table 
-#&gt; </span><span style='font-weight: bold;'>1fr</span><span> footer footer
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> of 4 elements: 
+#&gt;    </span><span style='font-style: italic;'>   </span><span> </span><span style='font-style: italic;'>1fr   </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr</span><span> </span><span style='font-weight: bold;'>header</span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr</span><span> </span><span style='font-weight: bold;'>plot  </span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    </span><span style='font-style: italic;'>1fr</span><span> </span><span style='font-weight: bold;'>footer</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt; Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>viewport</span><span>.
 #&gt; 
-#&gt; </span><span style='font-weight: bold;'>Alternative layouts:</span><span>
-#&gt; 
-#&gt; When width of page </span><span style='font-weight: bold;'>&lt; 600px</span><span> 
-#&gt; </span><span style='font-weight: bold;'>gridlayout</span><span> with </span><span style='font-weight: bold;'>4</span><span> rows, </span><span style='font-weight: bold;'>1</span><span> columns, and gap size of </span><span style='font-weight: bold;'>1rem</span><span>. Total height of </span><span style='font-weight: bold;'>auto</span><span>.
-#&gt; </span><span style='font-weight: bold;'>     </span><span> </span><span style='font-weight: bold;'>1fr   </span><span>
-#&gt; </span><span style='font-weight: bold;'>85px </span><span> header
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> plot  
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> footer
-#&gt; </span><span style='font-weight: bold;'>350px</span><span> table </div></span></pre>
+#&gt; Alternate layouts:   
+#&gt;    
+#&gt;    - Width &lt; 500px 
+#&gt;        </span><span style='font-style: italic;'>     </span><span> </span><span style='font-style: italic;'>1fr   </span><span>
+#&gt;       </span><span style='font-style: italic;'>85px </span><span> </span><span style='font-weight: bold;'>header</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>plot  </span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>footer</span><span>
+#&gt;       </span><span style='font-style: italic;'>350px</span><span> </span><span style='font-weight: bold;'>table </span><span>
+#&gt;    Gap of </span><span style='font-style: italic;'>1rem</span><span>. Total height of </span><span style='font-style: italic;'>auto</span><span>.</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

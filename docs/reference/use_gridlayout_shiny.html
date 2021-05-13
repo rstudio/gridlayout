@@ -172,7 +172,27 @@ desired layout for your Shiny app.</p></td>
     <tr>
       <th>...</th>
       <td><p>Arguments passed on to <code><a href='to_css.html'>to_css</a></code></p><dl>
-    <dt><code></code></dt><dd><p></p></dd>
+    <dt><code>container</code></dt><dd><p>Id of the element for grid to be placed in. Default value to
+apply grid styling to the whole app (aka the <code>body</code> element) for whole page
+grids. If an simple name is passed it is assumed that it is an id: i.e. the
+css id selector <code>#</code> is apended to the name. If container contains css
+selector characters such as a dot, the selector will not be transformed
+into an id automatically. E.g. <code>container = ".main-content"</code>.</p></dd>
+    <dt><code>is_card_styled</code></dt><dd><p>Should each section of the grid be given a card style
+to make it stand out? Options are <code>"grid_panel"</code>, where only elements with
+<code>"grid_panel"</code> class will get card styling, <code>"all"</code> where all children of
+the grid container will get card styling (useful for RMarkdown or other
+situations where you don't control child rendering) or <code>"none"</code> for no card
+styling.</p></dd>
+    <dt><code>element_styles</code></dt><dd><p>A list of named property-value pairs ( E.g.
+<code>element_styles = c("background" = "blue")</code>.) for additional styles to be
+added to each first child element of the grid container. E.g. under the css
+selector of <code>grid_container &gt; *</code>. If <code>is_card_styled = "all"</code> then this has
+the same purpose as as <code>additional_card_styles</code></p></dd>
+    <dt><code>selector_prefix</code></dt><dd><p>CSS prefix used to target grid elements. This will
+change if you're integrating grid with a system that you don't want to use
+ids (the <code>"#"</code> prefix) with because they are not available or are used for
+other reasons.</p></dd>
   
 </dl></td>
     </tr>

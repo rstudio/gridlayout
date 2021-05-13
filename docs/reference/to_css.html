@@ -152,7 +152,13 @@
     <p>Convert grid layout to css string</p>
     </div>
 
-    <pre class="usage"><span class='fu'>to_css</span><span class='op'>(</span><span class='va'>layout</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>to_css</span><span class='op'>(</span>
+  <span class='va'>layout</span>,
+  <span class='va'>container</span>,
+  is_card_styled <span class='op'>=</span> <span class='st'>"grid_panel"</span>,
+  element_styles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span>,
+  selector_prefix <span class='op'>=</span> <span class='st'>"#"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,43 +222,43 @@ other reasons.</p></td>
 </div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; body {
-#&gt;   display: grid;
-#&gt;   grid-template-rows: 100px 1fr 1fr;
-#&gt;   grid-template-columns: 120px 1fr 1fr;
-#&gt;   grid-gap: 1rem;
-#&gt;   padding: 1rem;
-#&gt;   height: 100vh;
+#&gt;    display:grid;
+#&gt;    grid-template-rows:100px 1fr 1fr;
+#&gt;    grid-template-columns:120px 1fr 1fr;
+#&gt;    grid-gap:1rem;
+#&gt;    padding:1rem;
+#&gt;    height:100vh;
 #&gt; }
 #&gt; 
 #&gt; #header {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 4;
-#&gt;   grid-row-start: 1;
-#&gt;   grid-row-end: 2;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:4;
+#&gt;    grid-row-start:1;
+#&gt;    grid-row-end:2;
 #&gt; }
 #&gt; #sidebar {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 2;
-#&gt;   grid-row-end: 4;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:2;
+#&gt;    grid-row-end:4;
 #&gt; }
 #&gt; #plot_a {
-#&gt;   grid-column-start: 2;
-#&gt;   grid-column-end: 3;
-#&gt;   grid-row-start: 2;
-#&gt;   grid-row-end: 3;
+#&gt;    grid-column-start:2;
+#&gt;    grid-column-end:3;
+#&gt;    grid-row-start:2;
+#&gt;    grid-row-end:3;
 #&gt; }
 #&gt; #plot_b {
-#&gt;   grid-column-start: 2;
-#&gt;   grid-column-end: 4;
-#&gt;   grid-row-start: 3;
-#&gt;   grid-row-end: 4;
+#&gt;    grid-column-start:2;
+#&gt;    grid-column-end:4;
+#&gt;    grid-row-start:3;
+#&gt;    grid-row-end:4;
 #&gt; }
 #&gt; #plot_c {
-#&gt;   grid-column-start: 3;
-#&gt;   grid-column-end: 4;
-#&gt;   grid-row-start: 2;
-#&gt;   grid-row-end: 3;
+#&gt;    grid-column-start:3;
+#&gt;    grid-column-end:4;
+#&gt;    grid-row-start:2;
+#&gt;    grid-row-end:3;
 #&gt; }
 #&gt; 
 #&gt; 
@@ -315,8 +321,18 @@ other reasons.</p></td>
 #&gt; 
 #&gt; 
 #&gt; .grid_panel.collapsed  {
-#&gt;   height: var(--card-title-height);
+#&gt;   grid-template-rows: min-content 0;
+#&gt;   height: min-content;
 #&gt;   overflow: hidden;
+#&gt; }
+#&gt; 
+#&gt; /* Make flip arrow point down when collapsed and
+#&gt;    up when expanded to show result of clicking */
+#&gt; .grid_panel .collapser-icon svg {
+#&gt;   transition: transform 0.2s ease;
+#&gt; }
+#&gt; .grid_panel.collapsed .collapser-icon svg {
+#&gt;   transform: scaleY(-1);
 #&gt; }
 #&gt; 
 #&gt; .grid_panel.collapsed .panel-content {
@@ -337,46 +353,46 @@ other reasons.</p></td>
 #&gt; .grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
 #&gt; .grid_panel .tabbable .tab-pane { height: 100%; }
 #&gt; 
-#&gt; @media (max-width:600px) {
+#&gt; @media (max-width:500px) {
 #&gt; 
 #&gt; body {
-#&gt;   display: grid;
-#&gt;   grid-template-rows: 85px 350px 350px 350px 350px;
-#&gt;   grid-template-columns: 1fr;
-#&gt;   grid-gap: 1rem;
-#&gt;   padding: 1rem;
-#&gt;   height: auto;
+#&gt;    display:grid;
+#&gt;    grid-template-rows:85px 350px 350px 350px 350px;
+#&gt;    grid-template-columns:1fr;
+#&gt;    grid-gap:1rem;
+#&gt;    padding:1rem;
+#&gt;    height:auto;
 #&gt; }
 #&gt; 
 #&gt; #header {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 1;
-#&gt;   grid-row-end: 2;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:1;
+#&gt;    grid-row-end:2;
 #&gt; }
 #&gt; #sidebar {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 2;
-#&gt;   grid-row-end: 3;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:2;
+#&gt;    grid-row-end:3;
 #&gt; }
 #&gt; #plot_a {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 3;
-#&gt;   grid-row-end: 4;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:3;
+#&gt;    grid-row-end:4;
 #&gt; }
 #&gt; #plot_b {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 4;
-#&gt;   grid-row-end: 5;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:4;
+#&gt;    grid-row-end:5;
 #&gt; }
 #&gt; #plot_c {
-#&gt;   grid-column-start: 1;
-#&gt;   grid-column-end: 2;
-#&gt;   grid-row-start: 5;
-#&gt;   grid-row-end: 6;
+#&gt;    grid-column-start:1;
+#&gt;    grid-column-end:2;
+#&gt;    grid-row-start:5;
+#&gt;    grid-row-end:6;
 #&gt; }
 #&gt; 
 #&gt; }

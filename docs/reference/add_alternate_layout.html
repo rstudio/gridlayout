@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Build css properties named or unnamed list of property values — build_css_rule • gridlayout</title>
+<title>Add alternate layout options — add_alternate_layout • gridlayout</title>
 
 
 <!-- jquery -->
@@ -40,8 +40,10 @@
 
 
 
-<meta property="og:title" content="Build css properties named or unnamed list of property values — build_css_rule" />
-<meta property="og:description" content="Build css properties named or unnamed list of property values" />
+<meta property="og:title" content="Add alternate layout options — add_alternate_layout" />
+<meta property="og:description" content="Adds a layout that will be triggered based upon the size of the viewport.
+This is typically used to add a mobile view (or a desktop view if your app is
+mobile first.)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -143,40 +145,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Build css properties named or unnamed list of property values</h1>
+    <h1>Add alternate layout options</h1>
     
-    <div class="hidden name"><code>build_css_rule.Rd</code></div>
+    <div class="hidden name"><code>add_alternate_layout.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Build css properties named or unnamed list of property values</p>
+    <p>Adds a layout that will be triggered based upon the size of the viewport.
+This is typically used to add a mobile view (or a desktop view if your app is
+mobile first.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>build_css_rule</span><span class='op'>(</span><span class='va'>selector</span>, <span class='va'>prop_list</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_alternate_layout</span><span class='op'>(</span>
+  <span class='va'>layout</span>,
+  <span class='va'>alternate_layout</span>,
+  width_bounds <span class='op'>=</span> <span class='cn'>NULL</span>,
+  container_height <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>selector</th>
-      <td><p>valid css selector to target. E.g. <code>body</code> or
-<code>div.blue_boxes</code>... For inline styles where no selector is desired use
-<code>"inline"</code>.</p></td>
+      <th>layout</th>
+      <td><p>Main (or default) layout object</p></td>
     </tr>
     <tr>
-      <th>prop_list</th>
-      <td><p>A list of property-value pairs for additional styles to be
-added to each element. Pairs can be given as named elements: e.g.
-<code>element_styles = c("background" = "blue")</code>. See <a href='https://rdrr.io/pkg/htmltools/man/css.html'>htmltools::css</a> for rules
-on formatting.</p></td>
+      <th>alternate_layout</th>
+      <td><p>A <code>gridlayout</code> object or layout-as-markdown-table
+defining layout.</p></td>
+    </tr>
+    <tr>
+      <th>width_bounds</th>
+      <td><p>A named vector with at least one element of name <code>min</code>,
+or <code>max</code>. These two values are used to set when the layout occurs. For
+instance, <code><a href='https://rdrr.io/r/base/c.html'>c(max = 600)</a></code> means the layout will occur up until the page is
+wider than <code>600px</code>.</p></td>
+    </tr>
+    <tr>
+      <th>container_height</th>
+      <td><p>How tall the layout should be. If left as <code>NULL</code> this
+will simply inherit the main layout's height. Often this should be set to
+<code>"auto"</code> to allow mobile user's to scroll. Beware though, you will want to
+absolutely size any plot outputs in these cases.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A concatenated string of property values to be used inside a css
-selector. If the <code>prop_list</code> is empty, an empty string (<code>""</code>) is returned
-to avoid placing empty css rules on the webpage.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

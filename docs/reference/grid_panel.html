@@ -171,7 +171,8 @@ style, or to align the content of the card vertically or horizontally.</p>
   use_bslib_card_styles <span class='op'>=</span> <span class='cn'>FALSE</span>,
   collapsable <span class='op'>=</span> <span class='cn'>FALSE</span>,
   scrollable <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  panel_id <span class='op'>=</span> <span class='cn'>NULL</span>
+  panel_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  panel_class <span class='op'>=</span> <span class='fu'>make_panel_classes</span><span class='op'>(</span><span class='va'>use_card_styles</span>, <span class='va'>use_bslib_card_styles</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -189,6 +190,16 @@ mapping to the the <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/jus
 (=<code>h_align</code>) and
 <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/align-items'><code>align-items</code></a>
 (= <code>v_align</code>).</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.</p></td>
+    </tr>
+    <tr>
+      <th>use_card_styles</th>
+      <td><p>Should the element contained in panel be made to look
+like an enclosed card?</p></td>
     </tr>
     <tr>
       <th>use_bslib_card_styles</th>
@@ -213,9 +224,10 @@ the panel can be seen?</p></td>
 <code><a href='grid_page.html'>grid_page()</a></code> or <code><a href='grid_container.html'>grid_container()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>use_card_style</th>
-      <td><p>Should the element contained in panel be made to look
-like an enclosed card?</p></td>
+      <th>panel_class</th>
+      <td><p>Class(es) of <code>grid_panel</code> div. Like <code>panel_id</code> this is
+typically automatically generated and should only be touched in advanced
+usage.</p></td>
     </tr>
     </table>
 
@@ -235,7 +247,7 @@ like an enclosed card?</p></td>
   h_align <span class='op'>=</span> <span class='st'>"center"</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; &lt;div class="grid_panel gridlayout-card"&gt;
-#&gt;   &lt;div style="display: grid; justify-content: center; align-content: center;" class="panel-content"&gt;
+#&gt;   &lt;div style="display:grid;justify-content:center;align-content:center;" class="panel-content"&gt;
 #&gt;     &lt;h2&gt;R&lt;/h2&gt;
 #&gt;   &lt;/div&gt;
 #&gt; &lt;/div&gt;</div><div class='input'>

@@ -43,7 +43,7 @@ reference:
   - md_to_gridlayout
   - to_md
   - get_elements
-  - add_alternate_layout.gridlayout
+  - get_element_ids
 - title: "Using layouts"
   desc: >
     Functions for utilizing layouts in Shiny apps or RMarkdown documents
