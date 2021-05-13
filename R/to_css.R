@@ -197,32 +197,23 @@ generate_layout_rules <- function(
 #' @return A concatenated string of property values to be used inside a css
 #'   selector. If the `prop_list` is empty, an empty string (`""`) is returned
 #'   to avoid placing empty css rules on the webpage.
-build_css_rule <- function(selector, prop_list){
+build_css_rule <- function(selector, prop_list) {
   # Empty css rules are best avoided
-  if (length(prop_list) == 0) return("")
+  if (length(prop_list) == 0) {
+    return("")
+  }
 
-  # Inline mode means we just give all the css on one line with no sector
-  # needed.
-  inline_mode <- selector == "inline"
-
-  css_text <- indent_text(
-    do.call(
-      htmltools::css,
-      as.list(c(
-        prop_list,
-        collapse_ = if (inline_mode) " " else "\n")
-      ))
+  css_text <- do.call(
+    htmltools::css,
+    as.list(c(prop_list, collapse_ = "\n"))
   )
 
-  if(inline_mode){
-    css_text
-  } else {
-    paste0(
-      selector, " {\n",
-      css_text,
-      "\n}"
-    )
-  }
+  paste0(
+    selector,
+    " {\n",
+    indent_text(css_text),
+    "\n}"
+  )
 }
 
 #' Convert layout to css for Shiny
