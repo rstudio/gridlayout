@@ -311,7 +311,7 @@ as_gridlayout <- function(x){
 format.gridlayout_template <- function(
   x,
   sizes_decorator = gridlayout:::italicize,
-  elements_decorator = gridlayout::invert_text
+  elements_decorator = gridlayout:::invert_text
 ){
 
   table_text <- to_table(
