@@ -40,7 +40,7 @@ relative units.}
     \item{\code{alternate_layouts}}{A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a
 phone or an ultra-wide monitor. Each entry in this list must contain a
-\code{layout}: or valid layout declaration (see \link{Declaring your layout}), and
+\code{layout}: or valid layout declaration (see \emph{Declaring your layout} section), and
 \code{width_bounds}: or a list with at least one of a \code{min} and \code{max} value for
 when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_layout()}} for more details. If no
 alternate layouts are given a single-column layout will be automatically
@@ -53,7 +53,7 @@ An object of class "grid_layout", which stores the layout as a
 matrix. This can be passed to other functions such as \code{layout_to_css()}.
 }
 \description{
-This is just a wrapper around \code{\link[=new_gridlayout]{new_gridlayout()}} that is more explicit about
+This is just a wrapper around \link{new_gridlayout} that is more explicit about
 its input format. Also adds the ability to absorb errors for use when parsing
 free text that may or may not represent a layout table.
 }

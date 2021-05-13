@@ -6,8 +6,7 @@
 #'
 #' @param layout Main (or default) layout object
 #' @param alternate_layout A `gridlayout` object or layout-as-markdown-table
-#'   defining layout. See [Declaring your layout] for more info on format. The
-#'   elements in this layout must match those in your main layout.
+#'   defining layout.
 #' @param width_bounds A named vector with at least one element of name `min`,
 #'   or `max`. These two values are used to set when the layout occurs. For
 #'   instance, `c(max = 600)` means the layout will occur up until the page is

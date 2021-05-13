@@ -37,7 +37,7 @@ get_elements.gridlayout <- function(layout){
 
 #' Get ids of element in layout
 #'
-#' @param layout Object of class `"gridlayout"`.
+#' @param x Object of class `"gridlayout"`.
 #'
 #' @return Character vector of ids of all elements in layout
 #' @export

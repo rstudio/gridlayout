@@ -9,3 +9,5 @@
 ^tests/run-screenshot-tests\.R$
 ^tests/screenshot-tests$
 ^inst/grided/www/\.cache$
+^doc$
+^Meta$

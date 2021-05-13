@@ -1,6 +1,6 @@
 #' Build grid layout obj from markdown table
 #'
-#' This is just a wrapper around [new_gridlayout()] that is more explicit about
+#' This is just a wrapper around [new_gridlayout] that is more explicit about
 #' its input format. Also adds the ability to absorb errors for use when parsing
 #' free text that may or may not represent a layout table.
 #'

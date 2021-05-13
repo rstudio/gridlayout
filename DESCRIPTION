@@ -19,7 +19,10 @@ Suggests:
     here,
     webshot2,
     rstudioapi,
-    fs
+    fs,
+    glue,
+    ggplot2,
+    gt
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

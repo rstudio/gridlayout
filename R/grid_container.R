@@ -7,7 +7,7 @@
 #'   with `grid-` to avoid namespace clashes)
 #' @param use_bslib_card_styles Should the elements within the grid be given the
 #'   current bootstrap theme's card styling? Note that this setting will
-#'   override card styling for elements built with \link{\code{grid_panel()}}.
+#'   override card styling for elements built with [grid_panel].
 #'   This is so you don't have to manually change styles for each card. If you
 #'   want a mixture of card styles, then you'll need to leave this as `FALSE`
 #'   and set styles manually on each panel.

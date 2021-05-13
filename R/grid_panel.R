@@ -8,7 +8,9 @@
 #' style, or to align the content of the card vertically or horizontally.
 #'
 #' @param ... Elements to include within the panel
-#' @param use_card_style Should the element contained in panel be made to look
+#' @param title Character string to go across top of panel with label. If left
+#'   blank the card contents will take up entire space.
+#' @param use_card_styles Should the element contained in panel be made to look
 #'   like an enclosed card?
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
@@ -251,7 +253,7 @@ title_panel <- function(
 ) {
 
   if (notNull(logo)) {
-    title_content <- tagList(
+    title_content <- htmltools::tagList(
       shiny::img(src = logo, height = "60px"),
       title_content
     )

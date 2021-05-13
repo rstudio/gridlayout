@@ -7,7 +7,7 @@
 get_element_ids(x)
 }
 \arguments{
-\item{layout}{Object of class \code{"gridlayout"}.}
+\item{x}{Object of class \code{"gridlayout"}.}
 }
 \value{
 Character vector of ids of all elements in layout

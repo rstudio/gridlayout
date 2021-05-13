@@ -15,8 +15,7 @@ add_alternate_layout(
 \item{layout}{Main (or default) layout object}
 
 \item{alternate_layout}{A \code{gridlayout} object or layout-as-markdown-table
-defining layout. See \link{Declaring your layout} for more info on format. The
-elements in this layout must match those in your main layout.}
+defining layout.}
 
 \item{width_bounds}{A named vector with at least one element of name \code{min},
 or \code{max}. These two values are used to set when the layout occurs. For
