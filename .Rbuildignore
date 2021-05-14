@@ -11,3 +11,4 @@
 ^inst/grided/www/\.cache$
 ^doc$
 ^Meta$
+^\.github$
