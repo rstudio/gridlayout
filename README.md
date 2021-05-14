@@ -4,6 +4,8 @@
 # gridlayout
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
 A package to making building weblayouts using CSS-Grid easy.
@@ -279,30 +281,40 @@ cat(to_css(my_layout))
 #>    grid-column-end:4;
 #>    grid-row-start:1;
 #>    grid-row-end:2;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #sidebar {
 #>    grid-column-start:1;
 #>    grid-column-end:2;
 #>    grid-row-start:2;
 #>    grid-row-end:4;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_a {
 #>    grid-column-start:2;
 #>    grid-column-end:3;
 #>    grid-row-start:2;
 #>    grid-row-end:3;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_b {
 #>    grid-column-start:2;
 #>    grid-column-end:4;
 #>    grid-row-start:3;
 #>    grid-row-end:4;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_c {
 #>    grid-column-start:3;
 #>    grid-column-end:4;
 #>    grid-row-start:2;
 #>    grid-row-end:3;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> 
 #> 
@@ -365,13 +377,21 @@ cat(to_css(my_layout))
 #> 
 #> 
 #> .grid_panel.collapsed  {
-#>   grid-template-rows: min-content 0;
-#>   height: min-content;
-#>   overflow: hidden;
+#>   /* If panel is not collapsible this css variable is defined as "block"
+#>      which means that a panel that has been collapsed, and then resized
+#>      to a scenario where it cant be collapsed, it will pop back
+#>   */
+#>   grid-template-rows: min-content var(--collapsed-content-size, 0);
+#>   height: var(--collapsed-panel-height);
+#>   overflow: var(--collapsed-panel-overflow);
 #> }
+#> 
 #> 
 #> /* Make flip arrow point down when collapsed and
 #>    up when expanded to show result of clicking */
+#> .grid_panel .collapser-icon {
+#>   display: var(--collapsible-visibility, none);
+#> }
 #> .grid_panel .collapser-icon svg {
 #>   transition: transform 0.2s ease;
 #> }
@@ -379,16 +399,20 @@ cat(to_css(my_layout))
 #>   transform: scaleY(-1);
 #> }
 #> 
-#> .grid_panel.collapsed .panel-content {
-#>   display: none;
-#> }
-#> 
 #> /* Make everything line up nice and cleanly like it should in the middle */
-#> .title_panel {
+#> .text_panel {
 #>   margin: 0;
 #>   height: 100%;
 #>   display: flex;
 #>   align-items: center;
+#> }
+#> /* Everything should be inline so lining up works properly */
+#> .text_panel * {
+#>   display: inline;
+#> }
+#> /* Make sure logo isn't right up next to the text */
+#> .text_panel > * {
+#>   margin: 0 5px;
 #> }
 #> 
 #> /* Makes it so tabpanels work in gridpanels */
@@ -413,30 +437,40 @@ cat(to_css(my_layout))
 #>    grid-column-end:2;
 #>    grid-row-start:1;
 #>    grid-row-end:2;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #sidebar {
 #>    grid-column-start:1;
 #>    grid-column-end:2;
 #>    grid-row-start:2;
 #>    grid-row-end:3;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_a {
 #>    grid-column-start:1;
 #>    grid-column-end:2;
 #>    grid-row-start:3;
 #>    grid-row-end:4;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_b {
 #>    grid-column-start:1;
 #>    grid-column-end:2;
 #>    grid-row-start:4;
 #>    grid-row-end:5;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> #plot_c {
 #>    grid-column-start:1;
 #>    grid-column-end:2;
 #>    grid-row-start:5;
 #>    grid-row-end:6;
+#>    --collapsible-visibility:none;
+#>    --collapsed-content-size:1fr;
 #> }
 #> 
 #> }
@@ -463,6 +497,9 @@ head(get_elements(my_layout), 2)
 #> [[1]]$end_col
 #> [1] 3
 #> 
+#> [[1]]$collapsible
+#> [1] FALSE
+#> 
 #> 
 #> [[2]]
 #> [[2]]$id
@@ -479,4 +516,7 @@ head(get_elements(my_layout), 2)
 #> 
 #> [[2]]$end_col
 #> [1] 1
+#> 
+#> [[2]]$collapsible
+#> [1] FALSE
 ```

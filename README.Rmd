@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 # gridlayout
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
 A package to making building weblayouts using CSS-Grid easy.
