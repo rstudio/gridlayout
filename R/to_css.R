@@ -141,7 +141,12 @@ generate_layout_rules <- function(
             "grid-column-start" = el$start_col,
             "grid-column-end" = el$end_col + 1,
             "grid-row-start" = el$start_row,
-            "grid-row-end" = el$end_row + 1)
+            "grid-row-end" = el$end_row + 1,
+            "--collapsible-visibility" = if (el$collapsible) "block" else "none",
+            "--collapsed-content-size" = if (el$collapsible) "0" else "1fr",
+            "--collapsed-panel-height" = if (el$collapsible) "min-content",
+            "--collapsed-panel-overflow" = if (el$collapsible) "hidden"
+          )
         )
       }
     ),

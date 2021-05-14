@@ -1,41 +1,22 @@
-# The geyser app... but in grid!
+# collapsible cards can be auto-detected and enabled
+
 library(gridlayout)
 library(shiny)
 
-main_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|70px  |header  |header |
-|1fr   |sidebar |plot   |"
-
-mobile_layout <- "
-|----- |--------|
-|2rem  |1fr     |
-|100px |header  |
-|250px |sidebar |
-|400px |plot    |"
-
-big_screen_layout <- "
-|-----|-------|--------|-----|
-|2rem |250px  | 250px  |1fr  |
-|1fr  |header |sidebar |plot |
-"
-
 my_layout <- new_gridlayout(
-  main_layout,
+  "
+  |     |200px   |1fr    |
+  |80px |header  |header |
+  |1fr  |sidebar |plot   |",
   alternate_layouts = list(
-    list(
-      layout = mobile_layout,
-      width_bounds = c(max = 600)
-    ),
-    list(
-      layout = big_screen_layout,
-      width_bounds = c(min = 1600)
-    )
+    layout = "
+      |      |1fr     |
+      |80px  |header  |
+      |auto  |sidebar |
+      |400px |plot    |",
+    width_bounds = c(max = 700)
   )
 )
-
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
@@ -43,11 +24,9 @@ app <- shinyApp(
     layout = my_layout,
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
-    header = title_panel("Geysers!"),
+    header = title_panel("This is my header"),
     sidebar = grid_panel(
       title = "Settings",
-      v_align = "center",
-      collapsible = TRUE,
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
     plot = plotOutput("distPlot")
@@ -60,7 +39,5 @@ app <- shinyApp(
     })
   }
 )
-
 app
-
 

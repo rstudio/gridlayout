@@ -11,7 +11,7 @@ grid_panel(
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
-  collapsable = FALSE,
+  collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
   panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
@@ -37,9 +37,11 @@ like an enclosed card?}
 instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
 will override \code{use_card_style}.}
 
-\item{collapsable}{Should the card be able to be collapsed? Only really
-functional when panel takes up entire width of page. Requires a title so
-the user knows what panel is in collapsed state.}
+\item{collapsible}{Should the card be able to be collapsed (\code{TRUE} or
+\code{FALSE})? Gridlayout will only show collapser if the layout allows it
+(panel is entirely positioned within "auto" sized rows, and has a title).
+Setting this to \code{FALSE} will mean collapsibility of the panel will never be
+enabled, regardless of layout.}
 
 \item{scrollable}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}

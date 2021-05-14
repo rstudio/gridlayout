@@ -20,9 +20,11 @@ like an enclosed card?}
     \item{\code{use_bslib_card_styles}}{Should the card styles from bslib be used
 instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
 will override \code{use_card_style}.}
-    \item{\code{collapsable}}{Should the card be able to be collapsed? Only really
-functional when panel takes up entire width of page. Requires a title so
-the user knows what panel is in collapsed state.}
+    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
+\code{FALSE})? Gridlayout will only show collapser if the layout allows it
+(panel is entirely positioned within "auto" sized rows, and has a title).
+Setting this to \code{FALSE} will mean collapsibility of the panel will never be
+enabled, regardless of layout.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
     \item{\code{v_align}}{Vertical and Horizontal alignment of content in panel.
