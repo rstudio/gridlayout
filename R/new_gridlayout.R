@@ -322,6 +322,14 @@ new_gridlayout_template <- function(
     warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
   }
 
+  # Parse through all elements to see if they are collapsible. A collapsible
+  # element is one that, if collapsed, will result in a shrinking of the page.
+  # This only occurs when every row that the element occupies is 'auto' sized.
+  for (i in seq_along(elements)) {
+    rows_for_el <- sizes$row[elements[[i]]$start_row: elements[[i]]$end_row]
+    elements[[i]]$collapsible = all(rows_for_el == "auto")
+  }
+
   structure(
     list(
       elements = elements,

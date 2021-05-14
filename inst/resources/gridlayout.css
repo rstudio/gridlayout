@@ -56,13 +56,21 @@
 
 
 .grid_panel.collapsed  {
-  grid-template-rows: min-content 0;
-  height: min-content;
-  overflow: hidden;
+  /* If panel is not collapsible this css variable is defined as "block"
+     which means that a panel that has been collapsed, and then resized
+     to a scenario where it cant be collapsed, it will pop back
+  */
+  grid-template-rows: min-content var(--collapsed-content-size, 0);
+  height: var(--collapsed-panel-height);
+  overflow: var(--collapsed-panel-overflow);
 }
+
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */
+.grid_panel .collapser-icon {
+  display: var(--collapsible-visibility, none);
+}
 .grid_panel .collapser-icon svg {
   transition: transform 0.2s ease;
 }
@@ -70,16 +78,20 @@
   transform: scaleY(-1);
 }
 
-.grid_panel.collapsed .panel-content {
-  display: none;
-}
-
 /* Make everything line up nice and cleanly like it should in the middle */
-.title_panel {
+.text_panel {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
+}
+/* Everything should be inline so lining up works properly */
+.text_panel * {
+  display: inline;
+}
+/* Make sure logo isn't right up next to the text */
+.text_panel > * {
+  margin: 0 5px;
 }
 
 /* Makes it so tabpanels work in gridpanels */

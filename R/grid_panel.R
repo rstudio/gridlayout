@@ -15,9 +15,11 @@
 #' @param use_bslib_card_styles Should the card styles from bslib be used
 #'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
 #'   will override `use_card_style`.
-#' @param collapsable Should the card be able to be collapsed? Only really
-#'   functional when panel takes up entire width of page. Requires a title so
-#'   the user knows what panel is in collapsed state.
+#' @param collapsible Should the card be able to be collapsed (`TRUE` or
+#'   `FALSE`)? Gridlayout will only show collapser if the layout allows it
+#'   (panel is entirely positioned within "auto" sized rows, and has a title).
+#'   Setting this to `FALSE` will mean collapsibility of the panel will never be
+#'   enabled, regardless of layout.
 #' @param scrollable Should scroll-bars be added so content that is larger than
 #'   the panel can be seen?
 #' @param v_align,h_align Vertical and Horizontal alignment of content in panel.
@@ -116,7 +118,7 @@ grid_panel <- function(
   title = NULL,
   use_card_styles = TRUE,
   use_bslib_card_styles = FALSE,
-  collapsable = FALSE,
+  collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
   panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
@@ -148,7 +150,7 @@ grid_panel <- function(
 
   has_title <- notNull(title)
   no_title <- is.null(title)
-  if (collapsable && no_title) stop("Collapsable cards need a title")
+  use_collapser <- collapsible && has_title
 
   # Go through contents and set plot sizes if necessary
   contents <- lapply(
@@ -166,12 +168,12 @@ grid_panel <- function(
       #     find(".shiny-plot-output")$
       #     each(set_plot_sizes)$
       #     allTags()
-      #
       #   el <- post_tq
       # }
       el
     }
   )
+
 
   shiny::div(
     id = panel_id,
@@ -180,8 +182,8 @@ grid_panel <- function(
       shiny::div(
         class = "title-bar",
         shiny::h3(title),
-        if (collapsable) make_collapser_icon(),
-        style = if (collapsable) "justify-content: space-between;"
+        if (use_collapser) make_collapser_icon(),
+        style = if (use_collapser) "justify-content: space-between;"
       )
     },
     shiny::div(contents, style = panel_styles, class = "panel-content")
@@ -205,66 +207,16 @@ make_collapser_icon <- function(parent_id = "") {
     fontawesome::fa("chevron-up"),
     "onclick" = '
     var card = this.parentElement.parentElement;
-    var card_content = card.querySelector(".panel-content");
     var card_classes = card.classList;
     if (card_classes.contains("collapsed")) {
       card_classes.remove("collapsed");
-      card_content.style.display = "unset";
     } else {
       card_classes.add("collapsed");
-      card_content.style.display = "none";
     }',
     class = "collapser-icon"
   )
 }
 
-#' Make header panel
-#'
-#' This is just a helper function that wraps your content in a vertically
-#' centered header (`h2`) tag.
-#'
-#' @param title_content Whatever you want the title to say. Typically just text
-#'   but any tag or tag-list is possible. All will get wrapped in an `h3` tag.
-#' @inheritDotParams grid_panel
-#' @param logo Optional image source for logo to be placed left of title
-#'
-#' @examples
-#'
-#' # Typically you'll just pass a character string to the function
-#' title_panel("This is my header")
-#'
-#' # You can adjust the horizontal alignment of your header with h_align
-#' title_panel("I'm on the right side!", h_align = "end")
-#'
-#' # If you want more than just text in your title, just wrap content in a span tag
-#' requireNamespace("fontawesome", quietly = TRUE)
-#' title_panel(
-#'   htmltools::span(
-#'     fontawesome::fa("r-project", fill = "steelblue"),
-#'     "This is my header"
-#'   )
-#' )
-#'
-#' @export
-title_panel <- function(
-  title_content,
-  ...,
-  logo = NULL
-) {
-
-  if (notNull(logo)) {
-    title_content <- htmltools::tagList(
-      shiny::img(src = logo, height = "60px"),
-      title_content
-    )
-  }
-
-  grid_panel(
-    shiny::h2(title_content, class = "title_panel"),
-    v_align = "center",
-    ...
-  )
-}
 
 validate_alignment <- function(arg_val) {
   # These are just the options available to the css properties justify-self
