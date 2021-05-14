@@ -78,13 +78,20 @@
   transform: scaleY(-1);
 }
 
-
 /* Make everything line up nice and cleanly like it should in the middle */
-.title_panel {
+.text_panel {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
+}
+/* Everything should be inline so lining up works properly */
+.text_panel * {
+  display: inline;
+}
+/* Make sure logo isn't right up next to the text */
+.text_panel > * {
+  margin: 0 5px;
 }
 
 /* Makes it so tabpanels work in gridpanels */

@@ -217,53 +217,6 @@ make_collapser_icon <- function(parent_id = "") {
   )
 }
 
-#' Make header panel
-#'
-#' This is just a helper function that wraps your content in a vertically
-#' centered header (`h2`) tag.
-#'
-#' @param title_content Whatever you want the title to say. Typically just text
-#'   but any tag or tag-list is possible. All will get wrapped in an `h3` tag.
-#' @inheritDotParams grid_panel
-#' @param logo Optional image source for logo to be placed left of title
-#'
-#' @examples
-#'
-#' # Typically you'll just pass a character string to the function
-#' title_panel("This is my header")
-#'
-#' # You can adjust the horizontal alignment of your header with h_align
-#' title_panel("I'm on the right side!", h_align = "end")
-#'
-#' # If you want more than just text in your title, just wrap content in a span tag
-#' requireNamespace("fontawesome", quietly = TRUE)
-#' title_panel(
-#'   htmltools::span(
-#'     fontawesome::fa("r-project", fill = "steelblue"),
-#'     "This is my header"
-#'   )
-#' )
-#'
-#' @export
-title_panel <- function(
-  title_content,
-  ...,
-  logo = NULL
-) {
-
-  if (notNull(logo)) {
-    title_content <- htmltools::tagList(
-      shiny::img(src = logo, height = "60px"),
-      title_content
-    )
-  }
-
-  grid_panel(
-    shiny::h2(title_content, class = "title_panel"),
-    v_align = "center",
-    ...
-  )
-}
 
 validate_alignment <- function(arg_val) {
   # These are just the options available to the css properties justify-self
