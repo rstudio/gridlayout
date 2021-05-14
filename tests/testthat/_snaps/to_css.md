@@ -1,7 +1,216 @@
 # Works with default body target
 
     Code
-      to_css(grid_obj)
+      cat(to_css(grid_obj))
     Output
-      [1] "\n\nbody {\n   display:grid;\n   grid-template-rows:100px 1fr 1fr;\n   grid-template-columns:120px 1fr 1fr;\n   grid-gap:1rem;\n   padding:1rem;\n   height:100vh;\n}\n\n#header {\n   grid-column-start:1;\n   grid-column-end:4;\n   grid-row-start:1;\n   grid-row-end:2;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#sidebar {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:2;\n   grid-row-end:4;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_a {\n   grid-column-start:2;\n   grid-column-end:3;\n   grid-row-start:2;\n   grid-row-end:3;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_b {\n   grid-column-start:2;\n   grid-column-end:4;\n   grid-row-start:3;\n   grid-row-end:4;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_c {\n   grid-column-start:3;\n   grid-column-end:4;\n   grid-row-start:2;\n   grid-row-end:3;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n\n\n\n.grid_panel {\n  --card-padding: 0.8rem;\n  box-sizing: border-box;\n  overflow: hidden;\n  display: grid;\n  grid-template-areas: \"title\"\n                       \"content\";\n  /* When there's no title the column will dissapear */\n  grid-template-rows: min-content 1fr;\n}\n\n.grid_panel .title-bar {\n  grid-area: title;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  justify-content: start;\n  align-items: center;\n  border-bottom: 1px solid rgba(0,0,0,0.125);\n  padding: calc(var(--card-padding)/2) var(--card-padding);\n}\n.grid_panel .title-bar > h3 {\n  margin: 0;\n  height: 100%;\n}\n\n.panel-content {\n  height: 100%;\n  width: 100%;\n  padding: var(--card-padding);\n  grid-area: content;\n}\n\n.grid_panel .shiny-plot-output > img {\n  /* The way grid sizing works can throw off the plot sizing in shiny. This\n     is because the size of the parent grows to its largest child element.\n     Shiny's plot output uses fixed pixel sizing. Shiny tries to update\n     these sizes by looking at the parent div's dimensions after a resize.\n     When the window has been made smaller, this means that the parent\n     element is spilling outside of its box because the plot image size is\n     still sitting at a fixed pixel width of the previous size. So when Shiny\n     queries the size of the parent it thinks that nothing has changed. By\n     setting a max width and height, we make sure the plot always gets shrunk\n     to at most the size of the grid element, thus allowing the resize observer\n     to work properly.\n  */\n  max-width: 100%;\n  max-height: 100%;\n}\n\n/* Only set card styles if we're not using the bslib card component */\n.grid_panel:not(.card) {\n  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);\n  border-radius: 0.5rem;\n}\n\n\n.grid_panel.collapsed  {\n  /* If panel is not collapsible this css variable is defined as \"block\"\n     which means that a panel that has been collapsed, and then resized\n     to a scenario where it cant be collapsed, it will pop back\n  */\n  grid-template-rows: min-content var(--collapsed-content-size, 0);\n  height: var(--collapsed-panel-height);\n  overflow: var(--collapsed-panel-overflow);\n}\n\n\n/* Make flip arrow point down when collapsed and\n   up when expanded to show result of clicking */\n.grid_panel .collapser-icon {\n  display: var(--collapsible-visibility, none);\n}\n.grid_panel .collapser-icon svg {\n  transition: transform 0.2s ease;\n}\n.grid_panel.collapsed .collapser-icon svg {\n  transform: scaleY(-1);\n}\n\n\n/* Make everything line up nice and cleanly like it should in the middle */\n.title_panel {\n  margin: 0;\n  height: 100%;\n  display: flex;\n  align-items: center;\n}\n\n/* Makes it so tabpanels work in gridpanels */\n.grid_panel .tabbable { height: 100% }\n.grid_panel .tabbable > .nav { height: 42px; }\n.grid_panel .tabbable .tab-content { height: calc(100% - 42px); }\n.grid_panel .tabbable .tab-pane { height: 100%; }\n\n@media (max-width:500px) {\n\nbody {\n   display:grid;\n   grid-template-rows:85px 350px 350px 350px 350px;\n   grid-template-columns:1fr;\n   grid-gap:1rem;\n   padding:1rem;\n   height:auto;\n}\n\n#header {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:1;\n   grid-row-end:2;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#sidebar {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:2;\n   grid-row-end:3;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_a {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:3;\n   grid-row-end:4;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_b {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:4;\n   grid-row-end:5;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n#plot_c {\n   grid-column-start:1;\n   grid-column-end:2;\n   grid-row-start:5;\n   grid-row-end:6;\n   --collapsible-visibility:none;\n   --collapsed-content-size:1fr;\n}\n\n}\n\n"
+      
+      
+      body {
+         display:grid;
+         grid-template-rows:100px 1fr 1fr;
+         grid-template-columns:120px 1fr 1fr;
+         grid-gap:1rem;
+         padding:1rem;
+         height:100vh;
+      }
+      
+      #header {
+         grid-column-start:1;
+         grid-column-end:4;
+         grid-row-start:1;
+         grid-row-end:2;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #sidebar {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:2;
+         grid-row-end:4;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_a {
+         grid-column-start:2;
+         grid-column-end:3;
+         grid-row-start:2;
+         grid-row-end:3;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_b {
+         grid-column-start:2;
+         grid-column-end:4;
+         grid-row-start:3;
+         grid-row-end:4;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_c {
+         grid-column-start:3;
+         grid-column-end:4;
+         grid-row-start:2;
+         grid-row-end:3;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      
+      
+      
+      .grid_panel {
+        --card-padding: 0.8rem;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: grid;
+        grid-template-areas: "title"
+                             "content";
+        /* When there's no title the column will dissapear */
+        grid-template-rows: min-content 1fr;
+      }
+      
+      .grid_panel .title-bar {
+        grid-area: title;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.125);
+        padding: calc(var(--card-padding)/2) var(--card-padding);
+      }
+      .grid_panel .title-bar > h3 {
+        margin: 0;
+        height: 100%;
+      }
+      
+      .panel-content {
+        height: 100%;
+        width: 100%;
+        padding: var(--card-padding);
+        grid-area: content;
+      }
+      
+      .grid_panel .shiny-plot-output > img {
+        /* The way grid sizing works can throw off the plot sizing in shiny. This
+           is because the size of the parent grows to its largest child element.
+           Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+           these sizes by looking at the parent div's dimensions after a resize.
+           When the window has been made smaller, this means that the parent
+           element is spilling outside of its box because the plot image size is
+           still sitting at a fixed pixel width of the previous size. So when Shiny
+           queries the size of the parent it thinks that nothing has changed. By
+           setting a max width and height, we make sure the plot always gets shrunk
+           to at most the size of the grid element, thus allowing the resize observer
+           to work properly.
+        */
+        max-width: 100%;
+        max-height: 100%;
+      }
+      
+      /* Only set card styles if we're not using the bslib card component */
+      .grid_panel:not(.card) {
+        box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
+        border-radius: 0.5rem;
+      }
+      
+      
+      .grid_panel.collapsed  {
+        /* If panel is not collapsible this css variable is defined as "block"
+           which means that a panel that has been collapsed, and then resized
+           to a scenario where it cant be collapsed, it will pop back
+        */
+        grid-template-rows: min-content var(--collapsed-content-size, 0);
+        height: var(--collapsed-panel-height);
+        overflow: var(--collapsed-panel-overflow);
+      }
+      
+      
+      /* Make flip arrow point down when collapsed and
+         up when expanded to show result of clicking */
+      .grid_panel .collapser-icon {
+        display: var(--collapsible-visibility, none);
+      }
+      .grid_panel .collapser-icon svg {
+        transition: transform 0.2s ease;
+      }
+      .grid_panel.collapsed .collapser-icon svg {
+        transform: scaleY(-1);
+      }
+      
+      /* Make everything line up nice and cleanly like it should in the middle */
+      .text_panel {
+        margin: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      /* Everything should be inline so lining up works properly */
+      .text_panel * {
+        display: inline;
+      }
+      /* Make sure logo isn't right up next to the text */
+      .text_panel > * {
+        margin: 0 5px;
+      }
+      
+      /* Makes it so tabpanels work in gridpanels */
+      .grid_panel .tabbable { height: 100% }
+      .grid_panel .tabbable > .nav { height: 42px; }
+      .grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
+      .grid_panel .tabbable .tab-pane { height: 100%; }
+      
+      @media (max-width:500px) {
+      
+      body {
+         display:grid;
+         grid-template-rows:85px 350px 350px 350px 350px;
+         grid-template-columns:1fr;
+         grid-gap:1rem;
+         padding:1rem;
+         height:auto;
+      }
+      
+      #header {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:1;
+         grid-row-end:2;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #sidebar {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:2;
+         grid-row-end:3;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_a {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:3;
+         grid-row-end:4;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_b {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:4;
+         grid-row-end:5;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      #plot_c {
+         grid-column-start:1;
+         grid-column-end:2;
+         grid-row-start:5;
+         grid-row-end:6;
+         --collapsible-visibility:none;
+         --collapsed-content-size:1fr;
+      }
+      
+      }
+      
 

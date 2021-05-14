@@ -8,7 +8,7 @@ test_that("Works with default body target", {
       |1fr   |sidebar |plot_b |plot_b |"
   )
 
-  expect_snapshot(to_css(grid_obj))
+  expect_snapshot(cat(to_css(grid_obj)))
 })
 
 test_that("Can change body target", {
