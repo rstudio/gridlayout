@@ -127,6 +127,6 @@ title_panel <- function(
     wrapping_tag = htmltools::h2,
     h_align = h_align,
     img_height = img_height,
-    htmltools::tags$head(tags$title(windowTitle))
+    htmltools::tags$head(htmltools::tags$title(windowTitle))
   )
 }
