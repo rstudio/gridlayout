@@ -271,7 +271,8 @@ use_gridlayout_shiny <- function(layout, ...){
   htmltools::tags$head(
     htmltools::tags$style(
       htmltools::HTML(to_css(layout, ...))
-    )
+    ),
+    htmltools::includeScript(system.file("resources/gridlayout.js", package = "gridlayout"))
   )
 }
 

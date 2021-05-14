@@ -3,6 +3,10 @@
 library(gridlayout)
 library(shiny)
 
+options(shiny.autoreload = TRUE)
+options(shiny.trace = TRUE)
+shiny::devmode(TRUE)
+
 my_layout <- new_gridlayout(
   "
   |     |200px   |1fr    |
@@ -13,10 +17,11 @@ my_layout <- new_gridlayout(
       |      |1fr     |
       |80px  |header  |
       |auto  |sidebar |
-      |400px |plot    |",
+      |auto |plot    |",
     width_bounds = c(max = 700)
   )
 )
+
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
@@ -29,7 +34,10 @@ app <- shinyApp(
       title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    plot = plotOutput("distPlot")
+    plot = grid_panel(
+      title = "Geysers!",
+      plotOutput("distPlot", height = "400px")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
