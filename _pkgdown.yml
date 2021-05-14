@@ -35,28 +35,32 @@ navbar:
 destination: docs
 
 reference:
-- title: "Creating layouts"
+- title: "Layouts"
   desc: >
-    Functions relating to creating and displaying gridlayout objects
+    Functions relating to creating and using gridlayout objects
 - contents:
   - new_gridlayout
-  - md_to_gridlayout
-  - to_md
-  - get_elements
-  - get_element_ids
-- title: "Using layouts"
-  desc: >
-    Functions for utilizing layouts in Shiny apps or RMarkdown documents
-- contents:
   - grid_page
   - grid_container
-  - grid_panel
-  - title_panel
   - starts_with("use_gridlayout")
+- title: "Grid Panels"
+  desc: >
+    Functions that wrap content to be placed in the grid.
+- contents:
+  - grid_panel
+  - text_panel
+  - title_panel
+- title: "Helper functions"
+  desc: >
+    Various functions for inspecting layouts or the content they create. For advanced use-cases.
+- contents:
+  - to_md
+  - md_to_gridlayout
+  - get_elements
+  - get_element_ids
   - to_css
   - to_app_template
   - build_css_rule
-  - get_element_ids
 - title: "Grided layout builder app"
   desc: >
     Functions for using the grided app for generating layouts with a graphical interface.

@@ -235,30 +235,40 @@ other reasons.</p></td>
 #&gt;    grid-column-end:4;
 #&gt;    grid-row-start:1;
 #&gt;    grid-row-end:2;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #sidebar {
 #&gt;    grid-column-start:1;
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:2;
 #&gt;    grid-row-end:4;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_a {
 #&gt;    grid-column-start:2;
 #&gt;    grid-column-end:3;
 #&gt;    grid-row-start:2;
 #&gt;    grid-row-end:3;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_b {
 #&gt;    grid-column-start:2;
 #&gt;    grid-column-end:4;
 #&gt;    grid-row-start:3;
 #&gt;    grid-row-end:4;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_c {
 #&gt;    grid-column-start:3;
 #&gt;    grid-column-end:4;
 #&gt;    grid-row-start:2;
 #&gt;    grid-row-end:3;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; 
 #&gt; 
@@ -321,13 +331,21 @@ other reasons.</p></td>
 #&gt; 
 #&gt; 
 #&gt; .grid_panel.collapsed  {
-#&gt;   grid-template-rows: min-content 0;
-#&gt;   height: min-content;
-#&gt;   overflow: hidden;
+#&gt;   /* If panel is not collapsible this css variable is defined as "block"
+#&gt;      which means that a panel that has been collapsed, and then resized
+#&gt;      to a scenario where it cant be collapsed, it will pop back
+#&gt;   */
+#&gt;   grid-template-rows: min-content var(--collapsed-content-size, 0);
+#&gt;   height: var(--collapsed-panel-height);
+#&gt;   overflow: var(--collapsed-panel-overflow);
 #&gt; }
+#&gt; 
 #&gt; 
 #&gt; /* Make flip arrow point down when collapsed and
 #&gt;    up when expanded to show result of clicking */
+#&gt; .grid_panel .collapser-icon {
+#&gt;   display: var(--collapsible-visibility, none);
+#&gt; }
 #&gt; .grid_panel .collapser-icon svg {
 #&gt;   transition: transform 0.2s ease;
 #&gt; }
@@ -335,16 +353,20 @@ other reasons.</p></td>
 #&gt;   transform: scaleY(-1);
 #&gt; }
 #&gt; 
-#&gt; .grid_panel.collapsed .panel-content {
-#&gt;   display: none;
-#&gt; }
-#&gt; 
 #&gt; /* Make everything line up nice and cleanly like it should in the middle */
-#&gt; .title_panel {
+#&gt; .text_panel {
 #&gt;   margin: 0;
 #&gt;   height: 100%;
 #&gt;   display: flex;
 #&gt;   align-items: center;
+#&gt; }
+#&gt; /* Everything should be inline so lining up works properly */
+#&gt; .text_panel * {
+#&gt;   display: inline;
+#&gt; }
+#&gt; /* Make sure logo isn't right up next to the text */
+#&gt; .text_panel &gt; * {
+#&gt;   margin: 0 5px;
 #&gt; }
 #&gt; 
 #&gt; /* Makes it so tabpanels work in gridpanels */
@@ -369,30 +391,40 @@ other reasons.</p></td>
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:1;
 #&gt;    grid-row-end:2;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #sidebar {
 #&gt;    grid-column-start:1;
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:2;
 #&gt;    grid-row-end:3;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_a {
 #&gt;    grid-column-start:1;
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:3;
 #&gt;    grid-row-end:4;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_b {
 #&gt;    grid-column-start:1;
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:4;
 #&gt;    grid-row-end:5;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; #plot_c {
 #&gt;    grid-column-start:1;
 #&gt;    grid-column-end:2;
 #&gt;    grid-row-start:5;
 #&gt;    grid-row-end:6;
+#&gt;    --collapsible-visibility:none;
+#&gt;    --collapsed-content-size:1fr;
 #&gt; }
 #&gt; 
 #&gt; }
