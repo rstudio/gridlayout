@@ -12,7 +12,6 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
-source("tests/testthat/setupScreenshots.R")
 ```
 
 # gridlayout
@@ -21,6 +20,13 @@ source("tests/testthat/setupScreenshots.R")
 <!-- badges: end -->
 
 A package to making building weblayouts using CSS-Grid easy.
+
+# Feature Goals
+
+- [ ] Can recreate anything `flexdashboard` can
+- [ ] Is easy to customize. E.g. a `gridlayoutExtra` package with new `grid_panels` is easy to make.
+- [ ] Widget for creating new app template from pre-built templates
+- [ ] Gracefully fails on older browsers (at least within reason)
 
 ## Installation
 
@@ -38,13 +44,12 @@ The easiest and most common way to specify a grid layout is using a markdown tab
 ```{r md_to_gridlayout}
 library(gridlayout)
 
-my_layout <- md_to_gridlayout(
-  layout_table = "
-    |      |120px   |1fr    |1fr    |
-    |------|--------|-------|-------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
+my_layout <- new_gridlayout("
+  |      |120px   |1fr    |1fr    |
+  |------|--------|-------|-------|
+  |100px |header  |header |header |
+  |1fr   |sidebar |plot_a |plot_c |
+  |1fr   |sidebar |plot_b |plot_b |"
 )
 
 my_layout
@@ -54,13 +59,12 @@ my_layout
 You can also use the top left cell of your table to specify the gap size.
 
 ```{r md_to_gridlayout_w_gap}
-my_layout <- md_to_gridlayout(
-  layout_table = "
-    | 25px |120px   |1fr    |1fr    |
-    |------|--------|-------|-------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
+my_layout <- new_gridlayout("
+  | 25px |120px   |1fr    |1fr    |
+  |------|--------|-------|-------|
+  |100px |header  |header |header |
+  |1fr   |sidebar |plot_a |plot_c |
+  |1fr   |sidebar |plot_b |plot_b |"
 )
 
 my_layout
@@ -84,40 +88,11 @@ elements_list <- list(
 )
 
 new_gridlayout(
+  elements_list,
   col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  element_list = elements_list
-)
-
-```
-
-Alternatively, you can use a matrix for a more visually intuitive layout system (although `my_to_gridlayout()` is even better.)
-
-```{r new_gridlayout_matrix}
-elements_mat <- matrix(c(
-  "header", "header",
-  "plot",   "table",
-  "footer", "footer"),
-  ncol = 2, byrow = TRUE
-)
-
-new_gridlayout(
-  col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  layout_mat = elements_mat
+  row_sizes = c("100px", "1fr", "1fr")
 )
 ```
-
-
-
-You can also build a layout from a markdown documents that have your layout in a code-chunk. This is useful for updating existing applications layouts without copying and pasting your layout table.
-
-
-````{r}
-my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- rmd_to_gridlayout(my_app_loc)
-my_layout
-````
 
 ## Using in a shiny app
 

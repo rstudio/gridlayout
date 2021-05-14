@@ -8,6 +8,14 @@
 
 A package to making building weblayouts using CSS-Grid easy.
 
+# Feature Goals
+
+-   [ ] Can recreate anything `flexdashboard` can
+-   [ ] Is easy to customize. E.g. a `gridlayoutExtra` package with new
+    `grid_panels` is easy to make.
+-   [ ] Widget for creating new app template from pre-built templates
+-   [ ] Gracefully fails on older browsers (at least within reason)
+
 ## Installation
 
 You can install the development version from
@@ -27,42 +35,64 @@ of your choice to configure your layout.
 ``` r
 library(gridlayout)
 
-my_layout <- md_to_gridlayout(
-  layout_table = "
-    |      |120px   |1fr    |1fr    |
-    |------|--------|-------|-------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
+my_layout <- new_gridlayout("
+  |      |120px   |1fr    |1fr    |
+  |------|--------|-------|-------|
+  |100px |header  |header |header |
+  |1fr   |sidebar |plot_a |plot_c |
+  |1fr   |sidebar |plot_b |plot_b |"
 )
 
 my_layout
-#> gridlayout object with 3 rows, 3 columns, and gap size: 1rem 
-#>        120px   1fr    1fr   
-#> 100px header  header header
-#> 1fr   sidebar plot_a plot_c
-#> 1fr   sidebar plot_b plot_b
+#> gridlayout of 5 elements: 
+#>          120px   1fr    1fr   
+#>    100px header  header header
+#>    1fr   sidebar plot_a plot_c
+#>    1fr   sidebar plot_b plot_b
+#> Gap of 1rem. Total height of viewport.
+#> 
+#> Alternate layouts:   
+#>    
+#>    - Width < 500px 
+#>              1fr    
+#>       85px  header 
+#>       350px sidebar
+#>       350px plot_a 
+#>       350px plot_b 
+#>       350px plot_c 
+#>    Gap of 1rem. Total height of auto.
 ```
 
 You can also use the top left cell of your table to specify the gap
 size.
 
 ``` r
-my_layout <- md_to_gridlayout(
-  layout_table = "
-    | 25px |120px   |1fr    |1fr    |
-    |------|--------|-------|-------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
+my_layout <- new_gridlayout("
+  | 25px |120px   |1fr    |1fr    |
+  |------|--------|-------|-------|
+  |100px |header  |header |header |
+  |1fr   |sidebar |plot_a |plot_c |
+  |1fr   |sidebar |plot_b |plot_b |"
 )
 
 my_layout
-#> gridlayout object with 3 rows, 3 columns, and gap size: 25px 
-#>        120px   1fr    1fr   
-#> 100px header  header header
-#> 1fr   sidebar plot_a plot_c
-#> 1fr   sidebar plot_b plot_b
+#> gridlayout of 5 elements: 
+#>          120px   1fr    1fr   
+#>    100px header  header header
+#>    1fr   sidebar plot_a plot_c
+#>    1fr   sidebar plot_b plot_b
+#> Gap of 25px. Total height of viewport.
+#> 
+#> Alternate layouts:   
+#>    
+#>    - Width < 500px 
+#>              1fr    
+#>       85px  header 
+#>       350px sidebar
+#>       350px plot_a 
+#>       350px plot_b 
+#>       350px plot_c 
+#>    Gap of 1rem. Total height of auto.
 ```
 
 You can also programatically build your layout using `new_gridlayout`.
@@ -85,52 +115,26 @@ elements_list <- list(
 )
 
 new_gridlayout(
+  elements_list,
   col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  element_list = elements_list
+  row_sizes = c("100px", "1fr", "1fr")
 )
-#> gridlayout object with 3 rows, 2 columns, and gap size: 1rem 
-#>        1fr    2fr   
-#> 100px header header
-#> 1fr   plot   table 
-#> 1fr   footer footer
-```
-
-Alternatively, you can use a matrix for a more visually intuitive layout
-system (although `my_to_gridlayout()` is even better.)
-
-``` r
-elements_mat <- matrix(c(
-  "header", "header",
-  "plot",   "table",
-  "footer", "footer"),
-  ncol = 2, byrow = TRUE
-)
-
-new_gridlayout(
-  col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr"),
-  layout_mat = elements_mat
-)
-#> gridlayout object with 3 rows, 2 columns, and gap size: 1rem 
-#>        1fr    2fr   
-#> 100px header header
-#> 1fr   plot   table 
-#> 1fr   footer footer
-```
-
-You can also build a layout from a markdown documents that have your
-layout in a code-chunk. This is useful for updating existing
-applications layouts without copying and pasting your layout table.
-
-``` r
-my_app_loc <- system.file("sample_apps/my_app.Rmd", package = "gridlayout")
-my_layout <- rmd_to_gridlayout(my_app_loc)
-my_layout
-#> gridlayout object with 2 rows, 2 columns, and gap size: 1rem 
-#>      1fr     1fr 
-#> 1fr sidebar main
-#> 1fr sidebar main
+#> gridlayout of 4 elements: 
+#>          1fr    2fr   
+#>    100px header header
+#>    1fr   plot   table 
+#>    1fr   footer footer
+#> Gap of 1rem. Total height of viewport.
+#> 
+#> Alternate layouts:   
+#>    
+#>    - Width < 500px 
+#>              1fr   
+#>       85px  header
+#>       350px plot  
+#>       350px table 
+#>       350px footer
+#>    Gap of 1rem. Total height of auto.
 ```
 
 ## Using in a shiny app
@@ -249,47 +253,192 @@ table spec or to the CSS that generates the given grid.
 
 ``` r
 cat(to_md(my_layout))
-#> |     |        |     |
-#> |-----|--------|-----|
-#> |1rem |1fr     |1fr  |
-#> |1fr  |sidebar |main |
-#> |1fr  |sidebar |main |
+#> |      |        |       |       |
+#> |------|--------|-------|-------|
+#> |25px  |120px   |1fr    |1fr    |
+#> |100px |header  |header |header |
+#> |1fr   |sidebar |plot_a |plot_c |
+#> |1fr   |sidebar |plot_b |plot_b |
 ```
 
 ``` r
 cat(to_css(my_layout))
+#> 
+#> 
 #> body {
-#>   display: grid;
-#>   grid-template-rows: 1fr 1fr;
-#>   grid-template-columns: 1fr 1fr;
-#>   grid-gap: 1rem;
-#>   padding: 1rem;
-#>   height: 100vh;
+#>    display:grid;
+#>    grid-template-rows:100px 1fr 1fr;
+#>    grid-template-columns:120px 1fr 1fr;
+#>    grid-gap:25px;
+#>    padding:25px;
+#>    height:100vh;
 #> }
 #> 
-#> body > * {
-#> 
+#> #header {
+#>    grid-column-start:1;
+#>    grid-column-end:4;
+#>    grid-row-start:1;
+#>    grid-row-end:2;
+#> }
+#> #sidebar {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:2;
+#>    grid-row-end:4;
+#> }
+#> #plot_a {
+#>    grid-column-start:2;
+#>    grid-column-end:3;
+#>    grid-row-start:2;
+#>    grid-row-end:3;
+#> }
+#> #plot_b {
+#>    grid-column-start:2;
+#>    grid-column-end:4;
+#>    grid-row-start:3;
+#>    grid-row-end:4;
+#> }
+#> #plot_c {
+#>    grid-column-start:3;
+#>    grid-column-end:4;
+#>    grid-row-start:2;
+#>    grid-row-end:3;
 #> }
 #> 
-#> body .grid_panel {
+#> 
+#> 
+#> .grid_panel {
+#>   --card-padding: 0.8rem;
 #>   box-sizing: border-box;
-#>   padding: 0.8rem;
 #>   overflow: hidden;
+#>   display: grid;
+#>   grid-template-areas: "title"
+#>                        "content";
+#>   /* When there's no title the column will dissapear */
+#>   grid-template-rows: min-content 1fr;
+#> }
+#> 
+#> .grid_panel .title-bar {
+#>   grid-area: title;
+#>   height: 100%;
+#>   width: 100%;
+#>   display: flex;
+#>   justify-content: start;
+#>   align-items: center;
+#>   border-bottom: 1px solid rgba(0,0,0,0.125);
+#>   padding: calc(var(--card-padding)/2) var(--card-padding);
+#> }
+#> .grid_panel .title-bar > h3 {
+#>   margin: 0;
+#>   height: 100%;
+#> }
+#> 
+#> .panel-content {
+#>   height: 100%;
+#>   width: 100%;
+#>   padding: var(--card-padding);
+#>   grid-area: content;
+#> }
+#> 
+#> .grid_panel .shiny-plot-output > img {
+#>   /* The way grid sizing works can throw off the plot sizing in shiny. This
+#>      is because the size of the parent grows to its largest child element.
+#>      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+#>      these sizes by looking at the parent div's dimensions after a resize.
+#>      When the window has been made smaller, this means that the parent
+#>      element is spilling outside of its box because the plot image size is
+#>      still sitting at a fixed pixel width of the previous size. So when Shiny
+#>      queries the size of the parent it thinks that nothing has changed. By
+#>      setting a max width and height, we make sure the plot always gets shrunk
+#>      to at most the size of the grid element, thus allowing the resize observer
+#>      to work properly.
+#>   */
+#>   max-width: 100%;
+#>   max-height: 100%;
+#> }
+#> 
+#> /* Only set card styles if we're not using the bslib card component */
+#> .grid_panel:not(.card) {
 #>   box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
 #>   border-radius: 0.5rem;
 #> }
 #> 
-#> #sidebar {
-#>   grid-column-start: 1;
-#>   grid-column-end: 2;
-#>   grid-row-start: 1;
-#>   grid-row-end: 3;
+#> 
+#> .grid_panel.collapsed  {
+#>   grid-template-rows: min-content 0;
+#>   height: min-content;
+#>   overflow: hidden;
 #> }
-#> #main {
-#>   grid-column-start: 2;
-#>   grid-column-end: 3;
-#>   grid-row-start: 1;
-#>   grid-row-end: 3;
+#> 
+#> /* Make flip arrow point down when collapsed and
+#>    up when expanded to show result of clicking */
+#> .grid_panel .collapser-icon svg {
+#>   transition: transform 0.2s ease;
+#> }
+#> .grid_panel.collapsed .collapser-icon svg {
+#>   transform: scaleY(-1);
+#> }
+#> 
+#> .grid_panel.collapsed .panel-content {
+#>   display: none;
+#> }
+#> 
+#> /* Make everything line up nice and cleanly like it should in the middle */
+#> .title_panel {
+#>   margin: 0;
+#>   height: 100%;
+#>   display: flex;
+#>   align-items: center;
+#> }
+#> 
+#> /* Makes it so tabpanels work in gridpanels */
+#> .grid_panel .tabbable { height: 100% }
+#> .grid_panel .tabbable > .nav { height: 42px; }
+#> .grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
+#> .grid_panel .tabbable .tab-pane { height: 100%; }
+#> 
+#> @media (max-width:500px) {
+#> 
+#> body {
+#>    display:grid;
+#>    grid-template-rows:85px 350px 350px 350px 350px;
+#>    grid-template-columns:1fr;
+#>    grid-gap:1rem;
+#>    padding:1rem;
+#>    height:auto;
+#> }
+#> 
+#> #header {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:1;
+#>    grid-row-end:2;
+#> }
+#> #sidebar {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:2;
+#>    grid-row-end:3;
+#> }
+#> #plot_a {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:3;
+#>    grid-row-end:4;
+#> }
+#> #plot_b {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:4;
+#>    grid-row-end:5;
+#> }
+#> #plot_c {
+#>    grid-column-start:1;
+#>    grid-column-end:2;
+#>    grid-row-start:5;
+#>    grid-row-end:6;
+#> }
+#> 
 #> }
 ```
 
@@ -300,34 +449,34 @@ your grid you can use `get_elements()`.
 head(get_elements(my_layout), 2)
 #> [[1]]
 #> [[1]]$id
-#> [1] "sidebar"
+#> [1] "header"
 #> 
 #> [[1]]$start_row
 #> [1] 1
 #> 
 #> [[1]]$end_row
-#> [1] 2
+#> [1] 1
 #> 
 #> [[1]]$start_col
 #> [1] 1
 #> 
 #> [[1]]$end_col
-#> [1] 1
+#> [1] 3
 #> 
 #> 
 #> [[2]]
 #> [[2]]$id
-#> [1] "main"
+#> [1] "sidebar"
 #> 
 #> [[2]]$start_row
-#> [1] 1
+#> [1] 2
 #> 
 #> [[2]]$end_row
-#> [1] 2
+#> [1] 3
 #> 
 #> [[2]]$start_col
-#> [1] 2
+#> [1] 1
 #> 
 #> [[2]]$end_col
-#> [1] 2
+#> [1] 1
 ```
