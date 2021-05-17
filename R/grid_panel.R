@@ -203,6 +203,7 @@ make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
 }
 
 make_collapser_icon <- function(parent_id = "") {
+  requireNamespace("fontawesome", quietly = TRUE)
   shiny::span(
     fontawesome::fa("chevron-up"),
     "onclick" = '

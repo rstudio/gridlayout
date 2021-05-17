@@ -55,7 +55,7 @@ text_panel <- function(
     if (str_detect(icon, "\\.png|\\.jpg|\\.jpeg|\\.svg")) {
       icon <- shiny::img(src = icon, height = htmltools::validateCssUnit(img_height))
     } else {
-      requireNamespace("fontawesome")
+      requireNamespace("fontawesome", quietly = TRUE)
       # Test against a font awesome tag in case the class changes
       already_fa_obj <- identical(class(icon), class(fontawesome::fa("r-project")))
 
