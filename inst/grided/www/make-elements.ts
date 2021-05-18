@@ -1,4 +1,4 @@
-import { Grid_Pos } from ".";
+import { Grid_Pos } from "./App_State";
 import { set_element_in_grid } from "./utils-grid";
 import {
   as_array,
@@ -15,7 +15,7 @@ type Element_Contents = {
   children?: HTMLElement[];
 };
 
-type Element_Opts = {
+export type Element_Opts = {
   event_listener?: Event_Listener | Event_Listener[];
   styles?: object;
   innerHTML?: string;
@@ -92,7 +92,7 @@ export function make_el(
 }
 
 // Given a list of elements from a query selector, remove them all
-export function remove_elements(els_to_remove: NodeListOf<Element>): void {
+export function remove_elements(els_to_remove: NodeListOf<Element> | Element[]): void {
   els_to_remove.forEach((e) => e.remove());
 }
 

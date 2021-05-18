@@ -1,4 +1,4 @@
-import { make_el, remove_elements } from "./make-elements";
+import { Element_Opts, make_el, remove_elements } from "./make-elements";
 import {
   CSS_Input,
   get_css_unit,
@@ -10,7 +10,6 @@ import {
   Drag_Type,
   filler_text,
   get_bounding_rect,
-  get_next_color,
   Selection_Rect,
   update_rect_with_delta,
   XY_Pos,
@@ -19,11 +18,9 @@ import {
   send_elements_to_shiny,
   send_grid_sizing_to_shiny,
 } from "./utils-shiny";
+import { Shiny, Element_Info } from "./index";
 import {
-  Shiny,
-  Element_Info,
-} from "./index";
-import {
+  bounding_rect_to_css_pos,
   get_cols,
   get_drag_extent_on_grid,
   get_gap_size,
@@ -44,7 +41,7 @@ type Grid_Settings = {
   gap: CSS_Input;
 };
 
-type Grid_Pos = {
+export type Grid_Pos = {
   start_col?: number;
   end_col?: number;
   start_row?: number;
@@ -93,6 +90,7 @@ export class App_State {
   elements: Record<string, Element_Entries> = {};
 
   container: HTMLElement;
+  grid_styles: CSSStyleDeclaration;
   mode: "ShinyExisting" | "ShinyNew" | "ClientSide";
 
   constructor(opts: {
@@ -103,6 +101,7 @@ export class App_State {
   }) {
     this.controls = opts.controls;
     this.container = opts.container;
+    this.grid_styles = this.container.style;
     this.mode = opts.grid_is_filled
       ? "ShinyExisting"
       : Shiny
@@ -123,6 +122,24 @@ export class App_State {
     return sizes;
   }
 
+  get row_sizes() { return get_rows(this.container); }
+  get col_sizes() { return get_cols(this.container); }
+  get num_rows() { return this.row_sizes.length; }
+  get num_cols() { return this.col_sizes.length; }
+
+  get gap_size() {return get_gap_size(this.grid_styles);}
+
+  get grid_dims() {
+    return {
+      rows: this.row_sizes,
+      cols: this.col_sizes,
+    };
+  }
+
+  get num_elements(): number {
+    return Object.keys(this.elements).length;
+  }
+
   get current_elements(): Element_Info[] {
     const all_elements = [...Object.values(this.elements)].map(
       ({ grid_el }) => {
@@ -141,6 +158,26 @@ export class App_State {
     return all_elements;
   }
 
+  // Get the next color in our list of colors.
+  get next_color() {
+    const colors = [
+      "#e41a1c",
+      "#377eb8",
+      "#4daf4a",
+      "#984ea3",
+      "#ff7f00",
+      "#a65628",
+      "#f781bf",
+    ];
+    // If we have more elements than colors we simply recycle
+    return colors[this.num_elements % colors.length];
+  }
+
+  // Just so we dont have to always say make_el(this.container...)
+  make_el(sel_txt: string, opts?: Element_Opts) {
+    return make_el(this.container, sel_txt, opts);
+  }
+
   // Removes elements the user has added to the grid by id
   remove_elements(ids: string | Array<string>) {
     as_array(ids).forEach((el_id) => {
@@ -153,18 +190,26 @@ export class App_State {
   }
 
   setup_drag(opts: Drag_Options) {
-    const app_state = this;
     let drag_feedback_rect: HTMLElement;
     let start_rect: Selection_Rect;
     let start_loc: XY_Pos;
 
     const editor_el: HTMLElement = document.querySelector("#grided__editor");
 
-    opts.watching_element.onmousedown = function (event: MouseEvent) {
+    const update_grid_pos = (
+      element: HTMLElement,
+      bounding_rect: Selection_Rect
+    ): Grid_Pos => {
+      const grid_extent = get_drag_extent_on_grid(this, bounding_rect);
+      set_element_in_grid(element, grid_extent);
+      return grid_extent;
+    };
+
+    opts.watching_element.onmousedown = (event: MouseEvent) => {
       start_loc = event as DragEvent;
 
       // make sure dragged element is on top
-      app_state.container.appendChild(opts.grid_element);
+      this.container.appendChild(opts.grid_element);
 
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
@@ -177,7 +222,7 @@ export class App_State {
       };
 
       drag_feedback_rect = make_el(
-        app_state.container.querySelector("#drag_canvas"),
+        this.container.querySelector("#drag_canvas"),
         "div.drag-feedback-rect",
         {
           styles: {
@@ -196,15 +241,6 @@ export class App_State {
       editor_el.addEventListener("mousemove", drag);
       editor_el.addEventListener("mouseup", drag_end);
     };
-
-    function update_grid_pos(
-      element: HTMLElement,
-      bounding_rect: Selection_Rect
-    ): Grid_Pos {
-      const grid_extent = get_drag_extent_on_grid(app_state, bounding_rect);
-      set_element_in_grid(element, grid_extent);
-      return grid_extent;
-    }
 
     function drag(event: MouseEvent) {
       const curr_loc: XY_Pos = event;
@@ -239,375 +275,193 @@ export class App_State {
       editor_el.removeEventListener("mousemove", drag);
       editor_el.removeEventListener("mouseup", drag_end);
     }
-
-    function bounding_rect_to_css_pos(rect: Selection_Rect) {
-      return {
-        left: `${rect.left}px`,
-        top: `${rect.top}px`,
-        width: `${rect.right - rect.left}px`,
-        height: `${rect.bottom - rect.top}px`,
-      };
-    }
   }
 
   add_element(el_props: New_Element) {
-    this.elements[el_props.id] = add_element(this, el_props);
+    // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
+    if (el_props.existing_element) {
+      el_props.id = el_props.id.replace(/^.+?__/g, "");
+    }
+
+    this.elements[el_props.id] = draw_elements(this, el_props);
+
+    // Let shiny know we have a new element
+    send_elements_to_shiny(this.current_elements);
   }
 
   update_grid(opts: Grid_Update_Options) {
-    update_grid(this, opts);
-  }
-}
 
-function add_element(
-  app_state: App_State,
-  el_props: New_Element
-): Element_Entries {
-  const grid_container = app_state.container;
-  const {
-    grid_pos,
-    color = get_next_color(grid_container),
-    existing_element,
-  } = el_props;
-  const mirrors_existing_element = existing_element !== undefined;
-  // If element ids were generated with the grid_container R function then
-  // they have a prefix of the container name which we should remove so the
-  // added elements list is not ugly looking
-  const id = mirrors_existing_element
-    ? el_props.id.replace(/^.+?__/g, "")
-    : el_props.id;
-
-  const grid_el = make_el(grid_container, `div#${id}.el_${id}.added-element`, {
-    grid_pos,
-    // Add filler text for new elements so that auto-height will work
-    innerHTML: mirrors_existing_element ? "" : filler_text,
-    styles: {
-      borderColor: color,
-      position: "relative",
-    },
-  });
-
-  // Setup drag behavior
-  (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(function (
-    handle_type: Drag_Type
-  ) {
-    app_state.setup_drag({
-      watching_element: make_el(grid_el, `div.dragger.visible.${handle_type}`, {
-        styles: { background: color },
-        innerHTML:
-          handle_type === "center"
-            ? drag_icon
-            : handle_type === "bottom-right"
-            ? se_arrow
-            : nw_arrow,
-      }),
-      grid_element: grid_el,
-      drag_dir: handle_type,
-      on_drag: (res) => {
-        if (mirrors_existing_element) {
-          set_element_in_grid(existing_element, res.grid);
+    const new_num_rows = opts.rows ? opts.rows.length : this.num_rows;
+    const new_num_cols = opts.cols ? opts.cols.length : this.num_cols;
+  
+    // Make sure settings panel is up-to-date
+    this.settings_panel.num_rows(new_num_rows);
+    this.settings_panel.num_cols(new_num_cols);
+    this.settings_panel.gap.update_value(opts.gap || this.gap_size);
+  
+    const grid_numbers_changed =
+    this.num_rows !== new_num_rows || this.num_cols !== new_num_cols;
+    if (grid_numbers_changed) {
+      // Check for elements that may get dropped
+      let in_danger_els: Element_Info[] = [];
+      let auto_removed_el_ids: string[] = [];
+  
+      this.current_elements.forEach(function (el) {
+        const sits_outside_grid =
+          el.end_row > new_num_rows || el.end_col > new_num_cols;
+        const completely_outside_grid =
+          el.start_row > new_num_rows || el.start_col > new_num_cols;
+        if (completely_outside_grid) {
+          auto_removed_el_ids.push(el.id);
+        } else if (sits_outside_grid) {
+          in_danger_els.push(el);
         }
-      },
-      on_end: () => {
-        send_elements_to_shiny(app_state.current_elements);
-      },
-    });
-  });
-
-  const list_el = make_el(
-    document.querySelector("#added_elements"),
-    `div.el_${id}.added-element`,
-    {
-      innerHTML: id,
-      styles: {
-        borderColor: color,
-      },
-      event_listener: [
-        {
-          event: "mouseover",
-          func: function () {
-            this.classList.add("hovered");
-            grid_el.classList.add("hovered");
-          },
-        },
-        {
-          event: "mouseout",
-          func: function () {
-            this.classList.remove("hovered");
-            grid_el.classList.remove("hovered");
-          },
-        },
-      ],
-    }
-  );
-
-  if (!mirrors_existing_element) {
-    // Turn of deleting if were editing an existing app
-    // This means that if were in app editing mode and the user adds a new element
-    // they can delete that new element but they can't delete the existing elements
-    make_el(list_el, "button.remove_el", {
-      innerHTML: trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function () {
-          app_state.remove_elements(id);
-        },
-      },
-    });
-  }
-
-  // Let shiny know we have a new element
-  send_elements_to_shiny(app_state.current_elements);
-
-  return {
-    grid_el,
-    list_el,
-  };
-}
-
-function update_grid(app_state: App_State, opts: Grid_Update_Options) {
-  const old_num_rows = get_rows(app_state.container).length;
-  const old_num_cols = get_cols(app_state.container).length;
-  const old_gap = get_gap_size(app_state.container.style);
-  const new_gap = opts.gap || old_gap;
-  const new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
-  const new_num_cols = opts.cols ? opts.cols.length : old_num_cols;
-
-  // Make sure settings panel is up-to-date
-  app_state.settings_panel.num_rows(new_num_rows);
-  app_state.settings_panel.num_cols(new_num_cols);
-  app_state.settings_panel.gap.update_value(new_gap);
-
-  const grid_numbers_changed =
-    old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
-  if (grid_numbers_changed) {
-    // Check for elements that may get dropped
-    const all_els = app_state.current_elements;
-    let in_danger_els = [];
-    let auto_removed_el_ids = [];
-
-    all_els.forEach(function (el) {
-      const sits_outside_grid =
-        el.end_row > new_num_rows || el.end_col > new_num_cols;
-      const completely_outside_grid =
-        el.start_row > new_num_rows || el.start_col > new_num_cols;
-
-      if (completely_outside_grid) {
-        auto_removed_el_ids.push(el.id);
-      } else if (sits_outside_grid) {
-        in_danger_els.push(el);
-      }
-    });
-
-    app_state.remove_elements(auto_removed_el_ids);
-
-    if (in_danger_els.length > 0) {
-      const fix_els_modal = focused_modal({
-        header_text: `
-      <h2>The following elements dont fit on the new grid layout.</h2>
-      <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
-      `,
       });
+  
+      this.remove_elements(auto_removed_el_ids);
+  
+      if (in_danger_els.length > 0) {
 
-      const radio_inputs_html = in_danger_els.reduce(
-        (radio_group, el) =>
-          `
-        ${radio_group}
-        <div class = "radio-set-group">
-          <div class = "radio-set-label"> ${el.id} </div>
-          <div class = "radio-set-options">
-            <input type="radio" id = "delete_${el.id}" name="${el.id}" value="delete" checked>
-            <label for="delete_${el.id}">Delete</label>
-            <input type="radio" id = "shrink_${el.id}" name="${el.id}" value="shrink">
-            <label for="shrink_${el.id}">Shink</label>
-          </div>
-        </div>
-      `,
-        ""
-      );
+        show_danger_popup(this, in_danger_els, (to_edit) => {
+          to_edit.forEach((el) => {
+            const el_node: HTMLElement = this.container.querySelector(
+              `#${el.id}`
+            );
 
-      const delete_or_edit_form = make_el(
-        fix_els_modal.modal,
-        "form#delete_or_fix_list",
-        {
-          innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
-          event_listener: {
-            event: "submit",
-            func: function () {
-              const form = this;
-              const to_delete = in_danger_els.filter(
-                (d) => form[d.id].value === "delete"
-              );
+            el_node.style.gridRow = make_template_start_end(
+              el.start_row,
+              Math.min(el.end_row, new_num_rows)
+            );
+            el_node.style.gridColumn = make_template_start_end(
+              el.start_col,
+              Math.min(el.end_col, new_num_cols)
+            );
+          });
+          // Now that we've updated elements properly, we should be able to
+          // just recall the function and it won't spit an error
+          this.update_grid({
+            rows: opts.rows,
+            cols: opts.cols,
+            gap: opts.gap,
+          });
+        });
 
-              app_state.remove_elements(to_delete.map((d) => d.id));
-              const to_edit = in_danger_els.filter(
-                (d) => form[d.id].value === "shrink"
-              );
-              to_edit.forEach((el) => {
-                const el_node: HTMLElement = app_state.container.querySelector(
-                  `#${el.id}`
-                );
-
-                el_node.style.gridRow = make_template_start_end(
-                  el.start_row,
-                  Math.min(el.end_row, new_num_rows)
-                );
-                el_node.style.gridColumn = make_template_start_end(
-                  el.start_col,
-                  Math.min(el.end_col, new_num_cols)
-                );
-              });
-
-              fix_els_modal.remove();
-              // Now that we've updated elements properly, we should be able to
-              // just recall the function and it won't spit an error
-              update_grid(app_state, {
-                rows: opts.rows,
-                cols: opts.cols,
-                gap: opts.gap,
-              });
-            },
-          },
-        }
-      );
-
-      make_el(delete_or_edit_form, "input#name_submit", {
-        props: { type: "submit" },
-      });
-
-      make_el(fix_els_modal.modal, "p.notice-text", {
-        innerHTML:
-          "Note that elements residing completely in the removed row or column are automatically deleted.",
-      });
-
-      return;
-    }
-  }
-
-  if (opts.rows) {
-    app_state.container.style.gridTemplateRows = sizes_to_template_def(
-      opts.rows
-    );
-  }
-  if (opts.cols) {
-    app_state.container.style.gridTemplateColumns = sizes_to_template_def(
-      opts.cols
-    );
-  }
-  if (opts.gap) {
-    // This sets the --grid-gap variable so that the controls that need the
-    // info can use it to keep a constant distance from the grid holder
-    app_state.container.parentElement.style.setProperty("--grid-gap", opts.gap);
-    // We dont use css variables in the exported css that existing apps used
-    // so we need to modify both gap and padding
-    set_gap_size(app_state.container.style, opts.gap);
-    app_state.container.style.padding = opts.gap;
-  }
-
-  if (grid_numbers_changed || opts.force) {
-    fill_grid_cells(app_state);
-  }
-
-  if (!opts.dont_send_to_shiny) {
-    send_grid_sizing_to_shiny(app_state.container.style);
-  }
-
-  return app_state.container;
-}
-
-function fill_grid_cells(app_state: App_State) {
-  const grid_dims = {
-    rows: get_rows(app_state.container),
-    cols: get_cols(app_state.container),
-  };
-
-  const num_rows = grid_dims.rows.length;
-  const num_cols = grid_dims.cols.length;
-  // Grab currently drawn cells (if any) so we can check if we need to redraw
-  // or if this was simply a column/row sizing update
-  app_state.current_cells = [];
-  const need_to_reset_cells =
-    app_state.current_cells.length != num_rows * num_cols;
-
-  if (need_to_reset_cells) {
-    remove_elements(app_state.container.querySelectorAll(".grid-cell"));
-    for (let row_i = 1; row_i <= num_rows; row_i++) {
-      for (let col_i = 1; col_i <= num_cols; col_i++) {
-        app_state.current_cells.push(
-          make_el(app_state.container, `div.r${row_i}.c${col_i}.grid-cell`, {
-            data_props: { row: row_i, col: col_i },
-            grid_pos: { start_row: row_i, start_col: col_i },
-          })
-        );
+        return;
       }
     }
-
-    // Build each column and row's sizing controler
-    for (let type in app_state.controls) {
-      // Get rid of old ones to start with fresh slate
-      remove_elements(
-        app_state.container.querySelectorAll(`.${type}-controls`)
+  
+    if (opts.rows) {
+      this.grid_styles.gridTemplateRows = sizes_to_template_def(
+        opts.rows
       );
-      app_state.controls[type] = grid_dims[type].map(function (
-        size: string,
-        i: number
-      ) {
-        // The i + 1 is because grid is indexed at 1, not zero
-        const grid_i = i + 1;
-
-        return make_css_unit_input({
-          parent_el: app_state.container,
-          selector: `#control_${type}${grid_i}.${type}-controls`,
-          start_val: get_css_value(size),
-          start_unit: get_css_unit(size),
-          on_change: () =>
-            update_grid(app_state, app_state.layout_from_controls),
-          on_drag: () =>
-            update_grid(app_state, {
-              ...app_state.layout_from_controls,
-              dont_send_to_shiny: true,
-            }),
-          form_styles: {
-            [`grid${
-              type === "rows" ? "Row" : "Column"
-            }`]: make_template_start_end(grid_i),
-          },
-          drag_dir: type === "rows" ? "y" : "x",
-        });
-      });
     }
-    const current_selection_box = make_el(
-      app_state.container,
-      "div#current_selection_box.added-element"
-    );
-    const drag_canvas = make_el(app_state.container, "div#drag_canvas");
-
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_element: current_selection_box,
-      drag_dir: "bottom-right",
-      on_start: () => {
-        current_selection_box.style.borderColor = get_next_color(
-          app_state.container
-        );
-      },
-      on_end: ({ grid }) => {
-        name_new_element(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box,
-        });
-      },
-    });
-
-    // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
-    [
-      drag_canvas,
-      ...app_state.container.querySelectorAll(".added-element"),
-    ].forEach((el) => app_state.container.appendChild(el));
-  } else {
+    if (opts.cols) {
+      this.grid_styles.gridTemplateColumns = sizes_to_template_def(
+        opts.cols
+      );
+    }
+    if (opts.gap) {
+      // This sets the --grid-gap variable so that the controls that need the
+      // info can use it to keep a constant distance from the grid holder
+      this.container.parentElement.style.setProperty("--grid-gap", opts.gap);
+      // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+      set_gap_size(this.grid_styles, opts.gap);
+      this.grid_styles.padding = opts.gap;
+    }
+  
+    if (grid_numbers_changed || opts.force) {
+      this.fill_grid_cells();
+    }
+  
+    if (!opts.dont_send_to_shiny) {
+      send_grid_sizing_to_shiny(this.grid_styles);
+    }  
   }
-}
+
+  fill_grid_cells() {
+    // Grab currently drawn cells (if any) so we can check if we need to redraw
+    // or if this was simply a column/row sizing update
+    const need_to_reset_cells =
+      this.current_cells.length != this.num_rows * this.num_cols;
+
+    if (need_to_reset_cells) {
+      remove_elements(this.current_cells);
+      this.current_cells = [];
+
+      for (let row_i = 1; row_i <= this.num_rows; row_i++) {
+        for (let col_i = 1; col_i <= this.num_cols; col_i++) {
+          this.current_cells.push(
+            this.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
+              data_props: { row: row_i, col: col_i },
+              grid_pos: { start_row: row_i, start_col: col_i },
+            })
+          );
+        }
+      }
+
+      // Build each column and row's sizing controler
+      for (let type in this.controls) {
+        // Get rid of old ones to start with fresh slate
+        remove_elements(this.container.querySelectorAll(`.${type}-controls`));
+        this.controls[type] = this.grid_dims[type].map(
+          (size: string, i: number) => {
+            // The i + 1 is because grid is indexed at 1, not zero
+            const grid_i = i + 1;
+
+            return make_css_unit_input({
+              parent_el: this.container,
+              selector: `#control_${type}${grid_i}.${type}-controls`,
+              start_val: get_css_value(size),
+              start_unit: get_css_unit(size),
+              on_change: () => this.update_grid(this.layout_from_controls),
+              on_drag: () =>
+                this.update_grid({
+                  ...this.layout_from_controls,
+                  dont_send_to_shiny: true,
+                }),
+              form_styles: {
+                [`grid${
+                  type === "rows" ? "Row" : "Column"
+                }`]: make_template_start_end(grid_i),
+              },
+              drag_dir: type === "rows" ? "y" : "x",
+            });
+          }
+        );
+      }
+      const current_selection_box = this.make_el(
+        "div#current_selection_box.added-element"
+      );
+      const drag_canvas = this.make_el("div#drag_canvas");
+
+      this.setup_drag({
+        watching_element: drag_canvas,
+        grid_element: current_selection_box,
+        drag_dir: "bottom-right",
+        on_start: () => {
+          current_selection_box.style.borderColor = this.next_color;
+        },
+        on_end: ({ grid }) => {
+          name_new_element(this, {
+            grid_pos: grid,
+            selection_box: current_selection_box,
+          });
+        },
+      });
+
+      // Make sure any added elements sit on top by re-appending them to grid holder
+      // Make sure that the drag detector sits over everything
+      [
+        drag_canvas,
+        ...this.container.querySelectorAll(".added-element"),
+      ].forEach((el) => this.container.appendChild(el));
+    } else {
+    }
+  }
+} // End of class declaration
 
 function make_settings_panel(
   app_state: App_State,
@@ -758,4 +612,158 @@ function name_new_element(app_state: App_State, { grid_pos, selection_box }) {
     // Remove the temporary dragged element
     selection_box.style.display = "none";
   }
+}
+
+function draw_elements(app_state: App_State, el_props: New_Element) {
+  const el_color = app_state.next_color;
+  const grid_el = app_state.make_el(
+    `div#${el_props.id}.el_${el_props.id}.added-element`,
+    {
+      grid_pos: el_props.grid_pos,
+      // Add filler text for new elements so that auto-height will work
+      innerHTML: el_props.existing_element ? "" : filler_text,
+      styles: {
+        borderColor: el_color,
+        position: "relative",
+      },
+    }
+  );
+
+  // Setup drag behavior
+  (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
+    (handle_type: Drag_Type) => {
+      app_state.setup_drag({
+        watching_element: make_el(
+          grid_el,
+          `div.dragger.visible.${handle_type}`,
+          {
+            styles: { background: el_color },
+            innerHTML:
+              handle_type === "center"
+                ? drag_icon
+                : handle_type === "bottom-right"
+                ? se_arrow
+                : nw_arrow,
+          }
+        ),
+        grid_element: grid_el,
+        drag_dir: handle_type,
+        on_drag: (res) => {
+          if (el_props.existing_element) {
+            set_element_in_grid(el_props.existing_element, res.grid);
+          }
+        },
+        on_end: () => {
+          send_elements_to_shiny(app_state.current_elements);
+        },
+      });
+    }
+  );
+
+  const list_el = make_el(
+    document.querySelector("#added_elements"),
+    `div.el_${el_props.id}.added-element`,
+    {
+      innerHTML: el_props.id,
+      styles: { borderColor: el_color },
+      event_listener: [
+        {
+          event: "mouseover",
+          func: function () {
+            this.classList.add("hovered");
+            grid_el.classList.add("hovered");
+          },
+        },
+        {
+          event: "mouseout",
+          func: function () {
+            this.classList.remove("hovered");
+            grid_el.classList.remove("hovered");
+          },
+        },
+      ],
+    }
+  );
+
+  if (!el_props) {
+    // Turn of deleting if were editing an existing app
+    // This means that if were in app editing mode and the user adds a new element
+    // they can delete that new element but they can't delete the existing elements
+    make_el(list_el, "button.remove_el", {
+      innerHTML: trashcan_icon,
+      event_listener: {
+        event: "click",
+        func: () => {
+          this.remove_elements(el_props.id);
+        },
+      },
+    });
+  }
+
+  return { grid_el, list_el };
+}
+
+function show_danger_popup(
+  app_state: App_State, 
+  in_danger_els: Element_Info[],
+  on_finish: (to_edit: Element_Info[]) => void){
+  const fix_els_modal = focused_modal({
+    header_text: `
+  <h2>The following elements dont fit on the new grid layout.</h2>
+  <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
+  `,
+  });
+
+  const radio_inputs_html = in_danger_els.reduce(
+    (radio_group, el) =>
+      `
+    ${radio_group}
+    <div class = "radio-set-group">
+      <div class = "radio-set-label"> ${el.id} </div>
+      <div class = "radio-set-options">
+        <input type="radio" id = "delete_${el.id}" name="${el.id}" value="delete" checked>
+        <label for="delete_${el.id}">Delete</label>
+        <input type="radio" id = "shrink_${el.id}" name="${el.id}" value="shrink">
+        <label for="shrink_${el.id}">Shink</label>
+      </div>
+    </div>
+  `,
+    ""
+  );
+
+  const delete_or_edit_form = make_el(
+    fix_els_modal.modal,
+    "form#delete_or_fix_list",
+    {
+      innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
+      event_listener: {
+        event: "submit",
+        func: function () {
+          const form = this;
+          const to_delete = in_danger_els.filter(
+            (d) => form[d.id].value === "delete"
+          );
+
+          app_state.remove_elements(to_delete.map((d) => d.id));
+          const to_edit = in_danger_els.filter(
+            (d) => form[d.id].value === "shrink"
+          );
+
+          on_finish(to_edit);
+
+          fix_els_modal.remove();
+          
+        },
+      },
+    }
+  );
+
+  make_el(delete_or_edit_form, "input#name_submit", {
+    props: { type: "submit" },
+  });
+
+  make_el(fix_els_modal.modal, "p.notice-text", {
+    innerHTML:
+      "Note that elements residing completely in the removed row or column are automatically deleted.",
+  });
 }

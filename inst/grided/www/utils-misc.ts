@@ -159,21 +159,3 @@ export const filler_text = `
   when an unknown printer took a galley of type and scrambled it to make a type 
   specimen book.
 </div>`;
-
-
-
-  // Get the next color in our list of colors.
-  export function get_next_color(grid_container: HTMLElement) {
-    const colors = [
-      "#e41a1c",
-      "#377eb8",
-      "#4daf4a",
-      "#984ea3",
-      "#ff7f00",
-      "#a65628",
-      "#f781bf",
-    ];
-    const all_elements = grid_container.querySelectorAll(".added-element");
-    // If we have more elements than colors we simply recycle
-    return colors[all_elements.length % colors.length];
-  }

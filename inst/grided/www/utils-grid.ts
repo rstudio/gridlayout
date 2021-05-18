@@ -2,9 +2,9 @@
 
 
 import { Code_Text } from "./make-focused_modal";
-import { Element_Info, Grid_Pos } from "./index";
+import { Element_Info} from "./index";
 import { boxes_overlap, concat, concat_nl, get_bounding_rect, max_w_missing, min_w_missing, Selection_Rect } from "./utils-misc";
-import { App_State } from "./App_State";
+import { App_State, Grid_Pos } from "./App_State";
 
 
 function get_styles(container: HTMLElement|CSSStyleDeclaration){
@@ -91,6 +91,15 @@ export function get_drag_extent_on_grid(app_state: App_State, selection_rect: Se
   });
 
   return sel_bounds;
+}
+
+export function bounding_rect_to_css_pos(rect: Selection_Rect) {
+  return {
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.right - rect.left}px`,
+    height: `${rect.bottom - rect.top}px`,
+  };
 }
 
 

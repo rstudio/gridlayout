@@ -139,7 +139,7 @@ var __assign = this && this.__assign || function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.get_next_color = exports.filler_text = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = void 0;
+exports.filler_text = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = void 0;
 
 function concat(string_vec, collapse_char) {
   if (collapse_char === void 0) {
@@ -300,16 +300,7 @@ function set_class(elements, class_name) {
 }
 
 exports.set_class = set_class;
-exports.filler_text = "\n<div class = \"filler_text\">\n  Lorem Ipsum is simply dummy text of the printing and typesetting industry. \n  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>"; // Get the next color in our list of colors.
-
-function get_next_color(grid_container) {
-  var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
-  var all_elements = grid_container.querySelectorAll(".added-element"); // If we have more elements than colors we simply recycle
-
-  return colors[all_elements.length % colors.length];
-}
-
-exports.get_next_color = get_next_color;
+exports.filler_text = "\n<div class = \"filler_text\">\n  Lorem Ipsum is simply dummy text of the printing and typesetting industry. \n  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>";
 },{}],"utils-grid.ts":[function(require,module,exports) {
 "use strict"; // Functions related to grid construction, editings, etc
 
@@ -324,7 +315,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.set_gap_size = exports.get_gap_size = exports.gen_code_for_layout = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.sizes_to_template_def = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
+exports.set_gap_size = exports.get_gap_size = exports.gen_code_for_layout = exports.bounding_rect_to_css_pos = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.sizes_to_template_def = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
 
 var utils_misc_1 = require("./utils-misc");
 
@@ -423,6 +414,17 @@ function get_drag_extent_on_grid(app_state, selection_rect) {
 }
 
 exports.get_drag_extent_on_grid = get_drag_extent_on_grid;
+
+function bounding_rect_to_css_pos(rect) {
+  return {
+    left: rect.left + "px",
+    top: rect.top + "px",
+    width: rect.right - rect.left + "px",
+    height: rect.bottom - rect.top + "px"
+  };
+}
+
+exports.bounding_rect_to_css_pos = bounding_rect_to_css_pos;
 
 function gen_code_for_layout(elements, grid_styles) {
   var container_selector = "#container";
@@ -1364,6 +1366,7 @@ function () {
     this.elements = {};
     this.controls = opts.controls;
     this.container = opts.container;
+    this.grid_styles = this.container.style;
     this.mode = opts.grid_is_filled ? "ShinyExisting" : index_1.Shiny ? "ShinyNew" : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
     console.log("Hi app state");
@@ -1380,6 +1383,58 @@ function () {
       }
 
       return sizes;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "row_sizes", {
+    get: function get() {
+      return utils_grid_1.get_rows(this.container);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "col_sizes", {
+    get: function get() {
+      return utils_grid_1.get_cols(this.container);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "num_rows", {
+    get: function get() {
+      return this.row_sizes.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "num_cols", {
+    get: function get() {
+      return this.col_sizes.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "gap_size", {
+    get: function get() {
+      return utils_grid_1.get_gap_size(this.grid_styles);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "grid_dims", {
+    get: function get() {
+      return {
+        rows: this.row_sizes,
+        cols: this.col_sizes
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "num_elements", {
+    get: function get() {
+      return Object.keys(this.elements).length;
     },
     enumerable: false,
     configurable: true
@@ -1403,7 +1458,22 @@ function () {
     },
     enumerable: false,
     configurable: true
-  }); // Removes elements the user has added to the grid by id
+  });
+  Object.defineProperty(App_State.prototype, "next_color", {
+    // Get the next color in our list of colors.
+    get: function get() {
+      var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
+
+      return colors[this.num_elements % colors.length];
+    },
+    enumerable: false,
+    configurable: true
+  }); // Just so we dont have to always say make_el(this.container...)
+
+  App_State.prototype.make_el = function (sel_txt, opts) {
+    return make_elements_1.make_el(this.container, sel_txt, opts);
+  }; // Removes elements the user has added to the grid by id
+
 
   App_State.prototype.remove_elements = function (ids) {
     utils_misc_1.as_array(ids).forEach(function (el_id) {
@@ -1413,18 +1483,26 @@ function () {
   };
 
   App_State.prototype.setup_drag = function (opts) {
-    var app_state = this;
+    var _this = this;
+
     var drag_feedback_rect;
     var start_rect;
     var start_loc;
     var editor_el = document.querySelector("#grided__editor");
 
+    var update_grid_pos = function update_grid_pos(element, bounding_rect) {
+      var grid_extent = utils_grid_1.get_drag_extent_on_grid(_this, bounding_rect);
+      utils_grid_1.set_element_in_grid(element, grid_extent);
+      return grid_extent;
+    };
+
     opts.watching_element.onmousedown = function (event) {
       start_loc = event; // make sure dragged element is on top
 
-      app_state.container.appendChild(opts.grid_element); // If this is a new element drag there wont be a bounding box for the grid
+      _this.container.appendChild(opts.grid_element); // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
       // of the drag
+
 
       start_rect = utils_misc_1.get_bounding_rect(opts.grid_element) || {
         left: event.offsetX,
@@ -1432,8 +1510,8 @@ function () {
         top: event.offsetY,
         bottom: event.offsetY
       };
-      drag_feedback_rect = make_elements_1.make_el(app_state.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
-        styles: __assign({}, bounding_rect_to_css_pos(start_rect))
+      drag_feedback_rect = make_elements_1.make_el(_this.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
+        styles: __assign({}, utils_grid_1.bounding_rect_to_css_pos(start_rect))
       }); // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
 
@@ -1444,12 +1522,6 @@ function () {
       editor_el.addEventListener("mouseup", drag_end);
     };
 
-    function update_grid_pos(element, bounding_rect) {
-      var grid_extent = utils_grid_1.get_drag_extent_on_grid(app_state, bounding_rect);
-      utils_grid_1.set_element_in_grid(element, grid_extent);
-      return grid_extent;
-    }
-
     function drag(event) {
       var curr_loc = event; // Sometimes the drag event gets fired with nonsense zeros
 
@@ -1458,7 +1530,7 @@ function () {
         x: curr_loc.x - start_loc.x,
         y: curr_loc.y - start_loc.y
       }, opts.drag_dir);
-      Object.assign(drag_feedback_rect.style, bounding_rect_to_css_pos(new_rect));
+      Object.assign(drag_feedback_rect.style, utils_grid_1.bounding_rect_to_css_pos(new_rect));
       var grid_extent = update_grid_pos(opts.grid_element, new_rect);
       if (opts.on_drag) opts.on_drag({
         xy: curr_loc,
@@ -1478,309 +1550,184 @@ function () {
       editor_el.removeEventListener("mousemove", drag);
       editor_el.removeEventListener("mouseup", drag_end);
     }
-
-    function bounding_rect_to_css_pos(rect) {
-      return {
-        left: rect.left + "px",
-        top: rect.top + "px",
-        width: rect.right - rect.left + "px",
-        height: rect.bottom - rect.top + "px"
-      };
-    }
   };
 
   App_State.prototype.add_element = function (el_props) {
-    this.elements[el_props.id] = add_element(this, el_props);
+    // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
+    if (el_props.existing_element) {
+      el_props.id = el_props.id.replace(/^.+?__/g, "");
+    }
+
+    this.elements[el_props.id] = draw_elements(this, el_props); // Let shiny know we have a new element
+
+    utils_shiny_1.send_elements_to_shiny(this.current_elements);
   };
 
   App_State.prototype.update_grid = function (opts) {
-    update_grid(this, opts);
+    var _this = this;
+
+    var new_num_rows = opts.rows ? opts.rows.length : this.num_rows;
+    var new_num_cols = opts.cols ? opts.cols.length : this.num_cols; // Make sure settings panel is up-to-date
+
+    this.settings_panel.num_rows(new_num_rows);
+    this.settings_panel.num_cols(new_num_cols);
+    this.settings_panel.gap.update_value(opts.gap || this.gap_size);
+    var grid_numbers_changed = this.num_rows !== new_num_rows || this.num_cols !== new_num_cols;
+
+    if (grid_numbers_changed) {
+      // Check for elements that may get dropped
+      var in_danger_els_1 = [];
+      var auto_removed_el_ids_1 = [];
+      this.current_elements.forEach(function (el) {
+        var sits_outside_grid = el.end_row > new_num_rows || el.end_col > new_num_cols;
+        var completely_outside_grid = el.start_row > new_num_rows || el.start_col > new_num_cols;
+
+        if (completely_outside_grid) {
+          auto_removed_el_ids_1.push(el.id);
+        } else if (sits_outside_grid) {
+          in_danger_els_1.push(el);
+        }
+      });
+      this.remove_elements(auto_removed_el_ids_1);
+
+      if (in_danger_els_1.length > 0) {
+        show_danger_popup(this, in_danger_els_1, function (to_edit) {
+          to_edit.forEach(function (el) {
+            var el_node = _this.container.querySelector("#" + el.id);
+
+            el_node.style.gridRow = utils_grid_1.make_template_start_end(el.start_row, Math.min(el.end_row, new_num_rows));
+            el_node.style.gridColumn = utils_grid_1.make_template_start_end(el.start_col, Math.min(el.end_col, new_num_cols));
+          }); // Now that we've updated elements properly, we should be able to
+          // just recall the function and it won't spit an error
+
+          _this.update_grid({
+            rows: opts.rows,
+            cols: opts.cols,
+            gap: opts.gap
+          });
+        });
+        return;
+      }
+    }
+
+    if (opts.rows) {
+      this.grid_styles.gridTemplateRows = utils_grid_1.sizes_to_template_def(opts.rows);
+    }
+
+    if (opts.cols) {
+      this.grid_styles.gridTemplateColumns = utils_grid_1.sizes_to_template_def(opts.cols);
+    }
+
+    if (opts.gap) {
+      // This sets the --grid-gap variable so that the controls that need the
+      // info can use it to keep a constant distance from the grid holder
+      this.container.parentElement.style.setProperty("--grid-gap", opts.gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+
+      utils_grid_1.set_gap_size(this.grid_styles, opts.gap);
+      this.grid_styles.padding = opts.gap;
+    }
+
+    if (grid_numbers_changed || opts.force) {
+      this.fill_grid_cells();
+    }
+
+    if (!opts.dont_send_to_shiny) {
+      utils_shiny_1.send_grid_sizing_to_shiny(this.grid_styles);
+    }
+  };
+
+  App_State.prototype.fill_grid_cells = function () {
+    var _this = this; // Grab currently drawn cells (if any) so we can check if we need to redraw
+    // or if this was simply a column/row sizing update
+
+
+    var need_to_reset_cells = this.current_cells.length != this.num_rows * this.num_cols;
+
+    if (need_to_reset_cells) {
+      make_elements_1.remove_elements(this.current_cells);
+      this.current_cells = [];
+
+      for (var row_i = 1; row_i <= this.num_rows; row_i++) {
+        for (var col_i = 1; col_i <= this.num_cols; col_i++) {
+          this.current_cells.push(this.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
+            data_props: {
+              row: row_i,
+              col: col_i
+            },
+            grid_pos: {
+              start_row: row_i,
+              start_col: col_i
+            }
+          }));
+        }
+      }
+
+      var _loop_1 = function _loop_1(type) {
+        // Get rid of old ones to start with fresh slate
+        make_elements_1.remove_elements(this_1.container.querySelectorAll("." + type + "-controls"));
+        this_1.controls[type] = this_1.grid_dims[type].map(function (size, i) {
+          var _a; // The i + 1 is because grid is indexed at 1, not zero
+
+
+          var grid_i = i + 1;
+          return make_css_unit_input_1.make_css_unit_input({
+            parent_el: _this.container,
+            selector: "#control_" + type + grid_i + "." + type + "-controls",
+            start_val: make_css_unit_input_1.get_css_value(size),
+            start_unit: make_css_unit_input_1.get_css_unit(size),
+            on_change: function on_change() {
+              return _this.update_grid(_this.layout_from_controls);
+            },
+            on_drag: function on_drag() {
+              return _this.update_grid(__assign(__assign({}, _this.layout_from_controls), {
+                dont_send_to_shiny: true
+              }));
+            },
+            form_styles: (_a = {}, _a["grid" + (type === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(grid_i), _a),
+            drag_dir: type === "rows" ? "y" : "x"
+          });
+        });
+      };
+
+      var this_1 = this; // Build each column and row's sizing controler
+
+      for (var type in this.controls) {
+        _loop_1(type);
+      }
+
+      var current_selection_box_1 = this.make_el("div#current_selection_box.added-element");
+      var drag_canvas = this.make_el("div#drag_canvas");
+      this.setup_drag({
+        watching_element: drag_canvas,
+        grid_element: current_selection_box_1,
+        drag_dir: "bottom-right",
+        on_start: function on_start() {
+          current_selection_box_1.style.borderColor = _this.next_color;
+        },
+        on_end: function on_end(_a) {
+          var grid = _a.grid;
+          name_new_element(_this, {
+            grid_pos: grid,
+            selection_box: current_selection_box_1
+          });
+        }
+      }); // Make sure any added elements sit on top by re-appending them to grid holder
+      // Make sure that the drag detector sits over everything
+
+      __spreadArray([drag_canvas], this.container.querySelectorAll(".added-element")).forEach(function (el) {
+        return _this.container.appendChild(el);
+      });
+    } else {}
   };
 
   return App_State;
-}();
+}(); // End of class declaration
+
 
 exports.App_State = App_State;
-
-function add_element(app_state, el_props) {
-  var grid_container = app_state.container;
-  var grid_pos = el_props.grid_pos,
-      _a = el_props.color,
-      color = _a === void 0 ? utils_misc_1.get_next_color(grid_container) : _a,
-      existing_element = el_props.existing_element;
-  var mirrors_existing_element = existing_element !== undefined; // If element ids were generated with the grid_container R function then
-  // they have a prefix of the container name which we should remove so the
-  // added elements list is not ugly looking
-
-  var id = mirrors_existing_element ? el_props.id.replace(/^.+?__/g, "") : el_props.id;
-  var grid_el = make_elements_1.make_el(grid_container, "div#" + id + ".el_" + id + ".added-element", {
-    grid_pos: grid_pos,
-    // Add filler text for new elements so that auto-height will work
-    innerHTML: mirrors_existing_element ? "" : utils_misc_1.filler_text,
-    styles: {
-      borderColor: color,
-      position: "relative"
-    }
-  }); // Setup drag behavior
-
-  ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
-    app_state.setup_drag({
-      watching_element: make_elements_1.make_el(grid_el, "div.dragger.visible." + handle_type, {
-        styles: {
-          background: color
-        },
-        innerHTML: handle_type === "center" ? utils_icons_1.drag_icon : handle_type === "bottom-right" ? utils_icons_1.se_arrow : utils_icons_1.nw_arrow
-      }),
-      grid_element: grid_el,
-      drag_dir: handle_type,
-      on_drag: function on_drag(res) {
-        if (mirrors_existing_element) {
-          utils_grid_1.set_element_in_grid(existing_element, res.grid);
-        }
-      },
-      on_end: function on_end() {
-        utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
-      }
-    });
-  });
-  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + id + ".added-element", {
-    innerHTML: id,
-    styles: {
-      borderColor: color
-    },
-    event_listener: [{
-      event: "mouseover",
-      func: function func() {
-        this.classList.add("hovered");
-        grid_el.classList.add("hovered");
-      }
-    }, {
-      event: "mouseout",
-      func: function func() {
-        this.classList.remove("hovered");
-        grid_el.classList.remove("hovered");
-      }
-    }]
-  });
-
-  if (!mirrors_existing_element) {
-    // Turn of deleting if were editing an existing app
-    // This means that if were in app editing mode and the user adds a new element
-    // they can delete that new element but they can't delete the existing elements
-    make_elements_1.make_el(list_el, "button.remove_el", {
-      innerHTML: utils_icons_1.trashcan_icon,
-      event_listener: {
-        event: "click",
-        func: function func() {
-          app_state.remove_elements(id);
-        }
-      }
-    });
-  } // Let shiny know we have a new element
-
-
-  utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
-  return {
-    grid_el: grid_el,
-    list_el: list_el
-  };
-}
-
-function update_grid(app_state, opts) {
-  var old_num_rows = utils_grid_1.get_rows(app_state.container).length;
-  var old_num_cols = utils_grid_1.get_cols(app_state.container).length;
-  var old_gap = utils_grid_1.get_gap_size(app_state.container.style);
-  var new_gap = opts.gap || old_gap;
-  var new_num_rows = opts.rows ? opts.rows.length : old_num_rows;
-  var new_num_cols = opts.cols ? opts.cols.length : old_num_cols; // Make sure settings panel is up-to-date
-
-  app_state.settings_panel.num_rows(new_num_rows);
-  app_state.settings_panel.num_cols(new_num_cols);
-  app_state.settings_panel.gap.update_value(new_gap);
-  var grid_numbers_changed = old_num_rows !== new_num_rows || old_num_cols !== new_num_cols;
-
-  if (grid_numbers_changed) {
-    // Check for elements that may get dropped
-    var all_els = app_state.current_elements;
-    var in_danger_els_1 = [];
-    var auto_removed_el_ids_1 = [];
-    all_els.forEach(function (el) {
-      var sits_outside_grid = el.end_row > new_num_rows || el.end_col > new_num_cols;
-      var completely_outside_grid = el.start_row > new_num_rows || el.start_col > new_num_cols;
-
-      if (completely_outside_grid) {
-        auto_removed_el_ids_1.push(el.id);
-      } else if (sits_outside_grid) {
-        in_danger_els_1.push(el);
-      }
-    });
-    app_state.remove_elements(auto_removed_el_ids_1);
-
-    if (in_danger_els_1.length > 0) {
-      var fix_els_modal_1 = make_focused_modal_1.focused_modal({
-        header_text: "\n      <h2>The following elements dont fit on the new grid layout.</h2>\n      <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>\n      "
-      });
-      var radio_inputs_html = in_danger_els_1.reduce(function (radio_group, el) {
-        return "\n        " + radio_group + "\n        <div class = \"radio-set-group\">\n          <div class = \"radio-set-label\"> " + el.id + " </div>\n          <div class = \"radio-set-options\">\n            <input type=\"radio\" id = \"delete_" + el.id + "\" name=\"" + el.id + "\" value=\"delete\" checked>\n            <label for=\"delete_" + el.id + "\">Delete</label>\n            <input type=\"radio\" id = \"shrink_" + el.id + "\" name=\"" + el.id + "\" value=\"shrink\">\n            <label for=\"shrink_" + el.id + "\">Shink</label>\n          </div>\n        </div>\n      ";
-      }, "");
-      var delete_or_edit_form = make_elements_1.make_el(fix_els_modal_1.modal, "form#delete_or_fix_list", {
-        innerHTML: "<div class = \"update-action-form\"> " + radio_inputs_html + " </div>",
-        event_listener: {
-          event: "submit",
-          func: function func() {
-            var form = this;
-            var to_delete = in_danger_els_1.filter(function (d) {
-              return form[d.id].value === "delete";
-            });
-            app_state.remove_elements(to_delete.map(function (d) {
-              return d.id;
-            }));
-            var to_edit = in_danger_els_1.filter(function (d) {
-              return form[d.id].value === "shrink";
-            });
-            to_edit.forEach(function (el) {
-              var el_node = app_state.container.querySelector("#" + el.id);
-              el_node.style.gridRow = utils_grid_1.make_template_start_end(el.start_row, Math.min(el.end_row, new_num_rows));
-              el_node.style.gridColumn = utils_grid_1.make_template_start_end(el.start_col, Math.min(el.end_col, new_num_cols));
-            });
-            fix_els_modal_1.remove(); // Now that we've updated elements properly, we should be able to
-            // just recall the function and it won't spit an error
-
-            update_grid(app_state, {
-              rows: opts.rows,
-              cols: opts.cols,
-              gap: opts.gap
-            });
-          }
-        }
-      });
-      make_elements_1.make_el(delete_or_edit_form, "input#name_submit", {
-        props: {
-          type: "submit"
-        }
-      });
-      make_elements_1.make_el(fix_els_modal_1.modal, "p.notice-text", {
-        innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
-      });
-      return;
-    }
-  }
-
-  if (opts.rows) {
-    app_state.container.style.gridTemplateRows = utils_grid_1.sizes_to_template_def(opts.rows);
-  }
-
-  if (opts.cols) {
-    app_state.container.style.gridTemplateColumns = utils_grid_1.sizes_to_template_def(opts.cols);
-  }
-
-  if (opts.gap) {
-    // This sets the --grid-gap variable so that the controls that need the
-    // info can use it to keep a constant distance from the grid holder
-    app_state.container.parentElement.style.setProperty("--grid-gap", opts.gap); // We dont use css variables in the exported css that existing apps used
-    // so we need to modify both gap and padding
-
-    utils_grid_1.set_gap_size(app_state.container.style, opts.gap);
-    app_state.container.style.padding = opts.gap;
-  }
-
-  if (grid_numbers_changed || opts.force) {
-    fill_grid_cells(app_state);
-  }
-
-  if (!opts.dont_send_to_shiny) {
-    utils_shiny_1.send_grid_sizing_to_shiny(app_state.container.style);
-  }
-
-  return app_state.container;
-}
-
-function fill_grid_cells(app_state) {
-  var grid_dims = {
-    rows: utils_grid_1.get_rows(app_state.container),
-    cols: utils_grid_1.get_cols(app_state.container)
-  };
-  var num_rows = grid_dims.rows.length;
-  var num_cols = grid_dims.cols.length; // Grab currently drawn cells (if any) so we can check if we need to redraw
-  // or if this was simply a column/row sizing update
-
-  app_state.current_cells = [];
-  var need_to_reset_cells = app_state.current_cells.length != num_rows * num_cols;
-
-  if (need_to_reset_cells) {
-    make_elements_1.remove_elements(app_state.container.querySelectorAll(".grid-cell"));
-
-    for (var row_i = 1; row_i <= num_rows; row_i++) {
-      for (var col_i = 1; col_i <= num_cols; col_i++) {
-        app_state.current_cells.push(make_elements_1.make_el(app_state.container, "div.r" + row_i + ".c" + col_i + ".grid-cell", {
-          data_props: {
-            row: row_i,
-            col: col_i
-          },
-          grid_pos: {
-            start_row: row_i,
-            start_col: col_i
-          }
-        }));
-      }
-    }
-
-    var _loop_1 = function _loop_1(type) {
-      // Get rid of old ones to start with fresh slate
-      make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
-      app_state.controls[type] = grid_dims[type].map(function (size, i) {
-        var _a; // The i + 1 is because grid is indexed at 1, not zero
-
-
-        var grid_i = i + 1;
-        return make_css_unit_input_1.make_css_unit_input({
-          parent_el: app_state.container,
-          selector: "#control_" + type + grid_i + "." + type + "-controls",
-          start_val: make_css_unit_input_1.get_css_value(size),
-          start_unit: make_css_unit_input_1.get_css_unit(size),
-          on_change: function on_change() {
-            return update_grid(app_state, app_state.layout_from_controls);
-          },
-          on_drag: function on_drag() {
-            return update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
-              dont_send_to_shiny: true
-            }));
-          },
-          form_styles: (_a = {}, _a["grid" + (type === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(grid_i), _a),
-          drag_dir: type === "rows" ? "y" : "x"
-        });
-      });
-    }; // Build each column and row's sizing controler
-
-
-    for (var type in app_state.controls) {
-      _loop_1(type);
-    }
-
-    var current_selection_box_1 = make_elements_1.make_el(app_state.container, "div#current_selection_box.added-element");
-    var drag_canvas = make_elements_1.make_el(app_state.container, "div#drag_canvas");
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_element: current_selection_box_1,
-      drag_dir: "bottom-right",
-      on_start: function on_start() {
-        current_selection_box_1.style.borderColor = utils_misc_1.get_next_color(app_state.container);
-      },
-      on_end: function on_end(_a) {
-        var grid = _a.grid;
-        name_new_element(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box_1
-        });
-      }
-    }); // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
-
-    __spreadArray([drag_canvas], app_state.container.querySelectorAll(".added-element")).forEach(function (el) {
-      return app_state.container.appendChild(el);
-    });
-  } else {}
-}
 
 function make_settings_panel(app_state, panel_el) {
   return {
@@ -1936,6 +1883,118 @@ function name_new_element(app_state, _a) {
 
     selection_box.style.display = "none";
   }
+}
+
+function draw_elements(app_state, el_props) {
+  var _this = this;
+
+  var el_color = app_state.next_color;
+  var grid_el = app_state.make_el("div#" + el_props.id + ".el_" + el_props.id + ".added-element", {
+    grid_pos: el_props.grid_pos,
+    // Add filler text for new elements so that auto-height will work
+    innerHTML: el_props.existing_element ? "" : utils_misc_1.filler_text,
+    styles: {
+      borderColor: el_color,
+      position: "relative"
+    }
+  }); // Setup drag behavior
+
+  ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
+    app_state.setup_drag({
+      watching_element: make_elements_1.make_el(grid_el, "div.dragger.visible." + handle_type, {
+        styles: {
+          background: el_color
+        },
+        innerHTML: handle_type === "center" ? utils_icons_1.drag_icon : handle_type === "bottom-right" ? utils_icons_1.se_arrow : utils_icons_1.nw_arrow
+      }),
+      grid_element: grid_el,
+      drag_dir: handle_type,
+      on_drag: function on_drag(res) {
+        if (el_props.existing_element) {
+          utils_grid_1.set_element_in_grid(el_props.existing_element, res.grid);
+        }
+      },
+      on_end: function on_end() {
+        utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
+      }
+    });
+  });
+  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + el_props.id + ".added-element", {
+    innerHTML: el_props.id,
+    styles: {
+      borderColor: el_color
+    },
+    event_listener: [{
+      event: "mouseover",
+      func: function func() {
+        this.classList.add("hovered");
+        grid_el.classList.add("hovered");
+      }
+    }, {
+      event: "mouseout",
+      func: function func() {
+        this.classList.remove("hovered");
+        grid_el.classList.remove("hovered");
+      }
+    }]
+  });
+
+  if (!el_props) {
+    // Turn of deleting if were editing an existing app
+    // This means that if were in app editing mode and the user adds a new element
+    // they can delete that new element but they can't delete the existing elements
+    make_elements_1.make_el(list_el, "button.remove_el", {
+      innerHTML: utils_icons_1.trashcan_icon,
+      event_listener: {
+        event: "click",
+        func: function func() {
+          _this.remove_elements(el_props.id);
+        }
+      }
+    });
+  }
+
+  return {
+    grid_el: grid_el,
+    list_el: list_el
+  };
+}
+
+function show_danger_popup(app_state, in_danger_els, on_finish) {
+  var fix_els_modal = make_focused_modal_1.focused_modal({
+    header_text: "\n  <h2>The following elements dont fit on the new grid layout.</h2>\n  <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>\n  "
+  });
+  var radio_inputs_html = in_danger_els.reduce(function (radio_group, el) {
+    return "\n    " + radio_group + "\n    <div class = \"radio-set-group\">\n      <div class = \"radio-set-label\"> " + el.id + " </div>\n      <div class = \"radio-set-options\">\n        <input type=\"radio\" id = \"delete_" + el.id + "\" name=\"" + el.id + "\" value=\"delete\" checked>\n        <label for=\"delete_" + el.id + "\">Delete</label>\n        <input type=\"radio\" id = \"shrink_" + el.id + "\" name=\"" + el.id + "\" value=\"shrink\">\n        <label for=\"shrink_" + el.id + "\">Shink</label>\n      </div>\n    </div>\n  ";
+  }, "");
+  var delete_or_edit_form = make_elements_1.make_el(fix_els_modal.modal, "form#delete_or_fix_list", {
+    innerHTML: "<div class = \"update-action-form\"> " + radio_inputs_html + " </div>",
+    event_listener: {
+      event: "submit",
+      func: function func() {
+        var form = this;
+        var to_delete = in_danger_els.filter(function (d) {
+          return form[d.id].value === "delete";
+        });
+        app_state.remove_elements(to_delete.map(function (d) {
+          return d.id;
+        }));
+        var to_edit = in_danger_els.filter(function (d) {
+          return form[d.id].value === "shrink";
+        });
+        on_finish(to_edit);
+        fix_els_modal.remove();
+      }
+    }
+  });
+  make_elements_1.make_el(delete_or_edit_form, "input#name_submit", {
+    props: {
+      type: "submit"
+    }
+  });
+  make_elements_1.make_el(fix_els_modal.modal, "p.notice-text", {
+    innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
+  });
 }
 },{"./make-elements":"make-elements.ts","./make-css_unit_input":"make-css_unit_input.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./index":"index.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
