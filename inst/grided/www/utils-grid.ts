@@ -3,7 +3,8 @@
 
 import { Code_Text } from "./make-focused_modal";
 import { Element_Info, Grid_Pos } from "./index";
-import { concat, concat_nl } from "./utils-misc";
+import { boxes_overlap, concat, concat_nl, get_bounding_rect, max_w_missing, min_w_missing, Selection_Rect } from "./utils-misc";
+import { App_State } from "./App_State";
 
 
 function get_styles(container: HTMLElement|CSSStyleDeclaration){
@@ -71,6 +72,25 @@ export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
     end_row: +el_styles.gridRowEnd - 1,
     end_col: +el_styles.gridColumnEnd - 1,
   };
+}
+
+export function get_drag_extent_on_grid(app_state: App_State, selection_rect: Selection_Rect): Grid_Pos {
+  // Reset bounding box definitions so we only use current selection extent
+  const sel_bounds: Grid_Pos = { start_col: null, start_row: null };
+
+  app_state.current_cells.forEach(function (el) {
+    // Cell is overlapped by selection box
+    if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
+      const el_row: number = +el.dataset.row;
+      const el_col: number = +el.dataset.col;
+      sel_bounds.start_row = min_w_missing(sel_bounds.start_row, el_row);
+      sel_bounds.end_row = max_w_missing(sel_bounds.end_row, el_row);
+      sel_bounds.start_col = min_w_missing(sel_bounds.start_col, el_col);
+      sel_bounds.end_col = max_w_missing(sel_bounds.end_col, el_col);
+    }
+  });
+
+  return sel_bounds;
 }
 
 

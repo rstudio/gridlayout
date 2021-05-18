@@ -33,6 +33,7 @@ shinyApp(
   ),
   server = function(input, output, session) {
 
+
     output$distPlot <- renderPlot({
       x    <- faithful[, 2]
       bins <- seq(min(x), max(x), length.out = input$bins + 1)
@@ -40,5 +41,6 @@ shinyApp(
     })
 
     grided_server_code(input, output, session)
+
   }
 )
