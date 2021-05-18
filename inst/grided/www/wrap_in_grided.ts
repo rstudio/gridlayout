@@ -5,10 +5,7 @@ import {
   settings_icon,
   trashcan_icon,
 } from "./utils-icons";
-import { Block_El, Text_El, make_el } from "./make-elements";
-import { make_incrementer } from "./make-incrementer";
-import { make_css_unit_input } from "./make-css_unit_input";
-import { Grid_Settings, Grid_Update_Options } from "./index";
+import { Block_El, Text_El } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
 
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
@@ -16,7 +13,6 @@ import { make_toggle_switch } from "./make-toggle_switch";
 // that it contains so they can be overlayed with editable element boxes 
 export function wrap_in_grided(
   grid_el: HTMLElement,
-  update_grid: (opts: Grid_Update_Options, send_to_shiny?: boolean) => void,
   setShinyInput: (
     input_id: string,
     input_value: any,
@@ -104,49 +100,6 @@ export function wrap_in_grided(
   // than it eventually is. I think it's worth it.
   grid_el.style.maxWidth = "100%";
 
-  const grid_settings: Grid_Settings = {
-    num_rows: make_incrementer({
-      parent_el: settings_panel,
-      id: "num_rows",
-      start_val: 2,
-      label: "Number of rows",
-      on_increment: (x) => update_num_rows_or_cols("rows", x),
-    }),
-    num_cols: make_incrementer({
-      parent_el: settings_panel,
-      id: "num_cols",
-      start_val: 2,
-      label: "Number of cols",
-      on_increment: (x) => update_num_rows_or_cols("cols", x),
-    }),
-    gap: make_css_unit_input({
-      parent_el: make_el(
-        settings_panel,
-        "div#gap_size_chooser.plus_minus_input.settings-grid",
-        {
-          innerHTML: `<span class = "input-label">Panel gap size</span>`,
-        }
-      ),
-      selector: "#gap_size_chooser",
-      on_change: (x) => update_grid({ gap: x }),
-      allowed_units: ["px", "rem"],
-    }),
-  };
-
-  function update_num_rows_or_cols(dir, new_count) {
-    const current_vals = grid_el.style[
-      `gridTemplate${dir === "rows" ? "Rows" : "Columns"}`
-    ].split(" ");
-
-    if (new_count > current_vals.length) {
-      current_vals.push("1fr");
-    } else if (new_count < current_vals.length) {
-      current_vals.pop();
-    } else {
-      // No change, shouldn't happen but maybe...
-    }
-    update_grid({ [dir]: current_vals });
-  }
 
   function toggle_interaction_mode(interact_is_on: boolean) {
     [
@@ -182,7 +135,6 @@ export function wrap_in_grided(
 
   return {
     settings_panel,
-    grid_settings,
     grid_is_filled,
     existing_children,
   };
