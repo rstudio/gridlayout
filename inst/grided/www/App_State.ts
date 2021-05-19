@@ -1,25 +1,14 @@
-import { Element_Opts, make_el, remove_elements } from "./make-elements";
+import { Grid_Layout } from "./Grid_Layout";
+import { Element_Info, Shiny } from "./index";
 import {
   CSS_Input,
   get_css_unit,
   get_css_value,
-  make_css_unit_input,
+  make_css_unit_input
 } from "./make-css_unit_input";
-import {
-  as_array,
-  Drag_Type,
-  filler_text,
-  get_bounding_rect,
-  Selection_Rect,
-  set_class,
-  update_rect_with_delta,
-  XY_Pos,
-} from "./utils-misc";
-import {
-  send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
-} from "./utils-shiny";
-import { Shiny, Element_Info } from "./index";
+import { Element_Opts, make_el, remove_elements } from "./make-elements";
+import { focused_modal } from "./make-focused_modal";
+import { make_incrementer } from "./make-incrementer";
 import {
   bounding_rect_to_css_pos,
   contains_element,
@@ -29,12 +18,23 @@ import {
   grid_position_of_el,
   make_template_start_end,
   set_element_in_grid,
-  shrink_element_to_layout,
+  shrink_element_to_layout
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
-import { focused_modal } from "./make-focused_modal";
-import { make_incrementer } from "./make-incrementer";
-import { Grid_Layout } from "./Grid_Layout";
+import {
+  as_array,
+  Drag_Type,
+  filler_text,
+  get_bounding_rect,
+  Selection_Rect,
+  set_class,
+  update_rect_with_delta,
+  XY_Pos
+} from "./utils-misc";
+import {
+  send_elements_to_shiny,
+  send_grid_sizing_to_shiny
+} from "./utils-shiny";
 
 type Grid_Settings = {
   num_rows: (new_value: number) => void;

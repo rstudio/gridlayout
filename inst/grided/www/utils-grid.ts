@@ -1,17 +1,17 @@
 // Functions related to grid construction, editings, etc
 
-import { Code_Text } from "./make-focused_modal";
+import { App_State, Grid_Pos } from "./App_State";
+import { Layout_State } from "./Grid_Layout";
 import { Element_Info } from "./index";
+import { Code_Text } from "./make-focused_modal";
 import {
   boxes_overlap,
   concat_nl,
   get_bounding_rect,
   max_w_missing,
   min_w_missing,
-  Selection_Rect,
+  Selection_Rect
 } from "./utils-misc";
-import { App_State, Grid_Pos } from "./App_State";
-import { Layout_State } from "./Grid_Layout";
 
 function get_styles(container: HTMLElement | CSSStyleDeclaration) {
   if (container instanceof HTMLElement) {
@@ -44,9 +44,7 @@ export function make_template_start_end(start: number, end?: number): string {
 
 export function set_element_in_grid(
   el: HTMLElement,
-  grid_bounds: Grid_Pos,
-  el_styles?: CSSStyleDeclaration
-) {
+  grid_bounds: Grid_Pos) {
   if (grid_bounds.start_row) {
     el.style.gridRowStart = grid_bounds.start_row.toString();
   }

@@ -1,24 +1,22 @@
 // JS entry point
+import { App_State, Grid_Update_Options } from "./App_State";
 import { Block_El } from "./make-elements";
 import { show_code } from "./make-focused_modal";
-
-import {
-  get_pos_on_grid,
-  gen_code_for_layout,
-  get_gap_size,
-} from "./utils-grid";
 import {
   find_selector_by_property,
-  get_css_props_by_selector,
+  get_css_props_by_selector
 } from "./utils-cssom";
-import { wrap_in_grided } from "./wrap_in_grided";
+import {
+  gen_code_for_layout,
+  get_gap_size, get_pos_on_grid
+} from "./utils-grid";
 import {
   add_shiny_listener,
   send_elements_to_shiny,
   send_grid_sizing_to_shiny,
-  setShinyInput,
+  setShinyInput
 } from "./utils-shiny";
-import { App_State, Grid_Update_Options } from "./App_State";
+import { wrap_in_grided } from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
@@ -66,7 +64,7 @@ window.onload = function () {
     app_state.container.style.padding = "1rem";
   }
 
-  add_shiny_listener("shiny-loaded", function (event) {
+  add_shiny_listener("shiny-loaded", function () {
     if (debug_messages) console.log("connected to shiny");
     // Send elements to Shiny so app is aware of what it's working with
     send_elements_to_shiny(app_state.current_elements);
