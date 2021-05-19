@@ -12,24 +12,12 @@ export type Selection_Rect = {
   bottom: number;
 };
 
-
-export function concat(
-  string_vec: Array<string>,
-  collapse_char: string = " "
-): string {
-  return string_vec.reduce(
-    (concatted, current, i) =>
-      concatted + (i > 0 ? collapse_char : "") + current,
-    ""
-  );
-}
-
 export function concat_nl(...component_strings: string[]) {
-  return concat(component_strings, "\n");
+  return component_strings.join("\n");
 }
 
 export function concat_sp(...component_strings: string[]) {
-  return concat(component_strings, " ");
+  return component_strings.join(" ");
 }
 
 export function as_array<T>(content: T | Array<T>): Array<T> {
@@ -144,28 +132,18 @@ export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
 
-export function set_class(elements: NodeListOf<HTMLElement> | HTMLElement[], class_name: string) {
-  
-  elements.forEach(el => {
+export function set_class(
+  elements: NodeListOf<HTMLElement> | HTMLElement[],
+  class_name: string
+) {
+  elements.forEach((el) => {
     el.classList.add(class_name);
   });
-  
-}
-
-export function equal_arrays<Type>(a: Type[], b: Type[]) {
-  if (a.length !== b.length) return false;
-
-  for (let i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-
-  return true;
 }
 
 export function overlap<Type>(a: Type[], b: Type[]) {
-
   for (let i = 0; i < a.length; ++i) {
-    if (b.includes(a[i])) return true
+    if (b.includes(a[i])) return true;
   }
 
   return false;

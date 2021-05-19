@@ -2,11 +2,9 @@
 import { Block_El } from "./make-elements";
 import { show_code } from "./make-focused_modal";
 
-import { set_class } from "./utils-misc";
 import {
   get_pos_on_grid,
   gen_code_for_layout,
-  set_gap_size,
   get_gap_size,
 } from "./utils-grid";
 import {
@@ -64,7 +62,7 @@ window.onload = function () {
 
   // Only set a default gap sizing if it isn't already provided
   if (app_state.mode !== "ShinyExisting") {
-    set_gap_size(app_state.container.style, "1rem");
+    app_state.container.style.gap = "1rem";
     app_state.container.style.padding = "1rem";
   }
 
@@ -72,7 +70,7 @@ window.onload = function () {
     if (debug_messages) console.log("connected to shiny");
     // Send elements to Shiny so app is aware of what it's working with
     send_elements_to_shiny(app_state.current_elements);
-    send_grid_sizing_to_shiny(app_state.container.style);
+    send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
   });
 
   add_shiny_listener("finish-button-text", function (label_text: string) {

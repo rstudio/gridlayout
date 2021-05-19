@@ -139,19 +139,7 @@ var __assign = this && this.__assign || function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filler_text = exports.overlap = exports.equal_arrays = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = void 0;
-
-function concat(string_vec, collapse_char) {
-  if (collapse_char === void 0) {
-    collapse_char = " ";
-  }
-
-  return string_vec.reduce(function (concatted, current, i) {
-    return concatted + (i > 0 ? collapse_char : "") + current;
-  }, "");
-}
-
-exports.concat = concat;
+exports.filler_text = exports.overlap = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = void 0;
 
 function concat_nl() {
   var component_strings = [];
@@ -160,7 +148,7 @@ function concat_nl() {
     component_strings[_i] = arguments[_i];
   }
 
-  return concat(component_strings, "\n");
+  return component_strings.join("\n");
 }
 
 exports.concat_nl = concat_nl;
@@ -172,7 +160,7 @@ function concat_sp() {
     component_strings[_i] = arguments[_i];
   }
 
-  return concat(component_strings, " ");
+  return component_strings.join(" ");
 }
 
 exports.concat_sp = concat_sp;
@@ -301,18 +289,6 @@ function set_class(elements, class_name) {
 
 exports.set_class = set_class;
 
-function equal_arrays(a, b) {
-  if (a.length !== b.length) return false;
-
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-
-  return true;
-}
-
-exports.equal_arrays = equal_arrays;
-
 function overlap(a, b) {
   for (var i = 0; i < a.length; ++i) {
     if (b.includes(a[i])) return true;
@@ -337,7 +313,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.set_gap_size = exports.get_gap_size = exports.gen_code_for_layout = exports.bounding_rect_to_css_pos = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.sizes_to_template_def = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
+exports.grid_position_of_el = exports.shrink_element_to_layout = exports.contains_element = exports.get_gap_size = exports.gen_code_for_layout = exports.bounding_rect_to_css_pos = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
 
 var utils_misc_1 = require("./utils-misc");
 
@@ -372,14 +348,7 @@ function make_template_start_end(start, end) {
   return start + " / " + end;
 }
 
-exports.make_template_start_end = make_template_start_end; // grid-template-{column,row}: ...
-// Take a vector of css sizes and turn into the format for the css argument for
-
-function sizes_to_template_def(defs) {
-  return utils_misc_1.concat(defs, " ");
-}
-
-exports.sizes_to_template_def = sizes_to_template_def;
+exports.make_template_start_end = make_template_start_end;
 
 function set_element_in_grid(el, grid_bounds, el_styles) {
   if (grid_bounds.start_row) {
@@ -477,12 +446,49 @@ function get_gap_size(style) {
 
 exports.get_gap_size = get_gap_size;
 
-function set_gap_size(container_styles, new_val) {
-  container_styles.gap = new_val;
-  return new_val;
+function contains_element(layout, el) {
+  var num_rows = layout.rows.length;
+  var num_cols = layout.cols.length;
+
+  if (el.start_row > num_rows || el.start_col > num_cols) {
+    return "outside";
+  }
+
+  if (el.end_row > num_rows || el.end_col > num_cols) {
+    return "partially";
+  }
+
+  return "inside";
 }
 
-exports.set_gap_size = set_gap_size;
+exports.contains_element = contains_element;
+
+function shrink_element_to_layout(layout, el) {
+  var _a = grid_position_of_el(el),
+      start_row = _a.start_row,
+      start_col = _a.start_col,
+      end_row = _a.end_row,
+      end_col = _a.end_col;
+
+  el.style.gridRow = make_template_start_end(start_row, Math.min(end_row, layout.rows.length));
+  el.style.gridColumn = make_template_start_end(start_col, Math.min(end_col, layout.cols.length));
+}
+
+exports.shrink_element_to_layout = shrink_element_to_layout;
+
+function grid_position_of_el(el) {
+  var grid_area = el.style.gridArea.split(" / ");
+  return {
+    id: el.id,
+    start_row: +grid_area[0],
+    start_col: +grid_area[1],
+    // Subtract one here because the end in css is the end line, not row
+    end_row: +grid_area[2] - 1,
+    end_col: +grid_area[3] - 1
+  };
+}
+
+exports.grid_position_of_el = grid_position_of_el;
 },{"./utils-misc":"utils-misc.ts"}],"make-elements.ts":[function(require,module,exports) {
 "use strict";
 
@@ -1012,9 +1018,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.send_elements_to_shiny = exports.send_grid_sizing_to_shiny = exports.add_shiny_listener = exports.setShinyInput = void 0;
 
-var index_1 = require("./index");
-
-var utils_grid_1 = require("./utils-grid"); // These are functions for communicating with Shiny. They are all optional
+var index_1 = require("./index"); // These are functions for communicating with Shiny. They are all optional
 // chained so they won't spit errors if Shiny isn't connected or initialized
 // yet.
 
@@ -1040,12 +1044,8 @@ function add_shiny_listener(event_id, callback_func) {
 
 exports.add_shiny_listener = add_shiny_listener;
 
-function send_grid_sizing_to_shiny(grid_styles) {
-  setShinyInput("grid_sizing", {
-    rows: grid_styles.gridTemplateRows.split(" "),
-    cols: grid_styles.gridTemplateColumns.split(" "),
-    gap: utils_grid_1.get_gap_size(grid_styles)
-  });
+function send_grid_sizing_to_shiny(grid_attrs) {
+  setShinyInput("grid_sizing", grid_attrs);
 }
 
 exports.send_grid_sizing_to_shiny = send_grid_sizing_to_shiny;
@@ -1059,7 +1059,7 @@ function send_elements_to_shiny(elements) {
 }
 
 exports.send_elements_to_shiny = send_elements_to_shiny;
-},{"./index":"index.ts","./utils-grid":"utils-grid.ts"}],"make-css_unit_input.ts":[function(require,module,exports) {
+},{"./index":"index.ts"}],"make-css_unit_input.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1329,10 +1329,156 @@ function make_incrementer(_a) {
 }
 
 exports.make_incrementer = make_incrementer;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"App_State.ts":[function(require,module,exports) {
+},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"Grid_Layout.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Grid_Layout = void 0;
+
+var Grid_Layout =
+/** @class */
+function () {
+  function Grid_Layout(container) {
+    this.container = container;
+    this.styles = container.style;
+    console.log("Initialized Grid_Layout");
+  }
+
+  Object.defineProperty(Grid_Layout.prototype, "rows", {
+    get: function get() {
+      return this.styles.gridTemplateRows.split(" ");
+    },
+    set: function set(new_rows) {
+      if (typeof new_rows === "undefined") return;
+      this.styles.gridTemplateRows = sizes_to_template_def(new_rows);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_rows", {
+    get: function get() {
+      return this.rows.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "cols", {
+    get: function get() {
+      return this.styles.gridTemplateColumns.split(" ");
+    },
+    set: function set(new_cols) {
+      if (typeof new_cols === "undefined") return;
+      this.styles.gridTemplateColumns = sizes_to_template_def(new_cols);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_cols", {
+    get: function get() {
+      return this.cols.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "gap", {
+    get: function get() {
+      return this.styles.gap;
+    },
+    set: function set(new_gap) {
+      if (typeof new_gap === "undefined") return; // This sets the --grid-gap variable so that the controls that need the
+      // info can use it to keep a constant distance from the grid holder
+
+      this.container.parentElement.style.setProperty("--grid-gap", new_gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+
+      this.styles.gap = new_gap;
+      this.styles.padding = new_gap;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "attrs", {
+    get: function get() {
+      return {
+        rows: this.rows,
+        cols: this.cols,
+        gap: this.gap
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Grid_Layout.prototype.is_updated_val = function (attr, values) {
+    if (attr === "gap") {
+      return values !== this.gap;
+    } else if (_typeof(values) === "object") {
+      return !equal_arrays(this[attr], values);
+    }
+  }; // Given a new set of attributes, tells you which ones are different from
+  // current values
+
+
+  Grid_Layout.prototype.changed_attributes = function (attrs) {
+    var changed = [];
+    var new_attrs = this.attrs;
+    if (attrs.rows) new_attrs.rows = attrs.rows;
+    if (attrs.cols) new_attrs.cols = attrs.cols;
+    if (attrs.gap) new_attrs.gap = attrs.gap;
+    var new_num_cells = false;
+
+    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
+      changed.push("rows");
+      new_num_cells = true;
+    }
+
+    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
+      changed.push("cols");
+      new_num_cells = true;
+    }
+
+    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
+      changed.push("gap");
+    }
+
+    return {
+      changed: changed,
+      new_num_cells: new_num_cells,
+      new_attrs: new_attrs
+    };
+  };
+
+  Grid_Layout.prototype.update_attrs = function (attrs) {
+    this.rows = attrs.rows;
+    this.cols = attrs.cols;
+    this.gap = attrs.gap;
+  };
+
+  return Grid_Layout;
+}();
+
+exports.Grid_Layout = Grid_Layout; // grid-template-{column,row}: ...
+// Take a vector of css sizes and turn into the format for the css argument for
+
+function sizes_to_template_def(defs) {
+  return defs.join(" ");
+}
+
+function equal_arrays(a, b) {
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+
+  return true;
+}
+},{}],"App_State.ts":[function(require,module,exports) {
+"use strict";
 
 var __assign = this && this.__assign || function () {
   __assign = Object.assign || function (t) {
@@ -1381,166 +1527,7 @@ var make_focused_modal_1 = require("./make-focused_modal");
 
 var make_incrementer_1 = require("./make-incrementer");
 
-var Grid_Layout =
-/** @class */
-function () {
-  function Grid_Layout(container) {
-    this.container = container;
-    this.styles = container.style;
-    console.log("Initialized Grid_Layout");
-  }
-
-  Object.defineProperty(Grid_Layout.prototype, "rows", {
-    get: function get() {
-      return this.styles.gridTemplateRows.split(" ");
-    },
-    set: function set(new_rows) {
-      if (typeof new_rows === "undefined") return;
-      this.styles.gridTemplateRows = utils_grid_1.sizes_to_template_def(new_rows);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "num_rows", {
-    get: function get() {
-      return this.rows.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "cols", {
-    get: function get() {
-      return this.styles.gridTemplateColumns.split(" ");
-    },
-    set: function set(new_cols) {
-      if (typeof new_cols === "undefined") return;
-      this.styles.gridTemplateColumns = utils_grid_1.sizes_to_template_def(new_cols);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "num_cols", {
-    get: function get() {
-      return this.cols.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "gap", {
-    get: function get() {
-      return this.styles.gap;
-    },
-    set: function set(new_gap) {
-      if (typeof new_gap === "undefined") return; // This sets the --grid-gap variable so that the controls that need the
-      // info can use it to keep a constant distance from the grid holder
-
-      this.container.parentElement.style.setProperty("--grid-gap", new_gap); // We dont use css variables in the exported css that existing apps used
-      // so we need to modify both gap and padding
-
-      this.styles.gap = new_gap;
-      this.styles.padding = new_gap;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "attrs", {
-    get: function get() {
-      return {
-        rows: this.rows,
-        cols: this.cols,
-        gap: this.gap
-      };
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  Grid_Layout.prototype.is_updated_val = function (attr, values) {
-    if (attr === "gap") {
-      return values !== this.gap;
-    } else if (_typeof(values) === "object") {
-      return !utils_misc_1.equal_arrays(this[attr], values);
-    }
-  }; // Given a new set of attributes, tells you which ones are different from
-  // current values
-
-
-  Grid_Layout.prototype.changed_attributes = function (attrs) {
-    var changed = [];
-    var new_attrs = this.attrs;
-    if (attrs.rows) new_attrs.rows = attrs.rows;
-    if (attrs.cols) new_attrs.cols = attrs.cols;
-    if (attrs.gap) new_attrs.gap = attrs.gap;
-    var new_num_cells = false;
-
-    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
-      changed.push("rows");
-      new_num_cells = true;
-    }
-
-    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
-      changed.push("cols");
-      new_num_cells = true;
-    }
-
-    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
-      changed.push("gap");
-    }
-
-    var num_rows = new_attrs.rows.length;
-    var num_cols = new_attrs.cols.length;
-
-    function contains_element(el) {
-      if (el.start_row > num_rows || el.start_col > num_cols) {
-        return "outside";
-      }
-
-      if (el.end_row > num_rows || el.end_col > num_cols) {
-        return "partially";
-      }
-
-      return "inside";
-    }
-
-    function shrink_element_to_new_attrs(el) {
-      var _a = grid_position_of_el(el),
-          start_row = _a.start_row,
-          start_col = _a.start_col,
-          end_row = _a.end_row,
-          end_col = _a.end_col;
-
-      el.style.gridRow = utils_grid_1.make_template_start_end(start_row, Math.min(end_row, num_rows));
-      el.style.gridColumn = utils_grid_1.make_template_start_end(start_col, Math.min(end_col, num_cols));
-    }
-
-    return {
-      changed: changed,
-      new_num_cells: new_num_cells,
-      contains_element: contains_element,
-      shrink_element_to_new_attrs: shrink_element_to_new_attrs
-    };
-  };
-
-  Grid_Layout.prototype.update_attrs = function (attrs) {
-    this.rows = attrs.rows;
-    this.cols = attrs.cols;
-    this.gap = attrs.gap;
-  };
-
-  return Grid_Layout;
-}();
-
-function grid_position_of_el(el) {
-  var grid_area = el.style.gridArea.split(" / ");
-  return {
-    id: el.id,
-    start_row: +grid_area[0],
-    start_col: +grid_area[1],
-    // Subtract one here because the end in css is the end line, not row
-    end_row: +grid_area[2] - 1,
-    end_col: +grid_area[3] - 1
-  };
-}
+var Grid_Layout_1 = require("./Grid_Layout");
 
 var App_State =
 /** @class */
@@ -1554,7 +1541,7 @@ function () {
     this.grid_styles = this.container.style;
     this.mode = opts.grid_is_filled ? "ShinyExisting" : index_1.Shiny ? "ShinyNew" : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
-    this.grid_layout = new Grid_Layout(this.container);
+    this.grid_layout = new Grid_Layout_1.Grid_Layout(this.container);
     console.log("Initialized App_State");
   }
 
@@ -1606,7 +1593,7 @@ function () {
     get: function get() {
       var all_elements = __spreadArray([], Object.values(this.elements)).map(function (_a) {
         var grid_el = _a.grid_el;
-        return grid_position_of_el(grid_el);
+        return utils_grid_1.grid_position_of_el(grid_el);
       });
 
       return all_elements;
@@ -1738,7 +1725,7 @@ function () {
         conflicting: []
       };
       this.current_elements.forEach(function (el) {
-        var element_position = updated_attributes.contains_element(el);
+        var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el);
         if (element_position === "inside") return;
 
         if (element_position === "partially") {
@@ -1766,7 +1753,7 @@ function () {
         show_danger_popup(this, danger_elements_1.to_edit, function (to_edit) {
           to_edit.forEach(function (el) {
             var el_node = _this.elements[el.id].grid_el;
-            updated_attributes.shrink_element_to_new_attrs(el_node);
+            utils_grid_1.shrink_element_to_layout(updated_attributes.new_attrs, el_node);
           }); // Now that we've updated elements properly, we should be able to
           // just recall the function and it won't spit an error
 
@@ -1792,7 +1779,7 @@ function () {
     }
 
     if (!opts.dont_send_to_shiny) {
-      utils_shiny_1.send_grid_sizing_to_shiny(this.grid_styles);
+      utils_shiny_1.send_grid_sizing_to_shiny(this.grid_layout.attrs);
     }
   };
 
@@ -2175,7 +2162,7 @@ function show_danger_popup(app_state, in_danger_els, on_finish) {
     innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
   });
 }
-},{"./make-elements":"make-elements.ts","./make-css_unit_input":"make-css_unit_input.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./index":"index.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts"}],"index.ts":[function(require,module,exports) {
+},{"./make-elements":"make-elements.ts","./make-css_unit_input":"make-css_unit_input.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./index":"index.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./Grid_Layout":"Grid_Layout.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2226,7 +2213,7 @@ window.onload = function () {
   }); // Only set a default gap sizing if it isn't already provided
 
   if (app_state.mode !== "ShinyExisting") {
-    utils_grid_1.set_gap_size(app_state.container.style, "1rem");
+    app_state.container.style.gap = "1rem";
     app_state.container.style.padding = "1rem";
   }
 
@@ -2234,7 +2221,7 @@ window.onload = function () {
     if (debug_messages) console.log("connected to shiny"); // Send elements to Shiny so app is aware of what it's working with
 
     utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
-    utils_shiny_1.send_grid_sizing_to_shiny(app_state.container.style);
+    utils_shiny_1.send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
   });
   utils_shiny_1.add_shiny_listener("finish-button-text", function (label_text) {
     document.querySelector("button#update_code").innerHTML = label_text;

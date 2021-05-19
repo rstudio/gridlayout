@@ -1,25 +1,31 @@
 // Functions related to grid construction, editings, etc
 
-
 import { Code_Text } from "./make-focused_modal";
-import { Element_Info} from "./index";
-import { boxes_overlap, concat, concat_nl, get_bounding_rect, max_w_missing, min_w_missing, Selection_Rect } from "./utils-misc";
+import { Element_Info } from "./index";
+import {
+  boxes_overlap,
+  concat_nl,
+  get_bounding_rect,
+  max_w_missing,
+  min_w_missing,
+  Selection_Rect,
+} from "./utils-misc";
 import { App_State, Grid_Pos } from "./App_State";
+import { Layout_State } from "./Grid_Layout";
 
-
-function get_styles(container: HTMLElement|CSSStyleDeclaration){
-  if (container instanceof HTMLElement){
+function get_styles(container: HTMLElement | CSSStyleDeclaration) {
+  if (container instanceof HTMLElement) {
     return container.style;
   } else {
     return container;
   }
 }
 
-export function get_rows(grid_container: HTMLElement|CSSStyleDeclaration) {
+export function get_rows(grid_container: HTMLElement | CSSStyleDeclaration) {
   return get_styles(grid_container).gridTemplateRows.split(" ");
 }
 
-export function get_cols(grid_container: HTMLElement|CSSStyleDeclaration) {
+export function get_cols(grid_container: HTMLElement | CSSStyleDeclaration) {
   return get_styles(grid_container).gridTemplateColumns.split(" ");
 }
 
@@ -34,12 +40,6 @@ export function make_template_start_end(start: number, end?: number): string {
   end = end ? end + 1 : start + (negative_index ? -1 : 1);
   // end = end ? +end + 1 : start + (negative_index ? -1 : 1);
   return `${start} / ${end}`;
-}
-
-// grid-template-{column,row}: ...
-// Take a vector of css sizes and turn into the format for the css argument for
-export function sizes_to_template_def(defs: Array<string>) {
-  return concat(defs, " ");
 }
 
 export function set_element_in_grid(
@@ -63,7 +63,6 @@ export function set_element_in_grid(
   el.style.display = "block"; // make sure we can see the element
 }
 
-
 export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
   const el_styles = getComputedStyle(grid_el);
   return {
@@ -74,7 +73,10 @@ export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
   };
 }
 
-export function get_drag_extent_on_grid(app_state: App_State, selection_rect: Selection_Rect): Grid_Pos {
+export function get_drag_extent_on_grid(
+  app_state: App_State,
+  selection_rect: Selection_Rect
+): Grid_Pos {
   // Reset bounding box definitions so we only use current selection extent
   const sel_bounds: Grid_Pos = { start_col: null, start_row: null };
 
@@ -101,8 +103,6 @@ export function bounding_rect_to_css_pos(rect: Selection_Rect) {
     height: `${rect.bottom - rect.top}px`,
   };
 }
-
-
 
 export function gen_code_for_layout(
   elements: Element_Info[],
@@ -141,22 +141,57 @@ export function gen_code_for_layout(
   ];
 }
 
-export function get_gap_size(style: CSSStyleDeclaration|string) {
+export function get_gap_size(style: CSSStyleDeclaration | string) {
   // Older browsers give back both row-gap and column-gap in same query
   // so we need to reduce to a single value before returning
 
-  const gap_size_vec = (typeof style === "string"
-    ? style
-    : style.gap
-  ).split(" ");
+  const gap_size_vec = (typeof style === "string" ? style : style.gap).split(
+    " "
+  );
 
   return gap_size_vec[0];
 }
 
-export function set_gap_size(
-  container_styles: CSSStyleDeclaration,
-  new_val: string
+export function contains_element(
+  layout: Layout_State,
+  el: Element_Info
+): "inside" | "partially" | "outside" {
+  const num_rows = layout.rows.length;
+  const num_cols = layout.cols.length;
+  if (el.start_row > num_rows || el.start_col > num_cols) {
+    return "outside";
+  }
+
+  if (el.end_row > num_rows || el.end_col > num_cols) {
+    return "partially";
+  }
+
+  return "inside";
+}
+
+export function shrink_element_to_layout(
+  layout: Layout_State,
+  el: HTMLElement
 ) {
-  container_styles.gap = new_val;
-  return new_val;
+  const { start_row, start_col, end_row, end_col } = grid_position_of_el(el);
+  el.style.gridRow = make_template_start_end(
+    start_row,
+    Math.min(end_row, layout.rows.length)
+  );
+  el.style.gridColumn = make_template_start_end(
+    start_col,
+    Math.min(end_col, layout.cols.length)
+  );
+}
+
+export function grid_position_of_el(el: HTMLElement) {
+  const grid_area = el.style.gridArea.split(" / ");
+  return {
+    id: el.id,
+    start_row: +grid_area[0],
+    start_col: +grid_area[1],
+    // Subtract one here because the end in css is the end line, not row
+    end_row: +grid_area[2] - 1,
+    end_col: +grid_area[3] - 1,
+  };
 }

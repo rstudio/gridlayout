@@ -8,7 +8,6 @@ import {
 import {
   as_array,
   Drag_Type,
-  equal_arrays,
   filler_text,
   get_bounding_rect,
   Selection_Rect,
@@ -23,16 +22,19 @@ import {
 import { Shiny, Element_Info } from "./index";
 import {
   bounding_rect_to_css_pos,
+  contains_element,
   get_drag_extent_on_grid,
   get_gap_size,
   get_pos_on_grid,
+  grid_position_of_el,
   make_template_start_end,
   set_element_in_grid,
-  sizes_to_template_def,
+  shrink_element_to_layout,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import { focused_modal } from "./make-focused_modal";
 import { make_incrementer } from "./make-incrementer";
+import { Grid_Layout } from "./Grid_Layout";
 
 type Grid_Settings = {
   num_rows: (new_value: number) => void;
@@ -81,161 +83,6 @@ type Element_Entries = {
   list_el: HTMLElement;
   mirrors_existing: boolean;
 };
-
-type Track_Attr = "rows" | "cols";
-type Grid_Attr = Track_Attr | "gap";
-type Layout_State = {
-  rows: string[];
-  cols: string[];
-  gap: string;
-};
-
-class Grid_Layout {
-  container: HTMLElement;
-  styles: CSSStyleDeclaration;
-
-  constructor(container: HTMLElement) {
-    this.container = container;
-    this.styles = container.style;
-    console.log("Initialized Grid_Layout");
-  }
-
-  set rows(new_rows: string[]) {
-    if (typeof new_rows === "undefined") return;
-    this.styles.gridTemplateRows = sizes_to_template_def(new_rows);
-  }
-  get rows(): string[] {
-    return this.styles.gridTemplateRows.split(" ");
-  }
-  get num_rows() {
-    return this.rows.length;
-  }
-
-  set cols(new_cols: string[]) {
-    if (typeof new_cols === "undefined") return;
-    this.styles.gridTemplateColumns = sizes_to_template_def(new_cols);
-  }
-  get cols(): string[] {
-    return this.styles.gridTemplateColumns.split(" ");
-  }
-  get num_cols() {
-    return this.cols.length;
-  }
-
-  set gap(new_gap: string) {
-    if (typeof new_gap === "undefined") return;
-    // This sets the --grid-gap variable so that the controls that need the
-    // info can use it to keep a constant distance from the grid holder
-    this.container.parentElement.style.setProperty("--grid-gap", new_gap);
-    // We dont use css variables in the exported css that existing apps used
-    // so we need to modify both gap and padding
-    this.styles.gap = new_gap;
-    this.styles.padding = new_gap;
-  }
-  get gap(): string {
-    return this.styles.gap;
-  }
-
-  get attrs(): Layout_State {
-    return {
-      rows: this.rows,
-      cols: this.cols,
-      gap: this.gap,
-    };
-  }
-
-  is_updated_val(attr: Grid_Attr, values: string | string[]) {
-    if (attr === "gap") {
-      return values !== this.gap;
-    } else if (typeof values === "object") {
-      return !equal_arrays(this[attr], values);
-    }
-  }
-
-  // Given a new set of attributes, tells you which ones are different from
-  // current values
-  changed_attributes(attrs: {
-    rows?: string[];
-    cols?: string[];
-    gap?: string;
-  }) {
-    const changed: Grid_Attr[] = [];
-    const new_attrs: Layout_State = this.attrs;
-
-    if (attrs.rows) new_attrs.rows = attrs.rows;
-    if (attrs.cols) new_attrs.cols = attrs.cols;
-    if (attrs.gap) new_attrs.gap = attrs.gap;
-
-    let new_num_cells = false;
-    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
-      changed.push("rows");
-      new_num_cells = true;
-    }
-    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
-      changed.push("cols");
-      new_num_cells = true;
-    }
-    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
-      changed.push("gap");
-    }
-
-    const num_rows = new_attrs.rows.length;
-    const num_cols = new_attrs.cols.length;
-
-    function contains_element(
-      el: Element_Info
-    ): "inside" | "partially" | "outside" {
-      if (el.start_row > num_rows || el.start_col > num_cols) {
-        return "outside";
-      }
-
-      if (el.end_row > num_rows || el.end_col > num_cols) {
-        return "partially";
-      }
-
-      return "inside";
-    }
-
-    function shrink_element_to_new_attrs(el: HTMLElement) {
-      const { start_row, start_col, end_row, end_col } = grid_position_of_el(
-        el
-      );
-      el.style.gridRow = make_template_start_end(
-        start_row,
-        Math.min(end_row, num_rows)
-      );
-      el.style.gridColumn = make_template_start_end(
-        start_col,
-        Math.min(end_col, num_cols)
-      );
-    }
-
-    return {
-      changed,
-      new_num_cells,
-      contains_element,
-      shrink_element_to_new_attrs,
-    };
-  }
-
-  update_attrs(attrs: { rows?: string[]; cols?: string[]; gap?: string }) {
-    this.rows = attrs.rows;
-    this.cols = attrs.cols;
-    this.gap = attrs.gap;
-  }
-}
-
-function grid_position_of_el(el: HTMLElement) {
-  const grid_area = el.style.gridArea.split(" / ");
-  return {
-    id: el.id,
-    start_row: +grid_area[0],
-    start_col: +grid_area[1],
-    // Subtract one here because the end in css is the end line, not row
-    end_row: +grid_area[2] - 1,
-    end_col: +grid_area[3] - 1,
-  };
-}
 
 export class App_State {
   controls: { rows: CSS_Input[]; cols: CSS_Input[] };
@@ -451,7 +298,7 @@ export class App_State {
       } = { to_delete: [], to_edit: [], conflicting: [] };
 
       this.current_elements.forEach((el) => {
-        const element_position = updated_attributes.contains_element(el);
+        const element_position = contains_element(updated_attributes.new_attrs, el);
 
         if (element_position === "inside") return;
 
@@ -480,7 +327,7 @@ export class App_State {
         show_danger_popup(this, danger_elements.to_edit, (to_edit) => {
           to_edit.forEach((el) => {
             const el_node: HTMLElement = this.elements[el.id].grid_el;
-            updated_attributes.shrink_element_to_new_attrs(el_node);
+            shrink_element_to_layout(updated_attributes.new_attrs, el_node);
           });
           // Now that we've updated elements properly, we should be able to
           // just recall the function and it won't spit an error
@@ -505,7 +352,8 @@ export class App_State {
     }
 
     if (!opts.dont_send_to_shiny) {
-      send_grid_sizing_to_shiny(this.grid_styles);
+      
+      send_grid_sizing_to_shiny(this.grid_layout.attrs);
     }
   }
 
