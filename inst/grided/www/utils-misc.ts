@@ -144,7 +144,7 @@ export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
 
-export function set_class(elements: NodeListOf<HTMLElement>, class_name: string) {
+export function set_class(elements: NodeListOf<HTMLElement> | HTMLElement[], class_name: string) {
   
   elements.forEach(el => {
     el.classList.add(class_name);

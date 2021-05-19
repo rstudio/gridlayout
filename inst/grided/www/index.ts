@@ -20,7 +20,7 @@ import {
   send_grid_sizing_to_shiny,
   setShinyInput,
 } from "./utils-shiny";
-import { App_State } from "./App_State";
+import { App_State, Grid_Update_Options } from "./App_State";
 
 export const Shiny = (window as any).Shiny;
 
@@ -108,14 +108,13 @@ window.onload = function () {
       gap: get_gap_size(current_grid_props.gap),
       force: true,
     });
-
-    // Make grid cells transparent so the app is seen beneath them
-    set_class(
-      app_state.container.querySelectorAll(".grid-cell"),
-      "transparent"
-    );
   } else if (app_state.mode === "ShinyNew") {
-    add_shiny_listener("update-grid", app_state.update_grid);
+    // Need to use arrow function here so method is run on out app_state object
+    // if we just passed app_state.update_grid as the callback its just the method
+    // without the object behind it,
+    add_shiny_listener("update-grid", (opts: Grid_Update_Options) =>
+      app_state.update_grid(opts)
+    );
 
     add_shiny_listener("add-elements", function (
       elements_to_add: Element_Info[]

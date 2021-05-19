@@ -1387,7 +1387,7 @@ function () {
   function Grid_Layout(container) {
     this.container = container;
     this.styles = container.style;
-    console.log("Hello Grid_Layout");
+    console.log("Initialized Grid_Layout");
   }
 
   Object.defineProperty(Grid_Layout.prototype, "rows", {
@@ -1467,9 +1467,10 @@ function () {
 
   Grid_Layout.prototype.changed_attributes = function (attrs) {
     var changed = [];
-
-    var new_attrs = __assign(__assign({}, this.attrs), attrs);
-
+    var new_attrs = this.attrs;
+    if (attrs.rows) new_attrs.rows = attrs.rows;
+    if (attrs.cols) new_attrs.cols = attrs.cols;
+    if (attrs.gap) new_attrs.gap = attrs.gap;
     var new_num_cells = false;
 
     if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
@@ -1486,12 +1487,37 @@ function () {
       changed.push("gap");
     }
 
+    var num_rows = new_attrs.rows.length;
+    var num_cols = new_attrs.cols.length;
+
+    function contains_element(el) {
+      if (el.start_row > num_rows || el.start_col > num_cols) {
+        return "outside";
+      }
+
+      if (el.end_row > num_rows || el.end_col > num_cols) {
+        return "partially";
+      }
+
+      return "inside";
+    }
+
+    function shrink_element_to_new_attrs(el) {
+      var _a = grid_position_of_el(el),
+          start_row = _a.start_row,
+          start_col = _a.start_col,
+          end_row = _a.end_row,
+          end_col = _a.end_col;
+
+      el.style.gridRow = utils_grid_1.make_template_start_end(start_row, Math.min(end_row, num_rows));
+      el.style.gridColumn = utils_grid_1.make_template_start_end(start_col, Math.min(end_col, num_cols));
+    }
+
     return {
       changed: changed,
       new_num_cells: new_num_cells,
-      contains_element: function contains_element(el) {
-        return element_within_grid(new_attrs, el);
-      }
+      contains_element: contains_element,
+      shrink_element_to_new_attrs: shrink_element_to_new_attrs
     };
   };
 
@@ -1501,26 +1527,19 @@ function () {
     this.gap = attrs.gap;
   };
 
-  Grid_Layout.prototype.element_within_grid = function (el) {
-    return element_within_grid(this.attrs, el);
-  };
-
   return Grid_Layout;
 }();
 
-function element_within_grid(layout, el) {
-  var num_rows = layout.rows.length;
-  var num_cols = layout.cols.length;
-
-  if (el.start_row > num_rows || el.start_col > num_cols) {
-    return "outside";
-  }
-
-  if (el.end_row > num_rows || el.end_col > num_cols) {
-    return "partially";
-  }
-
-  return "inside";
+function grid_position_of_el(el) {
+  var grid_area = el.style.gridArea.split(" / ");
+  return {
+    id: el.id,
+    start_row: +grid_area[0],
+    start_col: +grid_area[1],
+    // Subtract one here because the end in css is the end line, not row
+    end_row: +grid_area[2] - 1,
+    end_col: +grid_area[3] - 1
+  };
 }
 
 var App_State =
@@ -1536,7 +1555,7 @@ function () {
     this.mode = opts.grid_is_filled ? "ShinyExisting" : index_1.Shiny ? "ShinyNew" : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
     this.grid_layout = new Grid_Layout(this.container);
-    console.log("Hi app state");
+    console.log("Initialized App_State");
   }
 
   Object.defineProperty(App_State.prototype, "layout_from_controls", {
@@ -1587,15 +1606,7 @@ function () {
     get: function get() {
       var all_elements = __spreadArray([], Object.values(this.elements)).map(function (_a) {
         var grid_el = _a.grid_el;
-        var grid_area = grid_el.style.gridArea.split(" / ");
-        return {
-          id: grid_el.id,
-          start_row: +grid_area[0],
-          start_col: +grid_area[1],
-          // Subtract one here because the end in css is the end line, not row
-          end_row: +grid_area[2] - 1,
-          end_col: +grid_area[3] - 1
-        };
+        return grid_position_of_el(grid_el);
       });
 
       return all_elements;
@@ -1751,17 +1762,11 @@ function () {
         return;
       }
 
-      this.remove_elements(danger_elements_1.to_delete.map(function (el) {
-        return el.id;
-      }));
-
       if (danger_elements_1.to_edit.length > 0) {
         show_danger_popup(this, danger_elements_1.to_edit, function (to_edit) {
           to_edit.forEach(function (el) {
-            var el_node = _this.container.querySelector("#" + el.id);
-
-            el_node.style.gridRow = utils_grid_1.make_template_start_end(el.start_row, Math.min(el.end_row, _this.grid_layout.num_rows));
-            el_node.style.gridColumn = utils_grid_1.make_template_start_end(el.start_col, Math.min(el.end_col, _this.grid_layout.num_cols));
+            var el_node = _this.elements[el.id].grid_el;
+            updated_attributes.shrink_element_to_new_attrs(el_node);
           }); // Now that we've updated elements properly, we should be able to
           // just recall the function and it won't spit an error
 
@@ -1773,6 +1778,10 @@ function () {
         });
         return;
       }
+
+      this.remove_elements(danger_elements_1.to_delete.map(function (el) {
+        return el.id;
+      }));
     }
 
     this.update_settings_panel(opts);
@@ -1811,6 +1820,10 @@ function () {
             }
           }));
         }
+      }
+
+      if (this.mode === "ShinyExisting") {
+        utils_misc_1.set_class(this.current_cells, "transparent");
       }
 
       var _loop_1 = function _loop_1(type) {
@@ -2174,8 +2187,6 @@ var make_elements_1 = require("./make-elements");
 
 var make_focused_modal_1 = require("./make-focused_modal");
 
-var utils_misc_1 = require("./utils-misc");
-
 var utils_grid_1 = require("./utils-grid");
 
 var utils_cssom_1 = require("./utils-cssom");
@@ -2247,11 +2258,14 @@ window.onload = function () {
       cols: current_grid_props.gridTemplateColumns.split(" "),
       gap: utils_grid_1.get_gap_size(current_grid_props.gap),
       force: true
-    }); // Make grid cells transparent so the app is seen beneath them
-
-    utils_misc_1.set_class(app_state.container.querySelectorAll(".grid-cell"), "transparent");
+    });
   } else if (app_state.mode === "ShinyNew") {
-    utils_shiny_1.add_shiny_listener("update-grid", app_state.update_grid);
+    // Need to use arrow function here so method is run on out app_state object
+    // if we just passed app_state.update_grid as the callback its just the method
+    // without the object behind it,
+    utils_shiny_1.add_shiny_listener("update-grid", function (opts) {
+      return app_state.update_grid(opts);
+    });
     utils_shiny_1.add_shiny_listener("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el) {
         app_state.add_element({
@@ -2285,7 +2299,7 @@ window.onload = function () {
     });
   });
 }; // End of the window.onload callback
-},{"./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./utils-misc":"utils-misc.ts","./utils-grid":"utils-grid.ts","./utils-cssom":"utils-cssom.ts","./wrap_in_grided":"wrap_in_grided.ts","./utils-shiny":"utils-shiny.ts","./App_State":"App_State.ts"}],"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./utils-grid":"utils-grid.ts","./utils-cssom":"utils-cssom.ts","./wrap_in_grided":"wrap_in_grided.ts","./utils-shiny":"utils-shiny.ts","./App_State":"App_State.ts"}],"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

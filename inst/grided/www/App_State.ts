@@ -11,8 +11,8 @@ import {
   equal_arrays,
   filler_text,
   get_bounding_rect,
-  overlap,
   Selection_Rect,
+  set_class,
   update_rect_with_delta,
   XY_Pos,
 } from "./utils-misc";
@@ -23,20 +23,16 @@ import {
 import { Shiny, Element_Info } from "./index";
 import {
   bounding_rect_to_css_pos,
-  get_cols,
   get_drag_extent_on_grid,
   get_gap_size,
   get_pos_on_grid,
-  get_rows,
   make_template_start_end,
   set_element_in_grid,
-  set_gap_size,
   sizes_to_template_def,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import { focused_modal } from "./make-focused_modal";
 import { make_incrementer } from "./make-incrementer";
-import { forEachChild } from "typescript";
 
 type Grid_Settings = {
   num_rows: (new_value: number) => void;
@@ -51,7 +47,7 @@ export type Grid_Pos = {
   end_row?: number;
 };
 
-type Grid_Update_Options = {
+export type Grid_Update_Options = {
   rows?: string[];
   cols?: string[];
   gap?: string;
@@ -88,7 +84,6 @@ type Element_Entries = {
 
 type Track_Attr = "rows" | "cols";
 type Grid_Attr = Track_Attr | "gap";
-type Update_Res = "updated" | "unchanged";
 type Layout_State = {
   rows: string[];
   cols: string[];
@@ -102,7 +97,7 @@ class Grid_Layout {
   constructor(container: HTMLElement) {
     this.container = container;
     this.styles = container.style;
-    console.log("Hello Grid_Layout");
+    console.log("Initialized Grid_Layout");
   }
 
   set rows(new_rows: string[]) {
@@ -165,7 +160,12 @@ class Grid_Layout {
     gap?: string;
   }) {
     const changed: Grid_Attr[] = [];
-    const new_attrs: Layout_State = { ...this.attrs, ...attrs };
+    const new_attrs: Layout_State = this.attrs;
+
+    if (attrs.rows) new_attrs.rows = attrs.rows;
+    if (attrs.cols) new_attrs.cols = attrs.cols;
+    if (attrs.gap) new_attrs.gap = attrs.gap;
+
     let new_num_cells = false;
     if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
       changed.push("rows");
@@ -178,11 +178,43 @@ class Grid_Layout {
     if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
       changed.push("gap");
     }
+
+    const num_rows = new_attrs.rows.length;
+    const num_cols = new_attrs.cols.length;
+
+    function contains_element(
+      el: Element_Info
+    ): "inside" | "partially" | "outside" {
+      if (el.start_row > num_rows || el.start_col > num_cols) {
+        return "outside";
+      }
+
+      if (el.end_row > num_rows || el.end_col > num_cols) {
+        return "partially";
+      }
+
+      return "inside";
+    }
+
+    function shrink_element_to_new_attrs(el: HTMLElement) {
+      const { start_row, start_col, end_row, end_col } = grid_position_of_el(
+        el
+      );
+      el.style.gridRow = make_template_start_end(
+        start_row,
+        Math.min(end_row, num_rows)
+      );
+      el.style.gridColumn = make_template_start_end(
+        start_col,
+        Math.min(end_col, num_cols)
+      );
+    }
+
     return {
       changed,
       new_num_cells,
-      contains_element: (el: Element_Info) =>
-        element_within_grid(new_attrs, el),
+      contains_element,
+      shrink_element_to_new_attrs,
     };
   }
 
@@ -191,28 +223,18 @@ class Grid_Layout {
     this.cols = attrs.cols;
     this.gap = attrs.gap;
   }
-
-  element_within_grid(el: Element_Info): "inside" | "partially" | "outside" {
-    return element_within_grid(this.attrs, el);
-  }
 }
 
-function element_within_grid(
-  layout: Layout_State,
-  el: Element_Info
-): "inside" | "partially" | "outside" {
-  const num_rows = layout.rows.length;
-  const num_cols = layout.cols.length;
-
-  if (el.start_row > num_rows || el.start_col > num_cols) {
-    return "outside";
-  }
-
-  if (el.end_row > num_rows || el.end_col > num_cols) {
-    return "partially";
-  }
-
-  return "inside";
+function grid_position_of_el(el: HTMLElement) {
+  const grid_area = el.style.gridArea.split(" / ");
+  return {
+    id: el.id,
+    start_row: +grid_area[0],
+    start_col: +grid_area[1],
+    // Subtract one here because the end in css is the end line, not row
+    end_row: +grid_area[2] - 1,
+    end_col: +grid_area[3] - 1,
+  };
 }
 
 export class App_State {
@@ -242,9 +264,8 @@ export class App_State {
       ? "ShinyNew"
       : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
-
     this.grid_layout = new Grid_Layout(this.container);
-    console.log("Hi app state");
+    console.log("Initialized App_State");
   }
 
   get layout_from_controls() {
@@ -278,18 +299,8 @@ export class App_State {
   }
 
   get current_elements(): Element_Info[] {
-    const all_elements = [...Object.values(this.elements)].map(
-      ({ grid_el }) => {
-        const grid_area = grid_el.style.gridArea.split(" / ");
-        return {
-          id: grid_el.id,
-          start_row: +grid_area[0],
-          start_col: +grid_area[1],
-          // Subtract one here because the end in css is the end line, not row
-          end_row: +grid_area[2] - 1,
-          end_col: +grid_area[3] - 1,
-        };
-      }
+    const all_elements = [...Object.values(this.elements)].map(({ grid_el }) =>
+      grid_position_of_el(grid_el)
     );
 
     return all_elements;
@@ -431,7 +442,6 @@ export class App_State {
 
   update_grid(opts: Grid_Update_Options) {
     const updated_attributes = this.grid_layout.changed_attributes(opts);
-
     if (updated_attributes.new_num_cells) {
       // Check for elements that may get dropped
       let danger_elements: {
@@ -466,23 +476,11 @@ export class App_State {
         return;
       }
 
-      this.remove_elements(danger_elements.to_delete.map((el) => el.id));
-
       if (danger_elements.to_edit.length > 0) {
         show_danger_popup(this, danger_elements.to_edit, (to_edit) => {
           to_edit.forEach((el) => {
-            const el_node: HTMLElement = this.container.querySelector(
-              `#${el.id}`
-            );
-
-            el_node.style.gridRow = make_template_start_end(
-              el.start_row,
-              Math.min(el.end_row, this.grid_layout.num_rows)
-            );
-            el_node.style.gridColumn = make_template_start_end(
-              el.start_col,
-              Math.min(el.end_col, this.grid_layout.num_cols)
-            );
+            const el_node: HTMLElement = this.elements[el.id].grid_el;
+            updated_attributes.shrink_element_to_new_attrs(el_node);
           });
           // Now that we've updated elements properly, we should be able to
           // just recall the function and it won't spit an error
@@ -495,7 +493,9 @@ export class App_State {
 
         return;
       }
+      this.remove_elements(danger_elements.to_delete.map((el) => el.id));
     }
+
     this.update_settings_panel(opts);
 
     this.grid_layout.update_attrs(opts);
@@ -529,6 +529,10 @@ export class App_State {
             })
           );
         }
+      }
+
+      if (this.mode === "ShinyExisting") {
+        set_class(this.current_cells, "transparent");
       }
 
       // Build each column and row's sizing controler
