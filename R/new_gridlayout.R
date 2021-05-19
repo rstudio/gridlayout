@@ -306,7 +306,7 @@ new_gridlayout_template <- function(
           stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
         }
 
-        if (max(end_vals) < length(sizes)) {
+        if (max(end_vals) > length(sizes)) {
           stop("The provided ", dir, " sizes need to match the number of ", dir, "s in your layout")
         }
       }

@@ -35,7 +35,8 @@ grided_server_code <- function(
   input, output, session,
   starting_layout = NULL,
   on_finish = NULL,
-  finish_button_text = NULL
+  finish_button_text = NULL,
+  show_messages = FALSE
 ){
 
   # Lets grided know it should send over initial app state
@@ -67,6 +68,26 @@ grided_server_code <- function(
     shiny::req(input$elements)
     layout_from_grided(input$elements, input$grid_sizing)
   })
+
+  observe({
+    if (show_messages) {
+      cat("==============================================\nElements Msg:")
+      lobstr::tree(input$elements)
+    }
+  })
+
+  observe({
+    if (show_messages) {
+      cat("==============================================\nSizing Msg:")
+      lobstr::tree(input$grid_sizing)
+    }
+  })
+#
+#   observe({
+#     if (show_messages) {
+#       print(current_layout())
+#     }
+#   })
 
   initial_layout <- NULL
   shiny::observe({

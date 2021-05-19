@@ -139,7 +139,7 @@ var __assign = this && this.__assign || function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.filler_text = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = void 0;
+exports.filler_text = exports.overlap = exports.equal_arrays = exports.set_class = exports.flatten = exports.update_rect_with_delta = exports.boxes_overlap = exports.get_bounding_rect = exports.max_w_missing = exports.min_w_missing = exports.compare_w_missing = exports.as_array = exports.concat_sp = exports.concat_nl = exports.concat = void 0;
 
 function concat(string_vec, collapse_char) {
   if (collapse_char === void 0) {
@@ -300,6 +300,28 @@ function set_class(elements, class_name) {
 }
 
 exports.set_class = set_class;
+
+function equal_arrays(a, b) {
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+
+  return true;
+}
+
+exports.equal_arrays = equal_arrays;
+
+function overlap(a, b) {
+  for (var i = 0; i < a.length; ++i) {
+    if (b.includes(a[i])) return true;
+  }
+
+  return false;
+}
+
+exports.overlap = overlap;
 exports.filler_text = "\n<div class = \"filler_text\">\n  Lorem Ipsum is simply dummy text of the printing and typesetting industry. \n  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>";
 },{}],"utils-grid.ts":[function(require,module,exports) {
 "use strict"; // Functions related to grid construction, editings, etc
@@ -1310,6 +1332,8 @@ exports.make_incrementer = make_incrementer;
 },{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"App_State.ts":[function(require,module,exports) {
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var __assign = this && this.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1357,6 +1381,148 @@ var make_focused_modal_1 = require("./make-focused_modal");
 
 var make_incrementer_1 = require("./make-incrementer");
 
+var Grid_Layout =
+/** @class */
+function () {
+  function Grid_Layout(container) {
+    this.container = container;
+    this.styles = container.style;
+    console.log("Hello Grid_Layout");
+  }
+
+  Object.defineProperty(Grid_Layout.prototype, "rows", {
+    get: function get() {
+      return this.styles.gridTemplateRows.split(" ");
+    },
+    set: function set(new_rows) {
+      if (typeof new_rows === "undefined") return;
+      this.styles.gridTemplateRows = utils_grid_1.sizes_to_template_def(new_rows);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_rows", {
+    get: function get() {
+      return this.rows.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "cols", {
+    get: function get() {
+      return this.styles.gridTemplateColumns.split(" ");
+    },
+    set: function set(new_cols) {
+      if (typeof new_cols === "undefined") return;
+      this.styles.gridTemplateColumns = utils_grid_1.sizes_to_template_def(new_cols);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_cols", {
+    get: function get() {
+      return this.cols.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "gap", {
+    get: function get() {
+      return this.styles.gap;
+    },
+    set: function set(new_gap) {
+      if (typeof new_gap === "undefined") return; // This sets the --grid-gap variable so that the controls that need the
+      // info can use it to keep a constant distance from the grid holder
+
+      this.container.parentElement.style.setProperty("--grid-gap", new_gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+
+      this.styles.gap = new_gap;
+      this.styles.padding = new_gap;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "attrs", {
+    get: function get() {
+      return {
+        rows: this.rows,
+        cols: this.cols,
+        gap: this.gap
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Grid_Layout.prototype.is_updated_val = function (attr, values) {
+    if (attr === "gap") {
+      return values !== this.gap;
+    } else if (_typeof(values) === "object") {
+      return !utils_misc_1.equal_arrays(this[attr], values);
+    }
+  }; // Given a new set of attributes, tells you which ones are different from
+  // current values
+
+
+  Grid_Layout.prototype.changed_attributes = function (attrs) {
+    var changed = [];
+
+    var new_attrs = __assign(__assign({}, this.attrs), attrs);
+
+    var new_num_cells = false;
+
+    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
+      changed.push("rows");
+      new_num_cells = true;
+    }
+
+    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
+      changed.push("cols");
+      new_num_cells = true;
+    }
+
+    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
+      changed.push("gap");
+    }
+
+    return {
+      changed: changed,
+      new_num_cells: new_num_cells,
+      contains_element: function contains_element(el) {
+        return element_within_grid(new_attrs, el);
+      }
+    };
+  };
+
+  Grid_Layout.prototype.update_attrs = function (attrs) {
+    this.rows = attrs.rows;
+    this.cols = attrs.cols;
+    this.gap = attrs.gap;
+  };
+
+  Grid_Layout.prototype.element_within_grid = function (el) {
+    return element_within_grid(this.attrs, el);
+  };
+
+  return Grid_Layout;
+}();
+
+function element_within_grid(layout, el) {
+  var num_rows = layout.rows.length;
+  var num_cols = layout.cols.length;
+
+  if (el.start_row > num_rows || el.start_col > num_cols) {
+    return "outside";
+  }
+
+  if (el.end_row > num_rows || el.end_col > num_cols) {
+    return "partially";
+  }
+
+  return "inside";
+}
+
 var App_State =
 /** @class */
 function () {
@@ -1369,6 +1535,7 @@ function () {
     this.grid_styles = this.container.style;
     this.mode = opts.grid_is_filled ? "ShinyExisting" : index_1.Shiny ? "ShinyNew" : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
+    this.grid_layout = new Grid_Layout(this.container);
     console.log("Hi app state");
   }
 
@@ -1387,47 +1554,24 @@ function () {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(App_State.prototype, "row_sizes", {
-    get: function get() {
-      return utils_grid_1.get_rows(this.container);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "col_sizes", {
-    get: function get() {
-      return utils_grid_1.get_cols(this.container);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "num_rows", {
-    get: function get() {
-      return this.row_sizes.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "num_cols", {
-    get: function get() {
-      return this.col_sizes.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
+
+  App_State.prototype.update_settings_panel = function (opts) {
+    if (opts.cols) {
+      this.settings_panel.num_cols(opts.cols.length);
+    }
+
+    if (opts.rows) {
+      this.settings_panel.num_rows(opts.rows.length);
+    }
+
+    if (opts.gap) {
+      this.settings_panel.gap.update_value(opts.gap);
+    }
+  };
+
   Object.defineProperty(App_State.prototype, "gap_size", {
     get: function get() {
       return utils_grid_1.get_gap_size(this.grid_styles);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "grid_dims", {
-    get: function get() {
-      return {
-        rows: this.row_sizes,
-        cols: this.col_sizes
-      };
     },
     enumerable: false,
     configurable: true
@@ -1476,8 +1620,13 @@ function () {
 
 
   App_State.prototype.remove_elements = function (ids) {
+    var _this = this;
+
     utils_misc_1.as_array(ids).forEach(function (el_id) {
-      make_elements_1.remove_elements(document.querySelectorAll("div.el_" + el_id + ".added-element"));
+      var element_entries = _this.elements[el_id];
+      make_elements_1.remove_elements([element_entries.grid_el, element_entries.list_el]); // Remove from current elements list
+
+      delete _this.elements[el_id];
     });
     utils_shiny_1.send_elements_to_shiny(this.current_elements);
   };
@@ -1568,37 +1717,51 @@ function () {
   App_State.prototype.update_grid = function (opts) {
     var _this = this;
 
-    var new_num_rows = opts.rows ? opts.rows.length : this.num_rows;
-    var new_num_cols = opts.cols ? opts.cols.length : this.num_cols; // Make sure settings panel is up-to-date
+    var updated_attributes = this.grid_layout.changed_attributes(opts);
 
-    this.settings_panel.num_rows(new_num_rows);
-    this.settings_panel.num_cols(new_num_cols);
-    this.settings_panel.gap.update_value(opts.gap || this.gap_size);
-    var grid_numbers_changed = this.num_rows !== new_num_rows || this.num_cols !== new_num_cols;
-
-    if (grid_numbers_changed) {
+    if (updated_attributes.new_num_cells) {
       // Check for elements that may get dropped
-      var in_danger_els_1 = [];
-      var auto_removed_el_ids_1 = [];
+      var danger_elements_1 = {
+        to_delete: [],
+        to_edit: [],
+        conflicting: []
+      };
       this.current_elements.forEach(function (el) {
-        var sits_outside_grid = el.end_row > new_num_rows || el.end_col > new_num_cols;
-        var completely_outside_grid = el.start_row > new_num_rows || el.start_col > new_num_cols;
+        var element_position = updated_attributes.contains_element(el);
+        if (element_position === "inside") return;
 
-        if (completely_outside_grid) {
-          auto_removed_el_ids_1.push(el.id);
-        } else if (sits_outside_grid) {
-          in_danger_els_1.push(el);
+        if (element_position === "partially") {
+          danger_elements_1.to_edit.push(el);
+          return;
         }
-      });
-      this.remove_elements(auto_removed_el_ids_1);
 
-      if (in_danger_els_1.length > 0) {
-        show_danger_popup(this, in_danger_els_1, function (to_edit) {
+        if (_this.elements[el.id].mirrors_existing) {
+          danger_elements_1.conflicting.push(el);
+          return;
+        }
+
+        danger_elements_1.to_delete.push(el);
+      });
+
+      if (danger_elements_1.conflicting.length > 0) {
+        show_conflict_popup(danger_elements_1.conflicting); // Make sure to switch back the control values to previous values
+
+        this.update_settings_panel(this.grid_layout.attrs); // Stop this action from going further
+
+        return;
+      }
+
+      this.remove_elements(danger_elements_1.to_delete.map(function (el) {
+        return el.id;
+      }));
+
+      if (danger_elements_1.to_edit.length > 0) {
+        show_danger_popup(this, danger_elements_1.to_edit, function (to_edit) {
           to_edit.forEach(function (el) {
             var el_node = _this.container.querySelector("#" + el.id);
 
-            el_node.style.gridRow = utils_grid_1.make_template_start_end(el.start_row, Math.min(el.end_row, new_num_rows));
-            el_node.style.gridColumn = utils_grid_1.make_template_start_end(el.start_col, Math.min(el.end_col, new_num_cols));
+            el_node.style.gridRow = utils_grid_1.make_template_start_end(el.start_row, Math.min(el.end_row, _this.grid_layout.num_rows));
+            el_node.style.gridColumn = utils_grid_1.make_template_start_end(el.start_col, Math.min(el.end_col, _this.grid_layout.num_cols));
           }); // Now that we've updated elements properly, we should be able to
           // just recall the function and it won't spit an error
 
@@ -1612,25 +1775,10 @@ function () {
       }
     }
 
-    if (opts.rows) {
-      this.grid_styles.gridTemplateRows = utils_grid_1.sizes_to_template_def(opts.rows);
-    }
+    this.update_settings_panel(opts);
+    this.grid_layout.update_attrs(opts);
 
-    if (opts.cols) {
-      this.grid_styles.gridTemplateColumns = utils_grid_1.sizes_to_template_def(opts.cols);
-    }
-
-    if (opts.gap) {
-      // This sets the --grid-gap variable so that the controls that need the
-      // info can use it to keep a constant distance from the grid holder
-      this.container.parentElement.style.setProperty("--grid-gap", opts.gap); // We dont use css variables in the exported css that existing apps used
-      // so we need to modify both gap and padding
-
-      utils_grid_1.set_gap_size(this.grid_styles, opts.gap);
-      this.grid_styles.padding = opts.gap;
-    }
-
-    if (grid_numbers_changed || opts.force) {
+    if (updated_attributes.new_num_cells || opts.force) {
       this.fill_grid_cells();
     }
 
@@ -1644,14 +1792,14 @@ function () {
     // or if this was simply a column/row sizing update
 
 
-    var need_to_reset_cells = this.current_cells.length != this.num_rows * this.num_cols;
+    var need_to_reset_cells = this.current_cells.length != this.grid_layout.num_rows * this.grid_layout.num_cols;
 
     if (need_to_reset_cells) {
       make_elements_1.remove_elements(this.current_cells);
       this.current_cells = [];
 
-      for (var row_i = 1; row_i <= this.num_rows; row_i++) {
-        for (var col_i = 1; col_i <= this.num_cols; col_i++) {
+      for (var row_i = 1; row_i <= this.grid_layout.num_rows; row_i++) {
+        for (var col_i = 1; col_i <= this.grid_layout.num_cols; col_i++) {
           this.current_cells.push(this.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
             data_props: {
               row: row_i,
@@ -1668,7 +1816,7 @@ function () {
       var _loop_1 = function _loop_1(type) {
         // Get rid of old ones to start with fresh slate
         make_elements_1.remove_elements(this_1.container.querySelectorAll("." + type + "-controls"));
-        this_1.controls[type] = this_1.grid_dims[type].map(function (size, i) {
+        this_1.controls[type] = this_1.grid_layout.attrs[type].map(function (size, i) {
           var _a; // The i + 1 is because grid is indexed at 1, not zero
 
 
@@ -1709,7 +1857,7 @@ function () {
         },
         on_end: function on_end(_a) {
           var grid = _a.grid;
-          name_new_element(_this, {
+          element_naming_ui(_this, {
             grid_pos: grid,
             selection_box: current_selection_box_1
           });
@@ -1779,7 +1927,7 @@ function make_settings_panel(app_state, panel_el) {
   }
 }
 
-function name_new_element(app_state, _a) {
+function element_naming_ui(app_state, _a) {
   var grid_pos = _a.grid_pos,
       selection_box = _a.selection_box;
   var modal_divs = make_focused_modal_1.focused_modal({
@@ -1886,9 +2034,8 @@ function name_new_element(app_state, _a) {
 }
 
 function draw_elements(app_state, el_props) {
-  var _this = this;
-
   var el_color = app_state.next_color;
+  var mirrors_existing = typeof el_props.existing_element !== "undefined";
   var grid_el = app_state.make_el("div#" + el_props.id + ".el_" + el_props.id + ".added-element", {
     grid_pos: el_props.grid_pos,
     // Add filler text for new elements so that auto-height will work
@@ -1910,7 +2057,7 @@ function draw_elements(app_state, el_props) {
       grid_element: grid_el,
       drag_dir: handle_type,
       on_drag: function on_drag(res) {
-        if (el_props.existing_element) {
+        if (mirrors_existing) {
           utils_grid_1.set_element_in_grid(el_props.existing_element, res.grid);
         }
       },
@@ -1939,7 +2086,7 @@ function draw_elements(app_state, el_props) {
     }]
   });
 
-  if (!el_props) {
+  if (!mirrors_existing) {
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
     // they can delete that new element but they can't delete the existing elements
@@ -1948,7 +2095,7 @@ function draw_elements(app_state, el_props) {
       event_listener: {
         event: "click",
         func: function func() {
-          _this.remove_elements(el_props.id);
+          app_state.remove_elements(el_props.id);
         }
       }
     });
@@ -1956,8 +2103,27 @@ function draw_elements(app_state, el_props) {
 
   return {
     grid_el: grid_el,
-    list_el: list_el
+    list_el: list_el,
+    mirrors_existing: mirrors_existing
   };
+}
+
+function show_conflict_popup(conflicting_elements) {
+  var conflicting_elements_list = conflicting_elements.reduce(function (id_list, el) {
+    return "\n    " + id_list + "\n    <li> " + el.id + " </li>\n    ";
+  }, "<ul>") + "</ul>";
+  var message_model = make_focused_modal_1.focused_modal({
+    header_text: "\n  <h2>Sorry! Can't make that update</h2> \n  <p> This is because it would result in the following elements being removed from your app:</p>\n  " + conflicting_elements_list + "\n  <p> Either re-arrange these elements to not reside in the removed grid or column or remove them from your app before running grided.</p>\n  "
+  });
+  make_elements_1.make_el(message_model.modal, "button#accept_result", {
+    innerHTML: "Okay",
+    event_listener: {
+      event: "click",
+      func: function func() {
+        message_model.remove();
+      }
+    }
+  });
 }
 
 function show_danger_popup(app_state, in_danger_els, on_finish) {

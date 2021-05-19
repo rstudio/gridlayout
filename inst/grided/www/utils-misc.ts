@@ -152,6 +152,25 @@ export function set_class(elements: NodeListOf<HTMLElement>, class_name: string)
   
 }
 
+export function equal_arrays<Type>(a: Type[], b: Type[]) {
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+
+  return true;
+}
+
+export function overlap<Type>(a: Type[], b: Type[]) {
+
+  for (let i = 0; i < a.length; ++i) {
+    if (b.includes(a[i])) return true
+  }
+
+  return false;
+}
+
 export const filler_text = `
 <div class = "filler_text">
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. 

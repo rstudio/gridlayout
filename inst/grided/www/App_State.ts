@@ -8,8 +8,10 @@ import {
 import {
   as_array,
   Drag_Type,
+  equal_arrays,
   filler_text,
   get_bounding_rect,
+  overlap,
   Selection_Rect,
   update_rect_with_delta,
   XY_Pos,
@@ -34,6 +36,7 @@ import {
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import { focused_modal } from "./make-focused_modal";
 import { make_incrementer } from "./make-incrementer";
+import { forEachChild } from "typescript";
 
 type Grid_Settings = {
   num_rows: (new_value: number) => void;
@@ -80,7 +83,137 @@ type New_Element = {
 type Element_Entries = {
   grid_el: HTMLElement;
   list_el: HTMLElement;
+  mirrors_existing: boolean;
 };
+
+type Track_Attr = "rows" | "cols";
+type Grid_Attr = Track_Attr | "gap";
+type Update_Res = "updated" | "unchanged";
+type Layout_State = {
+  rows: string[];
+  cols: string[];
+  gap: string;
+};
+
+class Grid_Layout {
+  container: HTMLElement;
+  styles: CSSStyleDeclaration;
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+    this.styles = container.style;
+    console.log("Hello Grid_Layout");
+  }
+
+  set rows(new_rows: string[]) {
+    if (typeof new_rows === "undefined") return;
+    this.styles.gridTemplateRows = sizes_to_template_def(new_rows);
+  }
+  get rows(): string[] {
+    return this.styles.gridTemplateRows.split(" ");
+  }
+  get num_rows() {
+    return this.rows.length;
+  }
+
+  set cols(new_cols: string[]) {
+    if (typeof new_cols === "undefined") return;
+    this.styles.gridTemplateColumns = sizes_to_template_def(new_cols);
+  }
+  get cols(): string[] {
+    return this.styles.gridTemplateColumns.split(" ");
+  }
+  get num_cols() {
+    return this.cols.length;
+  }
+
+  set gap(new_gap: string) {
+    if (typeof new_gap === "undefined") return;
+    // This sets the --grid-gap variable so that the controls that need the
+    // info can use it to keep a constant distance from the grid holder
+    this.container.parentElement.style.setProperty("--grid-gap", new_gap);
+    // We dont use css variables in the exported css that existing apps used
+    // so we need to modify both gap and padding
+    this.styles.gap = new_gap;
+    this.styles.padding = new_gap;
+  }
+  get gap(): string {
+    return this.styles.gap;
+  }
+
+  get attrs(): Layout_State {
+    return {
+      rows: this.rows,
+      cols: this.cols,
+      gap: this.gap,
+    };
+  }
+
+  is_updated_val(attr: Grid_Attr, values: string | string[]) {
+    if (attr === "gap") {
+      return values !== this.gap;
+    } else if (typeof values === "object") {
+      return !equal_arrays(this[attr], values);
+    }
+  }
+
+  // Given a new set of attributes, tells you which ones are different from
+  // current values
+  changed_attributes(attrs: {
+    rows?: string[];
+    cols?: string[];
+    gap?: string;
+  }) {
+    const changed: Grid_Attr[] = [];
+    const new_attrs: Layout_State = { ...this.attrs, ...attrs };
+    let new_num_cells = false;
+    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
+      changed.push("rows");
+      new_num_cells = true;
+    }
+    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
+      changed.push("cols");
+      new_num_cells = true;
+    }
+    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
+      changed.push("gap");
+    }
+    return {
+      changed,
+      new_num_cells,
+      contains_element: (el: Element_Info) =>
+        element_within_grid(new_attrs, el),
+    };
+  }
+
+  update_attrs(attrs: { rows?: string[]; cols?: string[]; gap?: string }) {
+    this.rows = attrs.rows;
+    this.cols = attrs.cols;
+    this.gap = attrs.gap;
+  }
+
+  element_within_grid(el: Element_Info): "inside" | "partially" | "outside" {
+    return element_within_grid(this.attrs, el);
+  }
+}
+
+function element_within_grid(
+  layout: Layout_State,
+  el: Element_Info
+): "inside" | "partially" | "outside" {
+  const num_rows = layout.rows.length;
+  const num_cols = layout.cols.length;
+
+  if (el.start_row > num_rows || el.start_col > num_cols) {
+    return "outside";
+  }
+
+  if (el.end_row > num_rows || el.end_col > num_cols) {
+    return "partially";
+  }
+
+  return "inside";
+}
 
 export class App_State {
   controls: { rows: CSS_Input[]; cols: CSS_Input[] };
@@ -92,6 +225,7 @@ export class App_State {
   container: HTMLElement;
   grid_styles: CSSStyleDeclaration;
   mode: "ShinyExisting" | "ShinyNew" | "ClientSide";
+  grid_layout: Grid_Layout;
 
   constructor(opts: {
     controls: { rows: CSS_Input[]; cols: CSS_Input[] };
@@ -109,6 +243,7 @@ export class App_State {
       : "ClientSide";
     this.settings_panel = make_settings_panel(this, opts.settings_panel);
 
+    this.grid_layout = new Grid_Layout(this.container);
     console.log("Hi app state");
   }
 
@@ -122,18 +257,20 @@ export class App_State {
     return sizes;
   }
 
-  get row_sizes() { return get_rows(this.container); }
-  get col_sizes() { return get_cols(this.container); }
-  get num_rows() { return this.row_sizes.length; }
-  get num_cols() { return this.col_sizes.length; }
+  update_settings_panel(opts: Grid_Update_Options) {
+    if (opts.cols) {
+      this.settings_panel.num_cols(opts.cols.length);
+    }
+    if (opts.rows) {
+      this.settings_panel.num_rows(opts.rows.length);
+    }
+    if (opts.gap) {
+      this.settings_panel.gap.update_value(opts.gap);
+    }
+  }
 
-  get gap_size() {return get_gap_size(this.grid_styles);}
-
-  get grid_dims() {
-    return {
-      rows: this.row_sizes,
-      cols: this.col_sizes,
-    };
+  get gap_size() {
+    return get_gap_size(this.grid_styles);
   }
 
   get num_elements(): number {
@@ -181,9 +318,10 @@ export class App_State {
   // Removes elements the user has added to the grid by id
   remove_elements(ids: string | Array<string>) {
     as_array(ids).forEach((el_id) => {
-      remove_elements(
-        document.querySelectorAll(`div.el_${el_id}.added-element`)
-      );
+      const element_entries = this.elements[el_id];
+      remove_elements([element_entries.grid_el, element_entries.list_el]);
+      // Remove from current elements list
+      delete this.elements[el_id];
     });
 
     send_elements_to_shiny(this.current_elements);
@@ -292,39 +430,46 @@ export class App_State {
   }
 
   update_grid(opts: Grid_Update_Options) {
+    const updated_attributes = this.grid_layout.changed_attributes(opts);
 
-    const new_num_rows = opts.rows ? opts.rows.length : this.num_rows;
-    const new_num_cols = opts.cols ? opts.cols.length : this.num_cols;
-  
-    // Make sure settings panel is up-to-date
-    this.settings_panel.num_rows(new_num_rows);
-    this.settings_panel.num_cols(new_num_cols);
-    this.settings_panel.gap.update_value(opts.gap || this.gap_size);
-  
-    const grid_numbers_changed =
-    this.num_rows !== new_num_rows || this.num_cols !== new_num_cols;
-    if (grid_numbers_changed) {
+    if (updated_attributes.new_num_cells) {
       // Check for elements that may get dropped
-      let in_danger_els: Element_Info[] = [];
-      let auto_removed_el_ids: string[] = [];
-  
-      this.current_elements.forEach(function (el) {
-        const sits_outside_grid =
-          el.end_row > new_num_rows || el.end_col > new_num_cols;
-        const completely_outside_grid =
-          el.start_row > new_num_rows || el.start_col > new_num_cols;
-        if (completely_outside_grid) {
-          auto_removed_el_ids.push(el.id);
-        } else if (sits_outside_grid) {
-          in_danger_els.push(el);
-        }
-      });
-  
-      this.remove_elements(auto_removed_el_ids);
-  
-      if (in_danger_els.length > 0) {
+      let danger_elements: {
+        to_delete: Element_Info[];
+        to_edit: Element_Info[];
+        conflicting: Element_Info[];
+      } = { to_delete: [], to_edit: [], conflicting: [] };
 
-        show_danger_popup(this, in_danger_els, (to_edit) => {
+      this.current_elements.forEach((el) => {
+        const element_position = updated_attributes.contains_element(el);
+
+        if (element_position === "inside") return;
+
+        if (element_position === "partially") {
+          danger_elements.to_edit.push(el);
+          return;
+        }
+
+        if (this.elements[el.id].mirrors_existing) {
+          danger_elements.conflicting.push(el);
+          return;
+        }
+
+        danger_elements.to_delete.push(el);
+      });
+
+      if (danger_elements.conflicting.length > 0) {
+        show_conflict_popup(danger_elements.conflicting);
+        // Make sure to switch back the control values to previous values
+        this.update_settings_panel(this.grid_layout.attrs);
+        // Stop this action from going further
+        return;
+      }
+
+      this.remove_elements(danger_elements.to_delete.map((el) => el.id));
+
+      if (danger_elements.to_edit.length > 0) {
+        show_danger_popup(this, danger_elements.to_edit, (to_edit) => {
           to_edit.forEach((el) => {
             const el_node: HTMLElement = this.container.querySelector(
               `#${el.id}`
@@ -332,11 +477,11 @@ export class App_State {
 
             el_node.style.gridRow = make_template_start_end(
               el.start_row,
-              Math.min(el.end_row, new_num_rows)
+              Math.min(el.end_row, this.grid_layout.num_rows)
             );
             el_node.style.gridColumn = make_template_start_end(
               el.start_col,
-              Math.min(el.end_col, new_num_cols)
+              Math.min(el.end_col, this.grid_layout.num_cols)
             );
           });
           // Now that we've updated elements properly, we should be able to
@@ -351,48 +496,32 @@ export class App_State {
         return;
       }
     }
-  
-    if (opts.rows) {
-      this.grid_styles.gridTemplateRows = sizes_to_template_def(
-        opts.rows
-      );
-    }
-    if (opts.cols) {
-      this.grid_styles.gridTemplateColumns = sizes_to_template_def(
-        opts.cols
-      );
-    }
-    if (opts.gap) {
-      // This sets the --grid-gap variable so that the controls that need the
-      // info can use it to keep a constant distance from the grid holder
-      this.container.parentElement.style.setProperty("--grid-gap", opts.gap);
-      // We dont use css variables in the exported css that existing apps used
-      // so we need to modify both gap and padding
-      set_gap_size(this.grid_styles, opts.gap);
-      this.grid_styles.padding = opts.gap;
-    }
-  
-    if (grid_numbers_changed || opts.force) {
+    this.update_settings_panel(opts);
+
+    this.grid_layout.update_attrs(opts);
+
+    if (updated_attributes.new_num_cells || opts.force) {
       this.fill_grid_cells();
     }
-  
+
     if (!opts.dont_send_to_shiny) {
       send_grid_sizing_to_shiny(this.grid_styles);
-    }  
+    }
   }
 
   fill_grid_cells() {
     // Grab currently drawn cells (if any) so we can check if we need to redraw
     // or if this was simply a column/row sizing update
     const need_to_reset_cells =
-      this.current_cells.length != this.num_rows * this.num_cols;
+      this.current_cells.length !=
+      this.grid_layout.num_rows * this.grid_layout.num_cols;
 
     if (need_to_reset_cells) {
       remove_elements(this.current_cells);
       this.current_cells = [];
 
-      for (let row_i = 1; row_i <= this.num_rows; row_i++) {
-        for (let col_i = 1; col_i <= this.num_cols; col_i++) {
+      for (let row_i = 1; row_i <= this.grid_layout.num_rows; row_i++) {
+        for (let col_i = 1; col_i <= this.grid_layout.num_cols; col_i++) {
           this.current_cells.push(
             this.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
               data_props: { row: row_i, col: col_i },
@@ -406,7 +535,7 @@ export class App_State {
       for (let type in this.controls) {
         // Get rid of old ones to start with fresh slate
         remove_elements(this.container.querySelectorAll(`.${type}-controls`));
-        this.controls[type] = this.grid_dims[type].map(
+        this.controls[type] = this.grid_layout.attrs[type].map(
           (size: string, i: number) => {
             // The i + 1 is because grid is indexed at 1, not zero
             const grid_i = i + 1;
@@ -445,7 +574,7 @@ export class App_State {
           current_selection_box.style.borderColor = this.next_color;
         },
         on_end: ({ grid }) => {
-          name_new_element(this, {
+          element_naming_ui(this, {
             grid_pos: grid,
             selection_box: current_selection_box,
           });
@@ -512,7 +641,7 @@ function make_settings_panel(
   }
 }
 
-function name_new_element(app_state: App_State, { grid_pos, selection_box }) {
+function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   const modal_divs = focused_modal({
     background_callbacks: {
       // Clicking outside of the modal will cancel the naming. Seems natural
@@ -616,6 +745,7 @@ function name_new_element(app_state: App_State, { grid_pos, selection_box }) {
 
 function draw_elements(app_state: App_State, el_props: New_Element) {
   const el_color = app_state.next_color;
+  const mirrors_existing = typeof el_props.existing_element !== "undefined";
   const grid_el = app_state.make_el(
     `div#${el_props.id}.el_${el_props.id}.added-element`,
     {
@@ -649,7 +779,7 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
         grid_element: grid_el,
         drag_dir: handle_type,
         on_drag: (res) => {
-          if (el_props.existing_element) {
+          if (mirrors_existing) {
             set_element_in_grid(el_props.existing_element, res.grid);
           }
         },
@@ -685,7 +815,7 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
     }
   );
 
-  if (!el_props) {
+  if (!mirrors_existing) {
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
     // they can delete that new element but they can't delete the existing elements
@@ -694,19 +824,50 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
       event_listener: {
         event: "click",
         func: () => {
-          this.remove_elements(el_props.id);
+          app_state.remove_elements(el_props.id);
         },
       },
     });
   }
 
-  return { grid_el, list_el };
+  return { grid_el, list_el, mirrors_existing };
+}
+
+function show_conflict_popup(conflicting_elements: Element_Info[]) {
+  const conflicting_elements_list: string =
+    conflicting_elements.reduce(
+      (id_list, el) =>
+        `
+    ${id_list}
+    <li> ${el.id} </li>
+    `,
+      "<ul>"
+    ) + "</ul>";
+  const message_model = focused_modal({
+    header_text: `
+  <h2>Sorry! Can't make that update</h2> 
+  <p> This is because it would result in the following elements being removed from your app:</p>
+  ${conflicting_elements_list}
+  <p> Either re-arrange these elements to not reside in the removed grid or column or remove them from your app before running grided.</p>
+  `,
+  });
+
+  make_el(message_model.modal, "button#accept_result", {
+    innerHTML: `Okay`,
+    event_listener: {
+      event: "click",
+      func: function () {
+        message_model.remove();
+      },
+    },
+  });
 }
 
 function show_danger_popup(
-  app_state: App_State, 
+  app_state: App_State,
   in_danger_els: Element_Info[],
-  on_finish: (to_edit: Element_Info[]) => void){
+  on_finish: (to_edit: Element_Info[]) => void
+) {
   const fix_els_modal = focused_modal({
     header_text: `
   <h2>The following elements dont fit on the new grid layout.</h2>
@@ -752,7 +913,6 @@ function show_danger_popup(
           on_finish(to_edit);
 
           fix_els_modal.remove();
-          
         },
       },
     }

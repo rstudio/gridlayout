@@ -39,6 +39,6 @@ shinyApp(
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
 
-    grided_server_code(input, output, session)
+    grided_server_code(input, output, session, show_messages = TRUE)
   }
 )
