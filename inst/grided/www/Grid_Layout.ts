@@ -1,3 +1,5 @@
+import { Grid_Pos } from "./Grid_Item";
+
 type Grid_Attr = "rows" | "cols" | "gap";
 
 export type Layout_State = {
@@ -16,7 +18,7 @@ export class Grid_Layout {
 
   set rows(new_rows: string[]) {
     if (typeof new_rows === "undefined") return;
-    this.styles.gridTemplateRows = sizes_to_template_def(new_rows);
+    this.styles.gridTemplateRows = new_rows.join(" ");
   }
   get rows(): string[] {
     return this.styles.gridTemplateRows.split(" ");
@@ -27,7 +29,7 @@ export class Grid_Layout {
 
   set cols(new_cols: string[]) {
     if (typeof new_cols === "undefined") return;
-    this.styles.gridTemplateColumns = sizes_to_template_def(new_cols);
+    this.styles.gridTemplateColumns = new_cols.join(" ");
   }
   get cols(): string[] {
     return this.styles.gridTemplateColumns.split(" ");
@@ -105,12 +107,22 @@ export class Grid_Layout {
     this.cols = attrs.cols;
     this.gap = attrs.gap;
   }
-}
 
-// grid-template-{column,row}: ...
-// Take a vector of css sizes and turn into the format for the css argument for
-function sizes_to_template_def(defs: Array<string>) {
-  return defs.join(" ");
+  sizes_for_tract(item_pos: Grid_Pos, dir: "row" | "col"): string[] {
+    const start_index: number =
+      item_pos[`start_${dir}`] ?? item_pos[`end_${dir}`];
+    const end_index: number =
+      item_pos[`end_${dir}`] ?? item_pos[`start_${dir}`];
+
+    const tract_sizes = dir === "row" ? this.rows : this.cols;
+    return tract_sizes.filter(
+      (val: string, i: number) => i + 1 >= start_index && i + 1 <= end_index
+    );
+  }
+
+  item_row_sizes(item_pos: Grid_Pos) {
+    return this.sizes_for_tract(item_pos, "row");
+  }
 }
 
 function equal_arrays<Type>(a: Type[], b: Type[]) {

@@ -137,7 +137,7 @@ export function wrap_in_grided(app_state: App_State) {
     app_state.add_element({
       id: el.id,
       grid_pos: get_pos_on_grid(el as HTMLElement),
-      existing_element: el as HTMLElement,
+      mirrored_element: el as HTMLElement,
     });
   });
 

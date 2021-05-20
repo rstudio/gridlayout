@@ -1,9 +1,10 @@
 // JS entry point
-import { App_State, Grid_Update_Options, update_grid } from "./App_State";
-import { show_code } from "./make-focused_modal";
 import {
-  gen_code_for_layout,
-} from "./utils-grid";
+  App_State,
+  Grid_Update_Options,
+  update_grid,
+} from "./App_State";
+import { show_code } from "./make-focused_modal";
 import {
   add_shiny_listener,
   send_elements_to_shiny,
@@ -12,18 +13,9 @@ import {
 
 export const Shiny = (window as any).Shiny;
 
-export type Element_Info = {
-  id: string;
-  start_row: number;
-  end_row: number;
-  start_col: number;
-  end_col: number;
-};
-
 const debug_messages = true;
 
 window.onload = function () {
-
   const app_state = new App_State();
 
   add_shiny_listener("shiny-loaded", function (x) {
@@ -46,17 +38,25 @@ window.onload = function () {
       update_grid(app_state, opts)
     );
 
+    type Shiny_Element_Msg = {
+      id: string;
+      start_col: number;
+      start_row: number;
+      end_col: number;
+      end_row: number;
+    };
     add_shiny_listener("add-elements", function (
-      elements_to_add: Element_Info[]
+      elements_to_add: Shiny_Element_Msg[]
     ) {
-      elements_to_add.forEach((el: Element_Info) => {
+      elements_to_add.forEach((el_msg: Shiny_Element_Msg) => {
+        const { start_row, end_row, start_col, end_col } = el_msg;
         app_state.add_element({
-          id: el.id,
-          grid_pos: el,
+          id: el_msg.id,
+          grid_pos: { start_row, end_row, start_col, end_col },
         });
       });
     });
-  } 
+  }
   // else {
   //   // If in pure-client-side mode we need to provide a default grid and also wireup the code button
   //   update_grid(app_state, {

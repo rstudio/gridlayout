@@ -117,176 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"Grid_Layout.ts":[function(require,module,exports) {
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Grid_Layout = void 0;
-
-var Grid_Layout =
-/** @class */
-function () {
-  function Grid_Layout(container) {
-    this.container = container;
-    this.styles = container.style;
-    console.log("Initialized Grid_Layout");
-  }
-
-  Object.defineProperty(Grid_Layout.prototype, "rows", {
-    get: function get() {
-      return this.styles.gridTemplateRows.split(" ");
-    },
-    set: function set(new_rows) {
-      if (typeof new_rows === "undefined") return;
-      this.styles.gridTemplateRows = sizes_to_template_def(new_rows);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "num_rows", {
-    get: function get() {
-      return this.rows.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "cols", {
-    get: function get() {
-      return this.styles.gridTemplateColumns.split(" ");
-    },
-    set: function set(new_cols) {
-      if (typeof new_cols === "undefined") return;
-      this.styles.gridTemplateColumns = sizes_to_template_def(new_cols);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "num_cols", {
-    get: function get() {
-      return this.cols.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "gap", {
-    get: function get() {
-      return this.styles.gap;
-    },
-    set: function set(new_gap) {
-      if (typeof new_gap === "undefined") return; // This sets the --grid-gap variable so that the controls that need the
-      // info can use it to keep a constant distance from the grid holder
-
-      this.container.parentElement.style.setProperty("--grid-gap", new_gap); // We dont use css variables in the exported css that existing apps used
-      // so we need to modify both gap and padding
-
-      this.styles.gap = new_gap;
-      this.styles.padding = new_gap;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Grid_Layout.prototype, "attrs", {
-    get: function get() {
-      return {
-        rows: this.rows,
-        cols: this.cols,
-        gap: this.gap
-      };
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  Grid_Layout.prototype.is_updated_val = function (attr, values) {
-    if (attr === "gap") {
-      return values !== this.gap;
-    } else if (_typeof(values) === "object") {
-      return !equal_arrays(this[attr], values);
-    }
-  }; // Given a new set of attributes, tells you which ones are different from
-  // current values
-
-
-  Grid_Layout.prototype.changed_attributes = function (attrs) {
-    var changed = [];
-    var new_attrs = this.attrs;
-    if (attrs.rows) new_attrs.rows = attrs.rows;
-    if (attrs.cols) new_attrs.cols = attrs.cols;
-    if (attrs.gap) new_attrs.gap = attrs.gap;
-    var new_num_cells = false;
-
-    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
-      changed.push("rows");
-      new_num_cells = true;
-    }
-
-    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
-      changed.push("cols");
-      new_num_cells = true;
-    }
-
-    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
-      changed.push("gap");
-    }
-
-    return {
-      changed: changed,
-      new_num_cells: new_num_cells,
-      new_attrs: new_attrs
-    };
-  };
-
-  Grid_Layout.prototype.update_attrs = function (attrs) {
-    this.rows = attrs.rows;
-    this.cols = attrs.cols;
-    this.gap = attrs.gap;
-  };
-
-  return Grid_Layout;
-}();
-
-exports.Grid_Layout = Grid_Layout; // grid-template-{column,row}: ...
-// Take a vector of css sizes and turn into the format for the css argument for
-
-function sizes_to_template_def(defs) {
-  return defs.join(" ");
-}
-
-function equal_arrays(a, b) {
-  if (a.length !== b.length) return false;
-
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-
-  return true;
-}
-},{}],"utils-icons.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.browser_header_html = exports.elements_icon = exports.instructions_icon = exports.settings_icon = exports.minus_icon = exports.plus_icon = exports.drag_icon = exports.top_left_arrow = exports.nw_arrow = exports.se_arrow = exports.bottom_right_arrow = exports.trashcan_icon = exports.horizontal_drag_icon = exports.vertical_drag_icon = void 0;
-exports.vertical_drag_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M21 11H3V9H21V11M21 13H3V15H21V13Z\" />\n</svg>";
-exports.horizontal_drag_icon = "<svg style=\"width:24px;height:24px;max-height:100%;\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M11 21H9V3H11V21M15 3H13V21H15V3Z\" />\n</svg>";
-exports.trashcan_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z\" />\n</svg>";
-exports.bottom_right_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
-exports.se_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
-exports.nw_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z\" />\n</svg>";
-exports.top_left_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
-exports.drag_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z\" />\n</svg>";
-exports.plus_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z\" />\n</svg>";
-exports.minus_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,13H5V11H19V13Z\" />\n</svg>";
-exports.settings_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z\" />\n</svg>";
-exports.instructions_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z\" />\n</svg>";
-exports.elements_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z\" />\n</svg>";
-exports.browser_header_html = "<div id=\"buttons-container\">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id=\"url-box\">\n  <span> www.myShinyApp.com </span>\n</div>";
-},{}],"utils-misc.ts":[function(require,module,exports) {
+})({"utils-misc.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -557,7 +388,9 @@ function get_drag_extent_on_grid(app_state, selection_rect) {
   // Reset bounding box definitions so we only use current selection extent
   var sel_bounds = {
     start_col: null,
-    start_row: null
+    end_col: null,
+    start_row: null,
+    end_row: null
   };
   app_state.current_cells.forEach(function (el) {
     // Cell is overlapped by selection box
@@ -589,7 +422,12 @@ exports.bounding_rect_to_css_pos = bounding_rect_to_css_pos;
 function gen_code_for_layout(elements, grid_styles) {
   var container_selector = "#container";
   var element_defs = elements.map(function (el) {
-    return utils_misc_1.concat_nl("#" + el.id + " {", "  grid-column: " + make_template_start_end(el.start_col, el.end_col) + ";", "  grid-row: " + make_template_start_end(el.start_row, el.end_row) + ";", "}");
+    var _a = el.grid_pos,
+        start_row = _a.start_row,
+        end_row = _a.end_row,
+        start_col = _a.start_col,
+        end_col = _a.end_col;
+    return utils_misc_1.concat_nl("#" + el.id + " {", "  grid-column: " + make_template_start_end(start_col, end_col) + ";", "  grid-row: " + make_template_start_end(start_row, end_row) + ";", "}");
   });
   var css_code = utils_misc_1.concat_nl.apply(void 0, __spreadArray([container_selector + " {", "  display: grid;", "  grid-template-columns: " + grid_styles.gridTemplateColumns + ";", "  grid-template-rows: " + grid_styles.gridTemplateRows + ";", "  gap: " + get_gap_size(grid_styles), "}"], element_defs));
   var html_code = utils_misc_1.concat_nl.apply(void 0, __spreadArray(__spreadArray(["<div id = " + container_selector + ">"], elements.map(function (el) {
@@ -618,12 +456,17 @@ exports.get_gap_size = get_gap_size;
 function contains_element(layout, el) {
   var num_rows = layout.rows.length;
   var num_cols = layout.cols.length;
+  var _a = el.grid_pos,
+      start_row = _a.start_row,
+      end_row = _a.end_row,
+      start_col = _a.start_col,
+      end_col = _a.end_col;
 
-  if (el.start_row > num_rows || el.start_col > num_cols) {
+  if (start_row > num_rows || start_col > num_cols) {
     return "outside";
   }
 
-  if (el.end_row > num_rows || el.end_col > num_cols) {
+  if (end_row > num_rows || end_col > num_cols) {
     return "partially";
   }
 
@@ -648,7 +491,6 @@ exports.shrink_element_to_layout = shrink_element_to_layout;
 function grid_position_of_el(el) {
   var grid_area = el.style.gridArea.split(" / ");
   return {
-    id: el.id,
     start_row: +grid_area[0],
     start_col: +grid_area[1],
     // Subtract one here because the end in css is the end line, not row
@@ -658,7 +500,262 @@ function grid_position_of_el(el) {
 }
 
 exports.grid_position_of_el = grid_position_of_el;
-},{"./utils-misc":"utils-misc.ts"}],"make-elements.ts":[function(require,module,exports) {
+},{"./utils-misc":"utils-misc.ts"}],"Grid_Item.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Grid_Item = void 0;
+
+var utils_grid_1 = require("./utils-grid");
+
+var utils_misc_1 = require("./utils-misc");
+
+var Grid_Item =
+/** @class */
+function () {
+  function Grid_Item(el, mirrored_el) {
+    this.el = el;
+    this.mirrored_el = mirrored_el;
+  }
+
+  Object.defineProperty(Grid_Item.prototype, "position", {
+    get: function get() {
+      return utils_grid_1.get_pos_on_grid(this.el);
+    },
+    set: function set(pos) {
+      utils_grid_1.set_element_in_grid(this.el, pos);
+
+      if (this.has_mirrored) {
+        utils_grid_1.set_element_in_grid(this.mirrored_el, pos);
+      }
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Item.prototype, "bounding_rect", {
+    get: function get() {
+      return utils_misc_1.get_bounding_rect(this.el);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Item.prototype, "has_mirrored", {
+    get: function get() {
+      return typeof this.mirrored_el !== "undefined";
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Item.prototype, "style", {
+    get: function get() {
+      return this.el.style;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Grid_Item.prototype.fill_if_in_auto_row = function (parent_layout) {
+    var in_auto_row = parent_layout.item_row_sizes(this.position).includes("auto");
+
+    if (in_auto_row) {
+      this.el.innerHTML = utils_misc_1.filler_text;
+    }
+  };
+
+  Grid_Item.prototype.remove = function () {
+    this.el.remove();
+
+    if (this.has_mirrored) {
+      this.mirrored_el.remove();
+    }
+  };
+
+  return Grid_Item;
+}();
+
+exports.Grid_Item = Grid_Item;
+},{"./utils-grid":"utils-grid.ts","./utils-misc":"utils-misc.ts"}],"Grid_Layout.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Grid_Layout = void 0;
+
+var Grid_Layout =
+/** @class */
+function () {
+  function Grid_Layout(container) {
+    this.container = container;
+    this.styles = container.style;
+    console.log("Initialized Grid_Layout");
+  }
+
+  Object.defineProperty(Grid_Layout.prototype, "rows", {
+    get: function get() {
+      return this.styles.gridTemplateRows.split(" ");
+    },
+    set: function set(new_rows) {
+      if (typeof new_rows === "undefined") return;
+      this.styles.gridTemplateRows = new_rows.join(" ");
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_rows", {
+    get: function get() {
+      return this.rows.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "cols", {
+    get: function get() {
+      return this.styles.gridTemplateColumns.split(" ");
+    },
+    set: function set(new_cols) {
+      if (typeof new_cols === "undefined") return;
+      this.styles.gridTemplateColumns = new_cols.join(" ");
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "num_cols", {
+    get: function get() {
+      return this.cols.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "gap", {
+    get: function get() {
+      return this.styles.gap;
+    },
+    set: function set(new_gap) {
+      if (typeof new_gap === "undefined") return; // This sets the --grid-gap variable so that the controls that need the
+      // info can use it to keep a constant distance from the grid holder
+
+      this.container.parentElement.style.setProperty("--grid-gap", new_gap); // We dont use css variables in the exported css that existing apps used
+      // so we need to modify both gap and padding
+
+      this.styles.gap = new_gap;
+      this.styles.padding = new_gap;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Grid_Layout.prototype, "attrs", {
+    get: function get() {
+      return {
+        rows: this.rows,
+        cols: this.cols,
+        gap: this.gap
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Grid_Layout.prototype.is_updated_val = function (attr, values) {
+    if (attr === "gap") {
+      return values !== this.gap;
+    } else if (_typeof(values) === "object") {
+      return !equal_arrays(this[attr], values);
+    }
+  }; // Given a new set of attributes, tells you which ones are different from
+  // current values
+
+
+  Grid_Layout.prototype.changed_attributes = function (attrs) {
+    var changed = [];
+    var new_attrs = this.attrs;
+    if (attrs.rows) new_attrs.rows = attrs.rows;
+    if (attrs.cols) new_attrs.cols = attrs.cols;
+    if (attrs.gap) new_attrs.gap = attrs.gap;
+    var new_num_cells = false;
+
+    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
+      changed.push("rows");
+      new_num_cells = true;
+    }
+
+    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
+      changed.push("cols");
+      new_num_cells = true;
+    }
+
+    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
+      changed.push("gap");
+    }
+
+    return {
+      changed: changed,
+      new_num_cells: new_num_cells,
+      new_attrs: new_attrs
+    };
+  };
+
+  Grid_Layout.prototype.update_attrs = function (attrs) {
+    this.rows = attrs.rows;
+    this.cols = attrs.cols;
+    this.gap = attrs.gap;
+  };
+
+  Grid_Layout.prototype.sizes_for_tract = function (item_pos, dir) {
+    var _a, _b;
+
+    var start_index = (_a = item_pos["start_" + dir]) !== null && _a !== void 0 ? _a : item_pos["end_" + dir];
+    var end_index = (_b = item_pos["end_" + dir]) !== null && _b !== void 0 ? _b : item_pos["start_" + dir];
+    var tract_sizes = dir === "row" ? this.rows : this.cols;
+    return tract_sizes.filter(function (val, i) {
+      return i + 1 >= start_index && i + 1 <= end_index;
+    });
+  };
+
+  Grid_Layout.prototype.item_row_sizes = function (item_pos) {
+    return this.sizes_for_tract(item_pos, "row");
+  };
+
+  return Grid_Layout;
+}();
+
+exports.Grid_Layout = Grid_Layout;
+
+function equal_arrays(a, b) {
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+
+  return true;
+}
+},{}],"utils-icons.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.browser_header_html = exports.elements_icon = exports.instructions_icon = exports.settings_icon = exports.minus_icon = exports.plus_icon = exports.drag_icon = exports.top_left_arrow = exports.nw_arrow = exports.se_arrow = exports.bottom_right_arrow = exports.trashcan_icon = exports.horizontal_drag_icon = exports.vertical_drag_icon = void 0;
+exports.vertical_drag_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M21 11H3V9H21V11M21 13H3V15H21V13Z\" />\n</svg>";
+exports.horizontal_drag_icon = "<svg style=\"width:24px;height:24px;max-height:100%;\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M11 21H9V3H11V21M15 3H13V21H15V3Z\" />\n</svg>";
+exports.trashcan_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z\" />\n</svg>";
+exports.bottom_right_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
+exports.se_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
+exports.nw_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z\" />\n</svg>";
+exports.top_left_arrow = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z\" />\n</svg>";
+exports.drag_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z\" />\n</svg>";
+exports.plus_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z\" />\n</svg>";
+exports.minus_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M19,13H5V11H19V13Z\" />\n</svg>";
+exports.settings_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z\" />\n</svg>";
+exports.instructions_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z\" />\n</svg>";
+exports.elements_icon = "<svg style=\"width:24px;height:24px\" viewBox=\"0 0 24 24\">\n<path fill=\"currentColor\" d=\"M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z\" />\n</svg>";
+exports.browser_header_html = "<div id=\"buttons-container\">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id=\"url-box\">\n  <span> www.myShinyApp.com </span>\n</div>";
+},{}],"make-elements.ts":[function(require,module,exports) {
 "use strict";
 
 var __spreadArray = this && this.__spreadArray || function (to, from) {
@@ -1327,6 +1424,22 @@ exports.find_selector_by_property = find_selector_by_property;
 },{"./utils-misc":"utils-misc.ts"}],"utils-shiny.ts":[function(require,module,exports) {
 "use strict";
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1367,7 +1480,9 @@ exports.send_grid_sizing_to_shiny = send_grid_sizing_to_shiny;
 function send_elements_to_shiny(elements) {
   var elements_by_id = {};
   elements.forEach(function (el) {
-    elements_by_id[el.id] = el;
+    elements_by_id[el.id] = __assign({
+      id: el.id
+    }, el.grid_pos);
   });
   setShinyInput("elements", elements_by_id);
 }
@@ -1500,7 +1615,7 @@ function wrap_in_grided(app_state) {
     app_state.add_element({
       id: el.id,
       grid_pos: utils_grid_1.get_pos_on_grid(el),
-      existing_element: el
+      mirrored_element: el
     });
   });
 
@@ -1543,6 +1658,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.make_settings_panel = exports.update_grid = exports.App_State = void 0;
 
+var Grid_Item_1 = require("./Grid_Item");
+
 var Grid_Layout_1 = require("./Grid_Layout");
 
 var make_css_unit_input_1 = require("./make-css_unit_input");
@@ -1574,7 +1691,6 @@ function () {
     this.elements = [];
     var grid_layout_rule = utils_cssom_1.find_selector_by_property("display", "grid");
     this.container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page";
-    this.container_stylesheet = grid_layout_rule.first_rule_w_prop.style;
     this.container = grid_layout_rule.rule_exists ? document.querySelector(this.container_selector) : make_elements_1.Block_El("div#grid_page");
     this.controls = {
       rows: [],
@@ -1591,7 +1707,7 @@ function () {
     this.mode = grid_is_filled ? "Existing" : "New";
 
     if (grid_is_filled) {
-      var current_grid_props = this.container_stylesheet; // Make sure grid matches the one the app is working with
+      var current_grid_props = grid_layout_rule.first_rule_w_prop.style; // Make sure grid matches the one the app is working with
 
       update_grid(this, {
         rows: current_grid_props.gridTemplateRows.split(" "),
@@ -1626,11 +1742,11 @@ function () {
   });
   Object.defineProperty(App_State.prototype, "current_elements", {
     get: function get() {
-      var all_elements = this.elements.map(function (_a) {
-        var grid_el = _a.grid_el;
-        return utils_grid_1.grid_position_of_el(grid_el);
+      // Make sure grid position is current
+      this.elements.forEach(function (el) {
+        el.grid_pos = utils_grid_1.grid_position_of_el(el.grid_el);
       });
-      return all_elements;
+      return this.elements;
     },
     enumerable: false,
     configurable: true
@@ -1640,13 +1756,31 @@ function () {
     // If element ids were generated with the grid_container R function then
     // they have a prefix of the container name which we should remove so the
     // added elements list is not ugly looking
-    if (el_props.existing_element) {
+    if (el_props.mirrored_element) {
       el_props.id = el_props.id.replace(/^.+?__/g, "");
     }
 
-    this.elements.push(__assign({
-      id: el_props.id
-    }, draw_elements(this, el_props))); // Let shiny know we have a new element
+    var grid_el = this.make_el("div#" + el_props.id + ".el_" + el_props.id + ".added-element", {
+      styles: {
+        borderColor: this.next_color,
+        position: "relative"
+      }
+    });
+    var grid_item = new Grid_Item_1.Grid_Item(grid_el, el_props.mirrored_element);
+    grid_item.position = el_props.grid_pos;
+    grid_item.fill_if_in_auto_row(this.grid_layout);
+    var list_el = draw_elements(this, {
+      id: el_props.id,
+      grid_item: grid_item
+    });
+
+    var new_element_entry = __assign(__assign({}, el_props), {
+      grid_el: grid_el,
+      list_el: list_el,
+      grid_item: grid_item
+    });
+
+    this.elements.push(new_element_entry); // Let shiny know we have a new element
 
     utils_shiny_1.send_elements_to_shiny(this.current_elements);
   };
@@ -1713,21 +1847,23 @@ function () {
     var start_loc;
     var editor_el = document.querySelector("#grided__editor");
 
-    var update_grid_pos = function update_grid_pos(element, bounding_rect) {
+    var update_grid_pos = function update_grid_pos(grid_item, bounding_rect) {
       var grid_extent = utils_grid_1.get_drag_extent_on_grid(_this, bounding_rect);
-      utils_grid_1.set_element_in_grid(element, grid_extent);
+      grid_item.position = grid_extent;
       return grid_extent;
     };
 
     opts.watching_element.onmousedown = function (event) {
+      var _a;
+
       start_loc = event; // make sure dragged element is on top
 
-      _this.container.appendChild(opts.grid_element); // If this is a new element drag there wont be a bounding box for the grid
+      _this.container.appendChild(opts.grid_item.el); // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
       // of the drag
 
 
-      start_rect = utils_misc_1.get_bounding_rect(opts.grid_element) || {
+      start_rect = ((_a = opts.grid_item) === null || _a === void 0 ? void 0 : _a.bounding_rect) || {
         left: event.offsetX,
         right: event.offsetX,
         top: event.offsetY,
@@ -1738,7 +1874,7 @@ function () {
       }); // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
 
-      update_grid_pos(opts.grid_element, start_rect);
+      update_grid_pos(opts.grid_item, start_rect);
       if (opts.on_start) opts.on_start(start_loc); // Add listener to editor so we can continue to track this drag
 
       editor_el.addEventListener("mousemove", drag);
@@ -1754,7 +1890,7 @@ function () {
         y: curr_loc.y - start_loc.y
       }, opts.drag_dir);
       Object.assign(drag_feedback_rect.style, utils_grid_1.bounding_rect_to_css_pos(new_rect));
-      var grid_extent = update_grid_pos(opts.grid_element, new_rect);
+      var grid_extent = update_grid_pos(opts.grid_item, new_rect);
       if (opts.on_drag) opts.on_drag({
         xy: curr_loc,
         grid: grid_extent
@@ -1762,13 +1898,15 @@ function () {
     }
 
     function drag_end(event) {
+      var _a;
+
       var end_loc = event;
       drag_feedback_rect.remove();
       start_rect = null;
       start_loc = null;
       if (opts.on_end) opts.on_end({
         xy: end_loc,
-        grid: utils_grid_1.get_pos_on_grid(opts.grid_element || this.parentElement)
+        grid: ((_a = opts.grid_item) === null || _a === void 0 ? void 0 : _a.position) || utils_grid_1.get_pos_on_grid(this.parentElement)
       });
       editor_el.removeEventListener("mousemove", drag);
       editor_el.removeEventListener("mouseup", drag_end);
@@ -1800,7 +1938,7 @@ function update_grid(app_state, opts) {
         return;
       }
 
-      if (app_state.get_element(el.id).mirrors_existing) {
+      if (app_state.get_element(el.id).mirrored_element) {
         danger_elements_1.conflicting.push(el);
         return;
       }
@@ -1839,7 +1977,12 @@ function update_grid(app_state, opts) {
   }
 
   app_state.update_settings_panel(opts);
-  app_state.grid_layout.update_attrs(opts);
+  app_state.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
+  // is clear to user
+
+  app_state.current_elements.forEach(function (el) {
+    el.grid_item.fill_if_in_auto_row(app_state.grid_layout);
+  });
 
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
@@ -1870,7 +2013,9 @@ function fill_grid_cells(app_state) {
           },
           grid_pos: {
             start_row: row_i,
-            start_col: col_i
+            end_row: row_i,
+            start_col: col_i,
+            end_col: col_i
           }
         }));
       }
@@ -1912,11 +2057,11 @@ function fill_grid_cells(app_state) {
       _loop_1(type);
     }
 
-    var current_selection_box_1 = app_state.make_el("div#current_selection_box.added-element");
+    var current_selection_box_1 = new Grid_Item_1.Grid_Item(app_state.make_el("div#current_selection_box.added-element"));
     var drag_canvas = app_state.make_el("div#drag_canvas");
     app_state.setup_drag({
       watching_element: drag_canvas,
-      grid_element: current_selection_box_1,
+      grid_item: current_selection_box_1,
       drag_dir: "bottom-right",
       on_start: function on_start() {
         current_selection_box_1.style.borderColor = app_state.next_color;
@@ -2036,7 +2181,6 @@ function element_naming_ui(app_state, _a) {
 
         app_state.add_element({
           id: id,
-          color: selection_box.style.borderColor,
           grid_pos: grid_pos
         });
         reset_el_creation();
@@ -2095,41 +2239,29 @@ function element_naming_ui(app_state, _a) {
   }
 }
 
-function draw_elements(app_state, el_props) {
+function draw_elements(app_state, el_info) {
+  var id = el_info.id,
+      grid_item = el_info.grid_item;
   var el_color = app_state.next_color;
-  var mirrors_existing = typeof el_props.existing_element !== "undefined";
-  var grid_el = app_state.make_el("div#" + el_props.id + ".el_" + el_props.id + ".added-element", {
-    grid_pos: el_props.grid_pos,
-    // Add filler text for new elements so that auto-height will work
-    innerHTML: el_props.existing_element ? "" : utils_misc_1.filler_text,
-    styles: {
-      borderColor: el_color,
-      position: "relative"
-    }
-  }); // Setup drag behavior
+  var mirrors_existing = grid_item.has_mirrored; // Setup drag behavior
 
   ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
     app_state.setup_drag({
-      watching_element: make_elements_1.make_el(grid_el, "div.dragger.visible." + handle_type, {
+      watching_element: make_elements_1.make_el(grid_item.el, "div.dragger.visible." + handle_type, {
         styles: {
           background: el_color
         },
         innerHTML: handle_type === "center" ? utils_icons_1.drag_icon : handle_type === "bottom-right" ? utils_icons_1.se_arrow : utils_icons_1.nw_arrow
       }),
-      grid_element: grid_el,
+      grid_item: grid_item,
       drag_dir: handle_type,
-      on_drag: function on_drag(res) {
-        if (mirrors_existing) {
-          utils_grid_1.set_element_in_grid(el_props.existing_element, res.grid);
-        }
-      },
       on_end: function on_end() {
         utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
       }
     });
   });
-  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + el_props.id + ".added-element", {
-    innerHTML: el_props.id,
+  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + id + ".added-element", {
+    innerHTML: id,
     styles: {
       borderColor: el_color
     },
@@ -2137,13 +2269,13 @@ function draw_elements(app_state, el_props) {
       event: "mouseover",
       func: function func() {
         this.classList.add("hovered");
-        grid_el.classList.add("hovered");
+        grid_item.el.classList.add("hovered");
       }
     }, {
       event: "mouseout",
       func: function func() {
         this.classList.remove("hovered");
-        grid_el.classList.remove("hovered");
+        grid_item.el.classList.remove("hovered");
       }
     }]
   });
@@ -2157,17 +2289,13 @@ function draw_elements(app_state, el_props) {
       event_listener: {
         event: "click",
         func: function func() {
-          app_state.remove_elements(el_props.id);
+          app_state.remove_elements(id);
         }
       }
     });
   }
 
-  return {
-    grid_el: grid_el,
-    list_el: list_el,
-    mirrors_existing: mirrors_existing
-  };
+  return list_el;
 }
 
 function show_conflict_popup(conflicting_elements) {
@@ -2224,7 +2352,7 @@ function show_danger_popup(app_state, in_danger_els, on_finish) {
     innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
   });
 }
-},{"./Grid_Layout":"Grid_Layout.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"index.ts":[function(require,module,exports) {
+},{"./Grid_Item":"Grid_Item.ts","./Grid_Layout":"Grid_Layout.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2263,10 +2391,19 @@ window.onload = function () {
       return App_State_1.update_grid(app_state, opts);
     });
     utils_shiny_1.add_shiny_listener("add-elements", function (elements_to_add) {
-      elements_to_add.forEach(function (el) {
+      elements_to_add.forEach(function (el_msg) {
+        var start_row = el_msg.start_row,
+            end_row = el_msg.end_row,
+            start_col = el_msg.start_col,
+            end_col = el_msg.end_col;
         app_state.add_element({
-          id: el.id,
-          grid_pos: el
+          id: el_msg.id,
+          grid_pos: {
+            start_row: start_row,
+            end_row: end_row,
+            start_col: start_col,
+            end_col: end_col
+          }
         });
       });
     });

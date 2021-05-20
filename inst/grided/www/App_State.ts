@@ -1,5 +1,5 @@
+import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout } from "./Grid_Layout";
-import { Element_Info } from "./index";
 import {
   CSS_Input,
   get_css_unit,
@@ -23,15 +23,12 @@ import {
   get_pos_on_grid,
   grid_position_of_el,
   make_template_start_end,
-  set_element_in_grid,
   shrink_element_to_layout,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
   as_array,
   Drag_Type,
-  filler_text,
-  get_bounding_rect,
   Selection_Rect,
   set_class,
   update_rect_with_delta,
@@ -49,13 +46,6 @@ type Grid_Settings = {
   gap: CSS_Input;
 };
 
-export type Grid_Pos = {
-  start_col?: number;
-  end_col?: number;
-  start_row?: number;
-  end_row?: number;
-};
-
 export type Grid_Update_Options = {
   rows?: string[];
   cols?: string[];
@@ -69,27 +59,13 @@ type Drag_Res = {
   grid: Grid_Pos;
 };
 
-type Drag_Options = {
-  watching_element: HTMLElement;
-  drag_dir: Drag_Type;
-  grid_element?: HTMLElement;
-  on_start?: (start_loc: XY_Pos) => void;
-  on_drag?: (drag_info: Drag_Res) => void;
-  on_end?: (drag_info: Drag_Res) => void;
-};
-
-type New_Element = {
+export type Element_Info = {
   id: string;
-  color?: string;
   grid_pos: Grid_Pos;
-  existing_element?: HTMLElement;
-};
-
-type Element_Entries = {
-  id: string;
   grid_el: HTMLElement;
   list_el: HTMLElement;
-  mirrors_existing: boolean;
+  mirrored_element?: HTMLElement;
+  grid_item: Grid_Item;
 };
 
 export type App_Mode = "Existing" | "New";
@@ -99,11 +75,10 @@ export class App_State {
   settings_panel: Grid_Settings;
   // All the currently existing cells making up the grid
   current_cells: HTMLElement[] = [];
-  elements: Element_Entries[] = [];
+  elements: Element_Info[] = [];
 
   container_selector: string;
   container: HTMLElement;
-  container_stylesheet: CSSStyleDeclaration;
   grid_styles: CSSStyleDeclaration;
   mode: App_Mode;
   grid_layout: Grid_Layout;
@@ -114,7 +89,6 @@ export class App_State {
     this.container_selector = grid_layout_rule.rule_exists
       ? grid_layout_rule.selector
       : "#grid_page";
-    this.container_stylesheet = grid_layout_rule.first_rule_w_prop.style;
 
     this.container = grid_layout_rule.rule_exists
       ? document.querySelector(this.container_selector)
@@ -129,7 +103,7 @@ export class App_State {
     this.mode = grid_is_filled ? "Existing" : "New";
 
     if (grid_is_filled) {
-      const current_grid_props = this.container_stylesheet;
+      const current_grid_props = grid_layout_rule.first_rule_w_prop.style;
 
       // Make sure grid matches the one the app is working with
       update_grid(this, {
@@ -156,24 +130,49 @@ export class App_State {
   }
 
   get current_elements(): Element_Info[] {
-    const all_elements = this.elements.map(({ grid_el }) =>
-      grid_position_of_el(grid_el)
-    );
+    // Make sure grid position is current
+    this.elements.forEach((el) => {
+      el.grid_pos = grid_position_of_el(el.grid_el);
+    });
 
-    return all_elements;
+    return this.elements;
   }
 
-  add_element(el_props: New_Element) {
+  add_element(el_props: {
+    id: string;
+    grid_pos: Grid_Pos;
+    mirrored_element?: HTMLElement;
+  }) {
     // If element ids were generated with the grid_container R function then
     // they have a prefix of the container name which we should remove so the
     // added elements list is not ugly looking
-    if (el_props.existing_element) {
+    if (el_props.mirrored_element) {
       el_props.id = el_props.id.replace(/^.+?__/g, "");
     }
-    this.elements.push({
-      id: el_props.id,
-      ...draw_elements(this, el_props),
-    });
+
+    const grid_el = this.make_el(
+      `div#${el_props.id}.el_${el_props.id}.added-element`,
+      {
+        styles: {
+          borderColor: this.next_color,
+          position: "relative",
+        },
+      }
+    );
+
+    const grid_item = new Grid_Item(grid_el, el_props.mirrored_element);
+    grid_item.position = el_props.grid_pos;
+    grid_item.fill_if_in_auto_row(this.grid_layout);
+
+    const list_el = draw_elements(this, { id: el_props.id, grid_item });
+    const new_element_entry: Element_Info = {
+      ...el_props,
+      grid_el,
+      list_el,
+      grid_item,
+    };
+
+    this.elements.push(new_element_entry);
 
     // Let shiny know we have a new element
     send_elements_to_shiny(this.current_elements);
@@ -230,7 +229,14 @@ export class App_State {
     return make_el(this.container, sel_txt, opts);
   }
 
-  setup_drag(opts: Drag_Options) {
+  setup_drag(opts: {
+    watching_element: HTMLElement;
+    drag_dir: Drag_Type;
+    grid_item?: Grid_Item;
+    on_start?: (start_loc: XY_Pos) => void;
+    on_drag?: (drag_info: Drag_Res) => void;
+    on_end?: (drag_info: Drag_Res) => void;
+  }) {
     let drag_feedback_rect: HTMLElement;
     let start_rect: Selection_Rect;
     let start_loc: XY_Pos;
@@ -238,11 +244,11 @@ export class App_State {
     const editor_el: HTMLElement = document.querySelector("#grided__editor");
 
     const update_grid_pos = (
-      element: HTMLElement,
+      grid_item: Grid_Item,
       bounding_rect: Selection_Rect
     ): Grid_Pos => {
       const grid_extent = get_drag_extent_on_grid(this, bounding_rect);
-      set_element_in_grid(element, grid_extent);
+      grid_item.position = grid_extent;
       return grid_extent;
     };
 
@@ -250,12 +256,12 @@ export class App_State {
       start_loc = event as DragEvent;
 
       // make sure dragged element is on top
-      this.container.appendChild(opts.grid_element);
+      this.container.appendChild(opts.grid_item.el);
 
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
       // of the drag
-      start_rect = get_bounding_rect(opts.grid_element) || {
+      start_rect = opts.grid_item?.bounding_rect || {
         left: event.offsetX,
         right: event.offsetX,
         top: event.offsetY,
@@ -274,7 +280,7 @@ export class App_State {
 
       // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
-      update_grid_pos(opts.grid_element, start_rect);
+      update_grid_pos(opts.grid_item, start_rect);
 
       if (opts.on_start) opts.on_start(start_loc);
 
@@ -298,7 +304,7 @@ export class App_State {
         drag_feedback_rect.style,
         bounding_rect_to_css_pos(new_rect)
       );
-      const grid_extent = update_grid_pos(opts.grid_element, new_rect);
+      const grid_extent = update_grid_pos(opts.grid_item, new_rect);
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
 
@@ -310,7 +316,7 @@ export class App_State {
       if (opts.on_end)
         opts.on_end({
           xy: end_loc,
-          grid: get_pos_on_grid(opts.grid_element || this.parentElement),
+          grid: opts.grid_item?.position || get_pos_on_grid(this.parentElement),
         });
 
       editor_el.removeEventListener("mousemove", drag);
@@ -342,7 +348,7 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
         return;
       }
 
-      if (app_state.get_element(el.id).mirrors_existing) {
+      if (app_state.get_element(el.id).mirrored_element) {
         danger_elements.conflicting.push(el);
         return;
       }
@@ -382,6 +388,12 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
 
   app_state.grid_layout.update_attrs(opts);
 
+  // Put some filler text into items spanning auto rows so auto behavior
+  // is clear to user
+  app_state.current_elements.forEach((el) => {
+    el.grid_item.fill_if_in_auto_row(app_state.grid_layout);
+  });
+
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
   }
@@ -407,7 +419,12 @@ function fill_grid_cells(app_state: App_State) {
         app_state.current_cells.push(
           app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
             data_props: { row: row_i, col: col_i },
-            grid_pos: { start_row: row_i, start_col: col_i },
+            grid_pos: {
+              start_row: row_i,
+              end_row: row_i,
+              start_col: col_i,
+              end_col: col_i,
+            },
           })
         );
       }
@@ -450,14 +467,14 @@ function fill_grid_cells(app_state: App_State) {
         }
       );
     }
-    const current_selection_box = app_state.make_el(
-      "div#current_selection_box.added-element"
+    const current_selection_box = new Grid_Item(
+      app_state.make_el("div#current_selection_box.added-element")
     );
     const drag_canvas = app_state.make_el("div#drag_canvas");
 
     app_state.setup_drag({
       watching_element: drag_canvas,
-      grid_element: current_selection_box,
+      grid_item: current_selection_box,
       drag_dir: "bottom-right",
       on_start: () => {
         current_selection_box.style.borderColor = app_state.next_color;
@@ -583,11 +600,7 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
         }
 
         // Add the new element in to grid
-        app_state.add_element({
-          id,
-          color: selection_box.style.borderColor,
-          grid_pos,
-        });
+        app_state.add_element({ id, grid_pos });
 
         reset_el_creation();
       },
@@ -631,28 +644,20 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   }
 }
 
-function draw_elements(app_state: App_State, el_props: New_Element) {
+function draw_elements(
+  app_state: App_State,
+  el_info: { id: string; grid_item: Grid_Item }
+) {
+  const { id, grid_item } = el_info;
   const el_color = app_state.next_color;
-  const mirrors_existing = typeof el_props.existing_element !== "undefined";
-  const grid_el = app_state.make_el(
-    `div#${el_props.id}.el_${el_props.id}.added-element`,
-    {
-      grid_pos: el_props.grid_pos,
-      // Add filler text for new elements so that auto-height will work
-      innerHTML: el_props.existing_element ? "" : filler_text,
-      styles: {
-        borderColor: el_color,
-        position: "relative",
-      },
-    }
-  );
+  const mirrors_existing = grid_item.has_mirrored;
 
   // Setup drag behavior
   (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
     (handle_type: Drag_Type) => {
       app_state.setup_drag({
         watching_element: make_el(
-          grid_el,
+          grid_item.el,
           `div.dragger.visible.${handle_type}`,
           {
             styles: { background: el_color },
@@ -664,13 +669,8 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
                 : nw_arrow,
           }
         ),
-        grid_element: grid_el,
+        grid_item: grid_item,
         drag_dir: handle_type,
-        on_drag: (res) => {
-          if (mirrors_existing) {
-            set_element_in_grid(el_props.existing_element, res.grid);
-          }
-        },
         on_end: () => {
           send_elements_to_shiny(app_state.current_elements);
         },
@@ -680,23 +680,23 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
 
   const list_el = make_el(
     document.querySelector("#added_elements"),
-    `div.el_${el_props.id}.added-element`,
+    `div.el_${id}.added-element`,
     {
-      innerHTML: el_props.id,
+      innerHTML: id,
       styles: { borderColor: el_color },
       event_listener: [
         {
           event: "mouseover",
           func: function () {
             this.classList.add("hovered");
-            grid_el.classList.add("hovered");
+            grid_item.el.classList.add("hovered");
           },
         },
         {
           event: "mouseout",
           func: function () {
             this.classList.remove("hovered");
-            grid_el.classList.remove("hovered");
+            grid_item.el.classList.remove("hovered");
           },
         },
       ],
@@ -712,13 +712,13 @@ function draw_elements(app_state: App_State, el_props: New_Element) {
       event_listener: {
         event: "click",
         func: () => {
-          app_state.remove_elements(el_props.id);
+          app_state.remove_elements(id);
         },
       },
     });
   }
 
-  return { grid_el, list_el, mirrors_existing };
+  return list_el;
 }
 
 function show_conflict_popup(conflicting_elements: Element_Info[]) {

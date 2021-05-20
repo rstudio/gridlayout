@@ -1,8 +1,8 @@
 // Functions related to grid construction, editings, etc
 
-import { App_State, Grid_Pos } from "./App_State";
+import { App_State, Element_Info } from "./App_State";
+import { Grid_Pos } from "./Grid_Item";
 import { Layout_State } from "./Grid_Layout";
-import { Element_Info } from "./index";
 import { Code_Text } from "./make-focused_modal";
 import {
   boxes_overlap,
@@ -76,7 +76,7 @@ export function get_drag_extent_on_grid(
   selection_rect: Selection_Rect
 ): Grid_Pos {
   // Reset bounding box definitions so we only use current selection extent
-  const sel_bounds: Grid_Pos = { start_col: null, start_row: null };
+  const sel_bounds: Grid_Pos = { start_col: null, end_col: null, start_row: null, end_row: null };
 
   app_state.current_cells.forEach(function (el) {
     // Cell is overlapped by selection box
@@ -108,13 +108,15 @@ export function gen_code_for_layout(
 ): Array<Code_Text> {
   const container_selector = "#container";
 
-  const element_defs = elements.map((el) =>
-    concat_nl(
+  const element_defs = elements.map((el) => {
+    const {start_row, end_row, start_col, end_col} = el.grid_pos;
+    return concat_nl(
       `#${el.id} {`,
-      `  grid-column: ${make_template_start_end(el.start_col, el.end_col)};`,
-      `  grid-row: ${make_template_start_end(el.start_row, el.end_row)};`,
+      `  grid-column: ${make_template_start_end(start_col, end_col)};`,
+      `  grid-row: ${make_template_start_end(start_row, end_row)};`,
       `}`
     )
+  }
   );
 
   const css_code = concat_nl(
@@ -156,11 +158,13 @@ export function contains_element(
 ): "inside" | "partially" | "outside" {
   const num_rows = layout.rows.length;
   const num_cols = layout.cols.length;
-  if (el.start_row > num_rows || el.start_col > num_cols) {
+  const {start_row, end_row, start_col, end_col} = el.grid_pos;
+
+  if (start_row > num_rows || start_col > num_cols) {
     return "outside";
   }
 
-  if (el.end_row > num_rows || el.end_col > num_cols) {
+  if (end_row > num_rows || end_col > num_cols) {
     return "partially";
   }
 
@@ -182,10 +186,9 @@ export function shrink_element_to_layout(
   );
 }
 
-export function grid_position_of_el(el: HTMLElement) {
+export function grid_position_of_el(el: HTMLElement): Grid_Pos {
   const grid_area = el.style.gridArea.split(" / ");
   return {
-    id: el.id,
     start_row: +grid_area[0],
     start_col: +grid_area[1],
     // Subtract one here because the end in css is the end line, not row
