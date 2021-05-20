@@ -150,25 +150,17 @@ export class App_State {
       el_props.id = el_props.id.replace(/^.+?__/g, "");
     }
 
-    const grid_el = this.make_el(
-      `div#${el_props.id}.el_${el_props.id}.added-element`,
-      {
-        styles: {
-          borderColor: this.next_color,
-          position: "relative",
-        },
-      }
-    );
+    const grid_item = draw_elements(this, {
+      id: el_props.id,
+      mirrored_el: el_props.mirrored_element,
+    });
 
-    const grid_item = new Grid_Item(grid_el, el_props.mirrored_element);
     grid_item.position = el_props.grid_pos;
-    grid_item.fill_if_in_auto_row(this.grid_layout);
 
-    const list_el = draw_elements(this, { id: el_props.id, grid_item });
     const new_element_entry: Element_Info = {
       ...el_props,
-      grid_el,
-      list_el,
+      grid_el: grid_item.el,
+      list_el: grid_item.sibling_el,
       grid_item,
     };
 
@@ -187,10 +179,8 @@ export class App_State {
   // Removes elements the user has added to the grid by id
   remove_elements(ids: string | Array<string>) {
     as_array(ids).forEach((el_id) => {
-      const entry_index = this.elements.findIndex((el) => (el.id = el_id));
-      const element_entries = this.elements[entry_index];
-      remove_elements([element_entries.grid_el, element_entries.list_el]);
-      // Remove from current elements list
+      const entry_index = this.elements.findIndex((el) => el.id === el_id);
+      this.elements[entry_index].grid_item.remove();
       this.elements.splice(entry_index, 1);
     });
 
@@ -340,6 +330,7 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
         updated_attributes.new_attrs,
         el
       );
+      // const element_position = el.grid_item.contained_in_layout(updated_attributes.new_attrs);
 
       if (element_position === "inside") return;
 
@@ -391,7 +382,7 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
   // Put some filler text into items spanning auto rows so auto behavior
   // is clear to user
   app_state.current_elements.forEach((el) => {
-    el.grid_item.fill_if_in_auto_row(app_state.grid_layout);
+    el.grid_item.fill_if_in_auto_row();
   });
 
   if (updated_attributes.new_num_cells || opts.force) {
@@ -467,9 +458,10 @@ function fill_grid_cells(app_state: App_State) {
         }
       );
     }
-    const current_selection_box = new Grid_Item(
-      app_state.make_el("div#current_selection_box.added-element")
-    );
+    const current_selection_box = new Grid_Item({
+      el: app_state.make_el("div#current_selection_box.added-element"),
+      parent_layout: app_state.grid_layout,
+    });
     const drag_canvas = app_state.make_el("div#drag_canvas");
 
     app_state.setup_drag({
@@ -646,18 +638,57 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
 
 function draw_elements(
   app_state: App_State,
-  el_info: { id: string; grid_item: Grid_Item }
+  el_info: { id: string; mirrored_el: HTMLElement }
 ) {
-  const { id, grid_item } = el_info;
+  const { id, mirrored_el } = el_info;
   const el_color = app_state.next_color;
-  const mirrors_existing = grid_item.has_mirrored;
+  const mirrors_existing = typeof mirrored_el !== "undefined";
+
+  const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element`, {
+    styles: {
+      borderColor: app_state.next_color,
+      position: "relative",
+    },
+  });
+
+  const list_el = make_el(
+    document.querySelector("#added_elements"),
+    `div.el_${id}.added-element`,
+    {
+      innerHTML: id,
+      styles: { borderColor: el_color },
+      event_listener: [
+        {
+          event: "mouseover",
+          func: function () {
+            this.classList.add("hovered");
+            grid_el.classList.add("hovered");
+          },
+        },
+        {
+          event: "mouseout",
+          func: function () {
+            this.classList.remove("hovered");
+            grid_el.classList.remove("hovered");
+          },
+        },
+      ],
+    }
+  );
+
+  const grid_item = new Grid_Item({
+    el: grid_el,
+    mirrored_el,
+    sibling_element: list_el,
+    parent_layout: app_state.grid_layout,
+  });
 
   // Setup drag behavior
   (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
     (handle_type: Drag_Type) => {
       app_state.setup_drag({
         watching_element: make_el(
-          grid_item.el,
+          grid_el,
           `div.dragger.visible.${handle_type}`,
           {
             styles: { background: el_color },
@@ -678,31 +709,6 @@ function draw_elements(
     }
   );
 
-  const list_el = make_el(
-    document.querySelector("#added_elements"),
-    `div.el_${id}.added-element`,
-    {
-      innerHTML: id,
-      styles: { borderColor: el_color },
-      event_listener: [
-        {
-          event: "mouseover",
-          func: function () {
-            this.classList.add("hovered");
-            grid_item.el.classList.add("hovered");
-          },
-        },
-        {
-          event: "mouseout",
-          func: function () {
-            this.classList.remove("hovered");
-            grid_item.el.classList.remove("hovered");
-          },
-        },
-      ],
-    }
-  );
-
   if (!mirrors_existing) {
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
@@ -718,7 +724,7 @@ function draw_elements(
     });
   }
 
-  return list_el;
+  return grid_item;
 }
 
 function show_conflict_popup(conflicting_elements: Element_Info[]) {

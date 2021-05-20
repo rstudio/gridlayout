@@ -515,9 +515,8 @@ var utils_misc_1 = require("./utils-misc");
 var Grid_Item =
 /** @class */
 function () {
-  function Grid_Item(el, mirrored_el) {
-    this.el = el;
-    this.mirrored_el = mirrored_el;
+  function Grid_Item(opts) {
+    Object.assign(this, opts);
   }
 
   Object.defineProperty(Grid_Item.prototype, "position", {
@@ -530,6 +529,8 @@ function () {
       if (this.has_mirrored) {
         utils_grid_1.set_element_in_grid(this.mirrored_el, pos);
       }
+
+      this.fill_if_in_auto_row();
     },
     enumerable: false,
     configurable: true
@@ -556,8 +557,28 @@ function () {
     configurable: true
   });
 
-  Grid_Item.prototype.fill_if_in_auto_row = function (parent_layout) {
-    var in_auto_row = parent_layout.item_row_sizes(this.position).includes("auto");
+  Grid_Item.prototype.contained_in_layout = function (layout) {
+    var num_rows = layout.rows.length;
+    var num_cols = layout.cols.length;
+    var _a = this.position,
+        start_row = _a.start_row,
+        end_row = _a.end_row,
+        start_col = _a.start_col,
+        end_col = _a.end_col;
+
+    if (start_row > num_rows || start_col > num_cols) {
+      return "outside";
+    }
+
+    if (end_row > num_rows || end_col > num_cols) {
+      return "partially";
+    }
+
+    return "inside";
+  };
+
+  Grid_Item.prototype.fill_if_in_auto_row = function () {
+    var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
 
     if (in_auto_row) {
       this.el.innerHTML = utils_misc_1.filler_text;
@@ -569,6 +590,10 @@ function () {
 
     if (this.has_mirrored) {
       this.mirrored_el.remove();
+    }
+
+    if (this.sibling_el) {
+      this.sibling_el.remove();
     }
   };
 
@@ -1760,23 +1785,15 @@ function () {
       el_props.id = el_props.id.replace(/^.+?__/g, "");
     }
 
-    var grid_el = this.make_el("div#" + el_props.id + ".el_" + el_props.id + ".added-element", {
-      styles: {
-        borderColor: this.next_color,
-        position: "relative"
-      }
-    });
-    var grid_item = new Grid_Item_1.Grid_Item(grid_el, el_props.mirrored_element);
-    grid_item.position = el_props.grid_pos;
-    grid_item.fill_if_in_auto_row(this.grid_layout);
-    var list_el = draw_elements(this, {
+    var grid_item = draw_elements(this, {
       id: el_props.id,
-      grid_item: grid_item
+      mirrored_el: el_props.mirrored_element
     });
+    grid_item.position = el_props.grid_pos;
 
     var new_element_entry = __assign(__assign({}, el_props), {
-      grid_el: grid_el,
-      list_el: list_el,
+      grid_el: grid_item.el,
+      list_el: grid_item.sibling_el,
       grid_item: grid_item
     });
 
@@ -1798,11 +1815,10 @@ function () {
 
     utils_misc_1.as_array(ids).forEach(function (el_id) {
       var entry_index = _this.elements.findIndex(function (el) {
-        return el.id = el_id;
+        return el.id === el_id;
       });
 
-      var element_entries = _this.elements[entry_index];
-      make_elements_1.remove_elements([element_entries.grid_el, element_entries.list_el]); // Remove from current elements list
+      _this.elements[entry_index].grid_item.remove();
 
       _this.elements.splice(entry_index, 1);
     });
@@ -1930,7 +1946,8 @@ function update_grid(app_state, opts) {
       conflicting: []
     };
     app_state.current_elements.forEach(function (el) {
-      var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el);
+      var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el); // const element_position = el.grid_item.contained_in_layout(updated_attributes.new_attrs);
+
       if (element_position === "inside") return;
 
       if (element_position === "partially") {
@@ -1981,7 +1998,7 @@ function update_grid(app_state, opts) {
   // is clear to user
 
   app_state.current_elements.forEach(function (el) {
-    el.grid_item.fill_if_in_auto_row(app_state.grid_layout);
+    el.grid_item.fill_if_in_auto_row();
   });
 
   if (updated_attributes.new_num_cells || opts.force) {
@@ -2057,7 +2074,10 @@ function fill_grid_cells(app_state) {
       _loop_1(type);
     }
 
-    var current_selection_box_1 = new Grid_Item_1.Grid_Item(app_state.make_el("div#current_selection_box.added-element"));
+    var current_selection_box_1 = new Grid_Item_1.Grid_Item({
+      el: app_state.make_el("div#current_selection_box.added-element"),
+      parent_layout: app_state.grid_layout
+    });
     var drag_canvas = app_state.make_el("div#drag_canvas");
     app_state.setup_drag({
       watching_element: drag_canvas,
@@ -2241,13 +2261,44 @@ function element_naming_ui(app_state, _a) {
 
 function draw_elements(app_state, el_info) {
   var id = el_info.id,
-      grid_item = el_info.grid_item;
+      mirrored_el = el_info.mirrored_el;
   var el_color = app_state.next_color;
-  var mirrors_existing = grid_item.has_mirrored; // Setup drag behavior
+  var mirrors_existing = typeof mirrored_el !== "undefined";
+  var grid_el = app_state.make_el("div#" + id + ".el_" + id + ".added-element", {
+    styles: {
+      borderColor: app_state.next_color,
+      position: "relative"
+    }
+  });
+  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + id + ".added-element", {
+    innerHTML: id,
+    styles: {
+      borderColor: el_color
+    },
+    event_listener: [{
+      event: "mouseover",
+      func: function func() {
+        this.classList.add("hovered");
+        grid_el.classList.add("hovered");
+      }
+    }, {
+      event: "mouseout",
+      func: function func() {
+        this.classList.remove("hovered");
+        grid_el.classList.remove("hovered");
+      }
+    }]
+  });
+  var grid_item = new Grid_Item_1.Grid_Item({
+    el: grid_el,
+    mirrored_el: mirrored_el,
+    sibling_element: list_el,
+    parent_layout: app_state.grid_layout
+  }); // Setup drag behavior
 
   ["top-left", "bottom-right", "center"].forEach(function (handle_type) {
     app_state.setup_drag({
-      watching_element: make_elements_1.make_el(grid_item.el, "div.dragger.visible." + handle_type, {
+      watching_element: make_elements_1.make_el(grid_el, "div.dragger.visible." + handle_type, {
         styles: {
           background: el_color
         },
@@ -2259,25 +2310,6 @@ function draw_elements(app_state, el_info) {
         utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
       }
     });
-  });
-  var list_el = make_elements_1.make_el(document.querySelector("#added_elements"), "div.el_" + id + ".added-element", {
-    innerHTML: id,
-    styles: {
-      borderColor: el_color
-    },
-    event_listener: [{
-      event: "mouseover",
-      func: function func() {
-        this.classList.add("hovered");
-        grid_item.el.classList.add("hovered");
-      }
-    }, {
-      event: "mouseout",
-      func: function func() {
-        this.classList.remove("hovered");
-        grid_item.el.classList.remove("hovered");
-      }
-    }]
   });
 
   if (!mirrors_existing) {
@@ -2295,7 +2327,7 @@ function draw_elements(app_state, el_info) {
     });
   }
 
-  return list_el;
+  return grid_item;
 }
 
 function show_conflict_popup(conflicting_elements) {

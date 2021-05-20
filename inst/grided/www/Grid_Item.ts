@@ -1,6 +1,6 @@
 import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
 import { filler_text, get_bounding_rect } from "./utils-misc";
-import { Grid_Layout } from "./Grid_Layout";
+import { Grid_Layout, Layout_State } from "./Grid_Layout";
 
 export type Grid_Pos = {
   start_col: number;
@@ -10,13 +10,26 @@ export type Grid_Pos = {
 };
 
 export class Grid_Item {
-  constructor(public el: HTMLElement, public mirrored_el?: HTMLElement) {}
+  el: HTMLElement;
+  mirrored_el?: HTMLElement;
+  sibling_el?: HTMLElement;
+  parent_layout: Grid_Layout;
+
+  constructor(opts: {
+    el: HTMLElement;
+    mirrored_el?: HTMLElement;
+    sibling_element?: HTMLElement;
+    parent_layout: Grid_Layout;
+  }) {
+    Object.assign(this, opts);
+  }
 
   set position(pos: Grid_Pos) {
     set_element_in_grid(this.el, pos);
     if (this.has_mirrored) {
       set_element_in_grid(this.mirrored_el, pos);
     }
+    this.fill_if_in_auto_row();
   }
 
   get position() {
@@ -35,8 +48,26 @@ export class Grid_Item {
     return this.el.style;
   }
 
-  fill_if_in_auto_row(parent_layout: Grid_Layout) {
-    const in_auto_row = parent_layout
+  contained_in_layout(
+    layout: Layout_State
+  ): "inside" | "partially" | "outside" {
+    const num_rows = layout.rows.length;
+    const num_cols = layout.cols.length;
+    const { start_row, end_row, start_col, end_col } = this.position;
+
+    if (start_row > num_rows || start_col > num_cols) {
+      return "outside";
+    }
+
+    if (end_row > num_rows || end_col > num_cols) {
+      return "partially";
+    }
+
+    return "inside";
+  }
+
+  fill_if_in_auto_row() {
+    const in_auto_row = this.parent_layout
       .item_row_sizes(this.position)
       .includes("auto");
 
@@ -49,6 +80,9 @@ export class Grid_Item {
     this.el.remove();
     if (this.has_mirrored) {
       this.mirrored_el.remove();
+    }
+    if (this.sibling_el) {
+      this.sibling_el.remove();
     }
   }
 }
