@@ -1,4 +1,4 @@
-import { Layout_State } from "./App_State";
+import { Layout_State } from "./Grid_Layout";
 import { Element_Info, Shiny } from "./index";
 
 // These are functions for communicating with Shiny. They are all optional

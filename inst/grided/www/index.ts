@@ -1,22 +1,14 @@
 // JS entry point
-import { App_State, Grid_Update_Options } from "./App_State";
-import { Block_El } from "./make-elements";
+import { App_State, Grid_Update_Options, update_grid } from "./App_State";
 import { show_code } from "./make-focused_modal";
 import {
-  find_selector_by_property,
-  get_css_props_by_selector
-} from "./utils-cssom";
-import {
   gen_code_for_layout,
-  get_gap_size, get_pos_on_grid
 } from "./utils-grid";
 import {
   add_shiny_listener,
   send_elements_to_shiny,
   send_grid_sizing_to_shiny,
-  setShinyInput
 } from "./utils-shiny";
-import { wrap_in_grided } from "./wrap_in_grided";
 
 export const Shiny = (window as any).Shiny;
 
@@ -31,41 +23,12 @@ export type Element_Info = {
 const debug_messages = true;
 
 window.onload = function () {
-  // Do we already have a div with id grid_page in our app? Aka the grided UI
-  // has been already added?
-  const grid_layout_rule = find_selector_by_property("display", "grid");
 
-  const grid_container_selector = grid_layout_rule.rule_exists
-    ? grid_layout_rule.selector
-    : "#grid_page";
+  const app_state = new App_State();
 
-  // This holds the grid element dom node. Gets filled in the onload callback
-  // I am using a global variable here because we query inside this so much that
-  // it felt silly to regrab it every time as it never moves.
-  const container: HTMLElement = grid_layout_rule.rule_exists
-    ? document.querySelector(grid_container_selector)
-    : Block_El("div#grid_page");
-
-  const { grid_is_filled, existing_children, settings_panel } = wrap_in_grided(
-    container,
-    setShinyInput
-  );
-
-  const app_state = new App_State({
-    controls: { rows: [], cols: [] },
-    settings_panel,
-    container,
-    grid_is_filled,
-  });
-
-  // Only set a default gap sizing if it isn't already provided
-  if (app_state.mode !== "ShinyExisting") {
-    app_state.container.style.gap = "1rem";
-    app_state.container.style.padding = "1rem";
-  }
-
-  add_shiny_listener("shiny-loaded", function () {
+  add_shiny_listener("shiny-loaded", function (x) {
     if (debug_messages) console.log("connected to shiny");
+    x; // this is needed to vscode doesn't flag arg as dead code and delete it
     // Send elements to Shiny so app is aware of what it's working with
     send_elements_to_shiny(app_state.current_elements);
     send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
@@ -75,41 +38,12 @@ window.onload = function () {
     document.querySelector("button#update_code").innerHTML = label_text;
   });
 
-  if (app_state.mode === "ShinyExisting") {
-    // If grided is running on an existing app, we need to parse the children and
-    // add them as elements;
-    existing_children.forEach(function (el) {
-      app_state.add_element({
-        id: el.id,
-        grid_pos: get_pos_on_grid(el as HTMLElement),
-        existing_element: el as HTMLElement,
-      });
-    });
-
-    // Container styles are in this object
-    const current_grid_props: {
-      gridTemplateRows?: string;
-      gridTemplateColumns?: string;
-      gap?: string;
-    } = get_css_props_by_selector(grid_container_selector, [
-      "gridTemplateColumns",
-      "gridTemplateRows",
-      "gap",
-    ]);
-
-    // Make sure grid matches the one the app is working with
-    app_state.update_grid({
-      rows: current_grid_props.gridTemplateRows.split(" "),
-      cols: current_grid_props.gridTemplateColumns.split(" "),
-      gap: get_gap_size(current_grid_props.gap),
-      force: true,
-    });
-  } else if (app_state.mode === "ShinyNew") {
+  if (app_state.mode === "New") {
     // Need to use arrow function here so method is run on out app_state object
     // if we just passed app_state.update_grid as the callback its just the method
     // without the object behind it,
     add_shiny_listener("update-grid", (opts: Grid_Update_Options) =>
-      app_state.update_grid(opts)
+      update_grid(app_state, opts)
     );
 
     add_shiny_listener("add-elements", function (
@@ -122,24 +56,25 @@ window.onload = function () {
         });
       });
     });
-  } else {
-    // If in pure-client-side mode we need to provide a default grid and also wireup the code button
-    app_state.update_grid({
-      rows: ["1fr", "1fr"],
-      cols: ["1fr", "1fr"],
-      gap: "1rem",
-    });
+  } 
+  // else {
+  //   // If in pure-client-side mode we need to provide a default grid and also wireup the code button
+  //   update_grid(app_state, {
+  //     rows: ["1fr", "1fr"],
+  //     cols: ["1fr", "1fr"],
+  //     gap: "1rem",
+  //   });
 
-    document.getElementById("get_code").addEventListener("click", function () {
-      show_code(
-        "Place the following in your CSS:",
-        gen_code_for_layout(
-          app_state.current_elements,
-          app_state.container.style
-        )
-      );
-    });
-  }
+  //   document.getElementById("get_code").addEventListener("click", function () {
+  //     show_code(
+  //       "Place the following in your CSS:",
+  //       gen_code_for_layout(
+  //         app_state.current_elements,
+  //         app_state.container.style
+  //       )
+  //     );
+  //   });
+  // }
 
   add_shiny_listener("code_modal", function (code_to_show) {
     show_code("Paste the following code into your app to update the layout", {

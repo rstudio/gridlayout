@@ -1227,7 +1227,104 @@ function make_incrementer(_a) {
 }
 
 exports.make_incrementer = make_incrementer;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"utils-shiny.ts":[function(require,module,exports) {
+},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"utils-cssom.ts":[function(require,module,exports) {
+"use strict"; // Assumes that only one stylesheet has rules for the given selector and
+// that only one rule targeting that selector alone is defined
+// If target_property is provided the function will chose the sheet that defines
+
+var __spreadArray = this && this.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.find_selector_by_property = exports.get_styles_for_selector_with_targets = exports.get_css_props_by_selector = void 0;
+
+var utils_misc_1 = require("./utils-misc"); // Combines every style rule contained in all the style sheets on page into
+// a big array. Easier than navigating the nested structure of sheets => rules
+
+
+function get_all_style_rules() {
+  return utils_misc_1.flatten(__spreadArray([], document.styleSheets).map(function (x) {
+    return __spreadArray([], x.cssRules);
+  }));
+}
+
+function get_all_rules_for_selector(selector_text) {
+  // Find the stylesheet which contains the containers styles
+  var defines_ruleset = function defines_ruleset(selector_text) {
+    return function (rule) {
+      return rule.selectorText === selector_text;
+    };
+  };
+
+  return __spreadArray([], document.styleSheets).filter(function (style_sheet) {
+    return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
+  }).map(function (x) {
+    return __spreadArray([], x.cssRules).find(defines_ruleset(selector_text)).style;
+  });
+} // that given property (if multiple exist)
+
+
+function get_css_props_by_selector(selector_text, target_properties) {
+  var all_rules_for_selector = get_all_rules_for_selector(selector_text);
+  return target_properties.reduce(function (prop_values, prop) {
+    var _a;
+
+    var prop_val = (_a = all_rules_for_selector.find(function (rule) {
+      return rule[prop];
+    })) === null || _a === void 0 ? void 0 : _a[prop];
+
+    if (prop_val) {
+      prop_values[prop] = prop_val;
+    }
+
+    return prop_values;
+  }, {});
+}
+
+exports.get_css_props_by_selector = get_css_props_by_selector;
+
+function get_styles_for_selector_with_targets(selector_text, target_properties) {
+  var all_rules_for_selector = get_all_rules_for_selector(selector_text);
+  return all_rules_for_selector.find(function (rule) {
+    return has_all_props(rule, target_properties);
+  });
+}
+
+exports.get_styles_for_selector_with_targets = get_styles_for_selector_with_targets;
+
+function has_all_props(rule, props) {
+  for (var _i = 0, props_1 = props; _i < props_1.length; _i++) {
+    var prop = props_1[_i];
+    if (!!rule[prop]) return false;
+  }
+
+  return true;
+}
+
+function find_selector_by_property(property_id, property_value) {
+  var all_styles = get_all_style_rules();
+  var first_rule_w_prop = all_styles.filter(function (rule) {
+    return rule.style && rule.style[property_id] == property_value;
+  }).find(function (rule) {
+    return document.querySelector(rule.selectorText);
+  });
+  var rule_exists = Boolean(first_rule_w_prop);
+  return {
+    rule_exists: rule_exists,
+    first_rule_w_prop: first_rule_w_prop,
+    selector: rule_exists ? first_rule_w_prop.selectorText : ""
+  };
+}
+
+exports.find_selector_by_property = find_selector_by_property;
+},{"./utils-misc":"utils-misc.ts"}],"utils-shiny.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1276,7 +1373,145 @@ function send_elements_to_shiny(elements) {
 }
 
 exports.send_elements_to_shiny = send_elements_to_shiny;
-},{"./index":"index.ts"}],"App_State.ts":[function(require,module,exports) {
+},{"./index":"index.ts"}],"make-toggle_switch.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.make_toggle_switch = void 0;
+
+var make_elements_1 = require("./make-elements");
+
+function make_toggle_switch(off_text, on_text, on_change) {
+  var container = make_elements_1.Block_El("div.toggle-switch");
+  make_elements_1.make_el(container, "span.off-text", {
+    innerHTML: off_text
+  });
+  var label = make_elements_1.make_el(container, "label.switch");
+  make_elements_1.make_el(container, "span.on-text", {
+    innerHTML: on_text
+  });
+  make_elements_1.make_el(label, "input", {
+    props: {
+      type: "checkbox"
+    },
+    event_listener: {
+      event: "change",
+      func: function func(event) {
+        on_change(event.target.checked);
+      }
+    }
+  });
+  make_elements_1.make_el(label, "span.slider");
+
+  var _a = make_elements_1.Shadow_El("div.toggle-switch", container),
+      el = _a.el,
+      style_sheet = _a.style_sheet; // Add styles
+
+
+  style_sheet.innerHTML = toggle_styles;
+  return el;
+}
+
+exports.make_toggle_switch = make_toggle_switch;
+var toggle_styles = "\ndiv.toggle-switch {\n  display: inline-grid;\n  grid-template-columns: 1fr auto 1fr;\n  grid-gap: 3px;\n  width: 180px;\n  align-items: center;\n  justify-items: center;\n  padding-left: 4px;\n  padding-right: 4px;\n}\n\n.toggle-switch > span {\n  font-size: 1.2rem;\n}\n\n.toggle-switch > .off-text {\n  text-align: end;\n}\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border-radius: 34px;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: \"\";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  border-radius: 50%;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n";
+},{"./make-elements":"make-elements.ts"}],"wrap_in_grided.ts":[function(require,module,exports) {
+"use strict";
+
+var __spreadArray = this && this.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.wrap_in_grided = void 0;
+
+var make_elements_1 = require("./make-elements");
+
+var make_toggle_switch_1 = require("./make-toggle_switch");
+
+var utils_grid_1 = require("./utils-grid");
+
+var utils_icons_1 = require("./utils-icons");
+
+var utils_shiny_1 = require("./utils-shiny"); // Takes a grid element and wraps it in the grided ui. Also returns some useful
+// information such as if the element passed was empty and if not, the children
+// that it contains so they can be overlayed with editable element boxes
+
+
+function wrap_in_grided(app_state) {
+  var grid_is_filled = app_state.container.hasChildNodes();
+  var buttons = [action_button("get_code", "Get layout code"), action_button("update_code", "Update app")];
+
+  if (grid_is_filled) {
+    buttons.push(make_toggle_switch_1.make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
+  }
+
+  var settings_panel_el = make_elements_1.Block_El("div.card-body");
+  var grided_ui = make_elements_1.Block_El("div#grided__holder", make_elements_1.Block_El("div#grided__header", make_elements_1.Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), make_elements_1.Block_El.apply(void 0, __spreadArray(["div.code_btns"], buttons))), make_elements_1.Block_El("div#grided__settings", make_elements_1.Text_El("h3", utils_icons_1.settings_icon + " Settings"), settings_panel_el), make_elements_1.Block_El("div#grided__instructions", make_elements_1.Text_El("h3", utils_icons_1.instructions_icon + " Instructions"), make_elements_1.Text_El("div.card-body", "\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in \"Added elements\" panel and click the " + utils_icons_1.trashcan_icon + " icon</li>\n      </ul>")), make_elements_1.Block_El("div#grided__elements", make_elements_1.Text_El("h3", utils_icons_1.elements_icon + " Added elements"), make_elements_1.Block_El("div.card-body", make_elements_1.Block_El("div#added_elements"))), make_elements_1.Block_El("div#grided__editor", make_elements_1.Block_El("div#editor-wrapper", make_elements_1.Text_El("div#editor-browser-header", utils_icons_1.browser_header_html), make_elements_1.Block_El("div#editor-app-window", app_state.container)))); // Make grided UI direct child of the body
+
+  document.querySelector("body").appendChild(grided_ui); // Setup some basic styles for the container to make sure it fits into the
+  // grided interface properly.
+
+  app_state.grid_styles.height = "100%";
+  app_state.grid_styles.width = "100%";
+  app_state.grid_styles.display = "grid"; // Sometimes RMD styles will put a max-width of some amount which can mess
+  // stuff up on large screens. The tradeoff is that the app may appear wider
+  // than it eventually is. I think it's worth it.
+
+  app_state.grid_styles.maxWidth = "100%";
+
+  if (grid_is_filled) {
+    app_state.grid_styles.gap = "1rem";
+    app_state.grid_styles.padding = "1rem";
+  }
+
+  function toggle_interaction_mode(interact_is_on) {
+    __spreadArray(__spreadArray(__spreadArray([], app_state.container.querySelectorAll(".added-element")), app_state.container.querySelectorAll(".grid-cell")), [settings_panel_el, grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function (el) {
+      if (interact_is_on) {
+        el.classList.add("disabled");
+      } else {
+        el.classList.remove("disabled");
+      }
+    });
+  }
+
+  function action_button(id, label) {
+    var button_el = make_elements_1.Text_El("button#" + id, label);
+    button_el.addEventListener("click", function (event) {
+      utils_shiny_1.setShinyInput(id, 1, true);
+    });
+    return button_el;
+  } // If grided is running on an existing app, we need to parse the children and
+  // add them as elements;
+
+
+  __spreadArray([], app_state.container.children).forEach(function (el) {
+    var bbox = el.getBoundingClientRect(); // Only keep visible elements. This will (hopefully) filter out and
+    // script or style tags that find their way into the grid container
+
+    if (bbox.width === 0 && bbox.height === 0) return;
+    app_state.add_element({
+      id: el.id,
+      grid_pos: utils_grid_1.get_pos_on_grid(el),
+      existing_element: el
+    });
+  });
+
+  return {
+    settings_panel_el: settings_panel_el,
+    grid_is_filled: grid_is_filled
+  };
+}
+
+exports.wrap_in_grided = wrap_in_grided;
+},{"./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-shiny":"utils-shiny.ts"}],"App_State.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -1306,11 +1541,9 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.App_State = void 0;
+exports.make_settings_panel = exports.update_grid = exports.App_State = void 0;
 
 var Grid_Layout_1 = require("./Grid_Layout");
-
-var index_1 = require("./index");
 
 var make_css_unit_input_1 = require("./make-css_unit_input");
 
@@ -1320,6 +1553,8 @@ var make_focused_modal_1 = require("./make-focused_modal");
 
 var make_incrementer_1 = require("./make-incrementer");
 
+var utils_cssom_1 = require("./utils-cssom");
+
 var utils_grid_1 = require("./utils-grid");
 
 var utils_icons_1 = require("./utils-icons");
@@ -1328,20 +1563,43 @@ var utils_misc_1 = require("./utils-misc");
 
 var utils_shiny_1 = require("./utils-shiny");
 
+var wrap_in_grided_1 = require("./wrap_in_grided");
+
 var App_State =
 /** @class */
 function () {
-  function App_State(opts) {
+  function App_State() {
     // All the currently existing cells making up the grid
     this.current_cells = [];
-    this.elements = {};
-    this.controls = opts.controls;
-    this.container = opts.container;
+    this.elements = [];
+    var grid_layout_rule = utils_cssom_1.find_selector_by_property("display", "grid");
+    this.container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page";
+    this.container_stylesheet = grid_layout_rule.first_rule_w_prop.style;
+    this.container = grid_layout_rule.rule_exists ? document.querySelector(this.container_selector) : make_elements_1.Block_El("div#grid_page");
+    this.controls = {
+      rows: [],
+      cols: []
+    };
     this.grid_styles = this.container.style;
-    this.mode = opts.grid_is_filled ? "ShinyExisting" : index_1.Shiny ? "ShinyNew" : "ClientSide";
-    this.settings_panel = make_settings_panel(this, opts.settings_panel);
     this.grid_layout = new Grid_Layout_1.Grid_Layout(this.container);
-    console.log("Initialized App_State");
+
+    var _a = wrap_in_grided_1.wrap_in_grided(this),
+        settings_panel_el = _a.settings_panel_el,
+        grid_is_filled = _a.grid_is_filled;
+
+    this.settings_panel = make_settings_panel(this, settings_panel_el);
+    this.mode = grid_is_filled ? "Existing" : "New";
+
+    if (grid_is_filled) {
+      var current_grid_props = this.container_stylesheet; // Make sure grid matches the one the app is working with
+
+      update_grid(this, {
+        rows: current_grid_props.gridTemplateRows.split(" "),
+        cols: current_grid_props.gridTemplateColumns.split(" "),
+        gap: utils_grid_1.get_gap_size(current_grid_props.gap),
+        force: true
+      });
+    }
   }
 
   Object.defineProperty(App_State.prototype, "layout_from_controls", {
@@ -1359,6 +1617,74 @@ function () {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(App_State.prototype, "num_elements", {
+    get: function get() {
+      return this.elements.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App_State.prototype, "current_elements", {
+    get: function get() {
+      var all_elements = this.elements.map(function (_a) {
+        var grid_el = _a.grid_el;
+        return utils_grid_1.grid_position_of_el(grid_el);
+      });
+      return all_elements;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  App_State.prototype.add_element = function (el_props) {
+    // If element ids were generated with the grid_container R function then
+    // they have a prefix of the container name which we should remove so the
+    // added elements list is not ugly looking
+    if (el_props.existing_element) {
+      el_props.id = el_props.id.replace(/^.+?__/g, "");
+    }
+
+    this.elements.push(__assign({
+      id: el_props.id
+    }, draw_elements(this, el_props))); // Let shiny know we have a new element
+
+    utils_shiny_1.send_elements_to_shiny(this.current_elements);
+  };
+
+  App_State.prototype.get_element = function (el) {
+    var el_id = typeof el === "string" ? el : el.id;
+    return this.elements.find(function (e) {
+      return e.id == el_id;
+    });
+  }; // Removes elements the user has added to the grid by id
+
+
+  App_State.prototype.remove_elements = function (ids) {
+    var _this = this;
+
+    utils_misc_1.as_array(ids).forEach(function (el_id) {
+      var entry_index = _this.elements.findIndex(function (el) {
+        return el.id = el_id;
+      });
+
+      var element_entries = _this.elements[entry_index];
+      make_elements_1.remove_elements([element_entries.grid_el, element_entries.list_el]); // Remove from current elements list
+
+      _this.elements.splice(entry_index, 1);
+    });
+    utils_shiny_1.send_elements_to_shiny(this.current_elements);
+  };
+
+  Object.defineProperty(App_State.prototype, "next_color", {
+    // Get the next color in our list of colors.
+    get: function get() {
+      var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
+
+      return colors[this.num_elements % colors.length];
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   App_State.prototype.update_settings_panel = function (opts) {
     if (opts.cols) {
@@ -1372,60 +1698,11 @@ function () {
     if (opts.gap) {
       this.settings_panel.gap.update_value(opts.gap);
     }
-  };
+  }; // Just so we dont have to always say make_el(this.container...)
 
-  Object.defineProperty(App_State.prototype, "gap_size", {
-    get: function get() {
-      return utils_grid_1.get_gap_size(this.grid_styles);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "num_elements", {
-    get: function get() {
-      return Object.keys(this.elements).length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "current_elements", {
-    get: function get() {
-      var all_elements = __spreadArray([], Object.values(this.elements)).map(function (_a) {
-        var grid_el = _a.grid_el;
-        return utils_grid_1.grid_position_of_el(grid_el);
-      });
-
-      return all_elements;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "next_color", {
-    // Get the next color in our list of colors.
-    get: function get() {
-      var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
-
-      return colors[this.num_elements % colors.length];
-    },
-    enumerable: false,
-    configurable: true
-  }); // Just so we dont have to always say make_el(this.container...)
 
   App_State.prototype.make_el = function (sel_txt, opts) {
     return make_elements_1.make_el(this.container, sel_txt, opts);
-  }; // Removes elements the user has added to the grid by id
-
-
-  App_State.prototype.remove_elements = function (ids) {
-    var _this = this;
-
-    utils_misc_1.as_array(ids).forEach(function (el_id) {
-      var element_entries = _this.elements[el_id];
-      make_elements_1.remove_elements([element_entries.grid_el, element_entries.list_el]); // Remove from current elements list
-
-      delete _this.elements[el_id];
-    });
-    utils_shiny_1.send_elements_to_shiny(this.current_elements);
   };
 
   App_State.prototype.setup_drag = function (opts) {
@@ -1498,183 +1775,167 @@ function () {
     }
   };
 
-  App_State.prototype.add_element = function (el_props) {
-    // If element ids were generated with the grid_container R function then
-    // they have a prefix of the container name which we should remove so the
-    // added elements list is not ugly looking
-    if (el_props.existing_element) {
-      el_props.id = el_props.id.replace(/^.+?__/g, "");
-    }
-
-    this.elements[el_props.id] = draw_elements(this, el_props); // Let shiny know we have a new element
-
-    utils_shiny_1.send_elements_to_shiny(this.current_elements);
-  };
-
-  App_State.prototype.update_grid = function (opts) {
-    var _this = this;
-
-    var updated_attributes = this.grid_layout.changed_attributes(opts);
-
-    if (updated_attributes.new_num_cells) {
-      // Check for elements that may get dropped
-      var danger_elements_1 = {
-        to_delete: [],
-        to_edit: [],
-        conflicting: []
-      };
-      this.current_elements.forEach(function (el) {
-        var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el);
-        if (element_position === "inside") return;
-
-        if (element_position === "partially") {
-          danger_elements_1.to_edit.push(el);
-          return;
-        }
-
-        if (_this.elements[el.id].mirrors_existing) {
-          danger_elements_1.conflicting.push(el);
-          return;
-        }
-
-        danger_elements_1.to_delete.push(el);
-      });
-
-      if (danger_elements_1.conflicting.length > 0) {
-        show_conflict_popup(danger_elements_1.conflicting); // Make sure to switch back the control values to previous values
-
-        this.update_settings_panel(this.grid_layout.attrs); // Stop this action from going further
-
-        return;
-      }
-
-      if (danger_elements_1.to_edit.length > 0) {
-        show_danger_popup(this, danger_elements_1.to_edit, function (to_edit) {
-          to_edit.forEach(function (el) {
-            var el_node = _this.elements[el.id].grid_el;
-            utils_grid_1.shrink_element_to_layout(updated_attributes.new_attrs, el_node);
-          }); // Now that we've updated elements properly, we should be able to
-          // just recall the function and it won't spit an error
-
-          _this.update_grid({
-            rows: opts.rows,
-            cols: opts.cols,
-            gap: opts.gap
-          });
-        });
-        return;
-      }
-
-      this.remove_elements(danger_elements_1.to_delete.map(function (el) {
-        return el.id;
-      }));
-    }
-
-    this.update_settings_panel(opts);
-    this.grid_layout.update_attrs(opts);
-
-    if (updated_attributes.new_num_cells || opts.force) {
-      this.fill_grid_cells();
-    }
-
-    if (!opts.dont_send_to_shiny) {
-      utils_shiny_1.send_grid_sizing_to_shiny(this.grid_layout.attrs);
-    }
-  };
-
-  App_State.prototype.fill_grid_cells = function () {
-    var _this = this; // Grab currently drawn cells (if any) so we can check if we need to redraw
-    // or if this was simply a column/row sizing update
-
-
-    var need_to_reset_cells = this.current_cells.length != this.grid_layout.num_rows * this.grid_layout.num_cols;
-
-    if (need_to_reset_cells) {
-      make_elements_1.remove_elements(this.current_cells);
-      this.current_cells = [];
-
-      for (var row_i = 1; row_i <= this.grid_layout.num_rows; row_i++) {
-        for (var col_i = 1; col_i <= this.grid_layout.num_cols; col_i++) {
-          this.current_cells.push(this.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
-            data_props: {
-              row: row_i,
-              col: col_i
-            },
-            grid_pos: {
-              start_row: row_i,
-              start_col: col_i
-            }
-          }));
-        }
-      }
-
-      if (this.mode === "ShinyExisting") {
-        utils_misc_1.set_class(this.current_cells, "transparent");
-      }
-
-      var _loop_1 = function _loop_1(type) {
-        // Get rid of old ones to start with fresh slate
-        make_elements_1.remove_elements(this_1.container.querySelectorAll("." + type + "-controls"));
-        this_1.controls[type] = this_1.grid_layout.attrs[type].map(function (size, i) {
-          var _a; // The i + 1 is because grid is indexed at 1, not zero
-
-
-          var grid_i = i + 1;
-          return make_css_unit_input_1.make_css_unit_input({
-            parent_el: _this.container,
-            selector: "#control_" + type + grid_i + "." + type + "-controls",
-            start_val: make_css_unit_input_1.get_css_value(size),
-            start_unit: make_css_unit_input_1.get_css_unit(size),
-            on_change: function on_change() {
-              return _this.update_grid(_this.layout_from_controls);
-            },
-            on_drag: function on_drag() {
-              return _this.update_grid(__assign(__assign({}, _this.layout_from_controls), {
-                dont_send_to_shiny: true
-              }));
-            },
-            form_styles: (_a = {}, _a["grid" + (type === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(grid_i), _a),
-            drag_dir: type === "rows" ? "y" : "x"
-          });
-        });
-      };
-
-      var this_1 = this; // Build each column and row's sizing controler
-
-      for (var type in this.controls) {
-        _loop_1(type);
-      }
-
-      var current_selection_box_1 = this.make_el("div#current_selection_box.added-element");
-      var drag_canvas = this.make_el("div#drag_canvas");
-      this.setup_drag({
-        watching_element: drag_canvas,
-        grid_element: current_selection_box_1,
-        drag_dir: "bottom-right",
-        on_start: function on_start() {
-          current_selection_box_1.style.borderColor = _this.next_color;
-        },
-        on_end: function on_end(_a) {
-          var grid = _a.grid;
-          element_naming_ui(_this, {
-            grid_pos: grid,
-            selection_box: current_selection_box_1
-          });
-        }
-      }); // Make sure any added elements sit on top by re-appending them to grid holder
-      // Make sure that the drag detector sits over everything
-
-      __spreadArray([drag_canvas], this.container.querySelectorAll(".added-element")).forEach(function (el) {
-        return _this.container.appendChild(el);
-      });
-    } else {}
-  };
-
   return App_State;
 }(); // End of class declaration
 
 
 exports.App_State = App_State;
+
+function update_grid(app_state, opts) {
+  var updated_attributes = app_state.grid_layout.changed_attributes(opts);
+
+  if (updated_attributes.new_num_cells) {
+    // Check for elements that may get dropped
+    var danger_elements_1 = {
+      to_delete: [],
+      to_edit: [],
+      conflicting: []
+    };
+    app_state.current_elements.forEach(function (el) {
+      var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el);
+      if (element_position === "inside") return;
+
+      if (element_position === "partially") {
+        danger_elements_1.to_edit.push(el);
+        return;
+      }
+
+      if (app_state.get_element(el.id).mirrors_existing) {
+        danger_elements_1.conflicting.push(el);
+        return;
+      }
+
+      danger_elements_1.to_delete.push(el);
+    });
+
+    if (danger_elements_1.conflicting.length > 0) {
+      show_conflict_popup(danger_elements_1.conflicting); // Make sure to switch back the control values to previous values
+
+      app_state.update_settings_panel(app_state.grid_layout.attrs); // Stop this action from going further
+
+      return;
+    }
+
+    if (danger_elements_1.to_edit.length > 0) {
+      show_danger_popup(app_state, danger_elements_1.to_edit, function (to_edit) {
+        to_edit.forEach(function (el) {
+          var el_node = app_state.get_element(el.id).grid_el;
+          utils_grid_1.shrink_element_to_layout(updated_attributes.new_attrs, el_node);
+        }); // Now that we've updated elements properly, we should be able to
+        // just recall the function and it won't spit an error
+
+        update_grid(app_state, {
+          rows: opts.rows,
+          cols: opts.cols,
+          gap: opts.gap
+        });
+      });
+      return;
+    }
+
+    app_state.remove_elements(danger_elements_1.to_delete.map(function (el) {
+      return el.id;
+    }));
+  }
+
+  app_state.update_settings_panel(opts);
+  app_state.grid_layout.update_attrs(opts);
+
+  if (updated_attributes.new_num_cells || opts.force) {
+    fill_grid_cells(app_state);
+  }
+
+  if (!opts.dont_send_to_shiny) {
+    utils_shiny_1.send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
+  }
+}
+
+exports.update_grid = update_grid;
+
+function fill_grid_cells(app_state) {
+  // Grab currently drawn cells (if any) so we can check if we need to redraw
+  // or if this was simply a column/row sizing update
+  var need_to_reset_cells = app_state.current_cells.length != app_state.grid_layout.num_rows * app_state.grid_layout.num_cols;
+
+  if (need_to_reset_cells) {
+    make_elements_1.remove_elements(app_state.current_cells);
+    app_state.current_cells = [];
+
+    for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
+      for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
+        app_state.current_cells.push(app_state.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
+          data_props: {
+            row: row_i,
+            col: col_i
+          },
+          grid_pos: {
+            start_row: row_i,
+            start_col: col_i
+          }
+        }));
+      }
+    }
+
+    if (app_state.mode === "Existing") {
+      utils_misc_1.set_class(app_state.current_cells, "transparent");
+    }
+
+    var _loop_1 = function _loop_1(type) {
+      // Get rid of old ones to start with fresh slate
+      make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
+      app_state.controls[type] = app_state.grid_layout.attrs[type].map(function (size, i) {
+        var _a; // The i + 1 is because grid is indexed at 1, not zero
+
+
+        var grid_i = i + 1;
+        return make_css_unit_input_1.make_css_unit_input({
+          parent_el: app_state.container,
+          selector: "#control_" + type + grid_i + "." + type + "-controls",
+          start_val: make_css_unit_input_1.get_css_value(size),
+          start_unit: make_css_unit_input_1.get_css_unit(size),
+          on_change: function on_change() {
+            return update_grid(app_state, app_state.layout_from_controls);
+          },
+          on_drag: function on_drag() {
+            return update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
+              dont_send_to_shiny: true
+            }));
+          },
+          form_styles: (_a = {}, _a["grid" + (type === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(grid_i), _a),
+          drag_dir: type === "rows" ? "y" : "x"
+        });
+      });
+    }; // Build each column and row's sizing controler
+
+
+    for (var type in app_state.controls) {
+      _loop_1(type);
+    }
+
+    var current_selection_box_1 = app_state.make_el("div#current_selection_box.added-element");
+    var drag_canvas = app_state.make_el("div#drag_canvas");
+    app_state.setup_drag({
+      watching_element: drag_canvas,
+      grid_element: current_selection_box_1,
+      drag_dir: "bottom-right",
+      on_start: function on_start() {
+        current_selection_box_1.style.borderColor = app_state.next_color;
+      },
+      on_end: function on_end(_a) {
+        var grid = _a.grid;
+        element_naming_ui(app_state, {
+          grid_pos: grid,
+          selection_box: current_selection_box_1
+        });
+      }
+    }); // Make sure any added elements sit on top by re-appending them to grid holder
+    // Make sure that the drag detector sits over everything
+
+    __spreadArray([drag_canvas], app_state.container.querySelectorAll(".added-element")).forEach(function (el) {
+      return app_state.container.appendChild(el);
+    });
+  } else {}
+}
 
 function make_settings_panel(app_state, panel_el) {
   return {
@@ -1702,7 +1963,7 @@ function make_settings_panel(app_state, panel_el) {
       }),
       selector: "#gap_size_chooser",
       on_change: function on_change(x) {
-        return app_state.update_grid({
+        return update_grid(app_state, {
           gap: x
         });
       },
@@ -1722,9 +1983,11 @@ function make_settings_panel(app_state, panel_el) {
     } else {// No change, shouldn't happen but maybe...
     }
 
-    app_state.update_grid((_a = {}, _a[dir] = current_vals, _a));
+    update_grid(app_state, (_a = {}, _a[dir] = current_vals, _a));
   }
 }
+
+exports.make_settings_panel = make_settings_panel;
 
 function element_naming_ui(app_state, _a) {
   var grid_pos = _a.grid_pos,
@@ -1961,208 +2224,7 @@ function show_danger_popup(app_state, in_danger_els, on_finish) {
     innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
   });
 }
-},{"./Grid_Layout":"Grid_Layout.ts","./index":"index.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts"}],"utils-cssom.ts":[function(require,module,exports) {
-"use strict"; // Assumes that only one stylesheet has rules for the given selector and
-// that only one rule targeting that selector alone is defined
-// If target_property is provided the function will chose the sheet that defines
-
-var __spreadArray = this && this.__spreadArray || function (to, from) {
-  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
-    to[j] = from[i];
-  }
-
-  return to;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.find_selector_by_property = exports.get_css_props_by_selector = void 0;
-
-var utils_misc_1 = require("./utils-misc"); // Combines every style rule contained in all the style sheets on page into
-// a big array. Easier than navigating the nested structure of sheets => rules
-
-
-function get_all_style_rules() {
-  return utils_misc_1.flatten(__spreadArray([], document.styleSheets).map(function (x) {
-    return __spreadArray([], x.cssRules);
-  }));
-}
-
-function get_all_rules_for_selector(selector_text) {
-  // Find the stylesheet which contains the containers styles
-  var defines_ruleset = function defines_ruleset(selector_text) {
-    return function (rule) {
-      return rule.selectorText === selector_text;
-    };
-  };
-
-  return __spreadArray([], document.styleSheets).filter(function (style_sheet) {
-    return __spreadArray([], style_sheet.rules).find(defines_ruleset(selector_text));
-  }).map(function (x) {
-    return __spreadArray([], x.cssRules).find(defines_ruleset(selector_text)).style;
-  });
-} // that given property (if multiple exist)
-
-
-function get_css_props_by_selector(selector_text, target_properties) {
-  var all_rules_for_selector = get_all_rules_for_selector(selector_text);
-  return target_properties.reduce(function (prop_values, prop) {
-    var _a;
-
-    var prop_val = (_a = all_rules_for_selector.find(function (rule) {
-      return rule[prop];
-    })) === null || _a === void 0 ? void 0 : _a[prop];
-
-    if (prop_val) {
-      prop_values[prop] = prop_val;
-    }
-
-    return prop_values;
-  }, {});
-}
-
-exports.get_css_props_by_selector = get_css_props_by_selector;
-
-function find_selector_by_property(property_id, property_value) {
-  var all_styles = get_all_style_rules();
-  var first_rule_w_prop = all_styles.filter(function (rule) {
-    return rule.style && rule.style[property_id] == property_value;
-  }).find(function (rule) {
-    return document.querySelector(rule.selectorText);
-  });
-  var rule_exists = Boolean(first_rule_w_prop);
-  return {
-    rule_exists: rule_exists,
-    selector: rule_exists ? first_rule_w_prop.selectorText : ""
-  };
-}
-
-exports.find_selector_by_property = find_selector_by_property;
-},{"./utils-misc":"utils-misc.ts"}],"make-toggle_switch.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.make_toggle_switch = void 0;
-
-var make_elements_1 = require("./make-elements");
-
-function make_toggle_switch(off_text, on_text, on_change) {
-  var container = make_elements_1.Block_El("div.toggle-switch");
-  make_elements_1.make_el(container, "span.off-text", {
-    innerHTML: off_text
-  });
-  var label = make_elements_1.make_el(container, "label.switch");
-  make_elements_1.make_el(container, "span.on-text", {
-    innerHTML: on_text
-  });
-  make_elements_1.make_el(label, "input", {
-    props: {
-      type: "checkbox"
-    },
-    event_listener: {
-      event: "change",
-      func: function func(event) {
-        on_change(event.target.checked);
-      }
-    }
-  });
-  make_elements_1.make_el(label, "span.slider");
-
-  var _a = make_elements_1.Shadow_El("div.toggle-switch", container),
-      el = _a.el,
-      style_sheet = _a.style_sheet; // Add styles
-
-
-  style_sheet.innerHTML = toggle_styles;
-  return el;
-}
-
-exports.make_toggle_switch = make_toggle_switch;
-var toggle_styles = "\ndiv.toggle-switch {\n  display: inline-grid;\n  grid-template-columns: 1fr auto 1fr;\n  grid-gap: 3px;\n  width: 180px;\n  align-items: center;\n  justify-items: center;\n  padding-left: 4px;\n  padding-right: 4px;\n}\n\n.toggle-switch > span {\n  font-size: 1.2rem;\n}\n\n.toggle-switch > .off-text {\n  text-align: end;\n}\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border-radius: 34px;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: \"\";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  border-radius: 50%;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n";
-},{"./make-elements":"make-elements.ts"}],"wrap_in_grided.ts":[function(require,module,exports) {
-"use strict";
-
-var __spreadArray = this && this.__spreadArray || function (to, from) {
-  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
-    to[j] = from[i];
-  }
-
-  return to;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.wrap_in_grided = void 0;
-
-var utils_icons_1 = require("./utils-icons");
-
-var make_elements_1 = require("./make-elements");
-
-var make_toggle_switch_1 = require("./make-toggle_switch"); // Takes a grid element and wraps it in the grided ui. Also returns some useful
-// information such as if the element passed was empty and if not, the children
-// that it contains so they can be overlayed with editable element boxes 
-
-
-function wrap_in_grided(grid_el, setShinyInput) {
-  var grid_is_filled = grid_el.hasChildNodes();
-  var buttons = [action_button("get_code", "Get layout code"), action_button("update_code", "Update app")];
-
-  if (grid_is_filled) {
-    buttons.push(make_toggle_switch_1.make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
-  }
-
-  var settings_panel = make_elements_1.Block_El("div.card-body");
-  var grided_ui = make_elements_1.Block_El("div#grided__holder", make_elements_1.Block_El("div#grided__header", make_elements_1.Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), make_elements_1.Block_El.apply(void 0, __spreadArray(["div.code_btns"], buttons))), make_elements_1.Block_El("div#grided__settings", make_elements_1.Text_El("h3", utils_icons_1.settings_icon + " Settings"), settings_panel), make_elements_1.Block_El("div#grided__instructions", make_elements_1.Text_El("h3", utils_icons_1.instructions_icon + " Instructions"), make_elements_1.Text_El("div.card-body", "\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in \"Added elements\" panel and click the " + utils_icons_1.trashcan_icon + " icon</li>\n      </ul>")), make_elements_1.Block_El("div#grided__elements", make_elements_1.Text_El("h3", utils_icons_1.elements_icon + " Added elements"), make_elements_1.Block_El("div.card-body", make_elements_1.Block_El("div#added_elements"))), make_elements_1.Block_El("div#grided__editor", make_elements_1.Block_El("div#editor-wrapper", make_elements_1.Text_El("div#editor-browser-header", utils_icons_1.browser_header_html), make_elements_1.Block_El("div#editor-app-window", grid_el)))); // Make grided UI direct child of the body
-
-  document.querySelector("body").appendChild(grided_ui); // Setup some basic styles for the container to make sure it fits into the
-  // grided interface properly.
-
-  grid_el.style.height = "100%";
-  grid_el.style.width = "100%";
-  grid_el.style.display = "grid"; // Sometimes RMD styles will put a max-width of some amount which can mess
-  // stuff up on large screens. The tradeoff is that the app may appear wider
-  // than it eventually is. I think it's worth it.
-
-  grid_el.style.maxWidth = "100%";
-
-  function toggle_interaction_mode(interact_is_on) {
-    __spreadArray(__spreadArray(__spreadArray([], grid_el.querySelectorAll(".added-element")), grid_el.querySelectorAll(".grid-cell")), [settings_panel, grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function (el) {
-      if (interact_is_on) {
-        el.classList.add("disabled");
-      } else {
-        el.classList.remove("disabled");
-      }
-    });
-  }
-
-  function action_button(id, label) {
-    var button_el = make_elements_1.Text_El("button#" + id, label);
-    button_el.addEventListener("click", function (event) {
-      setShinyInput(id, 1, true);
-    });
-    return button_el;
-  }
-
-  var existing_children = __spreadArray([], grid_el.children).filter(function (node) {
-    var bbox = node.getBoundingClientRect(); // Only keep visible elements. This will (hopefully) filter out and
-    // script or style tags that find their way into the grid container
-
-    return bbox.width !== 0 && bbox.height !== 0;
-  });
-
-  return {
-    settings_panel: settings_panel,
-    grid_is_filled: grid_is_filled,
-    existing_children: existing_children
-  };
-}
-
-exports.wrap_in_grided = wrap_in_grided;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts"}],"index.ts":[function(require,module,exports) {
+},{"./Grid_Layout":"Grid_Layout.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2172,53 +2234,19 @@ exports.Shiny = void 0; // JS entry point
 
 var App_State_1 = require("./App_State");
 
-var make_elements_1 = require("./make-elements");
-
 var make_focused_modal_1 = require("./make-focused_modal");
 
-var utils_cssom_1 = require("./utils-cssom");
-
-var utils_grid_1 = require("./utils-grid");
-
 var utils_shiny_1 = require("./utils-shiny");
-
-var wrap_in_grided_1 = require("./wrap_in_grided");
 
 exports.Shiny = window.Shiny;
 var debug_messages = true;
 
 window.onload = function () {
-  // Do we already have a div with id grid_page in our app? Aka the grided UI
-  // has been already added?
-  var grid_layout_rule = utils_cssom_1.find_selector_by_property("display", "grid");
-  var grid_container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page"; // This holds the grid element dom node. Gets filled in the onload callback
-  // I am using a global variable here because we query inside this so much that
-  // it felt silly to regrab it every time as it never moves.
-
-  var container = grid_layout_rule.rule_exists ? document.querySelector(grid_container_selector) : make_elements_1.Block_El("div#grid_page");
-
-  var _a = wrap_in_grided_1.wrap_in_grided(container, utils_shiny_1.setShinyInput),
-      grid_is_filled = _a.grid_is_filled,
-      existing_children = _a.existing_children,
-      settings_panel = _a.settings_panel;
-
-  var app_state = new App_State_1.App_State({
-    controls: {
-      rows: [],
-      cols: []
-    },
-    settings_panel: settings_panel,
-    container: container,
-    grid_is_filled: grid_is_filled
-  }); // Only set a default gap sizing if it isn't already provided
-
-  if (app_state.mode !== "ShinyExisting") {
-    app_state.container.style.gap = "1rem";
-    app_state.container.style.padding = "1rem";
-  }
-
-  utils_shiny_1.add_shiny_listener("shiny-loaded", function () {
-    if (debug_messages) console.log("connected to shiny"); // Send elements to Shiny so app is aware of what it's working with
+  var app_state = new App_State_1.App_State();
+  utils_shiny_1.add_shiny_listener("shiny-loaded", function (x) {
+    if (debug_messages) console.log("connected to shiny");
+    x; // this is needed to vscode doesn't flag arg as dead code and delete it
+    // Send elements to Shiny so app is aware of what it's working with
 
     utils_shiny_1.send_elements_to_shiny(app_state.current_elements);
     utils_shiny_1.send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
@@ -2227,31 +2255,12 @@ window.onload = function () {
     document.querySelector("button#update_code").innerHTML = label_text;
   });
 
-  if (app_state.mode === "ShinyExisting") {
-    // If grided is running on an existing app, we need to parse the children and
-    // add them as elements;
-    existing_children.forEach(function (el) {
-      app_state.add_element({
-        id: el.id,
-        grid_pos: utils_grid_1.get_pos_on_grid(el),
-        existing_element: el
-      });
-    }); // Container styles are in this object
-
-    var current_grid_props = utils_cssom_1.get_css_props_by_selector(grid_container_selector, ["gridTemplateColumns", "gridTemplateRows", "gap"]); // Make sure grid matches the one the app is working with
-
-    app_state.update_grid({
-      rows: current_grid_props.gridTemplateRows.split(" "),
-      cols: current_grid_props.gridTemplateColumns.split(" "),
-      gap: utils_grid_1.get_gap_size(current_grid_props.gap),
-      force: true
-    });
-  } else if (app_state.mode === "ShinyNew") {
+  if (app_state.mode === "New") {
     // Need to use arrow function here so method is run on out app_state object
     // if we just passed app_state.update_grid as the callback its just the method
     // without the object behind it,
     utils_shiny_1.add_shiny_listener("update-grid", function (opts) {
-      return app_state.update_grid(opts);
+      return App_State_1.update_grid(app_state, opts);
     });
     utils_shiny_1.add_shiny_listener("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el) {
@@ -2261,17 +2270,24 @@ window.onload = function () {
         });
       });
     });
-  } else {
-    // If in pure-client-side mode we need to provide a default grid and also wireup the code button
-    app_state.update_grid({
-      rows: ["1fr", "1fr"],
-      cols: ["1fr", "1fr"],
-      gap: "1rem"
-    });
-    document.getElementById("get_code").addEventListener("click", function () {
-      make_focused_modal_1.show_code("Place the following in your CSS:", utils_grid_1.gen_code_for_layout(app_state.current_elements, app_state.container.style));
-    });
-  }
+  } // else {
+  //   // If in pure-client-side mode we need to provide a default grid and also wireup the code button
+  //   update_grid(app_state, {
+  //     rows: ["1fr", "1fr"],
+  //     cols: ["1fr", "1fr"],
+  //     gap: "1rem",
+  //   });
+  //   document.getElementById("get_code").addEventListener("click", function () {
+  //     show_code(
+  //       "Place the following in your CSS:",
+  //       gen_code_for_layout(
+  //         app_state.current_elements,
+  //         app_state.container.style
+  //       )
+  //     );
+  //   });
+  // }
+
 
   utils_shiny_1.add_shiny_listener("code_modal", function (code_to_show) {
     make_focused_modal_1.show_code("Paste the following code into your app to update the layout", {
@@ -2286,7 +2302,7 @@ window.onload = function () {
     });
   });
 }; // End of the window.onload callback
-},{"./App_State":"App_State.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./App_State":"App_State.ts","./make-focused_modal":"make-focused_modal.ts","./utils-shiny":"utils-shiny.ts"}],"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

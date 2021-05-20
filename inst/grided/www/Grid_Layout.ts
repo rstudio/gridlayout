@@ -7,11 +7,9 @@ export type Layout_State = {
 };
 
 export class Grid_Layout {
-  container: HTMLElement;
   styles: CSSStyleDeclaration;
 
-  constructor(container: HTMLElement) {
-    this.container = container;
+  constructor(public container: HTMLElement) {
     this.styles = container.style;
     console.log("Initialized Grid_Layout");
   }
