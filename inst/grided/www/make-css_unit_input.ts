@@ -42,7 +42,7 @@ export function make_css_unit_input({
   start_val = 1,
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
-  allowed_units = ["fr", "px", "rem", "auto"]
+  allowed_units = ["fr", "px", "rem", "auto"],
 }): CSS_Input {
   let current_unit = start_unit;
 
@@ -154,10 +154,9 @@ export function make_grid_tract_control(
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
 
-  const styles_for_holder: Record<string, string> = { 
-    display: "grid",
-    gridTemplateRows: "auto 20px",
-   };
+  const styles_for_holder: Record<string, string> = {
+
+  };
   if (dir === "rows") {
     Object.assign(styles_for_holder, {
       gridRow: make_template_start_end(tract_index),
@@ -190,15 +189,14 @@ export function make_grid_tract_control(
     },
   });
 
-  const resizer = make_el(holder, "div.css-unit-input-dragger", {
-    innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
-  });
-
   const value_input = <HTMLInputElement>(
     unit_input.form.querySelector(".css-unit-input-value")
   );
   const drag_dir = dir === "rows" ? "y" : "x";
 
+  const resizer = make_el(holder, "div.css-unit-input-dragger", {
+    innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
+  });
   // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
@@ -236,6 +234,13 @@ export function make_grid_tract_control(
         },
       },
     ],
+  });
+
+  make_el(holder, "button.addButton.addAfter", {
+    innerHTML: "+"
+  });
+  make_el(holder, "button.addButton.addBefore", {
+    innerHTML: "+"
   });
 
   function show_or_hide_dragger(curr_val: string) {

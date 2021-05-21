@@ -1121,10 +1121,7 @@ function make_grid_tract_control(app_state, opts) {
   var size = opts.size,
       dir = opts.dir,
       tract_index = opts.tract_index;
-  var styles_for_holder = {
-    display: "grid",
-    gridTemplateRows: "auto 20px"
-  };
+  var styles_for_holder = {};
 
   if (dir === "rows") {
     Object.assign(styles_for_holder, {
@@ -1153,11 +1150,11 @@ function make_grid_tract_control(app_state, opts) {
       App_State_1.update_grid(app_state, app_state.layout_from_controls);
     }
   });
+  var value_input = unit_input.form.querySelector(".css-unit-input-value");
+  var drag_dir = dir === "rows" ? "y" : "x";
   var resizer = make_elements_1.make_el(holder, "div.css-unit-input-dragger", {
     innerHTML: dir === "rows" ? utils_icons_1.vertical_drag_icon : utils_icons_1.horizontal_drag_icon
-  });
-  var value_input = unit_input.form.querySelector(".css-unit-input-value");
-  var drag_dir = dir === "rows" ? "y" : "x"; // Place an invisible div over the main one that we let be dragged. This means
+  }); // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
 
@@ -1189,6 +1186,12 @@ function make_grid_tract_control(app_state, opts) {
         App_State_1.update_grid(app_state, app_state.layout_from_controls);
       }
     }]
+  });
+  make_elements_1.make_el(holder, "button.addButton.addAfter", {
+    innerHTML: "+"
+  });
+  make_elements_1.make_el(holder, "button.addButton.addBefore", {
+    innerHTML: "+"
   });
 
   function show_or_hide_dragger(curr_val) {

@@ -466,6 +466,54 @@ button.minus_btn.disabled {
   align-content: center;
   justify-content: end;
 }
+.rows-controls, 
+.cols-controls {
+  display: grid;
+  /* grid-template-rows: auto auto; */
+  gap: 0.25rem;
+
+}
+.rows-controls {
+  padding-right: 0.5rem;
+  grid-template-areas: 
+  ".        addAfter    .       "
+  "cssInput cssInput   cssInput"
+  "dragger  dragger    dragger"
+  ".        addBefore  .       ";
+}
+
+.cols-controls {
+  padding-top: 0.5rem;
+  grid-template-areas: 
+  "addBefore cssInput cssInput cssInput addAfter"
+  ".         dragger  dragger  dragger  .";
+}
+
+.cols-controls .addButton {
+  align-self: center;
+}
+
+.unit-input {
+  padding: 0;
+  grid-area: cssInput;
+}
+.css-unit-input-dragger {
+  max-height: 20px;
+  grid-area: dragger;
+}
+.addButton {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+}
+.addAfter {
+  grid-area: addAfter;
+}
+.addBefore {
+  grid-area: addBefore;
+}
 
 .rows-controls {
   height: 100%;
