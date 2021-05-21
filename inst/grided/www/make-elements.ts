@@ -1,4 +1,4 @@
-import { Grid_Pos } from "./App_State";
+import { Grid_Pos } from "./Grid_Item";
 import { set_element_in_grid } from "./utils-grid";
 import {
   as_array,

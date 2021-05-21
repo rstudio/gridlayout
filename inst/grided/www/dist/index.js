@@ -1188,10 +1188,31 @@ function make_grid_tract_control(app_state, opts) {
     }]
   });
   make_elements_1.make_el(holder, "button.addButton.addAfter", {
-    innerHTML: "+"
+    innerHTML: "+",
+    event_listener: {
+      event: "click",
+      func: function func(event) {
+        console.log("Add " + dir + " after " + tract_index);
+      }
+    }
   });
   make_elements_1.make_el(holder, "button.addButton.addBefore", {
-    innerHTML: "+"
+    innerHTML: "+",
+    event_listener: {
+      event: "click",
+      func: function func(event) {
+        console.log("Add " + dir + " before " + tract_index);
+      }
+    }
+  });
+  make_elements_1.make_el(holder, "button.addButton.removeThis", {
+    innerHTML: "-",
+    event_listener: {
+      event: "click",
+      func: function func(event) {
+        console.log("Remove " + dir + " " + tract_index);
+      }
+    }
   });
 
   function show_or_hide_dragger(curr_val) {

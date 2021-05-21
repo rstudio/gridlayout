@@ -476,17 +476,18 @@ button.minus_btn.disabled {
 .rows-controls {
   padding-right: 0.5rem;
   grid-template-areas: 
-  ".        addAfter    .       "
-  "cssInput cssInput   cssInput"
-  "dragger  dragger    dragger"
-  ".        addBefore  .       ";
+  ".          .        addBefore  .       "
+  "removeThis cssInput cssInput   cssInput"
+  "removeThis dragger  dragger    dragger"
+  ".          .        addAfter   .       ";
 }
 
 .cols-controls {
   padding-top: 0.5rem;
   grid-template-areas: 
-  "addBefore cssInput cssInput cssInput addAfter"
-  ".         dragger  dragger  dragger  .";
+  "addBefore cssInput cssInput    cssInput addAfter"
+  ".         dragger  dragger     dragger  ."
+  ".         .        removeThis  .        .";
 }
 
 .cols-controls .addButton {
@@ -513,6 +514,9 @@ button.minus_btn.disabled {
 }
 .addBefore {
   grid-area: addBefore;
+}
+.removeThis {
+  grid-area: removeThis;
 }
 
 .rows-controls {

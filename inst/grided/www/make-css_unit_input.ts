@@ -154,9 +154,7 @@ export function make_grid_tract_control(
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
 
-  const styles_for_holder: Record<string, string> = {
-
-  };
+  const styles_for_holder: Record<string, string> = {};
   if (dir === "rows") {
     Object.assign(styles_for_holder, {
       gridRow: make_template_start_end(tract_index),
@@ -237,10 +235,31 @@ export function make_grid_tract_control(
   });
 
   make_el(holder, "button.addButton.addAfter", {
-    innerHTML: "+"
+    innerHTML: "+",
+    event_listener: {
+      event: "click",
+      func: (event: Event) => {
+        console.log(`Add ${dir} after ${tract_index}`);
+      },
+    },
   });
   make_el(holder, "button.addButton.addBefore", {
-    innerHTML: "+"
+    innerHTML: "+",
+    event_listener: {
+      event: "click",
+      func: (event: Event) => {
+        console.log(`Add ${dir} before ${tract_index}`);
+      },
+    },
+  });
+  make_el(holder, "button.addButton.removeThis", {
+    innerHTML: "-",
+    event_listener: {
+      event: "click",
+      func: (event: Event) => {
+        console.log(`Remove ${dir} ${tract_index}`);
+      },
+    },
   });
 
   function show_or_hide_dragger(curr_val: string) {
