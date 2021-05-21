@@ -1,5 +1,6 @@
 import { Grid_Pos } from "./Grid_Item";
 
+export type Tract_Dir = "rows" | "cols";
 type Grid_Attr = "rows" | "cols" | "gap";
 
 export type Layout_State = {
@@ -82,18 +83,18 @@ export class Grid_Layout {
     if (attrs.cols) new_attrs.cols = attrs.cols;
     if (attrs.gap) new_attrs.gap = attrs.gap;
 
-    let new_num_cells = false;
     if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
       changed.push("rows");
-      new_num_cells = true;
     }
     if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
       changed.push("cols");
-      new_num_cells = true;
     }
     if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
       changed.push("gap");
     }
+    const new_num_cells =
+      new_attrs.cols.length !== this.num_cols ||
+      new_attrs.rows.length !== this.num_rows;
 
     return {
       changed,
