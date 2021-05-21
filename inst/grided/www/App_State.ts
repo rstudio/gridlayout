@@ -314,7 +314,6 @@ export class App_State {
       editor_el.removeEventListener("mouseup", drag_end);
     }
   }
-
 } // End of class declaration
 
 export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
@@ -389,7 +388,6 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
 
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
-    debugger;
     setup_tract_controls(app_state);
     setup_new_item_drag(app_state);
   }
