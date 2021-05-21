@@ -1,10 +1,11 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
-import { Grid_Layout } from "./Grid_Layout";
+import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
 import {
   CSS_Input,
   get_css_unit,
   get_css_value,
   make_css_unit_input,
+  make_grid_tract_control,
 } from "./make-css_unit_input";
 import {
   Block_El,
@@ -313,6 +314,7 @@ export class App_State {
       editor_el.removeEventListener("mouseup", drag_end);
     }
   }
+
 } // End of class declaration
 
 export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
@@ -387,6 +389,9 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
 
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
+    debugger;
+    setup_tract_controls(app_state);
+    setup_new_item_drag(app_state);
   }
 
   if (!opts.dont_send_to_shiny) {
@@ -424,68 +429,76 @@ function fill_grid_cells(app_state: App_State) {
     if (app_state.mode === "Existing") {
       set_class(app_state.current_cells, "transparent");
     }
+  }
+}
 
-    // Build each column and row's sizing controler
-    for (let type in app_state.controls) {
-      // Get rid of old ones to start with fresh slate
-      remove_elements(
-        app_state.container.querySelectorAll(`.${type}-controls`)
-      );
-      app_state.controls[type] = app_state.grid_layout.attrs[type].map(
-        (size: string, i: number) => {
-          // The i + 1 is because grid is indexed at 1, not zero
-          const grid_i = i + 1;
+function setup_new_item_drag(app_state: App_State) {
+  const current_selection_box = new Grid_Item({
+    el: app_state.make_el("div#current_selection_box.added-element"),
+    parent_layout: app_state.grid_layout,
+  });
+  const drag_canvas = app_state.make_el("div#drag_canvas");
 
-          return make_css_unit_input({
-            parent_el: app_state.container,
-            selector: `#control_${type}${grid_i}.${type}-controls`,
-            start_val: get_css_value(size),
-            start_unit: get_css_unit(size),
-            on_change: () =>
-              update_grid(app_state, app_state.layout_from_controls),
-            on_drag: () =>
-              update_grid(app_state, {
-                ...app_state.layout_from_controls,
-                dont_send_to_shiny: true,
-              }),
-            form_styles: {
-              [`grid${
-                type === "rows" ? "Row" : "Column"
-              }`]: make_template_start_end(grid_i),
-            },
-            drag_dir: type === "rows" ? "y" : "x",
-          });
-        }
-      );
-    }
-    const current_selection_box = new Grid_Item({
-      el: app_state.make_el("div#current_selection_box.added-element"),
-      parent_layout: app_state.grid_layout,
-    });
-    const drag_canvas = app_state.make_el("div#drag_canvas");
+  app_state.setup_drag({
+    watching_element: drag_canvas,
+    grid_item: current_selection_box,
+    drag_dir: "bottom-right",
+    on_start: () => {
+      current_selection_box.style.borderColor = app_state.next_color;
+    },
+    on_end: ({ grid }) => {
+      element_naming_ui(app_state, {
+        grid_pos: grid,
+        selection_box: current_selection_box,
+      });
+    },
+  });
 
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_item: current_selection_box,
-      drag_dir: "bottom-right",
-      on_start: () => {
-        current_selection_box.style.borderColor = app_state.next_color;
-      },
-      on_end: ({ grid }) => {
-        element_naming_ui(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box,
+  // Make sure any added elements sit on top by re-appending them to grid holder
+  // Make sure that the drag detector sits over everything
+  [
+    drag_canvas,
+    ...app_state.container.querySelectorAll(".added-element"),
+  ].forEach((el) => app_state.container.appendChild(el));
+}
+
+function setup_tract_controls(app_state: App_State) {
+  // Build each column and row's sizing controler
+  for (let type in app_state.controls) {
+    // Get rid of old ones to start with fresh slate
+    remove_elements(app_state.container.querySelectorAll(`.${type}-controls`));
+    app_state.controls[type] = app_state.grid_layout.attrs[type].map(
+      (size: string, i: number) => {
+        // The i + 1 is because grid is indexed at 1, not zero
+        const grid_i = i + 1;
+
+        return make_grid_tract_control(app_state, {
+          size,
+          dir: type as Tract_Dir,
+          tract_index: grid_i,
         });
-      },
-    });
-
-    // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
-    [
-      drag_canvas,
-      ...app_state.container.querySelectorAll(".added-element"),
-    ].forEach((el) => app_state.container.appendChild(el));
-  } else {
+        // return make_css_unit_input({
+        //   parent_el: app_state.container,
+        //   selector: `#control_${type}${grid_i}.${type}-controls`,
+        //   start_val: get_css_value(size),
+        //   start_unit: get_css_unit(size),
+        //   add_buttons: true,
+        //   on_change: () =>
+        //     update_grid(app_state, app_state.layout_from_controls),
+        //   on_drag: () =>
+        //     update_grid(app_state, {
+        //       ...app_state.layout_from_controls,
+        //       dont_send_to_shiny: true,
+        //     }),
+        //   form_styles: {
+        //     [`grid${
+        //       type === "rows" ? "Row" : "Column"
+        //     }`]: make_template_start_end(grid_i),
+        //   },
+        //   drag_dir: type === "rows" ? "y" : "x",
+        // });
+      }
+    );
   }
 }
 

@@ -4,6 +4,9 @@ import {
   vertical_drag_icon,
 } from "./utils-icons";
 import { make_el } from "./make-elements";
+import { App_State, update_grid } from "./App_State";
+import { make_template_start_end } from "./utils-grid";
+import { Tract_Dir } from "./Grid_Layout";
 
 export type CSS_Input = {
   form: HTMLElement;
@@ -43,9 +46,11 @@ export function make_css_unit_input({
   allowed_units = ["fr", "px", "rem", "auto"],
   form_styles = {},
   drag_dir = "none",
+  add_buttons = false,
 }): CSS_Input {
   const allow_drag = drag_dir !== "none";
   let current_unit = start_unit;
+
 
   const form = make_el(parent_el, `form${selector}.css-unit-input`, {
     styles: form_styles,
@@ -131,6 +136,9 @@ export function make_css_unit_input({
       unit_option.selected = true;
     }
   });
+  if (add_buttons) {
+    debugger;
+  }
 
   function unit_type(): unit_options {
     return unit_selector.value as unit_options;
@@ -190,3 +198,35 @@ export function make_css_unit_input({
 
   return { form, current_value, update_value };
 }
+
+export function make_grid_tract_control(app_state: App_State, opts: {
+  size: string,
+  dir: Tract_Dir,
+  tract_index: number
+}): CSS_Input {
+  const {size, dir, tract_index} = opts;
+  console.log("Making a new grid tract controller")
+  return make_css_unit_input({
+    parent_el: app_state.container,
+    selector: `#control_${dir}${tract_index}.${dir}-controls`,
+    start_val: get_css_value(size),
+    start_unit: get_css_unit(size),
+    add_buttons: true,
+    on_change: () =>
+      update_grid(app_state, app_state.layout_from_controls),
+    on_drag: () => {
+      update_grid(app_state, {
+        ...app_state.layout_from_controls,
+        dont_send_to_shiny: true,
+      })
+      console.log("Dragged grid");
+    },
+    form_styles: {
+      [`grid${
+        dir === "rows" ? "Row" : "Column"
+      }`]: make_template_start_end(tract_index),
+    },
+    drag_dir: dir === "rows" ? "y" : "x",
+  });
+}
+

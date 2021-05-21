@@ -701,22 +701,20 @@ function () {
     if (attrs.rows) new_attrs.rows = attrs.rows;
     if (attrs.cols) new_attrs.cols = attrs.cols;
     if (attrs.gap) new_attrs.gap = attrs.gap;
-    var new_num_cells = false;
 
     if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
       changed.push("rows");
-      new_num_cells = true;
     }
 
     if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
       changed.push("cols");
-      new_num_cells = true;
     }
 
     if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
       changed.push("gap");
     }
 
+    var new_num_cells = new_attrs.cols.length !== this.num_cols || new_attrs.rows.length !== this.num_rows;
     return {
       changed: changed,
       new_num_cells: new_num_cells,
@@ -958,14 +956,34 @@ exports.Text_El = Text_El;
 },{"./utils-grid":"utils-grid.ts","./utils-misc":"utils-misc.ts"}],"make-css_unit_input.ts":[function(require,module,exports) {
 "use strict";
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.make_css_unit_input = exports.get_css_value = exports.get_css_unit = void 0;
+exports.make_grid_tract_control = exports.make_css_unit_input = exports.get_css_value = exports.get_css_unit = void 0;
 
 var utils_icons_1 = require("./utils-icons");
 
 var make_elements_1 = require("./make-elements");
+
+var App_State_1 = require("./App_State");
+
+var utils_grid_1 = require("./utils-grid");
 
 var default_values = {
   fr: "1",
@@ -1009,7 +1027,9 @@ function make_css_unit_input(_a) {
       _h = _a.form_styles,
       form_styles = _h === void 0 ? {} : _h,
       _j = _a.drag_dir,
-      drag_dir = _j === void 0 ? "none" : _j;
+      drag_dir = _j === void 0 ? "none" : _j,
+      _k = _a.add_buttons,
+      add_buttons = _k === void 0 ? false : _k;
   var allow_drag = drag_dir !== "none";
   var current_unit = start_unit;
   var form = make_elements_1.make_el(parent_el, "form" + selector + ".css-unit-input", {
@@ -1085,6 +1105,10 @@ function make_css_unit_input(_a) {
     }
   });
 
+  if (add_buttons) {
+    debugger;
+  }
+
   function unit_type() {
     return unit_selector.value;
   }
@@ -1145,7 +1169,36 @@ function make_css_unit_input(_a) {
 }
 
 exports.make_css_unit_input = make_css_unit_input;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"make-focused_modal.ts":[function(require,module,exports) {
+
+function make_grid_tract_control(app_state, opts) {
+  var _a;
+
+  var size = opts.size,
+      dir = opts.dir,
+      tract_index = opts.tract_index;
+  console.log("Making a new grid tract controller");
+  return make_css_unit_input({
+    parent_el: app_state.container,
+    selector: "#control_" + dir + tract_index + "." + dir + "-controls",
+    start_val: get_css_value(size),
+    start_unit: get_css_unit(size),
+    add_buttons: true,
+    on_change: function on_change() {
+      return App_State_1.update_grid(app_state, app_state.layout_from_controls);
+    },
+    on_drag: function on_drag() {
+      App_State_1.update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
+        dont_send_to_shiny: true
+      }));
+      console.log("Dragged grid");
+    },
+    form_styles: (_a = {}, _a["grid" + (dir === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(tract_index), _a),
+    drag_dir: dir === "rows" ? "y" : "x"
+  });
+}
+
+exports.make_grid_tract_control = make_grid_tract_control;
+},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts","./App_State":"App_State.ts","./utils-grid":"utils-grid.ts"}],"make-focused_modal.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2003,6 +2056,9 @@ function update_grid(app_state, opts) {
 
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
+    debugger;
+    setup_tract_controls(app_state);
+    setup_new_item_drag(app_state);
   }
 
   if (!opts.dont_send_to_shiny) {
@@ -2041,65 +2097,75 @@ function fill_grid_cells(app_state) {
     if (app_state.mode === "Existing") {
       utils_misc_1.set_class(app_state.current_cells, "transparent");
     }
+  }
+}
 
-    var _loop_1 = function _loop_1(type) {
-      // Get rid of old ones to start with fresh slate
-      make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
-      app_state.controls[type] = app_state.grid_layout.attrs[type].map(function (size, i) {
-        var _a; // The i + 1 is because grid is indexed at 1, not zero
-
-
-        var grid_i = i + 1;
-        return make_css_unit_input_1.make_css_unit_input({
-          parent_el: app_state.container,
-          selector: "#control_" + type + grid_i + "." + type + "-controls",
-          start_val: make_css_unit_input_1.get_css_value(size),
-          start_unit: make_css_unit_input_1.get_css_unit(size),
-          on_change: function on_change() {
-            return update_grid(app_state, app_state.layout_from_controls);
-          },
-          on_drag: function on_drag() {
-            return update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
-              dont_send_to_shiny: true
-            }));
-          },
-          form_styles: (_a = {}, _a["grid" + (type === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(grid_i), _a),
-          drag_dir: type === "rows" ? "y" : "x"
-        });
+function setup_new_item_drag(app_state) {
+  var current_selection_box = new Grid_Item_1.Grid_Item({
+    el: app_state.make_el("div#current_selection_box.added-element"),
+    parent_layout: app_state.grid_layout
+  });
+  var drag_canvas = app_state.make_el("div#drag_canvas");
+  app_state.setup_drag({
+    watching_element: drag_canvas,
+    grid_item: current_selection_box,
+    drag_dir: "bottom-right",
+    on_start: function on_start() {
+      current_selection_box.style.borderColor = app_state.next_color;
+    },
+    on_end: function on_end(_a) {
+      var grid = _a.grid;
+      element_naming_ui(app_state, {
+        grid_pos: grid,
+        selection_box: current_selection_box
       });
-    }; // Build each column and row's sizing controler
-
-
-    for (var type in app_state.controls) {
-      _loop_1(type);
     }
+  }); // Make sure any added elements sit on top by re-appending them to grid holder
+  // Make sure that the drag detector sits over everything
 
-    var current_selection_box_1 = new Grid_Item_1.Grid_Item({
-      el: app_state.make_el("div#current_selection_box.added-element"),
-      parent_layout: app_state.grid_layout
-    });
-    var drag_canvas = app_state.make_el("div#drag_canvas");
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_item: current_selection_box_1,
-      drag_dir: "bottom-right",
-      on_start: function on_start() {
-        current_selection_box_1.style.borderColor = app_state.next_color;
-      },
-      on_end: function on_end(_a) {
-        var grid = _a.grid;
-        element_naming_ui(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box_1
-        });
-      }
-    }); // Make sure any added elements sit on top by re-appending them to grid holder
-    // Make sure that the drag detector sits over everything
+  __spreadArray([drag_canvas], app_state.container.querySelectorAll(".added-element")).forEach(function (el) {
+    return app_state.container.appendChild(el);
+  });
+}
 
-    __spreadArray([drag_canvas], app_state.container.querySelectorAll(".added-element")).forEach(function (el) {
-      return app_state.container.appendChild(el);
+function setup_tract_controls(app_state) {
+  var _loop_1 = function _loop_1(type) {
+    // Get rid of old ones to start with fresh slate
+    make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
+    app_state.controls[type] = app_state.grid_layout.attrs[type].map(function (size, i) {
+      // The i + 1 is because grid is indexed at 1, not zero
+      var grid_i = i + 1;
+      return make_css_unit_input_1.make_grid_tract_control(app_state, {
+        size: size,
+        dir: type,
+        tract_index: grid_i
+      }); // return make_css_unit_input({
+      //   parent_el: app_state.container,
+      //   selector: `#control_${type}${grid_i}.${type}-controls`,
+      //   start_val: get_css_value(size),
+      //   start_unit: get_css_unit(size),
+      //   add_buttons: true,
+      //   on_change: () =>
+      //     update_grid(app_state, app_state.layout_from_controls),
+      //   on_drag: () =>
+      //     update_grid(app_state, {
+      //       ...app_state.layout_from_controls,
+      //       dont_send_to_shiny: true,
+      //     }),
+      //   form_styles: {
+      //     [`grid${
+      //       type === "rows" ? "Row" : "Column"
+      //     }`]: make_template_start_end(grid_i),
+      //   },
+      //   drag_dir: type === "rows" ? "y" : "x",
+      // });
     });
-  } else {}
+  }; // Build each column and row's sizing controler
+
+
+  for (var type in app_state.controls) {
+    _loop_1(type);
+  }
 }
 
 function make_settings_panel(app_state, panel_el) {
