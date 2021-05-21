@@ -1,13 +1,11 @@
 import { Grid_Pos } from "./Grid_Item";
 import { set_element_in_grid } from "./utils-grid";
-import {
-  as_array,
-} from "./utils-misc";
+import { as_array } from "./utils-misc";
 
 export type Event_Listener = {
   event: string;
   func: (event: Event) => void;
-}
+};
 
 type Element_Contents = {
   sel_txt: string;
@@ -22,27 +20,25 @@ export type Element_Opts = {
   data_props?: object;
   grid_pos?: Grid_Pos;
   props?: object;
-}
+};
 
 // Safari doesn't support lookbehinds for regex so we have to make it manually
-function extract_id(sel_txt: string): string|null {
+function extract_id(sel_txt: string): string | null {
   const id_match: RegExpMatchArray = sel_txt.match(/#([^\.]+)/g);
-  return id_match ? id_match[0].replace("#", ""): null;
+  return id_match ? id_match[0].replace("#", "") : null;
 }
 
-function extract_classes(sel_txt:string): Array<string>|null {
+function extract_classes(sel_txt: string): Array<string> | null {
   const class_list: RegExpMatchArray = sel_txt.match(/\.([^\.#]+)/g);
-  return class_list 
-    ? [...class_list].map(c => c.replace("\.", ""))
-    : null;
+  return class_list ? [...class_list].map((c) => c.replace(".", "")) : null;
 }
 
-export function parse_selector_text(sel_txt: string){
+export function parse_selector_text(sel_txt: string) {
   return {
     tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
     el_id: extract_id(sel_txt),
     class_list: extract_classes(sel_txt),
-  }
+  };
 }
 
 // This is a heavy-lifter that takes care of building elements and placing them
@@ -52,12 +48,11 @@ export function make_el(
   parent: HTMLElement,
   sel_txt: string,
   opts: Element_Opts = {}
-  ) {  
-
+) {
   let el: HTMLElement = parent.querySelector(sel_txt);
   if (!el) {
     // Element doesn't exists so we need to make it
-    el = El({sel_txt});
+    el = El({ sel_txt });
 
     if (opts.props) {
       Object.assign(el, opts.props);
@@ -92,7 +87,9 @@ export function make_el(
 }
 
 // Given a list of elements from a query selector, remove them all
-export function remove_elements(els_to_remove: NodeListOf<Element> | Element[]): void {
+export function remove_elements(
+  els_to_remove: NodeListOf<Element> | Element[]
+): void {
   els_to_remove.forEach((e) => e.remove());
 }
 
@@ -102,7 +99,9 @@ export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
   const style_sheet = document.createElement("style");
 
   shadow_holder.shadowRoot.appendChild(style_sheet);
-  children.forEach((child_el) => shadow_holder.shadowRoot.appendChild(child_el))
+  children.forEach((child_el) =>
+    shadow_holder.shadowRoot.appendChild(child_el)
+  );
   return {
     el: shadow_holder,
     style_sheet,

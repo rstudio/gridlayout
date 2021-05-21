@@ -1,9 +1,5 @@
 // JS entry point
-import {
-  App_State,
-  Grid_Update_Options,
-  update_grid,
-} from "./App_State";
+import { App_State, Grid_Update_Options, update_grid } from "./App_State";
 import { show_code } from "./make-focused_modal";
 import {
   add_shiny_listener,

@@ -807,7 +807,7 @@ function extract_id(sel_txt) {
 function extract_classes(sel_txt) {
   var class_list = sel_txt.match(/\.([^\.#]+)/g);
   return class_list ? __spreadArray([], class_list).map(function (c) {
-    return c.replace("\.", "");
+    return c.replace(".", "");
   }) : null;
 }
 

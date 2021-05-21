@@ -10,7 +10,7 @@ import {
   get_bounding_rect,
   max_w_missing,
   min_w_missing,
-  Selection_Rect
+  Selection_Rect,
 } from "./utils-misc";
 
 function get_styles(container: HTMLElement | CSSStyleDeclaration) {
@@ -42,9 +42,7 @@ export function make_template_start_end(start: number, end?: number): string {
   return `${start} / ${end}`;
 }
 
-export function set_element_in_grid(
-  el: HTMLElement,
-  grid_bounds: Grid_Pos) {
+export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
   if (grid_bounds.start_row) {
     el.style.gridRowStart = grid_bounds.start_row.toString();
   }
@@ -76,7 +74,12 @@ export function get_drag_extent_on_grid(
   selection_rect: Selection_Rect
 ): Grid_Pos {
   // Reset bounding box definitions so we only use current selection extent
-  const sel_bounds: Grid_Pos = { start_col: null, end_col: null, start_row: null, end_row: null };
+  const sel_bounds: Grid_Pos = {
+    start_col: null,
+    end_col: null,
+    start_row: null,
+    end_row: null,
+  };
 
   app_state.current_cells.forEach(function (el) {
     // Cell is overlapped by selection box
@@ -109,15 +112,14 @@ export function gen_code_for_layout(
   const container_selector = "#container";
 
   const element_defs = elements.map((el) => {
-    const {start_row, end_row, start_col, end_col} = el.grid_pos;
+    const { start_row, end_row, start_col, end_col } = el.grid_pos;
     return concat_nl(
       `#${el.id} {`,
       `  grid-column: ${make_template_start_end(start_col, end_col)};`,
       `  grid-row: ${make_template_start_end(start_row, end_row)};`,
       `}`
-    )
-  }
-  );
+    );
+  });
 
   const css_code = concat_nl(
     `${container_selector} {`,
@@ -158,7 +160,7 @@ export function contains_element(
 ): "inside" | "partially" | "outside" {
   const num_rows = layout.rows.length;
   const num_cols = layout.cols.length;
-  const {start_row, end_row, start_col, end_col} = el.grid_pos;
+  const { start_row, end_row, start_col, end_col } = el.grid_pos;
 
   if (start_row > num_rows || start_col > num_cols) {
     return "outside";

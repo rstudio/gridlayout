@@ -30,7 +30,7 @@ export function send_grid_sizing_to_shiny(grid_attrs: Layout_State) {
 export function send_elements_to_shiny(elements: Element_Info[]) {
   const elements_by_id = {};
   elements.forEach(function (el) {
-    elements_by_id[el.id] = {id: el.id, ...el.grid_pos};
+    elements_by_id[el.id] = { id: el.id, ...el.grid_pos };
   });
 
   setShinyInput("elements", elements_by_id);

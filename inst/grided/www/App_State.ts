@@ -189,9 +189,9 @@ export class App_State {
   }
 
   add_tract(dir: Tract_Dir, new_index: number) {
-    this.elements.forEach(el => {
-      const start_id = dir === "rows" ? "start_row": "start_col";
-      const end_id = dir === "rows" ? "end_row": "end_col";
+    this.elements.forEach((el) => {
+      const start_id = dir === "rows" ? "start_row" : "start_col";
+      const end_id = dir === "rows" ? "end_row" : "end_col";
       const el_position = el.grid_item.position;
 
       if (new_index >= el_position[end_id]) {
@@ -209,8 +209,8 @@ export class App_State {
 
     const tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(new_index, 0, "1fr");
-    
-    update_grid(this, {[dir]: tract_sizes});
+
+    update_grid(this, { [dir]: tract_sizes });
   }
 
   // Get the next color in our list of colors.
