@@ -188,6 +188,31 @@ export class App_State {
     send_elements_to_shiny(this.current_elements);
   }
 
+  add_tract(dir: Tract_Dir, new_index: number) {
+    this.elements.forEach(el => {
+      const start_id = dir === "rows" ? "start_row": "start_col";
+      const end_id = dir === "rows" ? "end_row": "end_col";
+      const el_position = el.grid_item.position;
+
+      if (new_index >= el_position[end_id]) {
+        // no change needed
+      } else if (new_index < el_position[start_id]) {
+        // Before item span means everything is shifted up
+        el_position[start_id]++;
+        el_position[end_id]++;
+      } else {
+        // Within item span: just end is shifted up
+        el.grid_item[end_id] = el_position[end_id]++;
+      }
+      el.grid_item.position = el_position;
+    });
+
+    const tract_sizes = this.grid_layout[dir];
+    tract_sizes.splice(new_index, 0, "1fr");
+    
+    update_grid(this, {[dir]: tract_sizes});
+  }
+
   // Get the next color in our list of colors.
   get next_color() {
     const colors = [

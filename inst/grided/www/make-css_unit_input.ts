@@ -240,6 +240,7 @@ export function make_grid_tract_control(
       event: "click",
       func: (event: Event) => {
         console.log(`Add ${dir} after ${tract_index}`);
+        app_state.add_tract(dir, tract_index);
       },
     },
   });
@@ -249,6 +250,7 @@ export function make_grid_tract_control(
       event: "click",
       func: (event: Event) => {
         console.log(`Add ${dir} before ${tract_index}`);
+        app_state.add_tract(dir, tract_index-1);
       },
     },
   });

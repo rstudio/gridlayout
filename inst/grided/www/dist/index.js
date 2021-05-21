@@ -1193,6 +1193,7 @@ function make_grid_tract_control(app_state, opts) {
       event: "click",
       func: function func(event) {
         console.log("Add " + dir + " after " + tract_index);
+        app_state.add_tract(dir, tract_index);
       }
     }
   });
@@ -1202,6 +1203,7 @@ function make_grid_tract_control(app_state, opts) {
       event: "click",
       func: function func(event) {
         console.log("Add " + dir + " before " + tract_index);
+        app_state.add_tract(dir, tract_index - 1);
       }
     }
   });
@@ -1908,6 +1910,31 @@ function () {
     utils_shiny_1.send_elements_to_shiny(this.current_elements);
   };
 
+  App_State.prototype.add_tract = function (dir, new_index) {
+    var _a;
+
+    this.elements.forEach(function (el) {
+      var start_id = dir === "rows" ? "start_row" : "start_col";
+      var end_id = dir === "rows" ? "end_row" : "end_col";
+      var el_position = el.grid_item.position;
+
+      if (new_index >= el_position[end_id]) {// no change needed
+      } else if (new_index < el_position[start_id]) {
+        // Before item span means everything is shifted up
+        el_position[start_id]++;
+        el_position[end_id]++;
+      } else {
+        // Within item span: just end is shifted up
+        el.grid_item[end_id] = el_position[end_id]++;
+      }
+
+      el.grid_item.position = el_position;
+    });
+    var tract_sizes = this.grid_layout[dir];
+    tract_sizes.splice(new_index, 0, "1fr");
+    update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
+  };
+
   Object.defineProperty(App_State.prototype, "next_color", {
     // Get the next color in our list of colors.
     get: function get() {
@@ -2594,7 +2621,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49205" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62382" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
