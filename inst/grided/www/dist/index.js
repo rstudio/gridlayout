@@ -1020,20 +1020,10 @@ function make_css_unit_input(_a) {
       on_change = _e === void 0 ? function (x) {
     return console.log("css unit change", x);
   } : _e,
-      _f = _a.on_drag,
-      on_drag = _f === void 0 ? on_change : _f,
-      _g = _a.allowed_units,
-      allowed_units = _g === void 0 ? ["fr", "px", "rem", "auto"] : _g,
-      _h = _a.form_styles,
-      form_styles = _h === void 0 ? {} : _h,
-      _j = _a.drag_dir,
-      drag_dir = _j === void 0 ? "none" : _j,
-      _k = _a.add_buttons,
-      add_buttons = _k === void 0 ? false : _k;
-  var allow_drag = drag_dir !== "none";
+      _f = _a.allowed_units,
+      allowed_units = _f === void 0 ? ["fr", "px", "rem", "auto"] : _f;
   var current_unit = start_unit;
   var form = make_elements_1.make_el(parent_el, "form" + selector + ".css-unit-input", {
-    styles: form_styles,
     event_listener: [{
       event: "change",
       func: on_update
@@ -1059,39 +1049,6 @@ function make_css_unit_input(_a) {
       name: "units"
     }
   });
-  var resizer = make_elements_1.make_el(form, "div.css-unit-input-dragger", {
-    innerHTML: drag_dir === "y" ? utils_icons_1.vertical_drag_icon : utils_icons_1.horizontal_drag_icon
-  }); // Place an invisible div over the main one that we let be dragged. This means
-  // we can use the nice drag interaction callbacks without the ugly default
-  // drag behavior of two copies of the div and zooming back to the start pos etc.
-
-  make_elements_1.make_el(resizer, "div.css-unit-input-drag-detector", {
-    props: {
-      draggable: true
-    },
-    event_listener: [{
-      event: "dragstart",
-      func: function func(event) {
-        this.dataset.baseline = value_input.value;
-        this.dataset.start = event[drag_dir];
-      }
-    }, {
-      event: "drag",
-      func: function func(event) {
-        var drag_pos = event[drag_dir]; // At the end of the drag we get a drag event with 0 values that throws stuff off
-
-        if (drag_pos === 0) return;
-        var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
-        value_input.value = new_value.toString();
-        on_drag();
-      }
-    }, {
-      event: "dragend",
-      func: function func(event) {
-        on_change(current_value());
-      }
-    }]
-  });
   allowed_units.forEach(function (unit_type) {
     var unit_option = make_elements_1.make_el(unit_selector, "option." + unit_type, {
       props: {
@@ -1104,10 +1061,6 @@ function make_css_unit_input(_a) {
       unit_option.selected = true;
     }
   });
-
-  if (add_buttons) {
-    debugger;
-  }
 
   function unit_type() {
     return unit_selector.value;
@@ -1137,9 +1090,9 @@ function make_css_unit_input(_a) {
       value_input.classList.add("disabled");
       value_input.value = "";
     } else {
-      value_input.classList.remove("disabled"); // If the user is flipping through multiple units we dont want to just 
+      value_input.classList.remove("disabled"); // If the user is flipping through multiple units we dont want to just
       // stick to whatever value was last set as the unit unless they've changed
-      // it from the default. E.g. flipping from default of 100px to rem 
+      // it from the default. E.g. flipping from default of 100px to rem
       // shouldn't result in a 100rem wide track which then needs to be adjusted
 
       var using_old_units_default = value_input.value === default_values[current_unit];
@@ -1149,12 +1102,6 @@ function make_css_unit_input(_a) {
     for (var _i = 0, _a = unit_selector.children; _i < _a.length; _i++) {
       var opt = _a[_i];
       opt.selected = opt.value === units;
-    }
-
-    if (units === "px" && allow_drag) {
-      form.classList.add("with-drag");
-    } else {
-      form.classList.remove("with-drag");
     }
 
     current_unit = units;
@@ -1171,30 +1118,89 @@ function make_css_unit_input(_a) {
 exports.make_css_unit_input = make_css_unit_input;
 
 function make_grid_tract_control(app_state, opts) {
-  var _a;
-
   var size = opts.size,
       dir = opts.dir,
       tract_index = opts.tract_index;
-  console.log("Making a new grid tract controller");
-  return make_css_unit_input({
-    parent_el: app_state.container,
-    selector: "#control_" + dir + tract_index + "." + dir + "-controls",
+  var styles_for_holder = {
+    display: "grid",
+    gridTemplateRows: "auto 20px"
+  };
+
+  if (dir === "rows") {
+    Object.assign(styles_for_holder, {
+      gridRow: utils_grid_1.make_template_start_end(tract_index),
+      justifyContent: "end",
+      alignContent: "center"
+    });
+  } else {
+    Object.assign(styles_for_holder, {
+      gridColumn: utils_grid_1.make_template_start_end(tract_index),
+      justifyContent: "center",
+      alignContent: "start"
+    });
+  }
+
+  var holder = make_elements_1.make_el(app_state.container, "div#control_" + dir + tract_index + "." + dir + "-controls", {
+    styles: styles_for_holder
+  });
+  var unit_input = make_css_unit_input({
+    parent_el: holder,
+    selector: ".unit-input",
     start_val: get_css_value(size),
     start_unit: get_css_unit(size),
-    add_buttons: true,
-    on_change: function on_change() {
-      return App_State_1.update_grid(app_state, app_state.layout_from_controls);
-    },
-    on_drag: function on_drag() {
-      App_State_1.update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
-        dont_send_to_shiny: true
-      }));
-      console.log("Dragged grid");
-    },
-    form_styles: (_a = {}, _a["grid" + (dir === "rows" ? "Row" : "Column")] = utils_grid_1.make_template_start_end(tract_index), _a),
-    drag_dir: dir === "rows" ? "y" : "x"
+    on_change: function on_change(new_val) {
+      show_or_hide_dragger(new_val);
+      App_State_1.update_grid(app_state, app_state.layout_from_controls);
+    }
   });
+  var resizer = make_elements_1.make_el(holder, "div.css-unit-input-dragger", {
+    innerHTML: dir === "rows" ? utils_icons_1.vertical_drag_icon : utils_icons_1.horizontal_drag_icon
+  });
+  var value_input = unit_input.form.querySelector(".css-unit-input-value");
+  var drag_dir = dir === "rows" ? "y" : "x"; // Place an invisible div over the main one that we let be dragged. This means
+  // we can use the nice drag interaction callbacks without the ugly default
+  // drag behavior of two copies of the div and zooming back to the start pos etc.
+
+  make_elements_1.make_el(resizer, "div.css-unit-input-drag-detector", {
+    props: {
+      draggable: true
+    },
+    event_listener: [{
+      event: "dragstart",
+      func: function func(event) {
+        this.dataset.baseline = value_input.value;
+        this.dataset.start = event[drag_dir];
+      }
+    }, {
+      event: "drag",
+      func: function func(event) {
+        var drag_pos = event[drag_dir]; // At the end of the drag we get a drag event with 0 values that throws stuff off
+
+        if (drag_pos === 0) return;
+        var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
+        value_input.value = new_value.toString();
+        App_State_1.update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
+          dont_send_to_shiny: true
+        }));
+      }
+    }, {
+      event: "dragend",
+      func: function func(event) {
+        App_State_1.update_grid(app_state, app_state.layout_from_controls);
+      }
+    }]
+  });
+
+  function show_or_hide_dragger(curr_val) {
+    if (get_css_unit(curr_val) === "px") {
+      holder.classList.add("with-drag");
+    } else {
+      holder.classList.remove("with-drag");
+    }
+  }
+
+  show_or_hide_dragger(unit_input.current_value());
+  return unit_input;
 }
 
 exports.make_grid_tract_control = make_grid_tract_control;
@@ -2056,7 +2062,6 @@ function update_grid(app_state, opts) {
 
   if (updated_attributes.new_num_cells || opts.force) {
     fill_grid_cells(app_state);
-    debugger;
     setup_tract_controls(app_state);
     setup_new_item_drag(app_state);
   }

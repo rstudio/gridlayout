@@ -42,13 +42,11 @@ export function make_css_unit_input({
   start_val = 1,
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
-  allowed_units = ["fr", "px", "rem", "auto"],
-  form_styles = {},
+  allowed_units = ["fr", "px", "rem", "auto"]
 }): CSS_Input {
   let current_unit = start_unit;
 
   const form = make_el(parent_el, `form${selector}.css-unit-input`, {
-    styles: form_styles,
     event_listener: [
       { event: "change", func: on_update },
       {
@@ -155,23 +153,44 @@ export function make_grid_tract_control(
   }
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
+
+  const styles_for_holder: Record<string, string> = { 
+    display: "grid",
+    gridTemplateRows: "auto 20px",
+   };
+  if (dir === "rows") {
+    Object.assign(styles_for_holder, {
+      gridRow: make_template_start_end(tract_index),
+      justifyContent: "end",
+      alignContent: "center",
+    });
+  } else {
+    Object.assign(styles_for_holder, {
+      gridColumn: make_template_start_end(tract_index),
+      justifyContent: "center",
+      alignContent: "start",
+    });
+  }
+
+  const holder = make_el(
+    app_state.container,
+    `div#control_${dir}${tract_index}.${dir}-controls`,
+    {
+      styles: styles_for_holder,
+    }
+  );
   const unit_input = make_css_unit_input({
-    parent_el: app_state.container,
-    selector: `#control_${dir}${tract_index}.${dir}-controls`,
+    parent_el: holder,
+    selector: `.unit-input`,
     start_val: get_css_value(size),
     start_unit: get_css_unit(size),
-    form_styles: {
-      [`grid${dir === "rows" ? "Row" : "Column"}`]: make_template_start_end(
-        tract_index
-      ),
-    },
     on_change: (new_val: string) => {
       show_or_hide_dragger(new_val);
       update_grid(app_state, app_state.layout_from_controls);
     },
   });
 
-  const resizer = make_el(unit_input.form, "div.css-unit-input-dragger", {
+  const resizer = make_el(holder, "div.css-unit-input-dragger", {
     innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
   });
 
@@ -221,9 +240,9 @@ export function make_grid_tract_control(
 
   function show_or_hide_dragger(curr_val: string) {
     if (get_css_unit(curr_val) === "px") {
-      unit_input.form.classList.add("with-drag");
+      holder.classList.add("with-drag");
     } else {
-      unit_input.form.classList.remove("with-drag");
+      holder.classList.remove("with-drag");
     }
   }
   show_or_hide_dragger(unit_input.current_value());

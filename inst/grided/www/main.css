@@ -385,7 +385,6 @@ button.minus_btn.disabled {
   grid-template-columns: 60px 54px;
   grid-template-rows: 32px;
   grid-gap: 5px;
-  align-content: center;
   padding: 0.5rem;
   pointer-events: none;
   /* Prevents card styling when set to every child from spilling into input divs */
@@ -393,9 +392,9 @@ button.minus_btn.disabled {
 }
 
 
-.css-unit-input.with-drag {
+/* .css-unit-input.with-drag {
   grid-template-rows: 32px 18px;
-}
+} */
 
 .css-unit-input-value,
 .css-unit-input-select {
@@ -407,7 +406,7 @@ button.minus_btn.disabled {
 
 .css-unit-input-dragger {
   align-self: stretch;
-  grid-column: 1/-1;
+  /* grid-column: 1/-1; */
   display: none;
   justify-content: center;
   align-items: center;
