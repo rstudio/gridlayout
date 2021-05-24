@@ -1393,87 +1393,7 @@ function show_code(message, code_blocks) {
 }
 
 exports.show_code = show_code;
-},{"./make-elements":"make-elements.ts","./utils-misc":"utils-misc.ts"}],"make-incrementer.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.make_incrementer = void 0;
-
-var utils_icons_1 = require("./utils-icons");
-
-var make_elements_1 = require("./make-elements"); // Builds an up down button and value input
-
-
-function make_incrementer(_a) {
-  var parent_el = _a.parent_el,
-      _b = _a.start_val,
-      start_val = _b === void 0 ? 2 : _b,
-      _c = _a.id,
-      id = _c === void 0 ? "incrementer" : _c,
-      _d = _a.label,
-      label = _d === void 0 ? "my incrementer" : _d,
-      _e = _a.on_increment,
-      on_increment = _e === void 0 ? function (x) {
-    return console.log(x);
-  } : _e;
-  var current_value = start_val;
-  var plus_minus_div = make_elements_1.make_el(parent_el, "div#" + id + "_incrementer.plus-minus-input.settings-grid", {
-    innerHTML: "<span class = \"input-label\">" + label + "</span>"
-  });
-  var inputs_div = make_elements_1.make_el(plus_minus_div, "div.plus-minus-input-controls");
-  var minus_btn = make_elements_1.make_el(inputs_div, "button.plus-minus-input-btn.minus", {
-    props: {
-      name: "plus button"
-    },
-    innerHTML: utils_icons_1.minus_icon,
-    event_listener: {
-      event: "click",
-      func: increment_counter(-1)
-    }
-  });
-  var value_label = make_elements_1.make_el(inputs_div, "span.plus-minus-input-value", {
-    innerHTML: start_val.toString()
-  });
-  make_elements_1.make_el(inputs_div, "button.plus-minus-input-btn.plus", {
-    props: {
-      name: "minus button"
-    },
-    innerHTML: utils_icons_1.plus_icon,
-    event_listener: {
-      event: "click",
-      func: increment_counter(1)
-    }
-  });
-
-  function update_value(new_value) {
-    // Dont waste time if value hasn't changed
-    if (current_value == new_value) return;
-    value_label.innerHTML = new_value.toString();
-
-    if (new_value === 1) {
-      minus_btn.classList.add("disabled");
-    } else {
-      minus_btn.classList.remove("disabled");
-    }
-
-    current_value = new_value;
-  }
-
-  function increment_counter(amount) {
-    return function () {
-      var new_value = +value_label.innerHTML + amount;
-      update_value(new_value);
-      on_increment(new_value);
-    };
-  }
-
-  return update_value;
-}
-
-exports.make_incrementer = make_incrementer;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts"}],"utils-cssom.ts":[function(require,module,exports) {
+},{"./make-elements":"make-elements.ts","./utils-misc":"utils-misc.ts"}],"utils-cssom.ts":[function(require,module,exports) {
 "use strict"; // Assumes that only one stylesheet has rules for the given selector and
 // that only one rule targeting that selector alone is defined
 // If target_property is provided the function will chose the sheet that defines
@@ -1696,6 +1616,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.wrap_in_grided = void 0;
 
+var App_State_1 = require("./App_State");
+
+var make_css_unit_input_1 = require("./make-css_unit_input");
+
 var make_elements_1 = require("./make-elements");
 
 var make_toggle_switch_1 = require("./make-toggle_switch");
@@ -1718,6 +1642,18 @@ function wrap_in_grided(app_state) {
   }
 
   var settings_panel_el = make_elements_1.Block_El("div.card-body");
+  var gap_size_setting = make_css_unit_input_1.make_css_unit_input({
+    parent_el: make_elements_1.make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
+      innerHTML: "<span class = \"input-label\">Panel gap size</span>"
+    }),
+    selector: "#gap_size_chooser",
+    on_change: function on_change(x) {
+      return App_State_1.update_grid(app_state, {
+        gap: x
+      });
+    },
+    allowed_units: ["px", "rem"]
+  });
   var grided_ui = make_elements_1.Block_El("div#grided__holder", make_elements_1.Block_El("div#grided__header", make_elements_1.Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), make_elements_1.Block_El.apply(void 0, __spreadArray(["div.code_btns"], buttons))), make_elements_1.Block_El("div#grided__settings", make_elements_1.Text_El("h3", utils_icons_1.settings_icon + " Settings"), settings_panel_el), make_elements_1.Block_El("div#grided__instructions", make_elements_1.Text_El("h3", utils_icons_1.instructions_icon + " Instructions"), make_elements_1.Text_El("div.card-body", "\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in \"Added elements\" panel and click the " + utils_icons_1.trashcan_icon + " icon</li>\n      </ul>")), make_elements_1.Block_El("div#grided__elements", make_elements_1.Text_El("h3", utils_icons_1.elements_icon + " Added elements"), make_elements_1.Block_El("div.card-body", make_elements_1.Block_El("div#added_elements"))), make_elements_1.Block_El("div#grided__editor", make_elements_1.Block_El("div#editor-wrapper", make_elements_1.Text_El("div#editor-browser-header", utils_icons_1.browser_header_html), make_elements_1.Block_El("div#editor-app-window", app_state.container)))); // Make grided UI direct child of the body
 
   document.querySelector("body").appendChild(grided_ui); // Setup some basic styles for the container to make sure it fits into the
@@ -1769,13 +1705,13 @@ function wrap_in_grided(app_state) {
   });
 
   return {
-    settings_panel_el: settings_panel_el,
+    gap_size_setting: gap_size_setting,
     grid_is_filled: grid_is_filled
   };
 }
 
 exports.wrap_in_grided = wrap_in_grided;
-},{"./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-shiny":"utils-shiny.ts"}],"App_State.ts":[function(require,module,exports) {
+},{"./App_State":"App_State.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-shiny":"utils-shiny.ts"}],"App_State.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -1805,7 +1741,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.make_settings_panel = exports.update_grid = exports.App_State = void 0;
+exports.update_grid = exports.App_State = void 0;
 
 var Grid_Item_1 = require("./Grid_Item");
 
@@ -1816,8 +1752,6 @@ var make_css_unit_input_1 = require("./make-css_unit_input");
 var make_elements_1 = require("./make-elements");
 
 var make_focused_modal_1 = require("./make-focused_modal");
-
-var make_incrementer_1 = require("./make-incrementer");
 
 var utils_cssom_1 = require("./utils-cssom");
 
@@ -1849,10 +1783,10 @@ function () {
     this.grid_layout = new Grid_Layout_1.Grid_Layout(this.container);
 
     var _a = wrap_in_grided_1.wrap_in_grided(this),
-        settings_panel_el = _a.settings_panel_el,
-        grid_is_filled = _a.grid_is_filled;
+        grid_is_filled = _a.grid_is_filled,
+        gap_size_setting = _a.gap_size_setting;
 
-    this.settings_panel = make_settings_panel(this, settings_panel_el);
+    this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
 
     if (grid_is_filled) {
@@ -1887,14 +1821,7 @@ function () {
     get: function get() {
       var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
 
-      return colors[this.num_elements % colors.length];
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App_State.prototype, "num_elements", {
-    get: function get() {
-      return this.elements.length;
+      return colors[this.elements.length % colors.length];
     },
     enumerable: false,
     configurable: true
@@ -1934,13 +1861,6 @@ function () {
     this.elements.push(new_element_entry); // Let shiny know we have a new element
 
     utils_shiny_1.send_elements_to_shiny(this.current_elements);
-  };
-
-  App_State.prototype.get_element = function (el) {
-    var el_id = typeof el === "string" ? el : el.id;
-    return this.elements.find(function (e) {
-      return e.id == el_id;
-    });
   }; // Removes elements the user has added to the grid by id
 
 
@@ -2024,20 +1944,6 @@ function () {
     var tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(index - 1, 1);
     update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
-  };
-
-  App_State.prototype.update_settings_panel = function (opts) {
-    if (opts.cols) {
-      this.settings_panel.num_cols(opts.cols.length);
-    }
-
-    if (opts.rows) {
-      this.settings_panel.num_rows(opts.rows.length);
-    }
-
-    if (opts.gap) {
-      this.settings_panel.gap.update_value(opts.gap);
-    }
   }; // Just so we dont have to always say make_el(this.container...)
 
 
@@ -2127,7 +2033,7 @@ exports.App_State = App_State;
 
 function update_grid(app_state, opts) {
   var updated_attributes = app_state.grid_layout.changed_attributes(opts);
-  app_state.update_settings_panel(opts);
+  app_state.gap_size_setting.update_value(opts.gap);
   app_state.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
   // is clear to user
 
@@ -2271,58 +2177,6 @@ function setup_tract_controls(app_state) {
     _loop_1(dir);
   }
 }
-
-function make_settings_panel(app_state, panel_el) {
-  return {
-    num_rows: make_incrementer_1.make_incrementer({
-      parent_el: panel_el,
-      id: "num_rows",
-      start_val: 2,
-      label: "Number of rows",
-      on_increment: function on_increment(x) {
-        return update_num_rows_or_cols("rows", x);
-      }
-    }),
-    num_cols: make_incrementer_1.make_incrementer({
-      parent_el: panel_el,
-      id: "num_cols",
-      start_val: 2,
-      label: "Number of cols",
-      on_increment: function on_increment(x) {
-        return update_num_rows_or_cols("cols", x);
-      }
-    }),
-    gap: make_css_unit_input_1.make_css_unit_input({
-      parent_el: make_elements_1.make_el(panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
-        innerHTML: "<span class = \"input-label\">Panel gap size</span>"
-      }),
-      selector: "#gap_size_chooser",
-      on_change: function on_change(x) {
-        return update_grid(app_state, {
-          gap: x
-        });
-      },
-      allowed_units: ["px", "rem"]
-    })
-  };
-
-  function update_num_rows_or_cols(dir, new_count) {
-    var _a;
-
-    var current_vals = app_state.container.style["gridTemplate" + (dir === "rows" ? "Rows" : "Columns")].split(" ");
-
-    if (new_count > current_vals.length) {
-      current_vals.push("1fr");
-    } else if (new_count < current_vals.length) {
-      current_vals.pop();
-    } else {// No change, shouldn't happen but maybe...
-    }
-
-    update_grid(app_state, (_a = {}, _a[dir] = current_vals, _a));
-  }
-}
-
-exports.make_settings_panel = make_settings_panel;
 
 function element_naming_ui(app_state, _a) {
   var grid_pos = _a.grid_pos,
@@ -2554,7 +2408,7 @@ function show_danger_popup(app_state, in_danger_els, on_finish) {
     innerHTML: "Note that elements residing completely in the removed row or column are automatically deleted."
   });
 }
-},{"./Grid_Item":"Grid_Item.ts","./Grid_Layout":"Grid_Layout.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./make-incrementer":"make-incrementer.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"index.ts":[function(require,module,exports) {
+},{"./Grid_Item":"Grid_Item.ts","./Grid_Layout":"Grid_Layout.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-focused_modal":"make-focused_modal.ts","./utils-cssom":"utils-cssom.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts","./utils-shiny":"utils-shiny.ts","./wrap_in_grided":"wrap_in_grided.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

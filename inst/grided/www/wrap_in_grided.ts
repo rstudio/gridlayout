@@ -1,5 +1,6 @@
-import { App_State } from "./App_State";
-import { Block_El, Text_El } from "./make-elements";
+import { App_State, update_grid } from "./App_State";
+import { make_css_unit_input } from "./make-css_unit_input";
+import { Block_El, make_el, Text_El } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
 import { get_pos_on_grid } from "./utils-grid";
 import {
@@ -32,6 +33,19 @@ export function wrap_in_grided(app_state: App_State) {
   }
 
   const settings_panel_el = Block_El("div.card-body");
+  const gap_size_setting = make_css_unit_input({
+    parent_el: make_el(
+      settings_panel_el,
+      "div#gap_size_chooser.plus_minus_input.settings-grid",
+      {
+        innerHTML: `<span class = "input-label">Panel gap size</span>`,
+      }
+    ),
+    selector: "#gap_size_chooser",
+    on_change: (x) => update_grid(app_state, { gap: x }),
+    allowed_units: ["px", "rem"],
+  });
+
   const grided_ui = Block_El(
     "div#grided__holder",
     Block_El(
@@ -142,7 +156,7 @@ export function wrap_in_grided(app_state: App_State) {
   });
 
   return {
-    settings_panel_el,
+    gap_size_setting,
     grid_is_filled,
   };
 }

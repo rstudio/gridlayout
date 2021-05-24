@@ -2,8 +2,6 @@ import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
 import {
   CSS_Input,
-  get_css_unit,
-  get_css_value,
   make_css_unit_input,
   make_grid_tract_control,
 } from "./make-css_unit_input";
@@ -15,27 +13,17 @@ import {
   remove_elements,
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
-import { make_incrementer } from "./make-incrementer";
 import { find_selector_by_property } from "./utils-cssom";
 import {
   bounding_rect_to_css_pos,
-  contains_element,
   get_drag_extent_on_grid,
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
   make_start_end_for_dir,
   make_template_start_end,
-  shrink_element_to_layout,
 } from "./utils-grid";
-import {
-  drag_icon,
-  minus_icon,
-  nw_arrow,
-  plus_icon,
-  se_arrow,
-  trashcan_icon,
-} from "./utils-icons";
+import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
   as_array,
   Drag_Type,
@@ -51,8 +39,6 @@ import {
 import { wrap_in_grided } from "./wrap_in_grided";
 
 type Grid_Settings = {
-  num_rows: (new_value: number) => void;
-  num_cols: (new_value: number) => void;
   gap: CSS_Input;
 };
 
@@ -82,7 +68,7 @@ export type App_Mode = "Existing" | "New";
 
 export class App_State {
   controls: { rows: CSS_Input[]; cols: CSS_Input[] };
-  settings_panel: Grid_Settings;
+  gap_size_setting: CSS_Input;
   // All the currently existing cells making up the grid
   current_cells: HTMLElement[] = [];
   elements: Element_Info[] = [];
@@ -108,8 +94,8 @@ export class App_State {
     this.grid_styles = this.container.style;
     this.grid_layout = new Grid_Layout(this.container);
 
-    const { settings_panel_el, grid_is_filled } = wrap_in_grided(this);
-    this.settings_panel = make_settings_panel(this, settings_panel_el);
+    const { grid_is_filled, gap_size_setting } = wrap_in_grided(this);
+    this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
 
     if (grid_is_filled) {
@@ -147,11 +133,7 @@ export class App_State {
       "#f781bf",
     ];
     // If we have more elements than colors we simply recycle
-    return colors[this.num_elements % colors.length];
-  }
-
-  get num_elements(): number {
-    return this.elements.length;
+    return colors[this.elements.length % colors.length];
   }
 
   get current_elements(): Element_Info[] {
@@ -193,12 +175,6 @@ export class App_State {
 
     // Let shiny know we have a new element
     send_elements_to_shiny(this.current_elements);
-  }
-
-  get_element(el: Element_Info | string) {
-    const el_id: string = typeof el === "string" ? el : el.id;
-
-    return this.elements.find((e) => e.id == el_id);
   }
 
   // Removes elements the user has added to the grid by id
@@ -273,18 +249,6 @@ export class App_State {
     tract_sizes.splice(index - 1, 1);
 
     update_grid(this, { [dir]: tract_sizes });
-  }
-
-  update_settings_panel(opts: Grid_Update_Options) {
-    if (opts.cols) {
-      this.settings_panel.num_cols(opts.cols.length);
-    }
-    if (opts.rows) {
-      this.settings_panel.num_rows(opts.rows.length);
-    }
-    if (opts.gap) {
-      this.settings_panel.gap.update_value(opts.gap);
-    }
   }
 
   // Just so we dont have to always say make_el(this.container...)
@@ -391,7 +355,7 @@ export class App_State {
 export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
   const updated_attributes = app_state.grid_layout.changed_attributes(opts);
 
-  app_state.update_settings_panel(opts);
+  app_state.gap_size_setting.update_value(opts.gap);
 
   app_state.grid_layout.update_attrs(opts);
 
@@ -532,55 +496,6 @@ function setup_tract_controls(app_state: App_State) {
         );
       }
     }
-  }
-}
-
-export function make_settings_panel(
-  app_state: App_State,
-  panel_el: HTMLElement
-): Grid_Settings {
-  return {
-    num_rows: make_incrementer({
-      parent_el: panel_el,
-      id: "num_rows",
-      start_val: 2,
-      label: "Number of rows",
-      on_increment: (x) => update_num_rows_or_cols("rows", x),
-    }),
-    num_cols: make_incrementer({
-      parent_el: panel_el,
-      id: "num_cols",
-      start_val: 2,
-      label: "Number of cols",
-      on_increment: (x) => update_num_rows_or_cols("cols", x),
-    }),
-    gap: make_css_unit_input({
-      parent_el: make_el(
-        panel_el,
-        "div#gap_size_chooser.plus_minus_input.settings-grid",
-        {
-          innerHTML: `<span class = "input-label">Panel gap size</span>`,
-        }
-      ),
-      selector: "#gap_size_chooser",
-      on_change: (x) => update_grid(app_state, { gap: x }),
-      allowed_units: ["px", "rem"],
-    }),
-  };
-
-  function update_num_rows_or_cols(dir, new_count) {
-    const current_vals = app_state.container.style[
-      `gridTemplate${dir === "rows" ? "Rows" : "Columns"}`
-    ].split(" ");
-
-    if (new_count > current_vals.length) {
-      current_vals.push("1fr");
-    } else if (new_count < current_vals.length) {
-      current_vals.pop();
-    } else {
-      // No change, shouldn't happen but maybe...
-    }
-    update_grid(app_state, { [dir]: current_vals });
   }
 }
 
