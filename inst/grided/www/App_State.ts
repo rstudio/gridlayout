@@ -1,12 +1,12 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
-import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
+import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
 import { CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
   incrementer_button,
   make_el,
-  remove_elements,
+  remove_elements
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
 import { find_selector_by_property } from "./utils-cssom";
@@ -17,7 +17,7 @@ import {
   get_pos_on_grid,
   grid_position_of_el,
   make_start_end_for_dir,
-  make_template_start_end,
+  make_template_start_end
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -27,11 +27,11 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos,
+  XY_Pos
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
+  send_grid_sizing_to_shiny
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
 

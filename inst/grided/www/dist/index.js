@@ -298,7 +298,7 @@ function overlap(a, b) {
 }
 
 exports.overlap = overlap;
-exports.filler_text = "\n<div class = \"filler_text\">\n  Lorem Ipsum is simply dummy text of the printing and typesetting industry. \n  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>";
+exports.filler_text = "\n<div class = \"filler_text\">\n  This filler text demonstrates how the height of an element spanning an \"auto\"\n  row is influenced by its content. While you're here...\n  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>";
 },{}],"utils-grid.ts":[function(require,module,exports) {
 "use strict"; // Functions related to grid construction, editings, etc
 
@@ -748,22 +748,6 @@ exports.browser_header_html = "<div id=\"buttons-container\">\n  <div></div>\n  
 },{}],"make-elements.ts":[function(require,module,exports) {
 "use strict";
 
-var __assign = this && this.__assign || function () {
-  __assign = Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-
-      for (var p in s) {
-        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-      }
-    }
-
-    return t;
-  };
-
-  return __assign.apply(this, arguments);
-};
-
 var __spreadArray = this && this.__spreadArray || function (to, from) {
   for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
     to[j] = from[i];
@@ -947,23 +931,9 @@ function incrementer_button(opts) {
       additional_styles = opts.additional_styles,
       _a = opts.label,
       label = _a === void 0 ? up_or_down === "up" ? "Add" : "Remove" : _a;
-
-  var button_styles = __assign({
-    fontSize: "10px",
-    height: "2.5em",
-    width: "2.5em",
-    borderRadius: "50%",
-    display: "grid",
-    placeContent: "center",
-    border: "2px solid lightgrey",
-    backgroundColor: "#fff",
-    position: "relative",
-    padding: "0"
-  }, additional_styles);
-
-  var button = make_el(parent_el, "button" + selector_text, {
+  var button = make_el(parent_el, "button.incrementer-button" + selector_text, {
     innerHTML: up_or_down === "up" ? utils_icons_1.plus_icon : utils_icons_1.minus_icon,
-    styles: button_styles,
+    styles: additional_styles,
     event_listener: {
       event: "click",
       func: on_click
@@ -971,10 +941,6 @@ function incrementer_button(opts) {
     props: {
       title: label
     }
-  });
-  Object.assign(button.querySelector("svg").style, {
-    width: "100%",
-    height: "100%"
   });
   return button;
 }
@@ -2121,7 +2087,7 @@ function setup_tract_controls(app_state) {
         };
         var size = "2.5em";
         var offset_to_gap = "calc(-1 * (var(--grid-gap) + " + size + ")/2)";
-        var offset_outside_editor = "calc(-" + size + " - var(--grid-gap) - 4px)";
+        var offset_outside_editor = "calc(-" + size + " - var(--grid-gap) - 0.5rem)";
 
         if (dir_1 === "rows") {
           Object.assign(styles_for_holder, (_b = {
@@ -2309,7 +2275,7 @@ function draw_elements(app_state, el_info) {
   var grid_item = new Grid_Item_1.Grid_Item({
     el: grid_el,
     mirrored_el: mirrored_el,
-    sibling_element: list_el,
+    sibling_el: list_el,
     parent_layout: app_state.grid_layout
   }); // Setup drag behavior
 

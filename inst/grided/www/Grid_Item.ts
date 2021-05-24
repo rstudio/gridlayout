@@ -1,6 +1,6 @@
+import { Grid_Layout } from "./Grid_Layout";
 import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
-import { filler_text, get_bounding_rect } from "./utils-misc";
-import { Grid_Layout, Layout_State } from "./Grid_Layout";
+import { get_bounding_rect } from "./utils-misc";
 
 export type Grid_Pos = {
   start_col: number;
