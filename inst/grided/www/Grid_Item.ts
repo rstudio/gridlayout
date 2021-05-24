@@ -18,7 +18,7 @@ export class Grid_Item {
   constructor(opts: {
     el: HTMLElement;
     mirrored_el?: HTMLElement;
-    sibling_element?: HTMLElement;
+    sibling_el?: HTMLElement;
     parent_layout: Grid_Layout;
   }) {
     Object.assign(this, opts);

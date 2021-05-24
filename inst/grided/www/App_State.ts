@@ -1,10 +1,6 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
-import {
-  CSS_Input,
-  make_css_unit_input,
-  make_grid_tract_control,
-} from "./make-css_unit_input";
+import { CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
@@ -657,7 +653,7 @@ function draw_elements(
   const grid_item = new Grid_Item({
     el: grid_el,
     mirrored_el,
-    sibling_element: list_el,
+    sibling_el: list_el,
     parent_layout: app_state.grid_layout,
   });
 
