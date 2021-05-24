@@ -3,7 +3,7 @@ import {
   horizontal_drag_icon,
   vertical_drag_icon,
 } from "./utils-icons";
-import { make_el } from "./make-elements";
+import { incrementer_button, make_el } from "./make-elements";
 import { App_State, update_grid } from "./App_State";
 import { make_template_start_end } from "./utils-grid";
 import { Tract_Dir } from "./Grid_Layout";
@@ -234,34 +234,8 @@ export function make_grid_tract_control(
     ],
   });
 
-  make_el(holder, "button.addButton.addAfter", {
-    innerHTML: "+",
-    event_listener: {
-      event: "click",
-      func: (event: Event) => {
-        console.log(`Add ${dir} after ${tract_index}`);
-        app_state.add_tract(dir, tract_index);
-      },
-    },
-  });
-  make_el(holder, "button.addButton.addBefore", {
-    innerHTML: "+",
-    event_listener: {
-      event: "click",
-      func: (event: Event) => {
-        console.log(`Add ${dir} before ${tract_index}`);
-        app_state.add_tract(dir, tract_index - 1);
-      },
-    },
-  });
-  make_el(holder, "button.addButton.removeThis", {
-    innerHTML: "-",
-    event_listener: {
-      event: "click",
-      func: (event: Event) => {
-        app_state.remove_tract(dir, tract_index);
-      },
-    },
+  incrementer_button(holder, ".removeThis", "down", () => {
+    app_state.remove_tract(dir, tract_index);
   });
 
   function show_or_hide_dragger(curr_val: string) {

@@ -1,5 +1,6 @@
 import { Grid_Pos } from "./Grid_Item";
 import { set_element_in_grid } from "./utils-grid";
+import { plus_icon, minus_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
 
 export type Event_Listener = {
@@ -140,4 +141,41 @@ export function Text_El(sel_txt: string, text: string) {
     sel_txt,
     text,
   });
+}
+
+export function incrementer_button(
+  parent_el: HTMLElement,
+  selector_text: string,
+  up_or_down: "up" | "down",
+  on_click: () => void,
+  additional_styles?: Record<string, string>
+) {
+  const button_styles = {
+    fontSize: "10px",
+    height: "2.5em",
+    width: "2.5em",
+    borderRadius: "50%",
+    display: "grid",
+    placeContent: "center",
+    border: "2px solid lightgrey",
+    backgroundColor: "#fff",
+    position: "relative",
+    padding: "0",
+    ...additional_styles,
+  };
+
+  const button = make_el(parent_el, `button${selector_text}`, {
+    innerHTML: up_or_down === "up" ? plus_icon : minus_icon,
+    styles: button_styles,
+    event_listener: {
+      event: "click",
+      func: on_click,
+    },
+  });
+  Object.assign(button.querySelector("svg").style, {
+    width: "100%",
+    height: "100%",
+  });
+
+  return button;
 }

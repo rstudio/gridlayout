@@ -494,6 +494,11 @@ button.minus_btn.disabled {
   align-self: center;
 }
 
+.removeThis {
+  grid-area: removeThis;
+}
+
+
 .unit-input {
   padding: 0;
   grid-area: cssInput;
@@ -501,22 +506,6 @@ button.minus_btn.disabled {
 .css-unit-input-dragger {
   max-height: 20px;
   grid-area: dragger;
-}
-.addButton {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: grid;
-  place-content: center;
-}
-.addAfter {
-  grid-area: addAfter;
-}
-.addBefore {
-  grid-area: addBefore;
-}
-.removeThis {
-  grid-area: removeThis;
 }
 
 .rows-controls {

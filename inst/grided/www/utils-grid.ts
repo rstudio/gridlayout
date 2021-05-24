@@ -199,16 +199,16 @@ export function grid_position_of_el(el: HTMLElement): Grid_Pos {
   };
 }
 
-export function make_start_end_for_dir(dir: Tract_Dir){
+export function make_start_end_for_dir(dir: Tract_Dir) {
   if (dir === "cols") {
     return {
       start_id: "start_col",
-      end_id: "end_col"
-    }
+      end_id: "end_col",
+    };
   } else {
     return {
       start_id: "start_row",
-      end_id: "end_row"
-    }
+      end_id: "end_row",
+    };
   }
 }

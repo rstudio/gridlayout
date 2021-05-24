@@ -797,6 +797,22 @@ exports.browser_header_html = "<div id=\"buttons-container\">\n  <div></div>\n  
 },{}],"make-elements.ts":[function(require,module,exports) {
 "use strict";
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 var __spreadArray = this && this.__spreadArray || function (to, from) {
   for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
     to[j] = from[i];
@@ -808,9 +824,11 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Text_El = exports.Block_El = exports.Shadow_El = exports.remove_elements = exports.make_el = exports.parse_selector_text = void 0;
+exports.incrementer_button = exports.Text_El = exports.Block_El = exports.Shadow_El = exports.remove_elements = exports.make_el = exports.parse_selector_text = void 0;
 
 var utils_grid_1 = require("./utils-grid");
+
+var utils_icons_1 = require("./utils-icons");
 
 var utils_misc_1 = require("./utils-misc"); // Safari doesn't support lookbehinds for regex so we have to make it manually
 
@@ -969,7 +987,38 @@ function Text_El(sel_txt, text) {
 }
 
 exports.Text_El = Text_El;
-},{"./utils-grid":"utils-grid.ts","./utils-misc":"utils-misc.ts"}],"make-css_unit_input.ts":[function(require,module,exports) {
+
+function incrementer_button(parent_el, selector_text, up_or_down, on_click, additional_styles) {
+  var button_styles = __assign({
+    fontSize: "10px",
+    height: "2.5em",
+    width: "2.5em",
+    borderRadius: "50%",
+    display: "grid",
+    placeContent: "center",
+    border: "2px solid lightgrey",
+    backgroundColor: "#fff",
+    position: "relative",
+    padding: "0"
+  }, additional_styles);
+
+  var button = make_el(parent_el, "button" + selector_text, {
+    innerHTML: up_or_down === "up" ? utils_icons_1.plus_icon : utils_icons_1.minus_icon,
+    styles: button_styles,
+    event_listener: {
+      event: "click",
+      func: on_click
+    }
+  });
+  Object.assign(button.querySelector("svg").style, {
+    width: "100%",
+    height: "100%"
+  });
+  return button;
+}
+
+exports.incrementer_button = incrementer_button;
+},{"./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-misc":"utils-misc.ts"}],"make-css_unit_input.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -1203,34 +1252,8 @@ function make_grid_tract_control(app_state, opts) {
       }
     }]
   });
-  make_elements_1.make_el(holder, "button.addButton.addAfter", {
-    innerHTML: "+",
-    event_listener: {
-      event: "click",
-      func: function func(event) {
-        console.log("Add " + dir + " after " + tract_index);
-        app_state.add_tract(dir, tract_index);
-      }
-    }
-  });
-  make_elements_1.make_el(holder, "button.addButton.addBefore", {
-    innerHTML: "+",
-    event_listener: {
-      event: "click",
-      func: function func(event) {
-        console.log("Add " + dir + " before " + tract_index);
-        app_state.add_tract(dir, tract_index - 1);
-      }
-    }
-  });
-  make_elements_1.make_el(holder, "button.addButton.removeThis", {
-    innerHTML: "-",
-    event_listener: {
-      event: "click",
-      func: function func(event) {
-        app_state.remove_tract(dir, tract_index);
-      }
-    }
+  make_elements_1.incrementer_button(holder, ".removeThis", "down", function () {
+    app_state.remove_tract(dir, tract_index);
   });
 
   function show_or_hide_dragger(curr_val) {
@@ -2126,34 +2149,28 @@ function update_grid(app_state, opts) {
 exports.update_grid = update_grid;
 
 function fill_grid_cells(app_state) {
-  // Grab currently drawn cells (if any) so we can check if we need to redraw
-  // or if this was simply a column/row sizing update
-  var need_to_reset_cells = app_state.current_cells.length != app_state.grid_layout.num_rows * app_state.grid_layout.num_cols;
+  make_elements_1.remove_elements(app_state.current_cells);
+  app_state.current_cells = [];
 
-  if (need_to_reset_cells) {
-    make_elements_1.remove_elements(app_state.current_cells);
-    app_state.current_cells = [];
-
-    for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
-      for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-        app_state.current_cells.push(app_state.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
-          data_props: {
-            row: row_i,
-            col: col_i
-          },
-          grid_pos: {
-            start_row: row_i,
-            end_row: row_i,
-            start_col: col_i,
-            end_col: col_i
-          }
-        }));
-      }
+  for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
+    for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
+      app_state.current_cells.push(app_state.make_el("div.r" + row_i + ".c" + col_i + ".grid-cell", {
+        data_props: {
+          row: row_i,
+          col: col_i
+        },
+        grid_pos: {
+          start_row: row_i,
+          end_row: row_i,
+          start_col: col_i,
+          end_col: col_i
+        }
+      }));
     }
+  }
 
-    if (app_state.mode === "Existing") {
-      utils_misc_1.set_class(app_state.current_cells, "transparent");
-    }
+  if (app_state.mode === "Existing") {
+    utils_misc_1.set_class(app_state.current_cells, "transparent");
   }
 }
 
@@ -2186,22 +2203,72 @@ function setup_new_item_drag(app_state) {
 }
 
 function setup_tract_controls(app_state) {
-  var _loop_1 = function _loop_1(type) {
+  var _loop_1 = function _loop_1(dir) {
     // Get rid of old ones to start with fresh slate
-    make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
-    app_state.controls[type] = app_state.grid_layout.attrs[type].map(function (size, i) {
+    make_elements_1.remove_elements(app_state.container.querySelectorAll("." + dir + "-controls"));
+    app_state.controls[dir] = app_state.grid_layout.attrs[dir].map(function (size, i) {
       return make_css_unit_input_1.make_grid_tract_control(app_state, {
         size: size,
-        dir: type,
+        dir: dir,
         // The i + 1 is because grid is indexed at 1, not zero
         tract_index: i + 1
       });
+    }); // Wipe all old elements
+
+    app_state.container.querySelectorAll("button.tract-add").forEach(function (el) {
+      return el.remove();
     });
+
+    var _loop_2 = function _loop_2(dir_1) {
+      var _loop_3 = function _loop_3(index) {
+        var _b, _c;
+
+        var final_btn = index === 0;
+        var tract_index = final_btn ? 1 : index;
+        var styles_for_holder = {
+          position: "absolute"
+        };
+        var size = "2.5em";
+        var offset_to_gap = "calc(-1 * (var(--grid-gap) + " + size + ")/2)";
+        var offset_outside_editor = "calc(-" + size + " - var(--grid-gap) - 4px)";
+
+        if (dir_1 === "rows") {
+          Object.assign(styles_for_holder, (_b = {
+            gridRow: utils_grid_1.make_template_start_end(tract_index),
+            gridColumn: "1 / 2",
+            justifyContent: final_btn ? "end" : "start",
+            left: offset_outside_editor
+          }, _b[final_btn ? "top" : "bottom"] = offset_to_gap, _b));
+        } else {
+          Object.assign(styles_for_holder, (_c = {
+            gridColumn: utils_grid_1.make_template_start_end(tract_index),
+            gridRow: "-1 / -2",
+            alignContent: "end",
+            bottom: offset_outside_editor
+          }, _c[final_btn ? "left" : "right"] = offset_to_gap, _c));
+        }
+
+        make_elements_1.incrementer_button(app_state.container, ".addButton.tract-add." + dir_1 + "_" + index, "up", function () {
+          return app_state.add_tract(dir_1, index);
+        }, styles_for_holder);
+      }; // Adds an extra row or column at end so we can bookend with new tracts
+
+
+      for (var index = app_state.grid_layout["num_" + dir_1]; index >= 0; index--) {
+        _loop_3(index);
+      }
+    };
+
+    for (var _i = 0, _a = ["rows", "cols"]; _i < _a.length; _i++) {
+      var dir_1 = _a[_i];
+
+      _loop_2(dir_1);
+    }
   }; // Build each column and row's sizing controler
 
 
-  for (var type in app_state.controls) {
-    _loop_1(type);
+  for (var dir in app_state.controls) {
+    _loop_1(dir);
   }
 }
 

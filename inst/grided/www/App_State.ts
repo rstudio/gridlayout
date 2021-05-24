@@ -10,6 +10,7 @@ import {
 import {
   Block_El,
   Element_Opts,
+  incrementer_button,
   make_el,
   remove_elements,
 } from "./make-elements";
@@ -27,7 +28,14 @@ import {
   make_template_start_end,
   shrink_element_to_layout,
 } from "./utils-grid";
-import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
+import {
+  drag_icon,
+  minus_icon,
+  nw_arrow,
+  plus_icon,
+  se_arrow,
+  trashcan_icon,
+} from "./utils-icons";
 import {
   as_array,
   Drag_Type,
@@ -405,35 +413,27 @@ export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
 }
 
 function fill_grid_cells(app_state: App_State) {
-  // Grab currently drawn cells (if any) so we can check if we need to redraw
-  // or if this was simply a column/row sizing update
-  const need_to_reset_cells =
-    app_state.current_cells.length !=
-    app_state.grid_layout.num_rows * app_state.grid_layout.num_cols;
+  remove_elements(app_state.current_cells);
+  app_state.current_cells = [];
 
-  if (need_to_reset_cells) {
-    remove_elements(app_state.current_cells);
-    app_state.current_cells = [];
-
-    for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
-      for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-        app_state.current_cells.push(
-          app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
-            data_props: { row: row_i, col: col_i },
-            grid_pos: {
-              start_row: row_i,
-              end_row: row_i,
-              start_col: col_i,
-              end_col: col_i,
-            },
-          })
-        );
-      }
+  for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
+    for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
+      app_state.current_cells.push(
+        app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
+          data_props: { row: row_i, col: col_i },
+          grid_pos: {
+            start_row: row_i,
+            end_row: row_i,
+            start_col: col_i,
+            end_col: col_i,
+          },
+        })
+      );
     }
+  }
 
-    if (app_state.mode === "Existing") {
-      set_class(app_state.current_cells, "transparent");
-    }
+  if (app_state.mode === "Existing") {
+    set_class(app_state.current_cells, "transparent");
   }
 }
 
@@ -469,18 +469,69 @@ function setup_new_item_drag(app_state: App_State) {
 
 function setup_tract_controls(app_state: App_State) {
   // Build each column and row's sizing controler
-  for (let type in app_state.controls) {
+  for (let dir in app_state.controls) {
     // Get rid of old ones to start with fresh slate
-    remove_elements(app_state.container.querySelectorAll(`.${type}-controls`));
-    app_state.controls[type] = app_state.grid_layout.attrs[type].map(
+    remove_elements(app_state.container.querySelectorAll(`.${dir}-controls`));
+    app_state.controls[dir] = app_state.grid_layout.attrs[dir].map(
       (size: string, i: number) =>
         make_grid_tract_control(app_state, {
           size,
-          dir: type as Tract_Dir,
+          dir: dir as Tract_Dir,
           // The i + 1 is because grid is indexed at 1, not zero
           tract_index: i + 1,
         })
     );
+
+    // Wipe all old elements
+    app_state.container
+      .querySelectorAll("button.tract-add")
+      .forEach((el) => el.remove());
+
+    for (const dir of ["rows", "cols"]) {
+      // Adds an extra row or column at end so we can bookend with new tracts
+      for (
+        let index = app_state.grid_layout[`num_${dir}`];
+        index >= 0;
+        index--
+      ) {
+        const final_btn = index === 0;
+        const tract_index = final_btn ? 1 : index;
+
+        const styles_for_holder: Record<string, string> = {
+          position: "absolute",
+        };
+
+        const size = "2.5em";
+        const offset_to_gap = `calc(-1 * (var(--grid-gap) + ${size})/2)`;
+        const offset_outside_editor = `calc(-${size} - var(--grid-gap) - 4px)`;
+
+        if (dir === "rows") {
+          Object.assign(styles_for_holder, {
+            gridRow: make_template_start_end(tract_index),
+            gridColumn: `1 / 2`,
+            justifyContent: final_btn ? "end" : "start",
+            left: offset_outside_editor,
+            [final_btn ? "top" : "bottom"]: offset_to_gap,
+          });
+        } else {
+          Object.assign(styles_for_holder, {
+            gridColumn: make_template_start_end(tract_index),
+            gridRow: `-1 / -2`,
+            alignContent: "end",
+            bottom: offset_outside_editor,
+            [final_btn ? "left" : "right"]: offset_to_gap,
+          });
+        }
+
+        incrementer_button(
+          app_state.container,
+          `.addButton.tract-add.${dir}_${index}`,
+          "up",
+          () => app_state.add_tract(dir as Tract_Dir, index),
+          styles_for_holder
+        );
+      }
+    }
   }
 }
 
