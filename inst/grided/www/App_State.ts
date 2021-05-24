@@ -482,7 +482,7 @@ function setup_tract_controls(app_state: App_State) {
 
         const size = "2.5em";
         const offset_to_gap = `calc(-1 * (var(--grid-gap) + ${size})/2)`;
-        const offset_outside_editor = `calc(-${size} - var(--grid-gap) - 4px)`;
+        const offset_outside_editor = `calc(-${size} - var(--grid-gap) - 0.5rem)`;
 
         if (dir === "rows") {
           Object.assign(styles_for_holder, {
