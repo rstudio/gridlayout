@@ -159,23 +159,10 @@ export function incrementer_button(opts: {
     additional_styles,
     label = up_or_down === "up" ? "Add" : "Remove",
   } = opts;
-  const button_styles = {
-    fontSize: "10px",
-    height: "2.5em",
-    width: "2.5em",
-    borderRadius: "50%",
-    display: "grid",
-    placeContent: "center",
-    border: "2px solid lightgrey",
-    backgroundColor: "#fff",
-    position: "relative",
-    padding: "0",
-    ...additional_styles,
-  };
 
-  const button = make_el(parent_el, `button${selector_text}`, {
+  const button = make_el(parent_el, `button.incrementer-button${selector_text}`, {
     innerHTML: up_or_down === "up" ? plus_icon : minus_icon,
-    styles: button_styles,
+    styles: additional_styles,
     event_listener: {
       event: "click",
       func: on_click,
@@ -183,10 +170,6 @@ export function incrementer_button(opts: {
     props: {
       title: label,
     },
-  });
-  Object.assign(button.querySelector("svg").style, {
-    width: "100%",
-    height: "100%",
   });
 
   return button;

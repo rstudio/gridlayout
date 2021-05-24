@@ -480,23 +480,18 @@ button.minus_btn.disabled {
 .rows-controls {
   padding-right: 0.5rem;
   grid-template-areas: 
-  ".          .        addBefore  .       "
   "removeThis cssInput cssInput   cssInput"
-  "removeThis dragger  dragger    dragger"
-  ".          .        addAfter   .       ";
+  "removeThis dragger  dragger    dragger";
 }
 
 .cols-controls {
   padding-top: 0.5rem;
   grid-template-areas: 
-  "addBefore cssInput cssInput    cssInput addAfter"
-  ".         dragger  dragger     dragger  ."
-  ".         .        removeThis  .        .";
+  "cssInput cssInput    cssInput"
+  "dragger  dragger     dragger "
+  ".        removeThis  .       ";
 }
 
-.cols-controls .addButton {
-  align-self: center;
-}
 
 .removeThis {
   grid-area: removeThis;
@@ -523,6 +518,23 @@ button.minus_btn.disabled {
   width: var(--editor-left-pad);
 }
 
+
+.incrementer-button {
+  font-size: 8px;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: 2px;
+  border: 1px solid var(--off-black, #4f4f4f);
+  /* background-color: #fff; */
+  position: relative;
+  padding: 0;
+}
+
+.incrementer-button > svg {
+  max-height: 100%;
+  max-width: 100%;
+  color: var(--dark-gray, gray)
+}
 
 .background-blurrer {
   grid-column: 1 / -1;
