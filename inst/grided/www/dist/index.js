@@ -573,26 +573,6 @@ function () {
     configurable: true
   });
 
-  Grid_Item.prototype.contained_in_layout = function (layout) {
-    var num_rows = layout.rows.length;
-    var num_cols = layout.cols.length;
-    var _a = this.position,
-        start_row = _a.start_row,
-        end_row = _a.end_row,
-        start_col = _a.start_col,
-        end_col = _a.end_col;
-
-    if (start_row > num_rows || start_col > num_cols) {
-      return "outside";
-    }
-
-    if (end_row > num_rows || end_col > num_cols) {
-      return "partially";
-    }
-
-    return "inside";
-  };
-
   Grid_Item.prototype.fill_if_in_auto_row = function () {
     var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
 
@@ -2440,7 +2420,7 @@ window.onload = function () {
     // if we just passed app_state.update_grid as the callback its just the method
     // without the object behind it,
     utils_shiny_1.add_shiny_listener("update-grid", function (opts) {
-      return App_State_1.update_grid(app_state, opts);
+      return app_state.update_grid(opts);
     });
     utils_shiny_1.add_shiny_listener("add-elements", function (elements_to_add) {
       elements_to_add.forEach(function (el_msg) {

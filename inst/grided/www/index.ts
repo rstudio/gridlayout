@@ -1,5 +1,5 @@
 // JS entry point
-import { App_State, Grid_Update_Options, update_grid } from "./App_State";
+import { App_State, Grid_Update_Options } from "./App_State";
 import { show_code } from "./make-focused_modal";
 import {
   add_shiny_listener,
@@ -31,7 +31,7 @@ window.onload = function () {
     // if we just passed app_state.update_grid as the callback its just the method
     // without the object behind it,
     add_shiny_listener("update-grid", (opts: Grid_Update_Options) =>
-      update_grid(app_state, opts)
+      app_state.update_grid(opts)
     );
 
     type Shiny_Element_Msg = {

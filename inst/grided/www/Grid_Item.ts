@@ -48,24 +48,6 @@ export class Grid_Item {
     return this.el.style;
   }
 
-  contained_in_layout(
-    layout: Layout_State
-  ): "inside" | "partially" | "outside" {
-    const num_rows = layout.rows.length;
-    const num_cols = layout.cols.length;
-    const { start_row, end_row, start_col, end_col } = this.position;
-
-    if (start_row > num_rows || start_col > num_cols) {
-      return "outside";
-    }
-
-    if (end_row > num_rows || end_col > num_cols) {
-      return "partially";
-    }
-
-    return "inside";
-  }
-
   fill_if_in_auto_row() {
     const in_auto_row = this.parent_layout
       .item_row_sizes(this.position)
