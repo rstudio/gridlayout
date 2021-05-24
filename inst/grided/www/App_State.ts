@@ -6,7 +6,7 @@ import {
   Element_Opts,
   incrementer_button,
   make_el,
-  remove_elements
+  remove_elements,
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
 import { find_selector_by_property } from "./utils-cssom";
@@ -17,7 +17,7 @@ import {
   get_pos_on_grid,
   grid_position_of_el,
   make_start_end_for_dir,
-  make_template_start_end
+  make_template_start_end,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -27,11 +27,11 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos
+  XY_Pos,
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny
+  send_grid_sizing_to_shiny,
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
 
@@ -373,6 +373,16 @@ export class App_State {
       this.current_elements.forEach((el) => {
         el.grid_item.fill_if_in_auto_row();
       });
+
+      // Do some funky logic to get height of the container and make app window
+      // grow if app is larger than available vertical space but not shrink
+      // if it is smaller
+      // this.container.style.height = "auto"; // Let container grow as needed
+      // const content_height = this.container.getBoundingClientRect().height;
+      // (document.querySelector(
+      //   "#editor-wrapper"
+      // ) as HTMLElement).style.gridTemplateRows = `var(--browser-menu-height) minmax(calc(100% - 30px),${content_height}px)`;
+      // this.container.style.height = "100%"; 
     }
 
     if (new_num_cells) {
