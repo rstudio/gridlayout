@@ -259,7 +259,7 @@ export function make_grid_tract_control(
     event_listener: {
       event: "click",
       func: (event: Event) => {
-        console.log(`Remove ${dir} ${tract_index}`);
+        app_state.remove_tract(dir, tract_index);
       },
     },
   });

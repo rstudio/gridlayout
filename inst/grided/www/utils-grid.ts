@@ -2,7 +2,7 @@
 
 import { App_State, Element_Info } from "./App_State";
 import { Grid_Pos } from "./Grid_Item";
-import { Layout_State } from "./Grid_Layout";
+import { Layout_State, Tract_Dir } from "./Grid_Layout";
 import { Code_Text } from "./make-focused_modal";
 import {
   boxes_overlap,
@@ -197,4 +197,18 @@ export function grid_position_of_el(el: HTMLElement): Grid_Pos {
     end_row: +grid_area[2] - 1,
     end_col: +grid_area[3] - 1,
   };
+}
+
+export function make_start_end_for_dir(dir: Tract_Dir){
+  if (dir === "cols") {
+    return {
+      start_id: "start_col",
+      end_id: "end_col"
+    }
+  } else {
+    return {
+      start_id: "start_row",
+      end_id: "end_row"
+    }
+  }
 }

@@ -23,6 +23,7 @@ import {
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
+  make_start_end_for_dir,
   make_template_start_end,
   shrink_element_to_layout,
 } from "./utils-grid";
@@ -126,6 +127,21 @@ export class App_State {
     return sizes;
   }
 
+  // Get the next color in our list of colors.
+  get next_color() {
+    const colors = [
+      "#e41a1c",
+      "#377eb8",
+      "#4daf4a",
+      "#984ea3",
+      "#ff7f00",
+      "#a65628",
+      "#f781bf",
+    ];
+    // If we have more elements than colors we simply recycle
+    return colors[this.num_elements % colors.length];
+  }
+
   get num_elements(): number {
     return this.elements.length;
   }
@@ -213,19 +229,42 @@ export class App_State {
     update_grid(this, { [dir]: tract_sizes });
   }
 
-  // Get the next color in our list of colors.
-  get next_color() {
-    const colors = [
-      "#e41a1c",
-      "#377eb8",
-      "#4daf4a",
-      "#984ea3",
-      "#ff7f00",
-      "#a65628",
-      "#f781bf",
-    ];
-    // If we have more elements than colors we simply recycle
-    return colors[this.num_elements % colors.length];
+  remove_tract(dir: Tract_Dir, index: number) {
+    // First check for trouble elements before proceeding so we can error out
+    // and tell the user why
+    const trouble_elements: Element_Info[] = this.elements.filter((el) => {
+      const { start_id, end_id } = make_start_end_for_dir(dir);
+      const el_position = el.grid_item.position;
+
+      return (
+        el_position[start_id] === el_position[end_id] &&
+        el_position[start_id] === index
+      );
+    });
+
+    if (trouble_elements.length > 0) {
+      show_conflict_popup(trouble_elements);
+      // End early
+      return;
+    }
+
+    this.elements.forEach((el) => {
+      const { start_id, end_id } = make_start_end_for_dir(dir);
+      const el_position = el.grid_item.position;
+
+      if (el_position[start_id] > index) {
+        el_position[start_id]--;
+      }
+      if (el_position[end_id] >= index) {
+        el_position[end_id]--;
+      }
+      el.grid_item.position = el_position;
+    });
+
+    const tract_sizes = this.grid_layout[dir];
+    tract_sizes.splice(index - 1, 1);
+
+    update_grid(this, { [dir]: tract_sizes });
   }
 
   update_settings_panel(opts: Grid_Update_Options) {
@@ -343,63 +382,6 @@ export class App_State {
 
 export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
   const updated_attributes = app_state.grid_layout.changed_attributes(opts);
-  if (updated_attributes.new_num_cells) {
-    // Check for elements that may get dropped
-    let danger_elements: {
-      to_delete: Element_Info[];
-      to_edit: Element_Info[];
-      conflicting: Element_Info[];
-    } = { to_delete: [], to_edit: [], conflicting: [] };
-
-    app_state.current_elements.forEach((el) => {
-      const element_position = contains_element(
-        updated_attributes.new_attrs,
-        el
-      );
-      // const element_position = el.grid_item.contained_in_layout(updated_attributes.new_attrs);
-
-      if (element_position === "inside") return;
-
-      if (element_position === "partially") {
-        danger_elements.to_edit.push(el);
-        return;
-      }
-
-      if (app_state.get_element(el.id).mirrored_element) {
-        danger_elements.conflicting.push(el);
-        return;
-      }
-
-      danger_elements.to_delete.push(el);
-    });
-
-    if (danger_elements.conflicting.length > 0) {
-      show_conflict_popup(danger_elements.conflicting);
-      // Make sure to switch back the control values to previous values
-      app_state.update_settings_panel(app_state.grid_layout.attrs);
-      // Stop this action from going further
-      return;
-    }
-
-    if (danger_elements.to_edit.length > 0) {
-      show_danger_popup(app_state, danger_elements.to_edit, (to_edit) => {
-        to_edit.forEach((el) => {
-          const el_node: HTMLElement = app_state.get_element(el.id).grid_el;
-          shrink_element_to_layout(updated_attributes.new_attrs, el_node);
-        });
-        // Now that we've updated elements properly, we should be able to
-        // just recall the function and it won't spit an error
-        update_grid(app_state, {
-          rows: opts.rows,
-          cols: opts.cols,
-          gap: opts.gap,
-        });
-      });
-
-      return;
-    }
-    app_state.remove_elements(danger_elements.to_delete.map((el) => el.id));
-  }
 
   app_state.update_settings_panel(opts);
 
@@ -491,36 +473,13 @@ function setup_tract_controls(app_state: App_State) {
     // Get rid of old ones to start with fresh slate
     remove_elements(app_state.container.querySelectorAll(`.${type}-controls`));
     app_state.controls[type] = app_state.grid_layout.attrs[type].map(
-      (size: string, i: number) => {
-        // The i + 1 is because grid is indexed at 1, not zero
-        const grid_i = i + 1;
-
-        return make_grid_tract_control(app_state, {
+      (size: string, i: number) =>
+        make_grid_tract_control(app_state, {
           size,
           dir: type as Tract_Dir,
-          tract_index: grid_i,
-        });
-        // return make_css_unit_input({
-        //   parent_el: app_state.container,
-        //   selector: `#control_${type}${grid_i}.${type}-controls`,
-        //   start_val: get_css_value(size),
-        //   start_unit: get_css_unit(size),
-        //   add_buttons: true,
-        //   on_change: () =>
-        //     update_grid(app_state, app_state.layout_from_controls),
-        //   on_drag: () =>
-        //     update_grid(app_state, {
-        //       ...app_state.layout_from_controls,
-        //       dont_send_to_shiny: true,
-        //     }),
-        //   form_styles: {
-        //     [`grid${
-        //       type === "rows" ? "Row" : "Column"
-        //     }`]: make_template_start_end(grid_i),
-        //   },
-        //   drag_dir: type === "rows" ? "y" : "x",
-        // });
-      }
+          // The i + 1 is because grid is indexed at 1, not zero
+          tract_index: i + 1,
+        })
     );
   }
 }

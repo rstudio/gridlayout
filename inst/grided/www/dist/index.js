@@ -313,7 +313,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.grid_position_of_el = exports.shrink_element_to_layout = exports.contains_element = exports.get_gap_size = exports.gen_code_for_layout = exports.bounding_rect_to_css_pos = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
+exports.make_start_end_for_dir = exports.grid_position_of_el = exports.shrink_element_to_layout = exports.contains_element = exports.get_gap_size = exports.gen_code_for_layout = exports.bounding_rect_to_css_pos = exports.get_drag_extent_on_grid = exports.get_pos_on_grid = exports.set_element_in_grid = exports.make_template_start_end = exports.get_cols = exports.get_rows = void 0;
 
 var utils_misc_1 = require("./utils-misc");
 
@@ -500,6 +500,22 @@ function grid_position_of_el(el) {
 }
 
 exports.grid_position_of_el = grid_position_of_el;
+
+function make_start_end_for_dir(dir) {
+  if (dir === "cols") {
+    return {
+      start_id: "start_col",
+      end_id: "end_col"
+    };
+  } else {
+    return {
+      start_id: "start_row",
+      end_id: "end_row"
+    };
+  }
+}
+
+exports.make_start_end_for_dir = make_start_end_for_dir;
 },{"./utils-misc":"utils-misc.ts"}],"Grid_Item.ts":[function(require,module,exports) {
 "use strict";
 
@@ -1212,7 +1228,7 @@ function make_grid_tract_control(app_state, opts) {
     event_listener: {
       event: "click",
       func: function func(event) {
-        console.log("Remove " + dir + " " + tract_index);
+        app_state.remove_tract(dir, tract_index);
       }
     }
   });
@@ -1843,6 +1859,16 @@ function () {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(App_State.prototype, "next_color", {
+    // Get the next color in our list of colors.
+    get: function get() {
+      var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
+
+      return colors[this.num_elements % colors.length];
+    },
+    enumerable: false,
+    configurable: true
+  });
   Object.defineProperty(App_State.prototype, "num_elements", {
     get: function get() {
       return this.elements.length;
@@ -1935,16 +1961,47 @@ function () {
     update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
   };
 
-  Object.defineProperty(App_State.prototype, "next_color", {
-    // Get the next color in our list of colors.
-    get: function get() {
-      var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"]; // If we have more elements than colors we simply recycle
+  App_State.prototype.remove_tract = function (dir, index) {
+    var _a; // First check for trouble elements before proceeding so we can error out
+    // and tell the user why
 
-      return colors[this.num_elements % colors.length];
-    },
-    enumerable: false,
-    configurable: true
-  });
+
+    var trouble_elements = this.elements.filter(function (el) {
+      var _a = utils_grid_1.make_start_end_for_dir(dir),
+          start_id = _a.start_id,
+          end_id = _a.end_id;
+
+      var el_position = el.grid_item.position;
+      return el_position[start_id] === el_position[end_id] && el_position[start_id] === index;
+    });
+
+    if (trouble_elements.length > 0) {
+      show_conflict_popup(trouble_elements); // End early
+
+      return;
+    }
+
+    this.elements.forEach(function (el) {
+      var _a = utils_grid_1.make_start_end_for_dir(dir),
+          start_id = _a.start_id,
+          end_id = _a.end_id;
+
+      var el_position = el.grid_item.position;
+
+      if (el_position[start_id] > index) {
+        el_position[start_id]--;
+      }
+
+      if (el_position[end_id] >= index) {
+        el_position[end_id]--;
+      }
+
+      el.grid_item.position = el_position;
+    });
+    var tract_sizes = this.grid_layout[dir];
+    tract_sizes.splice(index - 1, 1);
+    update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
+  };
 
   App_State.prototype.update_settings_panel = function (opts) {
     if (opts.cols) {
@@ -2047,62 +2104,6 @@ exports.App_State = App_State;
 
 function update_grid(app_state, opts) {
   var updated_attributes = app_state.grid_layout.changed_attributes(opts);
-
-  if (updated_attributes.new_num_cells) {
-    // Check for elements that may get dropped
-    var danger_elements_1 = {
-      to_delete: [],
-      to_edit: [],
-      conflicting: []
-    };
-    app_state.current_elements.forEach(function (el) {
-      var element_position = utils_grid_1.contains_element(updated_attributes.new_attrs, el); // const element_position = el.grid_item.contained_in_layout(updated_attributes.new_attrs);
-
-      if (element_position === "inside") return;
-
-      if (element_position === "partially") {
-        danger_elements_1.to_edit.push(el);
-        return;
-      }
-
-      if (app_state.get_element(el.id).mirrored_element) {
-        danger_elements_1.conflicting.push(el);
-        return;
-      }
-
-      danger_elements_1.to_delete.push(el);
-    });
-
-    if (danger_elements_1.conflicting.length > 0) {
-      show_conflict_popup(danger_elements_1.conflicting); // Make sure to switch back the control values to previous values
-
-      app_state.update_settings_panel(app_state.grid_layout.attrs); // Stop this action from going further
-
-      return;
-    }
-
-    if (danger_elements_1.to_edit.length > 0) {
-      show_danger_popup(app_state, danger_elements_1.to_edit, function (to_edit) {
-        to_edit.forEach(function (el) {
-          var el_node = app_state.get_element(el.id).grid_el;
-          utils_grid_1.shrink_element_to_layout(updated_attributes.new_attrs, el_node);
-        }); // Now that we've updated elements properly, we should be able to
-        // just recall the function and it won't spit an error
-
-        update_grid(app_state, {
-          rows: opts.rows,
-          cols: opts.cols,
-          gap: opts.gap
-        });
-      });
-      return;
-    }
-
-    app_state.remove_elements(danger_elements_1.to_delete.map(function (el) {
-      return el.id;
-    }));
-  }
-
   app_state.update_settings_panel(opts);
   app_state.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
   // is clear to user
@@ -2189,32 +2190,12 @@ function setup_tract_controls(app_state) {
     // Get rid of old ones to start with fresh slate
     make_elements_1.remove_elements(app_state.container.querySelectorAll("." + type + "-controls"));
     app_state.controls[type] = app_state.grid_layout.attrs[type].map(function (size, i) {
-      // The i + 1 is because grid is indexed at 1, not zero
-      var grid_i = i + 1;
       return make_css_unit_input_1.make_grid_tract_control(app_state, {
         size: size,
         dir: type,
-        tract_index: grid_i
-      }); // return make_css_unit_input({
-      //   parent_el: app_state.container,
-      //   selector: `#control_${type}${grid_i}.${type}-controls`,
-      //   start_val: get_css_value(size),
-      //   start_unit: get_css_unit(size),
-      //   add_buttons: true,
-      //   on_change: () =>
-      //     update_grid(app_state, app_state.layout_from_controls),
-      //   on_drag: () =>
-      //     update_grid(app_state, {
-      //       ...app_state.layout_from_controls,
-      //       dont_send_to_shiny: true,
-      //     }),
-      //   form_styles: {
-      //     [`grid${
-      //       type === "rows" ? "Row" : "Column"
-      //     }`]: make_template_start_end(grid_i),
-      //   },
-      //   drag_dir: type === "rows" ? "y" : "x",
-      // });
+        // The i + 1 is because grid is indexed at 1, not zero
+        tract_index: i + 1
+      });
     });
   }; // Build each column and row's sizing controler
 
@@ -2621,7 +2602,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62382" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62389" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
