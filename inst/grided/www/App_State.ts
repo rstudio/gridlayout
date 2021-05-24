@@ -349,29 +349,28 @@ export class App_State {
 
   update_grid(opts: Grid_Update_Options) {
     const updated_attributes = this.grid_layout.changed_attributes(opts);
-  
+
     this.gap_size_setting.update_value(opts.gap);
-  
+
     this.grid_layout.update_attrs(opts);
-  
+
     // Put some filler text into items spanning auto rows so auto behavior
     // is clear to user
     this.current_elements.forEach((el) => {
       el.grid_item.fill_if_in_auto_row();
     });
-  
+
     if (updated_attributes.new_num_cells || opts.force) {
       fill_grid_cells(this);
       setup_tract_controls(this);
       setup_new_item_drag(this);
     }
-  
+
     if (!opts.dont_send_to_shiny) {
       send_grid_sizing_to_shiny(this.grid_layout.attrs);
     }
   }
 } // End of class declaration
-
 
 function fill_grid_cells(app_state: App_State) {
   remove_elements(app_state.current_cells);
@@ -484,13 +483,14 @@ function setup_tract_controls(app_state: App_State) {
           });
         }
 
-        incrementer_button(
-          app_state.container,
-          `.addButton.tract-add.${dir}_${index}`,
-          "up",
-          () => app_state.add_tract(dir as Tract_Dir, index),
-          styles_for_holder
-        );
+        incrementer_button({
+          parent_el: app_state.container,
+          selector_text: `.addButton.tract-add.${dir}_${index}`,
+          up_or_down: "up",
+          label: `Add a ${dir === "rows" ? "row" : "col"}`,
+          on_click: () => app_state.add_tract(dir as Tract_Dir, index),
+          additional_styles: styles_for_holder,
+        });
       }
     }
   }

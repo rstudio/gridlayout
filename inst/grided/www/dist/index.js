@@ -968,7 +968,15 @@ function Text_El(sel_txt, text) {
 
 exports.Text_El = Text_El;
 
-function incrementer_button(parent_el, selector_text, up_or_down, on_click, additional_styles) {
+function incrementer_button(opts) {
+  var parent_el = opts.parent_el,
+      selector_text = opts.selector_text,
+      up_or_down = opts.up_or_down,
+      on_click = opts.on_click,
+      additional_styles = opts.additional_styles,
+      _a = opts.label,
+      label = _a === void 0 ? up_or_down === "up" ? "Add" : "Remove" : _a;
+
   var button_styles = __assign({
     fontSize: "10px",
     height: "2.5em",
@@ -988,6 +996,9 @@ function incrementer_button(parent_el, selector_text, up_or_down, on_click, addi
     event_listener: {
       event: "click",
       func: on_click
+    },
+    props: {
+      title: label
     }
   });
   Object.assign(button.querySelector("svg").style, {
@@ -1025,8 +1036,6 @@ exports.make_grid_tract_control = exports.make_css_unit_input = exports.get_css_
 var utils_icons_1 = require("./utils-icons");
 
 var make_elements_1 = require("./make-elements");
-
-var App_State_1 = require("./App_State");
 
 var utils_grid_1 = require("./utils-grid");
 
@@ -1192,7 +1201,7 @@ function make_grid_tract_control(app_state, opts) {
     start_unit: get_css_unit(size),
     on_change: function on_change(new_val) {
       show_or_hide_dragger(new_val);
-      App_State_1.update_grid(app_state, app_state.layout_from_controls);
+      app_state.update_grid(app_state.layout_from_controls);
     }
   });
   var value_input = unit_input.form.querySelector(".css-unit-input-value");
@@ -1221,19 +1230,25 @@ function make_grid_tract_control(app_state, opts) {
         if (drag_pos === 0) return;
         var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
         value_input.value = new_value.toString();
-        App_State_1.update_grid(app_state, __assign(__assign({}, app_state.layout_from_controls), {
+        app_state.update_grid(__assign(__assign({}, app_state.layout_from_controls), {
           dont_send_to_shiny: true
         }));
       }
     }, {
       event: "dragend",
       func: function func(event) {
-        App_State_1.update_grid(app_state, app_state.layout_from_controls);
+        app_state.update_grid(app_state.layout_from_controls);
       }
     }]
   });
-  make_elements_1.incrementer_button(holder, ".removeThis", "down", function () {
-    app_state.remove_tract(dir, tract_index);
+  make_elements_1.incrementer_button({
+    parent_el: holder,
+    selector_text: ".removeThis",
+    up_or_down: "down",
+    label: "Remove " + (dir === "rows" ? "row" : "col"),
+    on_click: function on_click() {
+      return app_state.remove_tract(dir, tract_index);
+    }
   });
 
   function show_or_hide_dragger(curr_val) {
@@ -1249,7 +1264,7 @@ function make_grid_tract_control(app_state, opts) {
 }
 
 exports.make_grid_tract_control = make_grid_tract_control;
-},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts","./App_State":"App_State.ts","./utils-grid":"utils-grid.ts"}],"make-focused_modal.ts":[function(require,module,exports) {
+},{"./utils-icons":"utils-icons.ts","./make-elements":"make-elements.ts","./utils-grid":"utils-grid.ts"}],"make-focused_modal.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2130,9 +2145,16 @@ function setup_tract_controls(app_state) {
           }, _c[final_btn ? "left" : "right"] = offset_to_gap, _c));
         }
 
-        make_elements_1.incrementer_button(app_state.container, ".addButton.tract-add." + dir_1 + "_" + index, "up", function () {
-          return app_state.add_tract(dir_1, index);
-        }, styles_for_holder);
+        make_elements_1.incrementer_button({
+          parent_el: app_state.container,
+          selector_text: ".addButton.tract-add." + dir_1 + "_" + index,
+          up_or_down: "up",
+          label: "Add a " + (dir_1 === "rows" ? "row" : "col"),
+          on_click: function on_click() {
+            return app_state.add_tract(dir_1, index);
+          },
+          additional_styles: styles_for_holder
+        });
       }; // Adds an extra row or column at end so we can bookend with new tracts
 
 

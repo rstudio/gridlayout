@@ -4,7 +4,7 @@ import {
   vertical_drag_icon,
 } from "./utils-icons";
 import { incrementer_button, make_el } from "./make-elements";
-import { App_State, update_grid } from "./App_State";
+import { App_State } from "./App_State";
 import { make_template_start_end } from "./utils-grid";
 import { Tract_Dir } from "./Grid_Layout";
 
@@ -183,7 +183,7 @@ export function make_grid_tract_control(
     start_unit: get_css_unit(size),
     on_change: (new_val: string) => {
       show_or_hide_dragger(new_val);
-      update_grid(app_state, app_state.layout_from_controls);
+      app_state.update_grid(app_state.layout_from_controls);
     },
   });
 
@@ -219,7 +219,7 @@ export function make_grid_tract_control(
             +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
           );
           value_input.value = new_value.toString();
-          update_grid(app_state, {
+          app_state.update_grid({
             ...app_state.layout_from_controls,
             dont_send_to_shiny: true,
           });
@@ -228,14 +228,18 @@ export function make_grid_tract_control(
       {
         event: "dragend",
         func: function (event) {
-          update_grid(app_state, app_state.layout_from_controls);
+          app_state.update_grid(app_state.layout_from_controls);
         },
       },
     ],
   });
 
-  incrementer_button(holder, ".removeThis", "down", () => {
-    app_state.remove_tract(dir, tract_index);
+  incrementer_button({
+    parent_el: holder,
+    selector_text: ".removeThis",
+    up_or_down: "down",
+    label: `Remove ${dir === "rows" ? "row" : "col"}`,
+    on_click: () => app_state.remove_tract(dir, tract_index),
   });
 
   function show_or_hide_dragger(curr_val: string) {

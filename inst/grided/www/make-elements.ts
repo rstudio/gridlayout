@@ -143,13 +143,22 @@ export function Text_El(sel_txt: string, text: string) {
   });
 }
 
-export function incrementer_button(
-  parent_el: HTMLElement,
-  selector_text: string,
-  up_or_down: "up" | "down",
-  on_click: () => void,
-  additional_styles?: Record<string, string>
-) {
+export function incrementer_button(opts: {
+  parent_el: HTMLElement;
+  selector_text: string;
+  up_or_down: "up" | "down";
+  label?: string;
+  on_click: () => void;
+  additional_styles?: Record<string, string>;
+}) {
+  const {
+    parent_el,
+    selector_text,
+    up_or_down,
+    on_click,
+    additional_styles,
+    label = up_or_down === "up" ? "Add" : "Remove",
+  } = opts;
   const button_styles = {
     fontSize: "10px",
     height: "2.5em",
@@ -170,6 +179,9 @@ export function incrementer_button(
     event_listener: {
       event: "click",
       func: on_click,
+    },
+    props: {
+      title: label,
     },
   });
   Object.assign(button.querySelector("svg").style, {
