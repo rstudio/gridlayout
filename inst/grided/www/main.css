@@ -378,6 +378,10 @@ button.minus_btn.disabled {
 .added-element .filler_text {
   color: rgba(128, 128, 128, 0.5);
   user-select: none;
+  display: none;
+}
+.added-element.in-auto-row .filler_text {
+  display: block;
 }
 
 .css-unit-input {

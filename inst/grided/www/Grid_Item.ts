@@ -54,7 +54,9 @@ export class Grid_Item {
       .includes("auto");
 
     if (in_auto_row) {
-      this.el.innerHTML = filler_text;
+      this.el.classList.add("in-auto-row");
+    } else {
+      this.el.classList.remove("in-auto-row");
     }
   }
 
