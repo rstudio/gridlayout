@@ -1,4 +1,4 @@
-import { App_State, update_grid } from "./App_State";
+import { App_State } from "./App_State";
 import { make_css_unit_input } from "./make-css_unit_input";
 import { Block_El, make_el, Text_El } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
@@ -32,7 +32,7 @@ export function wrap_in_grided(app_state: App_State) {
     );
   }
 
-  const settings_panel_el = Block_El("div.card-body");
+  const settings_panel_el = Block_El("div.panel-body");
   const gap_size_setting = make_css_unit_input({
     parent_el: make_el(
       settings_panel_el,
@@ -42,7 +42,7 @@ export function wrap_in_grided(app_state: App_State) {
       }
     ),
     selector: "#gap_size_chooser",
-    on_change: (x) => update_grid(app_state, { gap: x }),
+    on_change: (x) => app_state.update_grid({ gap: x }),
     allowed_units: ["px", "rem"],
   });
 
@@ -65,7 +65,7 @@ export function wrap_in_grided(app_state: App_State) {
       "div#grided__instructions",
       Text_El("h3", `${instructions_icon} Instructions`),
       Text_El(
-        "div.card-body",
+        "div.panel-body",
         `
       <strong>Add an element:</strong>
       <ul>
@@ -85,7 +85,7 @@ export function wrap_in_grided(app_state: App_State) {
     Block_El(
       "div#grided__elements",
       Text_El("h3", `${elements_icon} Added elements`),
-      Block_El("div.card-body", Block_El("div#added_elements"))
+      Block_El("div.panel-body", Block_El("div#added_elements"))
     ),
     Block_El(
       "div#grided__editor",
@@ -119,7 +119,6 @@ export function wrap_in_grided(app_state: App_State) {
     [
       ...app_state.container.querySelectorAll(".added-element"),
       ...app_state.container.querySelectorAll(".grid-cell"),
-      settings_panel_el,
       grided_ui.querySelector("#added_elements"),
       grided_ui.querySelector("#drag_canvas"),
     ].forEach(function (el: Element) {

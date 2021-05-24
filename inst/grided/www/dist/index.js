@@ -1616,8 +1616,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.wrap_in_grided = void 0;
 
-var App_State_1 = require("./App_State");
-
 var make_css_unit_input_1 = require("./make-css_unit_input");
 
 var make_elements_1 = require("./make-elements");
@@ -1641,20 +1639,20 @@ function wrap_in_grided(app_state) {
     buttons.push(make_toggle_switch_1.make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
   }
 
-  var settings_panel_el = make_elements_1.Block_El("div.card-body");
+  var settings_panel_el = make_elements_1.Block_El("div.panel-body");
   var gap_size_setting = make_css_unit_input_1.make_css_unit_input({
     parent_el: make_elements_1.make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
       innerHTML: "<span class = \"input-label\">Panel gap size</span>"
     }),
     selector: "#gap_size_chooser",
     on_change: function on_change(x) {
-      return App_State_1.update_grid(app_state, {
+      return app_state.update_grid({
         gap: x
       });
     },
     allowed_units: ["px", "rem"]
   });
-  var grided_ui = make_elements_1.Block_El("div#grided__holder", make_elements_1.Block_El("div#grided__header", make_elements_1.Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), make_elements_1.Block_El.apply(void 0, __spreadArray(["div.code_btns"], buttons))), make_elements_1.Block_El("div#grided__settings", make_elements_1.Text_El("h3", utils_icons_1.settings_icon + " Settings"), settings_panel_el), make_elements_1.Block_El("div#grided__instructions", make_elements_1.Text_El("h3", utils_icons_1.instructions_icon + " Instructions"), make_elements_1.Text_El("div.card-body", "\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in \"Added elements\" panel and click the " + utils_icons_1.trashcan_icon + " icon</li>\n      </ul>")), make_elements_1.Block_El("div#grided__elements", make_elements_1.Text_El("h3", utils_icons_1.elements_icon + " Added elements"), make_elements_1.Block_El("div.card-body", make_elements_1.Block_El("div#added_elements"))), make_elements_1.Block_El("div#grided__editor", make_elements_1.Block_El("div#editor-wrapper", make_elements_1.Text_El("div#editor-browser-header", utils_icons_1.browser_header_html), make_elements_1.Block_El("div#editor-app-window", app_state.container)))); // Make grided UI direct child of the body
+  var grided_ui = make_elements_1.Block_El("div#grided__holder", make_elements_1.Block_El("div#grided__header", make_elements_1.Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), make_elements_1.Block_El.apply(void 0, __spreadArray(["div.code_btns"], buttons))), make_elements_1.Block_El("div#grided__settings", make_elements_1.Text_El("h3", utils_icons_1.settings_icon + " Settings"), settings_panel_el), make_elements_1.Block_El("div#grided__instructions", make_elements_1.Text_El("h3", utils_icons_1.instructions_icon + " Instructions"), make_elements_1.Text_El("div.panel-body", "\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in \"Added elements\" panel and click the " + utils_icons_1.trashcan_icon + " icon</li>\n      </ul>")), make_elements_1.Block_El("div#grided__elements", make_elements_1.Text_El("h3", utils_icons_1.elements_icon + " Added elements"), make_elements_1.Block_El("div.panel-body", make_elements_1.Block_El("div#added_elements"))), make_elements_1.Block_El("div#grided__editor", make_elements_1.Block_El("div#editor-wrapper", make_elements_1.Text_El("div#editor-browser-header", utils_icons_1.browser_header_html), make_elements_1.Block_El("div#editor-app-window", app_state.container)))); // Make grided UI direct child of the body
 
   document.querySelector("body").appendChild(grided_ui); // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
@@ -1673,7 +1671,7 @@ function wrap_in_grided(app_state) {
   }
 
   function toggle_interaction_mode(interact_is_on) {
-    __spreadArray(__spreadArray(__spreadArray([], app_state.container.querySelectorAll(".added-element")), app_state.container.querySelectorAll(".grid-cell")), [settings_panel_el, grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function (el) {
+    __spreadArray(__spreadArray(__spreadArray([], app_state.container.querySelectorAll(".added-element")), app_state.container.querySelectorAll(".grid-cell")), [grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function (el) {
       if (interact_is_on) {
         el.classList.add("disabled");
       } else {
@@ -1711,7 +1709,7 @@ function wrap_in_grided(app_state) {
 }
 
 exports.wrap_in_grided = wrap_in_grided;
-},{"./App_State":"App_State.ts","./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-shiny":"utils-shiny.ts"}],"App_State.ts":[function(require,module,exports) {
+},{"./make-css_unit_input":"make-css_unit_input.ts","./make-elements":"make-elements.ts","./make-toggle_switch":"make-toggle_switch.ts","./utils-grid":"utils-grid.ts","./utils-icons":"utils-icons.ts","./utils-shiny":"utils-shiny.ts"}],"App_State.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -1741,7 +1739,7 @@ var __spreadArray = this && this.__spreadArray || function (to, from) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.update_grid = exports.App_State = void 0;
+exports.App_State = void 0;
 
 var Grid_Item_1 = require("./Grid_Item");
 
@@ -1792,7 +1790,7 @@ function () {
     if (grid_is_filled) {
       var current_grid_props = grid_layout_rule.first_rule_w_prop.style; // Make sure grid matches the one the app is working with
 
-      update_grid(this, {
+      this.update_grid({
         rows: current_grid_props.gridTemplateRows.split(" "),
         cols: current_grid_props.gridTemplateColumns.split(" "),
         gap: utils_grid_1.get_gap_size(current_grid_props.gap),
@@ -1901,7 +1899,7 @@ function () {
     });
     var tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(new_index, 0, "1fr");
-    update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
+    this.update_grid((_a = {}, _a[dir] = tract_sizes, _a));
   };
 
   App_State.prototype.remove_tract = function (dir, index) {
@@ -1943,7 +1941,7 @@ function () {
     });
     var tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(index - 1, 1);
-    update_grid(this, (_a = {}, _a[dir] = tract_sizes, _a));
+    this.update_grid((_a = {}, _a[dir] = tract_sizes, _a));
   }; // Just so we dont have to always say make_el(this.container...)
 
 
@@ -2025,34 +2023,32 @@ function () {
     }
   };
 
+  App_State.prototype.update_grid = function (opts) {
+    var updated_attributes = this.grid_layout.changed_attributes(opts);
+    this.gap_size_setting.update_value(opts.gap);
+    this.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
+    // is clear to user
+
+    this.current_elements.forEach(function (el) {
+      el.grid_item.fill_if_in_auto_row();
+    });
+
+    if (updated_attributes.new_num_cells || opts.force) {
+      fill_grid_cells(this);
+      setup_tract_controls(this);
+      setup_new_item_drag(this);
+    }
+
+    if (!opts.dont_send_to_shiny) {
+      utils_shiny_1.send_grid_sizing_to_shiny(this.grid_layout.attrs);
+    }
+  };
+
   return App_State;
 }(); // End of class declaration
 
 
 exports.App_State = App_State;
-
-function update_grid(app_state, opts) {
-  var updated_attributes = app_state.grid_layout.changed_attributes(opts);
-  app_state.gap_size_setting.update_value(opts.gap);
-  app_state.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
-  // is clear to user
-
-  app_state.current_elements.forEach(function (el) {
-    el.grid_item.fill_if_in_auto_row();
-  });
-
-  if (updated_attributes.new_num_cells || opts.force) {
-    fill_grid_cells(app_state);
-    setup_tract_controls(app_state);
-    setup_new_item_drag(app_state);
-  }
-
-  if (!opts.dont_send_to_shiny) {
-    utils_shiny_1.send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
-  }
-}
-
-exports.update_grid = update_grid;
 
 function fill_grid_cells(app_state) {
   make_elements_1.remove_elements(app_state.current_cells);

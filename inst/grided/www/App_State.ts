@@ -38,10 +38,6 @@ import {
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
 
-type Grid_Settings = {
-  gap: CSS_Input;
-};
-
 export type Grid_Update_Options = {
   rows?: string[];
   cols?: string[];
@@ -102,7 +98,7 @@ export class App_State {
       const current_grid_props = grid_layout_rule.first_rule_w_prop.style;
 
       // Make sure grid matches the one the app is working with
-      update_grid(this, {
+      this.update_grid({
         rows: current_grid_props.gridTemplateRows.split(" "),
         cols: current_grid_props.gridTemplateColumns.split(" "),
         gap: get_gap_size(current_grid_props.gap),
@@ -210,7 +206,7 @@ export class App_State {
     const tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(new_index, 0, "1fr");
 
-    update_grid(this, { [dir]: tract_sizes });
+    this.update_grid({ [dir]: tract_sizes });
   }
 
   remove_tract(dir: Tract_Dir, index: number) {
@@ -248,7 +244,7 @@ export class App_State {
     const tract_sizes = this.grid_layout[dir];
     tract_sizes.splice(index - 1, 1);
 
-    update_grid(this, { [dir]: tract_sizes });
+    this.update_grid({ [dir]: tract_sizes });
   }
 
   // Just so we dont have to always say make_el(this.container...)
@@ -350,31 +346,32 @@ export class App_State {
       editor_el.removeEventListener("mouseup", drag_end);
     }
   }
+
+  update_grid(opts: Grid_Update_Options) {
+    const updated_attributes = this.grid_layout.changed_attributes(opts);
+  
+    this.gap_size_setting.update_value(opts.gap);
+  
+    this.grid_layout.update_attrs(opts);
+  
+    // Put some filler text into items spanning auto rows so auto behavior
+    // is clear to user
+    this.current_elements.forEach((el) => {
+      el.grid_item.fill_if_in_auto_row();
+    });
+  
+    if (updated_attributes.new_num_cells || opts.force) {
+      fill_grid_cells(this);
+      setup_tract_controls(this);
+      setup_new_item_drag(this);
+    }
+  
+    if (!opts.dont_send_to_shiny) {
+      send_grid_sizing_to_shiny(this.grid_layout.attrs);
+    }
+  }
 } // End of class declaration
 
-export function update_grid(app_state: App_State, opts: Grid_Update_Options) {
-  const updated_attributes = app_state.grid_layout.changed_attributes(opts);
-
-  app_state.gap_size_setting.update_value(opts.gap);
-
-  app_state.grid_layout.update_attrs(opts);
-
-  // Put some filler text into items spanning auto rows so auto behavior
-  // is clear to user
-  app_state.current_elements.forEach((el) => {
-    el.grid_item.fill_if_in_auto_row();
-  });
-
-  if (updated_attributes.new_num_cells || opts.force) {
-    fill_grid_cells(app_state);
-    setup_tract_controls(app_state);
-    setup_new_item_drag(app_state);
-  }
-
-  if (!opts.dont_send_to_shiny) {
-    send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
-  }
-}
 
 function fill_grid_cells(app_state: App_State) {
   remove_elements(app_state.current_cells);

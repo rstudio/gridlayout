@@ -43,7 +43,7 @@ h3 {
   color: white;
 }
 
-.card-body {
+.panel-body {
   margin-top: calc(2 * var(--side-gaps));
 }
 
@@ -99,9 +99,9 @@ button.minus_btn.disabled {
   grid-template-columns: 1fr 1fr;
   justify-items: center;
   align-items: center;
-  grid-gap: 1rem;
-  padding: 0.5rem 1rem;
+  grid-gap: 0.75rem;
 }
+
 .settings-grid > .input-label {
   text-align: right;
   justify-self: end;
