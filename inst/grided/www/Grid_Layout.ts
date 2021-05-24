@@ -61,52 +61,15 @@ export class Grid_Layout {
     };
   }
 
-  is_updated_val(attr: Grid_Attr, values: string | string[]) {
+  is_updated_val(attr: Grid_Attr, values?: string | string[]) {
+    // Assume no value passed means no update. This allows us to call and check
+    // on objects that may not have the attribute in them.
+    if (typeof values === "undefined") return false;
     if (attr === "gap") {
       return values !== this.gap;
     } else if (typeof values === "object") {
       return !equal_arrays(this[attr], values);
     }
-  }
-
-  // Given a new set of attributes, tells you which ones are different from
-  // current values
-  changed_attributes(attrs: {
-    rows?: string[];
-    cols?: string[];
-    gap?: string;
-  }) {
-    const changed: Grid_Attr[] = [];
-    const new_attrs: Layout_State = this.attrs;
-
-    if (attrs.rows) new_attrs.rows = attrs.rows;
-    if (attrs.cols) new_attrs.cols = attrs.cols;
-    if (attrs.gap) new_attrs.gap = attrs.gap;
-
-    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
-      changed.push("rows");
-    }
-    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
-      changed.push("cols");
-    }
-    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
-      changed.push("gap");
-    }
-    const new_num_cells =
-      new_attrs.cols.length !== this.num_cols ||
-      new_attrs.rows.length !== this.num_rows;
-
-    return {
-      changed,
-      new_num_cells,
-      new_attrs,
-    };
-  }
-
-  update_attrs(attrs: { rows?: string[]; cols?: string[]; gap?: string }) {
-    this.rows = attrs.rows;
-    this.cols = attrs.cols;
-    this.gap = attrs.gap;
   }
 
   sizes_for_tract(item_pos: Grid_Pos, dir: "row" | "col"): string[] {

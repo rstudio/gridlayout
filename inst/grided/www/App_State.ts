@@ -1,5 +1,5 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
-import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
+import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
 import {
   CSS_Input,
   make_css_unit_input,
@@ -27,6 +27,7 @@ import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
   as_array,
   Drag_Type,
+  filler_text,
   Selection_Rect,
   set_class,
   update_rect_with_delta,
@@ -348,19 +349,37 @@ export class App_State {
   }
 
   update_grid(opts: Grid_Update_Options) {
-    const updated_attributes = this.grid_layout.changed_attributes(opts);
+    // Given a new set of attributes, finds which ones changed and updates the
+    // corresponding portions of the grid
+    let new_num_cells = opts.force ?? false;
+    let rows_and_cols_updated = opts.force ?? false;
 
-    this.gap_size_setting.update_value(opts.gap);
+    if (this.grid_layout.is_updated_val("rows", opts.rows)) {
+      if (this.grid_layout.num_rows !== opts.rows.length) new_num_cells = true;
+      rows_and_cols_updated = true;
+      this.grid_layout.rows = opts.rows;
+    }
 
-    this.grid_layout.update_attrs(opts);
+    if (this.grid_layout.is_updated_val("cols", opts.cols)) {
+      if (this.grid_layout.num_cols !== opts.cols.length) new_num_cells = true;
+      rows_and_cols_updated = true;
+      this.grid_layout.cols = opts.cols;
+    }
 
-    // Put some filler text into items spanning auto rows so auto behavior
-    // is clear to user
-    this.current_elements.forEach((el) => {
-      el.grid_item.fill_if_in_auto_row();
-    });
+    if (this.grid_layout.is_updated_val("gap", opts.gap)) {
+      this.grid_layout.gap = opts.gap;
+      this.gap_size_setting.update_value(opts.gap);
+    }
 
-    if (updated_attributes.new_num_cells || opts.force) {
+    if (rows_and_cols_updated) {
+      // Put some filler text into items spanning auto rows so auto behavior
+      // is clear to user
+      this.current_elements.forEach((el) => {
+        el.grid_item.fill_if_in_auto_row();
+      });
+    }
+
+    if (new_num_cells) {
       fill_grid_cells(this);
       setup_tract_controls(this);
       setup_new_item_drag(this);
@@ -603,6 +622,7 @@ function draw_elements(
   const mirrors_existing = typeof mirrored_el !== "undefined";
 
   const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element`, {
+    innerHTML: filler_text,
     styles: {
       borderColor: app_state.next_color,
       position: "relative",

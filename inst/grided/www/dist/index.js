@@ -577,7 +577,9 @@ function () {
     var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
 
     if (in_auto_row) {
-      this.el.innerHTML = utils_misc_1.filler_text;
+      this.el.classList.add("in-auto-row");
+    } else {
+      this.el.classList.remove("in-auto-row");
     }
   };
 
@@ -682,46 +684,15 @@ function () {
   });
 
   Grid_Layout.prototype.is_updated_val = function (attr, values) {
+    // Assume no value passed means no update. This allows us to call and check
+    // on objects that may not have the attribute in them.
+    if (typeof values === "undefined") return false;
+
     if (attr === "gap") {
       return values !== this.gap;
     } else if (_typeof(values) === "object") {
       return !equal_arrays(this[attr], values);
     }
-  }; // Given a new set of attributes, tells you which ones are different from
-  // current values
-
-
-  Grid_Layout.prototype.changed_attributes = function (attrs) {
-    var changed = [];
-    var new_attrs = this.attrs;
-    if (attrs.rows) new_attrs.rows = attrs.rows;
-    if (attrs.cols) new_attrs.cols = attrs.cols;
-    if (attrs.gap) new_attrs.gap = attrs.gap;
-
-    if (attrs.rows && this.is_updated_val("rows", attrs.rows)) {
-      changed.push("rows");
-    }
-
-    if (attrs.cols && this.is_updated_val("cols", attrs.cols)) {
-      changed.push("cols");
-    }
-
-    if (attrs.gap && this.is_updated_val("gap", attrs.gap)) {
-      changed.push("gap");
-    }
-
-    var new_num_cells = new_attrs.cols.length !== this.num_cols || new_attrs.rows.length !== this.num_rows;
-    return {
-      changed: changed,
-      new_num_cells: new_num_cells,
-      new_attrs: new_attrs
-    };
-  };
-
-  Grid_Layout.prototype.update_attrs = function (attrs) {
-    this.rows = attrs.rows;
-    this.cols = attrs.cols;
-    this.gap = attrs.gap;
   };
 
   Grid_Layout.prototype.sizes_for_tract = function (item_pos, dir) {
@@ -2019,16 +1990,39 @@ function () {
   };
 
   App_State.prototype.update_grid = function (opts) {
-    var updated_attributes = this.grid_layout.changed_attributes(opts);
-    this.gap_size_setting.update_value(opts.gap);
-    this.grid_layout.update_attrs(opts); // Put some filler text into items spanning auto rows so auto behavior
-    // is clear to user
+    var _a, _b; // Given a new set of attributes, finds which ones changed and updates the
+    // corresponding portions of the grid
 
-    this.current_elements.forEach(function (el) {
-      el.grid_item.fill_if_in_auto_row();
-    });
 
-    if (updated_attributes.new_num_cells || opts.force) {
+    var new_num_cells = (_a = opts.force) !== null && _a !== void 0 ? _a : false;
+    var rows_and_cols_updated = (_b = opts.force) !== null && _b !== void 0 ? _b : false;
+
+    if (this.grid_layout.is_updated_val("rows", opts.rows)) {
+      if (this.grid_layout.num_rows !== opts.rows.length) new_num_cells = true;
+      rows_and_cols_updated = true;
+      this.grid_layout.rows = opts.rows;
+    }
+
+    if (this.grid_layout.is_updated_val("cols", opts.cols)) {
+      if (this.grid_layout.num_cols !== opts.cols.length) new_num_cells = true;
+      rows_and_cols_updated = true;
+      this.grid_layout.cols = opts.cols;
+    }
+
+    if (this.grid_layout.is_updated_val("gap", opts.gap)) {
+      this.grid_layout.gap = opts.gap;
+      this.gap_size_setting.update_value(opts.gap);
+    }
+
+    if (rows_and_cols_updated) {
+      // Put some filler text into items spanning auto rows so auto behavior
+      // is clear to user
+      this.current_elements.forEach(function (el) {
+        el.grid_item.fill_if_in_auto_row();
+      });
+    }
+
+    if (new_num_cells) {
       fill_grid_cells(this);
       setup_tract_controls(this);
       setup_new_item_drag(this);
@@ -2287,6 +2281,7 @@ function draw_elements(app_state, el_info) {
   var el_color = app_state.next_color;
   var mirrors_existing = typeof mirrored_el !== "undefined";
   var grid_el = app_state.make_el("div#" + id + ".el_" + id + ".added-element", {
+    innerHTML: utils_misc_1.filler_text,
     styles: {
       borderColor: app_state.next_color,
       position: "relative"
