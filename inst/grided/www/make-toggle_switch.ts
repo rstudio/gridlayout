@@ -47,7 +47,7 @@ div.toggle-switch {
 }
 
 .toggle-switch > span {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .toggle-switch > .off-text {
