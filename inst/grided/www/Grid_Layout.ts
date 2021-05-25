@@ -11,10 +11,11 @@ export type Layout_State = {
 
 export class Grid_Layout {
   styles: CSSStyleDeclaration;
-
-  constructor(public container: HTMLElement) {
+  container: HTMLElement
+  constructor(container: HTMLElement) {
+    this.container = container;
     this.styles = container.style;
-    console.log("Initialized Grid_Layout");
+    console.log("Initialized Grid_Layout with parcel 2");
   }
 
   set rows(new_rows: string[]) {

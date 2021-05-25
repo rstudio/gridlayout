@@ -29,3 +29,9 @@ inst/demo_apps/rmarkdown_demo/rmd_layout_editing_files/
 *.mov
 doc
 Meta
+
+inst/grided/www/node_modules/
+
+inst/grided/www/.parcel-cache/
+
+inst/grided/www/yarn-error.log

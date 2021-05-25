@@ -1,0 +1,13 @@
+{
+  "declaration": true,
+  "compilerOptions": {
+    "target": "es6",
+    "esModuleInterop": true
+  },
+  "include": [
+    "*.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

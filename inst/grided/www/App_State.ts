@@ -85,6 +85,7 @@ export class App_State {
 
     this.controls = { rows: [], cols: [] };
     this.grid_styles = this.container.style;
+
     this.grid_layout = new Grid_Layout(this.container);
 
     const { grid_is_filled, gap_size_setting } = wrap_in_grided(this);
@@ -384,7 +385,7 @@ export class App_State {
       // (document.querySelector(
       //   "#editor-wrapper"
       // ) as HTMLElement).style.gridTemplateRows = `var(--browser-menu-height) minmax(calc(100% - 30px),${content_height}px)`;
-      // this.container.style.height = "100%"; 
+      // this.container.style.height = "100%";
     }
 
     if (new_num_cells) {
@@ -421,6 +422,7 @@ function fill_grid_cells(app_state: App_State) {
 
   if (app_state.mode === "Existing") {
     set_class(app_state.current_cells, "transparent");
+    
   }
 }
 
@@ -505,7 +507,7 @@ function place_tract_controls(app_state: App_State) {
       };
     });
 
-    update_positions();
+  update_positions();
   function update_positions() {
     col_controls.forEach(({ matched_cell, el }) => {
       const bounding_rect = matched_cell.getBoundingClientRect();
@@ -531,10 +533,9 @@ function place_tract_controls(app_state: App_State) {
 
 function setup_tract_controls(app_state: App_State) {
   place_tract_controls(app_state);
-  
+
   // Build each column and row's sizing controler
   for (let dir in app_state.controls) {
-
     // Get rid of old ones to start with fresh slate
     remove_elements(app_state.container.querySelectorAll(`.${dir}-controls`));
     app_state.controls[dir] = app_state.grid_layout.attrs[dir].map(
