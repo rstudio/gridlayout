@@ -162,13 +162,13 @@ button.minus_btn.disabled {
 }
 
 #grided__editor {
-
   grid-area: editor;
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
   padding-top: var(--editor-top-pad);
   min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
   overflow: scroll;
+  /* position: relative; */
 }
 
 #editor-wrapper {
@@ -412,8 +412,47 @@ Grid Controls
   font-size: 1.15rem;
 }
 
+.css-unit-input > * {
+  pointer-events: all;
+}
+
+.css-unit-input-value.disabled {
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+
+.rows-controls,
+.cols-controls {
+  position: fixed;
+  display: grid;
+  gap: 0.25rem;
+  position: absolute;
+}
+
+.cols-controls {
+  height: var(--editor-top-pad);
+  padding-bottom: 5px;
+  grid-template-areas: 
+    ".        removeThis  .       "
+    "dragger  dragger     dragger "
+    "cssInput cssInput    cssInput";
+  justify-content: center;
+  align-content: end;
+}
+
+.rows-controls {
+  width: var(--editor-left-pad);
+  padding-right: 0.5rem;
+  align-items: center;
+  grid-template-areas: 
+    "removeThis cssInput cssInput cssInput"
+    "removeThis dragger  dragger  dragger";
+  justify-content: end;
+  align-content: center;
+}
+
 .css-unit-input-dragger {
-  align-self: stretch;
   display: none;
   justify-content: center;
   align-items: center;
@@ -421,8 +460,8 @@ Grid Controls
   border: 1px solid var(--dark-gray);
   border-radius: 4px;
   color: var(--off-black);
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  position: relative;
+  height: 15px;
+  grid-area: dragger;
 }
 
 .with-drag .css-unit-input-dragger {
@@ -443,53 +482,7 @@ Grid Controls
   cursor: grabbing;
 }
 
-.css-unit-input > * {
-  pointer-events: all;
-}
 
-.css-unit-input-value.disabled {
-  opacity: 0.15;
-  pointer-events: none;
-}
-
-
-
-.rows-controls,
-.cols-controls {
-  display: grid;
-  gap: 0.25rem;
-  position: absolute;
-}
-
-.cols-controls {
-  height: var(--editor-top-pad);
-  width: 100%;
-  grid-row: 1 / 2;
-  /* This is so when the columns are thin the unit selector sits to the right
-   side. When everything is on a single row it has no effect */
-  bottom: calc(100% + var(--browser-menu-height) + var(--grid-gap) + 5px);
-  padding-top: 0.5rem;
-  grid-template-areas: 
-    ".        removeThis  .       "
-    "dragger  dragger     dragger "
-    "cssInput cssInput    cssInput";
-  justify-content: center;
-  align-content: end;
-}
-
-.rows-controls {
-  height: 100%;
-  width: var(--editor-left-pad);
-  right: calc(100% + var(--grid-gap));
-  padding-right: 0.5rem;
-  align-items: center;
-  grid-column: 1 / 2;
-  grid-template-areas: 
-    "removeThis cssInput cssInput cssInput"
-    "removeThis dragger  dragger  dragger";
-  justify-content: end;
-  align-content: center;
-}
 
 .removeThis {
   grid-area: removeThis;
@@ -499,10 +492,7 @@ Grid Controls
   padding: 0;
   grid-area: cssInput;
 }
-.css-unit-input-dragger {
-  max-height: 20px;
-  grid-area: dragger;
-}
+
 
 .incrementer-button {
   font-size: 10px;

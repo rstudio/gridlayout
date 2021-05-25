@@ -1,4 +1,5 @@
 import { Grid_Pos } from "./Grid_Item";
+import { get_gap_size } from "./utils-grid";
 
 export type Tract_Dir = "rows" | "cols";
 type Grid_Attr = "rows" | "cols" | "gap";
@@ -11,7 +12,7 @@ export type Layout_State = {
 
 export class Grid_Layout {
   styles: CSSStyleDeclaration;
-  container: HTMLElement
+  container: HTMLElement;
   constructor(container: HTMLElement) {
     this.container = container;
     this.styles = container.style;
@@ -51,7 +52,7 @@ export class Grid_Layout {
     this.styles.padding = new_gap;
   }
   get gap(): string {
-    return this.styles.gap;
+    return get_gap_size(this.styles.gap);
   }
 
   get attrs(): Layout_State {

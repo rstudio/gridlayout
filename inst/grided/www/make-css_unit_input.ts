@@ -144,9 +144,8 @@ export function make_css_unit_input({
   return { form, current_value, update_value };
 }
 
-// import {pink_bg} from './tra'
-
 export function make_grid_tract_control(
+  holder: HTMLElement,
   app_state: App_State,
   opts: {
     size: string;
@@ -156,17 +155,6 @@ export function make_grid_tract_control(
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
 
-  const holder = make_el(
-    app_state.container,
-    `div#control_${dir}${tract_index}.${dir}-controls`,
-    {
-      styles: {
-        [dir === "rows" ? "gridRow" : "gridColumn"]: make_template_start_end(
-          tract_index
-        ),
-      },
-    }
-  );
   const unit_input = make_css_unit_input({
     parent_el: holder,
     selector: `.unit-input`,
@@ -174,9 +162,18 @@ export function make_grid_tract_control(
     start_unit: get_css_unit(size),
     on_change: (new_val: string) => {
       show_or_hide_dragger(new_val);
-      app_state.update_grid(app_state.layout_from_controls);
+      send_update();
     },
   });
+
+  function send_update(to_shiny: boolean = true) {
+    app_state.update_tract({
+      tract_index,
+      dir,
+      new_value: unit_input.current_value(),
+      dont_send_to_shiny: !to_shiny,
+    });
+  }
 
   const value_input = <HTMLInputElement>(
     unit_input.form.querySelector(".css-unit-input-value")
@@ -210,16 +207,13 @@ export function make_grid_tract_control(
             +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
           );
           value_input.value = new_value.toString();
-          app_state.update_grid({
-            ...app_state.layout_from_controls,
-            dont_send_to_shiny: true,
-          });
+          send_update(false);
         },
       },
       {
         event: "dragend",
         func: function (event) {
-          app_state.update_grid(app_state.layout_from_controls);
+          send_update();
         },
       },
     ],

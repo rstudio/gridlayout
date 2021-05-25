@@ -680,7 +680,7 @@
       var getOwnPropertyNamesModule2 = require_object_get_own_property_names();
       var getOwnPropertySymbolsModule2 = require_object_get_own_property_symbols();
       var anObject6 = require_an_object();
-      module.exports = getBuiltIn2("Reflect", "ownKeys") || function ownKeys6(it) {
+      module.exports = getBuiltIn2("Reflect", "ownKeys") || function ownKeys5(it) {
         var keys2 = getOwnPropertyNamesModule2.f(anObject6(it));
         var getOwnPropertySymbols3 = getOwnPropertySymbolsModule2.f;
         return getOwnPropertySymbols3 ? keys2.concat(getOwnPropertySymbols3(it)) : keys2;
@@ -692,11 +692,11 @@
   var require_copy_constructor_properties = __commonJS({
     "node_modules/core-js/internals/copy-constructor-properties.js": function(exports, module) {
       var has4 = require_has();
-      var ownKeys6 = require_own_keys();
+      var ownKeys5 = require_own_keys();
       var getOwnPropertyDescriptorModule3 = require_object_get_own_property_descriptor();
       var definePropertyModule2 = require_object_define_property();
       module.exports = function(target, source) {
-        var keys2 = ownKeys6(source);
+        var keys2 = ownKeys5(source);
         var defineProperty5 = definePropertyModule2.f;
         var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule3.f;
         for (var i = 0; i < keys2.length; i++) {
@@ -1381,26 +1381,6 @@
     }
   });
 
-  // node_modules/core-js/internals/array-method-has-species-support.js
-  var require_array_method_has_species_support = __commonJS({
-    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
-      var fails7 = require_fails();
-      var wellKnownSymbol5 = require_well_known_symbol();
-      var V8_VERSION2 = require_engine_v8_version();
-      var SPECIES2 = wellKnownSymbol5("species");
-      module.exports = function(METHOD_NAME) {
-        return V8_VERSION2 >= 51 || !fails7(function() {
-          var array = [];
-          var constructor = array.constructor = {};
-          constructor[SPECIES2] = function() {
-            return { foo: 1 };
-          };
-          return array[METHOD_NAME](Boolean).foo !== 1;
-        });
-      };
-    }
-  });
-
   // node_modules/core-js/internals/get-substitution.js
   var require_get_substitution = __commonJS({
     "node_modules/core-js/internals/get-substitution.js": function(exports, module) {
@@ -1590,6 +1570,26 @@
           definePropertyModule2.f(object, propertyKey, createPropertyDescriptor2(0, value));
         else
           object[propertyKey] = value;
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-method-has-species-support.js
+  var require_array_method_has_species_support = __commonJS({
+    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
+      var fails7 = require_fails();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var V8_VERSION2 = require_engine_v8_version();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(METHOD_NAME) {
+        return V8_VERSION2 >= 51 || !fails7(function() {
+          var array = [];
+          var constructor = array.constructor = {};
+          constructor[SPECIES2] = function() {
+            return { foo: 1 };
+          };
+          return array[METHOD_NAME](Boolean).foo !== 1;
+        });
       };
     }
   });
@@ -2462,18 +2462,6 @@
     ];
   }, UNSUPPORTED_Y);
 
-  // node_modules/core-js/modules/es.array.map.js
-  "use strict";
-  var $2 = require_export();
-  var $map = require_array_iteration().map;
-  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("map");
-  $2({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-    map: function map(callbackfn) {
-      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
   // node_modules/core-js/modules/es.string.replace.js
   "use strict";
   var fixRegExpWellKnownSymbolLogic2 = require_fix_regexp_well_known_symbol_logic();
@@ -2557,7 +2545,7 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $3 = require_export();
+  var $2 = require_export();
   var $findIndex = require_array_iteration().findIndex;
   var addToUnscopables = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
@@ -2566,7 +2554,7 @@
     Array(1)[FIND_INDEX](function() {
       SKIPS_HOLES = false;
     });
-  $3({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $2({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -2575,20 +2563,20 @@
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $4 = require_export();
+  var $3 = require_export();
   var toAbsoluteIndex = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength3 = require_to_length();
   var toObject = require_to_object();
   var arraySpeciesCreate = require_array_species_create();
   var createProperty = require_create_property();
-  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("splice");
+  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("splice");
   var max2 = Math.max;
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $4({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+  $3({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
     splice: function splice(start, deleteCount) {
       var O = toObject(this);
       var len = toLength3(O.length);
@@ -2645,26 +2633,26 @@
 
   // node_modules/core-js/modules/es.array.filter.js
   "use strict";
-  var $5 = require_export();
+  var $4 = require_export();
   var $filter = require_array_iteration().filter;
-  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("filter");
-  $5({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("filter");
+  $4({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
     filter: function filter(callbackfn) {
       return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $6 = require_export();
+  var $5 = require_export();
   var assign = require_object_assign();
-  $6({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $5({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $7 = require_export();
+  var $6 = require_export();
   var fails = require_fails();
   var isArray = require_is_array();
   var isObject = require_is_object();
@@ -2672,7 +2660,7 @@
   var toLength4 = require_to_length();
   var createProperty2 = require_create_property();
   var arraySpeciesCreate2 = require_array_species_create();
-  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var wellKnownSymbol = require_well_known_symbol();
   var V8_VERSION = require_engine_v8_version();
   var IS_CONCAT_SPREADABLE = wellKnownSymbol("isConcatSpreadable");
@@ -2683,7 +2671,7 @@
     array[IS_CONCAT_SPREADABLE] = false;
     return array.concat()[0] !== array;
   });
-  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport4("concat");
+  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport3("concat");
   var isConcatSpreadable = function(O) {
     if (!isObject(O))
       return false;
@@ -2691,7 +2679,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray(O);
   };
   var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $7({ target: "Array", proto: true, forced: FORCED }, {
+  $6({ target: "Array", proto: true, forced: FORCED }, {
     concat: function concat(arg) {
       var O = toObject2(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -2714,6 +2702,18 @@
       }
       A.length = n;
       return A;
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.map.js
+  "use strict";
+  var $7 = require_export();
+  var $map = require_array_iteration().map;
+  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport4("map");
+  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+    map: function map(callbackfn) {
+      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
@@ -3895,7 +3895,7 @@
     }, {
       key: "gap",
       get: function get() {
-        return this.styles.gap;
+        return get_gap_size(this.styles.gap);
       },
       set: function set(new_gap) {
         if (typeof new_gap === "undefined")
@@ -4212,44 +4212,6 @@
   }
 
   // make-css_unit_input.ts
-  function ownKeys3(object, enumerableOnly) {
-    var keys2 = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) {
-        symbols = symbols.filter(function(sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-      keys2.push.apply(keys2, symbols);
-    }
-    return keys2;
-  }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys3(Object(source), true).forEach(function(key) {
-          _defineProperty4(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys3(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-    return target;
-  }
-  function _defineProperty4(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
   function _createForOfIteratorHelper(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -4410,11 +4372,8 @@
       update_value: update_value
     };
   }
-  function make_grid_tract_control(app_state, opts) {
+  function make_grid_tract_control(holder, app_state, opts) {
     var size = opts.size, dir = opts.dir, tract_index = opts.tract_index;
-    var holder = make_el(app_state.container, "div#control_".concat(dir).concat(tract_index, ".").concat(dir, "-controls"), {
-      styles: _defineProperty4({}, dir === "rows" ? "gridRow" : "gridColumn", make_template_start_end(tract_index))
-    });
     var unit_input = make_css_unit_input({
       parent_el: holder,
       selector: ".unit-input",
@@ -4422,9 +4381,18 @@
       start_unit: get_css_unit(size),
       on_change: function on_change(new_val) {
         show_or_hide_dragger(new_val);
-        app_state.update_grid(app_state.layout_from_controls);
+        send_update();
       }
     });
+    function send_update() {
+      var to_shiny = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : true;
+      app_state.update_tract({
+        tract_index: tract_index,
+        dir: dir,
+        new_value: unit_input.current_value(),
+        dont_send_to_shiny: !to_shiny
+      });
+    }
     var value_input = unit_input.form.querySelector(".css-unit-input-value");
     var drag_dir = dir === "rows" ? "y" : "x";
     var resizer = make_el(holder, "div.css-unit-input-dragger", {
@@ -4448,14 +4416,12 @@
             return;
           var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
           value_input.value = new_value.toString();
-          app_state.update_grid(_objectSpread2(_objectSpread2({}, app_state.layout_from_controls), {}, {
-            dont_send_to_shiny: true
-          }));
+          send_update(false);
         }
       }, {
         event: "dragend",
         func: function func(event) {
-          app_state.update_grid(app_state.layout_from_controls);
+          send_update();
         }
       }]
     });
@@ -4642,7 +4608,7 @@
   }
 
   // utils-shiny.ts
-  function ownKeys4(object, enumerableOnly) {
+  function ownKeys3(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
@@ -4655,24 +4621,24 @@
     }
     return keys2;
   }
-  function _objectSpread3(target) {
+  function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys4(Object(source), true).forEach(function(key) {
-          _defineProperty5(target, key, source[key]);
+        ownKeys3(Object(source), true).forEach(function(key) {
+          _defineProperty4(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys4(Object(source)).forEach(function(key) {
+        ownKeys3(Object(source)).forEach(function(key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
     }
     return target;
   }
-  function _defineProperty5(obj, key, value) {
+  function _defineProperty4(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -4696,7 +4662,7 @@
   function send_elements_to_shiny(elements) {
     var elements_by_id = {};
     elements.forEach(function(el) {
-      elements_by_id[el.id] = _objectSpread3({
+      elements_by_id[el.id] = _objectSpread2({
         id: el.id
       }, el.grid_pos);
     });
@@ -4832,6 +4798,45 @@
   }
 
   // App_State.ts
+  function _createForOfIteratorHelper2(o, allowArrayLike) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (!it) {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray6(o)) || allowArrayLike && o && typeof o.length === "number") {
+        if (it)
+          o = it;
+        var i = 0;
+        var F = function F2() {
+        };
+        return { s: F, n: function n() {
+          if (i >= o.length)
+            return { done: true };
+          return { done: false, value: o[i++] };
+        }, e: function e(_e) {
+          throw _e;
+        }, f: F };
+      }
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+    var normalCompletion = true, didErr = false, err;
+    return { s: function s() {
+      it = it.call(o);
+    }, n: function n() {
+      var step = it.next();
+      normalCompletion = step.done;
+      return step;
+    }, e: function e(_e2) {
+      didErr = true;
+      err = _e2;
+    }, f: function f() {
+      try {
+        if (!normalCompletion && it["return"] != null)
+          it["return"]();
+      } finally {
+        if (didErr)
+          throw err;
+      }
+    } };
+  }
   function _toConsumableArray5(arr) {
     return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread5();
   }
@@ -4867,7 +4872,7 @@
     }
     return arr2;
   }
-  function ownKeys5(object, enumerableOnly) {
+  function ownKeys4(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
@@ -4880,17 +4885,17 @@
     }
     return keys2;
   }
-  function _objectSpread4(target) {
+  function _objectSpread3(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys5(Object(source), true).forEach(function(key) {
-          _defineProperty6(target, key, source[key]);
+        ownKeys4(Object(source), true).forEach(function(key) {
+          _defineProperty5(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys5(Object(source)).forEach(function(key) {
+        ownKeys4(Object(source)).forEach(function(key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -4919,7 +4924,7 @@
       _defineProperties3(Constructor, staticProps);
     return Constructor;
   }
-  function _defineProperty6(obj, key, value) {
+  function _defineProperty5(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -4927,25 +4932,22 @@
     }
     return obj;
   }
+  var tract_dirs = ["rows", "cols"];
   var App_State = /* @__PURE__ */ function() {
     function App_State2() {
       _classCallCheck3(this, App_State2);
-      _defineProperty6(this, "controls", void 0);
-      _defineProperty6(this, "gap_size_setting", void 0);
-      _defineProperty6(this, "current_cells", []);
-      _defineProperty6(this, "elements", []);
-      _defineProperty6(this, "container_selector", void 0);
-      _defineProperty6(this, "container", void 0);
-      _defineProperty6(this, "grid_styles", void 0);
-      _defineProperty6(this, "mode", void 0);
-      _defineProperty6(this, "grid_layout", void 0);
+      _defineProperty5(this, "gap_size_setting", void 0);
+      _defineProperty5(this, "current_cells", []);
+      _defineProperty5(this, "elements", []);
+      _defineProperty5(this, "container_selector", void 0);
+      _defineProperty5(this, "container", void 0);
+      _defineProperty5(this, "grid_styles", void 0);
+      _defineProperty5(this, "mode", void 0);
+      _defineProperty5(this, "grid_layout", void 0);
+      _defineProperty5(this, "tract_controls", void 0);
       var grid_layout_rule = find_selector_by_property("display", "grid");
       this.container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page";
       this.container = grid_layout_rule.rule_exists ? document.querySelector(this.container_selector) : Block_El("div#grid_page");
-      this.controls = {
-        rows: [],
-        cols: []
-      };
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
       var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
@@ -4962,17 +4964,6 @@
       }
     }
     _createClass3(App_State2, [{
-      key: "layout_from_controls",
-      get: function get() {
-        var sizes = {};
-        for (var type in this.controls) {
-          sizes[type] = this.controls[type].map(function(unit_input) {
-            return unit_input.current_value();
-          });
-        }
-        return sizes;
-      }
-    }, {
       key: "next_color",
       get: function get() {
         var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
@@ -4997,7 +4988,7 @@
           mirrored_el: el_props.mirrored_element
         });
         grid_item.position = el_props.grid_pos;
-        var new_element_entry = _objectSpread4(_objectSpread4({}, el_props), {}, {
+        var new_element_entry = _objectSpread3(_objectSpread3({}, el_props), {}, {
           grid_el: grid_item.el,
           list_el: grid_item.sibling_el,
           grid_item: grid_item
@@ -5036,7 +5027,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(new_index, 0, "1fr");
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
+        this.update_grid(_defineProperty5({}, dir, tract_sizes));
       }
     }, {
       key: "remove_tract",
@@ -5063,7 +5054,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(index - 1, 1);
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
+        this.update_grid(_defineProperty5({}, dir, tract_sizes));
       }
     }, {
       key: "make_el",
@@ -5094,7 +5085,7 @@
             bottom: event.offsetY
           };
           drag_feedback_rect = make_el(_this2.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
-            styles: _objectSpread4({}, bounding_rect_to_css_pos(start_rect))
+            styles: _objectSpread3({}, bounding_rect_to_css_pos(start_rect))
           });
           update_grid_pos(opts.grid_item, start_rect);
           if (opts.on_start)
@@ -5134,6 +5125,15 @@
         }
       }
     }, {
+      key: "update_tract",
+      value: function update_tract(opts) {
+        var _this$update_grid3;
+        var tract_index = opts.tract_index, dir = opts.dir, new_value = opts.new_value, _opts$dont_send_to_sh = opts.dont_send_to_shiny, dont_send_to_shiny = _opts$dont_send_to_sh === void 0 ? false : _opts$dont_send_to_sh;
+        var tract_values = this.grid_layout[dir];
+        tract_values[tract_index - 1] = new_value;
+        this.update_grid((_this$update_grid3 = {}, _defineProperty5(_this$update_grid3, dir, tract_values), _defineProperty5(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
+      }
+    }, {
       key: "update_grid",
       value: function update_grid(opts) {
         var _opts$force, _opts$force2;
@@ -5155,16 +5155,15 @@
           this.grid_layout.gap = opts.gap;
           this.gap_size_setting.update_value(opts.gap);
         }
+        if (new_num_cells) {
+          fill_grid_cells(this);
+          setup_new_item_drag(this);
+        }
         if (rows_and_cols_updated) {
           this.current_elements.forEach(function(el) {
             el.grid_item.fill_if_in_auto_row();
           });
-          place_tract_controls(this);
-        }
-        if (new_num_cells) {
-          fill_grid_cells(this);
-          setup_tract_controls(this);
-          setup_new_item_drag(this);
+          this.tract_controls.update_positions();
         }
         if (!opts.dont_send_to_shiny) {
           send_grid_sizing_to_shiny(this.grid_layout.attrs);
@@ -5195,6 +5194,7 @@
     if (app_state.mode === "Existing") {
       set_class(app_state.current_cells, "transparent");
     }
+    app_state.tract_controls = build_tract_controls(app_state);
   }
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
@@ -5221,124 +5221,113 @@
       return app_state.container.appendChild(el);
     });
   }
-  function place_tract_controls(app_state) {
-    var col_controls = app_state.current_cells.filter(function(el) {
-      return el.classList.contains("r1");
-    }).map(function(el) {
-      var bounding_rect = el.getBoundingClientRect();
-      return {
-        matched_cell: el,
-        el: make_el(document.querySelector(".container-fluid"), "div#controller_for_col_".concat(+el.dataset.col, ".column-contoller"), {
-          styles: {
-            outline: "1px solid pink",
-            position: "fixed",
-            height: "var(--editor-top-pad)"
-          }
-        })
-      };
+  function build_tract_controls(app_state) {
+    var editor_container = document.querySelector("#grided__editor");
+    editor_container.querySelectorAll(".tract-controls").forEach(function(el) {
+      return el.remove();
     });
-    var row_controls = app_state.current_cells.filter(function(el) {
-      return el.classList.contains("c1");
-    }).map(function(el) {
-      var bounding_rect = el.getBoundingClientRect();
-      return {
-        matched_cell: el,
-        el: make_el(document.querySelector(".container-fluid"), "div#controller_for_row_".concat(+el.dataset.row, ".row-contoller"), {
-          styles: {
-            outline: "1px solid green",
-            position: "fixed",
-            width: "var(--editor-left-pad)"
-          }
-        })
-      };
+    app_state.container.querySelectorAll("button.tract-add").forEach(function(el) {
+      return el.remove();
     });
+    var controls = {
+      rows: build_controls_for_dir("rows"),
+      cols: build_controls_for_dir("cols")
+    };
+    function build_controls_for_dir(dir) {
+      var target_class = dir === "rows" ? "c1" : "r1";
+      var dir_singular = dir === "rows" ? "row" : "col";
+      setup_tract_add_buttons(dir);
+      return app_state.current_cells.filter(function(el) {
+        return el.classList.contains(target_class);
+      }).map(function(el) {
+        var tract_index = +el.dataset[dir_singular];
+        var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".").concat(dir, "-controls.tract-controls"));
+        return {
+          matched_cell: el,
+          el: holder_el,
+          controller: make_grid_tract_control(holder_el, app_state, {
+            dir: dir,
+            size: app_state.grid_layout[dir][tract_index - 1],
+            tract_index: tract_index
+          })
+        };
+      });
+    }
+    function setup_tract_add_buttons(dir) {
+      var _loop = function _loop2(index2) {
+        var final_btn = index2 === 0;
+        var tract_index = final_btn ? 1 : index2;
+        var styles_for_holder = {
+          position: "absolute"
+        };
+        var size = "2.5em";
+        var offset_to_gap = "calc(-1 * (var(--grid-gap) + ".concat(size, ")/2)");
+        var offset_outside_editor = "calc(-".concat(size, " - var(--grid-gap) - 0.5rem)");
+        if (dir === "rows") {
+          Object.assign(styles_for_holder, _defineProperty5({
+            gridRow: make_template_start_end(tract_index),
+            gridColumn: "1 / 2",
+            justifyContent: final_btn ? "end" : "start",
+            left: offset_outside_editor
+          }, final_btn ? "top" : "bottom", offset_to_gap));
+        } else {
+          Object.assign(styles_for_holder, _defineProperty5({
+            gridColumn: make_template_start_end(tract_index),
+            gridRow: "1 / 2",
+            alignContent: "end",
+            top: "calc(-".concat(size, " - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)")
+          }, final_btn ? "left" : "right", offset_to_gap));
+        }
+        incrementer_button({
+          parent_el: app_state.container,
+          selector_text: ".addButton.tract-add.".concat(dir, "_").concat(index2),
+          up_or_down: "up",
+          label: "Add a ".concat(dir === "rows" ? "row" : "col"),
+          on_click: function on_click() {
+            return app_state.add_tract(dir, index2);
+          },
+          additional_styles: styles_for_holder
+        });
+      };
+      for (var index = app_state.grid_layout["num_".concat(dir)]; index >= 0; index--) {
+        _loop(index);
+      }
+    }
     update_positions();
     function update_positions() {
-      col_controls.forEach(function(_ref2) {
-        var matched_cell = _ref2.matched_cell, el = _ref2.el;
-        var bounding_rect = matched_cell.getBoundingClientRect();
-        Object.assign(el.style, {
-          left: bounding_rect.left + "px",
-          width: bounding_rect.width + "px",
-          top: "calc(".concat(bounding_rect.top, "px - var(--editor-top-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 0.5rem)")
-        });
-      });
-      row_controls.forEach(function(_ref3) {
-        var matched_cell = _ref3.matched_cell, el = _ref3.el;
-        var bounding_rect = matched_cell.getBoundingClientRect();
-        Object.assign(el.style, {
-          top: bounding_rect.top + "px",
-          height: bounding_rect.height + "px",
-          left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
-        });
-      });
-    }
-  }
-  function setup_tract_controls(app_state) {
-    place_tract_controls(app_state);
-    var _loop = function _loop2(dir2) {
-      remove_elements(app_state.container.querySelectorAll(".".concat(dir2, "-controls")));
-      app_state.controls[dir2] = app_state.grid_layout.attrs[dir2].map(function(size, i) {
-        return make_grid_tract_control(app_state, {
-          size: size,
-          dir: dir2,
-          tract_index: i + 1
-        });
-      });
-      app_state.container.querySelectorAll("button.tract-add").forEach(function(el) {
-        return el.remove();
-      });
-      var _loop22 = function _loop23() {
-        var dir3 = _arr[_i];
-        var _loop3 = function _loop32(index2) {
-          var final_btn = index2 === 0;
-          var tract_index = final_btn ? 1 : index2;
-          var styles_for_holder = {
-            position: "absolute"
-          };
-          var size = "2.5em";
-          var offset_to_gap = "calc(-1 * (var(--grid-gap) + ".concat(size, ")/2)");
-          var offset_outside_editor = "calc(-".concat(size, " - var(--grid-gap) - 0.5rem)");
-          if (dir3 === "rows") {
-            Object.assign(styles_for_holder, _defineProperty6({
-              gridRow: make_template_start_end(tract_index),
-              gridColumn: "1 / 2",
-              justifyContent: final_btn ? "end" : "start",
-              left: offset_outside_editor
-            }, final_btn ? "top" : "bottom", offset_to_gap));
-          } else {
-            Object.assign(styles_for_holder, _defineProperty6({
-              gridColumn: make_template_start_end(tract_index),
-              gridRow: "1 / 2",
-              alignContent: "end",
-              top: "calc(-".concat(size, " - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)")
-            }, final_btn ? "left" : "right", offset_to_gap));
-          }
-          incrementer_button({
-            parent_el: app_state.container,
-            selector_text: ".addButton.tract-add.".concat(dir3, "_").concat(index2),
-            up_or_down: "up",
-            label: "Add a ".concat(dir3 === "rows" ? "row" : "col"),
-            on_click: function on_click() {
-              return app_state.add_tract(dir3, index2);
-            },
-            additional_styles: styles_for_holder
+      var _iterator = _createForOfIteratorHelper2(tract_dirs), _step;
+      try {
+        var _loop2 = function _loop22() {
+          var dir = _step.value;
+          controls[dir].forEach(function(_ref2) {
+            var matched_cell = _ref2.matched_cell, el = _ref2.el;
+            var bounding_rect = matched_cell.getBoundingClientRect();
+            Object.assign(el.style, dir === "cols" ? {
+              left: bounding_rect.left + "px",
+              width: bounding_rect.width + "px",
+              top: "calc(".concat(bounding_rect.top, "px - var(--editor-top-pad) - var(--browser-menu-height) - ").concat(app_state.grid_layout.attrs.gap, ")")
+            } : {
+              top: bounding_rect.top + "px",
+              height: bounding_rect.height + "px",
+              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
+            });
           });
         };
-        for (var index = app_state.grid_layout["num_".concat(dir3)]; index >= 0; index--) {
-          _loop3(index);
+        for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+          _loop2();
         }
-      };
-      for (var _i = 0, _arr = ["rows", "cols"]; _i < _arr.length; _i++) {
-        _loop22();
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
-    };
-    for (var dir in app_state.controls) {
-      _loop(dir);
     }
+    return {
+      update_positions: update_positions
+    };
   }
-  function element_naming_ui(app_state, _ref4) {
-    var grid_pos = _ref4.grid_pos, selection_box = _ref4.selection_box;
+  function element_naming_ui(app_state, _ref3) {
+    var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
     var modal_divs = focused_modal({
       background_callbacks: {
         event: "click",
