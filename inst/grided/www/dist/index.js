@@ -1971,7 +1971,8 @@ function () {
       // is clear to user
       this.current_elements.forEach(function (el) {
         el.grid_item.fill_if_in_auto_row();
-      }); // Do some funky logic to get height of the container and make app window
+      });
+      place_tract_controls(this); // Do some funky logic to get height of the container and make app window
       // grow if app is larger than available vertical space but not shrink
       // if it is smaller
       // this.container.style.height = "auto"; // Let container grow as needed
@@ -2053,7 +2054,74 @@ function setup_new_item_drag(app_state) {
   });
 }
 
+function place_tract_controls(app_state) {
+  // Get screen positions of every row and col
+  var col_controls = app_state.current_cells.filter(function (el) {
+    return el.classList.contains("r1");
+  }).map(function (el) {
+    var bounding_rect = el.getBoundingClientRect();
+    return {
+      matched_cell: el,
+      el: make_elements_1.make_el(document.querySelector(".container-fluid"), "div#controller_for_col_" + +el.dataset.col + ".column-contoller", {
+        styles: {
+          outline: "1px solid pink",
+          position: "fixed",
+          // left: bounding_rect.left + "px",
+          // width: bounding_rect.width + "px",
+          // top: `calc(${bounding_rect.top}px - var(--editor-top-pad) - ${app_state.grid_layout.attrs.gap} - 0.5rem)`,
+          height: "var(--editor-top-pad)"
+        }
+      })
+    };
+  });
+  var row_controls = app_state.current_cells.filter(function (el) {
+    return el.classList.contains("c1");
+  }).map(function (el) {
+    var bounding_rect = el.getBoundingClientRect();
+    return {
+      matched_cell: el,
+      el: make_elements_1.make_el(document.querySelector(".container-fluid"), "div#controller_for_row_" + +el.dataset.row + ".row-contoller", {
+        styles: {
+          outline: "1px solid green",
+          position: "fixed",
+          // top: bounding_rect.top + "px",
+          // height: bounding_rect.height + "px",
+          // left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${app_state.grid_layout.attrs.gap} - 2px)`,
+          // left:  (bounding_rect.left - 30) + "px",
+          width: "var(--editor-left-pad)"
+        }
+      })
+    };
+  });
+  update_positions();
+
+  function update_positions() {
+    col_controls.forEach(function (_a) {
+      var matched_cell = _a.matched_cell,
+          el = _a.el;
+      var bounding_rect = matched_cell.getBoundingClientRect();
+      Object.assign(el.style, {
+        left: bounding_rect.left + "px",
+        width: bounding_rect.width + "px",
+        top: "calc(" + bounding_rect.top + "px - var(--editor-top-pad) - " + app_state.grid_layout.attrs.gap + " - 0.5rem)"
+      });
+    });
+    row_controls.forEach(function (_a) {
+      var matched_cell = _a.matched_cell,
+          el = _a.el;
+      var bounding_rect = matched_cell.getBoundingClientRect();
+      Object.assign(el.style, {
+        top: bounding_rect.top + "px",
+        height: bounding_rect.height + "px",
+        left: "calc(" + bounding_rect.left + "px - var(--editor-left-pad) - " + app_state.grid_layout.attrs.gap + " - 2px)"
+      });
+    });
+  }
+}
+
 function setup_tract_controls(app_state) {
+  place_tract_controls(app_state);
+
   var _loop_1 = function _loop_1(dir) {
     // Get rid of old ones to start with fresh slate
     make_elements_1.remove_elements(app_state.container.querySelectorAll("." + dir + "-controls"));

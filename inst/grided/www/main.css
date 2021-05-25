@@ -1,5 +1,5 @@
 /* Styles for my app */
-#grided__holder {
+body {
   --side-gaps: 0.7rem;
   --blue: #007bff;
   --light-gray: #9e9e9e;
@@ -9,6 +9,15 @@
   --off-black: #2c2c2c;
   --edge-round: 5px;
   --element_roundness: 10px;
+  --browser-menu-height: 30px;
+  --editor-radius: 10px;
+  --outline-color: var(--light-gray);
+  --editor-left-pad: 200px;
+  --editor-top-pad: 100px;
+}
+
+#grided__holder {
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 18px;
   display: grid;
@@ -154,11 +163,7 @@ button.minus_btn.disabled {
 }
 
 #grided__editor {
-  --browser-menu-height: 30px;
-  --editor-radius: 10px;
-  --outline-color: var(--light-gray);
-  --editor-left-pad: 200px;
-  --editor-top-pad: 100px;
+
   grid-area: editor;
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
