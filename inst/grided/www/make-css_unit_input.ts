@@ -154,26 +154,16 @@ export function make_grid_tract_control(
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
 
-  const styles_for_holder: Record<string, string> = {};
-  if (dir === "rows") {
-    Object.assign(styles_for_holder, {
-      gridRow: make_template_start_end(tract_index),
-      justifyContent: "end",
-      alignContent: "center",
-    });
-  } else {
-    Object.assign(styles_for_holder, {
-      gridColumn: make_template_start_end(tract_index),
-      justifyContent: "center",
-      alignContent: "start",
-    });
-  }
-
+    
   const holder = make_el(
     app_state.container,
     `div#control_${dir}${tract_index}.${dir}-controls`,
     {
-      styles: styles_for_holder,
+      styles: {
+        [dir === "rows" ? "gridRow" : "gridColumn"]: make_template_start_end(
+          tract_index
+        ),
+      },
     }
   );
   const unit_input = make_css_unit_input({

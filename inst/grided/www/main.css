@@ -158,11 +158,11 @@ button.minus_btn.disabled {
   --editor-radius: 10px;
   --outline-color: var(--light-gray);
   --editor-left-pad: 200px;
-  --editor-bottom-pad: 100px;
+  --editor-top-pad: 100px;
   grid-area: editor;
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
-  padding-bottom: var(--editor-bottom-pad);
+  padding-top: var(--editor-top-pad);
   min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
   overflow: scroll;
 }
@@ -240,7 +240,6 @@ button.minus_btn.disabled {
 .grid-cell.transparent {
   background: none;
 }
-
 
 .grid-cell.selected {
   background: currentColor;
@@ -385,6 +384,12 @@ button.minus_btn.disabled {
   display: block;
 }
 
+/* 
+======================================================
+Grid Controls
+====================================================== 
+*/
+
 .css-unit-input {
   display: grid;
   grid-template-columns: 60px 54px;
@@ -396,11 +401,6 @@ button.minus_btn.disabled {
   box-shadow: none !important; 
 }
 
-
-/* .css-unit-input.with-drag {
-  grid-template-rows: 32px 18px;
-} */
-
 .css-unit-input-value,
 .css-unit-input-select {
   align-self:stretch;
@@ -408,10 +408,8 @@ button.minus_btn.disabled {
   font-size: 1.15rem;
 }
 
-
 .css-unit-input-dragger {
   align-self: stretch;
-  /* grid-column: 1/-1; */
   display: none;
   justify-content: center;
   align-items: center;
@@ -445,59 +443,53 @@ button.minus_btn.disabled {
   pointer-events: all;
 }
 
-
 .css-unit-input-value.disabled {
   opacity: 0.15;
   pointer-events: none;
 }
 
 
-.cols-controls {
-  position: absolute;
-  grid-row: -2 / -1;
-  /* This is so when the columns are thin the unit selector sits to the right
-  side. When everything is on a single row it has no effect */
-  top: calc(100% + var(--grid-gap));
-  height: var(--editor-bottom-pad);
-  width: 100%;
-}
 
-.cols-controls.css-unit-input {
-  align-content: start;
-  justify-content: center;
-}
-
-.rows-controls.css-unit-input {
-  align-content: center;
-  justify-content: end;
-}
-.rows-controls, 
+.rows-controls,
 .cols-controls {
   display: grid;
-  /* grid-template-rows: auto auto; */
   gap: 0.25rem;
-
-}
-.rows-controls {
-  padding-right: 0.5rem;
-  grid-template-areas: 
-  "removeThis cssInput cssInput   cssInput"
-  "removeThis dragger  dragger    dragger";
+  position: absolute;
 }
 
 .cols-controls {
+  height: var(--editor-top-pad);
+  width: 100%;
+  grid-row: 1 / 2;
+  /* This is so when the columns are thin the unit selector sits to the right
+   side. When everything is on a single row it has no effect */
+  bottom: calc(100% + var(--browser-menu-height) + var(--grid-gap) + 5px);
   padding-top: 0.5rem;
   grid-template-areas: 
-  "cssInput cssInput    cssInput"
-  "dragger  dragger     dragger "
-  ".        removeThis  .       ";
+    ".        removeThis  .       "
+    "dragger  dragger     dragger "
+    "cssInput cssInput    cssInput";
+  justify-content: center;
+  align-content: end;
 }
 
+.rows-controls {
+  height: 100%;
+  width: var(--editor-left-pad);
+  right: calc(100% + var(--grid-gap));
+  padding-right: 0.5rem;
+  align-items: center;
+  grid-column: 1 / 2;
+  grid-template-areas: 
+    "removeThis cssInput cssInput cssInput"
+    "removeThis dragger  dragger  dragger";
+  justify-content: end;
+  align-content: center;
+}
 
 .removeThis {
   grid-area: removeThis;
 }
-
 
 .unit-input {
   padding: 0;
@@ -508,33 +500,26 @@ button.minus_btn.disabled {
   grid-area: dragger;
 }
 
-.rows-controls {
-  height: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  grid-column: 1 / 2;
-  align-self: center;
-  position: absolute;
-  right: calc(100% + var(--grid-gap));
-  width: var(--editor-left-pad);
-}
-
-
 .incrementer-button {
-  font-size: 8px;
+  font-size: 10px;
   height: 2.5em;
   width: 2.5em;
-  border-radius: 2px;
-  border: 1px solid var(--off-black, #4f4f4f);
-  /* background-color: #fff; */
-  position: relative;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #fff;
   padding: 0;
+  color: var(--dark-gray, gray);
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.incrementer-button:hover {
+  background-color: var(--dark-gray);
+  color: white;
 }
 
 .incrementer-button > svg {
   max-height: 100%;
   max-width: 100%;
-  color: var(--dark-gray, gray)
 }
 
 .background-blurrer {

@@ -13,7 +13,7 @@ starting_layout <- md_to_gridlayout("
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
-|auto  |header  |header |
+|150px  |header  |header |
 |1fr   |sidebar |plot   |")
 
 

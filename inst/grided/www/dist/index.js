@@ -932,7 +932,7 @@ function incrementer_button(opts) {
       _a = opts.label,
       label = _a === void 0 ? up_or_down === "up" ? "Add" : "Remove" : _a;
   var button = make_el(parent_el, "button.incrementer-button" + selector_text, {
-    innerHTML: up_or_down === "up" ? utils_icons_1.plus_icon : utils_icons_1.minus_icon,
+    innerHTML: up_or_down === "up" ? utils_icons_1.plus_icon : utils_icons_1.trashcan_icon,
     styles: additional_styles,
     event_listener: {
       event: "click",
@@ -1109,27 +1109,13 @@ function make_css_unit_input(_a) {
 exports.make_css_unit_input = make_css_unit_input;
 
 function make_grid_tract_control(app_state, opts) {
+  var _a;
+
   var size = opts.size,
       dir = opts.dir,
       tract_index = opts.tract_index;
-  var styles_for_holder = {};
-
-  if (dir === "rows") {
-    Object.assign(styles_for_holder, {
-      gridRow: utils_grid_1.make_template_start_end(tract_index),
-      justifyContent: "end",
-      alignContent: "center"
-    });
-  } else {
-    Object.assign(styles_for_holder, {
-      gridColumn: utils_grid_1.make_template_start_end(tract_index),
-      justifyContent: "center",
-      alignContent: "start"
-    });
-  }
-
   var holder = make_elements_1.make_el(app_state.container, "div#control_" + dir + tract_index + "." + dir + "-controls", {
-    styles: styles_for_holder
+    styles: (_a = {}, _a[dir === "rows" ? "gridRow" : "gridColumn"] = utils_grid_1.make_template_start_end(tract_index), _a)
   });
   var unit_input = make_css_unit_input({
     parent_el: holder,
@@ -2107,9 +2093,9 @@ function setup_tract_controls(app_state) {
         } else {
           Object.assign(styles_for_holder, (_c = {
             gridColumn: utils_grid_1.make_template_start_end(tract_index),
-            gridRow: "-1 / -2",
+            gridRow: "1 / 2",
             alignContent: "end",
-            bottom: offset_outside_editor
+            top: "calc(-" + size + " - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)"
           }, _c[final_btn ? "left" : "right"] = offset_to_gap, _c));
         }
 

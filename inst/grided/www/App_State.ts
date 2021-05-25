@@ -501,9 +501,9 @@ function setup_tract_controls(app_state: App_State) {
         } else {
           Object.assign(styles_for_holder, {
             gridColumn: make_template_start_end(tract_index),
-            gridRow: `-1 / -2`,
+            gridRow: `1 / 2`,
             alignContent: "end",
-            bottom: offset_outside_editor,
+            top: `calc(-${size} - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)`,
             [final_btn ? "left" : "right"]: offset_to_gap,
           });
         }

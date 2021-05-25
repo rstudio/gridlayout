@@ -1,6 +1,6 @@
 import { Grid_Pos } from "./Grid_Item";
 import { set_element_in_grid } from "./utils-grid";
-import { plus_icon, minus_icon } from "./utils-icons";
+import { plus_icon, minus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
 
 export type Event_Listener = {
@@ -161,7 +161,7 @@ export function incrementer_button(opts: {
   } = opts;
 
   const button = make_el(parent_el, `button.incrementer-button${selector_text}`, {
-    innerHTML: up_or_down === "up" ? plus_icon : minus_icon,
+    innerHTML: up_or_down === "up" ? plus_icon : trashcan_icon,
     styles: additional_styles,
     event_listener: {
       event: "click",
