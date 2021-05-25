@@ -3786,7 +3786,7 @@
       key: "fill_if_in_auto_row",
       value: function fill_if_in_auto_row() {
         var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
-        if (in_auto_row) {
+        if (in_auto_row && !this.has_mirrored) {
           this.el.classList.add("in-auto-row");
         } else {
           this.el.classList.remove("in-auto-row");
@@ -5194,7 +5194,7 @@
     if (app_state.mode === "Existing") {
       set_class(app_state.current_cells, "transparent");
     }
-    app_state.tract_controls = build_tract_controls(app_state);
+    app_state.tract_controls = setup_tract_controls(app_state);
   }
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
@@ -5221,7 +5221,7 @@
       return app_state.container.appendChild(el);
     });
   }
-  function build_tract_controls(app_state) {
+  function setup_tract_controls(app_state) {
     var editor_container = document.querySelector("#grided__editor");
     editor_container.querySelectorAll(".tract-controls").forEach(function(el) {
       return el.remove();
@@ -5294,14 +5294,27 @@
       }
     }
     update_positions();
+    editor_container.querySelector("#editor-app-window").onscroll = update_positions;
+    function pos_relative_to_container(container, child_el) {
+      var pos = child_el.getBoundingClientRect();
+      return {
+        top: pos.top - container.top,
+        bottom: pos.bottom - container.bottom,
+        left: pos.left - container.left,
+        right: pos.right - container.right,
+        height: pos.height,
+        width: pos.width
+      };
+    }
     function update_positions() {
+      var editor_pos = editor_container.getBoundingClientRect();
       var _iterator = _createForOfIteratorHelper2(tract_dirs), _step;
       try {
         var _loop2 = function _loop22() {
           var dir = _step.value;
           controls[dir].forEach(function(_ref2) {
             var matched_cell = _ref2.matched_cell, el = _ref2.el;
-            var bounding_rect = matched_cell.getBoundingClientRect();
+            var bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
             Object.assign(el.style, dir === "cols" ? {
               left: bounding_rect.left + "px",
               width: bounding_rect.width + "px",

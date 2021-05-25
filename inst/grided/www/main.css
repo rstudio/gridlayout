@@ -168,7 +168,7 @@ button.minus_btn.disabled {
   padding-top: var(--editor-top-pad);
   min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
   overflow: scroll;
-  /* position: relative; */
+  position: relative;
 }
 
 #editor-wrapper {
@@ -197,6 +197,7 @@ button.minus_btn.disabled {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
 }
 /* Make position absolute so we can easily position the controls where we want them */
 #editor-app-window > div {
@@ -424,7 +425,7 @@ Grid Controls
 
 .rows-controls,
 .cols-controls {
-  position: fixed;
+  /* position: fixed; */
   display: grid;
   gap: 0.25rem;
   position: absolute;
@@ -462,6 +463,7 @@ Grid Controls
   color: var(--off-black);
   height: 15px;
   grid-area: dragger;
+  position: relative; /* So the drag detector div can be sized correctly */
 }
 
 .with-drag .css-unit-input-dragger {

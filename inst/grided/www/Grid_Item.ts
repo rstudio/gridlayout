@@ -53,7 +53,7 @@ export class Grid_Item {
       .item_row_sizes(this.position)
       .includes("auto");
 
-    if (in_auto_row) {
+    if (in_auto_row && !this.has_mirrored) {
       this.el.classList.add("in-auto-row");
     } else {
       this.el.classList.remove("in-auto-row");

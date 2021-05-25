@@ -430,7 +430,7 @@ function fill_grid_cells(app_state: App_State) {
     set_class(app_state.current_cells, "transparent");
   }
 
-  app_state.tract_controls = build_tract_controls(app_state);
+  app_state.tract_controls = setup_tract_controls(app_state);
 }
 
 function setup_new_item_drag(app_state: App_State) {
@@ -463,7 +463,7 @@ function setup_new_item_drag(app_state: App_State) {
   ].forEach((el) => app_state.container.appendChild(el));
 }
 
-function build_tract_controls(app_state: App_State) {
+function setup_tract_controls(app_state: App_State) {
   const editor_container = document.querySelector(
     "#grided__editor"
   ) as HTMLElement;
@@ -560,10 +560,25 @@ function build_tract_controls(app_state: App_State) {
 
   update_positions();
 
+  (editor_container.querySelector("#editor-app-window") as HTMLElement).onscroll = update_positions;
+
+  function pos_relative_to_container(container: DOMRect, child_el: HTMLElement) {
+    const pos = child_el.getBoundingClientRect();
+
+    return {
+      top:    pos.top - container.top,
+      bottom: pos.bottom - container.bottom,
+      left:   pos.left - container.left,
+      right:  pos.right - container.right,
+      height: pos.height,
+      width: pos.width,
+    }
+  }
   function update_positions() {
+    const editor_pos = editor_container.getBoundingClientRect();
     for (const dir of tract_dirs) {
       controls[dir].forEach(({ matched_cell, el }) => {
-        const bounding_rect = matched_cell.getBoundingClientRect();
+        const bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
 
         Object.assign(
           el.style,
