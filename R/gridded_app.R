@@ -69,17 +69,19 @@ grided_server_code <- function(
     layout_from_grided(input$elements, input$grid_sizing)
   })
 
-  observe({
+  shiny::observe({
     if (show_messages) {
       cat("==============================================\nElements Msg:")
-      lobstr::tree(input$elements)
+      # lobstr::tree(input$elements)
+      input$elements
     }
   })
 
-  observe({
+  shiny::observe({
     if (show_messages) {
       cat("==============================================\nSizing Msg:")
-      lobstr::tree(input$grid_sizing)
+      # lobstr::tree(input$grid_sizing)
+      input$grid_sizing
     }
   })
 #
