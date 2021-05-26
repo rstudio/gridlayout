@@ -7,6 +7,7 @@ import {
   browser_header_html,
   elements_icon,
   instructions_icon,
+  plus_icon,
   settings_icon,
   trashcan_icon,
 } from "./utils-icons";
@@ -68,6 +69,11 @@ export function wrap_in_grided(app_state: App_State) {
       Text_El(
         "div.panel-body",
         `
+      <strong>Add or remove a row/column:</strong>
+      <ul> 
+        <li> Click the ${plus_icon} in gaps between rows and columns to add a row or column at that location </li>
+        <li> Click the ${trashcan_icon} next to the row/column sizing controls to remove it</li>
+      </ul>
       <strong>Add an element:</strong>
       <ul>
         <li>Click and drag over the grid to define a region</li>
@@ -80,6 +86,7 @@ export function wrap_in_grided(app_state: App_State) {
       <strong>Remove an element:</strong>
       <ul>
         <li>Find element entry in "Added elements" panel and click the ${trashcan_icon} icon</li>
+        <li>You can't remove elements are part of a running app</li>
       </ul>`
       )
     ),
