@@ -16,7 +16,6 @@ export class Grid_Layout {
   constructor(container: HTMLElement) {
     this.container = container;
     this.styles = container.style;
-    console.log("Initialized Grid_Layout with parcel 2");
   }
 
   set rows(new_rows: string[]) {

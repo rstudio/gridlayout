@@ -59,8 +59,6 @@ export type Element_Info = {
 
 export type App_Mode = "Existing" | "New";
 
-const tract_dirs: Tract_Dir[] = ["rows", "cols"];
-
 export class App_State {
   gap_size_setting: CSS_Input;
   // All the currently existing cells making up the grid
@@ -387,8 +385,9 @@ export class App_State {
         el.grid_item.fill_if_in_auto_row();
       });
 
-      this.tract_controls.update_positions();
     }
+
+    this.tract_controls.update_positions();
 
     if (!opts.dont_send_to_shiny) {
       send_grid_sizing_to_shiny(this.grid_layout.attrs);
