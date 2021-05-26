@@ -72,7 +72,7 @@ print_layout_info <- function(layout_id = "stack") {
 }
 ```
 
-```{r app_code, message=FALSE}
+```{r app_code, eval = FALSE, message=FALSE}
 library(gridlayout)
 library(shiny)
 library(ggplot2)
