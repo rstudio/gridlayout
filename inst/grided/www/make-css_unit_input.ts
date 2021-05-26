@@ -43,6 +43,7 @@ export function make_css_unit_input({
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
   allowed_units = ["fr", "px", "rem", "auto"],
+  snap_to_defaults = true,
 }): CSS_Input {
   let current_unit = start_unit;
 
@@ -123,7 +124,7 @@ export function make_css_unit_input({
       // it from the default. E.g. flipping from default of 100px to rem
       // shouldn't result in a 100rem wide track which then needs to be adjusted
       const using_old_units_default =
-        value_input.value === default_values[current_unit];
+        value_input.value === default_values[current_unit] && snap_to_defaults;
       value_input.value =
         count === null || using_old_units_default
           ? default_values[units]

@@ -3866,7 +3866,6 @@
       _defineProperty3(this, "container", void 0);
       this.container = container;
       this.styles = container.style;
-      console.log("Initialized Grid_Layout with parcel 2");
     }
     _createClass2(Grid_Layout2, [{
       key: "rows",
@@ -4301,7 +4300,7 @@
   function make_css_unit_input(_ref) {
     var parent_el = _ref.parent_el, _ref$selector = _ref.selector, selector = _ref$selector === void 0 ? "" : _ref$selector, _ref$start_val = _ref.start_val, start_val = _ref$start_val === void 0 ? 1 : _ref$start_val, _ref$start_unit = _ref.start_unit, start_unit = _ref$start_unit === void 0 ? "fr" : _ref$start_unit, _ref$on_change = _ref.on_change, on_change = _ref$on_change === void 0 ? function(x) {
       return console.log("css unit change", x);
-    } : _ref$on_change, _ref$allowed_units = _ref.allowed_units, allowed_units = _ref$allowed_units === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowed_units;
+    } : _ref$on_change, _ref$allowed_units = _ref.allowed_units, allowed_units = _ref$allowed_units === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowed_units, _ref$snap_to_defaults = _ref.snap_to_defaults, snap_to_defaults = _ref$snap_to_defaults === void 0 ? true : _ref$snap_to_defaults;
     var current_unit = start_unit;
     var form = make_el(parent_el, "form".concat(selector, ".css-unit-input"), {
       event_listener: [{
@@ -4363,7 +4362,7 @@
         value_input.value = "";
       } else {
         value_input.classList.remove("disabled");
-        var using_old_units_default = value_input.value === default_values[current_unit];
+        var using_old_units_default = value_input.value === default_values[current_unit] && snap_to_defaults;
         value_input.value = count === null || using_old_units_default ? default_values[units] : count.toString();
       }
       var _iterator = _createForOfIteratorHelper(unit_selector.children), _step;
@@ -4764,7 +4763,8 @@
           gap: x
         });
       },
-      allowed_units: ["px", "rem"]
+      allowed_units: ["px", "rem"],
+      snap_to_defaults: false
     });
     var grided_ui = Block_El("div#grided__holder", Block_El("div#grided__header", Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), Block_El.apply(void 0, ["div.code_btns"].concat(buttons))), Block_El("div#grided__settings", Text_El("h3", "".concat(settings_icon, " Settings")), settings_panel_el), Block_El("div#grided__instructions", Text_El("h3", "".concat(instructions_icon, " Instructions")), Text_El("div.panel-body", '\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the '.concat(trashcan_icon, " icon</li>\n      </ul>"))), Block_El("div#grided__elements", Text_El("h3", "".concat(elements_icon, " Added elements")), Block_El("div.panel-body", Block_El("div#added_elements"))), Block_El("div#grided__editor", Block_El("div#editor-wrapper", Text_El("div#editor-browser-header", browser_header_html), Block_El("div#editor-app-window", app_state.container))));
     document.querySelector("body").appendChild(grided_ui);
@@ -5173,8 +5173,8 @@
           this.current_elements.forEach(function(el) {
             el.grid_item.fill_if_in_auto_row();
           });
-          this.tract_controls.update_positions();
         }
+        this.tract_controls.update_positions();
         if (!opts.dont_send_to_shiny) {
           send_grid_sizing_to_shiny(this.grid_layout.attrs);
         }

@@ -12,8 +12,8 @@ body {
   --browser-menu-height: 30px;
   --editor-radius: 10px;
   --outline-color: var(--light-gray);
-  --editor-left-pad: 200px;
-  --editor-top-pad: 100px;
+  --editor-left-pad: 160px;
+  --editor-top-pad: 110px;
 }
 
 #grided__holder {
@@ -398,9 +398,9 @@ Grid Controls
 
 .css-unit-input {
   display: grid;
-  grid-template-columns: 60px 54px;
-  grid-template-rows: 32px;
-  grid-gap: 5px;
+  grid-template-columns: repeat(2, 55px);
+  justify-content: center; /* Make sure to sit in middle of control */
+  grid-gap: 2px;
   padding: 0.5rem;
   pointer-events: none;
   /* Prevents card styling when set to every child from spilling into input divs */
@@ -411,7 +411,8 @@ Grid Controls
 .css-unit-input-select {
   align-self:stretch;
   justify-self: stretch;
-  font-size: 1.15rem;
+  height: 1.65rem;
+  font-size: 1.1rem;
 }
 
 .css-unit-input > * {
@@ -425,8 +426,6 @@ Grid Controls
 
 
 .tract-controls {
-  /* outline: 1px solid red; */
-  /* position: fixed; */
   display: grid;
   gap: 0.25rem;
   position: absolute;
@@ -437,10 +436,17 @@ Grid Controls
   padding-bottom: 5px;
   grid-template-areas: 
     ".        remove-tract  .       "
-    "dragger  dragger     dragger "
-    "cssInput cssInput    cssInput";
+    "cssInput cssInput    cssInput"
+    "dragger  dragger     dragger ";
+  grid-template-columns: repeat(3, 1fr);
   justify-content: center;
+  justify-items: center;
   align-content: end;
+}
+
+.cols-controls .css-unit-input {
+  width: 90%;
+  grid-template-columns: repeat(auto-fit, 55px);
 }
 
 .rows-controls {
@@ -448,8 +454,9 @@ Grid Controls
   padding-right: 0.5rem;
   align-items: center;
   grid-template-areas: 
-    "remove-tract cssInput cssInput cssInput"
-    "remove-tract dragger  dragger  dragger";
+    "remove-tract cssInput"
+    "remove-tract dragger ";
+  /* grid-template-columns: auto minmax(50px, 200px); */
   justify-content: end;
   align-content: center;
 }
@@ -469,6 +476,9 @@ Grid Controls
 
 .with-drag .css-unit-input-dragger {
   display: flex;
+  width: 100%;
+  max-width: 80px;
+  justify-self: center;;
 }
 
 .css-unit-input-drag-detector {
@@ -500,11 +510,15 @@ Grid Controls
   height: 2em;
   width: 2em;  
   border-radius: 50%;
-  background-color: white;
-  border: 1px solid #fff;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
   padding: 0;
   color: var(--dark-gray, gray);
   transition: color 0.2s, background-color 0.2s;
+}
+
+.incrementer-button.remove-col{
+  font-size:12px;
 }
 
 .add-row,

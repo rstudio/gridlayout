@@ -44,6 +44,7 @@ export function wrap_in_grided(app_state: App_State) {
     selector: "#gap_size_chooser",
     on_change: (x) => app_state.update_grid({ gap: x }),
     allowed_units: ["px", "rem"],
+    snap_to_defaults: false
   });
 
   const grided_ui = Block_El(
