@@ -157,3 +157,16 @@ export const filler_text = `
   when an unknown printer took a galley of type and scrambled it to make a type 
   specimen book.
 </div>`;
+
+export function pos_relative_to_container(container: DOMRect, child_el: HTMLElement) {
+  const pos = child_el.getBoundingClientRect();
+
+  return {
+    top:    pos.top - container.top,
+    bottom: pos.bottom - container.bottom,
+    left:   pos.left - container.left,
+    right:  pos.right - container.right,
+    height: pos.height,
+    width: pos.width,
+  }
+}

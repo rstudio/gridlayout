@@ -3630,13 +3630,19 @@
     });
   }
   var filler_text = '\n<div class = "filler_text">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
+  function pos_relative_to_container(container, child_el) {
+    var pos = child_el.getBoundingClientRect();
+    return {
+      top: pos.top - container.top,
+      bottom: pos.bottom - container.bottom,
+      left: pos.left - container.left,
+      right: pos.right - container.right,
+      height: pos.height,
+      width: pos.width
+    };
+  }
 
   // utils-grid.ts
-  function make_template_start_end(start, end) {
-    var negative_index = start < 0;
-    end = end ? end + 1 : start + (negative_index ? -1 : 1);
-    return "".concat(start, " / ").concat(end);
-  }
   function set_element_in_grid(el, grid_bounds) {
     if (grid_bounds.start_row) {
       el.style.gridRowStart = grid_bounds.start_row.toString();
@@ -3900,7 +3906,7 @@
       set: function set(new_gap) {
         if (typeof new_gap === "undefined")
           return;
-        this.container.parentElement.style.setProperty("--grid-gap", new_gap);
+        document.querySelector("body").style.setProperty("--grid-gap", new_gap);
         this.styles.gap = new_gap;
         this.styles.padding = new_gap;
       }
@@ -4195,14 +4201,22 @@
       text: text
     });
   }
-  function incrementer_button(opts) {
-    var parent_el = opts.parent_el, selector_text = opts.selector_text, up_or_down = opts.up_or_down, on_click = opts.on_click, additional_styles = opts.additional_styles, _opts$label = opts.label, label = _opts$label === void 0 ? up_or_down === "up" ? "Add" : "Remove" : _opts$label;
-    var button = make_el(parent_el, "button.incrementer-button".concat(selector_text), {
-      innerHTML: up_or_down === "up" ? plus_icon : trashcan_icon,
+  function tract_add_or_remove_button(app_state, opts) {
+    var parent_el = opts.parent_el, add_or_remove = opts.add_or_remove, dir = opts.dir, tract_index = opts.tract_index, additional_styles = opts.additional_styles;
+    var dir_singular = dir === "rows" ? "row" : "col";
+    var label = add_or_remove === "add" ? "Add a ".concat(dir_singular) : "Remove ".concat(dir_singular);
+    var button = make_el(parent_el, "button.incrementer-button.".concat(add_or_remove, "-").concat(dir_singular, ".").concat(dir, "_").concat(tract_index), {
+      innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
       styles: additional_styles,
       event_listener: {
         event: "click",
-        func: on_click
+        func: function func() {
+          if (add_or_remove === "add") {
+            app_state.add_tract(dir, tract_index);
+          } else {
+            app_state.remove_tract(dir, tract_index);
+          }
+        }
       },
       props: {
         title: label
@@ -4425,14 +4439,11 @@
         }
       }]
     });
-    incrementer_button({
+    tract_add_or_remove_button(app_state, {
       parent_el: holder,
-      selector_text: ".removeThis",
-      up_or_down: "down",
-      label: "Remove ".concat(dir === "rows" ? "row" : "col"),
-      on_click: function on_click() {
-        return app_state.remove_tract(dir, tract_index);
-      }
+      add_or_remove: "remove",
+      dir: dir,
+      tract_index: tract_index
     });
     function show_or_hide_dragger(curr_val) {
       if (get_css_unit(curr_val) === "px") {
@@ -4932,7 +4943,6 @@
     }
     return obj;
   }
-  var tract_dirs = ["rows", "cols"];
   var App_State = /* @__PURE__ */ function() {
     function App_State2() {
       _classCallCheck3(this, App_State2);
@@ -5236,12 +5246,26 @@
     function build_controls_for_dir(dir) {
       var target_class = dir === "rows" ? "c1" : "r1";
       var dir_singular = dir === "rows" ? "row" : "col";
-      setup_tract_add_buttons(dir);
       return app_state.current_cells.filter(function(el) {
         return el.classList.contains(target_class);
       }).map(function(el) {
         var tract_index = +el.dataset[dir_singular];
         var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".").concat(dir, "-controls.tract-controls"));
+        if (tract_index === 1) {
+          tract_add_or_remove_button(app_state, {
+            parent_el: holder_el,
+            add_or_remove: "add",
+            dir: dir,
+            tract_index: 0,
+            additional_styles: _defineProperty5({}, dir === "rows" ? "top" : "left", "var(--incrementer-offset)")
+          });
+        }
+        tract_add_or_remove_button(app_state, {
+          parent_el: holder_el,
+          add_or_remove: "add",
+          dir: dir,
+          tract_index: tract_index
+        });
         return {
           matched_cell: el,
           el: holder_el,
@@ -5253,81 +5277,35 @@
         };
       });
     }
-    function setup_tract_add_buttons(dir) {
-      var _loop = function _loop2(index2) {
-        var final_btn = index2 === 0;
-        var tract_index = final_btn ? 1 : index2;
-        var styles_for_holder = {
-          position: "absolute"
-        };
-        var size = "2.5em";
-        var offset_to_gap = "calc(-1 * (var(--grid-gap) + ".concat(size, ")/2)");
-        var offset_outside_editor = "calc(-".concat(size, " - var(--grid-gap) - 0.5rem)");
-        if (dir === "rows") {
-          Object.assign(styles_for_holder, _defineProperty5({
-            gridRow: make_template_start_end(tract_index),
-            gridColumn: "1 / 2",
-            justifyContent: final_btn ? "end" : "start",
-            left: offset_outside_editor
-          }, final_btn ? "top" : "bottom", offset_to_gap));
-        } else {
-          Object.assign(styles_for_holder, _defineProperty5({
-            gridColumn: make_template_start_end(tract_index),
-            gridRow: "1 / 2",
-            alignContent: "end",
-            top: "calc(-".concat(size, " - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)")
-          }, final_btn ? "left" : "right", offset_to_gap));
-        }
-        incrementer_button({
-          parent_el: app_state.container,
-          selector_text: ".addButton.tract-add.".concat(dir, "_").concat(index2),
-          up_or_down: "up",
-          label: "Add a ".concat(dir === "rows" ? "row" : "col"),
-          on_click: function on_click() {
-            return app_state.add_tract(dir, index2);
-          },
-          additional_styles: styles_for_holder
-        });
-      };
-      for (var index = app_state.grid_layout["num_".concat(dir)]; index >= 0; index--) {
-        _loop(index);
-      }
-    }
     update_positions();
-    editor_container.querySelector("#editor-app-window").onscroll = update_positions;
-    function pos_relative_to_container(container, child_el) {
-      var pos = child_el.getBoundingClientRect();
-      return {
-        top: pos.top - container.top,
-        bottom: pos.bottom - container.bottom,
-        left: pos.left - container.left,
-        right: pos.right - container.right,
-        height: pos.height,
-        width: pos.width
-      };
-    }
+    editor_container.querySelector("#editor-app-window").onscroll = function() {
+      return update_positions(["rows"]);
+    };
     function update_positions() {
+      var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
       var editor_pos = editor_container.getBoundingClientRect();
-      var _iterator = _createForOfIteratorHelper2(tract_dirs), _step;
+      var wrapper_pos = pos_relative_to_container(editor_pos, editor_container.querySelector("#editor-wrapper"));
+      var gap_size = app_state.grid_layout.attrs.gap;
+      var _iterator = _createForOfIteratorHelper2(which_dirs), _step;
       try {
-        var _loop2 = function _loop22() {
+        var _loop = function _loop2() {
           var dir = _step.value;
           controls[dir].forEach(function(_ref2) {
             var matched_cell = _ref2.matched_cell, el = _ref2.el;
             var bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
             Object.assign(el.style, dir === "cols" ? {
-              left: bounding_rect.left + "px",
-              width: bounding_rect.width + "px",
-              top: "calc(".concat(bounding_rect.top, "px - var(--editor-top-pad) - var(--browser-menu-height) - ").concat(app_state.grid_layout.attrs.gap, ")")
+              left: "calc(".concat(bounding_rect.left, "px)"),
+              width: "calc(".concat(bounding_rect.width, "px)"),
+              top: "calc(".concat(wrapper_pos.top, "px - var(--editor-top-pad))")
             } : {
-              top: bounding_rect.top + "px",
-              height: bounding_rect.height + "px",
-              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
+              top: "calc(".concat(bounding_rect.top, "px)"),
+              height: "calc(".concat(bounding_rect.height, "px)"),
+              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(gap_size, " - 2px)")
             });
           });
         };
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-          _loop2();
+          _loop();
         }
       } catch (err) {
         _iterator.e(err);

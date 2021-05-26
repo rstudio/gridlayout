@@ -166,8 +166,9 @@ button.minus_btn.disabled {
   /* Leaves space for the row and column editing controls */
   padding-left: var(--editor-left-pad);
   padding-top: var(--editor-top-pad);
+  padding-bottom: 1.5rem; /* So the add a row buttons on very bottom arent off screen */
   min-width: 400px; /* So when starting small stuff isn't squished to uselessness */
-  overflow: scroll;
+  overflow: hidden;
   position: relative;
 }
 
@@ -423,8 +424,8 @@ Grid Controls
 }
 
 
-.rows-controls,
-.cols-controls {
+.tract-controls {
+  /* outline: 1px solid red; */
   /* position: fixed; */
   display: grid;
   gap: 0.25rem;
@@ -435,7 +436,7 @@ Grid Controls
   height: var(--editor-top-pad);
   padding-bottom: 5px;
   grid-template-areas: 
-    ".        removeThis  .       "
+    ".        remove-tract  .       "
     "dragger  dragger     dragger "
     "cssInput cssInput    cssInput";
   justify-content: center;
@@ -447,8 +448,8 @@ Grid Controls
   padding-right: 0.5rem;
   align-items: center;
   grid-template-areas: 
-    "removeThis cssInput cssInput cssInput"
-    "removeThis dragger  dragger  dragger";
+    "remove-tract cssInput cssInput cssInput"
+    "remove-tract dragger  dragger  dragger";
   justify-content: end;
   align-content: center;
 }
@@ -484,10 +485,9 @@ Grid Controls
   cursor: grabbing;
 }
 
-
-
-.removeThis {
-  grid-area: removeThis;
+.remove-row,
+.remove-col {
+  grid-area: remove-tract;
 }
 
 .unit-input {
@@ -495,17 +495,33 @@ Grid Controls
   grid-area: cssInput;
 }
 
-
 .incrementer-button {
-  font-size: 10px;
-  height: 2.5em;
-  width: 2.5em;
+  font-size: 15px;
+  height: 2em;
+  width: 2em;  
   border-radius: 50%;
   background-color: white;
   border: 1px solid #fff;
   padding: 0;
   color: var(--dark-gray, gray);
   transition: color 0.2s, background-color 0.2s;
+}
+
+.add-row,
+.add-col {
+  /* This offset is enough to place the button on the outside of the row/column
+     spanning div and centered in the grid tract */
+  --incrementer-offset: calc(-1em - var(--grid-gap)/2);
+  position: absolute;
+  right: 2px;
+  bottom: 2px
+}
+
+.add-row {
+  bottom: var(--incrementer-offset);
+}
+.add-col {
+  right: var(--incrementer-offset);
 }
 
 .incrementer-button:hover {

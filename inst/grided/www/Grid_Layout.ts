@@ -45,7 +45,8 @@ export class Grid_Layout {
     if (typeof new_gap === "undefined") return;
     // This sets the --grid-gap variable so that the controls that need the
     // info can use it to keep a constant distance from the grid holder
-    this.container.parentElement.style.setProperty("--grid-gap", new_gap);
+    document.querySelector("body").style.setProperty("--grid-gap", new_gap);
+    // this.container.parentElement.style.setProperty("--grid-gap", new_gap);
     // We dont use css variables in the exported css that existing apps used
     // so we need to modify both gap and padding
     this.styles.gap = new_gap;

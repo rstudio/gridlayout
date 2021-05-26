@@ -3,7 +3,7 @@ import {
   horizontal_drag_icon,
   vertical_drag_icon,
 } from "./utils-icons";
-import { incrementer_button, make_el } from "./make-elements";
+import { tract_add_or_remove_button, make_el } from "./make-elements";
 import { App_State } from "./App_State";
 import { make_template_start_end } from "./utils-grid";
 import { Tract_Dir } from "./Grid_Layout";
@@ -219,12 +219,11 @@ export function make_grid_tract_control(
     ],
   });
 
-  incrementer_button({
+  tract_add_or_remove_button(app_state, {
     parent_el: holder,
-    selector_text: ".removeThis",
-    up_or_down: "down",
-    label: `Remove ${dir === "rows" ? "row" : "col"}`,
-    on_click: () => app_state.remove_tract(dir, tract_index),
+    add_or_remove: "remove",
+    dir,
+    tract_index,
   });
 
   function show_or_hide_dragger(curr_val: string) {

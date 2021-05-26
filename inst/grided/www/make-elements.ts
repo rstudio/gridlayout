@@ -1,4 +1,6 @@
+import { App_State } from "./App_State";
 import { Grid_Pos } from "./Grid_Item";
+import { Tract_Dir } from "./Grid_Layout";
 import { set_element_in_grid } from "./utils-grid";
 import { plus_icon, minus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
@@ -143,34 +145,51 @@ export function Text_El(sel_txt: string, text: string) {
   });
 }
 
-export function incrementer_button(opts: {
-  parent_el: HTMLElement;
-  selector_text: string;
-  up_or_down: "up" | "down";
-  label?: string;
-  on_click: () => void;
-  additional_styles?: Record<string, string>;
-}) {
+export function tract_add_or_remove_button(
+  app_state: App_State,
+  opts: {
+    parent_el: HTMLElement;
+    add_or_remove: "add" | "remove";
+    dir: Tract_Dir;
+    tract_index: number;
+    additional_styles?: Record<string, string>;
+  }
+) {
   const {
     parent_el,
-    selector_text,
-    up_or_down,
-    on_click,
+    add_or_remove,
+    dir,
+    tract_index,
     additional_styles,
-    label = up_or_down === "up" ? "Add" : "Remove",
   } = opts;
+  const dir_singular = dir === "rows" ? "row" : "col";
 
-  const button = make_el(parent_el, `button.incrementer-button${selector_text}`, {
-    innerHTML: up_or_down === "up" ? plus_icon : trashcan_icon,
-    styles: additional_styles,
-    event_listener: {
-      event: "click",
-      func: on_click,
-    },
-    props: {
-      title: label,
-    },
-  });
+  const label =
+    add_or_remove === "add"
+      ? `Add a ${dir_singular}`
+      : `Remove ${dir_singular}`;
+
+  const button = make_el(
+    parent_el,
+    `button.incrementer-button.${add_or_remove}-${dir_singular}.${dir}_${tract_index}`,
+    {
+      innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
+      styles: additional_styles,
+      event_listener: {
+        event: "click",
+        func: () => {
+          if (add_or_remove === "add") {
+            app_state.add_tract(dir, tract_index);
+          } else {
+            app_state.remove_tract(dir, tract_index);
+          }
+        },
+      },
+      props: {
+        title: label,
+      },
+    }
+  );
 
   return button;
 }

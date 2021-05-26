@@ -14,7 +14,7 @@ requireNamespace("bslib", quietly = TRUE)
 my_layout <- "
 |      |        |       |
 |------|--------|-------|
-|2rem  |200px   |1fr    |
+|3rem  |200px   |1fr    |
 |150px |header  |header |
 |1fr   |sidebar |plot   |"
 

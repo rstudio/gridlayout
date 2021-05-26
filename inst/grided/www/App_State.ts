@@ -4,7 +4,7 @@ import { CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
-  incrementer_button,
+  tract_add_or_remove_button,
   make_el,
   remove_elements,
 } from "./make-elements";
@@ -17,13 +17,13 @@ import {
   get_pos_on_grid,
   grid_position_of_el,
   make_start_end_for_dir,
-  make_template_start_end,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
   as_array,
   Drag_Type,
   filler_text,
+  pos_relative_to_container,
   Selection_Rect,
   set_class,
   update_rect_with_delta,
@@ -489,11 +489,11 @@ function setup_tract_controls(app_state: App_State) {
   };
 
   function build_controls_for_dir(dir: Tract_Dir) {
+    // This is the class of the first grid cell for each row or column
     const target_class = dir === "rows" ? "c1" : "r1";
     const dir_singular = dir === "rows" ? "row" : "col";
 
-    setup_tract_add_buttons(dir);
-
+    // Builds the controls and tract addition buttons for all cells
     return app_state.current_cells
       .filter((el) => el.classList.contains(target_class))
       .map((el) => {
@@ -503,6 +503,29 @@ function setup_tract_controls(app_state: App_State) {
           editor_container,
           `div#controller_for_${dir_singular}_${tract_index}.${dir}-controls.tract-controls`
         );
+
+        if (tract_index === 1) {
+          // Add an additional button before the first row and column. Otherwise
+          // the user would not be able to add a row or column at the very start
+          // of the grid.
+          tract_add_or_remove_button(app_state, {
+            parent_el: holder_el,
+            add_or_remove: "add",
+            dir,
+            tract_index: 0,
+            additional_styles: {
+              [dir === "rows" ? "top" : "left"]: "var(--incrementer-offset)",
+            },
+          });
+        }
+
+        tract_add_or_remove_button(app_state, {
+          parent_el: holder_el,
+          add_or_remove: "add",
+          dir,
+          tract_index,
+        });
+
         return {
           matched_cell: el,
           el: holder_el,
@@ -515,83 +538,39 @@ function setup_tract_controls(app_state: App_State) {
       });
   }
 
-  function setup_tract_add_buttons(dir: Tract_Dir) {
-    // Adds an extra row or column at end so we can bookend with new tracts
-    for (let index = app_state.grid_layout[`num_${dir}`]; index >= 0; index--) {
-      const final_btn = index === 0;
-      const tract_index = final_btn ? 1 : index;
-
-      const styles_for_holder: Record<string, string> = {
-        position: "absolute",
-      };
-
-      const size = "2.5em";
-      const offset_to_gap = `calc(-1 * (var(--grid-gap) + ${size})/2)`;
-      const offset_outside_editor = `calc(-${size} - var(--grid-gap) - 0.5rem)`;
-
-      if (dir === "rows") {
-        Object.assign(styles_for_holder, {
-          gridRow: make_template_start_end(tract_index),
-          gridColumn: `1 / 2`,
-          justifyContent: final_btn ? "end" : "start",
-          left: offset_outside_editor,
-          [final_btn ? "top" : "bottom"]: offset_to_gap,
-        });
-      } else {
-        Object.assign(styles_for_holder, {
-          gridColumn: make_template_start_end(tract_index),
-          gridRow: `1 / 2`,
-          alignContent: "end",
-          top: `calc(-${size} - var(--grid-gap) - var(--browser-menu-height) - 0.5rem)`,
-          [final_btn ? "left" : "right"]: offset_to_gap,
-        });
-      }
-
-      incrementer_button({
-        parent_el: app_state.container,
-        selector_text: `.addButton.tract-add.${dir}_${index}`,
-        up_or_down: "up",
-        label: `Add a ${dir === "rows" ? "row" : "col"}`,
-        on_click: () => app_state.add_tract(dir as Tract_Dir, index),
-        additional_styles: styles_for_holder,
-      });
-    }
-  }
-
   update_positions();
 
-  (editor_container.querySelector("#editor-app-window") as HTMLElement).onscroll = update_positions;
+  (editor_container.querySelector(
+    "#editor-app-window"
+  ) as HTMLElement).onscroll = () => update_positions(["rows"]);
 
-  function pos_relative_to_container(container: DOMRect, child_el: HTMLElement) {
-    const pos = child_el.getBoundingClientRect();
-
-    return {
-      top:    pos.top - container.top,
-      bottom: pos.bottom - container.bottom,
-      left:   pos.left - container.left,
-      right:  pos.right - container.right,
-      height: pos.height,
-      width: pos.width,
-    }
-  }
-  function update_positions() {
+  function update_positions(which_dirs: Tract_Dir[] = ["rows", "cols"]) {
     const editor_pos = editor_container.getBoundingClientRect();
-    for (const dir of tract_dirs) {
+    const wrapper_pos = pos_relative_to_container(
+      editor_pos,
+      editor_container.querySelector("#editor-wrapper")
+    );
+    const gap_size = app_state.grid_layout.attrs.gap;
+
+    for (const dir of which_dirs) {
       controls[dir].forEach(({ matched_cell, el }) => {
-        const bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
+        const bounding_rect = pos_relative_to_container(
+          editor_pos,
+          matched_cell
+        );
 
         Object.assign(
           el.style,
           dir === "cols"
             ? {
-                left: bounding_rect.left + "px",
-                width: bounding_rect.width + "px",
-                top: `calc(${bounding_rect.top}px - var(--editor-top-pad) - var(--browser-menu-height) - ${app_state.grid_layout.attrs.gap})`,
+                left: `calc(${bounding_rect.left}px)`,
+                width: `calc(${bounding_rect.width}px)`,
+                top: `calc(${wrapper_pos.top}px - var(--editor-top-pad))`,
               }
             : {
-                top: bounding_rect.top + "px",
-                height: bounding_rect.height + "px",
-                left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${app_state.grid_layout.attrs.gap} - 2px)`,
+                top: `calc(${bounding_rect.top}px)`,
+                height: `calc(${bounding_rect.height}px)`,
+                left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${gap_size} - 2px)`,
               }
         );
       });
