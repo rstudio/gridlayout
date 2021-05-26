@@ -388,16 +388,6 @@ export class App_State {
       });
 
       this.tract_controls.update_positions();
-
-      // Do some funky logic to get height of the container and make app window
-      // grow if app is larger than available vertical space but not shrink
-      // if it is smaller
-      // this.container.style.height = "auto"; // Let container grow as needed
-      // const content_height = this.container.getBoundingClientRect().height;
-      // (document.querySelector(
-      //   "#editor-wrapper"
-      // ) as HTMLElement).style.gridTemplateRows = `var(--browser-menu-height) minmax(calc(100% - 30px),${content_height}px)`;
-      // this.container.style.height = "100%";
     }
 
     if (!opts.dont_send_to_shiny) {
@@ -540,6 +530,7 @@ function setup_tract_controls(app_state: App_State) {
 
   update_positions();
 
+  // Make sure when we scroll the editor window the row sizing controls follow
   (editor_container.querySelector(
     "#editor-app-window"
   ) as HTMLElement).onscroll = () => update_positions(["rows"]);
@@ -550,7 +541,6 @@ function setup_tract_controls(app_state: App_State) {
       editor_pos,
       editor_container.querySelector("#editor-wrapper")
     );
-    const gap_size = app_state.grid_layout.attrs.gap;
 
     for (const dir of which_dirs) {
       controls[dir].forEach(({ matched_cell, el }) => {
@@ -570,7 +560,7 @@ function setup_tract_controls(app_state: App_State) {
             : {
                 top: `calc(${bounding_rect.top}px)`,
                 height: `calc(${bounding_rect.height}px)`,
-                left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${gap_size} - 2px)`,
+                left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${app_state.grid_layout.attrs.gap} - 2px)`,
               }
         );
       });

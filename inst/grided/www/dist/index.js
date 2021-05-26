@@ -5285,7 +5285,6 @@
       var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
       var editor_pos = editor_container.getBoundingClientRect();
       var wrapper_pos = pos_relative_to_container(editor_pos, editor_container.querySelector("#editor-wrapper"));
-      var gap_size = app_state.grid_layout.attrs.gap;
       var _iterator = _createForOfIteratorHelper2(which_dirs), _step;
       try {
         var _loop = function _loop2() {
@@ -5300,7 +5299,7 @@
             } : {
               top: "calc(".concat(bounding_rect.top, "px)"),
               height: "calc(".concat(bounding_rect.height, "px)"),
-              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(gap_size, " - 2px)")
+              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
             });
           });
         };
