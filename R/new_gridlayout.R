@@ -306,8 +306,10 @@ new_gridlayout_template <- function(
           stop("Element(s) ", list_in_quotes(bad_elements), " extend beyond specified grid rows")
         }
 
-        if (max(end_vals) > length(sizes)) {
-          stop("The provided ", dir, " sizes need to match the number of ", dir, "s in your layout")
+        if (max(end_vals) != length(sizes)) {
+          stop("The provided ", dir, " sizes need to match the number of ",
+               dir, "s in your layout.\nIf you meant to have an empty ", dir,
+               ", use the placeholder element \".\" to fill it.")
         }
       }
 
@@ -321,6 +323,13 @@ new_gridlayout_template <- function(
   if (container_height == "auto" && has_relative_row_heights) {
     warning("Relative row heights don't mix well with auto-height containers. Expect some visual wonkiness.")
   }
+
+  # Remove any placeholder "." elements from elements list so we dont accidentally treat
+  # them like true elements
+  elements <- Filter(
+    f = function(el) el$id != ".",
+    x = elements
+  )
 
   # Parse through all elements to see if they are collapsible. A collapsible
   # element is one that, if collapsed, will result in a shrinking of the page.
