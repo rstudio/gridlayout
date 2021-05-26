@@ -98,6 +98,22 @@ test_that("A single size can be passed for row and column sizes and it will be r
                c("200px", "200px"))
 })
 
+test_that("Handles an explicit missing row provided with dots", {
+  expect_snapshot(   new_gridlayout(
+    layout_def = "
+      | header | header |
+      | plota  | plotb  |
+      | .      | .      |",
+    row_sizes = c("200px", "1fr", "2fr")
+  ))
+
+  expect_snapshot(new_gridlayout(
+    layout_def = "
+      | header | header | . |
+      | plota  | plotb  | . |",
+    col_sizes = c("200px", "1fr", "2fr")
+  ))
+})
 test_that("Gets mad if your row and column sizes don't match matrix dimensions", {
 
   expect_error(
