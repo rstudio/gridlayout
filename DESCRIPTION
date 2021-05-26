@@ -17,7 +17,6 @@ Suggests:
     rmarkdown,
     fontawesome,
     here,
-    webshot2,
     rstudioapi,
     fs,
     glue,
