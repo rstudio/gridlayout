@@ -171,7 +171,6 @@ nested_grid_panel <- function(
 
   grid_panel(
     title = title,
-    container,
-    class = "nested-grid"
+    container
   )
 }
