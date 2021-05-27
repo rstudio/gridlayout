@@ -32,4 +32,6 @@ Meta
 
 inst/grided/www/node_modules/
 
+inst/grided/www/.parcel-cache/
+
 inst/grided/www/yarn-error.log

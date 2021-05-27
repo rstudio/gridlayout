@@ -12,7 +12,7 @@ elements_from_mat <- function(layout_mat){
       # reassemble the matrix for the which to give us 2d coordinates
       all_pos <- which(
         matrix(
-          str_detect(layout_mat, id),
+          str_detect(layout_mat, id, fixed = TRUE),
           nrow = n_row,
           ncol = n_col
         ),

@@ -12,24 +12,12 @@ export type Selection_Rect = {
   bottom: number;
 };
 
-
-export function concat(
-  string_vec: Array<string>,
-  collapse_char: string = " "
-): string {
-  return string_vec.reduce(
-    (concatted, current, i) =>
-      concatted + (i > 0 ? collapse_char : "") + current,
-    ""
-  );
-}
-
 export function concat_nl(...component_strings: string[]) {
-  return concat(component_strings, "\n");
+  return component_strings.join("\n");
 }
 
 export function concat_sp(...component_strings: string[]) {
-  return concat(component_strings, " ");
+  return component_strings.join(" ");
 }
 
 export function as_array<T>(content: T | Array<T>): Array<T> {
@@ -144,18 +132,41 @@ export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
 
-export function set_class(elements: NodeListOf<HTMLElement>, class_name: string) {
-  
-  elements.forEach(el => {
+export function set_class(
+  elements: NodeListOf<HTMLElement> | HTMLElement[],
+  class_name: string
+) {
+  elements.forEach((el) => {
     el.classList.add(class_name);
   });
-  
+}
+
+export function overlap<Type>(a: Type[], b: Type[]) {
+  for (let i = 0; i < a.length; ++i) {
+    if (b.includes(a[i])) return true;
+  }
+
+  return false;
 }
 
 export const filler_text = `
 <div class = "filler_text">
-  Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+  This filler text demonstrates how the height of an element spanning an "auto"
+  row is influenced by its content. While you're here...
   Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
   when an unknown printer took a galley of type and scrambled it to make a type 
   specimen book.
 </div>`;
+
+export function pos_relative_to_container(container: DOMRect, child_el: HTMLElement) {
+  const pos = child_el.getBoundingClientRect();
+
+  return {
+    top:    pos.top - container.top,
+    bottom: pos.bottom - container.bottom,
+    left:   pos.left - container.left,
+    right:  pos.right - container.right,
+    height: pos.height,
+    width: pos.width,
+  }
+}

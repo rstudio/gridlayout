@@ -1,6 +1,6 @@
 Package: gridlayout
 Type: Package
-Title: Build Layouts For R-Webapps Using CSS-Grid
+Title: Build Layouts for R-Webapps Using CSS-Grid
 Version: 0.1.0
 Authors@R: c(person("Nick", "Strayer", role = c("aut", "cre"), email = "nick.strayer@rstudio.com"))
 Description: Makes it easy to layout your Shiny app or other R-derived HTML documents using CSS grid.
@@ -17,7 +17,6 @@ Suggests:
     rmarkdown,
     fontawesome,
     here,
-    webshot2,
     rstudioapi,
     fs,
     glue,
