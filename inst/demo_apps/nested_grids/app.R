@@ -8,7 +8,7 @@ requireNamespace("fontawesome", quietly = TRUE)
 my_layout <- "
 |     |        |        |
 |-----|--------|--------|
-|2rem |1fr     |1fr     |
+|1rem |1fr     |1fr     |
 |auto |header  |header  |
 |1fr  |nestedA |nestedB |"
 
@@ -28,15 +28,8 @@ app <- shinyApp(
     nestedA = nested_grid_panel(
       layout = content_layout,
       elements = list(
-        icon = grid_panel(
-          h2(fontawesome::fa("r-project", fill = "steelblue"), height = "80px"),
-          v_align = "center",
-          h_align = "center"
-        ),
-        bin_chooser = grid_panel(
-          sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
-          v_align = "center"
-        ),
+        icon = text_panel(icon = "r-project", h_align = "center"),
+        bin_chooser = sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
         settings = textOutput('current_bin_num'),
         plot = plotOutput("distPlot")
       )
@@ -45,17 +38,10 @@ app <- shinyApp(
       title = "Nested within a titled panel",
       layout = content_layout,
       elements = list(
-        icon = grid_panel(
-          h2(fontawesome::fa("r-project", fill = "steelblue"), height = "80px"),
-          v_align = "center",
-          h_align = "center"
-        ),
-        bin_chooser = grid_panel(
-          sliderInput("bins2", label = "Number of bins", min = 1, max = 50, value = 30),
-          v_align = "center"
-        ),
-        settings = textOutput('current_bin_num2'),
-        plot = "This would be a plot"
+        icon = text_panel(icon = "r-project", h_align = "center"),
+        bin_chooser = text_panel("Bin Slider"),
+        settings = 'Bin numbers',
+        plot = text_panel("Another Plot")
       )
     )
   ),
