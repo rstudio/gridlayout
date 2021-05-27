@@ -219,9 +219,7 @@ build_css_rule <- function(selector, prop_list) {
 #' adding this css though.
 #'
 #' @seealso \code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
-#' @param layout Either a markdown table representation (see
-#'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
-#'   desired layout for your Shiny app.
+#' @inheritParams grid_container
 #' @inheritDotParams to_css -layout
 #'
 #' @return Character string of css used to setup grid layout and place elements
