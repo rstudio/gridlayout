@@ -1,9 +1,5 @@
-# The geyser app... but in grid!
-
 library(gridlayout)
 library(shiny)
-requireNamespace("bslib", quietly = TRUE)
-requireNamespace("fontawesome", quietly = TRUE)
 
 my_layout <- "
 |     |        |        |
