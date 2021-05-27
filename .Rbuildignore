@@ -9,6 +9,9 @@
 ^tests/run-screenshot-tests\.R$
 ^tests/screenshot-tests$
 ^inst/grided/www/\.cache$
+^inst/grided/www/node_modules$
+^inst/demo_apps/.*.html
+^inst/demo_apps/.*_files$
 ^doc$
 ^Meta$
 ^\.github$

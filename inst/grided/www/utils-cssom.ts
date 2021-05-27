@@ -31,9 +31,8 @@ function get_all_rules_for_selector(selector_text: string) {
 // that given property (if multiple exist)
 export function get_css_props_by_selector(
   selector_text: string,
-  target_properties: string[],
+  target_properties: string[]
 ) {
-
   const all_rules_for_selector = get_all_rules_for_selector(selector_text);
 
   return target_properties.reduce((prop_values, prop) => {
@@ -44,14 +43,30 @@ export function get_css_props_by_selector(
     }
     return prop_values;
   }, {});
-
 }
 
+export function get_styles_for_selector_with_targets(
+  selector_text: string,
+  target_properties: string[]
+) {
+  const all_rules_for_selector = get_all_rules_for_selector(selector_text);
+
+  return all_rules_for_selector.find((rule) =>
+    has_all_props(rule, target_properties)
+  );
+}
+
+function has_all_props(rule: CSSStyleDeclaration, props: string[]) {
+  for (const prop of props) {
+    if (!!rule[prop]) return false;
+  }
+  return true;
+}
 
 export function find_selector_by_property(
   property_id: string,
   property_value: string
-): {rule_exists: boolean, selector: string} {
+): { rule_exists: boolean; first_rule_w_prop: CSSStyleRule; selector: string } {
   const all_styles = get_all_style_rules();
 
   const first_rule_w_prop = all_styles
@@ -61,6 +76,7 @@ export function find_selector_by_property(
   const rule_exists = Boolean(first_rule_w_prop);
   return {
     rule_exists,
-    selector: rule_exists ? first_rule_w_prop.selectorText: ""
+    first_rule_w_prop,
+    selector: rule_exists ? first_rule_w_prop.selectorText : "",
   };
 }

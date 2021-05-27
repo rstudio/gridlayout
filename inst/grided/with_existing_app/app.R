@@ -14,7 +14,7 @@ requireNamespace("bslib", quietly = TRUE)
 my_layout <- "
 |      |        |       |
 |------|--------|-------|
-|3rem  |200px   |1fr    |
+|2rem  |200px   |1fr    |
 |150px |header  |header |
 |1fr   |sidebar |plot   |"
 
@@ -33,12 +33,14 @@ shinyApp(
   ),
   server = function(input, output, session) {
 
+
     output$distPlot <- renderPlot({
       x    <- faithful[, 2]
       bins <- seq(min(x), max(x), length.out = input$bins + 1)
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
 
-    grided_server_code(input, output, session, show_messages = TRUE)
+    grided_server_code(input, output, session)
+
   }
 )

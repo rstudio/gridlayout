@@ -5,7 +5,6 @@ export function make_toggle_switch(
   on_text: string,
   on_change: (is_on: boolean) => void
 ) {
-
   const container = Block_El("div.toggle-switch");
 
   make_el(container, "span.off-text", {
@@ -32,7 +31,7 @@ export function make_toggle_switch(
   // Add styles
   style_sheet.innerHTML = toggle_styles;
 
-  return el;  
+  return el;
 }
 
 const toggle_styles: string = `
@@ -48,7 +47,7 @@ div.toggle-switch {
 }
 
 .toggle-switch > span {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .toggle-switch > .off-text {

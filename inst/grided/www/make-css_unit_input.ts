@@ -3,7 +3,10 @@ import {
   horizontal_drag_icon,
   vertical_drag_icon,
 } from "./utils-icons";
-import { make_el } from "./make-elements";
+import { tract_add_or_remove_button, make_el } from "./make-elements";
+import { App_State } from "./App_State";
+import { make_template_start_end } from "./utils-grid";
+import { Tract_Dir } from "./Grid_Layout";
 
 export type CSS_Input = {
   form: HTMLElement;
@@ -39,16 +42,12 @@ export function make_css_unit_input({
   start_val = 1,
   start_unit = "fr",
   on_change = (x: string) => console.log("css unit change", x),
-  on_drag = on_change,
   allowed_units = ["fr", "px", "rem", "auto"],
-  form_styles = {},
-  drag_dir = "none",
+  snap_to_defaults = true,
 }): CSS_Input {
-  const allow_drag = drag_dir !== "none";
   let current_unit = start_unit;
 
   const form = make_el(parent_el, `form${selector}.css-unit-input`, {
-    styles: form_styles,
     event_listener: [
       { event: "change", func: on_update },
       {
@@ -78,46 +77,6 @@ export function make_css_unit_input({
       props: { name: "units" },
     })
   );
-
-  const resizer = make_el(form, "div.css-unit-input-dragger", {
-    innerHTML: drag_dir === "y" ? vertical_drag_icon : horizontal_drag_icon,
-  });
-
-  // Place an invisible div over the main one that we let be dragged. This means
-  // we can use the nice drag interaction callbacks without the ugly default
-  // drag behavior of two copies of the div and zooming back to the start pos etc.
-  make_el(resizer, "div.css-unit-input-drag-detector", {
-    props: { draggable: true },
-    event_listener: [
-      {
-        event: "dragstart",
-        func: function (event) {
-          this.dataset.baseline = value_input.value;
-          this.dataset.start = event[drag_dir];
-        },
-      },
-      {
-        event: "drag",
-        func: function (event) {
-          const drag_pos = event[drag_dir];
-          // At the end of the drag we get a drag event with 0 values that throws stuff off
-          if (drag_pos === 0) return;
-          const new_value = Math.max(
-            0,
-            +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
-          );
-          value_input.value = new_value.toString();
-          on_drag();
-        },
-      },
-      {
-        event: "dragend",
-        func: function (event) {
-          on_change(current_value());
-        },
-      },
-    ],
-  });
 
   allowed_units.forEach(function (unit_type) {
     const unit_option = <HTMLOptionElement>(
@@ -159,16 +118,17 @@ export function make_css_unit_input({
       value_input.value = "";
     } else {
       value_input.classList.remove("disabled");
-    
-      // If the user is flipping through multiple units we dont want to just 
+
+      // If the user is flipping through multiple units we dont want to just
       // stick to whatever value was last set as the unit unless they've changed
-      // it from the default. E.g. flipping from default of 100px to rem 
+      // it from the default. E.g. flipping from default of 100px to rem
       // shouldn't result in a 100rem wide track which then needs to be adjusted
-      const using_old_units_default = value_input.value === default_values[current_unit];
+      const using_old_units_default =
+        value_input.value === default_values[current_unit] && snap_to_defaults;
       value_input.value =
-        count === null || using_old_units_default 
-        ? default_values[units] 
-        : count.toString();
+        count === null || using_old_units_default
+          ? default_values[units]
+          : count.toString();
     }
 
     for (let opt of unit_selector.children as HTMLCollectionOf<
@@ -177,16 +137,104 @@ export function make_css_unit_input({
       opt.selected = opt.value === units;
     }
 
-    if (units === "px" && allow_drag) {
-      form.classList.add("with-drag");
-    } else {
-      form.classList.remove("with-drag");
-    }
-
     current_unit = units;
   }
 
   update_value(`${start_val}${start_unit}`);
 
   return { form, current_value, update_value };
+}
+
+export function make_grid_tract_control(
+  holder: HTMLElement,
+  app_state: App_State,
+  opts: {
+    size: string;
+    dir: Tract_Dir;
+    tract_index: number;
+  }
+): CSS_Input {
+  const { size, dir, tract_index } = opts;
+
+  const unit_input = make_css_unit_input({
+    parent_el: holder,
+    selector: `.unit-input`,
+    start_val: get_css_value(size),
+    start_unit: get_css_unit(size),
+    on_change: (new_val: string) => {
+      show_or_hide_dragger(new_val);
+      send_update();
+    },
+  });
+
+  function send_update(to_shiny: boolean = true) {
+    app_state.update_tract({
+      tract_index,
+      dir,
+      new_value: unit_input.current_value(),
+      dont_send_to_shiny: !to_shiny,
+    });
+  }
+
+  const value_input = <HTMLInputElement>(
+    unit_input.form.querySelector(".css-unit-input-value")
+  );
+  const drag_dir = dir === "rows" ? "y" : "x";
+
+  const resizer = make_el(holder, "div.css-unit-input-dragger", {
+    innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
+  });
+  // Place an invisible div over the main one that we let be dragged. This means
+  // we can use the nice drag interaction callbacks without the ugly default
+  // drag behavior of two copies of the div and zooming back to the start pos etc.
+  make_el(resizer, "div.css-unit-input-drag-detector", {
+    props: { draggable: true },
+    event_listener: [
+      {
+        event: "dragstart",
+        func: function (event) {
+          this.dataset.baseline = value_input.value;
+          this.dataset.start = event[drag_dir];
+        },
+      },
+      {
+        event: "drag",
+        func: function (event) {
+          const drag_pos = event[drag_dir];
+          // At the end of the drag we get a drag event with 0 values that throws stuff off
+          if (drag_pos === 0) return;
+          const new_value = Math.max(
+            0,
+            +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
+          );
+          value_input.value = new_value.toString();
+          send_update(false);
+        },
+      },
+      {
+        event: "dragend",
+        func: function (event) {
+          send_update();
+        },
+      },
+    ],
+  });
+
+  tract_add_or_remove_button(app_state, {
+    parent_el: holder,
+    add_or_remove: "remove",
+    dir,
+    tract_index,
+  });
+
+  function show_or_hide_dragger(curr_val: string) {
+    if (get_css_unit(curr_val) === "px") {
+      holder.classList.add("with-drag");
+    } else {
+      holder.classList.remove("with-drag");
+    }
+  }
+  show_or_hide_dragger(unit_input.current_value());
+
+  return unit_input;
 }
