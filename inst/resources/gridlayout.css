@@ -6,7 +6,12 @@
   grid-template-areas: "title"
                        "content";
   /* When there's no title the column will dissapear */
-  grid-template-rows: min-content 1fr;
+  /* If we just use 1fr for the content, then it can
+     sometimes overflow and cause the cell to be larger
+     than it should. Not totally sure why but this
+     css-tricks article contained the solution:
+     https://css-tricks.com/preventing-a-grid-blowout/ */
+  grid-template-rows: min-content minmax(0, 1fr);
 }
 
 .grid_panel .title-bar {
