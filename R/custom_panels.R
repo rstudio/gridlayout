@@ -44,7 +44,7 @@
 #'
 #' @export
 text_panel <- function(
-  content,
+  content = NULL,
   ...,
   h_align = "start",
   img_height = "55px",
