@@ -5,7 +5,7 @@
 \title{Panel just containing text}
 \usage{
 text_panel(
-  content,
+  content = NULL,
   ...,
   h_align = "start",
   img_height = "55px",
