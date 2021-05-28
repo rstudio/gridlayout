@@ -186,13 +186,16 @@ namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
   container_tq$
     children()$
     each(function(el, i) {
-      if (notNull(el$attribs$id)) {
-        el$attribs$id <- str_replace_all(
-          text = el$attribs$id,
-          pattern = existing_id,
-          replacement = nested_grid_id,
-          fixed = TRUE
-        )
+      id <- get_attribs(el,"id")
+      if (notNull(id)) {
+        htmltools::tagQuery(el)$
+          removeAttrs("id")$
+          addAttrs(id = str_replace_all(
+            text = id,
+            pattern = existing_id,
+            replacement = nested_grid_id,
+            fixed = TRUE
+          ))
       }
       el
     })
