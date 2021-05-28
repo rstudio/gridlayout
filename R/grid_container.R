@@ -148,10 +148,13 @@ grid_container <- function(id = "grid-container",
   content
 }
 
+# Just to avoid the long winded namespaced function name
+get_attribs <- htmltools::tagGetAttribute
+
 namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
   # Look for the boolean attribute we place on a grid_container if the
   # user didn't specify an id. This means we are allowed to customize it
-  if (is.null(container_tag$attribs$placeholder_id)) {
+  if (is.null(get_attribs(container_tag, "placeholder_id"))) {
     # The user has specified the id of their nested grid container so we
     # shouldn't overwrite it.
     return(container_tag)
@@ -159,7 +162,7 @@ namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
 
   # Pull off the existing temporary id so we can use it to find-and-replace with
   # new id
-  existing_id <- container_tag$attribs$id
+  existing_id <- get_attribs(container_tag, "id")
 
   # Build a tagQuery object around our container and get rid of the old id
   # related attributes in the process
@@ -167,7 +170,10 @@ namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
     removeAttrs(c("placeholder_id", "id"))
 
   # Get ID of the grid_panel that encloses this grid_container()
-  wrapping_id <- container_tq$parent()$parent()$selectedTags()[[1]]$attribs$id
+  # We know we need to go up two levels because a grid_panel is made up of the
+  # containing div and then a "content-panel" div which itself holds the
+  # grid_container
+  wrapping_id <- get_attribs(container_tq$parent()$parent()$selectedTags()[[1]], "id")
 
   # Build new suffixed id for the container based on that wrapping panel id
   nested_grid_id <- paste0(wrapping_id, "__grid_container")
