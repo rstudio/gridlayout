@@ -31,6 +31,41 @@ expect_true(
 
 })
 
+#
+# test_that("Layouts as character-vector are properly detected", {
+#   my_doc <- '
+# my_layout <- c(
+# "|      |        |       |",
+# "|------|--------|-------|",
+# "|2rem  |200px   |1fr    |",
+# "|115px |header  |header |",
+# "|1fr   |sidebar |plot   |")
+# '
+#   found_layouts <- find_layouts_in_file(
+#     strsplit(my_doc, split = "\n")[[1]]
+#   )
+#
+#   expect_equal(
+#     length(found_layouts),
+#     1
+#   )
+#
+#   expect_equal(
+#     found_layouts[[1]]$start_row,
+#     2
+#   )
+#
+#   expect_equal(
+#     found_layouts[[1]]$end_row,
+#     6
+#   )
+#
+#   expect_true(
+#     found_layouts[[1]]$start_col < found_layouts[[1]]$end_col
+#   )
+#
+# })
+
 
 test_that("Finds a multiple tables if they exist (basic test)", {
   my_doc <- '

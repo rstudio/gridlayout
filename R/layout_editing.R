@@ -2,47 +2,46 @@
 # file_text is a character vector with each line of a file being represented as
 # an element in the vector. For example this is the way the rstudioapi gives you
 # back the open-files context.
-find_layouts_in_file <- function(file_text){
+find_layouts_in_file <- function(file_text) {
   # This is a semi-complicated regex that looks for lines that appear to be
   # markdown table lines. This means they start with pipes and end with pipes.
   # Exceptions are made for the start and end which may contain a quote and
   # leading/trailing content respectively
+  n_lines <- length(file_text)
 
-  table_lines <- str_detect(file_text, '(^|\\")\\s*\\|.+\\|\\s*\\"*')
-  start_lines <- str_detect(file_text, '(\'|\\")\\s*\\|.+\\|\\s*')
+  is_table_line <- str_detect(file_text, '(^|\\")\\s*\\|.+\\|\\s*\\"*')
+  prev_was_table_line <- lag(is_table_line, default = FALSE)
+  next_is_table_line <- lead(is_table_line, default = FALSE)
+  is_table_start_line <- str_detect(file_text, '(\'|\\")\\s*\\|.+\\|\\s*')
+  next_is_table_start_line <- lead(is_table_start_line)
 
   all_tables <- list()
   curr_table <- list()
-  prev_was_table <- FALSE
-  n_lines <- length(file_text)
-  for(i in seq_len(n_lines)){
-    is_table <- table_lines[i]
-    is_table_start <- start_lines[i]
+  for (i in seq_len(n_lines)) {
+    is_table <- is_table_line[i]
+    prev_was_table <- prev_was_table_line[i]
+    next_is_table <- next_is_table_line[i]
+    is_table_start <- is_table_start_line[i]
+    next_is_table_start <- next_is_table_start_line[i]
 
-    last_line <- i == n_lines
-    curr_table_finished <- prev_was_table && (!is_table || is_table_start || last_line)
-    starting_new_table <- is_table && (is_table_start || !prev_was_table)
-
+    curr_table_finished <- is_table & (!next_is_table | next_is_table_start)
     if (curr_table_finished) {
-      curr_table$end_row <- if(last_line) i else i - 1
+      curr_table$end_row <- min(i, n_lines) # Don't go beyond end of file for tables at bottom of file
       curr_table$end_col <- pos_of_char(file_text[curr_table$end_row], "|", max)
       all_tables[[length(all_tables) + 1]] <- curr_table
       curr_table <- list()
     }
 
+    starting_new_table <- is_table && (is_table_start || !prev_was_table)
     if (starting_new_table) {
       curr_table$start_row <- i
       curr_table$start_col <- pos_of_char(file_text[i], "|", min)
     }
-
-    prev_was_table <- is_table
   }
-
 
   all_layouts <- lapply(
     all_tables,
-    function(t){
-
+    function(t) {
       # Get the position of the start of the table and end of the table
       # so we can perfectly extract it without any extraneous text like
       # quotes or assignment operators
@@ -70,13 +69,13 @@ find_layouts_in_file <- function(file_text){
 }
 
 
-pos_of_char <- function(string, char, collapse_fn = min){
+pos_of_char <- function(string, char, collapse_fn = min) {
   all_chars <- strsplit(string, split = "")[[1]]
   collapse_fn(which(all_chars == char))
 }
 
 
-update_layout_in_file <- function(editor_selection, layout_loc, new_layout){
+update_layout_in_file <- function(editor_selection, layout_loc, new_layout) {
   requireNamespace("rstudioapi", quietly = TRUE)
 
   selected_range <- rstudioapi::document_range(

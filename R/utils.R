@@ -101,6 +101,15 @@ arg_list_exprs <- function(...){
   as.list(substitute(...()))
 }
 
+lag <- function(x, n = 1L, default = NA){
+  new_vec <- c(rep(default, times = n), x)
+  new_vec[seq(from = 1, to = length(x))]
+}
+
+lead <- function(x, n = 1L, default = NA){
+  new_vec <- c(x, rep(default, times = n))
+  new_vec[seq(from = n + 1, to = length(x) + n)]
+}
 
 # Uses a default value if supplied argument is missing. Also checks to make sure
 # that the supplied argument fits some desired check
