@@ -73,12 +73,11 @@ md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE, ...) {
 }
 
 parse_md_table_layout <- function(
-  layout_table,
+  layout_rows,
   col_sizes = NULL,
   row_sizes = NULL,
   gap = NULL
 ) {
-  layout_rows <- strsplit(layout_table, "\n")[[1]]
   is_header_divider <- grepl("^[\\| \\- :]+$", layout_rows, perl = TRUE)
   is_empty_row <- layout_rows == ""
 

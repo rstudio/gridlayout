@@ -24,6 +24,19 @@
 #'     | plota  | plotb  |" )
 #'  ```
 #'
+#'  To avoid multi-line strings and the indentation trouble they can cause,
+#'  you can also supply your table as a character vector where each element
+#'  corresponds to a row in your table:
+#'
+#'  ```{r}
+#'  new_gridlayout(c(
+#'    "| header | header |",
+#'    "| plota  | plotb  |" ))
+#'  ```
+#'
+#'  _An important caveat of this style is it is not currently able to be detected
+#'  using the "edit current layout" grided addin._
+#'
 #'  ## Element lists
 #'
 #'  The second method is to supply a list of elements by providing the following
@@ -226,7 +239,12 @@ new_gridlayout_template <- function(
 ) {
   elements <- list()
   # Figure out what type of layout definition we were passed
-  if (is_char_string(layout_def)) {
+  if (is.character(layout_def)) {
+    # Is the layout def a single multi-line string containing the table? If it
+    # is we need to split it by rows
+    if (length(layout_def == 1L) && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
+      layout_def <- strsplit(layout_def, "\n")[[1]]
+    }
     # MD table representation
     layout_info <- parse_md_table_layout(
       layout_def,
