@@ -70,3 +70,58 @@
         </div>
       </div>
 
+# Can double nest
+
+    Code
+      my_layout <-
+        "\n  |     |1fr     |4fr    |\n  |auto |header  |header |\n  |4fr  |sidebar |nested |"
+      grid_page(layout = my_layout, header = title_panel("Level 1"), sidebar = "I am a sidebar",
+      nested = nested_grid_panel(layout = my_layout, elements = list(header = text_panel(
+        "level 2"), sidebar = "I am a sidebar", nested = nested_grid_panel(layout = my_layout,
+        elements = list(header = text_panel("level 3"), sidebar = "I am a sidebar",
+        nested = "I am nested")))))
+    Output
+      <div class="container-fluid">
+        <div id="grid_page" class="grid-container">
+          <div class="grid_panel gridlayout-card" id="grid_page__header">
+            <div style="display:grid;justify-content:start;align-content:center;" class="panel-content">
+              <h2 class="text_panel">Level 1</h2>
+            </div>
+          </div>
+          <div id="grid_page__sidebar" class="grid_panel gridlayout-card">
+            <div class="panel-content">I am a sidebar</div>
+          </div>
+          <div class="grid_panel gridlayout-card" id="grid_page__nested">
+            <div class="panel-content">
+              <div class="grid-container" id="grid_page__nested__grid_container">
+                <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__header">
+                  <div style="display:grid;justify-content:start;align-content:center;" class="panel-content">
+                    <h2 class="text_panel">level 2</h2>
+                  </div>
+                </div>
+                <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__sidebar">
+                  <div class="panel-content">I am a sidebar</div>
+                </div>
+                <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__nested">
+                  <div class="panel-content">
+                    <div class="grid-container" id="grid_page__nested__grid_container__nested__grid_container">
+                      <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__nested__grid_container__header">
+                        <div style="display:grid;justify-content:start;align-content:center;" class="panel-content">
+                          <h2 class="text_panel">level 3</h2>
+                        </div>
+                      </div>
+                      <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__nested__grid_container__sidebar">
+                        <div class="panel-content">I am a sidebar</div>
+                      </div>
+                      <div class="grid_panel gridlayout-card" id="grid_page__nested__grid_container__nested__grid_container__nested">
+                        <div class="panel-content">I am nested</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+

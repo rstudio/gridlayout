@@ -10,15 +10,20 @@
 #'   desired layout for your Shiny app.
 #' @param use_bslib_card_styles Should the elements within the grid be given the
 #'   current bootstrap theme's card styling? Note that this setting will
-#'   override card styling for elements built with [grid_panel].
-#'   This is so you don't have to manually change styles for each card. If you
-#'   want a mixture of card styles, then you'll need to leave this as `FALSE`
-#'   and set styles manually on each panel.
+#'   override card styling for elements built with [grid_panel]. This is so you
+#'   don't have to manually change styles for each card. If you want a mixture
+#'   of card styles, then you'll need to leave this as `FALSE` and set styles
+#'   manually on each panel.
 #' @param elements Named list of the UI definitions that will be used to fill
 #'   all cells. Names must match those provided in `layout`.
 #' @param flag_mismatches Should a mismatch between supplied `elements` ui
 #'   definitions and layout trigger a warning? In advanced cases you may want to
 #'   dynamically set your layout and sometimes omit panels.
+#' @param check_for_nested_grids Should nested grids be detected and properly
+#'   namespaced? It will only be set to false when you know that the container
+#'   is itself a nested gridlayout. This setting should only be touched in
+#'   advanced layout scenarios and typically you will want to use
+#'   [nested_grid_panel()] instead.
 #'
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
@@ -66,7 +71,8 @@ grid_container <- function(id = "grid-container",
                            layout,
                            elements,
                            use_bslib_card_styles = FALSE,
-                           flag_mismatches = TRUE) {
+                           flag_mismatches = TRUE,
+                           check_for_nested_grids = TRUE) {
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
   layout <- as_gridlayout(layout)
@@ -137,13 +143,15 @@ grid_container <- function(id = "grid-container",
     )
   )
 
-  # Go through content to check if we have any nested grids. If we do we want
-  # to update their id structures to avoid namespace conflicts for the CSS.
-  # This means we get deterministic ids without user specification.
-  content <- htmltools::tagQuery(content)$
-    find(".grid-container")$
-    each(namespace_nested_grid_containers)$
-    allTags()
+  if (check_for_nested_grids) {
+    # Go through content to check if we have any nested grids. If we do we want
+    # to update their id structures to avoid namespace conflicts for the CSS.
+    # This means we get deterministic ids without user specification.
+    content <- htmltools::tagQuery(content)$
+      find(".grid-container")$
+      each(namespace_nested_grid_containers)$
+      allTags()
+  }
 
   content
 }
@@ -154,26 +162,25 @@ get_attribs <- htmltools::tagGetAttribute
 namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
   # Look for the boolean attribute we place on a grid_container if the
   # user didn't specify an id. This means we are allowed to customize it
-  if (is.null(get_attribs(container_tag, "placeholder_id"))) {
+  # Pull off the existing temporary id so we can use it to find-and-replace with
+  # new id
+  existing_id <- get_attribs(container_tag, "id")
+
+  if (!identical(existing_id, NESTED_GRID_PLACEHOLDER_ID)) {
     # The user has specified the id of their nested grid container so we
     # shouldn't overwrite it.
     return(container_tag)
   }
 
-  # Pull off the existing temporary id so we can use it to find-and-replace with
-  # new id
-  existing_id <- get_attribs(container_tag, "id")
-
   # Build a tagQuery object around our container and get rid of the old id
   # related attributes in the process
   container_tq <- htmltools::tagQuery(container_tag)$
-    removeAttrs(c("placeholder_id", "id"))
+    removeAttrs("id")
 
   # Get ID of the grid_panel that encloses this grid_container()
-  # We know we need to go up two levels because a grid_panel is made up of the
-  # containing div and then a "content-panel" div which itself holds the
-  # grid_container
-  wrapping_id <- get_attribs(container_tq$parent()$parent()$selectedTags()[[1]], "id")
+  # Note that we index just the first selected parent, which prevents us from
+  # going grabbing a grandparent panel if we have double nesting
+  wrapping_id <- get_attribs(container_tq$parents('.grid_panel')$selectedTags()[[1]], "id")
 
   # Build new suffixed id for the container based on that wrapping panel id
   nested_grid_id <- paste0(wrapping_id, "__grid_container")
@@ -200,14 +207,19 @@ namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
       el
     })
 
-  # Update the css text to swap in our new prefixed-id
+  # Update the css text to swap in our new prefixed-id. For double nesting there
+  # will be multiple stylesheets under any level but the lowest. Make sure we
+  # only target the one closest to the current container by selecting
+  # $children() first
   container_tq$
+    children('head')$
     find('style')$
     each(function(style_tag, i){
       style_tag$children[[1]] <- str_replace_all(
         style_tag$children[[1]],
         pattern = paste0("#", existing_id),
-        replacement = paste0("#", nested_grid_id)
+        replacement = paste0("#", nested_grid_id),
+        fixed = TRUE
       )
       style_tag
     })
