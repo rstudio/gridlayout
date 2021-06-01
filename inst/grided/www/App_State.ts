@@ -1,16 +1,12 @@
+import { css } from "@emotion/css";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
-import {
-  build_controls_for_dir,
-  CSS_Input,
-  make_grid_tract_control,
-} from "./make-css_unit_input";
+import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
-  tract_add_or_remove_button,
   make_el,
-  remove_elements,
+  remove_elements
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
 import { find_selector_by_property } from "./utils-cssom";
@@ -20,7 +16,7 @@ import {
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
-  make_start_end_for_dir,
+  make_start_end_for_dir
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -31,14 +27,13 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos,
+  XY_Pos
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
+  send_grid_sizing_to_shiny
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
-import { css } from "@emotion/css";
 
 export type Grid_Update_Options = {
   rows?: string[];
@@ -321,6 +316,7 @@ export class App_State {
         drag_feedback_rect.style,
         bounding_rect_to_css_pos(new_rect)
       );
+
       const grid_extent = update_grid_pos(opts.grid_item, new_rect);
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
@@ -422,15 +418,18 @@ function fill_grid_cells(app_state: App_State) {
   for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
     for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
       app_state.current_cells.push(
-        app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell.${grid_cell_styles}`, {
-          data_props: { row: row_i, col: col_i },
-          grid_pos: {
-            start_row: row_i,
-            end_row: row_i,
-            start_col: col_i,
-            end_col: col_i,
-          },
-        })
+        app_state.make_el(
+          `div.r${row_i}.c${col_i}.grid-cell.${grid_cell_styles}`,
+          {
+            data_props: { row: row_i, col: col_i },
+            grid_pos: {
+              start_row: row_i,
+              end_row: row_i,
+              start_col: col_i,
+              end_col: col_i,
+            },
+          }
+        )
       );
     }
   }
@@ -442,11 +441,11 @@ function fill_grid_cells(app_state: App_State) {
   app_state.tract_controls = setup_tract_controls(app_state);
 }
 
-const added_element_styles = css`  
+const added_element_styles = css`
   border-radius: var(--element_roundness);
   border-width: 3px;
   border-style: solid;
-  transition: border-width .2s ease-in-out;
+  transition: border-width 0.2s ease-in-out;
   background: none;
   position: relative;
 
@@ -496,7 +495,6 @@ const dragger_handle = css`
   color: var(--off-white);
   opacity: 0.5;
 
-
   & > svg {
     transform: scale(0.85);
   }
@@ -513,8 +511,8 @@ const dragger_handle = css`
   }
 
   &.center {
-    top: calc(50% - var(--radius)/2);
-    right: calc(50% - var(--radius)/2);
+    top: calc(50% - var(--radius) / 2);
+    right: calc(50% - var(--radius) / 2);
     border-radius: var(--element_roundness);
     cursor: grab;
   }
@@ -546,23 +544,26 @@ const current_sel_box = css`
 `;
 
 const drag_canvas_styles = css`
-  margin-left: calc(-1*var(--grid-gap));
-  margin-top: calc(-1*var(--grid-gap));
-  width: calc(100% + 2*var(--grid-gap));
-  height: calc(100% + 2*var(--grid-gap));
+  margin-left: calc(-1 * var(--grid-gap));
+  margin-top: calc(-1 * var(--grid-gap));
+  width: calc(100% + 2 * var(--grid-gap));
+  height: calc(100% + 2 * var(--grid-gap));
   grid-row: 1/-1;
   grid-column: 1/-1;
   position: relative;
-  
+
   .drag-feedback-rect {
     pointer-events: none;
     position: absolute;
-    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
     background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
     background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
     animation: border-dance 16s infinite linear;
   }
-  
+
   @keyframes border-dance {
     0% {
       background-position: 0 0, 100% 100%, 0 100%, 100% 0;
@@ -578,7 +579,9 @@ function setup_new_item_drag(app_state: App_State) {
     el: app_state.make_el(`div.${added_element_styles}.${current_sel_box}`),
     parent_layout: app_state.grid_layout,
   });
-  const drag_canvas = app_state.make_el(`div#drag_canvas.${drag_canvas_styles}`);
+  const drag_canvas = app_state.make_el(
+    `div#drag_canvas.${drag_canvas_styles}`
+  );
 
   app_state.setup_drag({
     watching_element: drag_canvas,
@@ -674,7 +677,9 @@ const name_form_styles = css`
   justify-content: space-evenly;
   margin-top: 2rem;
 
-  input[type="text"] { width: 50%; }
+  input[type="text"] {
+    width: 50%;
+  }
 `;
 
 function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
@@ -788,13 +793,16 @@ function draw_elements(
   const el_color = app_state.next_color;
   const mirrors_existing = typeof mirrored_el !== "undefined";
 
-  const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element.${added_element_styles}`, {
-    innerHTML: filler_text,
-    styles: {
-      borderColor: app_state.next_color,
-      position: "relative",
-    },
-  });
+  const grid_el = app_state.make_el(
+    `div#${id}.el_${id}.added-element.${added_element_styles}`,
+    {
+      innerHTML: filler_text,
+      styles: {
+        borderColor: app_state.next_color,
+        position: "relative",
+      },
+    }
+  );
 
   const list_el = make_el(
     document.querySelector("#added_elements"),
