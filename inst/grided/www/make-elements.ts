@@ -4,6 +4,7 @@ import { Tract_Dir } from "./Grid_Layout";
 import { set_element_in_grid } from "./utils-grid";
 import { plus_icon, minus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
+import { css } from "@emotion/css";
 
 export type Event_Listener = {
   event: string;
@@ -144,7 +145,48 @@ export function Text_El(sel_txt: string, text: string) {
     text,
   });
 }
+const incrementer_button = css`
+  font-size: 15px;
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
+  padding: 0;
+  color: var(--dark-gray, gray);
+  transition: color 0.2s, background-color 0.2s;
 
+  &.remove-col {
+    font-size: 12px;
+  }
+
+  &.add-row,
+  &.add-col {
+    /* This offset is enough to place the button on the outside of the row/column
+      spanning div and centered in the grid tract */
+    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+  }
+
+  &.add-row {
+    bottom: var(--incrementer-offset);
+  }
+  &.add-col {
+    right: var(--incrementer-offset);
+  }
+
+  &:hover {
+    background-color: var(--dark-gray);
+    color: white;
+  }
+
+  & > svg {
+    max-height: 100%;
+    max-width: 100%;
+  }
+`;
 export function tract_add_or_remove_button(
   app_state: App_State,
   opts: {
@@ -171,7 +213,7 @@ export function tract_add_or_remove_button(
 
   const button = make_el(
     parent_el,
-    `button.incrementer-button.${add_or_remove}-${dir_singular}.${dir}_${tract_index}`,
+    `button.${incrementer_button}.${add_or_remove}-${dir_singular}.${dir}_${tract_index}`,
     {
       innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
       styles: additional_styles,

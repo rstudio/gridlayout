@@ -219,9 +219,7 @@ build_css_rule <- function(selector, prop_list) {
 #' adding this css though.
 #'
 #' @seealso \code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
-#' @param layout Either a markdown table representation (see
-#'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
-#'   desired layout for your Shiny app.
+#' @inheritParams grid_container
 #' @inheritDotParams to_css -layout
 #'
 #' @return Character string of css used to setup grid layout and place elements
@@ -299,7 +297,7 @@ use_gridlayout_rmd <- function(
   is_card_styled = "all",
   element_styles = NULL,
   selector_prefix = "#"
-  ){
+){
 
   requireNamespace("knitr", quietly = TRUE)
 
@@ -312,6 +310,7 @@ use_gridlayout_rmd <- function(
         to_css(layout,
                container = container,
                is_card_styled = is_card_styled,
+               selector_prefix = selector_prefix,
                element_styles = c(
                  element_styles,
                  "display" = "block",

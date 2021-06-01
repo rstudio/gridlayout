@@ -1,12 +1,42 @@
-import {
-  browser_header_html,
-  horizontal_drag_icon,
-  vertical_drag_icon,
-} from "./utils-icons";
+import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
 import { tract_add_or_remove_button, make_el } from "./make-elements";
 import { App_State } from "./App_State";
-import { make_template_start_end } from "./utils-grid";
 import { Tract_Dir } from "./Grid_Layout";
+
+import { css } from "@emotion/css";
+
+const css_unit_input = css`
+  display: grid;
+  grid-template-columns: repeat(2, 55px);
+  justify-content: center; /* Make sure to sit in middle of control */
+  grid-gap: 2px;
+  padding: 0.5rem;
+  pointer-events: none;
+  /* Prevents card styling when set to every child from spilling into input divs */
+  box-shadow: none !important;
+
+  &.cols-sizing {
+    width: 90%;
+    grid-template-columns: repeat(auto-fit, 55px);
+  }
+
+  & > * {
+    pointer-events: all;
+  }
+
+  select,
+  input {
+    align-self: stretch;
+    justify-self: stretch;
+    height: 1.75rem;
+    font-size: 1.1rem;
+  }
+
+  .value_input.disabled {
+    opacity: 0.15;
+    pointer-events: none;
+  }
+`;
 
 export type CSS_Input = {
   form: HTMLElement;
@@ -47,7 +77,7 @@ export function make_css_unit_input({
 }): CSS_Input {
   let current_unit = start_unit;
 
-  const form = make_el(parent_el, `form${selector}.css-unit-input`, {
+  const form = make_el(parent_el, `form${selector}.${css_unit_input}`, {
     event_listener: [
       { event: "change", func: on_update },
       {
@@ -60,20 +90,18 @@ export function make_css_unit_input({
     ],
   });
 
-  const value_input = <HTMLInputElement>(
-    make_el(form, "input.css-unit-input-value", {
-      props: {
-        type: "number",
-        min: 0,
-        value: start_val,
-        step: 1,
-        "aria-live": "polite",
-      },
-    })
-  );
+  const value_input = <HTMLInputElement>make_el(form, "input.value-input", {
+    props: {
+      type: "number",
+      min: 0,
+      value: start_val,
+      step: 1,
+      "aria-live": "polite",
+    },
+  });
 
   const unit_selector = <HTMLSelectElement>(
-    make_el(form, "select.css-unit-input-select", {
+    make_el(form, "select.unit-selector", {
       props: { name: "units" },
     })
   );
@@ -145,6 +173,145 @@ export function make_css_unit_input({
   return { form, current_value, update_value };
 }
 
+const tract_controls = css`
+  display: grid;
+  gap: 0.25rem;
+  position: absolute;
+
+  &.cols-controls {
+    height: var(--editor-top-pad);
+    padding-bottom: 5px;
+    grid-template-areas: 
+      ".        remove-tract  .       "
+      "cssInput cssInput    cssInput"
+      "dragger  dragger     dragger ";
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    justify-items: center;
+    align-content: end;
+  }
+
+  &.cols-controls .css-unit-input {
+    width: 90%;
+    grid-template-columns: repeat(auto-fit, 55px);
+  }
+
+  &.rows-controls {
+    width: var(--editor-left-pad);
+    padding-right: 0.5rem;
+    align-items: center;
+    grid-template-areas: 
+      "remove-tract cssInput"
+      "remove-tract dragger ";
+    /* grid-template-columns: auto minmax(50px, 200px); */
+    justify-content: end;
+    align-content: center;
+  }
+
+  .remove-row,
+  .remove-col {
+    grid-area: remove-tract;
+  }
+
+  .unit-input {
+    padding: 0;
+    grid-area: cssInput;
+  }
+
+  .dragger {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    border: 1px solid var(--dark-gray);
+    border-radius: 4px;
+    color: var(--off-black);
+    height: 15px;
+    grid-area: dragger;
+    position: relative; /* So the drag detector div can be sized correctly */
+  }
+  .dragger:active {
+    cursor: grabbing;
+  }
+
+  &.with-drag .dragger {
+    display: flex;
+    width: 100%;
+    max-width: 80px;
+    justify-self: center;
+  }
+
+  .drag-detector {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: steelblue;
+    opacity: 0;
+  }
+`;
+
+
+export function build_controls_for_dir(
+  app_state: App_State,
+  dir: Tract_Dir,
+  editor_container: HTMLElement
+) {
+  // This is the class of the first grid cell for each row or column
+  const target_class = dir === "rows" ? "c1" : "r1";
+  const dir_singular = dir === "rows" ? "row" : "col";
+
+  // Make sure we dont have any controls hanging around
+  editor_container
+    .querySelectorAll(`.${dir}-controls`)
+    .forEach((el) => el.remove());
+
+  // Builds the controls and tract addition buttons for all cells
+  return app_state.current_cells
+    .filter((el) => el.classList.contains(target_class))
+    .map((el) => {
+      const tract_index: number = +el.dataset[dir_singular];
+
+      const holder_el = make_el(
+        editor_container,
+        `div#controller_for_${dir_singular}_${tract_index}.${tract_controls}.${dir}-controls`
+      );
+
+      if (tract_index === 1) {
+        // Add an additional button before the first row and column. Otherwise
+        // the user would not be able to add a row or column at the very start
+        // of the grid.
+        tract_add_or_remove_button(app_state, {
+          parent_el: holder_el,
+          add_or_remove: "add",
+          dir,
+          tract_index: 0,
+          additional_styles: {
+            [dir === "rows" ? "top" : "left"]: "var(--incrementer-offset)",
+          },
+        });
+      }
+
+      tract_add_or_remove_button(app_state, {
+        parent_el: holder_el,
+        add_or_remove: "add",
+        dir,
+        tract_index,
+      });
+
+      return {
+        matched_cell: el,
+        el: holder_el,
+        controller: make_grid_tract_control(holder_el, app_state, {
+          dir: dir as Tract_Dir,
+          size: app_state.grid_layout[dir][tract_index - 1],
+          tract_index,
+        }),
+      };
+    });
+}
+
 export function make_grid_tract_control(
   holder: HTMLElement,
   app_state: App_State,
@@ -158,7 +325,7 @@ export function make_grid_tract_control(
 
   const unit_input = make_css_unit_input({
     parent_el: holder,
-    selector: `.unit-input`,
+    selector: `.unit-input.${dir}-sizing`,
     start_val: get_css_value(size),
     start_unit: get_css_unit(size),
     on_change: (new_val: string) => {
@@ -177,17 +344,17 @@ export function make_grid_tract_control(
   }
 
   const value_input = <HTMLInputElement>(
-    unit_input.form.querySelector(".css-unit-input-value")
+    unit_input.form.querySelector(".value-input")
   );
   const drag_dir = dir === "rows" ? "y" : "x";
 
-  const resizer = make_el(holder, "div.css-unit-input-dragger", {
+  const resizer = make_el(holder, "div.dragger", {
     innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
   });
   // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
-  make_el(resizer, "div.css-unit-input-drag-detector", {
+  make_el(resizer, "div.drag-detector", {
     props: { draggable: true },
     event_listener: [
       {
