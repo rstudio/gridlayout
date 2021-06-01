@@ -67,12 +67,14 @@
 #' )
 #' }
 #'
-grid_container <- function(id = "grid-container",
-                           layout,
-                           elements,
-                           use_bslib_card_styles = FALSE,
-                           flag_mismatches = TRUE,
-                           check_for_nested_grids = TRUE) {
+grid_container <- function(
+  id = "grid-container",
+  layout,
+  elements,
+  use_bslib_card_styles = FALSE,
+  flag_mismatches = TRUE,
+  check_for_nested_grids = TRUE
+) {
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
   layout <- as_gridlayout(layout)
@@ -177,10 +179,10 @@ namespace_nested_grid_containers <- function(container_tag, i = "ignored") {
   container_tq <- htmltools::tagQuery(container_tag)$
     removeAttrs("id")
 
-  # Get ID of the grid_panel that encloses this grid_container()
-  # Note that we index just the first selected parent, which prevents us from
-  # going grabbing a grandparent panel if we have double nesting
-  wrapping_id <- get_attribs(container_tq$parents('.grid_panel')$selectedTags()[[1]], "id")
+  # Get ID of the grid_panel that encloses this grid_container() The $closest
+  # method will stop at the very first match instead of continuing. This means
+  # we won't waste effort finding all the parent containers if they exist.
+  wrapping_id <- get_attribs(container_tq$closest('.grid_panel')$selectedTags()[[1]], "id")
 
   # Build new suffixed id for the container based on that wrapping panel id
   nested_grid_id <- paste0(wrapping_id, "__grid_container")

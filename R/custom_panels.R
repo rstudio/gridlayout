@@ -156,7 +156,7 @@ nested_grid_panel <- function(
 ){
   using_default_id <- is.null(container_id)
   # Use a placeholder id that will get stripped and replaced with one reflecting
-  # the positiong of nesting in parent grid
+  # the positioning of nesting in parent grid
   if (using_default_id) container_id <- NESTED_GRID_PLACEHOLDER_ID
 
   grid_panel(
