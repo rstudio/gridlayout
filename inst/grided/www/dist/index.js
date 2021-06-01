@@ -6386,15 +6386,23 @@
 
   // make-focused_modal.ts
   var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
+  var _templateObject3;
+  function _taggedTemplateLiteral3(strings, raw) {
+    if (!raw) {
+      raw = strings.slice(0);
+    }
+    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
+  }
+  var blurred_background = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  grid-column: 1 / -1;\n  grid-row: 2 / -1;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  /* slightly transparent fallback */\n  background-color: rgba(255, 255, 255, .8);\n  z-index: 990;\n\n  /* if backdrop-filter support: make transparent and blurred */\n  @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n    & {\n      background-color: rgba(255, 255, 255, .05);\n      -webkit-backdrop-filter: blur(4px);\n      backdrop-filter: blur(4px);\n    }\n  }\n\n  .focused_modal {\n    width: 95%;\n    max-width: 450px;\n    background: white;\n    z-index: 999;\n    padding: 1.5rem 2.2rem;\n  }\n  .modal_header {\n    padding-bottom: 1rem;\n  }\n"])));
   function focused_modal(opts) {
-    var background = make_el(document.querySelector("#grided__holder"), "div.background-blurrer", {
+    var background = make_el(document.querySelector("#grided__holder"), "div.".concat(blurred_background), {
       event_listener: opts.background_callbacks
     });
     var modal = make_el(background, "div.focused_modal", {
       event_listener: opts.modal_callbacks
     });
     if (opts.header_text) {
-      make_el(modal, "div.focused_modal_header", {
+      make_el(modal, "div.modal_header", {
         innerHTML: opts.header_text,
         styles: {
           paddingBottom: "1rem"

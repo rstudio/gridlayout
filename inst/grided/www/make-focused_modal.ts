@@ -1,5 +1,37 @@
 import { make_el, Event_Listener } from "./make-elements";
 import { as_array, concat_nl } from "./utils-misc";
+import { css } from "@emotion/css";
+
+const blurred_background = css`
+  grid-column: 1 / -1;
+  grid-row: 2 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* slightly transparent fallback */
+  background-color: rgba(255, 255, 255, .8);
+  z-index: 990;
+
+  /* if backdrop-filter support: make transparent and blurred */
+  @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {
+    & {
+      background-color: rgba(255, 255, 255, .05);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+  }
+
+  .focused_modal {
+    width: 95%;
+    max-width: 450px;
+    background: white;
+    z-index: 999;
+    padding: 1.5rem 2.2rem;
+  }
+  .modal_header {
+    padding-bottom: 1rem;
+  }
+`;
 
 type Modal_Options = {
   background_callbacks?: Event_Listener | Event_Listener[];
@@ -9,7 +41,7 @@ type Modal_Options = {
 export function focused_modal(opts: Modal_Options) {
   const background = make_el(
     document.querySelector("#grided__holder"),
-    "div.background-blurrer",
+    `div.${blurred_background}`,
     {
       event_listener: opts.background_callbacks,
     }
@@ -20,7 +52,7 @@ export function focused_modal(opts: Modal_Options) {
   });
 
   if (opts.header_text) {
-    make_el(modal, "div.focused_modal_header", {
+    make_el(modal, "div.modal_header", {
       innerHTML: opts.header_text,
       styles: {
         paddingBottom: "1rem",
