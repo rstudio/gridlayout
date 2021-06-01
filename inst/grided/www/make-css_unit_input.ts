@@ -1,9 +1,8 @@
-import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
-import { tract_add_or_remove_button, make_el } from "./make-elements";
+import { css } from "@emotion/css";
 import { App_State } from "./App_State";
 import { Tract_Dir } from "./Grid_Layout";
-
-import { css } from "@emotion/css";
+import { make_el, tract_add_or_remove_button } from "./make-elements";
+import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
 
 const css_unit_input = css`
   display: grid;
@@ -181,7 +180,7 @@ const tract_controls = css`
   &.cols-controls {
     height: var(--editor-top-pad);
     padding-bottom: 5px;
-    grid-template-areas: 
+    grid-template-areas:
       ".        remove-tract  .       "
       "cssInput cssInput    cssInput"
       "dragger  dragger     dragger ";
@@ -200,7 +199,7 @@ const tract_controls = css`
     width: var(--editor-left-pad);
     padding-right: 0.5rem;
     align-items: center;
-    grid-template-areas: 
+    grid-template-areas:
       "remove-tract cssInput"
       "remove-tract dragger ";
     /* grid-template-columns: auto minmax(50px, 200px); */
@@ -251,7 +250,6 @@ const tract_controls = css`
     opacity: 0;
   }
 `;
-
 
 export function build_controls_for_dir(
   app_state: App_State,

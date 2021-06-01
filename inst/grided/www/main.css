@@ -14,6 +14,8 @@ body {
   --outline-color: var(--light-gray);
   --editor-left-pad: 160px;
   --editor-top-pad: 110px;
+  --grid-gap: 1rem;
+
 }
 
 #grided__holder {
@@ -96,12 +98,6 @@ img {
   grid-area: settings;
 }
 
-button.minus_btn.disabled {
-  opacity: 0.2;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 .settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -113,37 +109,6 @@ button.minus_btn.disabled {
 .settings-grid > .input-label {
   text-align: right;
   justify-self: end;
-}
-
-.plus-minus-input-controls{
-  display: grid;
-  grid-template-columns: 30px 30px 30px;
-  grid-template-rows: 30px;
-  justify-content: center;
-  align-items: stretch;
-  justify-items: stretch;
-}
-
-.plus-minus-input .input-label {
-  text-align: right;
-}
-
-.plus-minus-input-value {
-  text-align: center;
-  align-self: center;
-}
-
-.plus-minus-input-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  color: var(--off-black);
-}
-
-.plus-minus-input svg {
-  transform: scale(2);
 }
 
 #grided__instructions {
@@ -173,7 +138,6 @@ button.minus_btn.disabled {
 }
 
 #editor-wrapper {
-  --grid-gap: 1rem;
   border: 2px solid var(--outline-color);
   border-radius: var(--editor-radius);
   width: 100%;
@@ -218,6 +182,7 @@ button.minus_btn.disabled {
   height: var(--button-size);
   border-radius: calc(var(--button-size)/2);
 }
+
 #url-box {
   --vert-offset: 3px;
   --url-box-height: calc(100% - 2 * var(--vert-offset));
@@ -236,112 +201,7 @@ button.minus_btn.disabled {
   font-family: monospace;
 }
 
-.grid-cell {
-  background: var(--off-white);
-  border: 1px solid var(--gray);
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: var(--element_roundness);
-}
 
-.grid-cell.transparent {
-  background: none;
-}
-
-.grid-cell.selected {
-  background: currentColor;
-  border: 2px solid var(--light-gray);
-}
-
-#grided__editor .added-element {
-  background: none;
-  /* pointer-events: none; So the cells beneath the elements can be selected still */
-  position: relative;
-  /* This is neccesary so that content doesn't force tracks to be larger than 
-     requested */
-  /* overflow: hidden;  */
-}
-
-/* Apply to both the list of elements and the elements in the grid itself */
-.added-element {
-  border-radius: var(--element_roundness);
-  border-width: 3px;
-  border-style: solid;
-  transition: border-width .2s ease-in-out;
-}
-
-#added_elements .added-element {
-  height: 35px;
-  margin: 0 0 5px 0;
-  padding: 0.65rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#added_elements .added-element.hovered {
-  /* Emphasize by making a bit bigger */
-  transform: scale(1.05);
-}
-
-#grided__editor .added-element.hovered,
-#current_selection_box.added-element {
-  border-width: 7px;
-}
-
-.added-element .dragger {
-  --radius: 18px;
-  font-size: 12px;
-  position: absolute;
-  height: var(--radius);
-  width: var(--radius);
-  cursor: grab;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--off-white);
-  opacity: 0.5;
-}
-
-.added-element .dragger > svg {
-  transform: scale(0.85);
-}
-
-.added-element .dragger.top-left {
-  top: -2px;
-  left: -2px;
-  cursor: nw-resize;
-}
-.added-element .dragger.bottom-right {
-  bottom: -2px;
-  right: -2px;
-  cursor: se-resize;
-}
-
-.added-element .dragger.center {
-  top: calc(50% - var(--radius)/2);
-  right: calc(50% - var(--radius)/2);
-  border-radius: var(--element_roundness);
-  cursor: grab;
-}
-.added-element .dragger.center:active {
-  cursor: grabbing;
-}
-
-.added-element .dragger i {
-  display: inline-block;
-}
-
-.added-element .dragger.top-left i {
-  transform: rotate(315deg);
-}
-.added-element .dragger.bottom-right i {
-  transform: rotate(135deg);
-}
-
-.added-element .dragger.top-left,
-.added-element .dragger.bottom-right {
-  border-radius: var(--element_roundness) 0;
-}
 
 .added-element.disabled,
 .grid-cell.disabled,
@@ -350,10 +210,6 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
-#added_elements,
-#grided__settings > div {
-  position: relative;
-}
 
 #grided__settings > div.disabled::after,
 #added_elements.disabled::after{
@@ -368,94 +224,3 @@ button.minus_btn.disabled {
   background:#ffffffd4;
   cursor: not-allowed;
 }
-
-
-
-#current_selection_box.added-element {
-  border-style: dashed;
-  display: none;
-  pointer-events: none;
-}
-
-/* This is filler text to make auto sizing work. It's invisible to the user
-   so it doesn't distract. Not sure if this is the best way to do it but I think
-   it's worth a go. 
-*/
-.added-element .filler_text {
-  color: rgba(128, 128, 128, 0.5);
-  user-select: none;
-  display: none;
-}
-.added-element.in-auto-row .filler_text {
-  display: block;
-}
-
-
-
-form#name_form {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2rem;
-}
-form#name_form input[type="text"] {
-  width: 50%;
-}
-
-.radio-set-group {
-  display: flex;
-  justify-content: center;
-  padding-top: 0.25rem;
-  border-top: 1px solid var(--off-white);
-}
-.radio-set-group:first-child{
-  border-top: none;
-}
-
-.radio-set-group > div {
-  width: 50%;
-}
-
-.radio-set-label {
-  text-align: right;
-  padding-right: 1rem;
-}
-.notice-text{
-  font-style: italic;
-  font-weight: lighter;
-  font-size: 0.9rem;
-}
-
-#delete_or_fix_list {
-  outline: 1px solid var(--light-gray);
-  padding: 0.5rem;
-}
-
-#drag_canvas {
-  margin-left: calc(-1*var(--grid-gap));
-  margin-top: calc(-1*var(--grid-gap));
-  width: calc(100% + 2*var(--grid-gap));
-  height: calc(100% + 2*var(--grid-gap));
-  grid-row: 1/-1;
-  grid-column: 1/-1;
-  position: relative;
-}
-
-.drag-feedback-rect {
-  pointer-events: none;
-  position: absolute;
-  background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
-  animation: border-dance 16s infinite linear;
-}
-
-@keyframes border-dance {
-  0% {
-    background-position: 0 0, 100% 100%, 0 100%, 100% 0;
-  }
-  100% {
-    background-position: 100% 0, 0 100%, 0 0, 100% 100%;
-  }
-}
-
-

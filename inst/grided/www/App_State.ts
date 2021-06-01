@@ -1,12 +1,12 @@
+import { css } from "@emotion/css";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
-import { build_controls_for_dir, CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
+import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
-  tract_add_or_remove_button,
   make_el,
-  remove_elements,
+  remove_elements
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
 import { find_selector_by_property } from "./utils-cssom";
@@ -16,7 +16,7 @@ import {
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
-  make_start_end_for_dir,
+  make_start_end_for_dir
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -27,11 +27,11 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos,
+  XY_Pos
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
+  send_grid_sizing_to_shiny
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
 
@@ -316,6 +316,7 @@ export class App_State {
         drag_feedback_rect.style,
         bounding_rect_to_css_pos(new_rect)
       );
+
       const grid_extent = update_grid_pos(opts.grid_item, new_rect);
       if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
     }
@@ -384,7 +385,6 @@ export class App_State {
       this.current_elements.forEach((el) => {
         el.grid_item.fill_if_in_auto_row();
       });
-
     }
 
     this.tract_controls.update_positions();
@@ -395,6 +395,22 @@ export class App_State {
   }
 } // End of class declaration
 
+const grid_cell_styles = css`
+  background: var(--off-white, grey);
+  border: 1px solid var(--gray, grey);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: var(--element_roundness);
+
+  &.transparent {
+    background: none;
+  }
+
+  &.selected {
+    background: currentColor;
+    border: 2px solid var(--light-gray);
+  }
+`;
+
 function fill_grid_cells(app_state: App_State) {
   remove_elements(app_state.current_cells);
   app_state.current_cells = [];
@@ -402,15 +418,18 @@ function fill_grid_cells(app_state: App_State) {
   for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
     for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
       app_state.current_cells.push(
-        app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
-          data_props: { row: row_i, col: col_i },
-          grid_pos: {
-            start_row: row_i,
-            end_row: row_i,
-            start_col: col_i,
-            end_col: col_i,
-          },
-        })
+        app_state.make_el(
+          `div.r${row_i}.c${col_i}.grid-cell.${grid_cell_styles}`,
+          {
+            data_props: { row: row_i, col: col_i },
+            grid_pos: {
+              start_row: row_i,
+              end_row: row_i,
+              start_col: col_i,
+              end_col: col_i,
+            },
+          }
+        )
       );
     }
   }
@@ -422,12 +441,147 @@ function fill_grid_cells(app_state: App_State) {
   app_state.tract_controls = setup_tract_controls(app_state);
 }
 
+const added_element_styles = css`
+  border-radius: var(--element_roundness);
+  border-width: 3px;
+  border-style: solid;
+  transition: border-width 0.2s ease-in-out;
+  background: none;
+  position: relative;
+
+  &.in-list {
+    height: 35px;
+    margin: 0 0 5px 0;
+    padding: 0.65rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hovered {
+    border-width: 7px;
+  }
+
+  &.in-list.hovered {
+    /* Emphasize by making a bit bigger */
+    transform: scale(1.05);
+  }
+
+  /* This is filler text to make auto sizing work. It's invisible to the user
+     so it doesn't distract. Not sure if this is the best way to do it but I think
+     it's worth a go. 
+  */
+  .filler_text {
+    color: rgba(128, 128, 128, 0.5);
+    user-select: none;
+    display: none;
+  }
+
+  &.in-auto-row .filler_text {
+    display: block;
+  }
+`;
+
+const dragger_handle = css`
+  --radius: 18px;
+  font-size: 12px;
+  position: absolute;
+  height: var(--radius);
+  width: var(--radius);
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--off-white);
+  opacity: 0.5;
+
+  & > svg {
+    transform: scale(0.85);
+  }
+
+  &.top-left {
+    top: -2px;
+    left: -2px;
+    cursor: nw-resize;
+  }
+  &.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    cursor: se-resize;
+  }
+
+  &.center {
+    top: calc(50% - var(--radius) / 2);
+    right: calc(50% - var(--radius) / 2);
+    border-radius: var(--element_roundness);
+    cursor: grab;
+  }
+  &.center:active {
+    cursor: grabbing;
+  }
+
+  i {
+    display: inline-block;
+  }
+
+  &.top-left i {
+    transform: rotate(315deg);
+  }
+  &.bottom-right i {
+    transform: rotate(135deg);
+  }
+
+  &.top-left,
+  &.bottom-right {
+    border-radius: var(--element_roundness) 0;
+  }
+`;
+
+const current_sel_box = css`
+  border-style: dashed;
+  display: none;
+  pointer-events: none;
+`;
+
+const drag_canvas_styles = css`
+  margin-left: calc(-1 * var(--grid-gap));
+  margin-top: calc(-1 * var(--grid-gap));
+  width: calc(100% + 2 * var(--grid-gap));
+  height: calc(100% + 2 * var(--grid-gap));
+  grid-row: 1/-1;
+  grid-column: 1/-1;
+  position: relative;
+
+  .drag-feedback-rect {
+    pointer-events: none;
+    position: absolute;
+    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+    animation: border-dance 16s infinite linear;
+  }
+
+  @keyframes border-dance {
+    0% {
+      background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+    }
+    100% {
+      background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+    }
+  }
+`;
+
 function setup_new_item_drag(app_state: App_State) {
   const current_selection_box = new Grid_Item({
-    el: app_state.make_el("div#current_selection_box.added-element"),
+    el: app_state.make_el(`div.${added_element_styles}.${current_sel_box}`),
     parent_layout: app_state.grid_layout,
   });
-  const drag_canvas = app_state.make_el("div#drag_canvas");
+  const drag_canvas = app_state.make_el(
+    `div#drag_canvas.${drag_canvas_styles}`
+  );
 
   app_state.setup_drag({
     watching_element: drag_canvas,
@@ -474,7 +628,6 @@ function setup_tract_controls(app_state: App_State) {
     cols: build_controls_for_dir(app_state, "cols", editor_container),
   };
 
-
   update_positions();
 
   // Make sure when we scroll the editor window the row sizing controls follow
@@ -519,6 +672,16 @@ function setup_tract_controls(app_state: App_State) {
   };
 }
 
+const name_form_styles = css`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2rem;
+
+  input[type="text"] {
+    width: 50%;
+  }
+`;
+
 function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   const modal_divs = focused_modal({
     background_callbacks: {
@@ -548,7 +711,7 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
     `,
   });
 
-  const name_form = make_el(modal_div, "form#name_form", {
+  const name_form = make_el(modal_div, `form#name_form.${name_form_styles}`, {
     event_listener: {
       event: "submit",
       func: function (event) {
@@ -598,9 +761,14 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   });
 
   function warn_about_bad_id(msg) {
-    make_el(modal_div, "span#bad_id_msg.notice-text", {
+    make_el(modal_div, "span#bad_id_msg", {
       innerHTML: msg,
-      styles: { color: "orangered" },
+      styles: {
+        color: "orangered",
+        fontStyle: "italic",
+        fontWeight: "lighter",
+        fontSize: "0.9rem",
+      },
     });
   }
   function hide_warning_msg() {
@@ -625,17 +793,20 @@ function draw_elements(
   const el_color = app_state.next_color;
   const mirrors_existing = typeof mirrored_el !== "undefined";
 
-  const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element`, {
-    innerHTML: filler_text,
-    styles: {
-      borderColor: app_state.next_color,
-      position: "relative",
-    },
-  });
+  const grid_el = app_state.make_el(
+    `div#${id}.el_${id}.added-element.${added_element_styles}`,
+    {
+      innerHTML: filler_text,
+      styles: {
+        borderColor: app_state.next_color,
+        position: "relative",
+      },
+    }
+  );
 
   const list_el = make_el(
     document.querySelector("#added_elements"),
-    `div.el_${id}.added-element`,
+    `div.el_${id}.added-element.${added_element_styles}.in-list`,
     {
       innerHTML: id,
       styles: { borderColor: el_color },
@@ -671,7 +842,7 @@ function draw_elements(
       app_state.setup_drag({
         watching_element: make_el(
           grid_el,
-          `div.dragger.visible.${handle_type}`,
+          `div.dragger.visible.${dragger_handle}.${handle_type}`,
           {
             styles: { background: el_color },
             innerHTML:
@@ -736,70 +907,5 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
         message_model.remove();
       },
     },
-  });
-}
-
-function show_danger_popup(
-  app_state: App_State,
-  in_danger_els: Element_Info[],
-  on_finish: (to_edit: Element_Info[]) => void
-) {
-  const fix_els_modal = focused_modal({
-    header_text: `
-  <h2>The following elements dont fit on the new grid layout.</h2>
-  <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
-  `,
-  });
-
-  const radio_inputs_html = in_danger_els.reduce(
-    (radio_group, el) =>
-      `
-    ${radio_group}
-    <div class = "radio-set-group">
-      <div class = "radio-set-label"> ${el.id} </div>
-      <div class = "radio-set-options">
-        <input type="radio" id = "delete_${el.id}" name="${el.id}" value="delete" checked>
-        <label for="delete_${el.id}">Delete</label>
-        <input type="radio" id = "shrink_${el.id}" name="${el.id}" value="shrink">
-        <label for="shrink_${el.id}">Shink</label>
-      </div>
-    </div>
-  `,
-    ""
-  );
-
-  const delete_or_edit_form = make_el(
-    fix_els_modal.modal,
-    "form#delete_or_fix_list",
-    {
-      innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
-      event_listener: {
-        event: "submit",
-        func: function () {
-          const form = this;
-          const to_delete = in_danger_els.filter(
-            (d) => form[d.id].value === "delete"
-          );
-
-          app_state.remove_elements(to_delete.map((d) => d.id));
-          const to_edit = in_danger_els.filter(
-            (d) => form[d.id].value === "shrink"
-          );
-
-          on_finish(to_edit);
-
-          fix_els_modal.remove();
-        },
-      },
-    }
-  );
-
-  make_el(delete_or_edit_form, "input#name_submit", {
-    props: { type: "submit" },
-  });
-
-  make_el(fix_els_modal.modal, "p.notice-text", {
-    innerHTML:
-      "Note that elements residing completely in the removed row or column are automatically deleted.",
   });
 }
