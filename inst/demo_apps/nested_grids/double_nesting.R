@@ -4,22 +4,19 @@ library(fontawesome)
 my_layout <- "
 |     |     |       |       |
 |-----|-----|-------|-------|
-|10px |1fr  |5fr   |1fr    |
+|10px |1fr  |5fr    |1fr    |
 |1fr  |top  |top    |right  |
-|5fr |left |nested |right  |
+|5fr  |left |nested |right  |
 |1fr  |left |bottom |bottom |"
 
-depth <- 4
-colors <- viridis::plasma(depth)
+depth <- 2
 
 emoji_panel <- function(emoji, level = 1){
   grid_panel(
     div(
       style = htmltools::css(
-        "background-color" = colors[level],
         width = "100%", height = "100%",
         display = "grid",
-        color = "white",
         "font-size" = "2rem",
         "place-content" = "center"),
       emoji
