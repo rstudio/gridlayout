@@ -297,7 +297,7 @@ use_gridlayout_rmd <- function(
   is_card_styled = "all",
   element_styles = NULL,
   selector_prefix = "#"
-  ){
+){
 
   requireNamespace("knitr", quietly = TRUE)
 
@@ -310,6 +310,7 @@ use_gridlayout_rmd <- function(
         to_css(layout,
                container = container,
                is_card_styled = is_card_styled,
+               selector_prefix = selector_prefix,
                element_styles = c(
                  element_styles,
                  "display" = "block",
