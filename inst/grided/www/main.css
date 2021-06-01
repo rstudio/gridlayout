@@ -115,37 +115,6 @@ button.minus_btn.disabled {
   justify-self: end;
 }
 
-.plus-minus-input-controls{
-  display: grid;
-  grid-template-columns: 30px 30px 30px;
-  grid-template-rows: 30px;
-  justify-content: center;
-  align-items: stretch;
-  justify-items: stretch;
-}
-
-.plus-minus-input .input-label {
-  text-align: right;
-}
-
-.plus-minus-input-value {
-  text-align: center;
-  align-self: center;
-}
-
-.plus-minus-input-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  color: var(--off-black);
-}
-
-.plus-minus-input svg {
-  transform: scale(2);
-}
-
 #grided__instructions {
   grid-area: instructions;
 }
@@ -218,6 +187,7 @@ button.minus_btn.disabled {
   height: var(--button-size);
   border-radius: calc(var(--button-size)/2);
 }
+
 #url-box {
   --vert-offset: 3px;
   --url-box-height: calc(100% - 2 * var(--vert-offset));
@@ -390,45 +360,6 @@ button.minus_btn.disabled {
   display: block;
 }
 
-
-
-form#name_form {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2rem;
-}
-form#name_form input[type="text"] {
-  width: 50%;
-}
-
-.radio-set-group {
-  display: flex;
-  justify-content: center;
-  padding-top: 0.25rem;
-  border-top: 1px solid var(--off-white);
-}
-.radio-set-group:first-child{
-  border-top: none;
-}
-
-.radio-set-group > div {
-  width: 50%;
-}
-
-.radio-set-label {
-  text-align: right;
-  padding-right: 1rem;
-}
-.notice-text{
-  font-style: italic;
-  font-weight: lighter;
-  font-size: 0.9rem;
-}
-
-#delete_or_fix_list {
-  outline: 1px solid var(--light-gray);
-  padding: 0.5rem;
-}
 
 #drag_canvas {
   margin-left: calc(-1*var(--grid-gap));

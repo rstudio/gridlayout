@@ -1,6 +1,10 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
-import { build_controls_for_dir, CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
+import {
+  build_controls_for_dir,
+  CSS_Input,
+  make_grid_tract_control,
+} from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
@@ -34,6 +38,7 @@ import {
   send_grid_sizing_to_shiny,
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
+import { css } from "@emotion/css";
 
 export type Grid_Update_Options = {
   rows?: string[];
@@ -384,7 +389,6 @@ export class App_State {
       this.current_elements.forEach((el) => {
         el.grid_item.fill_if_in_auto_row();
       });
-
     }
 
     this.tract_controls.update_positions();
@@ -474,7 +478,6 @@ function setup_tract_controls(app_state: App_State) {
     cols: build_controls_for_dir(app_state, "cols", editor_container),
   };
 
-
   update_positions();
 
   // Make sure when we scroll the editor window the row sizing controls follow
@@ -519,6 +522,16 @@ function setup_tract_controls(app_state: App_State) {
   };
 }
 
+const name_form_styles = css`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2rem;
+
+  input[type="text"] {
+    width: 50%;
+  }
+`;
+
 function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   const modal_divs = focused_modal({
     background_callbacks: {
@@ -548,7 +561,7 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
     `,
   });
 
-  const name_form = make_el(modal_div, "form#name_form", {
+  const name_form = make_el(modal_div, `form#name_form.${name_form_styles}`, {
     event_listener: {
       event: "submit",
       func: function (event) {
@@ -598,9 +611,14 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
   });
 
   function warn_about_bad_id(msg) {
-    make_el(modal_div, "span#bad_id_msg.notice-text", {
+    make_el(modal_div, "span#bad_id_msg", {
       innerHTML: msg,
-      styles: { color: "orangered" },
+      styles: {
+        color: "orangered",
+        fontStyle: "italic",
+        fontWeight: "lighter",
+        fontSize: "0.9rem",
+      },
     });
   }
   function hide_warning_msg() {
@@ -736,70 +754,5 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
         message_model.remove();
       },
     },
-  });
-}
-
-function show_danger_popup(
-  app_state: App_State,
-  in_danger_els: Element_Info[],
-  on_finish: (to_edit: Element_Info[]) => void
-) {
-  const fix_els_modal = focused_modal({
-    header_text: `
-  <h2>The following elements dont fit on the new grid layout.</h2>
-  <p>Below, choose to either remove the element or to shink its bounds to the new grid sizing</p>
-  `,
-  });
-
-  const radio_inputs_html = in_danger_els.reduce(
-    (radio_group, el) =>
-      `
-    ${radio_group}
-    <div class = "radio-set-group">
-      <div class = "radio-set-label"> ${el.id} </div>
-      <div class = "radio-set-options">
-        <input type="radio" id = "delete_${el.id}" name="${el.id}" value="delete" checked>
-        <label for="delete_${el.id}">Delete</label>
-        <input type="radio" id = "shrink_${el.id}" name="${el.id}" value="shrink">
-        <label for="shrink_${el.id}">Shink</label>
-      </div>
-    </div>
-  `,
-    ""
-  );
-
-  const delete_or_edit_form = make_el(
-    fix_els_modal.modal,
-    "form#delete_or_fix_list",
-    {
-      innerHTML: `<div class = "update-action-form"> ${radio_inputs_html} </div>`,
-      event_listener: {
-        event: "submit",
-        func: function () {
-          const form = this;
-          const to_delete = in_danger_els.filter(
-            (d) => form[d.id].value === "delete"
-          );
-
-          app_state.remove_elements(to_delete.map((d) => d.id));
-          const to_edit = in_danger_els.filter(
-            (d) => form[d.id].value === "shrink"
-          );
-
-          on_finish(to_edit);
-
-          fix_els_modal.remove();
-        },
-      },
-    }
-  );
-
-  make_el(delete_or_edit_form, "input#name_submit", {
-    props: { type: "submit" },
-  });
-
-  make_el(fix_els_modal.modal, "p.notice-text", {
-    innerHTML:
-      "Note that elements residing completely in the removed row or column are automatically deleted.",
   });
 }
