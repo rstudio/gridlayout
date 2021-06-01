@@ -1248,6 +1248,93 @@
     }
   });
 
+  // node_modules/core-js/internals/array-method-has-species-support.js
+  var require_array_method_has_species_support = __commonJS({
+    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
+      var fails8 = require_fails();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var V8_VERSION2 = require_engine_v8_version();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(METHOD_NAME) {
+        return V8_VERSION2 >= 51 || !fails8(function() {
+          var array = [];
+          var constructor = array.constructor = {};
+          constructor[SPECIES2] = function() {
+            return { foo: 1 };
+          };
+          return array[METHOD_NAME](Boolean).foo !== 1;
+        });
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/freezing.js
+  var require_freezing = __commonJS({
+    "node_modules/core-js/internals/freezing.js": function(exports, module) {
+      var fails8 = require_fails();
+      module.exports = !fails8(function() {
+        return Object.isExtensible(Object.preventExtensions({}));
+      });
+    }
+  });
+
+  // node_modules/core-js/internals/internal-metadata.js
+  var require_internal_metadata = __commonJS({
+    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
+      var hiddenKeys2 = require_hidden_keys();
+      var isObject6 = require_is_object();
+      var has4 = require_has();
+      var defineProperty5 = require_object_define_property().f;
+      var uid2 = require_uid();
+      var FREEZING2 = require_freezing();
+      var METADATA = uid2("meta");
+      var id = 0;
+      var isExtensible = Object.isExtensible || function() {
+        return true;
+      };
+      var setMetadata = function(it) {
+        defineProperty5(it, METADATA, { value: {
+          objectID: "O" + ++id,
+          weakData: {}
+        } });
+      };
+      var fastKey = function(it, create4) {
+        if (!isObject6(it))
+          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return "F";
+          if (!create4)
+            return "E";
+          setMetadata(it);
+        }
+        return it[METADATA].objectID;
+      };
+      var getWeakData = function(it, create4) {
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return true;
+          if (!create4)
+            return false;
+          setMetadata(it);
+        }
+        return it[METADATA].weakData;
+      };
+      var onFreeze2 = function(it) {
+        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
+          setMetadata(it);
+        return it;
+      };
+      var meta = module.exports = {
+        REQUIRED: false,
+        fastKey: fastKey,
+        getWeakData: getWeakData,
+        onFreeze: onFreeze2
+      };
+      hiddenKeys2[METADATA] = true;
+    }
+  });
+
   // node_modules/core-js/internals/to-string-tag-support.js
   var require_to_string_tag_support = __commonJS({
     "node_modules/core-js/internals/to-string-tag-support.js": function(exports, module) {
@@ -1772,93 +1859,6 @@
         }
         return ITERATION_SUPPORT;
       };
-    }
-  });
-
-  // node_modules/core-js/internals/array-method-has-species-support.js
-  var require_array_method_has_species_support = __commonJS({
-    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
-      var fails8 = require_fails();
-      var wellKnownSymbol5 = require_well_known_symbol();
-      var V8_VERSION2 = require_engine_v8_version();
-      var SPECIES2 = wellKnownSymbol5("species");
-      module.exports = function(METHOD_NAME) {
-        return V8_VERSION2 >= 51 || !fails8(function() {
-          var array = [];
-          var constructor = array.constructor = {};
-          constructor[SPECIES2] = function() {
-            return { foo: 1 };
-          };
-          return array[METHOD_NAME](Boolean).foo !== 1;
-        });
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/freezing.js
-  var require_freezing = __commonJS({
-    "node_modules/core-js/internals/freezing.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
-        return Object.isExtensible(Object.preventExtensions({}));
-      });
-    }
-  });
-
-  // node_modules/core-js/internals/internal-metadata.js
-  var require_internal_metadata = __commonJS({
-    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
-      var hiddenKeys2 = require_hidden_keys();
-      var isObject6 = require_is_object();
-      var has4 = require_has();
-      var defineProperty5 = require_object_define_property().f;
-      var uid2 = require_uid();
-      var FREEZING2 = require_freezing();
-      var METADATA = uid2("meta");
-      var id = 0;
-      var isExtensible = Object.isExtensible || function() {
-        return true;
-      };
-      var setMetadata = function(it) {
-        defineProperty5(it, METADATA, { value: {
-          objectID: "O" + ++id,
-          weakData: {}
-        } });
-      };
-      var fastKey = function(it, create4) {
-        if (!isObject6(it))
-          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return "F";
-          if (!create4)
-            return "E";
-          setMetadata(it);
-        }
-        return it[METADATA].objectID;
-      };
-      var getWeakData = function(it, create4) {
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return true;
-          if (!create4)
-            return false;
-          setMetadata(it);
-        }
-        return it[METADATA].weakData;
-      };
-      var onFreeze2 = function(it) {
-        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
-          setMetadata(it);
-        return it;
-      };
-      var meta = module.exports = {
-        REQUIRED: false,
-        fastKey: fastKey,
-        getWeakData: getWeakData,
-        onFreeze: onFreeze2
-      };
-      hiddenKeys2[METADATA] = true;
     }
   });
 
@@ -3184,20 +3184,80 @@
     defineProperties: defineProperties2
   });
 
-  // node_modules/core-js/modules/es.array.is-array.js
+  // node_modules/core-js/modules/es.array.slice.js
+  "use strict";
   var $7 = require_export();
+  var isObject2 = require_is_object();
   var isArray2 = require_is_array();
-  $7({ target: "Array", stat: true }, {
-    isArray: isArray2
+  var toAbsoluteIndex = require_to_absolute_index();
+  var toLength = require_to_length();
+  var toIndexedObject4 = require_to_indexed_object();
+  var createProperty2 = require_create_property();
+  var wellKnownSymbol2 = require_well_known_symbol();
+  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
+  var SPECIES = wellKnownSymbol2("species");
+  var nativeSlice = [].slice;
+  var max = Math.max;
+  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+    slice: function slice(start, end) {
+      var O = toIndexedObject4(this);
+      var length2 = toLength(O.length);
+      var k = toAbsoluteIndex(start, length2);
+      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
+      var Constructor, result, n;
+      if (isArray2(O)) {
+        Constructor = O.constructor;
+        if (typeof Constructor == "function" && (Constructor === Array || isArray2(Constructor.prototype))) {
+          Constructor = void 0;
+        } else if (isObject2(Constructor)) {
+          Constructor = Constructor[SPECIES];
+          if (Constructor === null)
+            Constructor = void 0;
+        }
+        if (Constructor === Array || Constructor === void 0) {
+          return nativeSlice.call(O, k, fin);
+        }
+      }
+      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
+      for (n = 0; k < fin; k++, n++)
+        if (k in O)
+          createProperty2(result, n, O[k]);
+      result.length = n;
+      return result;
+    }
+  });
+
+  // node_modules/core-js/modules/es.object.freeze.js
+  var $8 = require_export();
+  var FREEZING = require_freezing();
+  var fails4 = require_fails();
+  var isObject3 = require_is_object();
+  var onFreeze = require_internal_metadata().onFreeze;
+  var $freeze = Object.freeze;
+  var FAILS_ON_PRIMITIVES3 = fails4(function() {
+    $freeze(1);
+  });
+  $8({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
+    freeze: function freeze(it) {
+      return $freeze && isObject3(it) ? $freeze(onFreeze(it)) : it;
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.is-array.js
+  var $9 = require_export();
+  var isArray3 = require_is_array();
+  $9({ target: "Array", stat: true }, {
+    isArray: isArray3
   });
 
   // node_modules/core-js/modules/es.symbol.description.js
   "use strict";
-  var $8 = require_export();
+  var $10 = require_export();
   var DESCRIPTORS5 = require_descriptors();
   var global4 = require_global();
   var has2 = require_has();
-  var isObject2 = require_is_object();
+  var isObject4 = require_is_object();
   var defineProperty2 = require_object_define_property().f;
   var copyConstructorProperties = require_copy_constructor_properties();
   var NativeSymbol = global4.Symbol;
@@ -3219,7 +3279,7 @@
     defineProperty2(symbolPrototype, "description", {
       configurable: true,
       get: function description() {
-        var symbol = isObject2(this) ? this.valueOf() : this;
+        var symbol = isObject4(this) ? this.valueOf() : this;
         var string = symbolToString.call(symbol);
         if (has2(EmptyStringDescriptionStore, symbol))
           return "";
@@ -3227,7 +3287,7 @@
         return desc === "" ? void 0 : desc;
       }
     });
-    $8({ global: true, forced: true }, {
+    $10({ global: true, forced: true }, {
       Symbol: SymbolWrapper
     });
   }
@@ -3284,9 +3344,9 @@
   var DOMIterables2 = require_dom_iterables();
   var ArrayIteratorMethods = require_es_array_iterator();
   var createNonEnumerableProperty3 = require_create_non_enumerable_property();
-  var wellKnownSymbol2 = require_well_known_symbol();
-  var ITERATOR = wellKnownSymbol2("iterator");
-  var TO_STRING_TAG = wellKnownSymbol2("toStringTag");
+  var wellKnownSymbol3 = require_well_known_symbol();
+  var ITERATOR = wellKnownSymbol3("iterator");
+  var TO_STRING_TAG = wellKnownSymbol3("toStringTag");
   var ArrayValues = ArrayIteratorMethods.values;
   for (var COLLECTION_NAME in DOMIterables2) {
     Collection = global5[COLLECTION_NAME];
@@ -3317,58 +3377,14 @@
   var METHOD_NAME;
 
   // node_modules/core-js/modules/es.array.from.js
-  var $9 = require_export();
+  var $11 = require_export();
   var from = require_array_from();
   var checkCorrectnessOfIteration = require_check_correctness_of_iteration();
   var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
     Array.from(iterable);
   });
-  $9({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
+  $11({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
     from: from
-  });
-
-  // node_modules/core-js/modules/es.array.slice.js
-  "use strict";
-  var $10 = require_export();
-  var isObject3 = require_is_object();
-  var isArray3 = require_is_array();
-  var toAbsoluteIndex = require_to_absolute_index();
-  var toLength = require_to_length();
-  var toIndexedObject4 = require_to_indexed_object();
-  var createProperty2 = require_create_property();
-  var wellKnownSymbol3 = require_well_known_symbol();
-  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
-  var SPECIES = wellKnownSymbol3("species");
-  var nativeSlice = [].slice;
-  var max = Math.max;
-  $10({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-    slice: function slice(start, end) {
-      var O = toIndexedObject4(this);
-      var length2 = toLength(O.length);
-      var k = toAbsoluteIndex(start, length2);
-      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
-      var Constructor, result, n;
-      if (isArray3(O)) {
-        Constructor = O.constructor;
-        if (typeof Constructor == "function" && (Constructor === Array || isArray3(Constructor.prototype))) {
-          Constructor = void 0;
-        } else if (isObject3(Constructor)) {
-          Constructor = Constructor[SPECIES];
-          if (Constructor === null)
-            Constructor = void 0;
-        }
-        if (Constructor === Array || Constructor === void 0) {
-          return nativeSlice.call(O, k, fin);
-        }
-      }
-      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
-      for (n = 0; k < fin; k++, n++)
-        if (k in O)
-          createProperty2(result, n, O[k]);
-      result.length = n;
-      return result;
-    }
   });
 
   // node_modules/core-js/modules/es.function.name.js
@@ -3390,22 +3406,6 @@
       }
     });
   }
-
-  // node_modules/core-js/modules/es.object.freeze.js
-  var $11 = require_export();
-  var FREEZING = require_freezing();
-  var fails4 = require_fails();
-  var isObject4 = require_is_object();
-  var onFreeze = require_internal_metadata().onFreeze;
-  var $freeze = Object.freeze;
-  var FAILS_ON_PRIMITIVES3 = fails4(function() {
-    $freeze(1);
-  });
-  $11({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
-    freeze: function freeze(it) {
-      return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
-    }
-  });
 
   // App_State.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
@@ -6747,12 +6747,7 @@
 
   // App_State.ts
   var _templateObject4;
-  function _taggedTemplateLiteral4(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
+  var _templateObject23;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -6826,6 +6821,12 @@
       arr2[i] = arr[i];
     }
     return arr2;
+  }
+  function _taggedTemplateLiteral4(strings, raw) {
+    if (!raw) {
+      raw = strings.slice(0);
+    }
+    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
   function ownKeys4(object, enumerableOnly) {
     var keys2 = Object.keys(object);
@@ -7126,12 +7127,13 @@
     }]);
     return App_State2;
   }();
+  var grid_cell_styles = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral4(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
     remove_elements(app_state.current_cells);
     app_state.current_cells = [];
     for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
       for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-        app_state.current_cells.push(app_state.make_el("div.r".concat(row_i, ".c").concat(col_i, ".grid-cell"), {
+        app_state.current_cells.push(app_state.make_el("div.r".concat(row_i, ".c").concat(col_i, ".grid-cell.").concat(grid_cell_styles), {
           data_props: {
             row: row_i,
             col: col_i
@@ -7223,7 +7225,7 @@
       update_positions: update_positions
     };
   }
-  var name_form_styles = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
+  var name_form_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
   function element_naming_ui(app_state, _ref3) {
     var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
     var modal_divs = focused_modal({

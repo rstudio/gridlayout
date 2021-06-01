@@ -399,6 +399,22 @@ export class App_State {
   }
 } // End of class declaration
 
+const grid_cell_styles = css`
+  background: var(--off-white, grey);
+  border: 1px solid var(--gray, grey);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: var(--element_roundness);
+
+  &.transparent {
+    background: none;
+  }
+
+  &.selected {
+    background: currentColor;
+    border: 2px solid var(--light-gray);
+  }
+`;
+
 function fill_grid_cells(app_state: App_State) {
   remove_elements(app_state.current_cells);
   app_state.current_cells = [];
@@ -406,7 +422,7 @@ function fill_grid_cells(app_state: App_State) {
   for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
     for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
       app_state.current_cells.push(
-        app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell`, {
+        app_state.make_el(`div.r${row_i}.c${col_i}.grid-cell.${grid_cell_styles}`, {
           data_props: { row: row_i, col: col_i },
           grid_pos: {
             start_row: row_i,

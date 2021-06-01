@@ -206,21 +206,6 @@ button.minus_btn.disabled {
   font-family: monospace;
 }
 
-.grid-cell {
-  background: var(--off-white);
-  border: 1px solid var(--gray);
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: var(--element_roundness);
-}
-
-.grid-cell.transparent {
-  background: none;
-}
-
-.grid-cell.selected {
-  background: currentColor;
-  border: 2px solid var(--light-gray);
-}
 
 #grided__editor .added-element {
   background: none;
