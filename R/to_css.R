@@ -306,7 +306,7 @@ use_gridlayout_rmd <- function(
     if (options$eval) {
       layout <- md_to_gridlayout(code)
       css_for_layout <- paste(
-        "<style>",
+        "<style style='display: none;'>",
         to_css(layout,
                container = container,
                is_card_styled = is_card_styled,

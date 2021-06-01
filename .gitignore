@@ -35,3 +35,5 @@ inst/grided/www/node_modules/
 inst/grided/www/.parcel-cache/
 
 inst/grided/www/yarn-error.log
+
+inst/demo_apps/rmarkdown_demo/remarker_test.html

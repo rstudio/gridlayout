@@ -1,7 +1,4 @@
 ---
-title: "`gridlayout` in Rmarkdown"
-author: "Nick Strayer"
-date: "3/9/2021"
 output:
   html_document:
     pandoc_args: !expr 'list(paste0("--filter=", system.file("filters/tabs.R", package="remarker")))'
@@ -17,22 +14,67 @@ knitr::opts_chunk$set(echo = TRUE)
 use_gridlayout_rmd(selector_prefix = "#section-")
 ```
 
-# main {.no-header}
 
 ```{gridlayout}
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |main     |
-|120px |footer  |footer   |
+|      |        |           |           |
+|------|--------|-----------|-----------|
+|1rem  |200px   |1fr        |1fr        |
+|100px |top  |top     |top     |
+|1fr   |sidebar |main_panel |main_panel |
+|1fr   |sidebar |main_panel |main_panel |
+```
+
+# Top 
+Here's my header
+
+
+# main_panel {.no-header}
+
+Text one two three *italic*. Text in 'single quotes', "double quotes".
+
+
+## {.tabs tabtype="tabsetPanel"}
+
+
+### First subsection
+
+Some *text* in a *paragraph*. This section has a bulletted list.
+
+-   A bullet item
+-   Another bullet item
+
+```{r}
+1+1
+```
+
+<!-- ##### Inner tabset panel {.tabset2} -->
+
+<!-- ###### Inner tab -->
+
+<!-- asdf -->
+
+<!-- ###### Another inner tab -->
+
+<!-- xyz -->
+
+### `r icon("calendar")` Second subsection
+
+This is the next subsection.
+
+```{r, echo=FALSE}
+sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30)
+plotOutput("distPlot")
+```
+
+```{r, context="server"}
+output$distPlot <- renderPlot({
+  x <- faithful[, 2]  # Old Faithful Geyser data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
 ```
 
 
 # Sidebar {.v_center}
 
 Here is some content for the sidebar
-
-# Footer
-
-Anything you want could go in the footer.
