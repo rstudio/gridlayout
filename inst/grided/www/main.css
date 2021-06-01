@@ -14,6 +14,8 @@ body {
   --outline-color: var(--light-gray);
   --editor-left-pad: 160px;
   --editor-top-pad: 110px;
+  --grid-gap: 1rem;
+
 }
 
 #grided__holder {
@@ -136,7 +138,6 @@ img {
 }
 
 #editor-wrapper {
-  --grid-gap: 1rem;
   border: 2px solid var(--outline-color);
   border-radius: var(--editor-radius);
   width: 100%;
