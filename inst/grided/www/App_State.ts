@@ -1,6 +1,6 @@
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
-import { CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
+import { build_controls_for_dir, CSS_Input, make_grid_tract_control } from "./make-css_unit_input";
 import {
   Block_El,
   Element_Opts,
@@ -458,9 +458,6 @@ function setup_tract_controls(app_state: App_State) {
   ) as HTMLElement;
 
   // Make sure we dont have any controls hanging around
-  editor_container
-    .querySelectorAll(".tract-controls")
-    .forEach((el) => el.remove());
   app_state.container
     .querySelectorAll("button.tract-add")
     .forEach((el) => el.remove());
@@ -473,59 +470,10 @@ function setup_tract_controls(app_state: App_State) {
       controller: CSS_Input;
     }[]
   > = {
-    rows: build_controls_for_dir("rows"),
-    cols: build_controls_for_dir("cols"),
+    rows: build_controls_for_dir(app_state, "rows", editor_container),
+    cols: build_controls_for_dir(app_state, "cols", editor_container),
   };
 
-  function build_controls_for_dir(dir: Tract_Dir) {
-    // This is the class of the first grid cell for each row or column
-    const target_class = dir === "rows" ? "c1" : "r1";
-    const dir_singular = dir === "rows" ? "row" : "col";
-
-    // Builds the controls and tract addition buttons for all cells
-    return app_state.current_cells
-      .filter((el) => el.classList.contains(target_class))
-      .map((el) => {
-        const tract_index: number = +el.dataset[dir_singular];
-
-        const holder_el = make_el(
-          editor_container,
-          `div#controller_for_${dir_singular}_${tract_index}.${dir}-controls.tract-controls`
-        );
-
-        if (tract_index === 1) {
-          // Add an additional button before the first row and column. Otherwise
-          // the user would not be able to add a row or column at the very start
-          // of the grid.
-          tract_add_or_remove_button(app_state, {
-            parent_el: holder_el,
-            add_or_remove: "add",
-            dir,
-            tract_index: 0,
-            additional_styles: {
-              [dir === "rows" ? "top" : "left"]: "var(--incrementer-offset)",
-            },
-          });
-        }
-
-        tract_add_or_remove_button(app_state, {
-          parent_el: holder_el,
-          add_or_remove: "add",
-          dir,
-          tract_index,
-        });
-
-        return {
-          matched_cell: el,
-          el: holder_el,
-          controller: make_grid_tract_control(holder_el, app_state, {
-            dir: dir as Tract_Dir,
-            size: app_state.grid_layout[dir][tract_index - 1],
-            tract_index,
-          }),
-        };
-      });
-  }
 
   update_positions();
 
