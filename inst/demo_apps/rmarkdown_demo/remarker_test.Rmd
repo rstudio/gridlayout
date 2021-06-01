@@ -19,7 +19,7 @@ use_gridlayout_rmd(selector_prefix = "#section-")
 |      |        |           |           |
 |------|--------|-----------|-----------|
 |1rem  |200px   |1fr        |1fr        |
-|100px |top  |top     |top     |
+|100px |top     |top        |top        |
 |1fr   |sidebar |main_panel |main_panel |
 |1fr   |sidebar |main_panel |main_panel |
 ```
