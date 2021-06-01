@@ -447,70 +447,138 @@ const added_element_styles = css`
   border-width: 3px;
   border-style: solid;
   transition: border-width .2s ease-in-out;
+  background: none;
+  position: relative;
 
-  .dragger {
-    --radius: 18px;
-    font-size: 12px;
-    position: absolute;
-    height: var(--radius);
-    width: var(--radius);
-    cursor: grab;
+  &.in-list {
+    height: 35px;
+    margin: 0 0 5px 0;
+    padding: 0.65rem 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    color: var(--off-white);
-    opacity: 0.5;
   }
 
-  .dragger > svg {
+  .hovered {
+    border-width: 7px;
+  }
+
+  &.in-list.hovered {
+    /* Emphasize by making a bit bigger */
+    transform: scale(1.05);
+  }
+
+  /* This is filler text to make auto sizing work. It's invisible to the user
+     so it doesn't distract. Not sure if this is the best way to do it but I think
+     it's worth a go. 
+  */
+  .filler_text {
+    color: rgba(128, 128, 128, 0.5);
+    user-select: none;
+    display: none;
+  }
+
+  &.in-auto-row .filler_text {
+    display: block;
+  }
+`;
+
+const dragger_handle = css`
+  --radius: 18px;
+  font-size: 12px;
+  position: absolute;
+  height: var(--radius);
+  width: var(--radius);
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--off-white);
+  opacity: 0.5;
+
+
+  & > svg {
     transform: scale(0.85);
   }
-  
-  .dragger.top-left {
+
+  &.top-left {
     top: -2px;
     left: -2px;
     cursor: nw-resize;
   }
-  .dragger.bottom-right {
+  &.bottom-right {
     bottom: -2px;
     right: -2px;
     cursor: se-resize;
   }
-  
-  .dragger.center {
+
+  &.center {
     top: calc(50% - var(--radius)/2);
     right: calc(50% - var(--radius)/2);
     border-radius: var(--element_roundness);
     cursor: grab;
   }
-  dragger.center:active {
+  &.center:active {
     cursor: grabbing;
   }
-  
-  .dragger i {
+
+  i {
     display: inline-block;
   }
-  
-  .dragger.top-left i {
+
+  &.top-left i {
     transform: rotate(315deg);
   }
-  .dragger.bottom-right i {
+  &.bottom-right i {
     transform: rotate(135deg);
   }
-  
-  .dragger.top-left,
-  .dragger.bottom-right {
+
+  &.top-left,
+  &.bottom-right {
     border-radius: var(--element_roundness) 0;
   }
+`;
+
+const current_sel_box = css`
+  border-style: dashed;
+  display: none;
+  pointer-events: none;
+`;
+
+const drag_canvas_styles = css`
+  margin-left: calc(-1*var(--grid-gap));
+  margin-top: calc(-1*var(--grid-gap));
+  width: calc(100% + 2*var(--grid-gap));
+  height: calc(100% + 2*var(--grid-gap));
+  grid-row: 1/-1;
+  grid-column: 1/-1;
+  position: relative;
   
+  .drag-feedback-rect {
+    pointer-events: none;
+    position: absolute;
+    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+    animation: border-dance 16s infinite linear;
+  }
+  
+  @keyframes border-dance {
+    0% {
+      background-position: 0 0, 100% 100%, 0 100%, 100% 0;
+    }
+    100% {
+      background-position: 100% 0, 0 100%, 0 0, 100% 100%;
+    }
+  }
 `;
 
 function setup_new_item_drag(app_state: App_State) {
   const current_selection_box = new Grid_Item({
-    el: app_state.make_el(`div#current_selection_box.added-element.${added_element_styles}`),
+    el: app_state.make_el(`div.${added_element_styles}.${current_sel_box}`),
     parent_layout: app_state.grid_layout,
   });
-  const drag_canvas = app_state.make_el("div#drag_canvas");
+  const drag_canvas = app_state.make_el(`div#drag_canvas.${drag_canvas_styles}`);
 
   app_state.setup_drag({
     watching_element: drag_canvas,
@@ -606,9 +674,7 @@ const name_form_styles = css`
   justify-content: space-evenly;
   margin-top: 2rem;
 
-  input[type="text"] {
-    width: 50%;
-  }
+  input[type="text"] { width: 50%; }
 `;
 
 function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
@@ -732,7 +798,7 @@ function draw_elements(
 
   const list_el = make_el(
     document.querySelector("#added_elements"),
-    `div.el_${id}.added-element.${added_element_styles}`,
+    `div.el_${id}.added-element.${added_element_styles}.in-list`,
     {
       innerHTML: id,
       styles: { borderColor: el_color },
@@ -768,7 +834,7 @@ function draw_elements(
       app_state.setup_drag({
         watching_element: make_el(
           grid_el,
-          `div.dragger.visible.${handle_type}`,
+          `div.dragger.visible.${dragger_handle}.${handle_type}`,
           {
             styles: { background: el_color },
             innerHTML:

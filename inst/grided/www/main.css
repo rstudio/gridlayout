@@ -96,12 +96,6 @@ img {
   grid-area: settings;
 }
 
-button.minus_btn.disabled {
-  opacity: 0.2;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 .settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -207,36 +201,6 @@ button.minus_btn.disabled {
 }
 
 
-#grided__editor .added-element {
-  background: none;
-  /* pointer-events: none; So the cells beneath the elements can be selected still */
-  position: relative;
-  /* This is neccesary so that content doesn't force tracks to be larger than 
-     requested */
-  /* overflow: hidden;  */
-}
-
-
-#added_elements .added-element {
-  height: 35px;
-  margin: 0 0 5px 0;
-  padding: 0.65rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#added_elements .added-element.hovered {
-  /* Emphasize by making a bit bigger */
-  transform: scale(1.05);
-}
-
-#grided__editor .added-element.hovered,
-#current_selection_box.added-element {
-  border-width: 7px;
-}
-
-
 
 .added-element.disabled,
 .grid-cell.disabled,
@@ -245,10 +209,6 @@ button.minus_btn.disabled {
   pointer-events: none;
 }
 
-#added_elements,
-#grided__settings > div {
-  position: relative;
-}
 
 #grided__settings > div.disabled::after,
 #added_elements.disabled::after{
@@ -263,55 +223,3 @@ button.minus_btn.disabled {
   background:#ffffffd4;
   cursor: not-allowed;
 }
-
-
-
-#current_selection_box.added-element {
-  border-style: dashed;
-  display: none;
-  pointer-events: none;
-}
-
-/* This is filler text to make auto sizing work. It's invisible to the user
-   so it doesn't distract. Not sure if this is the best way to do it but I think
-   it's worth a go. 
-*/
-.added-element .filler_text {
-  color: rgba(128, 128, 128, 0.5);
-  user-select: none;
-  display: none;
-}
-.added-element.in-auto-row .filler_text {
-  display: block;
-}
-
-
-#drag_canvas {
-  margin-left: calc(-1*var(--grid-gap));
-  margin-top: calc(-1*var(--grid-gap));
-  width: calc(100% + 2*var(--grid-gap));
-  height: calc(100% + 2*var(--grid-gap));
-  grid-row: 1/-1;
-  grid-column: 1/-1;
-  position: relative;
-}
-
-.drag-feedback-rect {
-  pointer-events: none;
-  position: absolute;
-  background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
-  animation: border-dance 16s infinite linear;
-}
-
-@keyframes border-dance {
-  0% {
-    background-position: 0 0, 100% 100%, 0 100%, 100% 0;
-  }
-  100% {
-    background-position: 100% 0, 0 100%, 0 0, 100% 100%;
-  }
-}
-
-

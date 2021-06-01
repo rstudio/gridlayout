@@ -6749,6 +6749,9 @@
   var _templateObject4;
   var _templateObject23;
   var _templateObject32;
+  var _templateObject42;
+  var _templateObject5;
+  var _templateObject6;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -7153,13 +7156,16 @@
     }
     app_state.tract_controls = setup_tract_controls(app_state);
   }
-  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(["  \n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width .2s ease-in-out;\n\n  .dragger {\n    --radius: 18px;\n    font-size: 12px;\n    position: absolute;\n    height: var(--radius);\n    width: var(--radius);\n    cursor: grab;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    color: var(--off-white);\n    opacity: 0.5;\n  }\n\n  .dragger > svg {\n    transform: scale(0.85);\n  }\n  \n  .dragger.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  .dragger.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n  \n  .dragger.center {\n    top: calc(50% - var(--radius)/2);\n    right: calc(50% - var(--radius)/2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  dragger.center:active {\n    cursor: grabbing;\n  }\n  \n  .dragger i {\n    display: inline-block;\n  }\n  \n  .dragger.top-left i {\n    transform: rotate(315deg);\n  }\n  .dragger.bottom-right i {\n    transform: rotate(135deg);\n  }\n  \n  .dragger.top-left,\n  .dragger.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n  \n"])));
+  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(["  \n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width .2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
+  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral4(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius)/2);\n    right: calc(50% - var(--radius)/2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n"])));
+  var current_sel_box = css(_templateObject42 || (_templateObject42 = _taggedTemplateLiteral4(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
+  var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral4(["\n  margin-left: calc(-1*var(--grid-gap));\n  margin-top: calc(-1*var(--grid-gap));\n  width: calc(100% + 2*var(--grid-gap));\n  height: calc(100% + 2*var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n  \n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%), linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n  \n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
-      el: app_state.make_el("div#current_selection_box.added-element.".concat(added_element_styles)),
+      el: app_state.make_el("div.".concat(added_element_styles, ".").concat(current_sel_box)),
       parent_layout: app_state.grid_layout
     });
-    var drag_canvas = app_state.make_el("div#drag_canvas");
+    var drag_canvas = app_state.make_el("div#drag_canvas.".concat(drag_canvas_styles));
     app_state.setup_drag({
       watching_element: drag_canvas,
       grid_item: current_selection_box,
@@ -7227,7 +7233,7 @@
       update_positions: update_positions
     };
   }
-  var name_form_styles = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
+  var name_form_styles = css(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] { width: 50%; }\n'])));
   function element_naming_ui(app_state, _ref3) {
     var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
     var modal_divs = focused_modal({
@@ -7328,7 +7334,7 @@
         position: "relative"
       }
     });
-    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles), {
+    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles, ".in-list"), {
       innerHTML: id,
       styles: {
         borderColor: el_color
@@ -7355,7 +7361,7 @@
     });
     ["top-left", "bottom-right", "center"].forEach(function(handle_type) {
       app_state.setup_drag({
-        watching_element: make_el(grid_el, "div.dragger.visible.".concat(handle_type), {
+        watching_element: make_el(grid_el, "div.dragger.visible.".concat(dragger_handle, ".").concat(handle_type), {
           styles: {
             background: el_color
           },
