@@ -6748,6 +6748,7 @@
   // App_State.ts
   var _templateObject4;
   var _templateObject23;
+  var _templateObject32;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -7152,9 +7153,10 @@
     }
     app_state.tract_controls = setup_tract_controls(app_state);
   }
+  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(["  \n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width .2s ease-in-out;\n\n  .dragger {\n    --radius: 18px;\n    font-size: 12px;\n    position: absolute;\n    height: var(--radius);\n    width: var(--radius);\n    cursor: grab;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    color: var(--off-white);\n    opacity: 0.5;\n  }\n\n  .dragger > svg {\n    transform: scale(0.85);\n  }\n  \n  .dragger.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  .dragger.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n  \n  .dragger.center {\n    top: calc(50% - var(--radius)/2);\n    right: calc(50% - var(--radius)/2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  dragger.center:active {\n    cursor: grabbing;\n  }\n  \n  .dragger i {\n    display: inline-block;\n  }\n  \n  .dragger.top-left i {\n    transform: rotate(315deg);\n  }\n  .dragger.bottom-right i {\n    transform: rotate(135deg);\n  }\n  \n  .dragger.top-left,\n  .dragger.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n  \n"])));
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
-      el: app_state.make_el("div#current_selection_box.added-element"),
+      el: app_state.make_el("div#current_selection_box.added-element.".concat(added_element_styles)),
       parent_layout: app_state.grid_layout
     });
     var drag_canvas = app_state.make_el("div#drag_canvas");
@@ -7225,7 +7227,7 @@
       update_positions: update_positions
     };
   }
-  var name_form_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
+  var name_form_styles = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
   function element_naming_ui(app_state, _ref3) {
     var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
     var modal_divs = focused_modal({
@@ -7319,14 +7321,14 @@
     var id = el_info.id, mirrored_el = el_info.mirrored_el;
     var el_color = app_state.next_color;
     var mirrors_existing = typeof mirrored_el !== "undefined";
-    var grid_el = app_state.make_el("div#".concat(id, ".el_").concat(id, ".added-element"), {
+    var grid_el = app_state.make_el("div#".concat(id, ".el_").concat(id, ".added-element.").concat(added_element_styles), {
       innerHTML: filler_text,
       styles: {
         borderColor: app_state.next_color,
         position: "relative"
       }
     });
-    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element"), {
+    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles), {
       innerHTML: id,
       styles: {
         borderColor: el_color

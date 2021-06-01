@@ -442,9 +442,72 @@ function fill_grid_cells(app_state: App_State) {
   app_state.tract_controls = setup_tract_controls(app_state);
 }
 
+const added_element_styles = css`  
+  border-radius: var(--element_roundness);
+  border-width: 3px;
+  border-style: solid;
+  transition: border-width .2s ease-in-out;
+
+  .dragger {
+    --radius: 18px;
+    font-size: 12px;
+    position: absolute;
+    height: var(--radius);
+    width: var(--radius);
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--off-white);
+    opacity: 0.5;
+  }
+
+  .dragger > svg {
+    transform: scale(0.85);
+  }
+  
+  .dragger.top-left {
+    top: -2px;
+    left: -2px;
+    cursor: nw-resize;
+  }
+  .dragger.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    cursor: se-resize;
+  }
+  
+  .dragger.center {
+    top: calc(50% - var(--radius)/2);
+    right: calc(50% - var(--radius)/2);
+    border-radius: var(--element_roundness);
+    cursor: grab;
+  }
+  dragger.center:active {
+    cursor: grabbing;
+  }
+  
+  .dragger i {
+    display: inline-block;
+  }
+  
+  .dragger.top-left i {
+    transform: rotate(315deg);
+  }
+  .dragger.bottom-right i {
+    transform: rotate(135deg);
+  }
+  
+  .dragger.top-left,
+  .dragger.bottom-right {
+    border-radius: var(--element_roundness) 0;
+  }
+  
+`;
+
 function setup_new_item_drag(app_state: App_State) {
   const current_selection_box = new Grid_Item({
-    el: app_state.make_el("div#current_selection_box.added-element"),
+    el: app_state.make_el(`div#current_selection_box.added-element.${added_element_styles}`),
     parent_layout: app_state.grid_layout,
   });
   const drag_canvas = app_state.make_el("div#drag_canvas");
@@ -659,7 +722,7 @@ function draw_elements(
   const el_color = app_state.next_color;
   const mirrors_existing = typeof mirrored_el !== "undefined";
 
-  const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element`, {
+  const grid_el = app_state.make_el(`div#${id}.el_${id}.added-element.${added_element_styles}`, {
     innerHTML: filler_text,
     styles: {
       borderColor: app_state.next_color,
@@ -669,7 +732,7 @@ function draw_elements(
 
   const list_el = make_el(
     document.querySelector("#added_elements"),
-    `div.el_${id}.added-element`,
+    `div.el_${id}.added-element.${added_element_styles}`,
     {
       innerHTML: id,
       styles: { borderColor: el_color },

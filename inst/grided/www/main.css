@@ -216,13 +216,6 @@ button.minus_btn.disabled {
   /* overflow: hidden;  */
 }
 
-/* Apply to both the list of elements and the elements in the grid itself */
-.added-element {
-  border-radius: var(--element_roundness);
-  border-width: 3px;
-  border-style: solid;
-  transition: border-width .2s ease-in-out;
-}
 
 #added_elements .added-element {
   height: 35px;
@@ -243,60 +236,7 @@ button.minus_btn.disabled {
   border-width: 7px;
 }
 
-.added-element .dragger {
-  --radius: 18px;
-  font-size: 12px;
-  position: absolute;
-  height: var(--radius);
-  width: var(--radius);
-  cursor: grab;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--off-white);
-  opacity: 0.5;
-}
 
-.added-element .dragger > svg {
-  transform: scale(0.85);
-}
-
-.added-element .dragger.top-left {
-  top: -2px;
-  left: -2px;
-  cursor: nw-resize;
-}
-.added-element .dragger.bottom-right {
-  bottom: -2px;
-  right: -2px;
-  cursor: se-resize;
-}
-
-.added-element .dragger.center {
-  top: calc(50% - var(--radius)/2);
-  right: calc(50% - var(--radius)/2);
-  border-radius: var(--element_roundness);
-  cursor: grab;
-}
-.added-element .dragger.center:active {
-  cursor: grabbing;
-}
-
-.added-element .dragger i {
-  display: inline-block;
-}
-
-.added-element .dragger.top-left i {
-  transform: rotate(315deg);
-}
-.added-element .dragger.bottom-right i {
-  transform: rotate(135deg);
-}
-
-.added-element .dragger.top-left,
-.added-element .dragger.bottom-right {
-  border-radius: var(--element_roundness) 0;
-}
 
 .added-element.disabled,
 .grid-cell.disabled,
