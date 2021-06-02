@@ -133,6 +133,7 @@ grid_container <- function(
 
   # Build container div, append the styles to head and then return
   content <- shiny::tagList(
+    gridlayout_css_dep(),
     shiny::div(
       id = id,
       class = "grid-container",

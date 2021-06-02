@@ -335,9 +335,22 @@ use_gridlayout_rmd <- function(
 
 # Dump css file to string for inlining while still keeping in a .css file for
 # easier editing
-get_accessory_css <- function(file){
+get_accessory_css <- function(file) {
   paste(
     readLines(system.file(paste0("resources/", file), package = "gridlayout")),
     collapse = "\n"
+  )
+}
+
+
+# handle dependency
+gridlayout_css_dep <- function() {
+  htmltools::htmlDependency(
+    name = "gridlayout_css",
+    package = "gridlayout",
+    src = "resources",
+    stylesheet = "gridlayout.css",
+    script = "gridlayout.js",
+    version = "1.0"
   )
 }
