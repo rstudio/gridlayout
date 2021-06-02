@@ -9,12 +9,11 @@ my_layout <- "
 |1fr  |nestedA |nestedB |"
 
 content_layout <- "
-|    |         |            |
-|----|---------|------------|
-|    |1fr      |4fr         |
-|1fr |icon     |bin_chooser |
-|4fr |settings |plot        |"
+|     |auto     |1fr         |
+|auto |icon     |bin_chooser |
+|1fr  |settings |plot        |"
 
+R_logo <- text_panel(icon = "r-project", h_align = "center")
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
@@ -24,8 +23,12 @@ app <- shinyApp(
     nestedA = nested_grid_panel(
       layout = content_layout,
       elements = list(
-        icon = text_panel(icon = "r-project", h_align = "center"),
-        bin_chooser = sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
+        icon = R_logo,
+        bin_chooser = grid_panel(
+          sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
+          h_align = "center",
+          v_align = "center"
+        ),
         settings = textOutput('current_bin_num'),
         plot = plotOutput("distPlot")
       )
@@ -34,10 +37,18 @@ app <- shinyApp(
       title = "Nested within a titled panel",
       layout = content_layout,
       elements = list(
-        icon = text_panel(icon = "r-project", h_align = "center"),
-        bin_chooser = text_panel("Bin Slider"),
-        settings = 'Bin numbers',
-        plot = text_panel("Another Plot")
+        icon = R_logo,
+        bin_chooser = text_panel("Bin Chooser L1", h_align = "center"),
+        settings = text_panel("Settings L1", h_align = "center"),
+        plot = nested_grid_panel(
+          layout = content_layout,
+          elements = list(
+            icon = R_logo,
+            bin_chooser = text_panel("Bin Chooser L2", h_align = "center"),
+            settings = text_panel("Settings L2", h_align = "center"),
+            plot =text_panel("Plot", h_align = "center")
+          )
+        )
       )
     )
   ),
@@ -48,7 +59,7 @@ app <- shinyApp(
       hist(x, breaks = bins, col = 'darkgray', border = 'white')
     })
     output$current_bin_num <- renderText({
-      paste("There are currently", input$bins, "bins in our histogram.")
+      paste("Histogram has", input$bins, "bins.")
     })
   }
 )
