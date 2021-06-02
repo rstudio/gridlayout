@@ -149,31 +149,15 @@ grid_panel <- function(
   )
 
   has_title <- notNull(title)
-  no_title <- is.null(title)
   use_collapser <- collapsible && has_title
 
-  # Go through contents and set plot sizes if necessary
-  contents <- lapply(
-    contents,
-    function(el){
-      if (! inherits(el, "shiny.tag") || inherits(el, "shiny.tag.list")) return(el)
-
-      if (el_has_class(el, "shiny-plot-output")) {
-        el <- set_plot_sizes(el)
-      }
-      # else {
-      #   # Will only ever happen if the parent isn't a plot output itself because
-      #   # plot outputs can't have children
-      #   post_tq <- htmltools::tagQuery(el)$
-      #     find(".shiny-plot-output")$
-      #     each(set_plot_sizes)$
-      #     allTags()
-      #   el <- post_tq
-      # }
-      el
-    }
-  )
-
+  # Go through and make sure plots that don't have custom sizes are set to fill their panels
+  panel_content <- htmltools::tagQuery(
+    shiny::div(contents, style = panel_styles, class = "panel-content")
+  )$
+    find(".shiny-plot-output")$
+    each(update_default_sized_plots)$
+    allTags()
 
   shiny::div(
     id = panel_id,
@@ -186,7 +170,7 @@ grid_panel <- function(
         style = if (use_collapser) "justify-content: space-between;"
       )
     },
-    shiny::div(contents, style = panel_styles, class = "panel-content")
+    panel_content
   )
 }
 
@@ -253,7 +237,7 @@ el_add_class <- function(el, class_name) {
 }
 
 
-set_plot_sizes <- function(el, i = "ignored") {
+update_default_sized_plots <- function(el, i = "ignored") {
 
   using_default_settings <- identical(
     htmltools::tagGetAttribute(el, "style"),
