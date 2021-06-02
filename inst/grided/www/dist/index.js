@@ -193,9 +193,9 @@
   // node_modules/core-js/internals/document-create-element.js
   var require_document_create_element = __commonJS({
     "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var isObject6 = require_is_object();
-      var document2 = global7.document;
+      var document2 = global8.document;
       var EXISTS = isObject6(document2) && isObject6(document2.createElement);
       module.exports = function(it) {
         return EXISTS ? document2.createElement(it) : {};
@@ -301,13 +301,13 @@
   // node_modules/core-js/internals/set-global.js
   var require_set_global = __commonJS({
     "node_modules/core-js/internals/set-global.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       module.exports = function(key, value) {
         try {
-          createNonEnumerableProperty4(global7, key, value);
+          createNonEnumerableProperty4(global8, key, value);
         } catch (error) {
-          global7[key] = value;
+          global8[key] = value;
         }
         return value;
       };
@@ -317,10 +317,10 @@
   // node_modules/core-js/internals/shared-store.js
   var require_shared_store = __commonJS({
     "node_modules/core-js/internals/shared-store.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var setGlobal = require_set_global();
       var SHARED = "__core-js_shared__";
-      var store = global7[SHARED] || setGlobal(SHARED, {});
+      var store = global8[SHARED] || setGlobal(SHARED, {});
       module.exports = store;
     }
   });
@@ -342,9 +342,9 @@
   // node_modules/core-js/internals/native-weak-map.js
   var require_native_weak_map = __commonJS({
     "node_modules/core-js/internals/native-weak-map.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var inspectSource = require_inspect_source();
-      var WeakMap2 = global7.WeakMap;
+      var WeakMap2 = global8.WeakMap;
       module.exports = typeof WeakMap2 === "function" && /native code/.test(inspectSource(WeakMap2));
     }
   });
@@ -405,7 +405,7 @@
   var require_internal_state = __commonJS({
     "node_modules/core-js/internals/internal-state.js": function(exports, module) {
       var NATIVE_WEAK_MAP = require_native_weak_map();
-      var global7 = require_global();
+      var global8 = require_global();
       var isObject6 = require_is_object();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var objectHas = require_has();
@@ -413,7 +413,7 @@
       var sharedKey2 = require_shared_key();
       var hiddenKeys2 = require_hidden_keys();
       var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
-      var WeakMap2 = global7.WeakMap;
+      var WeakMap2 = global8.WeakMap;
       var set;
       var get;
       var has4;
@@ -482,7 +482,7 @@
   // node_modules/core-js/internals/redefine.js
   var require_redefine = __commonJS({
     "node_modules/core-js/internals/redefine.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var has4 = require_has();
       var setGlobal = require_set_global();
@@ -505,7 +505,7 @@
             state.source = TEMPLATE.join(typeof key == "string" ? key : "");
           }
         }
-        if (O === global7) {
+        if (O === global8) {
           if (simple)
             O[key] = value;
           else
@@ -529,8 +529,8 @@
   // node_modules/core-js/internals/path.js
   var require_path = __commonJS({
     "node_modules/core-js/internals/path.js": function(exports, module) {
-      var global7 = require_global();
-      module.exports = global7;
+      var global8 = require_global();
+      module.exports = global8;
     }
   });
 
@@ -538,12 +538,12 @@
   var require_get_built_in = __commonJS({
     "node_modules/core-js/internals/get-built-in.js": function(exports, module) {
       var path = require_path();
-      var global7 = require_global();
+      var global8 = require_global();
       var aFunction = function(variable) {
         return typeof variable == "function" ? variable : void 0;
       };
       module.exports = function(namespace, method) {
-        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global7[namespace]) : path[namespace] && path[namespace][method] || global7[namespace] && global7[namespace][method];
+        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
       };
     }
   });
@@ -730,7 +730,7 @@
   // node_modules/core-js/internals/export.js
   var require_export = __commonJS({
     "node_modules/core-js/internals/export.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var getOwnPropertyDescriptor4 = require_object_get_own_property_descriptor().f;
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var redefine6 = require_redefine();
@@ -743,11 +743,11 @@
         var STATIC = options.stat;
         var FORCED3, target, key, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
-          target = global7;
+          target = global8;
         } else if (STATIC) {
-          target = global7[TARGET] || setGlobal(TARGET, {});
+          target = global8[TARGET] || setGlobal(TARGET, {});
         } else {
-          target = (global7[TARGET] || {}).prototype;
+          target = (global8[TARGET] || {}).prototype;
         }
         if (target)
           for (key in source) {
@@ -838,9 +838,9 @@
   // node_modules/core-js/internals/engine-v8-version.js
   var require_engine_v8_version = __commonJS({
     "node_modules/core-js/internals/engine-v8-version.js": function(exports, module) {
-      var global7 = require_global();
-      var userAgent = require_engine_user_agent();
-      var process2 = global7.process;
+      var global8 = require_global();
+      var userAgent2 = require_engine_user_agent();
+      var process2 = global8.process;
       var versions = process2 && process2.versions;
       var v8 = versions && versions.v8;
       var match2;
@@ -848,10 +848,10 @@
       if (v8) {
         match2 = v8.split(".");
         version = match2[0] < 4 ? 1 : match2[0] + match2[1];
-      } else if (userAgent) {
-        match2 = userAgent.match(/Edge\/(\d+)/);
+      } else if (userAgent2) {
+        match2 = userAgent2.match(/Edge\/(\d+)/);
         if (!match2 || match2[1] >= 74) {
-          match2 = userAgent.match(/Chrome\/(\d+)/);
+          match2 = userAgent2.match(/Chrome\/(\d+)/);
           if (match2)
             version = match2[1];
         }
@@ -882,14 +882,14 @@
   // node_modules/core-js/internals/well-known-symbol.js
   var require_well_known_symbol = __commonJS({
     "node_modules/core-js/internals/well-known-symbol.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var shared2 = require_shared();
       var has4 = require_has();
       var uid2 = require_uid();
       var NATIVE_SYMBOL2 = require_native_symbol();
       var USE_SYMBOL_AS_UID2 = require_use_symbol_as_uid();
       var WellKnownSymbolsStore2 = shared2("wks");
-      var Symbol2 = global7.Symbol;
+      var Symbol2 = global8.Symbol;
       var createWellKnownSymbol = USE_SYMBOL_AS_UID2 ? Symbol2 : Symbol2 && Symbol2.withoutSetter || uid2;
       module.exports = function(name) {
         if (!has4(WellKnownSymbolsStore2, name) || !(NATIVE_SYMBOL2 || typeof WellKnownSymbolsStore2[name] == "string")) {
@@ -1553,7 +1553,7 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $29 = require_export();
+      var $30 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
       var getPrototypeOf = require_object_get_prototype_of();
       var setPrototypeOf = require_object_set_prototype_of();
@@ -1643,7 +1643,7 @@
               }
             }
           else
-            $29({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $30({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $29 = require_export();
+      var $30 = require_export();
       var exec = require_regexp_exec();
-      $29({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $30({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2305,8 +2305,8 @@
   var require_engine_is_node = __commonJS({
     "node_modules/core-js/internals/engine-is-node.js": function(exports, module) {
       var classof2 = require_classof_raw();
-      var global7 = require_global();
-      module.exports = classof2(global7.process) == "process";
+      var global8 = require_global();
+      module.exports = classof2(global8.process) == "process";
     }
   });
 
@@ -2416,8 +2416,8 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $29 = require_export();
-      var global7 = require_global();
+      var $30 = require_export();
+      var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
       var InternalMetadataModule = require_internal_metadata();
@@ -2432,7 +2432,7 @@
         var IS_MAP = CONSTRUCTOR_NAME.indexOf("Map") !== -1;
         var IS_WEAK = CONSTRUCTOR_NAME.indexOf("Weak") !== -1;
         var ADDER = IS_MAP ? "set" : "add";
-        var NativeConstructor = global7[CONSTRUCTOR_NAME];
+        var NativeConstructor = global8[CONSTRUCTOR_NAME];
         var NativePrototype = NativeConstructor && NativeConstructor.prototype;
         var Constructor = NativeConstructor;
         var exported = {};
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $29({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $30({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -2629,7 +2629,7 @@
   var require_es_weak_map = __commonJS({
     "node_modules/core-js/modules/es.weak-map.js": function(exports, module) {
       "use strict";
-      var global7 = require_global();
+      var global8 = require_global();
       var redefineAll = require_redefine_all();
       var InternalMetadataModule = require_internal_metadata();
       var collection = require_collection();
@@ -2637,7 +2637,7 @@
       var isObject6 = require_is_object();
       var enforceIternalState = require_internal_state().enforce;
       var NATIVE_WEAK_MAP = require_native_weak_map();
-      var IS_IE11 = !global7.ActiveXObject && "ActiveXObject" in global7;
+      var IS_IE11 = !global8.ActiveXObject && "ActiveXObject" in global8;
       var isExtensible = Object.isExtensible;
       var InternalWeakMap;
       var wrapper = function(init) {
@@ -2755,7 +2755,7 @@
       "use strict";
       var aFunction = require_a_function();
       var isObject6 = require_is_object();
-      var slice3 = [].slice;
+      var slice4 = [].slice;
       var factories = {};
       var construct = function(C, argsLength, args) {
         if (!(argsLength in factories)) {
@@ -2767,9 +2767,9 @@
       };
       module.exports = Function.bind || function bind2(that) {
         var fn = aFunction(this);
-        var partArgs = slice3.call(arguments, 1);
+        var partArgs = slice4.call(arguments, 1);
         var boundFunction = function bound() {
-          var args = partArgs.concat(slice3.call(arguments));
+          var args = partArgs.concat(slice4.call(arguments));
           return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
         };
         if (isObject6(fn.prototype))
@@ -3555,8 +3555,8 @@
         var functionalReplace = typeof replaceValue === "function";
         if (!functionalReplace)
           replaceValue = String(replaceValue);
-        var global7 = rx.global;
-        if (global7) {
+        var global8 = rx.global;
+        if (global8) {
           var fullUnicode = rx.unicode;
           rx.lastIndex = 0;
         }
@@ -3566,7 +3566,7 @@
           if (result === null)
             break;
           results.push(result);
-          if (!global7)
+          if (!global8)
             break;
           var matchStr = String(result[0]);
           if (matchStr === "")
@@ -3762,9 +3762,29 @@
     }
   });
 
+  // node_modules/core-js/modules/web.timers.js
+  var $17 = require_export();
+  var global6 = require_global();
+  var userAgent = require_engine_user_agent();
+  var slice2 = [].slice;
+  var MSIE = /MSIE .\./.test(userAgent);
+  var wrap2 = function(scheduler) {
+    return function(handler, timeout) {
+      var boundArgs = arguments.length > 2;
+      var args = boundArgs ? slice2.call(arguments, 2) : void 0;
+      return scheduler(boundArgs ? function() {
+        (typeof handler == "function" ? handler : Function(handler)).apply(this, args);
+      } : handler, timeout);
+    };
+  };
+  $17({ global: true, bind: true, forced: MSIE }, {
+    setTimeout: wrap2(global6.setTimeout),
+    setInterval: wrap2(global6.setInterval)
+  });
+
   // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $17 = require_export();
+  var $18 = require_export();
   var $find = require_array_iteration().find;
   var addToUnscopables2 = require_add_to_unscopables();
   var FIND = "find";
@@ -3773,7 +3793,7 @@
     Array(1)[FIND](function() {
       SKIPS_HOLES2 = false;
     });
-  $17({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     find: function find(callbackfn) {
       return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3822,24 +3842,24 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var $reduce = require_array_reduce().left;
   var arrayMethodIsStrict = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
   var STRICT_METHOD = arrayMethodIsStrict("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $18({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+  $19({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.define-property.js
-  var $19 = require_export();
+  var $20 = require_export();
   var DESCRIPTORS7 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $19({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
+  $20({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
@@ -3850,13 +3870,13 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $20 = require_export();
+  var $21 = require_export();
   var $indexOf = require_array_includes().indexOf;
   var arrayMethodIsStrict2 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
   var STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-  $20({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+  $21({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3864,11 +3884,11 @@
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
-  var $21 = require_export();
+  var $22 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport5("map");
-  $21({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $22({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3972,10 +3992,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $22 = require_export();
+  var $23 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $22({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $23({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -3986,14 +4006,14 @@
 
   // node_modules/core-js/modules/es.array.join.js
   "use strict";
-  var $23 = require_export();
+  var $24 = require_export();
   var IndexedObject = require_indexed_object();
   var toIndexedObject5 = require_to_indexed_object();
   var arrayMethodIsStrict3 = require_array_method_is_strict();
   var nativeJoin = [].join;
   var ES3_STRINGS = IndexedObject != Object;
   var STRICT_METHOD3 = arrayMethodIsStrict3("join", ",");
-  $23({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
+  $24({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
     join: function join(separator) {
       return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
     }
@@ -4081,7 +4101,7 @@
   function caret() {
     return position;
   }
-  function slice2(begin, end) {
+  function slice3(begin, end) {
     return substr(characters, begin, end);
   }
   function token(type) {
@@ -4123,7 +4143,7 @@
     return characters = "", value;
   }
   function delimit(type) {
-    return trim2(slice2(position - 1, delimiter(type === 91 ? type + 2 : type === 40 ? type + 1 : type)));
+    return trim2(slice3(position - 1, delimiter(type === 91 ? type + 2 : type === 40 ? type + 1 : type)));
   }
   function whitespace(type) {
     while (character = peek()) {
@@ -4139,7 +4159,7 @@
       if (character < 48 || character > 102 || character > 57 && character < 65 || character > 70 && character < 97)
         break;
     }
-    return slice2(index, caret() + (count < 6 && peek() == 32 && next2() == 32));
+    return slice3(index, caret() + (count < 6 && peek() == 32 && next2() == 32));
   }
   function delimiter(type) {
     while (next2()) {
@@ -4167,13 +4187,13 @@
       else if (type + character === 42 + 42 && peek() === 47)
         break;
     }
-    return "/*" + slice2(index, position - 1) + "*" + from2(type === 47 ? type : next2());
+    return "/*" + slice3(index, position - 1) + "*" + from2(type === 47 ? type : next2());
   }
   function identifier(index) {
     while (!token(peek())) {
       next2();
     }
-    return slice2(index, position);
+    return slice3(index, position);
   }
 
   // node_modules/stylis/src/Parser.js
@@ -4481,10 +4501,10 @@
   var import_es_weak_map = __toModule(require_es_weak_map());
 
   // node_modules/core-js/modules/es.object.create.js
-  var $24 = require_export();
+  var $25 = require_export();
   var DESCRIPTORS8 = require_descriptors();
   var create2 = require_object_create();
-  $24({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
+  $25({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
     create: create2
   });
 
@@ -5123,9 +5143,9 @@
   };
 
   // node_modules/core-js/modules/es.function.bind.js
-  var $25 = require_export();
+  var $26 = require_export();
   var bind = require_function_bind();
-  $25({ target: "Function", proto: true }, {
+  $26({ target: "Function", proto: true }, {
     bind: bind
   });
 
@@ -5274,10 +5294,10 @@
 
   // node_modules/core-js/modules/es.array.includes.js
   "use strict";
-  var $26 = require_export();
+  var $27 = require_export();
   var $includes = require_array_includes().includes;
   var addToUnscopables3 = require_add_to_unscopables();
-  $26({ target: "Array", proto: true }, {
+  $27({ target: "Array", proto: true }, {
     includes: function includes(el) {
       return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5286,11 +5306,11 @@
 
   // node_modules/core-js/modules/es.string.includes.js
   "use strict";
-  var $27 = require_export();
+  var $28 = require_export();
   var notARegExp = require_not_a_regexp();
   var requireObjectCoercible4 = require_require_object_coercible();
   var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $27({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
     includes: function includes2(searchString) {
       return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5871,7 +5891,7 @@
   // node_modules/core-js/modules/es.number.constructor.js
   "use strict";
   var DESCRIPTORS9 = require_descriptors();
-  var global6 = require_global();
+  var global7 = require_global();
   var isForced = require_is_forced();
   var redefine5 = require_redefine();
   var has3 = require_has();
@@ -5885,7 +5905,7 @@
   var defineProperty4 = require_object_define_property().f;
   var trim3 = require_string_trim().trim;
   var NUMBER = "Number";
-  var NativeNumber = global6[NUMBER];
+  var NativeNumber = global7[NUMBER];
   var NumberPrototype = NativeNumber.prototype;
   var BROKEN_CLASSOF = classof(create3(NumberPrototype)) == NUMBER;
   var toNumber = function(argument) {
@@ -5940,7 +5960,7 @@
     }
     NumberWrapper.prototype = NumberPrototype;
     NumberPrototype.constructor = NumberWrapper;
-    redefine5(global6, NUMBER, NumberWrapper);
+    redefine5(global7, NUMBER, NumberWrapper);
   }
   var NumberWrapper;
   var keys2;
@@ -6539,11 +6559,11 @@
 
   // node_modules/core-js/modules/es.array.every.js
   "use strict";
-  var $28 = require_export();
+  var $29 = require_export();
   var $every = require_array_iteration().every;
   var arrayMethodIsStrict4 = require_array_method_is_strict();
   var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $28({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+  $29({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
     every: function every(callbackfn) {
       return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -7247,8 +7267,12 @@
     editor_container.querySelector("#editor-app-window").onscroll = function() {
       return update_positions(["rows"]);
     };
+    var resize_timeout;
     window.addEventListener("resize", function() {
-      return update_positions();
+      clearTimeout(resize_timeout);
+      resize_timeout = window.setTimeout(function() {
+        return update_positions();
+      }, 300);
     });
     function update_positions() {
       var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
