@@ -75,6 +75,7 @@ export class App_State {
     update_positions: () => void;
   };
   constructor() {
+    
     this.container = find_first_grid_node() ?? Block_El("div#grid_page");
 
     this.grid_styles = this.container.style;
@@ -574,7 +575,7 @@ const drag_canvas_styles = css`
 
 function setup_new_item_drag(app_state: App_State) {
   const current_selection_box = new Grid_Item({
-    el: app_state.make_el(`div.${added_element_styles}.${current_sel_box}`),
+    el: app_state.make_el(`div.drag_selection_box.${added_element_styles}.${current_sel_box}`),
     parent_layout: app_state.grid_layout,
   });
   const drag_canvas = app_state.make_el(
@@ -608,11 +609,6 @@ function setup_tract_controls(app_state: App_State) {
   const editor_container = document.querySelector(
     "#grided__editor"
   ) as HTMLElement;
-
-  // Make sure we dont have any controls hanging around
-  app_state.container
-    .querySelectorAll("button.tract-add")
-    .forEach((el) => el.remove());
 
   const controls: Record<
     Tract_Dir,
