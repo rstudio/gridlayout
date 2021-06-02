@@ -131,6 +131,8 @@ export function wrap_in_grided(app_state: App_State) {
     [
       ...app_state.container.querySelectorAll(".added-element"),
       ...app_state.container.querySelectorAll(".grid-cell"),
+      ...grided_ui.querySelectorAll(".tract-controls"),
+      grided_ui.querySelector("#grided__settings .panel-body"),
       grided_ui.querySelector("#added_elements"),
       grided_ui.querySelector("#drag_canvas"),
     ].forEach(function (el: Element) {
