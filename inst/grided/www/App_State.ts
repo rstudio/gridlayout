@@ -6,17 +6,18 @@ import {
   Block_El,
   Element_Opts,
   make_el,
-  remove_elements
+  remove_elements,
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
-import { find_selector_by_property } from "./utils-cssom";
+import { get_styles_for_selector_with_targets } from "./utils-cssom";
 import {
   bounding_rect_to_css_pos,
+  find_first_grid_node,
   get_drag_extent_on_grid,
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
-  make_start_end_for_dir
+  make_start_end_for_dir,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -27,11 +28,11 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos
+  XY_Pos,
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny
+  send_grid_sizing_to_shiny,
 } from "./utils-shiny";
 import { wrap_in_grided } from "./wrap_in_grided";
 
@@ -74,17 +75,8 @@ export class App_State {
     update_positions: () => void;
   };
   constructor() {
-    const grid_layout_rule = find_selector_by_property("display", "grid");
+    this.container = find_first_grid_node() ?? Block_El("div#grid_page");
 
-    this.container_selector = grid_layout_rule.rule_exists
-      ? grid_layout_rule.selector
-      : "#grid_page";
-
-    this.container = grid_layout_rule.rule_exists
-      ? document.querySelector(this.container_selector)
-      : Block_El("div#grid_page");
-
-    // this.controls = { rows: [], cols: [] };
     this.grid_styles = this.container.style;
 
     this.grid_layout = new Grid_Layout(this.container);
@@ -94,7 +86,13 @@ export class App_State {
     this.mode = grid_is_filled ? "Existing" : "New";
 
     if (grid_is_filled) {
-      const current_grid_props = grid_layout_rule.first_rule_w_prop.style;
+      // We need to go into the style sheets to get the starting grid properties
+      // because they arent reflected in the `.style` property and sizes are
+      // directly computed if we use getComputedStyle()
+      const current_grid_props = get_styles_for_selector_with_targets(
+        `#${this.container.id}`,
+        ["gridTemplateColumns", "gridTemplateRows"]
+      );
 
       // Make sure grid matches the one the app is working with
       this.update_grid({

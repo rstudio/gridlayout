@@ -13,6 +13,24 @@ import {
   Selection_Rect,
 } from "./utils-misc";
 
+
+export function find_first_grid_node(): HTMLElement {
+  let current_node = document.body;
+
+  let node_queue: Element[] = [...current_node.children];
+  let overflow_counter = 0;
+
+  while (node_queue.length != 0 && overflow_counter++ != 100) {
+    current_node = node_queue.shift() as HTMLElement;
+    if (getComputedStyle(current_node).display === "grid") {
+      break;
+    }
+    node_queue = [...node_queue, ...current_node.children];
+  }
+
+  return current_node;
+}
+
 function get_styles(container: HTMLElement | CSSStyleDeclaration) {
   if (container instanceof HTMLElement) {
     return container.style;

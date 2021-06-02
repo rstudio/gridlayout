@@ -1018,9 +1018,9 @@
     "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
       "use strict";
       var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict4 = require_array_method_is_strict();
-      var STRICT_METHOD4 = arrayMethodIsStrict4("forEach");
-      module.exports = !STRICT_METHOD4 ? function forEach3(callbackfn) {
+      var arrayMethodIsStrict5 = require_array_method_is_strict();
+      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
+      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
         return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
       } : [].forEach;
     }
@@ -1553,7 +1553,7 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $28 = require_export();
+      var $29 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
       var getPrototypeOf = require_object_get_prototype_of();
       var setPrototypeOf = require_object_set_prototype_of();
@@ -1643,7 +1643,7 @@
               }
             }
           else
-            $28({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $29({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $28 = require_export();
+      var $29 = require_export();
       var exec = require_regexp_exec();
-      $28({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $29({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2416,7 +2416,7 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $28 = require_export();
+      var $29 = require_export();
       var global7 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $28({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $29({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -5302,20 +5302,6 @@
 
   // utils-misc.ts
   var import_es_array_iterator5 = __toModule(require_es_array_iterator());
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray(arr);
-  }
   function ownKeys2(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -5488,10 +5474,6 @@
     }
     return new_rect;
   }
-  function flatten(arr) {
-    var _ref5;
-    return (_ref5 = []).concat.apply(_ref5, _toConsumableArray(arr));
-  }
   function set_class(elements, class_name) {
     elements.forEach(function(el) {
       el.classList.add(class_name);
@@ -5511,6 +5493,54 @@
   }
 
   // utils-grid.ts
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray2(arr) || _nonIterableSpread();
+  }
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray2(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray2(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray2(o, minLen);
+  }
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray2(arr);
+  }
+  function _arrayLikeToArray2(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function find_first_grid_node() {
+    var current_node = document.body;
+    var node_queue = _toConsumableArray(current_node.children);
+    var overflow_counter = 0;
+    while (node_queue.length != 0 && overflow_counter++ != 100) {
+      current_node = node_queue.shift();
+      if (getComputedStyle(current_node).display === "grid") {
+        break;
+      }
+      node_queue = [].concat(_toConsumableArray(node_queue), _toConsumableArray(current_node.children));
+    }
+    return current_node;
+  }
   function set_element_in_grid(el, grid_bounds) {
     if (grid_bounds.start_row) {
       el.style.gridRowStart = grid_bounds.start_row.toString();
@@ -5935,23 +5965,23 @@
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
   function _toConsumableArray2(arr) {
-    return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray2(arr) || _nonIterableSpread2();
+    return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray3(arr) || _nonIterableSpread2();
   }
   function _nonIterableSpread2() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray2(o, minLen) {
+  function _unsupportedIterableToArray3(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray2(o, minLen);
+      return _arrayLikeToArray3(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray2(o, minLen);
+      return _arrayLikeToArray3(o, minLen);
   }
   function _iterableToArray2(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -5959,9 +5989,9 @@
   }
   function _arrayWithoutHoles2(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray2(arr);
+      return _arrayLikeToArray3(arr);
   }
-  function _arrayLikeToArray2(arr, len) {
+  function _arrayLikeToArray3(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6114,7 +6144,7 @@
   function _createForOfIteratorHelper(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray3(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray4(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it)
           o = it;
         var i = 0;
@@ -6150,20 +6180,20 @@
       }
     } };
   }
-  function _unsupportedIterableToArray3(o, minLen) {
+  function _unsupportedIterableToArray4(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray3(o, minLen);
+      return _arrayLikeToArray4(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray3(o, minLen);
+      return _arrayLikeToArray4(o, minLen);
   }
-  function _arrayLikeToArray3(arr, len) {
+  function _arrayLikeToArray4(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6499,26 +6529,38 @@
     }
   }
 
+  // node_modules/core-js/modules/es.array.every.js
+  "use strict";
+  var $28 = require_export();
+  var $every = require_array_iteration().every;
+  var arrayMethodIsStrict4 = require_array_method_is_strict();
+  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
+  $28({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+    every: function every(callbackfn) {
+      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
   // utils-cssom.ts
   var import_es_array_iterator10 = __toModule(require_es_array_iterator());
   function _toConsumableArray3(arr) {
-    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray4(arr) || _nonIterableSpread3();
+    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
   }
   function _nonIterableSpread3() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray4(o, minLen) {
+  function _unsupportedIterableToArray5(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray4(o, minLen);
+      return _arrayLikeToArray5(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray4(o, minLen);
+      return _arrayLikeToArray5(o, minLen);
   }
   function _iterableToArray3(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6526,9 +6568,9 @@
   }
   function _arrayWithoutHoles3(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray4(arr);
+      return _arrayLikeToArray5(arr);
   }
-  function _arrayLikeToArray4(arr, len) {
+  function _arrayLikeToArray5(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6536,24 +6578,25 @@
     }
     return arr2;
   }
-  function get_all_style_rules() {
-    return flatten(_toConsumableArray3(document.styleSheets).map(function(x) {
-      return _toConsumableArray3(x.cssRules);
-    }));
-  }
-  function find_selector_by_property(property_id, property_value) {
-    var all_styles = get_all_style_rules();
-    var first_rule_w_prop = all_styles.filter(function(rule) {
-      return rule.style && rule.style[property_id] == property_value;
-    }).find(function(rule) {
-      return document.querySelector(rule.selectorText);
-    });
-    var rule_exists = Boolean(first_rule_w_prop);
-    return {
-      rule_exists: rule_exists,
-      first_rule_w_prop: first_rule_w_prop,
-      selector: rule_exists ? first_rule_w_prop.selectorText : ""
+  function get_all_rules_for_selector(selector_text) {
+    var defines_ruleset = function defines_ruleset2(selector_text2) {
+      return function(rule) {
+        return rule.selectorText === selector_text2;
+      };
     };
+    return _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
+      return _toConsumableArray3(style_sheet.rules).find(defines_ruleset(selector_text));
+    }).map(function(x) {
+      return _toConsumableArray3(x.cssRules).find(defines_ruleset(selector_text)).style;
+    });
+  }
+  function get_styles_for_selector_with_targets(selector_text, target_properties) {
+    var all_rules_for_selector = get_all_rules_for_selector(selector_text);
+    return all_rules_for_selector.find(function(rule) {
+      return target_properties.every(function(x) {
+        return rule[x];
+      });
+    });
   }
 
   // utils-shiny.ts
@@ -6651,23 +6694,23 @@
 
   // wrap_in_grided.ts
   function _toConsumableArray4(arr) {
-    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread4();
+    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
   }
   function _nonIterableSpread4() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray5(o, minLen) {
+  function _unsupportedIterableToArray6(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray5(o, minLen);
+      return _arrayLikeToArray6(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray5(o, minLen);
+      return _arrayLikeToArray6(o, minLen);
   }
   function _iterableToArray4(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6675,9 +6718,9 @@
   }
   function _arrayWithoutHoles4(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray5(arr);
+      return _arrayLikeToArray6(arr);
   }
-  function _arrayLikeToArray5(arr, len) {
+  function _arrayLikeToArray6(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6757,7 +6800,7 @@
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray6(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray7(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it)
           o = it;
         var i = 0;
@@ -6794,23 +6837,23 @@
     } };
   }
   function _toConsumableArray5(arr) {
-    return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread5();
+    return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray7(arr) || _nonIterableSpread5();
   }
   function _nonIterableSpread5() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray6(o, minLen) {
+  function _unsupportedIterableToArray7(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray6(o, minLen);
+      return _arrayLikeToArray7(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray6(o, minLen);
+      return _arrayLikeToArray7(o, minLen);
   }
   function _iterableToArray5(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6818,9 +6861,9 @@
   }
   function _arrayWithoutHoles5(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray6(arr);
+      return _arrayLikeToArray7(arr);
   }
-  function _arrayLikeToArray6(arr, len) {
+  function _arrayLikeToArray7(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6896,6 +6939,7 @@
   }
   var App_State = /* @__PURE__ */ function() {
     function App_State2() {
+      var _find_first_grid_node;
       _classCallCheck3(this, App_State2);
       _defineProperty6(this, "gap_size_setting", void 0);
       _defineProperty6(this, "current_cells", []);
@@ -6906,16 +6950,14 @@
       _defineProperty6(this, "mode", void 0);
       _defineProperty6(this, "grid_layout", void 0);
       _defineProperty6(this, "tract_controls", void 0);
-      var grid_layout_rule = find_selector_by_property("display", "grid");
-      this.container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page";
-      this.container = grid_layout_rule.rule_exists ? document.querySelector(this.container_selector) : Block_El("div#grid_page");
+      this.container = (_find_first_grid_node = find_first_grid_node()) !== null && _find_first_grid_node !== void 0 ? _find_first_grid_node : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
       var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
       this.gap_size_setting = gap_size_setting;
       this.mode = grid_is_filled ? "Existing" : "New";
       if (grid_is_filled) {
-        var current_grid_props = grid_layout_rule.first_rule_w_prop.style;
+        var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.update_grid({
           rows: current_grid_props.gridTemplateRows.split(" "),
           cols: current_grid_props.gridTemplateColumns.split(" "),
