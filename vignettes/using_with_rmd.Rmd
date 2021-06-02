@@ -21,9 +21,7 @@ source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
 
 lapply(
-  c("base",
-    "only_grid_panel",
-    "extra_child_styles"),
+  c("base", "only_grid_panel"),
   function(mode){
     screenshot_demo_app(
       app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown_options.Rmd'),
@@ -104,22 +102,4 @@ use_gridlayout_rmd(is_card_styled = "grid_panel")
 knitr::include_graphics("use_gridlayout_rmd_only_grid_panel.png")
 ```
 
-
-
-
-## Adding extra styles to elements
-
-The elements can be additionally styled with any arbitrary styles you want via the `element_styles` argument. Here we give every element the background of "honeydew". 
-
-```{r, eval = FALSE}
-use_gridlayout_rmd(
-  is_card_styled = "grid_panel",
-  element_styles = c("background" = "honeydew")
-)
-```
-
-
-```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("use_gridlayout_rmd_extra_child_styles.png")
-```
 

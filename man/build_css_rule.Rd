@@ -13,7 +13,7 @@ build_css_rule(selector, prop_list)
 
 \item{prop_list}{A list of property-value pairs for additional styles to be
 added to each element. Pairs can be given as named elements: e.g.
-\code{element_styles = c("background" = "blue")}. See \link[htmltools:css]{htmltools::css} for rules
+\code{prop_list = c("background" = "blue")}. See \link[htmltools:css]{htmltools::css} for rules
 on formatting.}
 }
 \value{
