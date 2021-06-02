@@ -624,10 +624,11 @@ function setup_tract_controls(app_state: App_State) {
 
   update_positions();
 
-  // Make sure when we scroll the editor window the row sizing controls follow
+  // Make sure when we scroll or resize the editor window the controls follow
   (editor_container.querySelector(
     "#editor-app-window"
   ) as HTMLElement).onscroll = () => update_positions(["rows"]);
+  window.addEventListener('resize', () => update_positions());
 
   function update_positions(which_dirs: Tract_Dir[] = ["rows", "cols"]) {
     const editor_pos = editor_container.getBoundingClientRect();

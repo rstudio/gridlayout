@@ -7247,6 +7247,9 @@
     editor_container.querySelector("#editor-app-window").onscroll = function() {
       return update_positions(["rows"]);
     };
+    window.addEventListener("resize", function() {
+      return update_positions();
+    });
     function update_positions() {
       var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
       var editor_pos = editor_container.getBoundingClientRect();
