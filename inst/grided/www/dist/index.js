@@ -5529,17 +5529,25 @@
     return arr2;
   }
   function find_first_grid_node() {
+    var grid_node;
     var current_node = document.body;
     var node_queue = _toConsumableArray(current_node.children);
-    var overflow_counter = 0;
-    while (node_queue.length != 0 && overflow_counter++ != 100) {
+    var num_checks = 0;
+    var check_max = 100;
+    while (typeof grid_node === "undefined" && node_queue.length > 0 && num_checks++ < check_max) {
       current_node = node_queue.shift();
-      if (getComputedStyle(current_node).display === "grid") {
-        break;
-      }
       node_queue = [].concat(_toConsumableArray(node_queue), _toConsumableArray(current_node.children));
+      if (getComputedStyle(current_node).display === "grid") {
+        grid_node = current_node;
+      }
     }
-    return current_node;
+    if (typeof grid_node === "undefined" && num_checks < check_max) {
+      var _grid_node = document.createElement("div");
+      current_node.appendChild(_grid_node);
+    } else if (num_checks === check_max) {
+      alert("Could not find a grid-layout element to edit -- Sorry!");
+    }
+    return grid_node;
   }
   function set_element_in_grid(el, grid_bounds) {
     if (grid_bounds.start_row) {
@@ -6308,7 +6316,7 @@
       update_value: update_value
     };
   }
-  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled { display: none; }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
   function build_controls_for_dir(app_state, dir, editor_container) {
     var target_class = dir === "rows" ? "c1" : "r1";
     var dir_singular = dir === "rows" ? "row" : "col";
@@ -6319,7 +6327,7 @@
       return el.classList.contains(target_class);
     }).map(function(el) {
       var tract_index = +el.dataset[dir_singular];
-      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".").concat(tract_controls, ".").concat(dir, "-controls"));
+      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".tract-controls.").concat(tract_controls, ".").concat(dir, "-controls"));
       if (tract_index === 1) {
         tract_add_or_remove_button(app_state, {
           parent_el: holder_el,
@@ -6759,7 +6767,7 @@
       app_state.grid_styles.padding = "1rem";
     }
     function toggle_interaction_mode(interact_is_on) {
-      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), [grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
+      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
         if (interact_is_on) {
           el.classList.add("disabled");
         } else {
@@ -7206,7 +7214,7 @@
   var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral4(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
-      el: app_state.make_el("div.".concat(added_element_styles, ".").concat(current_sel_box)),
+      el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
       parent_layout: app_state.grid_layout
     });
     var drag_canvas = app_state.make_el("div#drag_canvas.".concat(drag_canvas_styles));
@@ -7231,9 +7239,6 @@
   }
   function setup_tract_controls(app_state) {
     var editor_container = document.querySelector("#grided__editor");
-    app_state.container.querySelectorAll("button.tract-add").forEach(function(el) {
-      return el.remove();
-    });
     var controls = {
       rows: build_controls_for_dir(app_state, "rows", editor_container),
       cols: build_controls_for_dir(app_state, "cols", editor_container)
