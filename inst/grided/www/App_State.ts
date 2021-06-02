@@ -629,13 +629,13 @@ function setup_tract_controls(app_state: App_State) {
     "#editor-app-window"
   ) as HTMLElement).onscroll = () => update_positions(["rows"]);
 
-  // Use a timeout trick to debounce the tract updating on resizing to only
-  // fire after resize is done
-  let resize_timeout: number;
-  window.addEventListener('resize', function(){
-    clearTimeout(resize_timeout);
-    resize_timeout = window.setTimeout(() => update_positions(), 300)
-  })
+// Use a timeout trick to debounce the tract updating on resizing to only
+// fire after resize is done
+let resize_timeout: number;
+window.addEventListener('resize', () => {
+  clearTimeout(resize_timeout);
+  resize_timeout = window.setTimeout(() => update_positions(), 300)
+});
 
   function update_positions(which_dirs: Tract_Dir[] = ["rows", "cols"]) {
     const editor_pos = editor_container.getBoundingClientRect();
