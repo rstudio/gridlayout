@@ -4,9 +4,9 @@ import {
   send_elements_to_shiny,
   send_grid_sizing_to_shiny
 } from "./utils-shiny";
-import { App_State, Grid_Update_Options } from "./App_State";
+import { Layout_Editor, Grid_Update_Options } from "./Layout_Editor";
 
-export function add_shiny_listeners(app_state: App_State) {
+export function add_shiny_listeners(app_state: Layout_Editor) {
   add_shiny_listener("shiny-loaded", (_payload: any) => {
     console.log("connected to shiny");
     _payload; // this is needed to vscode doesn't flag arg as dead code and delete it

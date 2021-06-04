@@ -1,4 +1,4 @@
-import { Element_Info } from "./App_State";
+import { Element_Info } from "./Layout_Editor";
 import { Layout_State } from "./Grid_Layout";
 import { Shiny } from "./index";
 

@@ -1,6 +1,6 @@
 // Functions related to grid construction, editings, etc
 
-import { App_State, Element_Info } from "./App_State";
+import { Layout_Editor, Element_Info } from "./Layout_Editor";
 import { Grid_Pos } from "./Grid_Item";
 import { Layout_State, Tract_Dir } from "./Grid_Layout";
 import { Code_Text } from "./make-focused_modal";
@@ -102,7 +102,7 @@ export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
 }
 
 export function get_drag_extent_on_grid(
-  app_state: App_State,
+  app_state: Layout_Editor,
   selection_rect: Selection_Rect
 ): Grid_Pos {
   // Reset bounding box definitions so we only use current selection extent

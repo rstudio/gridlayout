@@ -1,8 +1,8 @@
 // JS entry point
-import { App_State } from "./App_State";
+import { Layout_Editor } from "./Layout_Editor";
 
 export const Shiny = (window as any).Shiny;
 
 window.onload = function () {
-  const app_state = new App_State();
+  const app_state = new Layout_Editor();
 }; 

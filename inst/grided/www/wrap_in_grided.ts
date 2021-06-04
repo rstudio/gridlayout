@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { App_State } from "./App_State";
+import { Layout_Editor } from "./Layout_Editor";
 import { make_css_unit_input } from "./make-css_unit_input";
 import { Block_El, make_el, Text_El } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
@@ -20,7 +20,7 @@ import { setShinyInput } from "./utils-shiny";
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
 // that it contains so they can be overlayed with editable element boxes
-export function wrap_in_grided(app_state: App_State) {
+export function wrap_in_grided(app_state: Layout_Editor) {
   const grid_is_filled = app_state.container.hasChildNodes();
 
   const buttons = [

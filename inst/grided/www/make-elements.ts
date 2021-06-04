@@ -1,4 +1,4 @@
-import { App_State } from "./App_State";
+import { Layout_Editor } from "./Layout_Editor";
 import { Grid_Pos } from "./Grid_Item";
 import { Tract_Dir } from "./Grid_Layout";
 import { set_element_in_grid } from "./utils-grid";
@@ -188,7 +188,7 @@ const incrementer_button = css`
   }
 `;
 export function tract_add_or_remove_button(
-  app_state: App_State,
+  app_state: Layout_Editor,
   opts: {
     parent_el: HTMLElement;
     add_or_remove: "add" | "remove";

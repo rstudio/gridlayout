@@ -3284,7 +3284,7 @@
   var defineWellKnownSymbol2 = require_define_well_known_symbol();
   defineWellKnownSymbol2("iterator");
 
-  // App_State.ts
+  // Layout_Editor.ts
   var import_es_array_iterator12 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
@@ -3381,7 +3381,7 @@
     });
   }
 
-  // App_State.ts
+  // Layout_Editor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.string.split.js
@@ -6864,7 +6864,7 @@
     };
   }
 
-  // App_State.ts
+  // Layout_Editor.ts
   var _templateObject4;
   var _templateObject23;
   var _templateObject32;
@@ -7011,10 +7011,10 @@
     }
     return obj;
   }
-  var App_State = /* @__PURE__ */ function() {
-    function App_State2() {
+  var Layout_Editor = /* @__PURE__ */ function() {
+    function Layout_Editor2() {
       var _find_first_grid_node;
-      _classCallCheck3(this, App_State2);
+      _classCallCheck3(this, Layout_Editor2);
       _defineProperty6(this, "gap_size_setting", void 0);
       _defineProperty6(this, "current_cells", []);
       _defineProperty6(this, "elements", []);
@@ -7041,7 +7041,7 @@
       }
       add_shiny_listeners(this);
     }
-    _createClass3(App_State2, [{
+    _createClass3(Layout_Editor2, [{
       key: "next_color",
       get: function get() {
         var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
@@ -7253,7 +7253,7 @@
         }
       }
     }]);
-    return App_State2;
+    return Layout_Editor2;
   }();
   var grid_cell_styles = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral4(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
@@ -7536,7 +7536,7 @@
   // index.ts
   var Shiny = window.Shiny;
   window.onload = function() {
-    var app_state = new App_State();
+    var app_state = new Layout_Editor();
   };
 })();
 //# sourceMappingURL=index.js.map

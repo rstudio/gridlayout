@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { App_State } from "./App_State";
+import { Layout_Editor } from "./Layout_Editor";
 import { Tract_Dir } from "./Grid_Layout";
 import { make_el, tract_add_or_remove_button } from "./make-elements";
 import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
@@ -254,7 +254,7 @@ const tract_controls = css`
 `;
 
 export function build_controls_for_dir(
-  app_state: App_State,
+  app_state: Layout_Editor,
   dir: Tract_Dir,
   editor_container: HTMLElement
 ) {
@@ -314,7 +314,7 @@ export function build_controls_for_dir(
 
 export function make_grid_tract_control(
   holder: HTMLElement,
-  app_state: App_State,
+  app_state: Layout_Editor,
   opts: {
     size: string;
     dir: Tract_Dir;

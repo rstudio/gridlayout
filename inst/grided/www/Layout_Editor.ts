@@ -61,7 +61,7 @@ export type Element_Info = {
 
 export type App_Mode = "Existing" | "New";
 
-export class App_State {
+export class Layout_Editor {
   gap_size_setting: CSS_Input;
   // All the currently existing cells making up the grid
   current_cells: HTMLElement[] = [];
@@ -415,7 +415,7 @@ const grid_cell_styles = css`
   }
 `;
 
-function fill_grid_cells(app_state: App_State) {
+function fill_grid_cells(app_state: Layout_Editor) {
   remove_elements(app_state.current_cells);
   app_state.current_cells = [];
 
@@ -578,7 +578,7 @@ const drag_canvas_styles = css`
   }
 `;
 
-function setup_new_item_drag(app_state: App_State) {
+function setup_new_item_drag(app_state: Layout_Editor) {
   const current_selection_box = new Grid_Item({
     el: app_state.make_el(
       `div.drag_selection_box.${added_element_styles}.${current_sel_box}`
@@ -612,7 +612,7 @@ function setup_new_item_drag(app_state: App_State) {
   ].forEach((el) => app_state.container.appendChild(el));
 }
 
-function setup_tract_controls(app_state: App_State) {
+function setup_tract_controls(app_state: Layout_Editor) {
   const editor_container = document.querySelector(
     "#grided__editor"
   ) as HTMLElement;
@@ -691,7 +691,7 @@ const name_form_styles = css`
   }
 `;
 
-function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
+function element_naming_ui(app_state: Layout_Editor, { grid_pos, selection_box }) {
   const modal_divs = focused_modal({
     background_callbacks: {
       // Clicking outside of the modal will cancel the naming. Seems natural
@@ -795,7 +795,7 @@ function element_naming_ui(app_state: App_State, { grid_pos, selection_box }) {
 }
 
 function draw_elements(
-  app_state: App_State,
+  app_state: Layout_Editor,
   el_info: { id: string; mirrored_el: HTMLElement }
 ) {
   const { id, mirrored_el } = el_info;
