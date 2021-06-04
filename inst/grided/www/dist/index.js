@@ -8018,10 +8018,15 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        var scale_amnt = this._shown_size / this._render_size;
-        var corner_radius = "".concat(4 / scale_amnt, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n      #container {\n        width: ".concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px \n      }\n      \n      #layout {\n        box-shadow: 0px 0px ").concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._render_size, "px;\n        height: ").concat(this._render_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.join(" "), ";\n        gap: ").concat(this.grid.gap, ";\n        padding: ").concat(this.grid.gap, ";\n        transform: scale(").concat(scale_amnt, ");\n        transform-origin: top left;\n        font-size: ").concat(1 / scale_amnt, "rem;\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #container:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: ").concat(1 / scale_amnt, "px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="container">\n      <div id="layout"> ').concat(this.element_divs, " </div>\n    </div>\n    ");
-        this.shadowRoot.getElementById("container").addEventListener("click", function(event) {
+        var scale = this._render_size / this._shown_size;
+        var scale_units = function scale_units2(unit) {
+          if (unit.includes("fr") || unit.includes("auto"))
+            return unit;
+          return "calc(".concat(unit, "/ ").concat(scale, ")");
+        };
+        var corner_radius = "".concat(10 / scale, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: ").concat(1 / scale, "px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
           _this2._on_select({
             name: _this2.name,
@@ -8069,7 +8074,7 @@
         var element_divs = "";
         this.elements.forEach(function(_ref) {
           var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
-          var grid_area = "".concat(start_row, "/").concat(start_col, "/").concat(end_row + 1, "/").concat(end_col + 1);
+          var grid_area = [start_row, start_col, end_row + 1, end_col + 1].join("/");
           element_divs += "\n      <div style='grid-area:".concat(grid_area, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
         });
         return element_divs;
@@ -8321,9 +8326,8 @@
   window.onload = function() {
     add_shiny_listener("layout-chooser", function(layouts) {
       var gallery = layout_gallery(layouts).on_go(function(selected_layout) {
-        console.log("The user has requested the following app be made", selected_layout);
+        console.log("Make app with", selected_layout);
       }).on_edit(function(selected_layout) {
-        console.log("The user has requested to edit the following", selected_layout);
         start_layout_editor({
           starting_layout: selected_layout
         });
@@ -8331,13 +8335,11 @@
       document.body.appendChild(gallery);
     });
     add_shiny_listener("edit-layout", function(layout_info) {
-      console.log("Editing a passed layout");
       start_layout_editor({
         starting_layout: layout_info
       });
     });
     add_shiny_listener("edit-existing-app", function(layout_info) {
-      console.log("Editing an existing app");
       start_layout_editor({});
     });
   };

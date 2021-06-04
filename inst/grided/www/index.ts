@@ -1,7 +1,6 @@
 // JS entry point
-import { Grid_Layout, Layout_State } from "./Grid_Layout";
-import { Layout_Editor, start_layout_editor } from "./Layout_Editor";
-import { Block_El, Text_El } from "./make-elements";
+import { Layout_State } from "./Grid_Layout";
+import { start_layout_editor } from "./Layout_Editor";
 import { add_shiny_listener } from "./utils-shiny";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
@@ -23,32 +22,23 @@ export type Layout_Info = {
 };
 
 window.onload = function () {
+  // Add listeners for the three main entry-points
   add_shiny_listener("layout-chooser", (layouts: Layout_Info[]) => {
     const gallery: LayoutGallery = layout_gallery(layouts)
       .on_go((selected_layout: Layout_Info) => {
-        console.log(
-          `The user has requested the following app be made`,
-          selected_layout
-        );
+        console.log(`Make app with`, selected_layout);
       })
       .on_edit((selected_layout: Layout_Info) => {
-        console.log(
-          `The user has requested to edit the following`,
-          selected_layout
-        );
-
         start_layout_editor({ starting_layout: selected_layout });
       });
     document.body.appendChild(gallery);
   });
 
   add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
-    console.log("Editing a passed layout");
     start_layout_editor({ starting_layout: layout_info });
   });
 
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
-    console.log("Editing an existing app");
     start_layout_editor({});
   });
 };
