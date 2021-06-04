@@ -1,7 +1,7 @@
 // JS entry point
 import { Layout_State } from "./Grid_Layout";
 import { start_layout_editor } from "./Layout_Editor";
-import { add_shiny_listener } from "./utils-shiny";
+import { add_shiny_listener, setShinyInput } from "./utils-shiny";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
 export const Shiny = (window as any).Shiny;
@@ -26,6 +26,7 @@ window.onload = function () {
   add_shiny_listener("layout-chooser", (layouts: Layout_Info[]) => {
     const gallery: LayoutGallery = layout_gallery(layouts)
       .on_go((selected_layout: Layout_Info) => {
+        setShinyInput("build_app_template", selected_layout);
         console.log(`Make app with`, selected_layout);
       })
       .on_edit((selected_layout: Layout_Info) => {

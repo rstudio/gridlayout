@@ -8326,6 +8326,7 @@
   window.onload = function() {
     add_shiny_listener("layout-chooser", function(layouts) {
       var gallery = layout_gallery(layouts).on_go(function(selected_layout) {
+        setShinyInput("build_app_template", selected_layout);
         console.log("Make app with", selected_layout);
       }).on_edit(function(selected_layout) {
         start_layout_editor({

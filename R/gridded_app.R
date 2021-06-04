@@ -103,6 +103,18 @@ grided_server_code <- function(
     input$get_code
   )
 
+  shiny::bindEvent(shiny::observe({
+    print("User has requested the following app layout be generated")
+    chosen_layout <- new_gridlayout(
+      layout_def = input$build_app_template$elements,
+      col_sizes = simplify2array(input$build_app_template$grid$cols),
+      row_sizes = simplify2array(input$build_app_template$grid$rows),
+      gap = input$build_app_template$grid$gap
+    )
+    cat(to_app_template(chosen_layout))
+    # print(chosen_layout)
+  }), input$build_app_template)
+
   # Get update code button will try and find the layout being edited in the currently open editor and update the code
   # This can be overridden by setting the on_finish argument to a function that takes the current layout as input
   shiny::bindEvent(shiny::observe({
