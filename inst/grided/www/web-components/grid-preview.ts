@@ -67,7 +67,7 @@ export class GridPreview extends HTMLElement {
       #layout > div {
         width: 100%;
         height: 100%;
-        border: ${1 / scale}px solid #bababa;
+        border: 1px solid #bababa;
         border-radius: ${corner_radius};
         display: grid;
         place-content: center;
