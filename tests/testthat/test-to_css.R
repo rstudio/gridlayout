@@ -29,35 +29,6 @@ test_that("Can change body target", {
 
 
 
-test_that("Custom styles can be added by the user for further customization of card style", {
-  grid_obj <- new_gridlayout("
-    |      |120px   |1fr    |1fr    |
-    |:-----|:-------|:------|:------|
-    |100px |header  |header |header |
-    |1fr   |sidebar |plot_a |plot_c |
-    |1fr   |sidebar |plot_b |plot_b |"
-  )
-
-  custom_styles <- c(
-    "background" = "blue",
-    "border" = "1px solid red"
-  )
-
-  expect_true(
-    str_detect(
-      to_css(grid_obj, element_styles = custom_styles),
-      "background:blue;"
-    )
-  )
-
-  expect_true(
-    str_detect(
-      to_css(grid_obj, element_styles = custom_styles),
-      "border:1px solid red;"
-    )
-  )
-})
-
 
 test_that("Height setting can be customized", {
   grid_obj <- new_gridlayout("

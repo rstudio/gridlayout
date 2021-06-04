@@ -13,11 +13,6 @@
 #'   the grid container will get card styling (useful for RMarkdown or other
 #'   situations where you don't control child rendering) or `"none"` for no card
 #'   styling.
-#' @param element_styles A list of named property-value pairs ( E.g.
-#'   `element_styles = c("background" = "blue")`.) for additional styles to be
-#'   added to each first child element of the grid container. E.g. under the css
-#'   selector of `grid_container > *`. If `is_card_styled = "all"` then this has
-#'   the same purpose as as `additional_card_styles`
 #' @param selector_prefix CSS prefix used to target grid elements. This will
 #'   change if you're integrating grid with a system that you don't want to use
 #'   ids (the `"#"` prefix) with because they are not available or are used for
@@ -38,42 +33,18 @@
 #' )
 #'
 #' cat(to_css(grid_obj))
-#'
 #' @export
-to_css <- function(
-  layout,
-  container,
-  is_card_styled = "grid_panel",
-  element_styles = c(),
-  selector_prefix = "#"
-){
-  container_query <- if(missing(container)){
+to_css <- function(layout,
+                   container,
+                   is_card_styled = "grid_panel",
+                   selector_prefix = "#") {
+  container_query <- if (missing(container)) {
     "body"
-  }  else {
+  } else {
     has_css_selector <- grepl("\\.|#|>|\\+", container)
 
-    if(has_css_selector) container else paste0("#", container)
+    if (has_css_selector) container else paste0("#", container)
   }
-
-  all_grid_els_selector <- paste0(container_query," > *")
-
-  accessory_css <- get_accessory_css("gridlayout.css")
-  if (is_card_styled == "all") {
-    # Make .grid_panel simply apply to every first-level div
-    accessory_css <- str_replace_all(
-      accessory_css,
-      ".grid_panel",
-      all_grid_els_selector,
-      fixed = TRUE
-    )
-  }
-
-  # User-defined styles for all the grid-elements. Goes after the accessory
-  # rules so they can override any desired properties
-  all_elements_styles <- build_css_rule(
-    selector = all_grid_els_selector,
-    element_styles
-  )
 
   layout_rules <- generate_layout_rules(
     layout = layout,
@@ -83,7 +54,6 @@ to_css <- function(
 
   alternates <- get_info(layout, "alternates")
   alternative_layout_queries <- if (length(alternates) > 0) {
-
     paste(
       lapply(
         alternates,
@@ -96,36 +66,33 @@ to_css <- function(
           )
         }
       ),
-      collapse = "\n\n"
+      collapse = "\n"
     )
-  } else ""
-
+  } else {
+    ""
+  }
 
   paste(
     layout_rules,
-    accessory_css,
     alternative_layout_queries,
-    all_elements_styles,
+    "", # Make sure we end on a space
     sep = "\n\n"
   )
 }
 
 
-generate_layout_rules <- function(
-  layout,
-  container_query,
-  selector_prefix,
-  width_bounds = NULL
-){
-
+generate_layout_rules <- function(layout,
+                                  container_query,
+                                  selector_prefix,
+                                  width_bounds = NULL) {
   main_container_styles <- build_css_rule(
     selector = container_query,
     prop_list = c(
       "display" = "grid",
-      "grid-template-rows" = collapse_w_space(get_info(layout, 'row_sizes')),
-      "grid-template-columns" = collapse_w_space(get_info(layout, 'col_sizes')),
-      "grid-gap" = get_info(layout, 'gap'),
-      "padding" = get_info(layout, 'gap'),
+      "grid-template-rows" = collapse_w_space(get_info(layout, "row_sizes")),
+      "grid-template-columns" = collapse_w_space(get_info(layout, "col_sizes")),
+      "grid-gap" = get_info(layout, "gap"),
+      "padding" = get_info(layout, "gap"),
       "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
@@ -134,14 +101,11 @@ generate_layout_rules <- function(
   element_grid_areas <- paste(
     sapply(
       get_info(layout, "elements"),
-      function(el){
+      function(el) {
         build_css_rule(
           selector = paste0(selector_prefix, el$id),
           prop_list = c(
-            "grid-column-start" = el$start_col,
-            "grid-column-end" = el$end_col + 1,
-            "grid-row-start" = el$start_row,
-            "grid-row-end" = el$end_row + 1,
+            "grid-area" = paste(el$start_row, el$start_col, el$end_row + 1, el$end_col + 1, sep = " / "),
             "--collapsible-visibility" = if (el$collapsible) "block" else "none",
             "--collapsed-content-size" = if (el$collapsible) "0" else "1fr",
             "--collapsed-panel-height" = if (el$collapsible) "min-content",
@@ -153,28 +117,36 @@ generate_layout_rules <- function(
     collapse = "\n"
   )
 
+  element_styles <- paste(
+    main_container_styles,
+    element_grid_areas,
+    sep = "\n"
+  )
+
+  within_media_query <- notNull(width_bounds)
   media_query_open <- ""
   media_query_close <- ""
-  if (notNull(width_bounds)) {
+  if (within_media_query) {
     has_min <- doesExist(width_bounds["min"])
     has_max <- doesExist(width_bounds["max"])
     media_query_open <- paste0(
       "@media ",
-      if (has_min) paste0("(min-width: ", width_bounds["min"],")"),
+      if (has_min) paste0("(min-width: ", width_bounds["min"], ")"),
       if (has_max && has_min) " and ",
       if (has_max) paste0("(max-width:", width_bounds["max"], ")"),
       " {"
     )
 
     media_query_close <- "}"
+    # Give element styles indentation so they visually stand out if inspected
+    element_styles <- indent_text(element_styles)
   }
 
   paste(
     media_query_open,
-    main_container_styles,
-    element_grid_areas,
+    element_styles,
     media_query_close,
-    sep = "\n\n"
+    sep = "\n"
   )
 }
 
@@ -186,7 +158,7 @@ generate_layout_rules <- function(
 #'   `"inline"`.
 #' @param prop_list A list of property-value pairs for additional styles to be
 #'   added to each element. Pairs can be given as named elements: e.g.
-#'   `element_styles = c("background" = "blue")`. See [htmltools::css] for rules
+#'   `prop_list = c("background" = "blue")`. See [htmltools::css] for rules
 #'   on formatting.
 #'
 #' @return A concatenated string of property values to be used inside a css
@@ -230,47 +202,48 @@ build_css_rule <- function(selector, prop_list) {
 #' @examples
 #' # Only run these examples in interactive R sessions
 #' if (interactive()) {
-#'
-#' my_layout <- "
+#'   my_layout <- "
 #' |      |        |         |
 #' |------|--------|---------|
 #' |2rem  |200px   |1fr      |
 #' |100px |header  |header   |
 #' |1fr   |sidebar |distPlot |"
 #'
-#' # The classic Geyser app with grid layout
-#' shinyApp(
-#'   ui = fluidPage(
-#'     use_gridlayout_shiny(my_layout, "app-container"),
-#'     div(
-#'       id = "app-container",
-#'       div(id = "header",
+#'   # The classic Geyser app with grid layout
+#'   shinyApp(
+#'     ui = fluidPage(
+#'       use_gridlayout_shiny(my_layout, "app-container"),
+#'       div(
+#'         id = "app-container",
+#'         div(
+#'           id = "header",
 #'           h2(id = "app-title", "Old Faithful Geyser Data")
-#'       ),
-#'       div(id = "sidebar",
-#'           sliderInput("bins","Number of bins:",
-#'                       min = 1, max = 50, value = 30)
-#'       ),
-#'       plotOutput("distPlot")
-#'     )
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x    <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#'     })
-#'   }
-#' )
+#'         ),
+#'         div(
+#'           id = "sidebar",
+#'           sliderInput("bins", "Number of bins:",
+#'             min = 1, max = 50, value = 30
+#'           )
+#'         ),
+#'         plotOutput("distPlot")
+#'       )
+#'     ),
+#'     server = function(input, output) {
+#'       output$distPlot <- renderPlot({
+#'         x <- faithful[, 2]
+#'         bins <- seq(min(x), max(x), length.out = input$bins + 1)
+#'         hist(x, breaks = bins, col = "darkgray", border = "white")
+#'       })
+#'     }
+#'   )
 #' }
-use_gridlayout_shiny <- function(layout, ...){
+use_gridlayout_shiny <- function(layout, ...) {
   requireNamespace("htmltools", quietly = TRUE)
   layout <- as_gridlayout(layout)
   htmltools::tags$head(
     htmltools::tags$style(
       htmltools::HTML(to_css(layout, ...))
-    ),
-    htmltools::includeScript(system.file("resources/gridlayout.js", package = "gridlayout"))
+    )
   )
 }
 
@@ -292,31 +265,41 @@ use_gridlayout_shiny <- function(layout, ...){
 #' @return NULL
 #' @export
 #'
-use_gridlayout_rmd <- function(
-  container = '.main-container',
-  is_card_styled = "all",
-  element_styles = NULL,
-  selector_prefix = "#"
-){
-
+use_gridlayout_rmd <- function(container = ".main-container",
+                               is_card_styled = "all",
+                               selector_prefix = "#") {
   requireNamespace("knitr", quietly = TRUE)
+
+  accessory_css <- get_accessory_css("gridlayout.css")
+  if (is_card_styled == "all") {
+    # Make .grid_panel simply apply to every first-level div
+    accessory_css <- str_replace_all(
+      accessory_css,
+      ".grid_panel",
+      paste0(container, " > div"),
+      fixed = TRUE
+    )
+  }
 
   knitr::knit_engines$set(gridlayout = function(options) {
     code <- paste(options$code, collapse = "\n")
     if (options$eval) {
       layout <- md_to_gridlayout(code)
       css_for_layout <- paste(
-        "<style style='display: none;'>",
+        "<style>",
         to_css(layout,
-               container = container,
-               is_card_styled = is_card_styled,
-               selector_prefix = selector_prefix,
-               element_styles = c(
-                 element_styles,
-                 "display" = "block",
-                 "padding" = "var(--card-padding)"
-               )
+          container = container,
+          is_card_styled = is_card_styled,
+          selector_prefix = selector_prefix
         ),
+        # Make sure all the elements have the proper padding they need
+        build_css_rule(
+          paste(container, "> div"),
+          prop_list = c(
+            padding = "var(--card-padding)"
+          )
+        ),
+        accessory_css,
         # Makes tab panels work properly and gives utility classes for alignment
         get_accessory_css("gridlayout_rmd_styles.css"),
         "</style>",
@@ -335,9 +318,21 @@ use_gridlayout_rmd <- function(
 
 # Dump css file to string for inlining while still keeping in a .css file for
 # easier editing
-get_accessory_css <- function(file){
+get_accessory_css <- function(file) {
   paste(
     readLines(system.file(paste0("resources/", file), package = "gridlayout")),
     collapse = "\n"
+  )
+}
+
+# handle dependency
+gridlayout_css_dep <- function() {
+  htmltools::htmlDependency(
+    name = "gridlayout_css",
+    package = "gridlayout",
+    src = "resources",
+    stylesheet = "gridlayout.css",
+    script = "gridlayout.js",
+    version = "1.0"
   )
 }

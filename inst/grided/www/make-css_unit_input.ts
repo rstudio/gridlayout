@@ -177,6 +177,8 @@ const tract_controls = css`
   gap: 0.25rem;
   position: absolute;
 
+  &.disabled { display: none; }
+
   &.cols-controls {
     height: var(--editor-top-pad);
     padding-bottom: 5px;
@@ -273,7 +275,7 @@ export function build_controls_for_dir(
 
       const holder_el = make_el(
         editor_container,
-        `div#controller_for_${dir_singular}_${tract_index}.${tract_controls}.${dir}-controls`
+        `div#controller_for_${dir_singular}_${tract_index}.tract-controls.${tract_controls}.${dir}-controls`
       );
 
       if (tract_index === 1) {

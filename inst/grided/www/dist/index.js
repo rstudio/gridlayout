@@ -193,9 +193,9 @@
   // node_modules/core-js/internals/document-create-element.js
   var require_document_create_element = __commonJS({
     "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var isObject6 = require_is_object();
-      var document2 = global7.document;
+      var document2 = global8.document;
       var EXISTS = isObject6(document2) && isObject6(document2.createElement);
       module.exports = function(it) {
         return EXISTS ? document2.createElement(it) : {};
@@ -301,13 +301,13 @@
   // node_modules/core-js/internals/set-global.js
   var require_set_global = __commonJS({
     "node_modules/core-js/internals/set-global.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       module.exports = function(key, value) {
         try {
-          createNonEnumerableProperty4(global7, key, value);
+          createNonEnumerableProperty4(global8, key, value);
         } catch (error) {
-          global7[key] = value;
+          global8[key] = value;
         }
         return value;
       };
@@ -317,10 +317,10 @@
   // node_modules/core-js/internals/shared-store.js
   var require_shared_store = __commonJS({
     "node_modules/core-js/internals/shared-store.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var setGlobal = require_set_global();
       var SHARED = "__core-js_shared__";
-      var store = global7[SHARED] || setGlobal(SHARED, {});
+      var store = global8[SHARED] || setGlobal(SHARED, {});
       module.exports = store;
     }
   });
@@ -342,9 +342,9 @@
   // node_modules/core-js/internals/native-weak-map.js
   var require_native_weak_map = __commonJS({
     "node_modules/core-js/internals/native-weak-map.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var inspectSource = require_inspect_source();
-      var WeakMap2 = global7.WeakMap;
+      var WeakMap2 = global8.WeakMap;
       module.exports = typeof WeakMap2 === "function" && /native code/.test(inspectSource(WeakMap2));
     }
   });
@@ -405,7 +405,7 @@
   var require_internal_state = __commonJS({
     "node_modules/core-js/internals/internal-state.js": function(exports, module) {
       var NATIVE_WEAK_MAP = require_native_weak_map();
-      var global7 = require_global();
+      var global8 = require_global();
       var isObject6 = require_is_object();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var objectHas = require_has();
@@ -413,7 +413,7 @@
       var sharedKey2 = require_shared_key();
       var hiddenKeys2 = require_hidden_keys();
       var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
-      var WeakMap2 = global7.WeakMap;
+      var WeakMap2 = global8.WeakMap;
       var set;
       var get;
       var has4;
@@ -482,7 +482,7 @@
   // node_modules/core-js/internals/redefine.js
   var require_redefine = __commonJS({
     "node_modules/core-js/internals/redefine.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var has4 = require_has();
       var setGlobal = require_set_global();
@@ -505,7 +505,7 @@
             state.source = TEMPLATE.join(typeof key == "string" ? key : "");
           }
         }
-        if (O === global7) {
+        if (O === global8) {
           if (simple)
             O[key] = value;
           else
@@ -529,8 +529,8 @@
   // node_modules/core-js/internals/path.js
   var require_path = __commonJS({
     "node_modules/core-js/internals/path.js": function(exports, module) {
-      var global7 = require_global();
-      module.exports = global7;
+      var global8 = require_global();
+      module.exports = global8;
     }
   });
 
@@ -538,12 +538,12 @@
   var require_get_built_in = __commonJS({
     "node_modules/core-js/internals/get-built-in.js": function(exports, module) {
       var path = require_path();
-      var global7 = require_global();
+      var global8 = require_global();
       var aFunction = function(variable) {
         return typeof variable == "function" ? variable : void 0;
       };
       module.exports = function(namespace, method) {
-        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global7[namespace]) : path[namespace] && path[namespace][method] || global7[namespace] && global7[namespace][method];
+        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
       };
     }
   });
@@ -730,7 +730,7 @@
   // node_modules/core-js/internals/export.js
   var require_export = __commonJS({
     "node_modules/core-js/internals/export.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var getOwnPropertyDescriptor4 = require_object_get_own_property_descriptor().f;
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var redefine6 = require_redefine();
@@ -743,11 +743,11 @@
         var STATIC = options.stat;
         var FORCED3, target, key, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
-          target = global7;
+          target = global8;
         } else if (STATIC) {
-          target = global7[TARGET] || setGlobal(TARGET, {});
+          target = global8[TARGET] || setGlobal(TARGET, {});
         } else {
-          target = (global7[TARGET] || {}).prototype;
+          target = (global8[TARGET] || {}).prototype;
         }
         if (target)
           for (key in source) {
@@ -838,9 +838,9 @@
   // node_modules/core-js/internals/engine-v8-version.js
   var require_engine_v8_version = __commonJS({
     "node_modules/core-js/internals/engine-v8-version.js": function(exports, module) {
-      var global7 = require_global();
-      var userAgent = require_engine_user_agent();
-      var process2 = global7.process;
+      var global8 = require_global();
+      var userAgent2 = require_engine_user_agent();
+      var process2 = global8.process;
       var versions = process2 && process2.versions;
       var v8 = versions && versions.v8;
       var match2;
@@ -848,10 +848,10 @@
       if (v8) {
         match2 = v8.split(".");
         version = match2[0] < 4 ? 1 : match2[0] + match2[1];
-      } else if (userAgent) {
-        match2 = userAgent.match(/Edge\/(\d+)/);
+      } else if (userAgent2) {
+        match2 = userAgent2.match(/Edge\/(\d+)/);
         if (!match2 || match2[1] >= 74) {
-          match2 = userAgent.match(/Chrome\/(\d+)/);
+          match2 = userAgent2.match(/Chrome\/(\d+)/);
           if (match2)
             version = match2[1];
         }
@@ -882,14 +882,14 @@
   // node_modules/core-js/internals/well-known-symbol.js
   var require_well_known_symbol = __commonJS({
     "node_modules/core-js/internals/well-known-symbol.js": function(exports, module) {
-      var global7 = require_global();
+      var global8 = require_global();
       var shared2 = require_shared();
       var has4 = require_has();
       var uid2 = require_uid();
       var NATIVE_SYMBOL2 = require_native_symbol();
       var USE_SYMBOL_AS_UID2 = require_use_symbol_as_uid();
       var WellKnownSymbolsStore2 = shared2("wks");
-      var Symbol2 = global7.Symbol;
+      var Symbol2 = global8.Symbol;
       var createWellKnownSymbol = USE_SYMBOL_AS_UID2 ? Symbol2 : Symbol2 && Symbol2.withoutSetter || uid2;
       module.exports = function(name) {
         if (!has4(WellKnownSymbolsStore2, name) || !(NATIVE_SYMBOL2 || typeof WellKnownSymbolsStore2[name] == "string")) {
@@ -1018,9 +1018,9 @@
     "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
       "use strict";
       var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict4 = require_array_method_is_strict();
-      var STRICT_METHOD4 = arrayMethodIsStrict4("forEach");
-      module.exports = !STRICT_METHOD4 ? function forEach3(callbackfn) {
+      var arrayMethodIsStrict5 = require_array_method_is_strict();
+      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
+      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
         return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
       } : [].forEach;
     }
@@ -1553,7 +1553,7 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $28 = require_export();
+      var $30 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
       var getPrototypeOf = require_object_get_prototype_of();
       var setPrototypeOf = require_object_set_prototype_of();
@@ -1643,7 +1643,7 @@
               }
             }
           else
-            $28({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $30({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $28 = require_export();
+      var $30 = require_export();
       var exec = require_regexp_exec();
-      $28({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $30({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2305,8 +2305,8 @@
   var require_engine_is_node = __commonJS({
     "node_modules/core-js/internals/engine-is-node.js": function(exports, module) {
       var classof2 = require_classof_raw();
-      var global7 = require_global();
-      module.exports = classof2(global7.process) == "process";
+      var global8 = require_global();
+      module.exports = classof2(global8.process) == "process";
     }
   });
 
@@ -2416,8 +2416,8 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $28 = require_export();
-      var global7 = require_global();
+      var $30 = require_export();
+      var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
       var InternalMetadataModule = require_internal_metadata();
@@ -2432,7 +2432,7 @@
         var IS_MAP = CONSTRUCTOR_NAME.indexOf("Map") !== -1;
         var IS_WEAK = CONSTRUCTOR_NAME.indexOf("Weak") !== -1;
         var ADDER = IS_MAP ? "set" : "add";
-        var NativeConstructor = global7[CONSTRUCTOR_NAME];
+        var NativeConstructor = global8[CONSTRUCTOR_NAME];
         var NativePrototype = NativeConstructor && NativeConstructor.prototype;
         var Constructor = NativeConstructor;
         var exported = {};
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $28({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $30({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -2629,7 +2629,7 @@
   var require_es_weak_map = __commonJS({
     "node_modules/core-js/modules/es.weak-map.js": function(exports, module) {
       "use strict";
-      var global7 = require_global();
+      var global8 = require_global();
       var redefineAll = require_redefine_all();
       var InternalMetadataModule = require_internal_metadata();
       var collection = require_collection();
@@ -2637,7 +2637,7 @@
       var isObject6 = require_is_object();
       var enforceIternalState = require_internal_state().enforce;
       var NATIVE_WEAK_MAP = require_native_weak_map();
-      var IS_IE11 = !global7.ActiveXObject && "ActiveXObject" in global7;
+      var IS_IE11 = !global8.ActiveXObject && "ActiveXObject" in global8;
       var isExtensible = Object.isExtensible;
       var InternalWeakMap;
       var wrapper = function(init) {
@@ -2755,7 +2755,7 @@
       "use strict";
       var aFunction = require_a_function();
       var isObject6 = require_is_object();
-      var slice3 = [].slice;
+      var slice4 = [].slice;
       var factories = {};
       var construct = function(C, argsLength, args) {
         if (!(argsLength in factories)) {
@@ -2767,9 +2767,9 @@
       };
       module.exports = Function.bind || function bind2(that) {
         var fn = aFunction(this);
-        var partArgs = slice3.call(arguments, 1);
+        var partArgs = slice4.call(arguments, 1);
         var boundFunction = function bound() {
-          var args = partArgs.concat(slice3.call(arguments));
+          var args = partArgs.concat(slice4.call(arguments));
           return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
         };
         if (isObject6(fn.prototype))
@@ -3555,8 +3555,8 @@
         var functionalReplace = typeof replaceValue === "function";
         if (!functionalReplace)
           replaceValue = String(replaceValue);
-        var global7 = rx.global;
-        if (global7) {
+        var global8 = rx.global;
+        if (global8) {
           var fullUnicode = rx.unicode;
           rx.lastIndex = 0;
         }
@@ -3566,7 +3566,7 @@
           if (result === null)
             break;
           results.push(result);
-          if (!global7)
+          if (!global8)
             break;
           var matchStr = String(result[0]);
           if (matchStr === "")
@@ -3762,9 +3762,29 @@
     }
   });
 
+  // node_modules/core-js/modules/web.timers.js
+  var $17 = require_export();
+  var global6 = require_global();
+  var userAgent = require_engine_user_agent();
+  var slice2 = [].slice;
+  var MSIE = /MSIE .\./.test(userAgent);
+  var wrap2 = function(scheduler) {
+    return function(handler, timeout) {
+      var boundArgs = arguments.length > 2;
+      var args = boundArgs ? slice2.call(arguments, 2) : void 0;
+      return scheduler(boundArgs ? function() {
+        (typeof handler == "function" ? handler : Function(handler)).apply(this, args);
+      } : handler, timeout);
+    };
+  };
+  $17({ global: true, bind: true, forced: MSIE }, {
+    setTimeout: wrap2(global6.setTimeout),
+    setInterval: wrap2(global6.setInterval)
+  });
+
   // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $17 = require_export();
+  var $18 = require_export();
   var $find = require_array_iteration().find;
   var addToUnscopables2 = require_add_to_unscopables();
   var FIND = "find";
@@ -3773,7 +3793,7 @@
     Array(1)[FIND](function() {
       SKIPS_HOLES2 = false;
     });
-  $17({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     find: function find(callbackfn) {
       return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3822,24 +3842,24 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var $reduce = require_array_reduce().left;
   var arrayMethodIsStrict = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
   var STRICT_METHOD = arrayMethodIsStrict("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $18({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+  $19({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.define-property.js
-  var $19 = require_export();
+  var $20 = require_export();
   var DESCRIPTORS7 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $19({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
+  $20({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
@@ -3850,13 +3870,13 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $20 = require_export();
+  var $21 = require_export();
   var $indexOf = require_array_includes().indexOf;
   var arrayMethodIsStrict2 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
   var STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-  $20({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+  $21({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3864,11 +3884,11 @@
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
-  var $21 = require_export();
+  var $22 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport5("map");
-  $21({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $22({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3972,10 +3992,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $22 = require_export();
+  var $23 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $22({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $23({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -3986,14 +4006,14 @@
 
   // node_modules/core-js/modules/es.array.join.js
   "use strict";
-  var $23 = require_export();
+  var $24 = require_export();
   var IndexedObject = require_indexed_object();
   var toIndexedObject5 = require_to_indexed_object();
   var arrayMethodIsStrict3 = require_array_method_is_strict();
   var nativeJoin = [].join;
   var ES3_STRINGS = IndexedObject != Object;
   var STRICT_METHOD3 = arrayMethodIsStrict3("join", ",");
-  $23({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
+  $24({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
     join: function join(separator) {
       return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
     }
@@ -4081,7 +4101,7 @@
   function caret() {
     return position;
   }
-  function slice2(begin, end) {
+  function slice3(begin, end) {
     return substr(characters, begin, end);
   }
   function token(type) {
@@ -4123,7 +4143,7 @@
     return characters = "", value;
   }
   function delimit(type) {
-    return trim2(slice2(position - 1, delimiter(type === 91 ? type + 2 : type === 40 ? type + 1 : type)));
+    return trim2(slice3(position - 1, delimiter(type === 91 ? type + 2 : type === 40 ? type + 1 : type)));
   }
   function whitespace(type) {
     while (character = peek()) {
@@ -4139,7 +4159,7 @@
       if (character < 48 || character > 102 || character > 57 && character < 65 || character > 70 && character < 97)
         break;
     }
-    return slice2(index, caret() + (count < 6 && peek() == 32 && next2() == 32));
+    return slice3(index, caret() + (count < 6 && peek() == 32 && next2() == 32));
   }
   function delimiter(type) {
     while (next2()) {
@@ -4167,13 +4187,13 @@
       else if (type + character === 42 + 42 && peek() === 47)
         break;
     }
-    return "/*" + slice2(index, position - 1) + "*" + from2(type === 47 ? type : next2());
+    return "/*" + slice3(index, position - 1) + "*" + from2(type === 47 ? type : next2());
   }
   function identifier(index) {
     while (!token(peek())) {
       next2();
     }
-    return slice2(index, position);
+    return slice3(index, position);
   }
 
   // node_modules/stylis/src/Parser.js
@@ -4481,10 +4501,10 @@
   var import_es_weak_map = __toModule(require_es_weak_map());
 
   // node_modules/core-js/modules/es.object.create.js
-  var $24 = require_export();
+  var $25 = require_export();
   var DESCRIPTORS8 = require_descriptors();
   var create2 = require_object_create();
-  $24({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
+  $25({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
     create: create2
   });
 
@@ -5123,9 +5143,9 @@
   };
 
   // node_modules/core-js/modules/es.function.bind.js
-  var $25 = require_export();
+  var $26 = require_export();
   var bind = require_function_bind();
-  $25({ target: "Function", proto: true }, {
+  $26({ target: "Function", proto: true }, {
     bind: bind
   });
 
@@ -5274,10 +5294,10 @@
 
   // node_modules/core-js/modules/es.array.includes.js
   "use strict";
-  var $26 = require_export();
+  var $27 = require_export();
   var $includes = require_array_includes().includes;
   var addToUnscopables3 = require_add_to_unscopables();
-  $26({ target: "Array", proto: true }, {
+  $27({ target: "Array", proto: true }, {
     includes: function includes(el) {
       return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5286,11 +5306,11 @@
 
   // node_modules/core-js/modules/es.string.includes.js
   "use strict";
-  var $27 = require_export();
+  var $28 = require_export();
   var notARegExp = require_not_a_regexp();
   var requireObjectCoercible4 = require_require_object_coercible();
   var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $27({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
     includes: function includes2(searchString) {
       return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5302,20 +5322,6 @@
 
   // utils-misc.ts
   var import_es_array_iterator5 = __toModule(require_es_array_iterator());
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray(arr);
-  }
   function ownKeys2(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -5488,10 +5494,6 @@
     }
     return new_rect;
   }
-  function flatten(arr) {
-    var _ref5;
-    return (_ref5 = []).concat.apply(_ref5, _toConsumableArray(arr));
-  }
   function set_class(elements, class_name) {
     elements.forEach(function(el) {
       el.classList.add(class_name);
@@ -5511,6 +5513,62 @@
   }
 
   // utils-grid.ts
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray2(arr) || _nonIterableSpread();
+  }
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray2(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray2(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray2(o, minLen);
+  }
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray2(arr);
+  }
+  function _arrayLikeToArray2(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function find_first_grid_node() {
+    var grid_node;
+    var current_node = document.body;
+    var node_queue = _toConsumableArray(current_node.children);
+    var num_checks = 0;
+    var check_max = 100;
+    while (typeof grid_node === "undefined" && node_queue.length > 0 && num_checks++ < check_max) {
+      current_node = node_queue.shift();
+      node_queue = [].concat(_toConsumableArray(node_queue), _toConsumableArray(current_node.children));
+      if (getComputedStyle(current_node).display === "grid") {
+        grid_node = current_node;
+      }
+    }
+    if (typeof grid_node === "undefined" && num_checks < check_max) {
+      var _grid_node = document.createElement("div");
+      current_node.appendChild(_grid_node);
+    } else if (num_checks === check_max) {
+      alert("Could not find a grid-layout element to edit -- Sorry!");
+    }
+    return grid_node;
+  }
   function set_element_in_grid(el, grid_bounds) {
     if (grid_bounds.start_row) {
       el.style.gridRowStart = grid_bounds.start_row.toString();
@@ -5833,7 +5891,7 @@
   // node_modules/core-js/modules/es.number.constructor.js
   "use strict";
   var DESCRIPTORS9 = require_descriptors();
-  var global6 = require_global();
+  var global7 = require_global();
   var isForced = require_is_forced();
   var redefine5 = require_redefine();
   var has3 = require_has();
@@ -5847,7 +5905,7 @@
   var defineProperty4 = require_object_define_property().f;
   var trim3 = require_string_trim().trim;
   var NUMBER = "Number";
-  var NativeNumber = global6[NUMBER];
+  var NativeNumber = global7[NUMBER];
   var NumberPrototype = NativeNumber.prototype;
   var BROKEN_CLASSOF = classof(create3(NumberPrototype)) == NUMBER;
   var toNumber = function(argument) {
@@ -5902,7 +5960,7 @@
     }
     NumberWrapper.prototype = NumberPrototype;
     NumberPrototype.constructor = NumberWrapper;
-    redefine5(global6, NUMBER, NumberWrapper);
+    redefine5(global7, NUMBER, NumberWrapper);
   }
   var NumberWrapper;
   var keys2;
@@ -5935,23 +5993,23 @@
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
   function _toConsumableArray2(arr) {
-    return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray2(arr) || _nonIterableSpread2();
+    return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray3(arr) || _nonIterableSpread2();
   }
   function _nonIterableSpread2() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray2(o, minLen) {
+  function _unsupportedIterableToArray3(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray2(o, minLen);
+      return _arrayLikeToArray3(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray2(o, minLen);
+      return _arrayLikeToArray3(o, minLen);
   }
   function _iterableToArray2(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -5959,9 +6017,9 @@
   }
   function _arrayWithoutHoles2(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray2(arr);
+      return _arrayLikeToArray3(arr);
   }
-  function _arrayLikeToArray2(arr, len) {
+  function _arrayLikeToArray3(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6114,7 +6172,7 @@
   function _createForOfIteratorHelper(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray3(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray4(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it)
           o = it;
         var i = 0;
@@ -6150,20 +6208,20 @@
       }
     } };
   }
-  function _unsupportedIterableToArray3(o, minLen) {
+  function _unsupportedIterableToArray4(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray3(o, minLen);
+      return _arrayLikeToArray4(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray3(o, minLen);
+      return _arrayLikeToArray4(o, minLen);
   }
-  function _arrayLikeToArray3(arr, len) {
+  function _arrayLikeToArray4(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6278,7 +6336,7 @@
       update_value: update_value
     };
   }
-  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled { display: none; }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
   function build_controls_for_dir(app_state, dir, editor_container) {
     var target_class = dir === "rows" ? "c1" : "r1";
     var dir_singular = dir === "rows" ? "row" : "col";
@@ -6289,7 +6347,7 @@
       return el.classList.contains(target_class);
     }).map(function(el) {
       var tract_index = +el.dataset[dir_singular];
-      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".").concat(tract_controls, ".").concat(dir, "-controls"));
+      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".tract-controls.").concat(tract_controls, ".").concat(dir, "-controls"));
       if (tract_index === 1) {
         tract_add_or_remove_button(app_state, {
           parent_el: holder_el,
@@ -6499,26 +6557,38 @@
     }
   }
 
+  // node_modules/core-js/modules/es.array.every.js
+  "use strict";
+  var $29 = require_export();
+  var $every = require_array_iteration().every;
+  var arrayMethodIsStrict4 = require_array_method_is_strict();
+  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
+  $29({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+    every: function every(callbackfn) {
+      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
   // utils-cssom.ts
   var import_es_array_iterator10 = __toModule(require_es_array_iterator());
   function _toConsumableArray3(arr) {
-    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray4(arr) || _nonIterableSpread3();
+    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
   }
   function _nonIterableSpread3() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray4(o, minLen) {
+  function _unsupportedIterableToArray5(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray4(o, minLen);
+      return _arrayLikeToArray5(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray4(o, minLen);
+      return _arrayLikeToArray5(o, minLen);
   }
   function _iterableToArray3(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6526,9 +6596,9 @@
   }
   function _arrayWithoutHoles3(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray4(arr);
+      return _arrayLikeToArray5(arr);
   }
-  function _arrayLikeToArray4(arr, len) {
+  function _arrayLikeToArray5(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6536,24 +6606,25 @@
     }
     return arr2;
   }
-  function get_all_style_rules() {
-    return flatten(_toConsumableArray3(document.styleSheets).map(function(x) {
-      return _toConsumableArray3(x.cssRules);
-    }));
-  }
-  function find_selector_by_property(property_id, property_value) {
-    var all_styles = get_all_style_rules();
-    var first_rule_w_prop = all_styles.filter(function(rule) {
-      return rule.style && rule.style[property_id] == property_value;
-    }).find(function(rule) {
-      return document.querySelector(rule.selectorText);
-    });
-    var rule_exists = Boolean(first_rule_w_prop);
-    return {
-      rule_exists: rule_exists,
-      first_rule_w_prop: first_rule_w_prop,
-      selector: rule_exists ? first_rule_w_prop.selectorText : ""
+  function get_all_rules_for_selector(selector_text) {
+    var defines_ruleset = function defines_ruleset2(selector_text2) {
+      return function(rule) {
+        return rule.selectorText === selector_text2;
+      };
     };
+    return _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
+      return _toConsumableArray3(style_sheet.rules).find(defines_ruleset(selector_text));
+    }).map(function(x) {
+      return _toConsumableArray3(x.cssRules).find(defines_ruleset(selector_text)).style;
+    });
+  }
+  function get_styles_for_selector_with_targets(selector_text, target_properties) {
+    var all_rules_for_selector = get_all_rules_for_selector(selector_text);
+    return all_rules_for_selector.find(function(rule) {
+      return target_properties.every(function(x) {
+        return rule[x];
+      });
+    });
   }
 
   // utils-shiny.ts
@@ -6651,23 +6722,23 @@
 
   // wrap_in_grided.ts
   function _toConsumableArray4(arr) {
-    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread4();
+    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
   }
   function _nonIterableSpread4() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray5(o, minLen) {
+  function _unsupportedIterableToArray6(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray5(o, minLen);
+      return _arrayLikeToArray6(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray5(o, minLen);
+      return _arrayLikeToArray6(o, minLen);
   }
   function _iterableToArray4(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6675,9 +6746,9 @@
   }
   function _arrayWithoutHoles4(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray5(arr);
+      return _arrayLikeToArray6(arr);
   }
-  function _arrayLikeToArray5(arr, len) {
+  function _arrayLikeToArray6(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6716,7 +6787,7 @@
       app_state.grid_styles.padding = "1rem";
     }
     function toggle_interaction_mode(interact_is_on) {
-      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), [grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
+      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
         if (interact_is_on) {
           el.classList.add("disabled");
         } else {
@@ -6757,7 +6828,7 @@
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray6(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray7(o)) || allowArrayLike && o && typeof o.length === "number") {
         if (it)
           o = it;
         var i = 0;
@@ -6794,23 +6865,23 @@
     } };
   }
   function _toConsumableArray5(arr) {
-    return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread5();
+    return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray7(arr) || _nonIterableSpread5();
   }
   function _nonIterableSpread5() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function _unsupportedIterableToArray6(o, minLen) {
+  function _unsupportedIterableToArray7(o, minLen) {
     if (!o)
       return;
     if (typeof o === "string")
-      return _arrayLikeToArray6(o, minLen);
+      return _arrayLikeToArray7(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor)
       n = o.constructor.name;
     if (n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray6(o, minLen);
+      return _arrayLikeToArray7(o, minLen);
   }
   function _iterableToArray5(iter) {
     if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -6818,9 +6889,9 @@
   }
   function _arrayWithoutHoles5(arr) {
     if (Array.isArray(arr))
-      return _arrayLikeToArray6(arr);
+      return _arrayLikeToArray7(arr);
   }
-  function _arrayLikeToArray6(arr, len) {
+  function _arrayLikeToArray7(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -6896,6 +6967,7 @@
   }
   var App_State = /* @__PURE__ */ function() {
     function App_State2() {
+      var _find_first_grid_node;
       _classCallCheck3(this, App_State2);
       _defineProperty6(this, "gap_size_setting", void 0);
       _defineProperty6(this, "current_cells", []);
@@ -6906,16 +6978,14 @@
       _defineProperty6(this, "mode", void 0);
       _defineProperty6(this, "grid_layout", void 0);
       _defineProperty6(this, "tract_controls", void 0);
-      var grid_layout_rule = find_selector_by_property("display", "grid");
-      this.container_selector = grid_layout_rule.rule_exists ? grid_layout_rule.selector : "#grid_page";
-      this.container = grid_layout_rule.rule_exists ? document.querySelector(this.container_selector) : Block_El("div#grid_page");
+      this.container = (_find_first_grid_node = find_first_grid_node()) !== null && _find_first_grid_node !== void 0 ? _find_first_grid_node : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
       var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
       this.gap_size_setting = gap_size_setting;
       this.mode = grid_is_filled ? "Existing" : "New";
       if (grid_is_filled) {
-        var current_grid_props = grid_layout_rule.first_rule_w_prop.style;
+        var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.update_grid({
           rows: current_grid_props.gridTemplateRows.split(" "),
           cols: current_grid_props.gridTemplateColumns.split(" "),
@@ -7164,7 +7234,7 @@
   var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral4(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
-      el: app_state.make_el("div.".concat(added_element_styles, ".").concat(current_sel_box)),
+      el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
       parent_layout: app_state.grid_layout
     });
     var drag_canvas = app_state.make_el("div#drag_canvas.".concat(drag_canvas_styles));
@@ -7189,9 +7259,6 @@
   }
   function setup_tract_controls(app_state) {
     var editor_container = document.querySelector("#grided__editor");
-    app_state.container.querySelectorAll("button.tract-add").forEach(function(el) {
-      return el.remove();
-    });
     var controls = {
       rows: build_controls_for_dir(app_state, "rows", editor_container),
       cols: build_controls_for_dir(app_state, "cols", editor_container)
@@ -7200,6 +7267,13 @@
     editor_container.querySelector("#editor-app-window").onscroll = function() {
       return update_positions(["rows"]);
     };
+    var resize_timeout;
+    window.addEventListener("resize", function() {
+      clearTimeout(resize_timeout);
+      resize_timeout = window.setTimeout(function() {
+        return update_positions();
+      }, 300);
+    });
     function update_positions() {
       var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
       var editor_pos = editor_container.getBoundingClientRect();

@@ -13,6 +13,38 @@ import {
   Selection_Rect,
 } from "./utils-misc";
 
+export function find_first_grid_node(): HTMLElement {
+  // Do a BFS for a grid layout element in the page
+  let grid_node: HTMLElement;
+  let current_node = document.body;
+  let node_queue: Element[] = [...current_node.children];
+  // We dont want to go too deep into the dom.
+  let num_checks = 0;
+  const check_max = 100;
+  while (
+    typeof grid_node === "undefined" &&
+    node_queue.length > 0 &&
+    num_checks++ < check_max
+  ) {
+    current_node = node_queue.shift() as HTMLElement;
+    node_queue = [...node_queue, ...current_node.children];
+    if (getComputedStyle(current_node).display === "grid") {
+      grid_node = current_node;
+    }
+  }
+
+  if (typeof grid_node === "undefined" && num_checks < check_max) {
+    // If we didnt find a grid node lets make one as a first child
+    const grid_node = document.createElement("div");
+    // grid_node.style.display = "grid";
+    current_node.appendChild(grid_node);
+  } else if (num_checks === check_max) {
+    alert("Could not find a grid-layout element to edit -- Sorry!");
+  }
+
+  return grid_node;
+}
+
 function get_styles(container: HTMLElement | CSSStyleDeclaration) {
   if (container instanceof HTMLElement) {
     return container.style;

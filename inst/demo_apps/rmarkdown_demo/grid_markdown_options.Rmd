@@ -16,10 +16,6 @@ switch(
   params$mode,
   base = use_gridlayout_rmd(),
   only_grid_panel = use_gridlayout_rmd(is_card_styled = "grid_panel"),
-  extra_child_styles = use_gridlayout_rmd(
-    is_card_styled = "grid_panel",
-    element_styles = c("background" = "honeydew")
-  ),
   stop("That's not an optional mode!")
 )
 

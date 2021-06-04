@@ -7,7 +7,6 @@
 use_gridlayout_rmd(
   container = ".main-container",
   is_card_styled = "all",
-  element_styles = NULL,
   selector_prefix = "#"
 )
 }
@@ -25,12 +24,6 @@ to make it stand out? Options are \code{"grid_panel"}, where only elements with
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
-
-\item{element_styles}{A list of named property-value pairs ( E.g.
-\code{element_styles = c("background" = "blue")}.) for additional styles to be
-added to each first child element of the grid container. E.g. under the css
-selector of \verb{grid_container > *}. If \code{is_card_styled = "all"} then this has
-the same purpose as as \code{additional_card_styles}}
 
 \item{selector_prefix}{CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
