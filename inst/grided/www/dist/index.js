@@ -58,8 +58,8 @@
   // node_modules/core-js/internals/descriptors.js
   var require_descriptors = __commonJS({
     "node_modules/core-js/internals/descriptors.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
         return Object.defineProperty({}, 1, { get: function() {
           return 7;
         } })[1] != 7;
@@ -108,10 +108,10 @@
   // node_modules/core-js/internals/indexed-object.js
   var require_indexed_object = __commonJS({
     "node_modules/core-js/internals/indexed-object.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var classof2 = require_classof_raw();
       var split = "".split;
-      module.exports = fails8(function() {
+      module.exports = fails10(function() {
         return !Object("z").propertyIsEnumerable(0);
       }) ? function(it) {
         return classof2(it) == "String" ? split.call(it, "") : Object(it);
@@ -153,16 +153,16 @@
   // node_modules/core-js/internals/to-primitive.js
   var require_to_primitive = __commonJS({
     "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(input, PREFERRED_STRING) {
-        if (!isObject6(input))
+        if (!isObject7(input))
           return input;
         var fn, val;
-        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject6(val = fn.call(input)))
+        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
           return val;
-        if (typeof (fn = input.valueOf) == "function" && !isObject6(val = fn.call(input)))
+        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
           return val;
-        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject6(val = fn.call(input)))
+        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
           return val;
         throw TypeError("Can't convert object to primitive value");
       };
@@ -182,10 +182,10 @@
   // node_modules/core-js/internals/has.js
   var require_has = __commonJS({
     "node_modules/core-js/internals/has.js": function(exports, module) {
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var hasOwnProperty = {}.hasOwnProperty;
       module.exports = function hasOwn(it, key) {
-        return hasOwnProperty.call(toObject5(it), key);
+        return hasOwnProperty.call(toObject6(it), key);
       };
     }
   });
@@ -194,9 +194,9 @@
   var require_document_create_element = __commonJS({
     "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
       var global8 = require_global();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var document2 = global8.document;
-      var EXISTS = isObject6(document2) && isObject6(document2.createElement);
+      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
       module.exports = function(it) {
         return EXISTS ? document2.createElement(it) : {};
       };
@@ -207,9 +207,9 @@
   var require_ie8_dom_define = __commonJS({
     "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
       var DESCRIPTORS10 = require_descriptors();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var createElement = require_document_create_element();
-      module.exports = !DESCRIPTORS10 && !fails8(function() {
+      module.exports = !DESCRIPTORS10 && !fails10(function() {
         return Object.defineProperty(createElement("div"), "a", {
           get: function() {
             return 7;
@@ -247,9 +247,9 @@
   // node_modules/core-js/internals/an-object.js
   var require_an_object = __commonJS({
     "node_modules/core-js/internals/an-object.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(it) {
-        if (!isObject6(it)) {
+        if (!isObject7(it)) {
           throw TypeError(String(it) + " is not an object");
         }
         return it;
@@ -262,13 +262,13 @@
     "node_modules/core-js/internals/object-define-property.js": function(exports) {
       var DESCRIPTORS10 = require_descriptors();
       var IE8_DOM_DEFINE = require_ie8_dom_define();
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var toPrimitive3 = require_to_primitive();
       var $defineProperty2 = Object.defineProperty;
       exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
-        anObject6(O);
+        anObject7(O);
         P = toPrimitive3(P, true);
-        anObject6(Attributes);
+        anObject7(Attributes);
         if (IE8_DOM_DEFINE)
           try {
             return $defineProperty2(O, P, Attributes);
@@ -406,7 +406,7 @@
     "node_modules/core-js/internals/internal-state.js": function(exports, module) {
       var NATIVE_WEAK_MAP = require_native_weak_map();
       var global8 = require_global();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var objectHas = require_has();
       var shared2 = require_shared_store();
@@ -423,7 +423,7 @@
       var getterFor = function(TYPE) {
         return function(it) {
           var state;
-          if (!isObject6(it) || (state = get(it)).type !== TYPE) {
+          if (!isObject7(it) || (state = get(it)).type !== TYPE) {
             throw TypeError("Incompatible receiver, " + TYPE + " required");
           }
           return state;
@@ -539,11 +539,11 @@
     "node_modules/core-js/internals/get-built-in.js": function(exports, module) {
       var path = require_path();
       var global8 = require_global();
-      var aFunction = function(variable) {
+      var aFunction2 = function(variable) {
         return typeof variable == "function" ? variable : void 0;
       };
       module.exports = function(namespace, method) {
-        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
+        return arguments.length < 2 ? aFunction2(path[namespace]) || aFunction2(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
       };
     }
   });
@@ -676,12 +676,12 @@
   // node_modules/core-js/internals/own-keys.js
   var require_own_keys = __commonJS({
     "node_modules/core-js/internals/own-keys.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
+      var getBuiltIn3 = require_get_built_in();
       var getOwnPropertyNamesModule2 = require_object_get_own_property_names();
       var getOwnPropertySymbolsModule2 = require_object_get_own_property_symbols();
-      var anObject6 = require_an_object();
-      module.exports = getBuiltIn2("Reflect", "ownKeys") || function ownKeys5(it) {
-        var keys2 = getOwnPropertyNamesModule2.f(anObject6(it));
+      var anObject7 = require_an_object();
+      module.exports = getBuiltIn3("Reflect", "ownKeys") || function ownKeys5(it) {
+        var keys2 = getOwnPropertyNamesModule2.f(anObject7(it));
         var getOwnPropertySymbols3 = getOwnPropertySymbolsModule2.f;
         return getOwnPropertySymbols3 ? keys2.concat(getOwnPropertySymbols3(it)) : keys2;
       };
@@ -711,11 +711,11 @@
   // node_modules/core-js/internals/is-forced.js
   var require_is_forced = __commonJS({
     "node_modules/core-js/internals/is-forced.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var replacement = /#|\.prototype\./;
       var isForced2 = function(feature, detection) {
         var value = data[normalize(feature)];
-        return value == POLYFILL ? true : value == NATIVE ? false : typeof detection == "function" ? fails8(detection) : !!detection;
+        return value == POLYFILL ? true : value == NATIVE ? false : typeof detection == "function" ? fails10(detection) : !!detection;
       };
       var normalize = isForced2.normalize = function(string) {
         return String(string).replace(replacement, ".").toLowerCase();
@@ -741,7 +741,7 @@
         var TARGET = options.target;
         var GLOBAL = options.global;
         var STATIC = options.stat;
-        var FORCED3, target, key, targetProperty, sourceProperty, descriptor;
+        var FORCED4, target, key, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
           target = global8;
         } else if (STATIC) {
@@ -757,8 +757,8 @@
               targetProperty = descriptor && descriptor.value;
             } else
               targetProperty = target[key];
-            FORCED3 = isForced2(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
-            if (!FORCED3 && targetProperty !== void 0) {
+            FORCED4 = isForced2(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
+            if (!FORCED4 && targetProperty !== void 0) {
               if (typeof sourceProperty === typeof targetProperty)
                 continue;
               copyConstructorProperties2(sourceProperty, targetProperty);
@@ -786,8 +786,8 @@
   // node_modules/core-js/internals/engine-user-agent.js
   var require_engine_user_agent = __commonJS({
     "node_modules/core-js/internals/engine-user-agent.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
-      module.exports = getBuiltIn2("navigator", "userAgent") || "";
+      var getBuiltIn3 = require_get_built_in();
+      module.exports = getBuiltIn3("navigator", "userAgent") || "";
     }
   });
 
@@ -820,8 +820,8 @@
   var require_native_symbol = __commonJS({
     "node_modules/core-js/internals/native-symbol.js": function(exports, module) {
       var V8_VERSION2 = require_engine_v8_version();
-      var fails8 = require_fails();
-      module.exports = !!Object.getOwnPropertySymbols && !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !!Object.getOwnPropertySymbols && !fails10(function() {
         return !String(Symbol()) || !Symbol.sham && V8_VERSION2 && V8_VERSION2 < 41;
       });
     }
@@ -850,10 +850,10 @@
     "node_modules/core-js/internals/object-define-properties.js": function(exports, module) {
       var DESCRIPTORS10 = require_descriptors();
       var definePropertyModule2 = require_object_define_property();
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var objectKeys2 = require_object_keys();
       module.exports = DESCRIPTORS10 ? Object.defineProperties : function defineProperties3(O, Properties) {
-        anObject6(O);
+        anObject7(O);
         var keys2 = objectKeys2(Properties);
         var length2 = keys2.length;
         var index = 0;
@@ -868,15 +868,15 @@
   // node_modules/core-js/internals/html.js
   var require_html = __commonJS({
     "node_modules/core-js/internals/html.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
-      module.exports = getBuiltIn2("document", "documentElement");
+      var getBuiltIn3 = require_get_built_in();
+      module.exports = getBuiltIn3("document", "documentElement");
     }
   });
 
   // node_modules/core-js/internals/object-create.js
   var require_object_create = __commonJS({
     "node_modules/core-js/internals/object-create.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var defineProperties3 = require_object_define_properties();
       var enumBugKeys = require_enum_bug_keys();
       var hiddenKeys2 = require_hidden_keys();
@@ -926,10 +926,10 @@
         return NullProtoObject();
       };
       hiddenKeys2[IE_PROTO] = true;
-      module.exports = Object.create || function create4(O, Properties) {
+      module.exports = Object.create || function create5(O, Properties) {
         var result;
         if (O !== null) {
-          EmptyConstructor[PROTOTYPE2] = anObject6(O);
+          EmptyConstructor[PROTOTYPE2] = anObject7(O);
           result = new EmptyConstructor();
           EmptyConstructor[PROTOTYPE2] = null;
           result[IE_PROTO] = O;
@@ -1040,9 +1040,9 @@
   // node_modules/core-js/internals/function-bind-context.js
   var require_function_bind_context = __commonJS({
     "node_modules/core-js/internals/function-bind-context.js": function(exports, module) {
-      var aFunction = require_a_function();
+      var aFunction2 = require_a_function();
       module.exports = function(fn, that, length2) {
-        aFunction(fn);
+        aFunction2(fn);
         if (that === void 0)
           return fn;
         switch (length2) {
@@ -1073,7 +1073,7 @@
   // node_modules/core-js/internals/array-species-create.js
   var require_array_species_create = __commonJS({
     "node_modules/core-js/internals/array-species-create.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var isArray5 = require_is_array();
       var wellKnownSymbol5 = require_well_known_symbol();
       var SPECIES2 = wellKnownSymbol5("species");
@@ -1083,7 +1083,7 @@
           C = originalArray.constructor;
           if (typeof C == "function" && (C === Array || isArray5(C.prototype)))
             C = void 0;
-          else if (isObject6(C)) {
+          else if (isObject7(C)) {
             C = C[SPECIES2];
             if (C === null)
               C = void 0;
@@ -1097,9 +1097,9 @@
   // node_modules/core-js/internals/array-iteration.js
   var require_array_iteration = __commonJS({
     "node_modules/core-js/internals/array-iteration.js": function(exports, module) {
-      var bind2 = require_function_bind_context();
+      var bind3 = require_function_bind_context();
       var IndexedObject2 = require_indexed_object();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var toLength7 = require_to_length();
       var arraySpeciesCreate3 = require_array_species_create();
       var push = [].push;
@@ -1112,13 +1112,13 @@
         var IS_FILTER_OUT = TYPE == 7;
         var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
         return function($this, callbackfn, that, specificCreate) {
-          var O = toObject5($this);
+          var O = toObject6($this);
           var self2 = IndexedObject2(O);
-          var boundFunction = bind2(callbackfn, that, 3);
+          var boundFunction = bind3(callbackfn, that, 3);
           var length2 = toLength7(self2.length);
           var index = 0;
-          var create4 = specificCreate || arraySpeciesCreate3;
-          var target = IS_MAP ? create4($this, length2) : IS_FILTER || IS_FILTER_OUT ? create4($this, 0) : void 0;
+          var create5 = specificCreate || arraySpeciesCreate3;
+          var target = IS_MAP ? create5($this, length2) : IS_FILTER || IS_FILTER_OUT ? create5($this, 0) : void 0;
           var value, result;
           for (; length2 > index; index++)
             if (NO_HOLES || index in self2) {
@@ -1183,12 +1183,12 @@
   // node_modules/core-js/internals/array-method-has-species-support.js
   var require_array_method_has_species_support = __commonJS({
     "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var wellKnownSymbol5 = require_well_known_symbol();
       var V8_VERSION2 = require_engine_v8_version();
       var SPECIES2 = wellKnownSymbol5("species");
       module.exports = function(METHOD_NAME) {
-        return V8_VERSION2 >= 51 || !fails8(function() {
+        return V8_VERSION2 >= 51 || !fails10(function() {
           var array = [];
           var constructor = array.constructor = {};
           constructor[SPECIES2] = function() {
@@ -1203,8 +1203,8 @@
   // node_modules/core-js/internals/freezing.js
   var require_freezing = __commonJS({
     "node_modules/core-js/internals/freezing.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
         return Object.isExtensible(Object.preventExtensions({}));
       });
     }
@@ -1214,7 +1214,7 @@
   var require_internal_metadata = __commonJS({
     "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
       var hiddenKeys2 = require_hidden_keys();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var has4 = require_has();
       var defineProperty5 = require_object_define_property().f;
       var uid2 = require_uid();
@@ -1230,23 +1230,23 @@
           weakData: {}
         } });
       };
-      var fastKey = function(it, create4) {
-        if (!isObject6(it))
+      var fastKey = function(it, create5) {
+        if (!isObject7(it))
           return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
         if (!has4(it, METADATA)) {
           if (!isExtensible(it))
             return "F";
-          if (!create4)
+          if (!create5)
             return "E";
           setMetadata(it);
         }
         return it[METADATA].objectID;
       };
-      var getWeakData = function(it, create4) {
+      var getWeakData = function(it, create5) {
         if (!has4(it, METADATA)) {
           if (!isExtensible(it))
             return true;
-          if (!create4)
+          if (!create5)
             return false;
           setMetadata(it);
         }
@@ -1317,14 +1317,14 @@
   var require_add_to_unscopables = __commonJS({
     "node_modules/core-js/internals/add-to-unscopables.js": function(exports, module) {
       var wellKnownSymbol5 = require_well_known_symbol();
-      var create4 = require_object_create();
+      var create5 = require_object_create();
       var definePropertyModule2 = require_object_define_property();
       var UNSCOPABLES = wellKnownSymbol5("unscopables");
       var ArrayPrototype = Array.prototype;
       if (ArrayPrototype[UNSCOPABLES] == void 0) {
         definePropertyModule2.f(ArrayPrototype, UNSCOPABLES, {
           configurable: true,
-          value: create4(null)
+          value: create5(null)
         });
       }
       module.exports = function(key) {
@@ -1343,8 +1343,8 @@
   // node_modules/core-js/internals/correct-prototype-getter.js
   var require_correct_prototype_getter = __commonJS({
     "node_modules/core-js/internals/correct-prototype-getter.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
         function F() {
         }
         F.prototype.constructor = null;
@@ -1357,13 +1357,13 @@
   var require_object_get_prototype_of = __commonJS({
     "node_modules/core-js/internals/object-get-prototype-of.js": function(exports, module) {
       var has4 = require_has();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var sharedKey2 = require_shared_key();
-      var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+      var CORRECT_PROTOTYPE_GETTER2 = require_correct_prototype_getter();
       var IE_PROTO = sharedKey2("IE_PROTO");
       var ObjectPrototype2 = Object.prototype;
-      module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function(O) {
-        O = toObject5(O);
+      module.exports = CORRECT_PROTOTYPE_GETTER2 ? Object.getPrototypeOf : function(O) {
+        O = toObject6(O);
         if (has4(O, IE_PROTO))
           return O[IE_PROTO];
         if (typeof O.constructor == "function" && O instanceof O.constructor) {
@@ -1378,8 +1378,8 @@
   var require_iterators_core = __commonJS({
     "node_modules/core-js/internals/iterators-core.js": function(exports, module) {
       "use strict";
-      var fails8 = require_fails();
-      var getPrototypeOf = require_object_get_prototype_of();
+      var fails10 = require_fails();
+      var getPrototypeOf2 = require_object_get_prototype_of();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var has4 = require_has();
       var wellKnownSymbol5 = require_well_known_symbol();
@@ -1397,12 +1397,12 @@
         if (!("next" in arrayIterator))
           BUGGY_SAFARI_ITERATORS = true;
         else {
-          PrototypeOfArrayIteratorPrototype = getPrototypeOf(getPrototypeOf(arrayIterator));
+          PrototypeOfArrayIteratorPrototype = getPrototypeOf2(getPrototypeOf2(arrayIterator));
           if (PrototypeOfArrayIteratorPrototype !== Object.prototype)
             IteratorPrototype = PrototypeOfArrayIteratorPrototype;
         }
       }
-      var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == void 0 || fails8(function() {
+      var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == void 0 || fails10(function() {
         var test = {};
         return IteratorPrototype[ITERATOR2].call(test) !== test;
       });
@@ -1423,7 +1423,7 @@
     "node_modules/core-js/internals/create-iterator-constructor.js": function(exports, module) {
       "use strict";
       var IteratorPrototype = require_iterators_core().IteratorPrototype;
-      var create4 = require_object_create();
+      var create5 = require_object_create();
       var createPropertyDescriptor2 = require_create_property_descriptor();
       var setToStringTag2 = require_set_to_string_tag();
       var Iterators = require_iterators();
@@ -1432,7 +1432,7 @@
       };
       module.exports = function(IteratorConstructor, NAME2, next3) {
         var TO_STRING_TAG2 = NAME2 + " Iterator";
-        IteratorConstructor.prototype = create4(IteratorPrototype, { next: createPropertyDescriptor2(1, next3) });
+        IteratorConstructor.prototype = create5(IteratorPrototype, { next: createPropertyDescriptor2(1, next3) });
         setToStringTag2(IteratorConstructor, TO_STRING_TAG2, false, true);
         Iterators[TO_STRING_TAG2] = returnThis;
         return IteratorConstructor;
@@ -1443,9 +1443,9 @@
   // node_modules/core-js/internals/a-possible-prototype.js
   var require_a_possible_prototype = __commonJS({
     "node_modules/core-js/internals/a-possible-prototype.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(it) {
-        if (!isObject6(it) && it !== null) {
+        if (!isObject7(it) && it !== null) {
           throw TypeError("Can't set " + String(it) + " as a prototype");
         }
         return it;
@@ -1456,7 +1456,7 @@
   // node_modules/core-js/internals/object-set-prototype-of.js
   var require_object_set_prototype_of = __commonJS({
     "node_modules/core-js/internals/object-set-prototype-of.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var aPossiblePrototype = require_a_possible_prototype();
       module.exports = Object.setPrototypeOf || ("__proto__" in {} ? function() {
         var CORRECT_SETTER = false;
@@ -1468,8 +1468,8 @@
           CORRECT_SETTER = test instanceof Array;
         } catch (error) {
         }
-        return function setPrototypeOf(O, proto) {
-          anObject6(O);
+        return function setPrototypeOf2(O, proto) {
+          anObject7(O);
           aPossiblePrototype(proto);
           if (CORRECT_SETTER)
             setter.call(O, proto);
@@ -1485,10 +1485,10 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $30 = require_export();
+      var $33 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
-      var getPrototypeOf = require_object_get_prototype_of();
-      var setPrototypeOf = require_object_set_prototype_of();
+      var getPrototypeOf2 = require_object_get_prototype_of();
+      var setPrototypeOf2 = require_object_set_prototype_of();
       var setToStringTag2 = require_set_to_string_tag();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var redefine6 = require_redefine();
@@ -1505,7 +1505,7 @@
       var returnThis = function() {
         return this;
       };
-      module.exports = function(Iterable, NAME2, IteratorConstructor, next3, DEFAULT, IS_SET, FORCED3) {
+      module.exports = function(Iterable, NAME2, IteratorConstructor, next3, DEFAULT, IS_SET, FORCED4) {
         createIteratorConstructor(IteratorConstructor, NAME2, next3);
         var getIterationMethod = function(KIND) {
           if (KIND === DEFAULT && defaultIterator)
@@ -1538,11 +1538,11 @@
         var anyNativeIterator = NAME2 == "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
         var CurrentIteratorPrototype, methods, KEY;
         if (anyNativeIterator) {
-          CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
+          CurrentIteratorPrototype = getPrototypeOf2(anyNativeIterator.call(new Iterable()));
           if (IteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
-            if (!IS_PURE2 && getPrototypeOf(CurrentIteratorPrototype) !== IteratorPrototype) {
-              if (setPrototypeOf) {
-                setPrototypeOf(CurrentIteratorPrototype, IteratorPrototype);
+            if (!IS_PURE2 && getPrototypeOf2(CurrentIteratorPrototype) !== IteratorPrototype) {
+              if (setPrototypeOf2) {
+                setPrototypeOf2(CurrentIteratorPrototype, IteratorPrototype);
               } else if (typeof CurrentIteratorPrototype[ITERATOR2] != "function") {
                 createNonEnumerableProperty4(CurrentIteratorPrototype, ITERATOR2, returnThis);
               }
@@ -1558,7 +1558,7 @@
             return nativeIterator.call(this);
           };
         }
-        if ((!IS_PURE2 || FORCED3) && IterablePrototype[ITERATOR2] !== defaultIterator) {
+        if ((!IS_PURE2 || FORCED4) && IterablePrototype[ITERATOR2] !== defaultIterator) {
           createNonEnumerableProperty4(IterablePrototype, ITERATOR2, defaultIterator);
         }
         Iterators[NAME2] = defaultIterator;
@@ -1568,14 +1568,14 @@
             keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
             entries: getIterationMethod(ENTRIES)
           };
-          if (FORCED3)
+          if (FORCED4)
             for (KEY in methods) {
               if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
                 redefine6(IterablePrototype, KEY, methods[KEY]);
               }
             }
           else
-            $30({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $33({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1689,11 +1689,11 @@
   // node_modules/core-js/internals/iterator-close.js
   var require_iterator_close = __commonJS({
     "node_modules/core-js/internals/iterator-close.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       module.exports = function(iterator) {
         var returnMethod = iterator["return"];
         if (returnMethod !== void 0) {
-          return anObject6(returnMethod.call(iterator)).value;
+          return anObject7(returnMethod.call(iterator)).value;
         }
       };
     }
@@ -1702,11 +1702,11 @@
   // node_modules/core-js/internals/call-with-safe-iteration-closing.js
   var require_call_with_safe_iteration_closing = __commonJS({
     "node_modules/core-js/internals/call-with-safe-iteration-closing.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var iteratorClose = require_iterator_close();
       module.exports = function(iterator, fn, value, ENTRIES) {
         try {
-          return ENTRIES ? fn(anObject6(value)[0], value[1]) : fn(value);
+          return ENTRIES ? fn(anObject7(value)[0], value[1]) : fn(value);
         } catch (error) {
           iteratorClose(iterator);
           throw error;
@@ -1746,15 +1746,15 @@
   var require_array_from = __commonJS({
     "node_modules/core-js/internals/array-from.js": function(exports, module) {
       "use strict";
-      var bind2 = require_function_bind_context();
-      var toObject5 = require_to_object();
+      var bind3 = require_function_bind_context();
+      var toObject6 = require_to_object();
       var callWithSafeIterationClosing = require_call_with_safe_iteration_closing();
       var isArrayIteratorMethod = require_is_array_iterator_method();
       var toLength7 = require_to_length();
       var createProperty5 = require_create_property();
       var getIteratorMethod = require_get_iterator_method();
       module.exports = function from3(arrayLike) {
-        var O = toObject5(arrayLike);
+        var O = toObject6(arrayLike);
         var C = typeof this == "function" ? this : Array;
         var argumentsLength = arguments.length;
         var mapfn = argumentsLength > 1 ? arguments[1] : void 0;
@@ -1763,7 +1763,7 @@
         var index = 0;
         var length2, result, step, iterator, next3, value;
         if (mapping)
-          mapfn = bind2(mapfn, argumentsLength > 2 ? arguments[2] : void 0, 2);
+          mapfn = bind3(mapfn, argumentsLength > 2 ? arguments[2] : void 0, 2);
         if (iteratorMethod != void 0 && !(C == Array && isArrayIteratorMethod(iteratorMethod))) {
           iterator = iteratorMethod.call(O);
           next3 = iterator.next;
@@ -1833,13 +1833,42 @@
     }
   });
 
+  // node_modules/core-js/internals/array-method-is-strict.js
+  var require_array_method_is_strict = __commonJS({
+    "node_modules/core-js/internals/array-method-is-strict.js": function(exports, module) {
+      "use strict";
+      var fails10 = require_fails();
+      module.exports = function(METHOD_NAME, argument) {
+        var method = [][METHOD_NAME];
+        return !!method && fails10(function() {
+          method.call(null, argument || function() {
+            throw 1;
+          }, 1);
+        });
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-for-each.js
+  var require_array_for_each = __commonJS({
+    "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
+      "use strict";
+      var $forEach2 = require_array_iteration().forEach;
+      var arrayMethodIsStrict5 = require_array_method_is_strict();
+      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
+      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
+        return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+      } : [].forEach;
+    }
+  });
+
   // node_modules/core-js/internals/regexp-flags.js
   var require_regexp_flags = __commonJS({
     "node_modules/core-js/internals/regexp-flags.js": function(exports, module) {
       "use strict";
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       module.exports = function() {
-        var that = anObject6(this);
+        var that = anObject7(this);
         var result = "";
         if (that.global)
           result += "g";
@@ -1862,16 +1891,16 @@
   var require_regexp_sticky_helpers = __commonJS({
     "node_modules/core-js/internals/regexp-sticky-helpers.js": function(exports) {
       "use strict";
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       function RE(s, f) {
         return RegExp(s, f);
       }
-      exports.UNSUPPORTED_Y = fails8(function() {
+      exports.UNSUPPORTED_Y = fails10(function() {
         var re = RE("a", "y");
         re.lastIndex = 2;
         return re.exec("abcd") != null;
       });
-      exports.BROKEN_CARET = fails8(function() {
+      exports.BROKEN_CARET = fails10(function() {
         var re = RE("^r", "gy");
         re.lastIndex = 2;
         return re.exec("str") != null;
@@ -1957,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $30 = require_export();
+      var $33 = require_export();
       var exec = require_regexp_exec();
-      $30({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $33({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -1972,12 +2001,12 @@
       require_es_regexp_exec();
       var redefine6 = require_redefine();
       var regexpExec2 = require_regexp_exec();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var wellKnownSymbol5 = require_well_known_symbol();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var SPECIES2 = wellKnownSymbol5("species");
       var RegExpPrototype2 = RegExp.prototype;
-      var REPLACE_SUPPORTS_NAMED_GROUPS = !fails8(function() {
+      var REPLACE_SUPPORTS_NAMED_GROUPS = !fails10(function() {
         var re = /./;
         re.exec = function() {
           var result = [];
@@ -1996,7 +2025,7 @@
         }
         return false;
       }();
-      var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = !fails8(function() {
+      var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = !fails10(function() {
         var re = /(?:)/;
         var originalExec = re.exec;
         re.exec = function() {
@@ -2007,14 +2036,14 @@
       });
       module.exports = function(KEY, length2, exec, sham) {
         var SYMBOL2 = wellKnownSymbol5(KEY);
-        var DELEGATES_TO_SYMBOL = !fails8(function() {
+        var DELEGATES_TO_SYMBOL = !fails10(function() {
           var O = {};
           O[SYMBOL2] = function() {
             return 7;
           };
           return ""[KEY](O) != 7;
         });
-        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails8(function() {
+        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails10(function() {
           var execCalled = false;
           var re = /a/;
           if (KEY === "split") {
@@ -2066,13 +2095,13 @@
   // node_modules/core-js/internals/is-regexp.js
   var require_is_regexp = __commonJS({
     "node_modules/core-js/internals/is-regexp.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var classof2 = require_classof_raw();
       var wellKnownSymbol5 = require_well_known_symbol();
       var MATCH = wellKnownSymbol5("match");
       module.exports = function(it) {
         var isRegExp2;
-        return isObject6(it) && ((isRegExp2 = it[MATCH]) !== void 0 ? !!isRegExp2 : classof2(it) == "RegExp");
+        return isObject7(it) && ((isRegExp2 = it[MATCH]) !== void 0 ? !!isRegExp2 : classof2(it) == "RegExp");
       };
     }
   });
@@ -2080,14 +2109,14 @@
   // node_modules/core-js/internals/species-constructor.js
   var require_species_constructor = __commonJS({
     "node_modules/core-js/internals/species-constructor.js": function(exports, module) {
-      var anObject6 = require_an_object();
-      var aFunction = require_a_function();
+      var anObject7 = require_an_object();
+      var aFunction2 = require_a_function();
       var wellKnownSymbol5 = require_well_known_symbol();
       var SPECIES2 = wellKnownSymbol5("species");
       module.exports = function(O, defaultConstructor) {
-        var C = anObject6(O).constructor;
+        var C = anObject7(O).constructor;
         var S;
-        return C === void 0 || (S = anObject6(C)[SPECIES2]) == void 0 ? defaultConstructor : aFunction(S);
+        return C === void 0 || (S = anObject7(C)[SPECIES2]) == void 0 ? defaultConstructor : aFunction2(S);
       };
     }
   });
@@ -2125,39 +2154,10 @@
     }
   });
 
-  // node_modules/core-js/internals/array-method-is-strict.js
-  var require_array_method_is_strict = __commonJS({
-    "node_modules/core-js/internals/array-method-is-strict.js": function(exports, module) {
-      "use strict";
-      var fails8 = require_fails();
-      module.exports = function(METHOD_NAME, argument) {
-        var method = [][METHOD_NAME];
-        return !!method && fails8(function() {
-          method.call(null, argument || function() {
-            throw 1;
-          }, 1);
-        });
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/array-for-each.js
-  var require_array_for_each = __commonJS({
-    "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
-      "use strict";
-      var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict5 = require_array_method_is_strict();
-      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
-      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
-        return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-      } : [].forEach;
-    }
-  });
-
   // node_modules/core-js/internals/get-substitution.js
   var require_get_substitution = __commonJS({
     "node_modules/core-js/internals/get-substitution.js": function(exports, module) {
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var floor = Math.floor;
       var replace2 = "".replace;
       var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
@@ -2167,7 +2167,7 @@
         var m = captures.length;
         var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
         if (namedCaptures !== void 0) {
-          namedCaptures = toObject5(namedCaptures);
+          namedCaptures = toObject6(namedCaptures);
           symbols = SUBSTITUTION_SYMBOLS;
         }
         return replace2.call(replacement, symbols, function(match2, ch) {
@@ -2209,15 +2209,15 @@
     "node_modules/core-js/internals/object-assign.js": function(exports, module) {
       "use strict";
       var DESCRIPTORS10 = require_descriptors();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var objectKeys2 = require_object_keys();
       var getOwnPropertySymbolsModule2 = require_object_get_own_property_symbols();
       var propertyIsEnumerableModule2 = require_object_property_is_enumerable();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var IndexedObject2 = require_indexed_object();
       var $assign = Object.assign;
       var defineProperty5 = Object.defineProperty;
-      module.exports = !$assign || fails8(function() {
+      module.exports = !$assign || fails10(function() {
         if (DESCRIPTORS10 && $assign({ b: 1 }, $assign(defineProperty5({}, "a", {
           enumerable: true,
           get: function() {
@@ -2238,7 +2238,7 @@
         });
         return $assign({}, A)[symbol] != 7 || objectKeys2($assign({}, B)).join("") != alphabet;
       }) ? function assign2(target, source) {
-        var T = toObject5(target);
+        var T = toObject6(target);
         var argumentsLength = arguments.length;
         var index = 1;
         var getOwnPropertySymbols3 = getOwnPropertySymbolsModule2.f;
@@ -2263,14 +2263,14 @@
   // node_modules/core-js/internals/array-reduce.js
   var require_array_reduce = __commonJS({
     "node_modules/core-js/internals/array-reduce.js": function(exports, module) {
-      var aFunction = require_a_function();
-      var toObject5 = require_to_object();
+      var aFunction2 = require_a_function();
+      var toObject6 = require_to_object();
       var IndexedObject2 = require_indexed_object();
       var toLength7 = require_to_length();
       var createMethod = function(IS_RIGHT) {
         return function(that, callbackfn, argumentsLength, memo) {
-          aFunction(callbackfn);
-          var O = toObject5(that);
+          aFunction2(callbackfn);
+          var O = toObject6(that);
           var self2 = IndexedObject2(O);
           var length2 = toLength7(O.length);
           var index = IS_RIGHT ? length2 - 1 : 0;
@@ -2325,10 +2325,10 @@
   // node_modules/core-js/internals/iterate.js
   var require_iterate = __commonJS({
     "node_modules/core-js/internals/iterate.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var isArrayIteratorMethod = require_is_array_iterator_method();
       var toLength7 = require_to_length();
-      var bind2 = require_function_bind_context();
+      var bind3 = require_function_bind_context();
       var getIteratorMethod = require_get_iterator_method();
       var iteratorClose = require_iterator_close();
       var Result = function(stopped, result) {
@@ -2340,7 +2340,7 @@
         var AS_ENTRIES = !!(options && options.AS_ENTRIES);
         var IS_ITERATOR = !!(options && options.IS_ITERATOR);
         var INTERRUPTED = !!(options && options.INTERRUPTED);
-        var fn = bind2(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
+        var fn = bind3(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
         var iterator, iterFn, index, length2, result, next3, step;
         var stop = function(condition) {
           if (iterator)
@@ -2349,7 +2349,7 @@
         };
         var callFn = function(value) {
           if (AS_ENTRIES) {
-            anObject6(value);
+            anObject7(value);
             return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
           }
           return INTERRUPTED ? fn(value, stop) : fn(value);
@@ -2401,12 +2401,12 @@
   // node_modules/core-js/internals/inherit-if-required.js
   var require_inherit_if_required = __commonJS({
     "node_modules/core-js/internals/inherit-if-required.js": function(exports, module) {
-      var isObject6 = require_is_object();
-      var setPrototypeOf = require_object_set_prototype_of();
+      var isObject7 = require_is_object();
+      var setPrototypeOf2 = require_object_set_prototype_of();
       module.exports = function($this, dummy, Wrapper) {
         var NewTarget, NewTargetPrototype;
-        if (setPrototypeOf && typeof (NewTarget = dummy.constructor) == "function" && NewTarget !== Wrapper && isObject6(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype)
-          setPrototypeOf($this, NewTargetPrototype);
+        if (setPrototypeOf2 && typeof (NewTarget = dummy.constructor) == "function" && NewTarget !== Wrapper && isObject7(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype)
+          setPrototypeOf2($this, NewTargetPrototype);
         return $this;
       };
     }
@@ -2416,15 +2416,15 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $30 = require_export();
+      var $33 = require_export();
       var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
       var InternalMetadataModule = require_internal_metadata();
       var iterate = require_iterate();
       var anInstance = require_an_instance();
-      var isObject6 = require_is_object();
-      var fails8 = require_fails();
+      var isObject7 = require_is_object();
+      var fails10 = require_fails();
       var checkCorrectnessOfIteration2 = require_check_correctness_of_iteration();
       var setToStringTag2 = require_set_to_string_tag();
       var inheritIfRequired2 = require_inherit_if_required();
@@ -2442,17 +2442,17 @@
             nativeMethod.call(this, value === 0 ? 0 : value);
             return this;
           } : KEY == "delete" ? function(key) {
-            return IS_WEAK && !isObject6(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
           } : KEY == "get" ? function get(key) {
-            return IS_WEAK && !isObject6(key) ? void 0 : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? void 0 : nativeMethod.call(this, key === 0 ? 0 : key);
           } : KEY == "has" ? function has4(key) {
-            return IS_WEAK && !isObject6(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
           } : function set(key, value) {
             nativeMethod.call(this, key === 0 ? 0 : key, value);
             return this;
           });
         };
-        var REPLACE = isForced2(CONSTRUCTOR_NAME, typeof NativeConstructor != "function" || !(IS_WEAK || NativePrototype.forEach && !fails8(function() {
+        var REPLACE = isForced2(CONSTRUCTOR_NAME, typeof NativeConstructor != "function" || !(IS_WEAK || NativePrototype.forEach && !fails10(function() {
           new NativeConstructor().entries().next();
         })));
         if (REPLACE) {
@@ -2461,13 +2461,13 @@
         } else if (isForced2(CONSTRUCTOR_NAME, true)) {
           var instance = new Constructor();
           var HASNT_CHAINING = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance;
-          var THROWS_ON_PRIMITIVES = fails8(function() {
+          var THROWS_ON_PRIMITIVES = fails10(function() {
             instance.has(1);
           });
           var ACCEPT_ITERABLES = checkCorrectnessOfIteration2(function(iterable) {
             new NativeConstructor(iterable);
           });
-          var BUGGY_ZERO = !IS_WEAK && fails8(function() {
+          var BUGGY_ZERO = !IS_WEAK && fails10(function() {
             var $instance = new NativeConstructor();
             var index = 5;
             while (index--)
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $30({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $33({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -2511,8 +2511,8 @@
       "use strict";
       var redefineAll = require_redefine_all();
       var getWeakData = require_internal_metadata().getWeakData;
-      var anObject6 = require_an_object();
-      var isObject6 = require_is_object();
+      var anObject7 = require_an_object();
+      var isObject7 = require_is_object();
       var anInstance = require_an_instance();
       var iterate = require_iterate();
       var ArrayIterationModule = require_array_iteration();
@@ -2574,7 +2574,7 @@
           var getInternalState3 = internalStateGetterFor(CONSTRUCTOR_NAME);
           var define = function(that, key, value) {
             var state = getInternalState3(that);
-            var data = getWeakData(anObject6(key), true);
+            var data = getWeakData(anObject7(key), true);
             if (data === true)
               uncaughtFrozenStore(state).set(key, value);
             else
@@ -2584,7 +2584,7 @@
           redefineAll(C.prototype, {
             "delete": function(key) {
               var state = getInternalState3(this);
-              if (!isObject6(key))
+              if (!isObject7(key))
                 return false;
               var data = getWeakData(key);
               if (data === true)
@@ -2593,7 +2593,7 @@
             },
             has: function has4(key) {
               var state = getInternalState3(this);
-              if (!isObject6(key))
+              if (!isObject7(key))
                 return false;
               var data = getWeakData(key);
               if (data === true)
@@ -2604,7 +2604,7 @@
           redefineAll(C.prototype, IS_MAP ? {
             get: function get(key) {
               var state = getInternalState3(this);
-              if (isObject6(key)) {
+              if (isObject7(key)) {
                 var data = getWeakData(key);
                 if (data === true)
                   return uncaughtFrozenStore(state).get(key);
@@ -2634,7 +2634,7 @@
       var InternalMetadataModule = require_internal_metadata();
       var collection = require_collection();
       var collectionWeak = require_collection_weak();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var enforceIternalState = require_internal_state().enforce;
       var NATIVE_WEAK_MAP = require_native_weak_map();
       var IS_IE11 = !global8.ActiveXObject && "ActiveXObject" in global8;
@@ -2656,7 +2656,7 @@
         nativeSet = WeakMapPrototype.set;
         redefineAll(WeakMapPrototype, {
           "delete": function(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2665,7 +2665,7 @@
             return nativeDelete.call(this, key);
           },
           has: function has4(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2674,7 +2674,7 @@
             return nativeHas.call(this, key);
           },
           get: function get(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2683,7 +2683,7 @@
             return nativeGet.call(this, key);
           },
           set: function set(key, value) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2738,11 +2738,11 @@
   // node_modules/core-js/internals/string-trim-forced.js
   var require_string_trim_forced = __commonJS({
     "node_modules/core-js/internals/string-trim-forced.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var whitespaces = require_whitespaces();
       var non = "\u200B\x85\u180E";
       module.exports = function(METHOD_NAME) {
-        return fails8(function() {
+        return fails10(function() {
           return !!whitespaces[METHOD_NAME]() || non[METHOD_NAME]() != non || whitespaces[METHOD_NAME].name !== METHOD_NAME;
         });
       };
@@ -2753,11 +2753,11 @@
   var require_function_bind = __commonJS({
     "node_modules/core-js/internals/function-bind.js": function(exports, module) {
       "use strict";
-      var aFunction = require_a_function();
-      var isObject6 = require_is_object();
+      var aFunction2 = require_a_function();
+      var isObject7 = require_is_object();
       var slice4 = [].slice;
       var factories = {};
-      var construct = function(C, argsLength, args) {
+      var construct2 = function(C, argsLength, args) {
         if (!(argsLength in factories)) {
           for (var list = [], i = 0; i < argsLength; i++)
             list[i] = "a[" + i + "]";
@@ -2765,14 +2765,14 @@
         }
         return factories[argsLength](C, args);
       };
-      module.exports = Function.bind || function bind2(that) {
-        var fn = aFunction(this);
+      module.exports = Function.bind || function bind3(that) {
+        var fn = aFunction2(this);
         var partArgs = slice4.call(arguments, 1);
         var boundFunction = function bound() {
           var args = partArgs.concat(slice4.call(arguments));
-          return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
+          return this instanceof boundFunction ? construct2(fn, args.length, args) : fn.apply(that, args);
         };
-        if (isObject6(fn.prototype))
+        if (isObject7(fn.prototype))
           boundFunction.prototype = fn.prototype;
         return boundFunction;
       };
@@ -2810,6 +2810,229 @@
         }
         return false;
       };
+    }
+  });
+
+  // node_modules/core-js/internals/set-species.js
+  var require_set_species = __commonJS({
+    "node_modules/core-js/internals/set-species.js": function(exports, module) {
+      "use strict";
+      var getBuiltIn3 = require_get_built_in();
+      var definePropertyModule2 = require_object_define_property();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var DESCRIPTORS10 = require_descriptors();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(CONSTRUCTOR_NAME) {
+        var Constructor = getBuiltIn3(CONSTRUCTOR_NAME);
+        var defineProperty5 = definePropertyModule2.f;
+        if (DESCRIPTORS10 && Constructor && !Constructor[SPECIES2]) {
+          defineProperty5(Constructor, SPECIES2, {
+            configurable: true,
+            get: function() {
+              return this;
+            }
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/collection-strong.js
+  var require_collection_strong = __commonJS({
+    "node_modules/core-js/internals/collection-strong.js": function(exports, module) {
+      "use strict";
+      var defineProperty5 = require_object_define_property().f;
+      var create5 = require_object_create();
+      var redefineAll = require_redefine_all();
+      var bind3 = require_function_bind_context();
+      var anInstance = require_an_instance();
+      var iterate = require_iterate();
+      var defineIterator2 = require_define_iterator();
+      var setSpecies = require_set_species();
+      var DESCRIPTORS10 = require_descriptors();
+      var fastKey = require_internal_metadata().fastKey;
+      var InternalStateModule3 = require_internal_state();
+      var setInternalState3 = InternalStateModule3.set;
+      var internalStateGetterFor = InternalStateModule3.getterFor;
+      module.exports = {
+        getConstructor: function(wrapper, CONSTRUCTOR_NAME, IS_MAP, ADDER) {
+          var C = wrapper(function(that, iterable) {
+            anInstance(that, C, CONSTRUCTOR_NAME);
+            setInternalState3(that, {
+              type: CONSTRUCTOR_NAME,
+              index: create5(null),
+              first: void 0,
+              last: void 0,
+              size: 0
+            });
+            if (!DESCRIPTORS10)
+              that.size = 0;
+            if (iterable != void 0)
+              iterate(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
+          });
+          var getInternalState3 = internalStateGetterFor(CONSTRUCTOR_NAME);
+          var define = function(that, key, value) {
+            var state = getInternalState3(that);
+            var entry = getEntry(that, key);
+            var previous, index;
+            if (entry) {
+              entry.value = value;
+            } else {
+              state.last = entry = {
+                index: index = fastKey(key, true),
+                key: key,
+                value: value,
+                previous: previous = state.last,
+                next: void 0,
+                removed: false
+              };
+              if (!state.first)
+                state.first = entry;
+              if (previous)
+                previous.next = entry;
+              if (DESCRIPTORS10)
+                state.size++;
+              else
+                that.size++;
+              if (index !== "F")
+                state.index[index] = entry;
+            }
+            return that;
+          };
+          var getEntry = function(that, key) {
+            var state = getInternalState3(that);
+            var index = fastKey(key);
+            var entry;
+            if (index !== "F")
+              return state.index[index];
+            for (entry = state.first; entry; entry = entry.next) {
+              if (entry.key == key)
+                return entry;
+            }
+          };
+          redefineAll(C.prototype, {
+            clear: function clear() {
+              var that = this;
+              var state = getInternalState3(that);
+              var data = state.index;
+              var entry = state.first;
+              while (entry) {
+                entry.removed = true;
+                if (entry.previous)
+                  entry.previous = entry.previous.next = void 0;
+                delete data[entry.index];
+                entry = entry.next;
+              }
+              state.first = state.last = void 0;
+              if (DESCRIPTORS10)
+                state.size = 0;
+              else
+                that.size = 0;
+            },
+            "delete": function(key) {
+              var that = this;
+              var state = getInternalState3(that);
+              var entry = getEntry(that, key);
+              if (entry) {
+                var next3 = entry.next;
+                var prev2 = entry.previous;
+                delete state.index[entry.index];
+                entry.removed = true;
+                if (prev2)
+                  prev2.next = next3;
+                if (next3)
+                  next3.previous = prev2;
+                if (state.first == entry)
+                  state.first = next3;
+                if (state.last == entry)
+                  state.last = prev2;
+                if (DESCRIPTORS10)
+                  state.size--;
+                else
+                  that.size--;
+              }
+              return !!entry;
+            },
+            forEach: function forEach3(callbackfn) {
+              var state = getInternalState3(this);
+              var boundFunction = bind3(callbackfn, arguments.length > 1 ? arguments[1] : void 0, 3);
+              var entry;
+              while (entry = entry ? entry.next : state.first) {
+                boundFunction(entry.value, entry.key, this);
+                while (entry && entry.removed)
+                  entry = entry.previous;
+              }
+            },
+            has: function has4(key) {
+              return !!getEntry(this, key);
+            }
+          });
+          redefineAll(C.prototype, IS_MAP ? {
+            get: function get(key) {
+              var entry = getEntry(this, key);
+              return entry && entry.value;
+            },
+            set: function set(key, value) {
+              return define(this, key === 0 ? 0 : key, value);
+            }
+          } : {
+            add: function add(value) {
+              return define(this, value = value === 0 ? 0 : value, value);
+            }
+          });
+          if (DESCRIPTORS10)
+            defineProperty5(C.prototype, "size", {
+              get: function() {
+                return getInternalState3(this).size;
+              }
+            });
+          return C;
+        },
+        setStrong: function(C, CONSTRUCTOR_NAME, IS_MAP) {
+          var ITERATOR_NAME = CONSTRUCTOR_NAME + " Iterator";
+          var getInternalCollectionState = internalStateGetterFor(CONSTRUCTOR_NAME);
+          var getInternalIteratorState = internalStateGetterFor(ITERATOR_NAME);
+          defineIterator2(C, CONSTRUCTOR_NAME, function(iterated, kind) {
+            setInternalState3(this, {
+              type: ITERATOR_NAME,
+              target: iterated,
+              state: getInternalCollectionState(iterated),
+              kind: kind,
+              last: void 0
+            });
+          }, function() {
+            var state = getInternalIteratorState(this);
+            var kind = state.kind;
+            var entry = state.last;
+            while (entry && entry.removed)
+              entry = entry.previous;
+            if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
+              state.target = void 0;
+              return { value: void 0, done: true };
+            }
+            if (kind == "keys")
+              return { value: entry.key, done: false };
+            if (kind == "values")
+              return { value: entry.value, done: false };
+            return { value: [entry.key, entry.value], done: false };
+          }, IS_MAP ? "entries" : "values", !IS_MAP, true);
+          setSpecies(CONSTRUCTOR_NAME);
+        }
+      };
+    }
+  });
+
+  // node_modules/core-js/modules/es.map.js
+  var require_es_map = __commonJS({
+    "node_modules/core-js/modules/es.map.js": function(exports, module) {
+      "use strict";
+      var collection = require_collection();
+      var collectionStrong = require_collection_strong();
+      module.exports = collection("Map", function(init) {
+        return function Map2() {
+          return init(this, arguments.length ? arguments[0] : void 0);
+        };
+      }, collectionStrong);
     }
   });
 
@@ -3381,6 +3604,32 @@
     });
   }
 
+  // node_modules/core-js/modules/es.array.for-each.js
+  "use strict";
+  var $11 = require_export();
+  var forEach = require_array_for_each();
+  $11({ target: "Array", proto: true, forced: [].forEach != forEach }, {
+    forEach: forEach
+  });
+
+  // node_modules/core-js/modules/web.dom-collections.for-each.js
+  var global5 = require_global();
+  var DOMIterables2 = require_dom_iterables();
+  var forEach2 = require_array_for_each();
+  var createNonEnumerableProperty3 = require_create_non_enumerable_property();
+  for (var COLLECTION_NAME in DOMIterables2) {
+    Collection = global5[COLLECTION_NAME];
+    CollectionPrototype = Collection && Collection.prototype;
+    if (CollectionPrototype && CollectionPrototype.forEach !== forEach2)
+      try {
+        createNonEnumerableProperty3(CollectionPrototype, "forEach", forEach2);
+      } catch (error) {
+        CollectionPrototype.forEach = forEach2;
+      }
+  }
+  var Collection;
+  var CollectionPrototype;
+
   // Layout_Editor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
@@ -3492,32 +3741,6 @@
       }
     ];
   }, UNSUPPORTED_Y);
-
-  // node_modules/core-js/modules/es.array.for-each.js
-  "use strict";
-  var $11 = require_export();
-  var forEach = require_array_for_each();
-  $11({ target: "Array", proto: true, forced: [].forEach != forEach }, {
-    forEach: forEach
-  });
-
-  // node_modules/core-js/modules/web.dom-collections.for-each.js
-  var global5 = require_global();
-  var DOMIterables2 = require_dom_iterables();
-  var forEach2 = require_array_for_each();
-  var createNonEnumerableProperty3 = require_create_non_enumerable_property();
-  for (var COLLECTION_NAME in DOMIterables2) {
-    Collection = global5[COLLECTION_NAME];
-    CollectionPrototype = Collection && Collection.prototype;
-    if (CollectionPrototype && CollectionPrototype.forEach !== forEach2)
-      try {
-        createNonEnumerableProperty3(CollectionPrototype, "forEach", forEach2);
-      } catch (error) {
-        CollectionPrototype.forEach = forEach2;
-      }
-  }
-  var Collection;
-  var CollectionPrototype;
 
   // node_modules/core-js/modules/es.string.replace.js
   "use strict";
@@ -4857,11 +5080,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof4(obj2) {
+      _typeof = function _typeof6(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof4(obj2) {
+      _typeof = function _typeof6(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5154,11 +5377,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof4(obj2) {
+      _typeof2 = function _typeof6(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof4(obj2) {
+      _typeof2 = function _typeof6(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -6026,25 +6249,6 @@
     add_shiny_listener("finish-button-text", function(label_text) {
       document.querySelector("button#update_code").innerHTML = label_text;
     });
-    if (app_state.mode === "New") {
-      add_shiny_listener("update-grid", function(opts) {
-        return app_state.update_grid(opts);
-      });
-      add_shiny_listener("add-elements", function(elements_to_add) {
-        elements_to_add.forEach(function(el_msg) {
-          var start_row = el_msg.start_row, end_row = el_msg.end_row, start_col = el_msg.start_col, end_col = el_msg.end_col;
-          app_state.add_element({
-            id: el_msg.id,
-            grid_pos: {
-              start_row: start_row,
-              end_row: end_row,
-              start_col: start_col,
-              end_col: end_col
-            }
-          });
-        });
-      });
-    }
     add_shiny_listener("code_modal", function(code_to_show) {
       show_code("Paste the following code into your app to update the layout", {
         type: "R",
@@ -6157,11 +6361,11 @@
   function _typeof3(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof4(obj2) {
+      _typeof3 = function _typeof6(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof3 = function _typeof4(obj2) {
+      _typeof3 = function _typeof6(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -7012,8 +7216,9 @@
     return obj;
   }
   var Layout_Editor = /* @__PURE__ */ function() {
-    function Layout_Editor2() {
-      var _find_first_grid_node;
+    function Layout_Editor2(_ref) {
+      var _ref2, _this = this;
+      var container = _ref.container, starting_layout = _ref.starting_layout;
       _classCallCheck3(this, Layout_Editor2);
       _defineProperty6(this, "gap_size_setting", void 0);
       _defineProperty6(this, "current_cells", []);
@@ -7024,13 +7229,27 @@
       _defineProperty6(this, "mode", void 0);
       _defineProperty6(this, "grid_layout", void 0);
       _defineProperty6(this, "tract_controls", void 0);
-      this.container = (_find_first_grid_node = find_first_grid_node()) !== null && _find_first_grid_node !== void 0 ? _find_first_grid_node : Block_El("div#grid_page");
+      this.container = (_ref2 = container !== null && container !== void 0 ? container : find_first_grid_node()) !== null && _ref2 !== void 0 ? _ref2 : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
       var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
       this.gap_size_setting = gap_size_setting;
       this.mode = grid_is_filled ? "Existing" : "New";
-      if (grid_is_filled) {
+      if (starting_layout) {
+        this.update_grid(starting_layout.grid);
+        starting_layout.elements.forEach(function(el_msg) {
+          var start_row = el_msg.start_row, end_row = el_msg.end_row, start_col = el_msg.start_col, end_col = el_msg.end_col;
+          _this.add_element({
+            id: el_msg.id,
+            grid_pos: {
+              start_row: start_row,
+              end_row: end_row,
+              start_col: start_col,
+              end_col: end_col
+            }
+          });
+        });
+      } else if (grid_is_filled) {
         var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.update_grid({
           rows: current_grid_props.gridTemplateRows.split(" "),
@@ -7038,6 +7257,8 @@
           gap: get_gap_size(current_grid_props.gap),
           force: true
         });
+      } else {
+        console.error("Neither starting layout was provided nor is there an existing grid app");
       }
       add_shiny_listeners(this);
     }
@@ -7082,13 +7303,13 @@
     }, {
       key: "remove_elements",
       value: function remove_elements2(ids) {
-        var _this = this;
+        var _this2 = this;
         as_array(ids).forEach(function(el_id) {
-          var entry_index = _this.elements.findIndex(function(el) {
+          var entry_index = _this2.elements.findIndex(function(el) {
             return el.id === el_id;
           });
-          _this.elements[entry_index].grid_item.remove();
-          _this.elements.splice(entry_index, 1);
+          _this2.elements[entry_index].grid_item.remove();
+          _this2.elements.splice(entry_index, 1);
         });
         send_elements_to_shiny(this.current_elements);
       }
@@ -7147,27 +7368,27 @@
     }, {
       key: "setup_drag",
       value: function setup_drag(opts) {
-        var _this2 = this;
+        var _this3 = this;
         var drag_feedback_rect;
         var start_rect;
         var start_loc;
         var editor_el = document.querySelector("#grided__editor");
         var update_grid_pos = function update_grid_pos2(grid_item, bounding_rect) {
-          var grid_extent = get_drag_extent_on_grid(_this2, bounding_rect);
+          var grid_extent = get_drag_extent_on_grid(_this3, bounding_rect);
           grid_item.position = grid_extent;
           return grid_extent;
         };
         opts.watching_element.onmousedown = function(event) {
           var _opts$grid_item;
           start_loc = event;
-          _this2.container.appendChild(opts.grid_item.el);
+          _this3.container.appendChild(opts.grid_item.el);
           start_rect = ((_opts$grid_item = opts.grid_item) === null || _opts$grid_item === void 0 ? void 0 : _opts$grid_item.bounding_rect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
-          drag_feedback_rect = make_el(_this2.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
+          drag_feedback_rect = make_el(_this3.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, bounding_rect_to_css_pos(start_rect))
           });
           update_grid_pos(opts.grid_item, start_rect);
@@ -7297,8 +7518,8 @@
       on_start: function on_start() {
         current_selection_box.style.borderColor = app_state.next_color;
       },
-      on_end: function on_end(_ref) {
-        var grid = _ref.grid;
+      on_end: function on_end(_ref3) {
+        var grid = _ref3.grid;
         element_naming_ui(app_state, {
           grid_pos: grid,
           selection_box: current_selection_box
@@ -7334,8 +7555,8 @@
       try {
         var _loop = function _loop2() {
           var dir = _step.value;
-          controls[dir].forEach(function(_ref2) {
-            var matched_cell = _ref2.matched_cell, el = _ref2.el;
+          controls[dir].forEach(function(_ref4) {
+            var matched_cell = _ref4.matched_cell, el = _ref4.el;
             var bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
             Object.assign(el.style, dir === "cols" ? {
               left: "calc(".concat(bounding_rect.left, "px)"),
@@ -7362,8 +7583,8 @@
     };
   }
   var name_form_styles = css(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
-  function element_naming_ui(app_state, _ref3) {
-    var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
+  function element_naming_ui(app_state, _ref5) {
+    var grid_pos = _ref5.grid_pos, selection_box = _ref5.selection_box;
     var modal_divs = focused_modal({
       background_callbacks: {
         event: "click",
@@ -7533,10 +7754,526 @@
     });
   }
 
+  // node_modules/core-js/modules/es.object.set-prototype-of.js
+  var $30 = require_export();
+  var setPrototypeOf = require_object_set_prototype_of();
+  $30({ target: "Object", stat: true }, {
+    setPrototypeOf: setPrototypeOf
+  });
+
+  // node_modules/core-js/modules/es.object.get-prototype-of.js
+  var $31 = require_export();
+  var fails8 = require_fails();
+  var toObject5 = require_to_object();
+  var nativeGetPrototypeOf = require_object_get_prototype_of();
+  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+  var FAILS_ON_PRIMITIVES4 = fails8(function() {
+    nativeGetPrototypeOf(1);
+  });
+  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+    getPrototypeOf: function getPrototypeOf(it) {
+      return nativeGetPrototypeOf(toObject5(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.reflect.construct.js
+  var $32 = require_export();
+  var getBuiltIn2 = require_get_built_in();
+  var aFunction = require_a_function();
+  var anObject6 = require_an_object();
+  var isObject6 = require_is_object();
+  var create4 = require_object_create();
+  var bind2 = require_function_bind();
+  var fails9 = require_fails();
+  var nativeConstruct = getBuiltIn2("Reflect", "construct");
+  var NEW_TARGET_BUG = fails9(function() {
+    function F() {
+    }
+    return !(nativeConstruct(function() {
+    }, [], F) instanceof F);
+  });
+  var ARGS_BUG = !fails9(function() {
+    nativeConstruct(function() {
+    });
+  });
+  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
+  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+    construct: function construct(Target, args) {
+      aFunction(Target);
+      anObject6(args);
+      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
+      if (ARGS_BUG && !NEW_TARGET_BUG)
+        return nativeConstruct(Target, args, newTarget);
+      if (Target == newTarget) {
+        switch (args.length) {
+          case 0:
+            return new Target();
+          case 1:
+            return new Target(args[0]);
+          case 2:
+            return new Target(args[0], args[1]);
+          case 3:
+            return new Target(args[0], args[1], args[2]);
+          case 4:
+            return new Target(args[0], args[1], args[2], args[3]);
+        }
+        var $args = [null];
+        $args.push.apply($args, args);
+        return new (bind2.apply(Target, $args))();
+      }
+      var proto = newTarget.prototype;
+      var instance = create4(isObject6(proto) ? proto : Object.prototype);
+      var result = Function.apply.call(Target, instance, args);
+      return isObject6(result) ? result : instance;
+    }
+  });
+
+  // web-components/layout-gallery.ts
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_map2 = __toModule(require_es_map());
+
+  // web-components/grid-preview.ts
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_map = __toModule(require_es_map());
+  function _typeof4(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof4 = function _typeof6(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof4 = function _typeof6(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof4(obj);
+  }
+  function _classCallCheck4(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties4(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass4(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties4(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties4(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf(subClass, superClass);
+  }
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+  function _possibleConstructorReturn(self2, call) {
+    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized(self2);
+  }
+  function _assertThisInitialized(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper = function _wrapNativeSuper3(Class2) {
+      if (Class2 === null || !_isNativeFunction(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf(Wrapper, Class2);
+    };
+    return _wrapNativeSuper(Class);
+  }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct3(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf3(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf(o);
+  }
+  function _defineProperty7(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits(GridPreview2, _HTMLElement);
+    var _super = _createSuper(GridPreview2);
+    function GridPreview2() {
+      var _this;
+      _classCallCheck4(this, GridPreview2);
+      _this = _super.call(this);
+      _defineProperty7(_assertThisInitialized(_this), "grid", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "_render_size", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "_shown_size", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "name", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "elements", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "hover_animation", void 0);
+      _defineProperty7(_assertThisInitialized(_this), "_on_select", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.name = "default name";
+      _this.grid = {
+        rows: ["1fr"],
+        cols: ["1fr"],
+        gap: "1rem"
+      };
+      _this.elements = [];
+      _this._render_size = 1250;
+      _this._shown_size = 250;
+      _this._on_select = function() {
+        return console.log("Selected ".concat(_this.name));
+      };
+      _this.hover_animation = true;
+      return _this;
+    }
+    _createClass4(GridPreview2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        var scale_amnt = this._shown_size / this._render_size;
+        var corner_radius = "".concat(4 / scale_amnt, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n      #container {\n        width: ".concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px \n      }\n      \n      #layout {\n        box-shadow: 0px 0px ").concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._render_size, "px;\n        height: ").concat(this._render_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.join(" "), ";\n        gap: ").concat(this.grid.gap, ";\n        padding: ").concat(this.grid.gap, ";\n        transform: scale(").concat(scale_amnt, ");\n        transform-origin: top left;\n        font-size: ").concat(1 / scale_amnt, "rem;\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #container:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: ").concat(1 / scale_amnt, "px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="container">\n      <div id="layout"> ').concat(this.element_divs, " </div>\n    </div>\n    ");
+        this.shadowRoot.getElementById("container").addEventListener("click", function() {
+          return _this2._on_select({
+            name: _this2.name,
+            elements: _this2.elements,
+            grid: _this2.grid
+          });
+        });
+      }
+    }, {
+      key: "layout",
+      value: function layout(_layout) {
+        var _layout$elements, _layout$name;
+        Object.assign(this.grid, _layout.grid);
+        this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
+        this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
+        return this;
+      }
+    }, {
+      key: "render_size",
+      value: function render_size(new_size) {
+        this._render_size = new_size;
+        return this;
+      }
+    }, {
+      key: "shown_size",
+      value: function shown_size(new_size) {
+        this._shown_size = new_size;
+        return this;
+      }
+    }, {
+      key: "on_select",
+      value: function on_select(_on_select) {
+        this._on_select = _on_select;
+        return this;
+      }
+    }, {
+      key: "turnoff_animation",
+      value: function turnoff_animation() {
+        this.hover_animation = false;
+        return this;
+      }
+    }, {
+      key: "element_divs",
+      get: function get() {
+        var element_divs = "";
+        this.elements.forEach(function(_ref) {
+          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
+          var grid_area = "".concat(start_row, "/").concat(start_col, "/").concat(end_row + 1, "/").concat(end_col + 1);
+          element_divs += "\n      <div style='grid-area:".concat(grid_area, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
+        });
+        return element_divs;
+      }
+    }]);
+    return GridPreview2;
+  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
+  function grid_preview() {
+    return new GridPreview();
+  }
+  customElements.define("grid-preview", GridPreview);
+
+  // web-components/layout-gallery.ts
+  function _typeof5(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof5 = function _typeof6(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof5 = function _typeof6(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof5(obj);
+  }
+  function _classCallCheck5(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties5(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass5(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties5(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties5(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits2(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf2(subClass, superClass);
+  }
+  function _createSuper2(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf2(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf2(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn2(this, result);
+    };
+  }
+  function _possibleConstructorReturn2(self2, call) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized2(self2);
+  }
+  function _assertThisInitialized2(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper2(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper2 = function _wrapNativeSuper3(Class2) {
+      if (Class2 === null || !_isNativeFunction2(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct2(Class2, arguments, _getPrototypeOf2(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf2(Wrapper, Class2);
+    };
+    return _wrapNativeSuper2(Class);
+  }
+  function _construct2(Parent, args, Class) {
+    if (_isNativeReflectConstruct2()) {
+      _construct2 = Reflect.construct;
+    } else {
+      _construct2 = function _construct3(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf2(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct2.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct2() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction2(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf2(o, p) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf2(o, p);
+  }
+  function _getPrototypeOf2(o) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf2(o);
+  }
+  function _defineProperty8(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(LayoutGallery2, _HTMLElement);
+    var _super = _createSuper2(LayoutGallery2);
+    function LayoutGallery2(layouts) {
+      var _this;
+      _classCallCheck5(this, LayoutGallery2);
+      _this = _super.call(this);
+      _defineProperty8(_assertThisInitialized2(_this), "layouts", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.layouts = layouts;
+      return _this;
+    }
+    _createClass5(LayoutGallery2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
+        var layouts_holder = this.shadowRoot.getElementById("layouts");
+        this.layouts.forEach(function(layout) {
+          layouts_holder.appendChild(grid_preview().layout(layout).on_select(_this2.select_a_grid));
+        });
+      }
+    }, {
+      key: "select_a_grid",
+      value: function select_a_grid(layout_info) {
+        console.log("selected", layout_info);
+      }
+    }]);
+    return LayoutGallery2;
+  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  customElements.define("layout-gallery", LayoutGallery);
+
   // index.ts
   var Shiny = window.Shiny;
   window.onload = function() {
-    var app_state = new Layout_Editor();
+    add_shiny_listener("layout-chooser", function(layouts) {
+      var gallery = new LayoutGallery(layouts);
+      document.body.appendChild(gallery);
+    });
+    add_shiny_listener("edit-layout", function(layout_info) {
+      console.log("Editing a passed layout");
+      var app_state = new Layout_Editor({
+        starting_layout: layout_info
+      });
+    });
+    add_shiny_listener("edit-existing-app", function(layout_info) {
+      console.log("Editing an existing app");
+      var app_state = new Layout_Editor({});
+    });
   };
 })();
 //# sourceMappingURL=index.js.map
