@@ -1,4 +1,5 @@
 import { css } from "@emotion/css";
+import { add_shiny_listeners } from "./add_shiny_listeners";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
 import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
@@ -75,7 +76,6 @@ export class App_State {
     update_positions: () => void;
   };
   constructor() {
-    
     this.container = find_first_grid_node() ?? Block_El("div#grid_page");
 
     this.grid_styles = this.container.style;
@@ -103,6 +103,8 @@ export class App_State {
         force: true,
       });
     }
+
+    add_shiny_listeners(this);
   }
 
   // Get the next color in our list of colors.
@@ -120,13 +122,16 @@ export class App_State {
     return colors[this.elements.length % colors.length];
   }
 
-  get current_elements(): Element_Info[] {
+  get_current_elements(): Element_Info[] {
     // Make sure grid position is current
     this.elements.forEach((el) => {
       el.grid_pos = grid_position_of_el(el.grid_el);
     });
 
     return this.elements;
+  }
+  get current_elements(): Element_Info[] {
+    return this.get_current_elements();
   }
 
   add_element(el_props: {
@@ -575,7 +580,9 @@ const drag_canvas_styles = css`
 
 function setup_new_item_drag(app_state: App_State) {
   const current_selection_box = new Grid_Item({
-    el: app_state.make_el(`div.drag_selection_box.${added_element_styles}.${current_sel_box}`),
+    el: app_state.make_el(
+      `div.drag_selection_box.${added_element_styles}.${current_sel_box}`
+    ),
     parent_layout: app_state.grid_layout,
   });
   const drag_canvas = app_state.make_el(
@@ -629,13 +636,13 @@ function setup_tract_controls(app_state: App_State) {
     "#editor-app-window"
   ) as HTMLElement).onscroll = () => update_positions(["rows"]);
 
-// Use a timeout trick to debounce the tract updating on resizing to only
-// fire after resize is done
-let resize_timeout: number;
-window.addEventListener('resize', () => {
-  clearTimeout(resize_timeout);
-  resize_timeout = window.setTimeout(() => update_positions(), 300)
-});
+  // Use a timeout trick to debounce the tract updating on resizing to only
+  // fire after resize is done
+  let resize_timeout: number;
+  window.addEventListener("resize", () => {
+    clearTimeout(resize_timeout);
+    resize_timeout = window.setTimeout(() => update_positions(), 300);
+  });
 
   function update_positions(which_dirs: Tract_Dir[] = ["rows", "cols"]) {
     const editor_pos = editor_container.getBoundingClientRect();
