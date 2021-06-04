@@ -1,11 +1,11 @@
+import { Layout_Element, Layout_Info } from "..";
 import { Layout_State } from "../Grid_Layout";
 
-type Layout_Element = {
-  id: string;
-  rows: [number, number];
-  cols: [number, number];
-  flip_id?: boolean;
-};
+type On_Select_Fn = (info: {
+  name: string;
+  grid: Layout_State;
+  elements: Layout_Element[];
+}) => void;
 
 export class GridPreview extends HTMLElement {
   grid: Layout_State;
@@ -14,11 +14,7 @@ export class GridPreview extends HTMLElement {
   name: string;
   elements: Layout_Element[];
   hover_animation: boolean;
-  _on_select: (info: {
-    name: string;
-    grid: Layout_State;
-    elements: Layout_Element[];
-  }) => void;
+  _on_select: On_Select_Fn
 
   constructor() {
     super();
@@ -41,7 +37,7 @@ export class GridPreview extends HTMLElement {
       * { box-sizing: border-box; }
       #container {
         width: ${this._shown_size}px;
-        height: ${this._render_size}px 
+        height: ${this._shown_size}px 
       }
       
       #layout {
@@ -100,10 +96,10 @@ export class GridPreview extends HTMLElement {
     );
   }
 
-  set_options(options) {
-    Object.assign(this.grid, options.grid);
-    this.elements = options.elements ?? [];
-    this.name = options.name ?? this.name;
+  layout(layout: Layout_Info) {
+    Object.assign(this.grid, layout.grid);
+    this.elements = layout.elements ?? [];
+    this.name = layout.name ?? this.name;
     return this;
   }
 
@@ -117,7 +113,7 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
-  on_select(on_select) {
+  on_select(on_select: On_Select_Fn) {
     this._on_select = on_select;
     return this;
   }
@@ -129,8 +125,8 @@ export class GridPreview extends HTMLElement {
 
   get element_divs() {
     let element_divs = "";
-    this.elements.forEach(({ id, rows, cols, flip_id = false }) => {
-      const grid_area = `${rows[0]}/${cols[0]}/${rows[1] + 1}/${cols[1] + 1}`;
+    this.elements.forEach(({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
+      const grid_area = `${start_row}/${start_col}/${end_row + 1}/${end_col + 1}`;
       element_divs += `
       <div style='grid-area:${grid_area}'>
         <div ${flip_id ? `class=flipped` : ``}>${id}</div>
@@ -142,4 +138,9 @@ export class GridPreview extends HTMLElement {
   }
 }
 
+export function grid_preview() {
+  return new GridPreview();
+}
+
 customElements.define("grid-preview", GridPreview);
+
