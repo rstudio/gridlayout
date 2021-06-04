@@ -1,4 +1,5 @@
 import { css } from "@emotion/css";
+import { Layout_Element, Layout_Info } from ".";
 import { add_shiny_listeners } from "./add_shiny_listeners";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
@@ -75,8 +76,15 @@ export class Layout_Editor {
   tract_controls: {
     update_positions: () => void;
   };
-  constructor() {
-    this.container = find_first_grid_node() ?? Block_El("div#grid_page");
+  constructor({
+    container,
+    starting_layout,
+  }: {
+    container?: HTMLElement;
+    starting_layout?: Layout_Info;
+  }) {
+    this.container =
+      container ?? find_first_grid_node() ?? Block_El("div#grid_page");
 
     this.grid_styles = this.container.style;
 
@@ -86,7 +94,17 @@ export class Layout_Editor {
     this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
 
-    if (grid_is_filled) {
+    if (starting_layout) {
+      this.update_grid(starting_layout.grid);
+
+      starting_layout.elements.forEach((el_msg: Layout_Element) => {
+        const { start_row, end_row, start_col, end_col } = el_msg;
+        this.add_element({
+          id: el_msg.id,
+          grid_pos: { start_row, end_row, start_col, end_col },
+        });
+      });
+    } else if (grid_is_filled) {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
       // directly computed if we use getComputedStyle()
@@ -102,6 +120,10 @@ export class Layout_Editor {
         gap: get_gap_size(current_grid_props.gap),
         force: true,
       });
+    } else {
+      console.error(
+        "Neither starting layout was provided nor is there an existing grid app"
+      );
     }
 
     add_shiny_listeners(this);
@@ -691,7 +713,10 @@ const name_form_styles = css`
   }
 `;
 
-function element_naming_ui(app_state: Layout_Editor, { grid_pos, selection_box }) {
+function element_naming_ui(
+  app_state: Layout_Editor,
+  { grid_pos, selection_box }
+) {
   const modal_divs = focused_modal({
     background_callbacks: {
       // Clicking outside of the modal will cancel the naming. Seems natural
