@@ -108,7 +108,7 @@ export class LayoutGallery extends HTMLElement {
     this.chooser_modal.innerHTML = "";
     this.chooser_modal.classList.remove("hidden");
     this.chooser_modal.appendChild(
-      grid_preview().layout(selected_layout).shown_size(500).turnoff_animation()
+      grid_preview().layout(selected_layout).shown_size(650).turnoff_animation()
     );
 
     this.chooser_modal.onclick = () => this.hide_chooser_modal();
