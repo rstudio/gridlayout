@@ -1,6 +1,5 @@
-import { Layout_Element, Layout_Info } from "..";
-import { Layout_State } from "../Grid_Layout";
-import { GridPreview, grid_preview } from "./grid-preview";
+import { Layout_Info } from "..";
+import { grid_preview } from "./grid-preview";
 
 type Select_Fn = (info: Layout_Info) => void;
 export class LayoutGallery extends HTMLElement {
