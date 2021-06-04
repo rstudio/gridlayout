@@ -43,36 +43,24 @@ grided_server_code <- function(
   session$sendCustomMessage("shiny-loaded", 1)
 
   if (identical(class(starting_layout), "list")) {
-    print("initiate template chooser")
-    # Setup with the desired starting layout
-    # Setup with the desired starting layout
-    session$sendCustomMessage(
-      "layout-chooser",
-      starting_layout
-    )
+    # Multiple layouts means we want template chooser interface
+    session$sendCustomMessage("layout-chooser", starting_layout)
 
   } else if(identical(class(starting_layout), "gridlayout")){
 
-    # Setup with the desired starting layout
+    # Single layout means jump straight to editing UI
     session$sendCustomMessage(
       "edit-layout",
-      list(
-        grid = list(
-          rows =  get_info(starting_layout, "row_sizes"),
-          cols = get_info(starting_layout, "col_sizes"),
-          gap = get_info(starting_layout, "gap")
-        ),
-        elements = get_elements(starting_layout)
-      )
+      dump_all_info(starting_layout)
     )
-
   } else {
-    # Have been injected into an existing app
+    # No layout means we have been injected into an existing app
     session$sendCustomMessage(
       "edit-existing-app",
       function(){}
     )
   }
+
   if (notNull(finish_button_text)) {
     # Update the "finish" button to whatever is desired by the user
     session$sendCustomMessage("finish-button-text", finish_button_text)
