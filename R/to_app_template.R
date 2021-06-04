@@ -28,7 +28,8 @@ to_app_template.gridlayout <- function(layout){
       function(el){
         paste_nl(
           paste0("  ", el$id, " = grid_panel("),
-          paste0("    h3(\"", el$id, "\")"),
+          paste0("    title = \"", el$id, "\","),
+          paste0("    p(\"content for ", el$id, "\")"),
           "  )")
       }
     ), collapse = ",\n")
