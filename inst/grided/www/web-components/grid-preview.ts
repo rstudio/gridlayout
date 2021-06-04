@@ -84,6 +84,7 @@ export class GridPreview extends HTMLElement {
     this.shadowRoot
       .getElementById("container")
       .addEventListener("click", (event) => {
+        // Dont let the gallery background pickup event and kill selection
         event.stopPropagation();
         this._on_select({
           name: this.name,

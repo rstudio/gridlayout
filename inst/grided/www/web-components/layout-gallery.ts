@@ -119,6 +119,8 @@ export class LayoutGallery extends HTMLElement {
     this.chooser_modal.appendChild(go_btn);
     if (this.on_go_fn) {
       go_btn.onclick = (event) => {
+        // Stop propigation of click event down so it doesn't trigger the
+        // background click-to-go-back behavior
         event.stopPropagation();
         this.remove();
         this.on_go_fn(selected_layout);
@@ -131,6 +133,7 @@ export class LayoutGallery extends HTMLElement {
     this.chooser_modal.appendChild(edit_btn);
     if (this.on_edit_fn) {
       edit_btn.onclick = (event) => {
+        // Dont trigger go-back behavior
         event.stopPropagation();
         this.remove();
         this.on_edit_fn(selected_layout);
