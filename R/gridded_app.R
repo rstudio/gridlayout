@@ -111,8 +111,8 @@ grided_server_code <- function(
       row_sizes = simplify2array(input$build_app_template$grid$rows),
       gap = input$build_app_template$grid$gap
     )
-    cat(to_app_template(chosen_layout))
-    # print(chosen_layout)
+    rstudioapi::documentNew(text = to_app_template(chosen_layout))
+    shiny::stopApp()
   }), input$build_app_template)
 
   # Get update code button will try and find the layout being edited in the currently open editor and update the code
