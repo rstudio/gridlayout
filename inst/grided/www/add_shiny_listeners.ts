@@ -1,10 +1,10 @@
+import { Layout_Editor } from "./Layout_Editor";
 import { show_code } from "./make-focused_modal";
 import {
   add_shiny_listener,
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny
+  send_grid_sizing_to_shiny,
 } from "./utils-shiny";
-import { Layout_Editor, Grid_Update_Options } from "./Layout_Editor";
 
 export function add_shiny_listeners(app_state: Layout_Editor) {
   add_shiny_listener("shiny-loaded", (_payload: any) => {
@@ -19,34 +19,6 @@ export function add_shiny_listeners(app_state: Layout_Editor) {
   add_shiny_listener("finish-button-text", function (label_text: string) {
     document.querySelector("button#update_code").innerHTML = label_text;
   });
-
-  if (app_state.mode === "New") {
-    // Need to use arrow function here so method is run on out app_state object
-    // if we just passed app_state.update_grid as the callback its just the method
-    // without the object behind it,
-    add_shiny_listener("update-grid", (opts: Grid_Update_Options) => app_state.update_grid(opts)
-    );
-
-    type Shiny_Element_Msg = {
-      id: string;
-      start_col: number;
-      start_row: number;
-      end_col: number;
-      end_row: number;
-    };
-    add_shiny_listener(
-      "add-elements",
-      (elements_to_add: Shiny_Element_Msg[]) => {
-        elements_to_add.forEach((el_msg: Shiny_Element_Msg) => {
-          const { start_row, end_row, start_col, end_col } = el_msg;
-          app_state.add_element({
-            id: el_msg.id,
-            grid_pos: { start_row, end_row, start_col, end_col },
-          });
-        });
-      }
-    );
-  }
 
   add_shiny_listener("code_modal", function (code_to_show) {
     show_code("Paste the following code into your app to update the layout", {
