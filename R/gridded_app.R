@@ -42,26 +42,40 @@ grided_server_code <- function(
   # Lets grided know it should send over initial app state
   session$sendCustomMessage("shiny-loaded", 1)
 
-  if(!is.null(starting_layout)){
+  if (identical(class(starting_layout), "list")) {
+    print("initiate template chooser")
+    # Setup with the desired starting layout
+    # Setup with the desired starting layout
     session$sendCustomMessage(
-      "update-grid",
+      "layout-chooser",
+      starting_layout
+    )
+
+  } else if(identical(class(starting_layout), "gridlayout")){
+
+    # Setup with the desired starting layout
+    session$sendCustomMessage(
+      "edit-layout",
       list(
-        rows =  get_info(starting_layout, "row_sizes"),
-        cols = get_info(starting_layout, "col_sizes"),
-        gap = get_info(starting_layout, "gap")
+        grid = list(
+          rows =  get_info(starting_layout, "row_sizes"),
+          cols = get_info(starting_layout, "col_sizes"),
+          gap = get_info(starting_layout, "gap")
+        ),
+        elements = get_elements(starting_layout)
       )
     )
 
-    if (!is.null(finish_button_text)) {
-      # Update the "finish" button to whatever is desired by the user
-      session$sendCustomMessage("finish-button-text", finish_button_text)
-    }
-
-    # Let grided know about the starting elements
+  } else {
+    # Have been injected into an existing app
     session$sendCustomMessage(
-      "add-elements",
-      get_elements(starting_layout)
+      "edit-existing-app",
+      function(){}
     )
+  }
+  if (notNull(finish_button_text)) {
+    # Update the "finish" button to whatever is desired by the user
+    session$sendCustomMessage("finish-button-text", finish_button_text)
   }
 
   current_layout <- shiny::reactive({
@@ -84,12 +98,6 @@ grided_server_code <- function(
       input$grid_sizing
     }
   })
-#
-#   observe({
-#     if (show_messages) {
-#       print(current_layout())
-#     }
-#   })
 
   initial_layout <- NULL
   shiny::observe({
@@ -112,7 +120,7 @@ grided_server_code <- function(
   shiny::bindEvent(shiny::observe({
     shiny::req(input$elements)
 
-    if(!is.null(on_finish)){
+    if(notNull(on_finish)){
       on_finish(current_layout())
       return()
     }

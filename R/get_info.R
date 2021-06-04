@@ -27,4 +27,15 @@ get_info.gridlayout_template <- function(x, prop){
 
 is_gridlayout_prop <- function(prop) prop %in% c("element_ids", "alternates")
 
+dump_all_info <- function(x, name = "layout") {
+  list(
+    name = name,
+    grid = list(
+      rows =  get_info(x, "row_sizes"),
+      cols = get_info(x, "col_sizes"),
+      gap = get_info(x, "gap")
+    ),
+    elements = get_elements(x)
+  )
+}
 
