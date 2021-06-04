@@ -1,9 +1,9 @@
 // JS entry point
 import { Grid_Layout, Layout_State } from "./Grid_Layout";
-import { Layout_Editor } from "./Layout_Editor";
+import { Layout_Editor, start_layout_editor } from "./Layout_Editor";
 import { Block_El, Text_El } from "./make-elements";
 import { add_shiny_listener } from "./utils-shiny";
-import {LayoutGallery} from "./web-components/layout-gallery";
+import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
 export const Shiny = (window as any).Shiny;
 
@@ -17,25 +17,38 @@ export type Layout_Element = {
 };
 
 export type Layout_Info = {
-  name?: string,
-  grid: Layout_State,
-  elements: Layout_Element[]
+  name?: string;
+  grid: Layout_State;
+  elements: Layout_Element[];
 };
 
 window.onload = function () {
-  
   add_shiny_listener("layout-chooser", (layouts: Layout_Info[]) => {
-    const gallery: LayoutGallery = new LayoutGallery(layouts);
+    const gallery: LayoutGallery = layout_gallery(layouts)
+      .on_go((selected_layout: Layout_Info) => {
+        console.log(
+          `The user has requested the following app be made`,
+          selected_layout
+        );
+      })
+      .on_edit((selected_layout: Layout_Info) => {
+        console.log(
+          `The user has requested to edit the following`,
+          selected_layout
+        );
+
+        start_layout_editor({ starting_layout: selected_layout });
+      });
     document.body.appendChild(gallery);
   });
 
   add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
     console.log("Editing a passed layout");
-    const app_state = new Layout_Editor({starting_layout: layout_info});
-  })
+    start_layout_editor({ starting_layout: layout_info });
+  });
 
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
     console.log("Editing an existing app");
-    const app_state = new Layout_Editor({});
-  })
-}; 
+    start_layout_editor({});
+  });
+};

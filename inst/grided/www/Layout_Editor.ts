@@ -943,3 +943,10 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
     },
   });
 }
+
+export function start_layout_editor(opts: {
+  container?: HTMLElement;
+  starting_layout?: Layout_Info;
+}){
+  new Layout_Editor(opts);
+}

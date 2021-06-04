@@ -7753,6 +7753,9 @@
       }
     });
   }
+  function start_layout_editor(opts) {
+    new Layout_Editor(opts);
+  }
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
   var $30 = require_export();
@@ -8018,8 +8021,9 @@
         var scale_amnt = this._shown_size / this._render_size;
         var corner_radius = "".concat(4 / scale_amnt, "px");
         this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n      #container {\n        width: ".concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px \n      }\n      \n      #layout {\n        box-shadow: 0px 0px ").concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._render_size, "px;\n        height: ").concat(this._render_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.join(" "), ";\n        gap: ").concat(this.grid.gap, ";\n        padding: ").concat(this.grid.gap, ";\n        transform: scale(").concat(scale_amnt, ");\n        transform-origin: top left;\n        font-size: ").concat(1 / scale_amnt, "rem;\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #container:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: ").concat(1 / scale_amnt, "px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="container">\n      <div id="layout"> ').concat(this.element_divs, " </div>\n    </div>\n    ");
-        this.shadowRoot.getElementById("container").addEventListener("click", function() {
-          return _this2._on_select({
+        this.shadowRoot.getElementById("container").addEventListener("click", function(event) {
+          event.stopPropagation();
+          _this2._on_select({
             name: _this2.name,
             elements: _this2.elements,
             grid: _this2.grid
@@ -8231,6 +8235,10 @@
       _classCallCheck5(this, LayoutGallery2);
       _this = _super.call(this);
       _defineProperty8(_assertThisInitialized2(_this), "layouts", void 0);
+      _defineProperty8(_assertThisInitialized2(_this), "layouts_holder", void 0);
+      _defineProperty8(_assertThisInitialized2(_this), "chooser_modal", void 0);
+      _defineProperty8(_assertThisInitialized2(_this), "on_edit_fn", void 0);
+      _defineProperty8(_assertThisInitialized2(_this), "on_go_fn", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8241,38 +8249,96 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
-        var layouts_holder = this.shadowRoot.getElementById("layouts");
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
+        this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
+        this.layouts_holder = this.shadowRoot.getElementById("layouts");
         this.layouts.forEach(function(layout) {
-          layouts_holder.appendChild(grid_preview().layout(layout).on_select(_this2.select_a_grid));
+          _this2.layouts_holder.appendChild(grid_preview().layout(layout).on_select(function(x) {
+            return _this2.select_a_grid(x);
+          }));
         });
       }
     }, {
+      key: "on_edit",
+      value: function on_edit(on_edit_fn) {
+        this.on_edit_fn = on_edit_fn;
+        return this;
+      }
+    }, {
+      key: "on_go",
+      value: function on_go(on_go_fn) {
+        this.on_go_fn = on_go_fn;
+        return this;
+      }
+    }, {
+      key: "hide_chooser_modal",
+      value: function hide_chooser_modal() {
+        this.chooser_modal.classList.add("hidden");
+      }
+    }, {
       key: "select_a_grid",
-      value: function select_a_grid(layout_info) {
-        console.log("selected", layout_info);
+      value: function select_a_grid(selected_layout) {
+        var _this3 = this;
+        this.chooser_modal.innerHTML = "";
+        this.chooser_modal.classList.remove("hidden");
+        this.chooser_modal.appendChild(grid_preview().layout(selected_layout).shown_size(500).turnoff_animation());
+        this.chooser_modal.onclick = function() {
+          return _this3.hide_chooser_modal();
+        };
+        var go_btn = document.createElement("button");
+        go_btn.classList.add("go");
+        go_btn.innerHTML = "Create app with this layout";
+        this.chooser_modal.appendChild(go_btn);
+        if (this.on_go_fn) {
+          go_btn.onclick = function(event) {
+            event.stopPropagation();
+            _this3.remove();
+            _this3.on_go_fn(selected_layout);
+          };
+        }
+        var edit_btn = document.createElement("button");
+        edit_btn.classList.add("edit");
+        edit_btn.innerHTML = "Edit this layout";
+        this.chooser_modal.appendChild(edit_btn);
+        if (this.on_edit_fn) {
+          edit_btn.onclick = function(event) {
+            event.stopPropagation();
+            _this3.remove();
+            _this3.on_edit_fn(selected_layout);
+          };
+        }
       }
     }]);
     return LayoutGallery2;
   }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  function layout_gallery(layouts) {
+    return new LayoutGallery(layouts);
+  }
   customElements.define("layout-gallery", LayoutGallery);
 
   // index.ts
   var Shiny = window.Shiny;
   window.onload = function() {
     add_shiny_listener("layout-chooser", function(layouts) {
-      var gallery = new LayoutGallery(layouts);
+      var gallery = layout_gallery(layouts).on_go(function(selected_layout) {
+        console.log("The user has requested the following app be made", selected_layout);
+      }).on_edit(function(selected_layout) {
+        console.log("The user has requested to edit the following", selected_layout);
+        start_layout_editor({
+          starting_layout: selected_layout
+        });
+      });
       document.body.appendChild(gallery);
     });
     add_shiny_listener("edit-layout", function(layout_info) {
       console.log("Editing a passed layout");
-      var app_state = new Layout_Editor({
+      start_layout_editor({
         starting_layout: layout_info
       });
     });
     add_shiny_listener("edit-existing-app", function(layout_info) {
       console.log("Editing an existing app");
-      var app_state = new Layout_Editor({});
+      start_layout_editor({});
     });
   };
 })();

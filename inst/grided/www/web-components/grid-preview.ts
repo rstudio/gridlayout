@@ -1,12 +1,6 @@
 import { Layout_Element, Layout_Info } from "..";
 import { Layout_State } from "../Grid_Layout";
 
-type On_Select_Fn = (info: {
-  name: string;
-  grid: Layout_State;
-  elements: Layout_Element[];
-}) => void;
-
 export class GridPreview extends HTMLElement {
   grid: Layout_State;
   _render_size: number;
@@ -14,7 +8,7 @@ export class GridPreview extends HTMLElement {
   name: string;
   elements: Layout_Element[];
   hover_animation: boolean;
-  _on_select: On_Select_Fn
+  _on_select: (info: Layout_Info) => void;
 
   constructor() {
     super();
@@ -87,13 +81,16 @@ export class GridPreview extends HTMLElement {
     </div>
     `;
 
-    this.shadowRoot.getElementById("container").addEventListener("click", () =>
-      this._on_select({
-        name: this.name,
-        elements: this.elements,
-        grid: this.grid,
-      })
-    );
+    this.shadowRoot
+      .getElementById("container")
+      .addEventListener("click", (event) => {
+        event.stopPropagation();
+        this._on_select({
+          name: this.name,
+          elements: this.elements,
+          grid: this.grid,
+        });
+      });
   }
 
   layout(layout: Layout_Info) {
@@ -113,7 +110,7 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
-  on_select(on_select: On_Select_Fn) {
+  on_select(on_select: (info: Layout_Info) => void) {
     this._on_select = on_select;
     return this;
   }
@@ -125,14 +122,18 @@ export class GridPreview extends HTMLElement {
 
   get element_divs() {
     let element_divs = "";
-    this.elements.forEach(({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
-      const grid_area = `${start_row}/${start_col}/${end_row + 1}/${end_col + 1}`;
-      element_divs += `
+    this.elements.forEach(
+      ({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
+        const grid_area = `${start_row}/${start_col}/${end_row + 1}/${
+          end_col + 1
+        }`;
+        element_divs += `
       <div style='grid-area:${grid_area}'>
         <div ${flip_id ? `class=flipped` : ``}>${id}</div>
       </div>
     `;
-    });
+      }
+    );
 
     return element_divs;
   }
@@ -143,4 +144,3 @@ export function grid_preview() {
 }
 
 customElements.define("grid-preview", GridPreview);
-

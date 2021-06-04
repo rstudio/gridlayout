@@ -2,10 +2,14 @@ import { Layout_Element, Layout_Info } from "..";
 import { Layout_State } from "../Grid_Layout";
 import { GridPreview, grid_preview } from "./grid-preview";
 
-
+type Select_Fn = (info: Layout_Info) => void;
 export class LayoutGallery extends HTMLElement {
-
   layouts: Layout_Info[];
+
+  layouts_holder: HTMLElement;
+  chooser_modal: HTMLElement;
+  on_edit_fn: Select_Fn;
+  on_go_fn: Select_Fn;
 
   constructor(layouts: Layout_Info[]) {
     super();
@@ -14,9 +18,16 @@ export class LayoutGallery extends HTMLElement {
   }
 
   connectedCallback() {
-  
     this.shadowRoot.innerHTML = `
     <style>
+      :host {
+        display: block;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
       #layouts {
         width: 100%;
         display: grid;
@@ -68,36 +79,68 @@ export class LayoutGallery extends HTMLElement {
     <div id = "chooser-modal" class = "hidden"> </div>
     `;
 
-
-    const layouts_holder = this.shadowRoot.getElementById("layouts");
+    this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
+    this.layouts_holder = this.shadowRoot.getElementById("layouts");
     this.layouts.forEach((layout) => {
-      layouts_holder.appendChild(grid_preview().layout(layout).on_select(this.select_a_grid));
+      this.layouts_holder.appendChild(
+        grid_preview()
+          .layout(layout)
+          .on_select((x: Layout_Info) => this.select_a_grid(x))
+      );
     });
   }
 
-  select_a_grid(layout_info: Layout_Info){
-    console.log(`selected`, layout_info);
-    // const chooser_modal = document.getElementById("chooser-modal");
-    // chooser_modal.innerHTML = "";
-    // chooser_modal.classList.remove('hidden');
-    // const layout_confirm = document
-    //     .createElement("grid-preview")
-    //     .set_options(layout_info)
-    //     .shown_size(500)
-    //     .turnoff_animation();
-    // chooser_modal.appendChild(layout_confirm);
-    // const go_btn = document.createElement('button');
-    // go_btn.classList.add("go");
-    // go_btn.innerHTML = "Create app with this layout";
-    // chooser_modal.appendChild(go_btn);
-    
-    // const edit_btn = document.createElement('button');
-    // edit_btn.classList.add("edit");
-    // edit_btn.innerHTML = "Edit this layout";
-    // chooser_modal.appendChild(edit_btn);
-  };
+  on_edit(on_edit_fn: Select_Fn) {
+    this.on_edit_fn = on_edit_fn;
+    return this;
+  }
+
+  on_go(on_go_fn: Select_Fn) {
+    this.on_go_fn = on_go_fn;
+    return this;
+  }
+
+  hide_chooser_modal() {
+    this.chooser_modal.classList.add("hidden");
+  }
+
+  select_a_grid(selected_layout: Layout_Info) {
+    this.chooser_modal.innerHTML = "";
+    this.chooser_modal.classList.remove("hidden");
+    this.chooser_modal.appendChild(
+      grid_preview().layout(selected_layout).shown_size(500).turnoff_animation()
+    );
+
+    this.chooser_modal.onclick = () => this.hide_chooser_modal();
+
+    const go_btn = document.createElement("button");
+    go_btn.classList.add("go");
+    go_btn.innerHTML = "Create app with this layout";
+    this.chooser_modal.appendChild(go_btn);
+    if (this.on_go_fn) {
+      go_btn.onclick = (event) => {
+        event.stopPropagation();
+        this.remove();
+        this.on_go_fn(selected_layout);
+      };
+    }
+
+    const edit_btn = document.createElement("button");
+    edit_btn.classList.add("edit");
+    edit_btn.innerHTML = "Edit this layout";
+    this.chooser_modal.appendChild(edit_btn);
+    if (this.on_edit_fn) {
+      edit_btn.onclick = (event) => {
+        event.stopPropagation();
+        this.remove();
+        this.on_edit_fn(selected_layout);
+      };
+    }
+  }
+}
+
+export function layout_gallery(layouts: Layout_Info[]) {
+  return new LayoutGallery(layouts);
 }
 
 customElements.define("layout-gallery", LayoutGallery);
-
-
