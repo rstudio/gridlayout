@@ -24,35 +24,35 @@ export class GridPreview extends HTMLElement {
   }
 
   connectedCallback() {
-    const scale_amnt = this._shown_size / this._render_size;
-    const corner_radius = `${4 / scale_amnt}px`;
+    const scale = this._render_size / this._shown_size;
+
+    const scale_units = (unit: string) => {
+      // Dont calc with relative units ()
+      if (unit.includes("fr") || unit.includes("auto")) return unit;
+      return `calc(${unit}/ ${scale})`;
+    };
+
+    const corner_radius = `${10 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
       * { box-sizing: border-box; }
-      #container {
-        width: ${this._shown_size}px;
-        height: ${this._shown_size}px 
-      }
-      
+
       #layout {
         box-shadow: 0px 0px ${corner_radius} 0px #626262;
         border-radius: ${corner_radius};
-        width: ${this._render_size}px;
-        height: ${this._render_size}px;
+        width: ${this._shown_size}px;
+        height: ${this._shown_size}px;
         display: grid;
-        grid-template-rows: ${this.grid.rows.join(" ")};
-        grid-template-columns: ${this.grid.cols.join(" ")};
-        gap: ${this.grid.gap};
-        padding: ${this.grid.gap};
-        transform: scale(${scale_amnt});
-        transform-origin: top left;
-        font-size: ${1 / scale_amnt}rem;
+        grid-template-rows: ${this.grid.rows.map(scale_units).join(" ")};
+        grid-template-columns: ${this.grid.cols.map(scale_units).join(" ")};
+        gap: ${scale_units(this.grid.gap)};
+        padding: ${scale_units(this.grid.gap)};
         background-color: white;
       }
       ${
         this.hover_animation
           ? `
-          #container:hover {
+          #layout:hover {
             animation: wiggle 1s ease;
             animation-iteration-count: 1;
             cursor: pointer;
@@ -67,7 +67,7 @@ export class GridPreview extends HTMLElement {
       #layout > div {
         width: 100%;
         height: 100%;
-        border: ${1 / scale_amnt}px solid #bababa;
+        border: ${1 / scale}px solid #bababa;
         border-radius: ${corner_radius};
         display: grid;
         place-content: center;
@@ -76,13 +76,11 @@ export class GridPreview extends HTMLElement {
       .flipped { transform: rotate(-90deg); }
     </style>
     <h3> ${this.name} </h3>
-    <div id="container">
-      <div id="layout"> ${this.element_divs} </div>
-    </div>
+    <div id="layout"> ${this.element_divs} </div>
     `;
 
     this.shadowRoot
-      .getElementById("container")
+      .getElementById("layout")
       .addEventListener("click", (event) => {
         // Dont let the gallery background pickup event and kill selection
         event.stopPropagation();
@@ -125,9 +123,9 @@ export class GridPreview extends HTMLElement {
     let element_divs = "";
     this.elements.forEach(
       ({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
-        const grid_area = `${start_row}/${start_col}/${end_row + 1}/${
-          end_col + 1
-        }`;
+        const grid_area = [start_row, start_col, end_row + 1, end_col + 1].join(
+          "/"
+        );
         element_divs += `
       <div style='grid-area:${grid_area}'>
         <div ${flip_id ? `class=flipped` : ``}>${id}</div>
