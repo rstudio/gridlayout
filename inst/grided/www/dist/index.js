@@ -5080,11 +5080,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof6(obj2) {
+      _typeof = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof6(obj2) {
+      _typeof = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5377,11 +5377,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof6(obj2) {
+      _typeof2 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof6(obj2) {
+      _typeof2 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -6368,11 +6368,11 @@
   function _typeof3(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof6(obj2) {
+      _typeof3 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof3 = function _typeof6(obj2) {
+      _typeof3 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -7016,7 +7016,7 @@
   function wrap_in_grided(app_state, finish_btn) {
     var grid_is_filled = app_state.container.hasChildNodes();
     var buttons = [click_button("#see-layout-code", "Code for layout", function() {
-      setShinyInput("see_layout_code", app_state.current_layout);
+      return setShinyInput("see_layout_code", app_state.current_layout);
     }), click_button("#done", finish_btn.label, function() {
       return finish_btn.on_done(app_state.current_layout);
     })];
@@ -7864,11 +7864,11 @@
   function _typeof4(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof4 = function _typeof6(obj2) {
+      _typeof4 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof4 = function _typeof6(obj2) {
+      _typeof4 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -7931,7 +7931,7 @@
   }
   function _wrapNativeSuper(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper = function _wrapNativeSuper3(Class2) {
+    _wrapNativeSuper = function _wrapNativeSuper5(Class2) {
       if (Class2 === null || !_isNativeFunction(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
@@ -7954,7 +7954,7 @@
     if (_isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
-      _construct = function _construct3(Parent2, args2, Class2) {
+      _construct = function _construct5(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
@@ -7985,14 +7985,14 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf3(o2, p2) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
     return _setPrototypeOf(o, p);
   }
   function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o2) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
     return _getPrototypeOf(o);
@@ -8114,11 +8114,11 @@
   function _typeof5(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof5 = function _typeof6(obj2) {
+      _typeof5 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof5 = function _typeof6(obj2) {
+      _typeof5 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -8181,7 +8181,7 @@
   }
   function _wrapNativeSuper2(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper2 = function _wrapNativeSuper3(Class2) {
+    _wrapNativeSuper2 = function _wrapNativeSuper5(Class2) {
       if (Class2 === null || !_isNativeFunction2(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
@@ -8204,7 +8204,7 @@
     if (_isNativeReflectConstruct2()) {
       _construct2 = Reflect.construct;
     } else {
-      _construct2 = function _construct3(Parent2, args2, Class2) {
+      _construct2 = function _construct5(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
@@ -8235,14 +8235,14 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
   function _setPrototypeOf2(o, p) {
-    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o2, p2) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
     return _setPrototypeOf2(o, p);
   }
   function _getPrototypeOf2(o) {
-    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o2) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
     return _getPrototypeOf2(o);
@@ -8334,6 +8334,390 @@
   }
   customElements.define("layout-gallery", LayoutGallery);
 
+  // web-components/focus-modal.ts
+  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
+
+  // web-components/copy-code.ts
+  var import_es_regexp_exec11 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
+  function _typeof6(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof6 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof6 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof6(obj);
+  }
+  function _classCallCheck6(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties6(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass6(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties6(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties6(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits3(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf3(subClass, superClass);
+  }
+  function _createSuper3(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf3(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf3(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn3(this, result);
+    };
+  }
+  function _possibleConstructorReturn3(self2, call) {
+    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized3(self2);
+  }
+  function _assertThisInitialized3(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper3(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper3 = function _wrapNativeSuper5(Class2) {
+      if (Class2 === null || !_isNativeFunction3(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf3(Wrapper, Class2);
+    };
+    return _wrapNativeSuper3(Class);
+  }
+  function _construct3(Parent, args, Class) {
+    if (_isNativeReflectConstruct3()) {
+      _construct3 = Reflect.construct;
+    } else {
+      _construct3 = function _construct5(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf3(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct3.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct3() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction3(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf3(o, p) {
+    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf3(o, p);
+  }
+  function _getPrototypeOf3(o) {
+    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf3(o);
+  }
+  var copy_code_template = document.createElement("template");
+  copy_code_template.innerHTML = '\n <style>\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text"\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      font-size: 1.5rem;\n      font-weight: bold;\n      grid-area: "type"; \n      place-self: center;\n     }\n    #copy { grid-area: "copy-btn"; }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> Copy Code </button>\n';
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(CopyCode2, _HTMLElement);
+    var _super = _createSuper3(CopyCode2);
+    function CopyCode2(code) {
+      var _this;
+      _classCallCheck6(this, CopyCode2);
+      _this = _super.call(this);
+      _this.attachShadow({
+        mode: "open"
+      }).appendChild(copy_code_template.content.cloneNode(true));
+      return _this;
+    }
+    _createClass6(CopyCode2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _code_text$match$leng;
+        var code_content = this.shadowRoot.getElementById("code-catcher");
+        var code_text = code_content.firstElementChild.assignedNodes()[0].textContent;
+        var num_of_lines = (_code_text$match$leng = code_text.match(/\n/g).length) !== null && _code_text$match$leng !== void 0 ? _code_text$match$leng : 1;
+        code_content.remove();
+        var code_el = this.shadowRoot.getElementById("code");
+        code_el.value = code_text;
+        code_el.rows = num_of_lines + 1;
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          code_el.select();
+          document.execCommand("copy");
+        });
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+      }
+    }]);
+    return CopyCode2;
+  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
+  customElements.define("copy-code", CopyCode);
+
+  // web-components/focus-modal.ts
+  function _typeof7(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof7 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof7 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof7(obj);
+  }
+  function _classCallCheck7(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties7(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass7(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties7(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties7(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits4(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf4(subClass, superClass);
+  }
+  function _createSuper4(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf4(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf4(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn4(this, result);
+    };
+  }
+  function _possibleConstructorReturn4(self2, call) {
+    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized4(self2);
+  }
+  function _assertThisInitialized4(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper4(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper4 = function _wrapNativeSuper5(Class2) {
+      if (Class2 === null || !_isNativeFunction4(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf4(Wrapper, Class2);
+    };
+    return _wrapNativeSuper4(Class);
+  }
+  function _construct4(Parent, args, Class) {
+    if (_isNativeReflectConstruct4()) {
+      _construct4 = Reflect.construct;
+    } else {
+      _construct4 = function _construct5(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf4(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct4.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct4() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction4(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf4(o, p) {
+    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf4(o, p);
+  }
+  function _getPrototypeOf4(o) {
+    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf4(o);
+  }
+  function _defineProperty9(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var modal_template = document.createElement("template");
+  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n    }\n    \n    #title {\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title">\n      <slot name=\'title\'>Modal title</slot>\n    </h2>\n    <div id = "code">\n    </div>\n    <button id = \'close\'> Close </button>\n  </div>\n';
+  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits4(FocusModal2, _HTMLElement);
+    var _super = _createSuper4(FocusModal2);
+    function FocusModal2(opts) {
+      var _this;
+      _classCallCheck7(this, FocusModal2);
+      _this = _super.call(this);
+      _defineProperty9(_assertThisInitialized4(_this), "_on_remove", void 0);
+      _this.attachShadow({
+        mode: "open"
+      }).appendChild(modal_template.content.cloneNode(true));
+      var content = _this.shadowRoot.getElementById("content");
+      var title_el = document.createElement("span");
+      title_el.slot = "title";
+      title_el.innerHTML = opts.title;
+      content.appendChild(title_el);
+      if (opts.code_content) {
+        var code_el = document.createElement("copy-code");
+        code_el.innerHTML = opts.code_content;
+        content.querySelector("#code").appendChild(code_el);
+      }
+      return _this;
+    }
+    _createClass7(FocusModal2, [{
+      key: "on_remove",
+      value: function on_remove(callback) {
+        this._on_remove = callback;
+        return this;
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        this.shadowRoot.getElementById("close").addEventListener("click", function() {
+          _this2.remove();
+        });
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+        console.log("Focus modal has been removed");
+        if (this._on_remove) {
+          this._on_remove();
+        }
+      }
+    }]);
+    return FocusModal2;
+  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
+  customElements.define("focus-modal", FocusModal);
+  function create_focus_modal(opts) {
+    var modal = new FocusModal(opts);
+    document.body.appendChild(modal);
+  }
+
   // index.ts
   var Shiny = window.Shiny;
   window.onload = function() {
@@ -8373,6 +8757,13 @@
             console.log("Updating the layout", layout);
           }
         }
+      });
+    });
+    add_shiny_listener("show-layout-code", function(layout_code) {
+      console.log("Showing layout code with webcomponent");
+      create_focus_modal({
+        title: "Layout code",
+        code_content: layout_code
       });
     });
   };

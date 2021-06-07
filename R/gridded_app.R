@@ -205,7 +205,8 @@ send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
   if (error_mode) {
     session$sendCustomMessage("code_update_problem", layout_call)
   } else {
-    session$sendCustomMessage("code_modal", layout_call)
+    session$sendCustomMessage("show-layout-code", layout_call);
+    # session$sendCustomMessage("code_modal", layout_call)
   }
 }
 

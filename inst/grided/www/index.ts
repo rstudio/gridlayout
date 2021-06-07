@@ -1,8 +1,10 @@
 // JS entry point
 import { Layout_State } from "./Grid_Layout";
 import { start_layout_editor } from "./Layout_Editor";
+import { focused_modal } from "./make-focused_modal";
 import { add_shiny_listener, setShinyInput } from "./utils-shiny";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
+import { create_focus_modal } from "./web-components/focus-modal";
 
 export const Shiny = (window as any).Shiny;
 
@@ -63,6 +65,14 @@ window.onload = function () {
           console.log("Updating the layout", layout);
         },
       },
+    });
+  });
+
+  add_shiny_listener("show-layout-code", (layout_code: string) => {
+    console.log("Showing layout code with webcomponent");
+    create_focus_modal({
+      title: "Layout code",
+      code_content: layout_code,
     });
   });
 };
