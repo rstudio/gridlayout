@@ -40,10 +40,7 @@ grided_edit_existing_layout <- function() {
 
   layout <- layout_tables[[chosen_layout_index]]
 
-  grided_app(
-    starting_layout = layout$layout,
-    finish_button_text = "Update selected layout"
-  )
+  grided_app(starting_layout = layout$layout)
 }
 
 

@@ -42,34 +42,35 @@ grided_server_code <- function(
   # Lets grided know it should send over initial app state
   session$sendCustomMessage("shiny-loaded", 1)
 
-  if (identical(class(starting_layout), "list")) {
+  grided_mode <- if (identical(class(starting_layout), "list")) {
     # Multiple layouts means we want template chooser interface
-    session$sendCustomMessage("layout-chooser", starting_layout)
-
-  } else if(identical(class(starting_layout), "gridlayout")){
-
+    "layoutChooser"
+  } else if (identical(class(starting_layout), "gridlayout")) {
     # Single layout means jump straight to editing UI
-    session$sendCustomMessage(
+    "editLayout"
+  } else if (is.null(starting_layout)) {
+    # No layout means we have been injected into an existing app
+    "liveApp"
+  } else {
+    # Uh-oh
+    stop("Dont know how to deal with this value of `starting_layout`")
+  }
+
+  switch(grided_mode,
+    layoutChooser = session$sendCustomMessage(
+      "layout-chooser",
+      starting_layout
+    ),
+    editLayout = session$sendCustomMessage(
       "edit-layout",
       dump_all_info(starting_layout)
-    )
-  } else {
-    # No layout means we have been injected into an existing app
-    session$sendCustomMessage(
+    ),
+    liveApp = session$sendCustomMessage(
       "edit-existing-app",
-      function(){}
+      function() {}
     )
-  }
+  )
 
-  if (notNull(finish_button_text)) {
-    # Update the "finish" button to whatever is desired by the user
-    session$sendCustomMessage("finish-button-text", finish_button_text)
-  }
-
-  current_layout <- shiny::reactive({
-    shiny::req(input$elements)
-    layout_from_grided(input$elements, input$grid_sizing)
-  })
 
   shiny::observe({
     if (show_messages) {
@@ -96,21 +97,16 @@ grided_server_code <- function(
   })
 
   # Get code button will send a popup with the code needed to define currently viewed layout
-  shiny::bindEvent(
-    shiny::observe({
-      send_layoutcall_popup(session, current_layout)
-    }),
-    input$get_code
-  )
+  # shiny::bindEvent(
+  #   shiny::observe({
+  #     send_layoutcall_popup(session, current_layout)
+  #   }),
+  #   input$get_code
+  # )
 
   shiny::bindEvent(shiny::observe({
     print("User has requested the following app layout be generated")
-    chosen_layout <- new_gridlayout(
-      layout_def = input$build_app_template$elements,
-      col_sizes = simplify2array(input$build_app_template$grid$cols),
-      row_sizes = simplify2array(input$build_app_template$grid$rows),
-      gap = input$build_app_template$grid$gap
-    )
+    chosen_layout <- layout_info_to_gridlayout(input$build_app_template)
     rstudioapi::documentNew(text = to_app_template(chosen_layout))
     shiny::stopApp()
   }), input$build_app_template)
@@ -118,10 +114,12 @@ grided_server_code <- function(
   # Get update code button will try and find the layout being edited in the currently open editor and update the code
   # This can be overridden by setting the on_finish argument to a function that takes the current layout as input
   shiny::bindEvent(shiny::observe({
+
+    updated_layout <- layout_info_to_gridlayout(input$update_layout)
     shiny::req(input$elements)
 
     if(notNull(on_finish)){
-      on_finish(current_layout())
+      on_finish(updated_layout)
       return()
     }
 
@@ -139,12 +137,21 @@ grided_server_code <- function(
 
     if (is.null(layout_table) || !in_rstudio()) {
       warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
-      send_layoutcall_popup(session, current_layout, error_mode = TRUE)
+      # send_layoutcall_popup(session, current_layout, error_mode = TRUE)
     } else {
-      update_layout_in_file(editor_selection, layout_table, current_layout())
+      update_layout_in_file(editor_selection, layout_table, updated_layout)
       shiny::stopApp()
     }
-  }), input$update_code)
+  }), input$update_layout)
+}
+
+layout_info_to_gridlayout <- function(layout_info){
+  new_gridlayout(
+    layout_def = layout_info$elements,
+    col_sizes = simplify2array(layout_info$grid$cols),
+    row_sizes = simplify2array(layout_info$grid$rows),
+    gap = layout_info$grid$gap
+  )
 }
 
 
@@ -192,7 +199,7 @@ layout_from_grided <- function(elements, grid_sizing) {
 send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
   layout_call <- paste(
     "layout <- grid_layout_from_md(layout_table = \"",
-    "    ", to_md(current_layout()), "\")",
+    "    ", to_md(current_layout), "\")",
     sep = "\n")
 
   if (error_mode) {
