@@ -1,4 +1,5 @@
 import { Layout_Info } from "..";
+import { click_button } from "../make-elements";
 import { grid_preview } from "./grid-preview";
 
 type Select_Fn = (info: Layout_Info) => void;
@@ -112,32 +113,26 @@ export class LayoutGallery extends HTMLElement {
 
     this.chooser_modal.onclick = () => this.hide_chooser_modal();
 
-    const go_btn = document.createElement("button");
-    go_btn.classList.add("go");
-    go_btn.innerHTML = "Create app with this layout";
-    this.chooser_modal.appendChild(go_btn);
-    if (this.on_go_fn) {
-      go_btn.onclick = (event) => {
+    const go_btn = click_button(
+      ".go",
+      "Create app with this layout",
+      (event) => {
         // Stop propigation of click event down so it doesn't trigger the
         // background click-to-go-back behavior
         event.stopPropagation();
         this.remove();
         this.on_go_fn(selected_layout);
-      };
-    }
+      }
+    );
+    this.chooser_modal.appendChild(go_btn);
 
-    const edit_btn = document.createElement("button");
-    edit_btn.classList.add("edit");
-    edit_btn.innerHTML = "Edit this layout";
+    const edit_btn = click_button(".edit", "Edit this layout", (event) => {
+      // Dont trigger go-back behavior
+      event.stopPropagation();
+      this.remove();
+      this.on_edit_fn(selected_layout);
+    });
     this.chooser_modal.appendChild(edit_btn);
-    if (this.on_edit_fn) {
-      edit_btn.onclick = (event) => {
-        // Dont trigger go-back behavior
-        event.stopPropagation();
-        this.remove();
-        this.on_edit_fn(selected_layout);
-      };
-    }
   }
 }
 

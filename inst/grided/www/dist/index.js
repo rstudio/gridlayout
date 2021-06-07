@@ -6063,6 +6063,13 @@
     });
     return button;
   }
+  function click_button(selector, label, on_finish) {
+    var button = Text_El("button".concat(selector), label);
+    button.addEventListener("click", function(event) {
+      on_finish(event);
+    });
+    return button;
+  }
 
   // make-focused_modal.ts
   var _templateObject2;
@@ -7008,9 +7015,8 @@
   }
   function wrap_in_grided(app_state, finish_btn) {
     var grid_is_filled = app_state.container.hasChildNodes();
-    var finished_button = Text_El("button#done", finish_btn.label);
-    finished_button.addEventListener("click", function(event) {
-      finish_btn.on_done(app_state.current_layout);
+    var finished_button = click_button("#done", finish_btn.label, function() {
+      return finish_btn.on_done(app_state.current_layout);
     });
     var buttons = [action_button("get_code", "Get layout code"), finished_button];
     if (grid_is_filled) {
@@ -8306,28 +8312,18 @@
         this.chooser_modal.onclick = function() {
           return _this3.hide_chooser_modal();
         };
-        var go_btn = document.createElement("button");
-        go_btn.classList.add("go");
-        go_btn.innerHTML = "Create app with this layout";
+        var go_btn = click_button(".go", "Create app with this layout", function(event) {
+          event.stopPropagation();
+          _this3.remove();
+          _this3.on_go_fn(selected_layout);
+        });
         this.chooser_modal.appendChild(go_btn);
-        if (this.on_go_fn) {
-          go_btn.onclick = function(event) {
-            event.stopPropagation();
-            _this3.remove();
-            _this3.on_go_fn(selected_layout);
-          };
-        }
-        var edit_btn = document.createElement("button");
-        edit_btn.classList.add("edit");
-        edit_btn.innerHTML = "Edit this layout";
+        var edit_btn = click_button(".edit", "Edit this layout", function(event) {
+          event.stopPropagation();
+          _this3.remove();
+          _this3.on_edit_fn(selected_layout);
+        });
         this.chooser_modal.appendChild(edit_btn);
-        if (this.on_edit_fn) {
-          edit_btn.onclick = function(event) {
-            event.stopPropagation();
-            _this3.remove();
-            _this3.on_edit_fn(selected_layout);
-          };
-        }
       }
     }]);
     return LayoutGallery2;

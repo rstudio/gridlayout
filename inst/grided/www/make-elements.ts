@@ -235,3 +235,12 @@ export function tract_add_or_remove_button(
 
   return button;
 }
+
+
+export function click_button(selector: string, label: string, on_finish: (event?: MouseEvent) => void){
+  const button = Text_El(`button${selector}`, label);
+  button.addEventListener("click", function (event) {
+    on_finish(event);
+  });
+  return button;
+}
