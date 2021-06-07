@@ -97,12 +97,12 @@ grided_server_code <- function(
   })
 
   # Get code button will send a popup with the code needed to define currently viewed layout
-  # shiny::bindEvent(
-  #   shiny::observe({
-  #     send_layoutcall_popup(session, current_layout)
-  #   }),
-  #   input$get_code
-  # )
+  shiny::bindEvent(
+    shiny::observe({
+      send_layoutcall_popup(session, layout_info_to_gridlayout(input$see_layout_code))
+    }),
+    input$see_layout_code
+  )
 
   shiny::bindEvent(shiny::observe({
     print("User has requested the following app layout be generated")

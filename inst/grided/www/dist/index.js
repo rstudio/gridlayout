@@ -7015,10 +7015,11 @@
   }
   function wrap_in_grided(app_state, finish_btn) {
     var grid_is_filled = app_state.container.hasChildNodes();
-    var finished_button = click_button("#done", finish_btn.label, function() {
+    var buttons = [click_button("#see-layout-code", "Code for layout", function() {
+      setShinyInput("see_layout_code", app_state.current_layout);
+    }), click_button("#done", finish_btn.label, function() {
       return finish_btn.on_done(app_state.current_layout);
-    });
-    var buttons = [action_button("get_code", "Get layout code"), finished_button];
+    })];
     if (grid_is_filled) {
       buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
     }

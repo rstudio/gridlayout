@@ -21,15 +21,19 @@ import { setShinyInput } from "./utils-shiny";
 export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Button_Setup) {
   const grid_is_filled = app_state.container.hasChildNodes();
 
-  const finished_button = click_button(
-    "#done",
-    finish_btn.label,
-    () => finish_btn.on_done(app_state.current_layout)
-  );
-
   const buttons = [
-    action_button("get_code", "Get layout code"),
-    finished_button,
+    click_button(
+      "#see-layout-code", 
+      "Code for layout",
+      () => {
+        setShinyInput("see_layout_code", app_state.current_layout);
+      }
+    ),
+    click_button(
+      "#done",
+      finish_btn.label,
+      () => finish_btn.on_done(app_state.current_layout)
+    )
   ];
   
   if (grid_is_filled) {
