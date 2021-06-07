@@ -3742,6 +3742,18 @@
     ];
   }, UNSUPPORTED_Y);
 
+  // node_modules/core-js/modules/es.array.map.js
+  "use strict";
+  var $12 = require_export();
+  var $map = require_array_iteration().map;
+  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("map");
+  $12({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+    map: function map(callbackfn) {
+      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
   // node_modules/core-js/modules/es.string.replace.js
   "use strict";
   var fixRegExpWellKnownSymbolLogic2 = require_fix_regexp_well_known_symbol_logic();
@@ -3825,7 +3837,7 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $12 = require_export();
+  var $13 = require_export();
   var $findIndex = require_array_iteration().findIndex;
   var addToUnscopables = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
@@ -3834,7 +3846,7 @@
     Array(1)[FIND_INDEX](function() {
       SKIPS_HOLES = false;
     });
-  $12({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $13({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3843,20 +3855,20 @@
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $13 = require_export();
+  var $14 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
   var toObject3 = require_to_object();
   var arraySpeciesCreate = require_array_species_create();
   var createProperty3 = require_create_property();
-  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("splice");
+  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("splice");
   var max3 = Math.max;
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $13({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3913,26 +3925,26 @@
 
   // node_modules/core-js/modules/es.array.filter.js
   "use strict";
-  var $14 = require_export();
+  var $15 = require_export();
   var $filter = require_array_iteration().filter;
-  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("filter");
-  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport4("filter");
+  $15({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     filter: function filter(callbackfn) {
       return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $15 = require_export();
+  var $16 = require_export();
   var assign = require_object_assign();
-  $15({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $16({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $16 = require_export();
+  var $17 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -3940,7 +3952,7 @@
   var toLength5 = require_to_length();
   var createProperty4 = require_create_property();
   var arraySpeciesCreate2 = require_array_species_create();
-  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
   var wellKnownSymbol4 = require_well_known_symbol();
   var V8_VERSION = require_engine_v8_version();
   var IS_CONCAT_SPREADABLE = wellKnownSymbol4("isConcatSpreadable");
@@ -3951,7 +3963,7 @@
     array[IS_CONCAT_SPREADABLE] = false;
     return array.concat()[0] !== array;
   });
-  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport4("concat");
+  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport5("concat");
   var isConcatSpreadable = function(O) {
     if (!isObject5(O))
       return false;
@@ -3959,7 +3971,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $16({ target: "Array", proto: true, forced: FORCED2 }, {
+  $17({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -3986,7 +3998,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $17 = require_export();
+  var $18 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4000,14 +4012,14 @@
       } : handler, timeout);
     };
   };
-  $17({ global: true, bind: true, forced: MSIE }, {
+  $18({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
 
   // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var $find = require_array_iteration().find;
   var addToUnscopables2 = require_add_to_unscopables();
   var FIND = "find";
@@ -4016,7 +4028,7 @@
     Array(1)[FIND](function() {
       SKIPS_HOLES2 = false;
     });
-  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $19({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     find: function find(callbackfn) {
       return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4065,24 +4077,24 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $19 = require_export();
+  var $20 = require_export();
   var $reduce = require_array_reduce().left;
   var arrayMethodIsStrict = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
   var STRICT_METHOD = arrayMethodIsStrict("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $19({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+  $20({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.define-property.js
-  var $20 = require_export();
+  var $21 = require_export();
   var DESCRIPTORS7 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $20({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
+  $21({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
@@ -4093,27 +4105,15 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $21 = require_export();
+  var $22 = require_export();
   var $indexOf = require_array_includes().indexOf;
   var arrayMethodIsStrict2 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
   var STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-  $21({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+  $22({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // node_modules/core-js/modules/es.array.map.js
-  "use strict";
-  var $22 = require_export();
-  var $map = require_array_iteration().map;
-  var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport5("map");
-  $22({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
-    map: function map(callbackfn) {
-      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
@@ -7006,9 +7006,13 @@
     }
     return arr2;
   }
-  function wrap_in_grided(app_state) {
+  function wrap_in_grided(app_state, finish_btn) {
     var grid_is_filled = app_state.container.hasChildNodes();
-    var buttons = [action_button("get_code", "Get layout code"), action_button("update_code", "Update app")];
+    var finished_button = Text_El("button#done", finish_btn.label);
+    finished_button.addEventListener("click", function(event) {
+      finish_btn.on_done(app_state.current_layout);
+    });
+    var buttons = [action_button("get_code", "Get layout code"), finished_button];
     if (grid_is_filled) {
       buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
     }
@@ -7218,7 +7222,7 @@
   var Layout_Editor = /* @__PURE__ */ function() {
     function Layout_Editor2(_ref) {
       var _ref2, _this = this;
-      var container = _ref.container, starting_layout = _ref.starting_layout;
+      var container = _ref.container, starting_layout = _ref.starting_layout, finish_btn = _ref.finish_btn;
       _classCallCheck3(this, Layout_Editor2);
       _defineProperty6(this, "gap_size_setting", void 0);
       _defineProperty6(this, "current_cells", []);
@@ -7232,7 +7236,7 @@
       this.container = (_ref2 = container !== null && container !== void 0 ? container : find_first_grid_node()) !== null && _ref2 !== void 0 ? _ref2 : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
-      var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
+      var _wrap_in_grided = wrap_in_grided(this, finish_btn), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
       this.gap_size_setting = gap_size_setting;
       this.mode = grid_is_filled ? "Existing" : "New";
       if (starting_layout) {
@@ -7263,6 +7267,18 @@
       add_shiny_listeners(this);
     }
     _createClass3(Layout_Editor2, [{
+      key: "current_layout",
+      get: function get() {
+        return {
+          grid: this.grid_layout.attrs,
+          elements: this.elements.map(function(el) {
+            return _objectSpread3({
+              id: el.id
+            }, el.grid_pos);
+          })
+        };
+      }
+    }, {
       key: "next_color",
       get: function get() {
         var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
@@ -8330,18 +8346,37 @@
         console.log("Make app with", selected_layout);
       }).on_edit(function(selected_layout) {
         start_layout_editor({
-          starting_layout: selected_layout
+          starting_layout: selected_layout,
+          finish_btn: {
+            label: "Create app",
+            on_done: function on_done(layout) {
+              setShinyInput("build_app_template", layout);
+            }
+          }
         });
       });
       document.body.appendChild(gallery);
     });
     add_shiny_listener("edit-layout", function(layout_info) {
       start_layout_editor({
-        starting_layout: layout_info
+        starting_layout: layout_info,
+        finish_btn: {
+          label: "Update app layout",
+          on_done: function on_done(layout) {
+            setShinyInput("update_layout", layout);
+          }
+        }
       });
     });
     add_shiny_listener("edit-existing-app", function(layout_info) {
-      start_layout_editor({});
+      start_layout_editor({
+        finish_btn: {
+          label: "Update app layout",
+          on_done: function on_done(layout) {
+            console.log("Updating the layout", layout);
+          }
+        }
+      });
     });
   };
 })();

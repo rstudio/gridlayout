@@ -30,16 +30,39 @@ window.onload = function () {
         console.log(`Make app with`, selected_layout);
       })
       .on_edit((selected_layout: Layout_Info) => {
-        start_layout_editor({ starting_layout: selected_layout });
+        start_layout_editor({
+          starting_layout: selected_layout,
+          finish_btn: {
+            label: "Create app",
+            on_done: (layout: Layout_Info) => {
+              setShinyInput("build_app_template", layout);
+            },
+          },
+        });
       });
     document.body.appendChild(gallery);
   });
 
   add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
-    start_layout_editor({ starting_layout: layout_info });
+    start_layout_editor({
+      starting_layout: layout_info,
+      finish_btn: {
+        label: "Update app layout",
+        on_done: (layout: Layout_Info) => {
+          setShinyInput("update_layout", layout);
+        }
+      },
+    });
   });
 
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
-    start_layout_editor({});
+    start_layout_editor({
+      finish_btn: {
+        label: "Update app layout",
+        on_done: (layout: Layout_Info) => {
+          console.log("Updating the layout", layout);
+        },
+      },
+    });
   });
 };

@@ -62,6 +62,14 @@ export type Element_Info = {
 
 export type App_Mode = "Existing" | "New";
 
+export type Finish_Button_Setup = {label: string, on_done: (layout: Layout_Info) => void};
+type Layout_Editor_Setup = {
+  container?: HTMLElement;
+  starting_layout?: Layout_Info;
+  finish_btn: Finish_Button_Setup
+};
+
+
 export class Layout_Editor {
   gap_size_setting: CSS_Input;
   // All the currently existing cells making up the grid
@@ -79,10 +87,8 @@ export class Layout_Editor {
   constructor({
     container,
     starting_layout,
-  }: {
-    container?: HTMLElement;
-    starting_layout?: Layout_Info;
-  }) {
+    finish_btn,
+  }: Layout_Editor_Setup) {
     this.container =
       container ?? find_first_grid_node() ?? Block_El("div#grid_page");
 
@@ -90,7 +96,7 @@ export class Layout_Editor {
 
     this.grid_layout = new Grid_Layout(this.container);
 
-    const { grid_is_filled, gap_size_setting } = wrap_in_grided(this);
+    const { grid_is_filled, gap_size_setting } = wrap_in_grided(this, finish_btn);
     this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
 
@@ -129,6 +135,15 @@ export class Layout_Editor {
     add_shiny_listeners(this);
   }
 
+  get current_layout(): Layout_Info {
+    return {
+      grid: this.grid_layout.attrs,
+      elements: this.elements.map((el) => ({
+        id: el.id,
+        ...el.grid_pos,
+      })),
+    };
+  }
   // Get the next color in our list of colors.
   get next_color() {
     const colors = [
@@ -944,9 +959,6 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
   });
 }
 
-export function start_layout_editor(opts: {
-  container?: HTMLElement;
-  starting_layout?: Layout_Info;
-}){
+export function start_layout_editor(opts: Layout_Editor_Setup) {
   new Layout_Editor(opts);
 }

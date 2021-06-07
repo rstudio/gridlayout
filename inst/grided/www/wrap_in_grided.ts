@@ -1,5 +1,4 @@
-import { css } from "@emotion/css";
-import { Layout_Editor } from "./Layout_Editor";
+import { Finish_Button_Setup, Layout_Editor } from "./Layout_Editor";
 import { make_css_unit_input } from "./make-css_unit_input";
 import { Block_El, make_el, Text_El } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
@@ -15,18 +14,22 @@ import {
 import { setShinyInput } from "./utils-shiny";
 
 
-
-
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
 // that it contains so they can be overlayed with editable element boxes
-export function wrap_in_grided(app_state: Layout_Editor) {
+export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Button_Setup) {
   const grid_is_filled = app_state.container.hasChildNodes();
+
+  const finished_button = Text_El(`button#done`, finish_btn.label);
+  finished_button.addEventListener("click", function (event) {
+    finish_btn.on_done(app_state.current_layout);
+  });
 
   const buttons = [
     action_button("get_code", "Get layout code"),
-    action_button("update_code", "Update app"),
+    finished_button,
   ];
+  
   if (grid_is_filled) {
     buttons.push(
       make_toggle_switch(
