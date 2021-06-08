@@ -6,9 +6,10 @@ import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
 import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
 import {
   Block_El,
+  El,
   Element_Opts,
   make_el,
-  remove_elements,
+  remove_elements
 } from "./make-elements";
 import { focused_modal } from "./make-focused_modal";
 import { get_styles_for_selector_with_targets } from "./utils-cssom";
@@ -19,7 +20,7 @@ import {
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
-  make_start_end_for_dir,
+  make_start_end_for_dir
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -30,12 +31,13 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos,
+  XY_Pos
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
+  send_grid_sizing_to_shiny
 } from "./utils-shiny";
+import { create_focus_modal } from "./web-components/focus-modal";
 import { wrap_in_grided } from "./wrap_in_grided";
 
 export type Grid_Update_Options = {
@@ -62,13 +64,15 @@ export type Element_Info = {
 
 export type App_Mode = "Existing" | "New";
 
-export type Finish_Button_Setup = {label: string, on_done: (layout: Layout_Info) => void};
+export type Finish_Button_Setup = {
+  label: string;
+  on_done: (layout: Layout_Info) => void;
+};
 type Layout_Editor_Setup = {
   container?: HTMLElement;
   starting_layout?: Layout_Info;
-  finish_btn: Finish_Button_Setup
+  finish_btn: Finish_Button_Setup;
 };
-
 
 export class Layout_Editor {
   gap_size_setting: CSS_Input;
@@ -84,11 +88,7 @@ export class Layout_Editor {
   tract_controls: {
     update_positions: () => void;
   };
-  constructor({
-    container,
-    starting_layout,
-    finish_btn,
-  }: Layout_Editor_Setup) {
+  constructor({ container, starting_layout, finish_btn }: Layout_Editor_Setup) {
     this.container =
       container ?? find_first_grid_node() ?? Block_El("div#grid_page");
 
@@ -96,7 +96,10 @@ export class Layout_Editor {
 
     this.grid_layout = new Grid_Layout(this.container);
 
-    const { grid_is_filled, gap_size_setting } = wrap_in_grided(this, finish_btn);
+    const { grid_is_filled, gap_size_setting } = wrap_in_grided(
+      this,
+      finish_btn
+    );
     this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
 
@@ -718,50 +721,33 @@ function setup_tract_controls(app_state: Layout_Editor) {
   };
 }
 
-const name_form_styles = css`
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2rem;
-
-  input[type="text"] {
-    width: 50%;
-  }
-`;
-
 function element_naming_ui(
   app_state: Layout_Editor,
   { grid_pos, selection_box }
 ) {
-  const modal_divs = focused_modal({
-    background_callbacks: {
-      // Clicking outside of the modal will cancel the naming. Seems natural
-      event: "click",
-      func: reset_el_creation,
+  const name_form = El({
+    sel_txt: `form#name_form.centered`,
+    styles: {
+      width: "100%",
+      display: "grid",
+      gridTemplateColumns: "50% 100px",
+      gap: "1rem",
+      justifyContent: "center",
     },
-    modal_callbacks: {
-      event: "click",
-      func: function (event) {
-        // This is needed to stop clicks on modal from triggering the cancel
-        // event that is attached to the background
-        event.stopPropagation();
-      },
-    },
-  });
-
-  const modal_div = modal_divs.modal;
-
-  make_el(modal_div, "div.instructions", {
-    innerHTML: `
-    <h2>Name your element:</h2>
-    <p>This name will be used to place items in your app.
-    For instance if you want to place a plot in this element,
-    this name will match the label of the plot output
-    </p>
-    `,
-  });
-
-  const name_form = make_el(modal_div, `form#name_form.${name_form_styles}`, {
+    children: [
+      El({
+        sel_txt: "input#name_input",
+        props: { type: "text" },
+        event_listener: {
+          // Don't leave warning message up while user is typing
+          event: "input",
+          func: hide_warning_msg,
+        },
+      }),
+      El({ sel_txt: "input#name_submit", props: { type: "submit" } }),
+    ],
     event_listener: {
+      // Don't leave warning message up while user is typing
       event: "submit",
       func: function (event) {
         event.preventDefault();
@@ -791,27 +777,25 @@ function element_naming_ui(
       },
     },
   });
-  make_el(name_form, "input#cancel_btn", {
-    props: { type: "button", value: "cancel" },
-    event_listener: { event: "click", func: reset_el_creation },
-  });
 
-  make_el(name_form, "input#name_input", {
-    props: { type: "text" },
-    event_listener: {
-      // Don't leave warning message up while user is typing
-      event: "input",
-      func: hide_warning_msg,
-    },
-  }).focus(); // So user can immediately type in id
+  const modal = create_focus_modal({
+    title: "Name your element:",
+    description: `
+    This name will be used to place items in your app.
+    For instance if you want to place a plot in this element,
+    this name will match the label of the plot output
+    `,
+  })
+    .add_element(name_form)
+    .on_close(reset_el_creation)
+    .focus_on("name_input");
 
-  make_el(name_form, "input#name_submit", {
-    props: { type: "submit" },
-  });
+  let warning_msg: HTMLElement;
 
-  function warn_about_bad_id(msg) {
-    make_el(modal_div, "span#bad_id_msg", {
-      innerHTML: msg,
+  function warn_about_bad_id(msg: string) {
+    warning_msg = El({
+      sel_txt: "span#bad_id_msg",
+      text: msg,
       styles: {
         color: "orangered",
         fontStyle: "italic",
@@ -819,16 +803,16 @@ function element_naming_ui(
         fontSize: "0.9rem",
       },
     });
+    modal.add_element(warning_msg);
   }
   function hide_warning_msg() {
-    const warn_msg = modal_div.querySelector("span#bad_id_msg");
-    if (warn_msg) {
-      warn_msg.remove();
+    if (warning_msg) {
+      warning_msg.remove();
     }
   }
   function reset_el_creation() {
     // All done here so get rid of the whole interface.
-    modal_divs.remove();
+    modal.remove();
     // Remove the temporary dragged element
     selection_box.style.display = "none";
   }

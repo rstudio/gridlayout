@@ -1,10 +1,9 @@
 // JS entry point
 import { Layout_State } from "./Grid_Layout";
 import { start_layout_editor } from "./Layout_Editor";
-import { focused_modal } from "./make-focused_modal";
 import { add_shiny_listener, setShinyInput } from "./utils-shiny";
-import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 import { create_focus_modal } from "./web-components/focus-modal";
+import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
 export const Shiny = (window as any).Shiny;
 
@@ -72,6 +71,7 @@ window.onload = function () {
     console.log("Showing layout code with webcomponent");
     create_focus_modal({
       title: "Layout code",
+      description: "Paste the following declaration into your app to use this layout",
       code_content: layout_code,
     });
   });

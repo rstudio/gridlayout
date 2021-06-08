@@ -3508,7 +3508,7 @@
   defineWellKnownSymbol2("iterator");
 
   // Layout_Editor.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
   "use strict";
@@ -3631,7 +3631,7 @@
   var CollectionPrototype;
 
   // Layout_Editor.ts
-  var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
+  var import_es_regexp_exec11 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.string.split.js
   "use strict";
@@ -6024,6 +6024,17 @@
         return el.appendChild(child_el);
       });
     }
+    if (opts.styles) {
+      Object.assign(el.style, opts.styles);
+    }
+    if (opts.props) {
+      Object.assign(el, opts.props);
+    }
+    if (opts.event_listener) {
+      as_array(opts.event_listener).forEach(function(listener) {
+        return el["on" + listener.event] = listener.func;
+      });
+    }
     return el;
   }
   function Block_El(sel_txt) {
@@ -6948,8 +6959,491 @@
     });
   }
 
-  // wrap_in_grided.ts
+  // node_modules/core-js/modules/es.object.set-prototype-of.js
+  var $30 = require_export();
+  var setPrototypeOf = require_object_set_prototype_of();
+  $30({ target: "Object", stat: true }, {
+    setPrototypeOf: setPrototypeOf
+  });
+
+  // node_modules/core-js/modules/es.object.get-prototype-of.js
+  var $31 = require_export();
+  var fails8 = require_fails();
+  var toObject5 = require_to_object();
+  var nativeGetPrototypeOf = require_object_get_prototype_of();
+  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+  var FAILS_ON_PRIMITIVES4 = fails8(function() {
+    nativeGetPrototypeOf(1);
+  });
+  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+    getPrototypeOf: function getPrototypeOf(it) {
+      return nativeGetPrototypeOf(toObject5(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.reflect.construct.js
+  var $32 = require_export();
+  var getBuiltIn2 = require_get_built_in();
+  var aFunction = require_a_function();
+  var anObject6 = require_an_object();
+  var isObject6 = require_is_object();
+  var create4 = require_object_create();
+  var bind2 = require_function_bind();
+  var fails9 = require_fails();
+  var nativeConstruct = getBuiltIn2("Reflect", "construct");
+  var NEW_TARGET_BUG = fails9(function() {
+    function F() {
+    }
+    return !(nativeConstruct(function() {
+    }, [], F) instanceof F);
+  });
+  var ARGS_BUG = !fails9(function() {
+    nativeConstruct(function() {
+    });
+  });
+  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
+  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+    construct: function construct(Target, args) {
+      aFunction(Target);
+      anObject6(args);
+      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
+      if (ARGS_BUG && !NEW_TARGET_BUG)
+        return nativeConstruct(Target, args, newTarget);
+      if (Target == newTarget) {
+        switch (args.length) {
+          case 0:
+            return new Target();
+          case 1:
+            return new Target(args[0]);
+          case 2:
+            return new Target(args[0], args[1]);
+          case 3:
+            return new Target(args[0], args[1], args[2]);
+          case 4:
+            return new Target(args[0], args[1], args[2], args[3]);
+        }
+        var $args = [null];
+        $args.push.apply($args, args);
+        return new (bind2.apply(Target, $args))();
+      }
+      var proto = newTarget.prototype;
+      var instance = create4(isObject6(proto) ? proto : Object.prototype);
+      var result = Function.apply.call(Target, instance, args);
+      return isObject6(result) ? result : instance;
+    }
+  });
+
+  // web-components/focus-modal.ts
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_map2 = __toModule(require_es_map());
+
+  // web-components/copy-code.ts
+  var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
   var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  var import_es_map = __toModule(require_es_map());
+  function _typeof4(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof4 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof4 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof4(obj);
+  }
+  function _classCallCheck3(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties3(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass3(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties3(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties3(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf(subClass, superClass);
+  }
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+  function _possibleConstructorReturn(self2, call) {
+    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized(self2);
+  }
+  function _assertThisInitialized(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper = function _wrapNativeSuper5(Class2) {
+      if (Class2 === null || !_isNativeFunction(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf(Wrapper, Class2);
+    };
+    return _wrapNativeSuper(Class);
+  }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct5(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf(o);
+  }
+  var copy_code_template = document.createElement("template");
+  copy_code_template.innerHTML = '\n <style>\n    * { box-sizing: border-box; }\n\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text";\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      grid-area: type; \n      font-size: 1.5rem;\n      font-weight: bold;\n      place-self: center;\n     }\n    #copy { \n      grid-area: copy-btn; \n      justify-self: end;\n      align-self: center;\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n\n    #copy > svg {\n      transform: scale(0.8);\n    }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> '.concat(clipboard_icon, " Copy Code </button>\n");
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits(CopyCode2, _HTMLElement);
+    var _super = _createSuper(CopyCode2);
+    function CopyCode2(code) {
+      var _this;
+      _classCallCheck3(this, CopyCode2);
+      _this = _super.call(this);
+      _this.attachShadow({
+        mode: "open"
+      }).appendChild(copy_code_template.content.cloneNode(true));
+      return _this;
+    }
+    _createClass3(CopyCode2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _code_text$match$leng;
+        var code_content = this.shadowRoot.getElementById("code-catcher");
+        var code_text = code_content.firstElementChild.assignedNodes()[0].textContent;
+        var num_of_lines = (_code_text$match$leng = code_text.match(/\n/g).length) !== null && _code_text$match$leng !== void 0 ? _code_text$match$leng : 1;
+        code_content.remove();
+        var code_el = this.shadowRoot.getElementById("code");
+        code_el.value = code_text;
+        code_el.rows = num_of_lines + 1;
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          code_el.select();
+          document.execCommand("copy");
+        });
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+      }
+    }]);
+    return CopyCode2;
+  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
+  customElements.define("copy-code", CopyCode);
+
+  // web-components/focus-modal.ts
+  function _typeof5(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof5 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof5 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof5(obj);
+  }
+  function _classCallCheck4(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties4(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass4(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties4(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties4(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits2(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf2(subClass, superClass);
+  }
+  function _createSuper2(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf2(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf2(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn2(this, result);
+    };
+  }
+  function _possibleConstructorReturn2(self2, call) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized2(self2);
+  }
+  function _assertThisInitialized2(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper2(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper2 = function _wrapNativeSuper5(Class2) {
+      if (Class2 === null || !_isNativeFunction2(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct2(Class2, arguments, _getPrototypeOf2(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf2(Wrapper, Class2);
+    };
+    return _wrapNativeSuper2(Class);
+  }
+  function _construct2(Parent, args, Class) {
+    if (_isNativeReflectConstruct2()) {
+      _construct2 = Reflect.construct;
+    } else {
+      _construct2 = function _construct5(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf2(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct2.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct2() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction2(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf2(o, p) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf2(o, p);
+  }
+  function _getPrototypeOf2(o) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf2(o);
+  }
+  function _defineProperty6(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var modal_template = document.createElement("template");
+  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n      position: relative;\n    }\n\n    #footer {\n      padding-top: 1rem;\n    }\n    \n    #title {\n      margin: 0;\n    }\n\n    #code {\n      margin-top: 0.5rem;\n      margin-bottom: 0.5rem;\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n\n    #close {\n      padding: 0;\n      display: inline-flex;\n      align-items: center;\n      position: absolute;\n      right: 3px;\n      top: 3px;\n    }\n\n    .centered {\n      margin-left: auto;\n      margin-right: auto;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title"></h2>\n    <button id = \'close\'> '.concat(close_icon, ' </button>\n    <div id = "description"></div>\n    <div id = "code"></div>\n  </div>\n');
+  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(FocusModal2, _HTMLElement);
+    var _super = _createSuper2(FocusModal2);
+    function FocusModal2(opts) {
+      var _this;
+      _classCallCheck4(this, FocusModal2);
+      _this = _super.call(this);
+      _defineProperty6(_assertThisInitialized2(_this), "_on_close", void 0);
+      _defineProperty6(_assertThisInitialized2(_this), "content", void 0);
+      _defineProperty6(_assertThisInitialized2(_this), "close_btn", void 0);
+      _this.attachShadow({
+        mode: "open"
+      }).appendChild(modal_template.content.cloneNode(true));
+      _this.shadowRoot.getElementById("title").innerHTML = opts.title;
+      _this.content = _this.shadowRoot.getElementById("content");
+      _this.close_btn = _this.shadowRoot.getElementById("close");
+      if (opts.description) {
+        _this.shadowRoot.getElementById("description").innerHTML = opts.description;
+      }
+      if (opts.code_content) {
+        var code_el = document.createElement("copy-code");
+        code_el.innerHTML = opts.code_content;
+        _this.shadowRoot.getElementById("code").appendChild(code_el);
+      }
+      return _this;
+    }
+    _createClass4(FocusModal2, [{
+      key: "add_element",
+      value: function add_element(el) {
+        this.content.appendChild(el);
+        return this;
+      }
+    }, {
+      key: "on_close",
+      value: function on_close(callback) {
+        this._on_close = callback;
+        return this;
+      }
+    }, {
+      key: "focus_on",
+      value: function focus_on(el_id) {
+        this.shadowRoot.getElementById(el_id).focus();
+        return this;
+      }
+    }, {
+      key: "setup_close_callbacks",
+      value: function setup_close_callbacks() {
+        var _this2 = this;
+        var exit_fn = function exit_fn2() {
+          var _this2$_on_close;
+          (_this2$_on_close = _this2._on_close) === null || _this2$_on_close === void 0 ? void 0 : _this2$_on_close.call(_this2);
+          _this2.remove();
+        };
+        this.close_btn.addEventListener("click", exit_fn);
+        this.addEventListener("click", exit_fn);
+        this.content.addEventListener("click", function(event) {
+          event.stopPropagation();
+        });
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.setup_close_callbacks();
+      }
+    }, {
+      key: "adoptedCallback",
+      value: function adoptedCallback() {
+        console.log("Adopted callback called");
+      }
+    }]);
+    return FocusModal2;
+  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  customElements.define("focus-modal", FocusModal);
+  function create_focus_modal(opts) {
+    var modal = new FocusModal(opts);
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  // wrap_in_grided.ts
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
 
   // make-toggle_switch.ts
   function make_toggle_switch(off_text, on_text, on_change) {
@@ -7087,7 +7581,6 @@
   var _templateObject32;
   var _templateObject42;
   var _templateObject5;
-  var _templateObject6;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -7186,7 +7679,7 @@
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
         ownKeys4(Object(source), true).forEach(function(key) {
-          _defineProperty6(target, key, source[key]);
+          _defineProperty7(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -7198,12 +7691,12 @@
     }
     return target;
   }
-  function _classCallCheck3(instance, Constructor) {
+  function _classCallCheck5(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties3(target, props) {
+  function _defineProperties5(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -7213,14 +7706,14 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass3(Constructor, protoProps, staticProps) {
+  function _createClass5(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties3(Constructor.prototype, protoProps);
+      _defineProperties5(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties3(Constructor, staticProps);
+      _defineProperties5(Constructor, staticProps);
     return Constructor;
   }
-  function _defineProperty6(obj, key, value) {
+  function _defineProperty7(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -7232,16 +7725,16 @@
     function Layout_Editor2(_ref) {
       var _ref2, _this = this;
       var container = _ref.container, starting_layout = _ref.starting_layout, finish_btn = _ref.finish_btn;
-      _classCallCheck3(this, Layout_Editor2);
-      _defineProperty6(this, "gap_size_setting", void 0);
-      _defineProperty6(this, "current_cells", []);
-      _defineProperty6(this, "elements", []);
-      _defineProperty6(this, "container_selector", void 0);
-      _defineProperty6(this, "container", void 0);
-      _defineProperty6(this, "grid_styles", void 0);
-      _defineProperty6(this, "mode", void 0);
-      _defineProperty6(this, "grid_layout", void 0);
-      _defineProperty6(this, "tract_controls", void 0);
+      _classCallCheck5(this, Layout_Editor2);
+      _defineProperty7(this, "gap_size_setting", void 0);
+      _defineProperty7(this, "current_cells", []);
+      _defineProperty7(this, "elements", []);
+      _defineProperty7(this, "container_selector", void 0);
+      _defineProperty7(this, "container", void 0);
+      _defineProperty7(this, "grid_styles", void 0);
+      _defineProperty7(this, "mode", void 0);
+      _defineProperty7(this, "grid_layout", void 0);
+      _defineProperty7(this, "tract_controls", void 0);
       this.container = (_ref2 = container !== null && container !== void 0 ? container : find_first_grid_node()) !== null && _ref2 !== void 0 ? _ref2 : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
@@ -7275,7 +7768,7 @@
       }
       add_shiny_listeners(this);
     }
-    _createClass3(Layout_Editor2, [{
+    _createClass5(Layout_Editor2, [{
       key: "current_layout",
       get: function get() {
         return {
@@ -7356,7 +7849,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(new_index, 0, "1fr");
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
+        this.update_grid(_defineProperty7({}, dir, tract_sizes));
       }
     }, {
       key: "remove_tract",
@@ -7383,7 +7876,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(index - 1, 1);
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
+        this.update_grid(_defineProperty7({}, dir, tract_sizes));
       }
     }, {
       key: "make_el",
@@ -7460,7 +7953,7 @@
         var tract_index = opts.tract_index, dir = opts.dir, new_value = opts.new_value, _opts$dont_send_to_sh = opts.dont_send_to_shiny, dont_send_to_shiny = _opts$dont_send_to_sh === void 0 ? false : _opts$dont_send_to_sh;
         var tract_values = this.grid_layout[dir];
         tract_values[tract_index - 1] = new_value;
-        this.update_grid((_this$update_grid3 = {}, _defineProperty6(_this$update_grid3, dir, tract_values), _defineProperty6(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
+        this.update_grid((_this$update_grid3 = {}, _defineProperty7(_this$update_grid3, dir, tract_values), _defineProperty7(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
       }
     }, {
       key: "update_grid",
@@ -7607,26 +8100,32 @@
       update_positions: update_positions
     };
   }
-  var name_form_styles = css(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
   function element_naming_ui(app_state, _ref5) {
     var grid_pos = _ref5.grid_pos, selection_box = _ref5.selection_box;
-    var modal_divs = focused_modal({
-      background_callbacks: {
-        event: "click",
-        func: reset_el_creation
+    var name_form = El({
+      sel_txt: "form#name_form.centered",
+      styles: {
+        width: "100%",
+        display: "grid",
+        gridTemplateColumns: "50% 100px",
+        gap: "1rem",
+        justifyContent: "center"
       },
-      modal_callbacks: {
-        event: "click",
-        func: function func(event) {
-          event.stopPropagation();
+      children: [El({
+        sel_txt: "input#name_input",
+        props: {
+          type: "text"
+        },
+        event_listener: {
+          event: "input",
+          func: hide_warning_msg
         }
-      }
-    });
-    var modal_div = modal_divs.modal;
-    make_el(modal_div, "div.instructions", {
-      innerHTML: "\n    <h2>Name your element:</h2>\n    <p>This name will be used to place items in your app.\n    For instance if you want to place a plot in this element,\n    this name will match the label of the plot output\n    </p>\n    "
-    });
-    var name_form = make_el(modal_div, "form#name_form.".concat(name_form_styles), {
+      }), El({
+        sel_txt: "input#name_submit",
+        props: {
+          type: "submit"
+        }
+      })],
       event_listener: {
         event: "submit",
         func: function func(event) {
@@ -7651,33 +8150,15 @@
         }
       }
     });
-    make_el(name_form, "input#cancel_btn", {
-      props: {
-        type: "button",
-        value: "cancel"
-      },
-      event_listener: {
-        event: "click",
-        func: reset_el_creation
-      }
-    });
-    make_el(name_form, "input#name_input", {
-      props: {
-        type: "text"
-      },
-      event_listener: {
-        event: "input",
-        func: hide_warning_msg
-      }
-    }).focus();
-    make_el(name_form, "input#name_submit", {
-      props: {
-        type: "submit"
-      }
-    });
+    var modal = create_focus_modal({
+      title: "Name your element:",
+      description: "\n    This name will be used to place items in your app.\n    For instance if you want to place a plot in this element,\n    this name will match the label of the plot output\n    "
+    }).add_element(name_form).on_close(reset_el_creation).focus_on("name_input");
+    var warning_msg;
     function warn_about_bad_id(msg) {
-      make_el(modal_div, "span#bad_id_msg", {
-        innerHTML: msg,
+      warning_msg = El({
+        sel_txt: "span#bad_id_msg",
+        text: msg,
         styles: {
           color: "orangered",
           fontStyle: "italic",
@@ -7685,15 +8166,15 @@
           fontSize: "0.9rem"
         }
       });
+      modal.add_element(warning_msg);
     }
     function hide_warning_msg() {
-      var warn_msg = modal_div.querySelector("span#bad_id_msg");
-      if (warn_msg) {
-        warn_msg.remove();
+      if (warning_msg) {
+        warning_msg.remove();
       }
     }
     function reset_el_creation() {
-      modal_divs.remove();
+      modal.remove();
       selection_box.style.display = "none";
     }
   }
@@ -7782,566 +8263,11 @@
     new Layout_Editor(opts);
   }
 
-  // node_modules/core-js/modules/es.object.set-prototype-of.js
-  var $30 = require_export();
-  var setPrototypeOf = require_object_set_prototype_of();
-  $30({ target: "Object", stat: true }, {
-    setPrototypeOf: setPrototypeOf
-  });
-
-  // node_modules/core-js/modules/es.object.get-prototype-of.js
-  var $31 = require_export();
-  var fails8 = require_fails();
-  var toObject5 = require_to_object();
-  var nativeGetPrototypeOf = require_object_get_prototype_of();
-  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
-  var FAILS_ON_PRIMITIVES4 = fails8(function() {
-    nativeGetPrototypeOf(1);
-  });
-  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
-    getPrototypeOf: function getPrototypeOf(it) {
-      return nativeGetPrototypeOf(toObject5(it));
-    }
-  });
-
-  // node_modules/core-js/modules/es.reflect.construct.js
-  var $32 = require_export();
-  var getBuiltIn2 = require_get_built_in();
-  var aFunction = require_a_function();
-  var anObject6 = require_an_object();
-  var isObject6 = require_is_object();
-  var create4 = require_object_create();
-  var bind2 = require_function_bind();
-  var fails9 = require_fails();
-  var nativeConstruct = getBuiltIn2("Reflect", "construct");
-  var NEW_TARGET_BUG = fails9(function() {
-    function F() {
-    }
-    return !(nativeConstruct(function() {
-    }, [], F) instanceof F);
-  });
-  var ARGS_BUG = !fails9(function() {
-    nativeConstruct(function() {
-    });
-  });
-  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
-  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
-    construct: function construct(Target, args) {
-      aFunction(Target);
-      anObject6(args);
-      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
-      if (ARGS_BUG && !NEW_TARGET_BUG)
-        return nativeConstruct(Target, args, newTarget);
-      if (Target == newTarget) {
-        switch (args.length) {
-          case 0:
-            return new Target();
-          case 1:
-            return new Target(args[0]);
-          case 2:
-            return new Target(args[0], args[1]);
-          case 3:
-            return new Target(args[0], args[1], args[2]);
-          case 4:
-            return new Target(args[0], args[1], args[2], args[3]);
-        }
-        var $args = [null];
-        $args.push.apply($args, args);
-        return new (bind2.apply(Target, $args))();
-      }
-      var proto = newTarget.prototype;
-      var instance = create4(isObject6(proto) ? proto : Object.prototype);
-      var result = Function.apply.call(Target, instance, args);
-      return isObject6(result) ? result : instance;
-    }
-  });
-
   // web-components/layout-gallery.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
-  var import_es_map2 = __toModule(require_es_map());
-
-  // web-components/grid-preview.ts
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
-  var import_es_map = __toModule(require_es_map());
-  function _typeof4(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof4 = function _typeof8(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof4 = function _typeof8(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof4(obj);
-  }
-  function _classCallCheck4(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties4(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  function _createClass4(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      _defineProperties4(Constructor.prototype, protoProps);
-    if (staticProps)
-      _defineProperties4(Constructor, staticProps);
-    return Constructor;
-  }
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
-    if (superClass)
-      _setPrototypeOf(subClass, superClass);
-  }
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived), result;
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return _possibleConstructorReturn(this, result);
-    };
-  }
-  function _possibleConstructorReturn(self2, call) {
-    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-    return _assertThisInitialized(self2);
-  }
-  function _assertThisInitialized(self2) {
-    if (self2 === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self2;
-  }
-  function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper = function _wrapNativeSuper5(Class2) {
-      if (Class2 === null || !_isNativeFunction(Class2))
-        return Class2;
-      if (typeof Class2 !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class2))
-          return _cache.get(Class2);
-        _cache.set(Class2, Wrapper);
-      }
-      function Wrapper() {
-        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
-      }
-      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf(Wrapper, Class2);
-    };
-    return _wrapNativeSuper(Class);
-  }
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
-    } else {
-      _construct = function _construct5(Parent2, args2, Class2) {
-        var a = [null];
-        a.push.apply(a, args2);
-        var Constructor = Function.bind.apply(Parent2, a);
-        var instance = new Constructor();
-        if (Class2)
-          _setPrototypeOf(instance, Class2.prototype);
-        return instance;
-      };
-    }
-    return _construct.apply(null, arguments);
-  }
-  function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct)
-      return false;
-    if (Reflect.construct.sham)
-      return false;
-    if (typeof Proxy === "function")
-      return true;
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-      }));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function _isNativeFunction(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
-      o2.__proto__ = p2;
-      return o2;
-    };
-    return _setPrototypeOf(o, p);
-  }
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
-      return o2.__proto__ || Object.getPrototypeOf(o2);
-    };
-    return _getPrototypeOf(o);
-  }
-  function _defineProperty7(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits(GridPreview2, _HTMLElement);
-    var _super = _createSuper(GridPreview2);
-    function GridPreview2() {
-      var _this;
-      _classCallCheck4(this, GridPreview2);
-      _this = _super.call(this);
-      _defineProperty7(_assertThisInitialized(_this), "grid", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "_render_size", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "_shown_size", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "name", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "elements", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "hover_animation", void 0);
-      _defineProperty7(_assertThisInitialized(_this), "_on_select", void 0);
-      _this.attachShadow({
-        mode: "open"
-      });
-      _this.name = "default name";
-      _this.grid = {
-        rows: ["1fr"],
-        cols: ["1fr"],
-        gap: "1rem"
-      };
-      _this.elements = [];
-      _this._render_size = 1250;
-      _this._shown_size = 250;
-      _this._on_select = function() {
-        return console.log("Selected ".concat(_this.name));
-      };
-      _this.hover_animation = true;
-      return _this;
-    }
-    _createClass4(GridPreview2, [{
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        var _this2 = this;
-        var scale = this._render_size / this._shown_size;
-        var scale_units = function scale_units2(unit) {
-          if (unit.includes("fr") || unit.includes("auto"))
-            return unit;
-          return "calc(".concat(unit, "/ ").concat(scale, ")");
-        };
-        var corner_radius = "".concat(10 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
-        this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
-          event.stopPropagation();
-          _this2._on_select({
-            name: _this2.name,
-            elements: _this2.elements,
-            grid: _this2.grid
-          });
-        });
-      }
-    }, {
-      key: "layout",
-      value: function layout(_layout) {
-        var _layout$elements, _layout$name;
-        Object.assign(this.grid, _layout.grid);
-        this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
-        this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
-        return this;
-      }
-    }, {
-      key: "render_size",
-      value: function render_size(new_size) {
-        this._render_size = new_size;
-        return this;
-      }
-    }, {
-      key: "shown_size",
-      value: function shown_size(new_size) {
-        this._shown_size = new_size;
-        return this;
-      }
-    }, {
-      key: "on_select",
-      value: function on_select(_on_select) {
-        this._on_select = _on_select;
-        return this;
-      }
-    }, {
-      key: "turnoff_animation",
-      value: function turnoff_animation() {
-        this.hover_animation = false;
-        return this;
-      }
-    }, {
-      key: "element_divs",
-      get: function get() {
-        var element_divs = "";
-        this.elements.forEach(function(_ref) {
-          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
-          var grid_area = [start_row, start_col, end_row + 1, end_col + 1].join("/");
-          element_divs += "\n      <div style='grid-area:".concat(grid_area, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
-        });
-        return element_divs;
-      }
-    }]);
-    return GridPreview2;
-  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
-  function grid_preview() {
-    return new GridPreview();
-  }
-  customElements.define("grid-preview", GridPreview);
-
-  // web-components/layout-gallery.ts
-  function _typeof5(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof5 = function _typeof8(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof5 = function _typeof8(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof5(obj);
-  }
-  function _classCallCheck5(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties5(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  function _createClass5(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      _defineProperties5(Constructor.prototype, protoProps);
-    if (staticProps)
-      _defineProperties5(Constructor, staticProps);
-    return Constructor;
-  }
-  function _inherits2(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
-    if (superClass)
-      _setPrototypeOf2(subClass, superClass);
-  }
-  function _createSuper2(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct2();
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf2(Derived), result;
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf2(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return _possibleConstructorReturn2(this, result);
-    };
-  }
-  function _possibleConstructorReturn2(self2, call) {
-    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-    return _assertThisInitialized2(self2);
-  }
-  function _assertThisInitialized2(self2) {
-    if (self2 === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self2;
-  }
-  function _wrapNativeSuper2(Class) {
-    var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper2 = function _wrapNativeSuper5(Class2) {
-      if (Class2 === null || !_isNativeFunction2(Class2))
-        return Class2;
-      if (typeof Class2 !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class2))
-          return _cache.get(Class2);
-        _cache.set(Class2, Wrapper);
-      }
-      function Wrapper() {
-        return _construct2(Class2, arguments, _getPrototypeOf2(this).constructor);
-      }
-      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf2(Wrapper, Class2);
-    };
-    return _wrapNativeSuper2(Class);
-  }
-  function _construct2(Parent, args, Class) {
-    if (_isNativeReflectConstruct2()) {
-      _construct2 = Reflect.construct;
-    } else {
-      _construct2 = function _construct5(Parent2, args2, Class2) {
-        var a = [null];
-        a.push.apply(a, args2);
-        var Constructor = Function.bind.apply(Parent2, a);
-        var instance = new Constructor();
-        if (Class2)
-          _setPrototypeOf2(instance, Class2.prototype);
-        return instance;
-      };
-    }
-    return _construct2.apply(null, arguments);
-  }
-  function _isNativeReflectConstruct2() {
-    if (typeof Reflect === "undefined" || !Reflect.construct)
-      return false;
-    if (Reflect.construct.sham)
-      return false;
-    if (typeof Proxy === "function")
-      return true;
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-      }));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function _isNativeFunction2(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-  function _setPrototypeOf2(o, p) {
-    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
-      o2.__proto__ = p2;
-      return o2;
-    };
-    return _setPrototypeOf2(o, p);
-  }
-  function _getPrototypeOf2(o) {
-    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
-      return o2.__proto__ || Object.getPrototypeOf(o2);
-    };
-    return _getPrototypeOf2(o);
-  }
-  function _defineProperty8(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits2(LayoutGallery2, _HTMLElement);
-    var _super = _createSuper2(LayoutGallery2);
-    function LayoutGallery2(layouts) {
-      var _this;
-      _classCallCheck5(this, LayoutGallery2);
-      _this = _super.call(this);
-      _defineProperty8(_assertThisInitialized2(_this), "layouts", void 0);
-      _defineProperty8(_assertThisInitialized2(_this), "layouts_holder", void 0);
-      _defineProperty8(_assertThisInitialized2(_this), "chooser_modal", void 0);
-      _defineProperty8(_assertThisInitialized2(_this), "on_edit_fn", void 0);
-      _defineProperty8(_assertThisInitialized2(_this), "on_go_fn", void 0);
-      _this.attachShadow({
-        mode: "open"
-      });
-      _this.layouts = layouts;
-      return _this;
-    }
-    _createClass5(LayoutGallery2, [{
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
-        this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
-        this.layouts_holder = this.shadowRoot.getElementById("layouts");
-        this.layouts.forEach(function(layout) {
-          _this2.layouts_holder.appendChild(grid_preview().layout(layout).on_select(function(x) {
-            return _this2.select_a_grid(x);
-          }));
-        });
-      }
-    }, {
-      key: "on_edit",
-      value: function on_edit(on_edit_fn) {
-        this.on_edit_fn = on_edit_fn;
-        return this;
-      }
-    }, {
-      key: "on_go",
-      value: function on_go(on_go_fn) {
-        this.on_go_fn = on_go_fn;
-        return this;
-      }
-    }, {
-      key: "hide_chooser_modal",
-      value: function hide_chooser_modal() {
-        this.chooser_modal.classList.add("hidden");
-      }
-    }, {
-      key: "select_a_grid",
-      value: function select_a_grid(selected_layout) {
-        var _this3 = this;
-        this.chooser_modal.innerHTML = "";
-        this.chooser_modal.classList.remove("hidden");
-        this.chooser_modal.appendChild(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation());
-        this.chooser_modal.onclick = function() {
-          return _this3.hide_chooser_modal();
-        };
-        var go_btn = click_button(".go", "Create app with this layout", function(event) {
-          event.stopPropagation();
-          _this3.remove();
-          _this3.on_go_fn(selected_layout);
-        });
-        this.chooser_modal.appendChild(go_btn);
-        var edit_btn = click_button(".edit", "Edit this layout", function(event) {
-          event.stopPropagation();
-          _this3.remove();
-          _this3.on_edit_fn(selected_layout);
-        });
-        this.chooser_modal.appendChild(edit_btn);
-      }
-    }]);
-    return LayoutGallery2;
-  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
-  function layout_gallery(layouts) {
-    return new LayoutGallery(layouts);
-  }
-  customElements.define("layout-gallery", LayoutGallery);
-
-  // web-components/focus-modal.ts
   var import_es_array_iterator16 = __toModule(require_es_array_iterator());
   var import_es_map4 = __toModule(require_es_map());
 
-  // web-components/copy-code.ts
-  var import_es_regexp_exec11 = __toModule(require_es_regexp_exec());
+  // web-components/grid-preview.ts
   var import_es_array_iterator15 = __toModule(require_es_array_iterator());
   var import_es_map3 = __toModule(require_es_map());
   function _typeof6(obj) {
@@ -8480,46 +8406,120 @@
     };
     return _getPrototypeOf3(o);
   }
-  var copy_code_template = document.createElement("template");
-  copy_code_template.innerHTML = '\n <style>\n    * { box-sizing: border-box; }\n\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text";\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      grid-area: type; \n      font-size: 1.5rem;\n      font-weight: bold;\n      place-self: center;\n     }\n    #copy { \n      grid-area: copy-btn; \n      justify-self: end;\n      align-self: center;\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n\n    #copy > svg {\n      transform: scale(0.8);\n    }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> '.concat(clipboard_icon, " Copy Code </button>\n");
-  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits3(CopyCode2, _HTMLElement);
-    var _super = _createSuper3(CopyCode2);
-    function CopyCode2(code) {
+  function _defineProperty8(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(GridPreview2, _HTMLElement);
+    var _super = _createSuper3(GridPreview2);
+    function GridPreview2() {
       var _this;
-      _classCallCheck6(this, CopyCode2);
+      _classCallCheck6(this, GridPreview2);
       _this = _super.call(this);
+      _defineProperty8(_assertThisInitialized3(_this), "grid", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "_render_size", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "_shown_size", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "name", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "elements", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "hover_animation", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "_on_select", void 0);
       _this.attachShadow({
         mode: "open"
-      }).appendChild(copy_code_template.content.cloneNode(true));
+      });
+      _this.name = "default name";
+      _this.grid = {
+        rows: ["1fr"],
+        cols: ["1fr"],
+        gap: "1rem"
+      };
+      _this.elements = [];
+      _this._render_size = 1250;
+      _this._shown_size = 250;
+      _this._on_select = function() {
+        return console.log("Selected ".concat(_this.name));
+      };
+      _this.hover_animation = true;
       return _this;
     }
-    _createClass6(CopyCode2, [{
+    _createClass6(GridPreview2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _code_text$match$leng;
-        var code_content = this.shadowRoot.getElementById("code-catcher");
-        var code_text = code_content.firstElementChild.assignedNodes()[0].textContent;
-        var num_of_lines = (_code_text$match$leng = code_text.match(/\n/g).length) !== null && _code_text$match$leng !== void 0 ? _code_text$match$leng : 1;
-        code_content.remove();
-        var code_el = this.shadowRoot.getElementById("code");
-        code_el.value = code_text;
-        code_el.rows = num_of_lines + 1;
-        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
-          code_el.select();
-          document.execCommand("copy");
+        var _this2 = this;
+        var scale = this._render_size / this._shown_size;
+        var scale_units = function scale_units2(unit) {
+          if (unit.includes("fr") || unit.includes("auto"))
+            return unit;
+          return "calc(".concat(unit, "/ ").concat(scale, ")");
+        };
+        var corner_radius = "".concat(10 / scale, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
+          event.stopPropagation();
+          _this2._on_select({
+            name: _this2.name,
+            elements: _this2.elements,
+            grid: _this2.grid
+          });
         });
       }
     }, {
-      key: "disconnectedCallback",
-      value: function disconnectedCallback() {
+      key: "layout",
+      value: function layout(_layout) {
+        var _layout$elements, _layout$name;
+        Object.assign(this.grid, _layout.grid);
+        this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
+        this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
+        return this;
+      }
+    }, {
+      key: "render_size",
+      value: function render_size(new_size) {
+        this._render_size = new_size;
+        return this;
+      }
+    }, {
+      key: "shown_size",
+      value: function shown_size(new_size) {
+        this._shown_size = new_size;
+        return this;
+      }
+    }, {
+      key: "on_select",
+      value: function on_select(_on_select) {
+        this._on_select = _on_select;
+        return this;
+      }
+    }, {
+      key: "turnoff_animation",
+      value: function turnoff_animation() {
+        this.hover_animation = false;
+        return this;
+      }
+    }, {
+      key: "element_divs",
+      get: function get() {
+        var element_divs = "";
+        this.elements.forEach(function(_ref) {
+          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
+          var grid_area = [start_row, start_col, end_row + 1, end_col + 1].join("/");
+          element_divs += "\n      <div style='grid-area:".concat(grid_area, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
+        });
+        return element_divs;
       }
     }]);
-    return CopyCode2;
+    return GridPreview2;
   }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
-  customElements.define("copy-code", CopyCode);
+  function grid_preview() {
+    return new GridPreview();
+  }
+  customElements.define("grid-preview", GridPreview);
 
-  // web-components/focus-modal.ts
+  // web-components/layout-gallery.ts
   function _typeof7(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -8664,70 +8664,84 @@
     }
     return obj;
   }
-  var modal_template = document.createElement("template");
-  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n    }\n\n    #footer {\n      padding-top: 1rem;\n    }\n    \n    #title {\n      margin: 0;\n    }\n\n    #code {\n      margin-top: 0.5rem;\n      margin-bottom: 0.5rem;\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n\n    #close {\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title"></h2>\n    <div id = "code"></div>\n    <div id = "footer">\n      <button id = \'close\'> '.concat(close_icon, " </button>\n    </div>\n  </div>\n");
-  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits4(FocusModal2, _HTMLElement);
-    var _super = _createSuper4(FocusModal2);
-    function FocusModal2(opts) {
+  var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits4(LayoutGallery2, _HTMLElement);
+    var _super = _createSuper4(LayoutGallery2);
+    function LayoutGallery2(layouts) {
       var _this;
-      _classCallCheck7(this, FocusModal2);
+      _classCallCheck7(this, LayoutGallery2);
       _this = _super.call(this);
-      _defineProperty9(_assertThisInitialized4(_this), "_on_remove", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "content", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "close_btn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "layouts", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "layouts_holder", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "chooser_modal", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "on_edit_fn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "on_go_fn", void 0);
       _this.attachShadow({
         mode: "open"
-      }).appendChild(modal_template.content.cloneNode(true));
-      _this.shadowRoot.getElementById("title").innerHTML = opts.title;
-      _this.content = _this.shadowRoot.getElementById("content");
-      _this.close_btn = _this.shadowRoot.getElementById("close");
-      if (opts.code_content) {
-        var code_el = document.createElement("copy-code");
-        code_el.innerHTML = opts.code_content;
-        _this.shadowRoot.getElementById("code").appendChild(code_el);
-      }
+      });
+      _this.layouts = layouts;
       return _this;
     }
-    _createClass7(FocusModal2, [{
-      key: "on_remove",
-      value: function on_remove(callback) {
-        this._on_remove = callback;
-        return this;
-      }
-    }, {
-      key: "setup_close_callbacks",
-      value: function setup_close_callbacks() {
+    _createClass7(LayoutGallery2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
         var _this2 = this;
-        var exit_fn = function exit_fn2() {
-          return _this2.remove();
-        };
-        this.close_btn.addEventListener("click", exit_fn);
-        this.addEventListener("click", exit_fn);
-        this.content.addEventListener("click", function(event) {
-          event.stopPropagation();
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
+        this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
+        this.layouts_holder = this.shadowRoot.getElementById("layouts");
+        this.layouts.forEach(function(layout) {
+          _this2.layouts_holder.appendChild(grid_preview().layout(layout).on_select(function(x) {
+            return _this2.select_a_grid(x);
+          }));
         });
       }
     }, {
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        this.setup_close_callbacks();
+      key: "on_edit",
+      value: function on_edit(on_edit_fn) {
+        this.on_edit_fn = on_edit_fn;
+        return this;
       }
     }, {
-      key: "disconnectedCallback",
-      value: function disconnectedCallback() {
-        if (this._on_remove) {
-          this._on_remove();
-        }
+      key: "on_go",
+      value: function on_go(on_go_fn) {
+        this.on_go_fn = on_go_fn;
+        return this;
+      }
+    }, {
+      key: "hide_chooser_modal",
+      value: function hide_chooser_modal() {
+        this.chooser_modal.classList.add("hidden");
+      }
+    }, {
+      key: "select_a_grid",
+      value: function select_a_grid(selected_layout) {
+        var _this3 = this;
+        this.chooser_modal.innerHTML = "";
+        this.chooser_modal.classList.remove("hidden");
+        this.chooser_modal.appendChild(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation());
+        this.chooser_modal.onclick = function() {
+          return _this3.hide_chooser_modal();
+        };
+        var go_btn = click_button(".go", "Create app with this layout", function(event) {
+          event.stopPropagation();
+          _this3.remove();
+          _this3.on_go_fn(selected_layout);
+        });
+        this.chooser_modal.appendChild(go_btn);
+        var edit_btn = click_button(".edit", "Edit this layout", function(event) {
+          event.stopPropagation();
+          _this3.remove();
+          _this3.on_edit_fn(selected_layout);
+        });
+        this.chooser_modal.appendChild(edit_btn);
       }
     }]);
-    return FocusModal2;
+    return LayoutGallery2;
   }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
-  customElements.define("focus-modal", FocusModal);
-  function create_focus_modal(opts) {
-    var modal = new FocusModal(opts);
-    document.body.appendChild(modal);
+  function layout_gallery(layouts) {
+    return new LayoutGallery(layouts);
   }
+  customElements.define("layout-gallery", LayoutGallery);
 
   // index.ts
   var Shiny = window.Shiny;
@@ -8774,6 +8788,7 @@
       console.log("Showing layout code with webcomponent");
       create_focus_modal({
         title: "Layout code",
+        description: "Paste the following declaration into your app to use this layout",
         code_content: layout_code
       });
     });

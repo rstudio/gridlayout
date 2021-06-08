@@ -1,10 +1,10 @@
-import { Layout_Editor } from "./Layout_Editor";
+import { css } from "@emotion/css";
 import { Grid_Pos } from "./Grid_Item";
 import { Tract_Dir } from "./Grid_Layout";
+import { Layout_Editor } from "./Layout_Editor";
 import { set_element_in_grid } from "./utils-grid";
-import { plus_icon, minus_icon, trashcan_icon } from "./utils-icons";
+import { plus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
-import { css } from "@emotion/css";
 
 export type Event_Listener = {
   event: string;
@@ -15,6 +15,9 @@ type Element_Contents = {
   sel_txt: string;
   text?: string;
   children?: HTMLElement[];
+  styles?: object;
+  props?: object;
+  event_listener?: Event_Listener | Event_Listener[];
 };
 
 export type Element_Opts = {
@@ -112,7 +115,7 @@ export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
   };
 }
 
-function El(opts: Element_Contents): HTMLElement {
+export function El(opts: Element_Contents): HTMLElement {
   const { tag_type, el_id, class_list } = parse_selector_text(opts.sel_txt);
 
   const el: HTMLElement = document.createElement(tag_type);
@@ -127,6 +130,20 @@ function El(opts: Element_Contents): HTMLElement {
 
   if (opts.children) {
     opts.children.forEach((child_el) => el.appendChild(child_el));
+  }
+
+  if (opts.styles) {
+    Object.assign(el.style, opts.styles);
+  }
+
+  if (opts.props) {
+    Object.assign(el, opts.props);
+  }
+
+  if (opts.event_listener) {
+    as_array(opts.event_listener).forEach(
+      (listener) => (el["on" + listener.event] = listener.func)
+    );
   }
 
   return el;

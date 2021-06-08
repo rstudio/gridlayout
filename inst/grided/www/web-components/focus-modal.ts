@@ -33,6 +33,7 @@ modal_template.innerHTML = `
       max-width: 450px;
       background: white;
       padding: 1.5rem 2.2rem;
+      position: relative;
     }
 
     #footer {
@@ -54,28 +55,36 @@ modal_template.innerHTML = `
     }
 
     #close {
-      padding: 5px 8px;
+      padding: 0;
       display: inline-flex;
       align-items: center;
+      position: absolute;
+      right: 3px;
+      top: 3px;
+    }
+
+    .centered {
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
   <div id="content">
     <h2 id = "title"></h2>
+    <button id = 'close'> ${close_icon} </button>
+    <div id = "description"></div>
     <div id = "code"></div>
-    <div id = "footer">
-      <button id = 'close'> ${close_icon} </button>
-    </div>
   </div>
 `;
 
 type Focus_Modal_Options = {
   title: string;
+  description?: string;
   on_cancel?: () => void;
   code_content?: string;
 };
 
 class FocusModal extends HTMLElement {
-  _on_remove: () => void;
+  _on_close: () => void;
   content: HTMLElement;
   close_btn: HTMLElement;
 
@@ -89,6 +98,9 @@ class FocusModal extends HTMLElement {
     this.content = this.shadowRoot.getElementById("content");
     this.close_btn = this.shadowRoot.getElementById("close");
 
+    if (opts.description) {
+      this.shadowRoot.getElementById("description").innerHTML = opts.description;
+    }
     if (opts.code_content) {
       const code_el = document.createElement("copy-code");
       code_el.innerHTML = opts.code_content;
@@ -96,14 +108,29 @@ class FocusModal extends HTMLElement {
     }
   }
 
-  on_remove(callback: () => void) {
-    this._on_remove = callback;
+  add_element(el: HTMLElement) {
+    this.content.appendChild(el);
+    return this;
+  }
+
+  on_close(callback: () => void) {
+    this._on_close = callback;
+    return this;
+  }
+
+  // Allows us to make an element focused for immediate action such as typing
+  // in a value etc. 
+  focus_on(el_id: string){
+    this.shadowRoot.getElementById(el_id).focus();
     return this;
   }
 
   setup_close_callbacks() {
     // Setup close callbacks for close button and off-modal click
-    const exit_fn = () => this.remove();
+    const exit_fn = () => {
+      this._on_close?.();
+      this.remove()
+    };
     this.close_btn.addEventListener("click", exit_fn);
     this.addEventListener("click", exit_fn);
     // Stop propigation of click events in the modal content so selecting text
@@ -117,10 +144,8 @@ class FocusModal extends HTMLElement {
     this.setup_close_callbacks();
   }
 
-  disconnectedCallback() {
-    if (this._on_remove) {
-      this._on_remove();
-    }
+  adoptedCallback() {
+    console.log("Adopted callback called");
   }
 }
 
@@ -129,4 +154,5 @@ customElements.define("focus-modal", FocusModal);
 export function create_focus_modal(opts: Focus_Modal_Options) {
   const modal = new FocusModal(opts);
   document.body.appendChild(modal);
+  return modal;
 }
