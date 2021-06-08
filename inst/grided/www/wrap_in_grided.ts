@@ -25,7 +25,7 @@ export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Butt
     click_button(
       "#see-layout-code", 
       "Code for layout",
-      () => setShinyInput("see_layout_code", app_state.current_layout)
+      () => setShinyInput("see_layout_code", app_state.current_layout, true)
     ),
     click_button(
       "#done",
