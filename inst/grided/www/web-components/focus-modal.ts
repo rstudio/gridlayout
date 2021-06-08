@@ -44,11 +44,8 @@ modal_template.innerHTML = `
     }
   </style>
   <div id="content">
-    <h2 id = "title">
-      <slot name='title'>Modal title</slot>
-    </h2>
-    <div id = "code">
-    </div>
+    <h2 id = "title"></h2>
+    <div id = "code"></div>
     <button id = 'close'> Close </button>
   </div>
 `;
@@ -69,17 +66,12 @@ class FocusModal extends HTMLElement {
       modal_template.content.cloneNode(true)
     );
 
-    const content = this.shadowRoot.getElementById("content");
-
-    const title_el = document.createElement("span");
-    title_el.slot = "title";
-    title_el.innerHTML = opts.title;
-    content.appendChild(title_el);
+    this.shadowRoot.getElementById("title").innerHTML = opts.title;
 
     if (opts.code_content) {
       const code_el = document.createElement('copy-code');
       code_el.innerHTML = opts.code_content;
-      content.querySelector("#code").appendChild(code_el);
+      this.shadowRoot.getElementById("code").appendChild(code_el);
     }
   }
   
