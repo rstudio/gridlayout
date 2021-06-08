@@ -5888,6 +5888,8 @@
   var settings_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
   var instructions_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
   var elements_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
+  var clipboard_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
+  var close_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
   var browser_header_html = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
 
   // make-elements.ts
@@ -7016,7 +7018,7 @@
   function wrap_in_grided(app_state, finish_btn) {
     var grid_is_filled = app_state.container.hasChildNodes();
     var buttons = [click_button("#see-layout-code", "Code for layout", function() {
-      return setShinyInput("see_layout_code", app_state.current_layout);
+      return setShinyInput("see_layout_code", app_state.current_layout, true);
     }), click_button("#done", finish_btn.label, function() {
       return finish_btn.on_done(app_state.current_layout);
     })];
@@ -8479,7 +8481,7 @@
     return _getPrototypeOf3(o);
   }
   var copy_code_template = document.createElement("template");
-  copy_code_template.innerHTML = '\n <style>\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text"\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      font-size: 1.5rem;\n      font-weight: bold;\n      grid-area: "type"; \n      place-self: center;\n     }\n    #copy { grid-area: "copy-btn"; }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> Copy Code </button>\n';
+  copy_code_template.innerHTML = '\n <style>\n    * { box-sizing: border-box; }\n\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text";\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      grid-area: type; \n      font-size: 1.5rem;\n      font-weight: bold;\n      place-self: center;\n     }\n    #copy { \n      grid-area: copy-btn; \n      justify-self: end;\n      align-self: center;\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n\n    #copy > svg {\n      transform: scale(0.8);\n    }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> '.concat(clipboard_icon, " Copy Code </button>\n");
   var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
     _inherits3(CopyCode2, _HTMLElement);
     var _super = _createSuper3(CopyCode2);
@@ -8663,7 +8665,7 @@
     return obj;
   }
   var modal_template = document.createElement("template");
-  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n    }\n    \n    #title {\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title">\n      <slot name=\'title\'>Modal title</slot>\n    </h2>\n    <div id = "code">\n    </div>\n    <button id = \'close\'> Close </button>\n  </div>\n';
+  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n    }\n\n    #footer {\n      padding-top: 1rem;\n    }\n    \n    #title {\n      margin: 0;\n    }\n\n    #code {\n      margin-top: 0.5rem;\n      margin-bottom: 0.5rem;\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n\n    #close {\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title"></h2>\n    <div id = "code"></div>\n    <div id = "footer">\n      <button id = \'close\'> '.concat(close_icon, " </button>\n    </div>\n  </div>\n");
   var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
     _inherits4(FocusModal2, _HTMLElement);
     var _super = _createSuper4(FocusModal2);
@@ -8672,18 +8674,18 @@
       _classCallCheck7(this, FocusModal2);
       _this = _super.call(this);
       _defineProperty9(_assertThisInitialized4(_this), "_on_remove", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "content", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "close_btn", void 0);
       _this.attachShadow({
         mode: "open"
       }).appendChild(modal_template.content.cloneNode(true));
-      var content = _this.shadowRoot.getElementById("content");
-      var title_el = document.createElement("span");
-      title_el.slot = "title";
-      title_el.innerHTML = opts.title;
-      content.appendChild(title_el);
+      _this.shadowRoot.getElementById("title").innerHTML = opts.title;
+      _this.content = _this.shadowRoot.getElementById("content");
+      _this.close_btn = _this.shadowRoot.getElementById("close");
       if (opts.code_content) {
         var code_el = document.createElement("copy-code");
         code_el.innerHTML = opts.code_content;
-        content.querySelector("#code").appendChild(code_el);
+        _this.shadowRoot.getElementById("code").appendChild(code_el);
       }
       return _this;
     }
@@ -8694,17 +8696,26 @@
         return this;
       }
     }, {
+      key: "setup_close_callbacks",
+      value: function setup_close_callbacks() {
+        var _this2 = this;
+        var exit_fn = function exit_fn2() {
+          return _this2.remove();
+        };
+        this.close_btn.addEventListener("click", exit_fn);
+        this.addEventListener("click", exit_fn);
+        this.content.addEventListener("click", function(event) {
+          event.stopPropagation();
+        });
+      }
+    }, {
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _this2 = this;
-        this.shadowRoot.getElementById("close").addEventListener("click", function() {
-          _this2.remove();
-        });
+        this.setup_close_callbacks();
       }
     }, {
       key: "disconnectedCallback",
       value: function disconnectedCallback() {
-        console.log("Focus modal has been removed");
         if (this._on_remove) {
           this._on_remove();
         }

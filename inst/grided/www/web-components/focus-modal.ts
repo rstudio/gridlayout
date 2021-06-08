@@ -1,4 +1,4 @@
-
+import {close_icon} from "../utils-icons";
 import "./copy-code.ts";
 
 const modal_template = document.createElement("template");
@@ -34,19 +34,37 @@ modal_template.innerHTML = `
       background: white;
       padding: 1.5rem 2.2rem;
     }
+
+    #footer {
+      padding-top: 1rem;
+    }
     
     #title {
+      margin: 0;
+    }
+
+    #code {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     #code > textarea {
       font-family: monospace;
       width: 100%;
     }
+
+    #close {
+      padding: 5px 8px;
+      display: inline-flex;
+      align-items: center;
+    }
   </style>
   <div id="content">
     <h2 id = "title"></h2>
     <div id = "code"></div>
-    <button id = 'close'> Close </button>
+    <div id = "footer">
+      <button id = 'close'> ${close_icon} </button>
+    </div>
   </div>
 `;
 
@@ -57,9 +75,10 @@ type Focus_Modal_Options = {
 };
 
 class FocusModal extends HTMLElement {
-  
   _on_remove: () => void;
-  
+  content: HTMLElement;
+  close_btn: HTMLElement;
+
   constructor(opts: Focus_Modal_Options) {
     super();
     this.attachShadow({ mode: "open" }).appendChild(
@@ -67,27 +86,38 @@ class FocusModal extends HTMLElement {
     );
 
     this.shadowRoot.getElementById("title").innerHTML = opts.title;
+    this.content = this.shadowRoot.getElementById("content");
+    this.close_btn = this.shadowRoot.getElementById("close");
 
     if (opts.code_content) {
-      const code_el = document.createElement('copy-code');
+      const code_el = document.createElement("copy-code");
       code_el.innerHTML = opts.code_content;
       this.shadowRoot.getElementById("code").appendChild(code_el);
     }
   }
-  
-  on_remove(callback: () => void){
+
+  on_remove(callback: () => void) {
     this._on_remove = callback;
     return this;
   }
 
-  connectedCallback() {
-    this.shadowRoot.getElementById("close").addEventListener("click", () => {
-      this.remove();
+  setup_close_callbacks() {
+    // Setup close callbacks for close button and off-modal click
+    const exit_fn = () => this.remove();
+    this.close_btn.addEventListener("click", exit_fn);
+    this.addEventListener("click", exit_fn);
+    // Stop propigation of click events in the modal content so selecting text
+    // or clicking the copy code button doesnt close the modal
+    this.content.addEventListener("click", (event) => {
+      event.stopPropagation();
     });
   }
 
+  connectedCallback() {
+    this.setup_close_callbacks();
+  }
+
   disconnectedCallback() {
-    console.log("Focus modal has been removed");
     if (this._on_remove) {
       this._on_remove();
     }
@@ -95,7 +125,6 @@ class FocusModal extends HTMLElement {
 }
 
 customElements.define("focus-modal", FocusModal);
-
 
 export function create_focus_modal(opts: Focus_Modal_Options) {
   const modal = new FocusModal(opts);

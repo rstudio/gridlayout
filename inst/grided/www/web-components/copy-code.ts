@@ -1,6 +1,9 @@
+import {clipboard_icon} from "../utils-icons";
 const copy_code_template = document.createElement("template");
 copy_code_template.innerHTML = `
  <style>
+    * { box-sizing: border-box; }
+
     :host {
       width: 100%;
       height: 100%;
@@ -10,7 +13,7 @@ copy_code_template.innerHTML = `
       gap: 4px;
       grid-template-areas:
         "type      copy-btn"
-        "code-text code-text"
+        "code-text code-text";
     }
     
     textarea {
@@ -19,19 +22,30 @@ copy_code_template.innerHTML = `
       width: 100%;
     }
     #type { 
+      grid-area: type; 
       font-size: 1.5rem;
       font-weight: bold;
-      grid-area: "type"; 
       place-self: center;
      }
-    #copy { grid-area: "copy-btn"; }
+    #copy { 
+      grid-area: copy-btn; 
+      justify-self: end;
+      align-self: center;
+      padding: 5px 8px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    #copy > svg {
+      transform: scale(0.8);
+    }
   </style>
   <div id = "code-catcher">
     <slot> </slot>
   </div>
   <textarea id = 'code'></textarea>
   <div id = "type"> R </div>
-  <button id = 'copy'> Copy Code </button>
+  <button id = 'copy'> ${clipboard_icon} Copy Code </button>
 `;
 
 class CopyCode extends HTMLElement {
