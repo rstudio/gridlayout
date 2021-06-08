@@ -1,6 +1,7 @@
 import { Layout_Info } from "..";
-import { click_button } from "../make-elements";
+import { click_button, El } from "../make-elements";
 import { grid_preview } from "./grid-preview";
+import { create_focus_modal } from "./focus-modal";
 
 type Select_Fn = (info: Layout_Info) => void;
 export class LayoutGallery extends HTMLElement {
@@ -68,7 +69,6 @@ export class LayoutGallery extends HTMLElement {
         grid-area: edit;
         justify-self: start;
       }
-      
       #chooser-modal.hidden {
         display: none;
       }
@@ -105,34 +105,42 @@ export class LayoutGallery extends HTMLElement {
   }
 
   select_a_grid(selected_layout: Layout_Info) {
-    this.chooser_modal.innerHTML = "";
-    this.chooser_modal.classList.remove("hidden");
-    this.chooser_modal.appendChild(
-      grid_preview().layout(selected_layout).shown_size(650).turnoff_animation()
-    );
+    const modal = create_focus_modal()
+      .set_title(selected_layout.name)
+      .max_width("95%")
+      .add_element(
+        grid_preview()
+          .layout(selected_layout)
+          .shown_size(650)
+          .turnoff_animation()
+          .hide_name()
+      );
 
-    this.chooser_modal.onclick = () => this.hide_chooser_modal();
-
-    const go_btn = click_button(
-      ".go",
-      "Create app with this layout",
-      (event) => {
-        // Stop propigation of click event down so it doesn't trigger the
-        // background click-to-go-back behavior
-        event.stopPropagation();
-        this.remove();
-        this.on_go_fn(selected_layout);
-      }
-    );
-    this.chooser_modal.appendChild(go_btn);
-
-    const edit_btn = click_button(".edit", "Edit this layout", (event) => {
-      // Dont trigger go-back behavior
+    const close_gallery = (event: MouseEvent) => {
+      // Stop propigation of click event down so it doesn't trigger the
+      // background click-to-go-back behavior
       event.stopPropagation();
       this.remove();
-      this.on_edit_fn(selected_layout);
-    });
-    this.chooser_modal.appendChild(edit_btn);
+      modal.remove();
+    };
+
+    modal.add_element(
+      El({
+        sel_txt: `div#footer`,
+        children: [
+          click_button(".go", "Create app with this layout", (event) => {
+            close_gallery(event);
+            this.on_go_fn(selected_layout);
+          }),
+          click_button(".edit", "Edit this layout", (event) => {
+            close_gallery(event);
+            this.on_edit_fn(selected_layout);
+          }),
+        ],
+      })
+    );
+
+    modal.add_to_page();
   }
 }
 

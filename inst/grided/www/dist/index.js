@@ -772,17 +772,6 @@
     }
   });
 
-  // node_modules/core-js/internals/object-keys.js
-  var require_object_keys = __commonJS({
-    "node_modules/core-js/internals/object-keys.js": function(exports, module) {
-      var internalObjectKeys = require_object_keys_internal();
-      var enumBugKeys = require_enum_bug_keys();
-      module.exports = Object.keys || function keys2(O) {
-        return internalObjectKeys(O, enumBugKeys);
-      };
-    }
-  });
-
   // node_modules/core-js/internals/engine-user-agent.js
   var require_engine_user_agent = __commonJS({
     "node_modules/core-js/internals/engine-user-agent.js": function(exports, module) {
@@ -841,6 +830,17 @@
       var classof2 = require_classof_raw();
       module.exports = Array.isArray || function isArray5(arg) {
         return classof2(arg) == "Array";
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/object-keys.js
+  var require_object_keys = __commonJS({
+    "node_modules/core-js/internals/object-keys.js": function(exports, module) {
+      var internalObjectKeys = require_object_keys_internal();
+      var enumBugKeys = require_enum_bug_keys();
+      module.exports = Object.keys || function keys2(O) {
+        return internalObjectKeys(O, enumBugKeys);
       };
     }
   });
@@ -3036,35 +3036,21 @@
     }
   });
 
-  // node_modules/core-js/modules/es.object.keys.js
-  var $ = require_export();
-  var toObject = require_to_object();
-  var nativeKeys = require_object_keys();
-  var fails = require_fails();
-  var FAILS_ON_PRIMITIVES = fails(function() {
-    nativeKeys(1);
-  });
-  $({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
-    keys: function keys(it) {
-      return nativeKeys(toObject(it));
-    }
-  });
-
   // node_modules/core-js/modules/es.symbol.js
   "use strict";
-  var $2 = require_export();
+  var $ = require_export();
   var global2 = require_global();
   var getBuiltIn = require_get_built_in();
   var IS_PURE = require_is_pure();
   var DESCRIPTORS = require_descriptors();
   var NATIVE_SYMBOL = require_native_symbol();
   var USE_SYMBOL_AS_UID = require_use_symbol_as_uid();
-  var fails2 = require_fails();
+  var fails = require_fails();
   var has = require_has();
   var isArray = require_is_array();
   var isObject = require_is_object();
   var anObject = require_an_object();
-  var toObject2 = require_to_object();
+  var toObject = require_to_object();
   var toIndexedObject = require_to_indexed_object();
   var toPrimitive = require_to_primitive();
   var createPropertyDescriptor = require_create_property_descriptor();
@@ -3108,7 +3094,7 @@
   var WellKnownSymbolsStore = shared("wks");
   var QObject = global2.QObject;
   var USE_SETTER = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-  var setSymbolDescriptor = DESCRIPTORS && fails2(function() {
+  var setSymbolDescriptor = DESCRIPTORS && fails(function() {
     return nativeObjectCreate(nativeDefineProperty({}, "a", {
       get: function() {
         return nativeDefineProperty(this, "a", { value: 7 }).a;
@@ -3253,13 +3239,13 @@
       }
     }
   }
-  $2({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
+  $({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
     Symbol: $Symbol
   });
   $forEach(objectKeys(WellKnownSymbolsStore), function(name) {
     defineWellKnownSymbol(name);
   });
-  $2({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
+  $({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
     "for": function(key) {
       var string = String(key);
       if (has(StringToSymbolRegistry, string))
@@ -3282,29 +3268,29 @@
       USE_SETTER = false;
     }
   });
-  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS }, {
+  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS }, {
     create: $create,
     defineProperty: $defineProperty,
     defineProperties: $defineProperties,
     getOwnPropertyDescriptor: $getOwnPropertyDescriptor
   });
-  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
+  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
     getOwnPropertyNames: $getOwnPropertyNames,
     getOwnPropertySymbols: $getOwnPropertySymbols
   });
-  $2({ target: "Object", stat: true, forced: fails2(function() {
+  $({ target: "Object", stat: true, forced: fails(function() {
     getOwnPropertySymbolsModule.f(1);
   }) }, {
     getOwnPropertySymbols: function getOwnPropertySymbols2(it) {
-      return getOwnPropertySymbolsModule.f(toObject2(it));
+      return getOwnPropertySymbolsModule.f(toObject(it));
     }
   });
   if ($stringify) {
-    FORCED_JSON_STRINGIFY = !NATIVE_SYMBOL || fails2(function() {
+    FORCED_JSON_STRINGIFY = !NATIVE_SYMBOL || fails(function() {
       var symbol = $Symbol();
       return $stringify([symbol]) != "[null]" || $stringify({ a: symbol }) != "{}" || $stringify(Object(symbol)) != "{}";
     });
-    $2({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
+    $({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
       stringify: function stringify2(it, replacer, space) {
         var args = [it];
         var index = 1;
@@ -3333,30 +3319,91 @@
   setToStringTag($Symbol, SYMBOL);
   hiddenKeys[HIDDEN] = true;
 
-  // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+  // node_modules/core-js/modules/es.symbol.description.js
+  "use strict";
+  var $2 = require_export();
+  var DESCRIPTORS2 = require_descriptors();
+  var global3 = require_global();
+  var has2 = require_has();
+  var isObject2 = require_is_object();
+  var defineProperty2 = require_object_define_property().f;
+  var copyConstructorProperties = require_copy_constructor_properties();
+  var NativeSymbol = global3.Symbol;
+  if (DESCRIPTORS2 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
+    EmptyStringDescriptionStore = {};
+    SymbolWrapper = function Symbol2() {
+      var description = arguments.length < 1 || arguments[0] === void 0 ? void 0 : String(arguments[0]);
+      var result = this instanceof SymbolWrapper ? new NativeSymbol(description) : description === void 0 ? NativeSymbol() : NativeSymbol(description);
+      if (description === "")
+        EmptyStringDescriptionStore[result] = true;
+      return result;
+    };
+    copyConstructorProperties(SymbolWrapper, NativeSymbol);
+    symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
+    symbolPrototype.constructor = SymbolWrapper;
+    symbolToString = symbolPrototype.toString;
+    native = String(NativeSymbol("test")) == "Symbol(test)";
+    regexp = /^Symbol\((.*)\)[^)]+$/;
+    defineProperty2(symbolPrototype, "description", {
+      configurable: true,
+      get: function description() {
+        var symbol = isObject2(this) ? this.valueOf() : this;
+        var string = symbolToString.call(symbol);
+        if (has2(EmptyStringDescriptionStore, symbol))
+          return "";
+        var desc = native ? string.slice(7, -1) : string.replace(regexp, "$1");
+        return desc === "" ? void 0 : desc;
+      }
+    });
+    $2({ global: true, forced: true }, {
+      Symbol: SymbolWrapper
+    });
+  }
+  var EmptyStringDescriptionStore;
+  var SymbolWrapper;
+  var symbolPrototype;
+  var symbolToString;
+  var native;
+  var regexp;
+
+  // node_modules/core-js/modules/es.object.keys.js
   var $3 = require_export();
+  var toObject2 = require_to_object();
+  var nativeKeys = require_object_keys();
+  var fails2 = require_fails();
+  var FAILS_ON_PRIMITIVES = fails2(function() {
+    nativeKeys(1);
+  });
+  $3({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
+    keys: function keys(it) {
+      return nativeKeys(toObject2(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+  var $4 = require_export();
   var fails3 = require_fails();
   var toIndexedObject2 = require_to_indexed_object();
   var nativeGetOwnPropertyDescriptor2 = require_object_get_own_property_descriptor().f;
-  var DESCRIPTORS2 = require_descriptors();
+  var DESCRIPTORS3 = require_descriptors();
   var FAILS_ON_PRIMITIVES2 = fails3(function() {
     nativeGetOwnPropertyDescriptor2(1);
   });
-  var FORCED = !DESCRIPTORS2 || FAILS_ON_PRIMITIVES2;
-  $3({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS2 }, {
+  var FORCED = !DESCRIPTORS3 || FAILS_ON_PRIMITIVES2;
+  $4({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS3 }, {
     getOwnPropertyDescriptor: function getOwnPropertyDescriptor2(it, key) {
       return nativeGetOwnPropertyDescriptor2(toIndexedObject2(it), key);
     }
   });
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptors.js
-  var $4 = require_export();
-  var DESCRIPTORS3 = require_descriptors();
+  var $5 = require_export();
+  var DESCRIPTORS4 = require_descriptors();
   var ownKeys = require_own_keys();
   var toIndexedObject3 = require_to_indexed_object();
   var getOwnPropertyDescriptorModule2 = require_object_get_own_property_descriptor();
   var createProperty = require_create_property();
-  $4({ target: "Object", stat: true, sham: !DESCRIPTORS3 }, {
+  $5({ target: "Object", stat: true, sham: !DESCRIPTORS4 }, {
     getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
       var O = toIndexedObject3(object);
       var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule2.f;
@@ -3374,17 +3421,17 @@
   });
 
   // node_modules/core-js/modules/es.object.define-properties.js
-  var $5 = require_export();
-  var DESCRIPTORS4 = require_descriptors();
+  var $6 = require_export();
+  var DESCRIPTORS5 = require_descriptors();
   var defineProperties2 = require_object_define_properties();
-  $5({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
+  $6({ target: "Object", stat: true, forced: !DESCRIPTORS5, sham: !DESCRIPTORS5 }, {
     defineProperties: defineProperties2
   });
 
   // node_modules/core-js/modules/es.array.slice.js
   "use strict";
-  var $6 = require_export();
-  var isObject2 = require_is_object();
+  var $7 = require_export();
+  var isObject3 = require_is_object();
   var isArray2 = require_is_array();
   var toAbsoluteIndex = require_to_absolute_index();
   var toLength = require_to_length();
@@ -3396,7 +3443,7 @@
   var SPECIES = wellKnownSymbol2("species");
   var nativeSlice = [].slice;
   var max = Math.max;
-  $6({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
     slice: function slice(start, end) {
       var O = toIndexedObject4(this);
       var length2 = toLength(O.length);
@@ -3407,7 +3454,7 @@
         Constructor = O.constructor;
         if (typeof Constructor == "function" && (Constructor === Array || isArray2(Constructor.prototype))) {
           Constructor = void 0;
-        } else if (isObject2(Constructor)) {
+        } else if (isObject3(Constructor)) {
           Constructor = Constructor[SPECIES];
           if (Constructor === null)
             Constructor = void 0;
@@ -3426,74 +3473,27 @@
   });
 
   // node_modules/core-js/modules/es.object.freeze.js
-  var $7 = require_export();
+  var $8 = require_export();
   var FREEZING = require_freezing();
   var fails4 = require_fails();
-  var isObject3 = require_is_object();
+  var isObject4 = require_is_object();
   var onFreeze = require_internal_metadata().onFreeze;
   var $freeze = Object.freeze;
   var FAILS_ON_PRIMITIVES3 = fails4(function() {
     $freeze(1);
   });
-  $7({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
+  $8({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
     freeze: function freeze(it) {
-      return $freeze && isObject3(it) ? $freeze(onFreeze(it)) : it;
+      return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
     }
   });
 
   // node_modules/core-js/modules/es.array.is-array.js
-  var $8 = require_export();
+  var $9 = require_export();
   var isArray3 = require_is_array();
-  $8({ target: "Array", stat: true }, {
+  $9({ target: "Array", stat: true }, {
     isArray: isArray3
   });
-
-  // node_modules/core-js/modules/es.symbol.description.js
-  "use strict";
-  var $9 = require_export();
-  var DESCRIPTORS5 = require_descriptors();
-  var global3 = require_global();
-  var has2 = require_has();
-  var isObject4 = require_is_object();
-  var defineProperty2 = require_object_define_property().f;
-  var copyConstructorProperties = require_copy_constructor_properties();
-  var NativeSymbol = global3.Symbol;
-  if (DESCRIPTORS5 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
-    EmptyStringDescriptionStore = {};
-    SymbolWrapper = function Symbol2() {
-      var description = arguments.length < 1 || arguments[0] === void 0 ? void 0 : String(arguments[0]);
-      var result = this instanceof SymbolWrapper ? new NativeSymbol(description) : description === void 0 ? NativeSymbol() : NativeSymbol(description);
-      if (description === "")
-        EmptyStringDescriptionStore[result] = true;
-      return result;
-    };
-    copyConstructorProperties(SymbolWrapper, NativeSymbol);
-    symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
-    symbolPrototype.constructor = SymbolWrapper;
-    symbolToString = symbolPrototype.toString;
-    native = String(NativeSymbol("test")) == "Symbol(test)";
-    regexp = /^Symbol\((.*)\)[^)]+$/;
-    defineProperty2(symbolPrototype, "description", {
-      configurable: true,
-      get: function description() {
-        var symbol = isObject4(this) ? this.valueOf() : this;
-        var string = symbolToString.call(symbol);
-        if (has2(EmptyStringDescriptionStore, symbol))
-          return "";
-        var desc = native ? string.slice(7, -1) : string.replace(regexp, "$1");
-        return desc === "" ? void 0 : desc;
-      }
-    });
-    $9({ global: true, forced: true }, {
-      Symbol: SymbolWrapper
-    });
-  }
-  var EmptyStringDescriptionStore;
-  var SymbolWrapper;
-  var symbolPrototype;
-  var symbolToString;
-  var native;
-  var regexp;
 
   // node_modules/core-js/modules/es.object.to-string.js
   var TO_STRING_TAG_SUPPORT = require_to_string_tag_support();
@@ -3631,7 +3631,7 @@
   var CollectionPrototype;
 
   // Layout_Editor.ts
-  var import_es_regexp_exec11 = __toModule(require_es_regexp_exec());
+  var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.string.split.js
   "use strict";
@@ -5515,43 +5515,7 @@
   var sheet = _createEmotion.sheet;
   var cache = _createEmotion.cache;
 
-  // make-focused_modal.ts
-  var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
-
-  // make-elements.ts
-  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
-  var import_es_regexp_exec6 = __toModule(require_es_regexp_exec());
-
-  // utils-grid.ts
-  var import_es_regexp_exec5 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator6 = __toModule(require_es_array_iterator());
-
-  // node_modules/core-js/modules/es.array.includes.js
-  "use strict";
-  var $27 = require_export();
-  var $includes = require_array_includes().includes;
-  var addToUnscopables3 = require_add_to_unscopables();
-  $27({ target: "Array", proto: true }, {
-    includes: function includes(el) {
-      return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables3("includes");
-
-  // node_modules/core-js/modules/es.string.includes.js
-  "use strict";
-  var $28 = require_export();
-  var notARegExp = require_not_a_regexp();
-  var requireObjectCoercible4 = require_require_object_coercible();
-  var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
-    includes: function includes2(searchString) {
-      return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // utils-misc.ts
-  var import_es_array_iterator5 = __toModule(require_es_array_iterator());
+  // utils-shiny.ts
   function ownKeys2(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -5583,6 +5547,110 @@
     return target;
   }
   function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function setShinyInput(input_id, input_value) {
+    var _Shiny$setInputValue;
+    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
+      priority: "event"
+    } : {});
+  }
+  function add_shiny_listener(event_id, callback_func) {
+    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
+  }
+  function send_grid_sizing_to_shiny(grid_attrs) {
+    setShinyInput("grid_sizing", grid_attrs);
+  }
+  function send_elements_to_shiny(elements) {
+    var elements_by_id = {};
+    elements.forEach(function(el) {
+      elements_by_id[el.id] = _objectSpread({
+        id: el.id
+      }, el.grid_pos);
+    });
+    setShinyInput("elements", elements_by_id);
+  }
+
+  // add_shiny_listeners.ts
+  function add_shiny_listeners(app_state) {
+    add_shiny_listener("shiny-loaded", function(_payload) {
+      console.log("connected to shiny");
+      _payload;
+      send_elements_to_shiny(app_state.current_elements);
+      send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
+    });
+    add_shiny_listener("finish-button-text", function(label_text) {
+      document.querySelector("button#update_code").innerHTML = label_text;
+    });
+  }
+
+  // node_modules/core-js/modules/es.array.includes.js
+  "use strict";
+  var $27 = require_export();
+  var $includes = require_array_includes().includes;
+  var addToUnscopables3 = require_add_to_unscopables();
+  $27({ target: "Array", proto: true }, {
+    includes: function includes(el) {
+      return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables3("includes");
+
+  // node_modules/core-js/modules/es.string.includes.js
+  "use strict";
+  var $28 = require_export();
+  var notARegExp = require_not_a_regexp();
+  var requireObjectCoercible4 = require_require_object_coercible();
+  var correctIsRegExpLogic = require_correct_is_regexp_logic();
+  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+    includes: function includes2(searchString) {
+      return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // utils-grid.ts
+  var import_es_regexp_exec5 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator6 = __toModule(require_es_array_iterator());
+
+  // utils-misc.ts
+  var import_es_array_iterator5 = __toModule(require_es_array_iterator());
+  function ownKeys3(object, enumerableOnly) {
+    var keys2 = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) {
+        symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+      keys2.push.apply(keys2, symbols);
+    }
+    return keys2;
+  }
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys3(Object(source), true).forEach(function(key) {
+          _defineProperty2(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys3(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+    return target;
+  }
+  function _defineProperty2(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -5649,12 +5717,6 @@
     if (Array.isArray(arr))
       return arr;
   }
-  function concat_nl() {
-    for (var _len = arguments.length, component_strings = new Array(_len), _key = 0; _key < _len; _key++) {
-      component_strings[_key] = arguments[_key];
-    }
-    return component_strings.join("\n");
-  }
   function as_array(content) {
     if (content instanceof Array) {
       return content;
@@ -5699,7 +5761,7 @@
     }
   }
   function update_rect_with_delta(rect, delta, dir) {
-    var new_rect = _objectSpread({}, rect);
+    var new_rect = _objectSpread2({}, rect);
     if (dir === "top-left") {
       new_rect.left = new_rect.left + delta.x;
       new_rect.top = new_rect.top + delta.y;
@@ -5876,6 +5938,330 @@
       };
     }
   }
+
+  // Grid_Item.ts
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+  function _defineProperty3(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var Grid_Item = /* @__PURE__ */ function() {
+    function Grid_Item2(opts) {
+      _classCallCheck(this, Grid_Item2);
+      _defineProperty3(this, "el", void 0);
+      _defineProperty3(this, "mirrored_el", void 0);
+      _defineProperty3(this, "sibling_el", void 0);
+      _defineProperty3(this, "parent_layout", void 0);
+      Object.assign(this, opts);
+    }
+    _createClass(Grid_Item2, [{
+      key: "position",
+      get: function get() {
+        return get_pos_on_grid(this.el);
+      },
+      set: function set(pos) {
+        set_element_in_grid(this.el, pos);
+        if (this.has_mirrored) {
+          set_element_in_grid(this.mirrored_el, pos);
+        }
+        this.fill_if_in_auto_row();
+      }
+    }, {
+      key: "bounding_rect",
+      get: function get() {
+        return get_bounding_rect(this.el);
+      }
+    }, {
+      key: "has_mirrored",
+      get: function get() {
+        return typeof this.mirrored_el !== "undefined";
+      }
+    }, {
+      key: "style",
+      get: function get() {
+        return this.el.style;
+      }
+    }, {
+      key: "fill_if_in_auto_row",
+      value: function fill_if_in_auto_row() {
+        var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
+        if (in_auto_row && !this.has_mirrored) {
+          this.el.classList.add("in-auto-row");
+        } else {
+          this.el.classList.remove("in-auto-row");
+        }
+      }
+    }, {
+      key: "remove",
+      value: function remove() {
+        this.el.remove();
+        if (this.has_mirrored) {
+          this.mirrored_el.remove();
+        }
+        if (this.sibling_el) {
+          this.sibling_el.remove();
+        }
+      }
+    }]);
+    return Grid_Item2;
+  }();
+
+  // Grid_Layout.ts
+  var import_es_regexp_exec6 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
+  function _typeof3(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof3 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof3 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof3(obj);
+  }
+  function _classCallCheck2(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties2(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass2(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties2(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties2(Constructor, staticProps);
+    return Constructor;
+  }
+  function _defineProperty4(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var Grid_Layout = /* @__PURE__ */ function() {
+    function Grid_Layout2(container) {
+      _classCallCheck2(this, Grid_Layout2);
+      _defineProperty4(this, "styles", void 0);
+      _defineProperty4(this, "container", void 0);
+      this.container = container;
+      this.styles = container.style;
+    }
+    _createClass2(Grid_Layout2, [{
+      key: "rows",
+      get: function get() {
+        return this.styles.gridTemplateRows.split(" ");
+      },
+      set: function set(new_rows) {
+        if (typeof new_rows === "undefined")
+          return;
+        this.styles.gridTemplateRows = new_rows.join(" ");
+      }
+    }, {
+      key: "num_rows",
+      get: function get() {
+        return this.rows.length;
+      }
+    }, {
+      key: "cols",
+      get: function get() {
+        return this.styles.gridTemplateColumns.split(" ");
+      },
+      set: function set(new_cols) {
+        if (typeof new_cols === "undefined")
+          return;
+        this.styles.gridTemplateColumns = new_cols.join(" ");
+      }
+    }, {
+      key: "num_cols",
+      get: function get() {
+        return this.cols.length;
+      }
+    }, {
+      key: "gap",
+      get: function get() {
+        return get_gap_size(this.styles.gap);
+      },
+      set: function set(new_gap) {
+        if (typeof new_gap === "undefined")
+          return;
+        document.querySelector("body").style.setProperty("--grid-gap", new_gap);
+        this.styles.gap = new_gap;
+        this.styles.padding = new_gap;
+      }
+    }, {
+      key: "attrs",
+      get: function get() {
+        return {
+          rows: this.rows,
+          cols: this.cols,
+          gap: this.gap
+        };
+      }
+    }, {
+      key: "is_updated_val",
+      value: function is_updated_val(attr, values) {
+        if (typeof values === "undefined")
+          return false;
+        if (attr === "gap") {
+          return values !== this.gap;
+        } else if (_typeof3(values) === "object") {
+          return !equal_arrays(this[attr], values);
+        }
+      }
+    }, {
+      key: "sizes_for_tract",
+      value: function sizes_for_tract(item_pos, dir) {
+        var _item_pos$, _item_pos$2;
+        var start_index = (_item_pos$ = item_pos["start_".concat(dir)]) !== null && _item_pos$ !== void 0 ? _item_pos$ : item_pos["end_".concat(dir)];
+        var end_index = (_item_pos$2 = item_pos["end_".concat(dir)]) !== null && _item_pos$2 !== void 0 ? _item_pos$2 : item_pos["start_".concat(dir)];
+        var tract_sizes = dir === "row" ? this.rows : this.cols;
+        return tract_sizes.filter(function(val, i) {
+          return i + 1 >= start_index && i + 1 <= end_index;
+        });
+      }
+    }, {
+      key: "item_row_sizes",
+      value: function item_row_sizes(item_pos) {
+        return this.sizes_for_tract(item_pos, "row");
+      }
+    }]);
+    return Grid_Layout2;
+  }();
+  function equal_arrays(a, b) {
+    if (a.length !== b.length)
+      return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i])
+        return false;
+    }
+    return true;
+  }
+
+  // make-css_unit_input.ts
+  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
+  var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
+
+  // node_modules/core-js/modules/es.number.constructor.js
+  "use strict";
+  var DESCRIPTORS9 = require_descriptors();
+  var global7 = require_global();
+  var isForced = require_is_forced();
+  var redefine5 = require_redefine();
+  var has3 = require_has();
+  var classof = require_classof_raw();
+  var inheritIfRequired = require_inherit_if_required();
+  var toPrimitive2 = require_to_primitive();
+  var fails7 = require_fails();
+  var create3 = require_object_create();
+  var getOwnPropertyNames2 = require_object_get_own_property_names().f;
+  var getOwnPropertyDescriptor3 = require_object_get_own_property_descriptor().f;
+  var defineProperty4 = require_object_define_property().f;
+  var trim3 = require_string_trim().trim;
+  var NUMBER = "Number";
+  var NativeNumber = global7[NUMBER];
+  var NumberPrototype = NativeNumber.prototype;
+  var BROKEN_CLASSOF = classof(create3(NumberPrototype)) == NUMBER;
+  var toNumber = function(argument) {
+    var it = toPrimitive2(argument, false);
+    var first, third, radix, maxCode, digits, length2, index, code;
+    if (typeof it == "string" && it.length > 2) {
+      it = trim3(it);
+      first = it.charCodeAt(0);
+      if (first === 43 || first === 45) {
+        third = it.charCodeAt(2);
+        if (third === 88 || third === 120)
+          return NaN;
+      } else if (first === 48) {
+        switch (it.charCodeAt(1)) {
+          case 66:
+          case 98:
+            radix = 2;
+            maxCode = 49;
+            break;
+          case 79:
+          case 111:
+            radix = 8;
+            maxCode = 55;
+            break;
+          default:
+            return +it;
+        }
+        digits = it.slice(2);
+        length2 = digits.length;
+        for (index = 0; index < length2; index++) {
+          code = digits.charCodeAt(index);
+          if (code < 48 || code > maxCode)
+            return NaN;
+        }
+        return parseInt(digits, radix);
+      }
+    }
+    return +it;
+  };
+  if (isForced(NUMBER, !NativeNumber(" 0o1") || !NativeNumber("0b1") || NativeNumber("+0x1"))) {
+    NumberWrapper = function Number2(value) {
+      var it = arguments.length < 1 ? 0 : value;
+      var dummy = this;
+      return dummy instanceof NumberWrapper && (BROKEN_CLASSOF ? fails7(function() {
+        NumberPrototype.valueOf.call(dummy);
+      }) : classof(dummy) != NUMBER) ? inheritIfRequired(new NativeNumber(toNumber(it)), dummy, NumberWrapper) : toNumber(it);
+    };
+    for (keys2 = DESCRIPTORS9 ? getOwnPropertyNames2(NativeNumber) : "MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger,fromString,range".split(","), j = 0; keys2.length > j; j++) {
+      if (has3(NativeNumber, key = keys2[j]) && !has3(NumberWrapper, key)) {
+        defineProperty4(NumberWrapper, key, getOwnPropertyDescriptor3(NativeNumber, key));
+      }
+    }
+    NumberWrapper.prototype = NumberPrototype;
+    NumberPrototype.constructor = NumberWrapper;
+    redefine5(global7, NUMBER, NumberWrapper);
+  }
+  var NumberWrapper;
+  var keys2;
+  var j;
+  var key;
+
+  // make-elements.ts
+  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
+  var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
 
   // utils-icons.ts
   var vertical_drag_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
@@ -6084,527 +6470,8 @@
     return button;
   }
 
-  // make-focused_modal.ts
+  // make-css_unit_input.ts
   var _templateObject2;
-  function _taggedTemplateLiteral2(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
-  var blurred_background = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  grid-column: 1 / -1;\n  grid-row: 2 / -1;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  /* slightly transparent fallback */\n  background-color: rgba(255, 255, 255, .8);\n  z-index: 990;\n\n  /* if backdrop-filter support: make transparent and blurred */\n  @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n    & {\n      background-color: rgba(255, 255, 255, .05);\n      -webkit-backdrop-filter: blur(4px);\n      backdrop-filter: blur(4px);\n    }\n  }\n\n  .focused_modal {\n    width: 95%;\n    max-width: 450px;\n    background: white;\n    z-index: 999;\n    padding: 1.5rem 2.2rem;\n  }\n  .modal_header {\n    padding-bottom: 1rem;\n  }\n"])));
-  function focused_modal(opts) {
-    var background = make_el(document.querySelector("#grided__holder"), "div.".concat(blurred_background), {
-      event_listener: opts.background_callbacks
-    });
-    var modal = make_el(background, "div.focused_modal", {
-      event_listener: opts.modal_callbacks
-    });
-    if (opts.header_text) {
-      make_el(modal, "div.modal_header", {
-        innerHTML: opts.header_text,
-        styles: {
-          paddingBottom: "1rem"
-        }
-      });
-    }
-    return {
-      background: background,
-      modal: modal,
-      remove: function remove() {
-        return background.remove();
-      }
-    };
-  }
-  function show_code(message, code_blocks) {
-    var code_modal = focused_modal({
-      header_text: "".concat(message),
-      modal_callbacks: {
-        event: "click",
-        func: function func(event) {
-          event.stopPropagation();
-        }
-      },
-      background_callbacks: {
-        event: "click",
-        func: close_modal
-      }
-    });
-    as_array(code_blocks).forEach(function(code_to_show) {
-      var num_of_lines = code_to_show.code.match(/\n/g).length;
-      var code_section = make_el(code_modal.modal, "div#".concat(code_to_show.type, ".code_chunk"), {
-        styles: {
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gridTemplateRows: "1fr, auto",
-          gap: "4px",
-          gridTemplateAreas: concat_nl('"code_type copy_btn"', '"code_text code_text"')
-        }
-      });
-      var code_text;
-      make_el(code_section, "strong", {
-        innerHTML: code_to_show.type,
-        styles: {
-          gridArea: "code_type"
-        }
-      });
-      make_el(code_section, "button#copy_code", {
-        innerHTML: "Copy to clipboard",
-        styles: {
-          gridArea: "copy_btn"
-        },
-        event_listener: {
-          event: "click",
-          func: function func() {
-            code_text.select();
-            document.execCommand("copy");
-          }
-        }
-      });
-      code_text = make_el(code_section, "textarea#code_for_layout", {
-        innerHTML: code_to_show.code,
-        props: {
-          rows: num_of_lines + 3
-        },
-        styles: {
-          width: "100%",
-          background: "#f3f2f2",
-          fontFamily: "monospace",
-          display: "block",
-          padding: "0.75rem",
-          marginBottom: "10px",
-          borderRadius: "5px",
-          gridArea: "code_text"
-        }
-      });
-    });
-    var action_buttons = make_el(code_modal.modal, "div#action_buttons", {
-      styles: {
-        display: "flex",
-        justifyContent: "space-around"
-      }
-    });
-    make_el(action_buttons, "button#close_code_model", {
-      innerHTML: "Close",
-      event_listener: {
-        event: "click",
-        func: close_modal
-      }
-    });
-    function close_modal() {
-      code_modal.remove();
-    }
-  }
-
-  // utils-shiny.ts
-  function ownKeys3(object, enumerableOnly) {
-    var keys2 = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) {
-        symbols = symbols.filter(function(sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-      keys2.push.apply(keys2, symbols);
-    }
-    return keys2;
-  }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys3(Object(source), true).forEach(function(key) {
-          _defineProperty2(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys3(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-    return target;
-  }
-  function _defineProperty2(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  function setShinyInput(input_id, input_value) {
-    var _Shiny$setInputValue;
-    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
-      priority: "event"
-    } : {});
-  }
-  function add_shiny_listener(event_id, callback_func) {
-    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
-  }
-  function send_grid_sizing_to_shiny(grid_attrs) {
-    setShinyInput("grid_sizing", grid_attrs);
-  }
-  function send_elements_to_shiny(elements) {
-    var elements_by_id = {};
-    elements.forEach(function(el) {
-      elements_by_id[el.id] = _objectSpread2({
-        id: el.id
-      }, el.grid_pos);
-    });
-    setShinyInput("elements", elements_by_id);
-  }
-
-  // add_shiny_listeners.ts
-  function add_shiny_listeners(app_state) {
-    add_shiny_listener("shiny-loaded", function(_payload) {
-      console.log("connected to shiny");
-      _payload;
-      send_elements_to_shiny(app_state.current_elements);
-      send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
-    });
-    add_shiny_listener("finish-button-text", function(label_text) {
-      document.querySelector("button#update_code").innerHTML = label_text;
-    });
-    add_shiny_listener("code_modal", function(code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show
-      });
-    });
-    add_shiny_listener("code_update_problem", function(code_to_show) {
-      show_code("Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.", {
-        type: "R",
-        code: code_to_show
-      });
-    });
-  }
-
-  // Grid_Item.ts
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps)
-      _defineProperties(Constructor, staticProps);
-    return Constructor;
-  }
-  function _defineProperty3(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  var Grid_Item = /* @__PURE__ */ function() {
-    function Grid_Item2(opts) {
-      _classCallCheck(this, Grid_Item2);
-      _defineProperty3(this, "el", void 0);
-      _defineProperty3(this, "mirrored_el", void 0);
-      _defineProperty3(this, "sibling_el", void 0);
-      _defineProperty3(this, "parent_layout", void 0);
-      Object.assign(this, opts);
-    }
-    _createClass(Grid_Item2, [{
-      key: "position",
-      get: function get() {
-        return get_pos_on_grid(this.el);
-      },
-      set: function set(pos) {
-        set_element_in_grid(this.el, pos);
-        if (this.has_mirrored) {
-          set_element_in_grid(this.mirrored_el, pos);
-        }
-        this.fill_if_in_auto_row();
-      }
-    }, {
-      key: "bounding_rect",
-      get: function get() {
-        return get_bounding_rect(this.el);
-      }
-    }, {
-      key: "has_mirrored",
-      get: function get() {
-        return typeof this.mirrored_el !== "undefined";
-      }
-    }, {
-      key: "style",
-      get: function get() {
-        return this.el.style;
-      }
-    }, {
-      key: "fill_if_in_auto_row",
-      value: function fill_if_in_auto_row() {
-        var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
-        if (in_auto_row && !this.has_mirrored) {
-          this.el.classList.add("in-auto-row");
-        } else {
-          this.el.classList.remove("in-auto-row");
-        }
-      }
-    }, {
-      key: "remove",
-      value: function remove() {
-        this.el.remove();
-        if (this.has_mirrored) {
-          this.mirrored_el.remove();
-        }
-        if (this.sibling_el) {
-          this.sibling_el.remove();
-        }
-      }
-    }]);
-    return Grid_Item2;
-  }();
-
-  // Grid_Layout.ts
-  var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
-  function _typeof3(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof8(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof3 = function _typeof8(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof3(obj);
-  }
-  function _classCallCheck2(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties2(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  function _createClass2(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      _defineProperties2(Constructor.prototype, protoProps);
-    if (staticProps)
-      _defineProperties2(Constructor, staticProps);
-    return Constructor;
-  }
-  function _defineProperty4(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  var Grid_Layout = /* @__PURE__ */ function() {
-    function Grid_Layout2(container) {
-      _classCallCheck2(this, Grid_Layout2);
-      _defineProperty4(this, "styles", void 0);
-      _defineProperty4(this, "container", void 0);
-      this.container = container;
-      this.styles = container.style;
-    }
-    _createClass2(Grid_Layout2, [{
-      key: "rows",
-      get: function get() {
-        return this.styles.gridTemplateRows.split(" ");
-      },
-      set: function set(new_rows) {
-        if (typeof new_rows === "undefined")
-          return;
-        this.styles.gridTemplateRows = new_rows.join(" ");
-      }
-    }, {
-      key: "num_rows",
-      get: function get() {
-        return this.rows.length;
-      }
-    }, {
-      key: "cols",
-      get: function get() {
-        return this.styles.gridTemplateColumns.split(" ");
-      },
-      set: function set(new_cols) {
-        if (typeof new_cols === "undefined")
-          return;
-        this.styles.gridTemplateColumns = new_cols.join(" ");
-      }
-    }, {
-      key: "num_cols",
-      get: function get() {
-        return this.cols.length;
-      }
-    }, {
-      key: "gap",
-      get: function get() {
-        return get_gap_size(this.styles.gap);
-      },
-      set: function set(new_gap) {
-        if (typeof new_gap === "undefined")
-          return;
-        document.querySelector("body").style.setProperty("--grid-gap", new_gap);
-        this.styles.gap = new_gap;
-        this.styles.padding = new_gap;
-      }
-    }, {
-      key: "attrs",
-      get: function get() {
-        return {
-          rows: this.rows,
-          cols: this.cols,
-          gap: this.gap
-        };
-      }
-    }, {
-      key: "is_updated_val",
-      value: function is_updated_val(attr, values) {
-        if (typeof values === "undefined")
-          return false;
-        if (attr === "gap") {
-          return values !== this.gap;
-        } else if (_typeof3(values) === "object") {
-          return !equal_arrays(this[attr], values);
-        }
-      }
-    }, {
-      key: "sizes_for_tract",
-      value: function sizes_for_tract(item_pos, dir) {
-        var _item_pos$, _item_pos$2;
-        var start_index = (_item_pos$ = item_pos["start_".concat(dir)]) !== null && _item_pos$ !== void 0 ? _item_pos$ : item_pos["end_".concat(dir)];
-        var end_index = (_item_pos$2 = item_pos["end_".concat(dir)]) !== null && _item_pos$2 !== void 0 ? _item_pos$2 : item_pos["start_".concat(dir)];
-        var tract_sizes = dir === "row" ? this.rows : this.cols;
-        return tract_sizes.filter(function(val, i) {
-          return i + 1 >= start_index && i + 1 <= end_index;
-        });
-      }
-    }, {
-      key: "item_row_sizes",
-      value: function item_row_sizes(item_pos) {
-        return this.sizes_for_tract(item_pos, "row");
-      }
-    }]);
-    return Grid_Layout2;
-  }();
-  function equal_arrays(a, b) {
-    if (a.length !== b.length)
-      return false;
-    for (var i = 0; i < a.length; ++i) {
-      if (a[i] !== b[i])
-        return false;
-    }
-    return true;
-  }
-
-  // make-css_unit_input.ts
-  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
-  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-
-  // node_modules/core-js/modules/es.number.constructor.js
-  "use strict";
-  var DESCRIPTORS9 = require_descriptors();
-  var global7 = require_global();
-  var isForced = require_is_forced();
-  var redefine5 = require_redefine();
-  var has3 = require_has();
-  var classof = require_classof_raw();
-  var inheritIfRequired = require_inherit_if_required();
-  var toPrimitive2 = require_to_primitive();
-  var fails7 = require_fails();
-  var create3 = require_object_create();
-  var getOwnPropertyNames2 = require_object_get_own_property_names().f;
-  var getOwnPropertyDescriptor3 = require_object_get_own_property_descriptor().f;
-  var defineProperty4 = require_object_define_property().f;
-  var trim3 = require_string_trim().trim;
-  var NUMBER = "Number";
-  var NativeNumber = global7[NUMBER];
-  var NumberPrototype = NativeNumber.prototype;
-  var BROKEN_CLASSOF = classof(create3(NumberPrototype)) == NUMBER;
-  var toNumber = function(argument) {
-    var it = toPrimitive2(argument, false);
-    var first, third, radix, maxCode, digits, length2, index, code;
-    if (typeof it == "string" && it.length > 2) {
-      it = trim3(it);
-      first = it.charCodeAt(0);
-      if (first === 43 || first === 45) {
-        third = it.charCodeAt(2);
-        if (third === 88 || third === 120)
-          return NaN;
-      } else if (first === 48) {
-        switch (it.charCodeAt(1)) {
-          case 66:
-          case 98:
-            radix = 2;
-            maxCode = 49;
-            break;
-          case 79:
-          case 111:
-            radix = 8;
-            maxCode = 55;
-            break;
-          default:
-            return +it;
-        }
-        digits = it.slice(2);
-        length2 = digits.length;
-        for (index = 0; index < length2; index++) {
-          code = digits.charCodeAt(index);
-          if (code < 48 || code > maxCode)
-            return NaN;
-        }
-        return parseInt(digits, radix);
-      }
-    }
-    return +it;
-  };
-  if (isForced(NUMBER, !NativeNumber(" 0o1") || !NativeNumber("0b1") || NativeNumber("+0x1"))) {
-    NumberWrapper = function Number2(value) {
-      var it = arguments.length < 1 ? 0 : value;
-      var dummy = this;
-      return dummy instanceof NumberWrapper && (BROKEN_CLASSOF ? fails7(function() {
-        NumberPrototype.valueOf.call(dummy);
-      }) : classof(dummy) != NUMBER) ? inheritIfRequired(new NativeNumber(toNumber(it)), dummy, NumberWrapper) : toNumber(it);
-    };
-    for (keys2 = DESCRIPTORS9 ? getOwnPropertyNames2(NativeNumber) : "MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger,fromString,range".split(","), j = 0; keys2.length > j; j++) {
-      if (has3(NativeNumber, key = keys2[j]) && !has3(NumberWrapper, key)) {
-        defineProperty4(NumberWrapper, key, getOwnPropertyDescriptor3(NativeNumber, key));
-      }
-    }
-    NumberWrapper.prototype = NumberPrototype;
-    NumberPrototype.constructor = NumberWrapper;
-    redefine5(global7, NUMBER, NumberWrapper);
-  }
-  var NumberWrapper;
-  var keys2;
-  var j;
-  var key;
-
-  // make-css_unit_input.ts
-  var _templateObject3;
   var _templateObject22;
   function _defineProperty5(obj, key, value) {
     if (key in obj) {
@@ -6674,13 +6541,13 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral3(strings, raw) {
+  function _taggedTemplateLiteral2(strings, raw) {
     if (!raw) {
       raw = strings.slice(0);
     }
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
-  var css_unit_input = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .value_input.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
+  var css_unit_input = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .value_input.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
   var default_values = {
     fr: "1",
     px: "100",
@@ -6781,7 +6648,7 @@
       update_value: update_value
     };
   }
-  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral3(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled { display: none; }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled { display: none; }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
   function build_controls_for_dir(app_state, dir, editor_container) {
     var target_class = dir === "rows" ? "c1" : "r1";
     var dir_singular = dir === "rows" ? "row" : "col";
@@ -7038,7 +6905,7 @@
   var import_es_map2 = __toModule(require_es_map());
 
   // web-components/copy-code.ts
-  var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
+  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
   var import_es_array_iterator11 = __toModule(require_es_array_iterator());
   var import_es_map = __toModule(require_es_map());
   function _typeof4(obj) {
@@ -7177,31 +7044,36 @@
     };
     return _getPrototypeOf(o);
   }
-  var copy_code_template = document.createElement("template");
-  copy_code_template.innerHTML = '\n <style>\n    * { box-sizing: border-box; }\n\n    :host {\n      width: 100%;\n      height: 100%;\n      display: grid;\n      grid-template-columns: repeat(2, 1fr);\n      grid-template-rows: 40px auto;\n      gap: 4px;\n      grid-template-areas:\n        "type      copy-btn"\n        "code-text code-text";\n    }\n    \n    textarea {\n      grid-area: code-text;\n      font-family: monospace;\n      width: 100%;\n    }\n    #type { \n      grid-area: type; \n      font-size: 1.5rem;\n      font-weight: bold;\n      place-self: center;\n     }\n    #copy { \n      grid-area: copy-btn; \n      justify-self: end;\n      align-self: center;\n      padding: 5px 8px;\n      display: inline-flex;\n      align-items: center;\n    }\n\n    #copy > svg {\n      transform: scale(0.8);\n    }\n  </style>\n  <div id = "code-catcher">\n    <slot> </slot>\n  </div>\n  <textarea id = \'code\'></textarea>\n  <div id = "type"> R </div>\n  <button id = \'copy\'> '.concat(clipboard_icon, " Copy Code </button>\n");
+  function _defineProperty6(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
   var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
     _inherits(CopyCode2, _HTMLElement);
     var _super = _createSuper(CopyCode2);
     function CopyCode2(code) {
+      var _code$match$length;
       var _this;
       _classCallCheck3(this, CopyCode2);
       _this = _super.call(this);
+      _defineProperty6(_assertThisInitialized(_this), "code", void 0);
+      _defineProperty6(_assertThisInitialized(_this), "num_of_lines", void 0);
+      _this.code = code;
+      _this.num_of_lines = (_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1;
       _this.attachShadow({
         mode: "open"
-      }).appendChild(copy_code_template.content.cloneNode(true));
+      });
       return _this;
     }
     _createClass3(CopyCode2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _code_text$match$leng;
-        var code_content = this.shadowRoot.getElementById("code-catcher");
-        var code_text = code_content.firstElementChild.assignedNodes()[0].textContent;
-        var num_of_lines = (_code_text$match$leng = code_text.match(/\n/g).length) !== null && _code_text$match$leng !== void 0 ? _code_text$match$leng : 1;
-        code_content.remove();
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.num_of_lines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboard_icon, " Copy Code </button>\n   ");
         var code_el = this.shadowRoot.getElementById("code");
-        code_el.value = code_text;
-        code_el.rows = num_of_lines + 1;
         this.shadowRoot.getElementById("copy").addEventListener("click", function() {
           code_el.select();
           document.execCommand("copy");
@@ -7215,6 +7087,9 @@
     return CopyCode2;
   }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
   customElements.define("copy-code", CopyCode);
+  function copy_code(code) {
+    return new CopyCode(code);
+  }
 
   // web-components/focus-modal.ts
   function _typeof5(obj) {
@@ -7353,7 +7228,7 @@
     };
     return _getPrototypeOf2(o);
   }
-  function _defineProperty6(obj, key, value) {
+  function _defineProperty7(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -7361,38 +7236,50 @@
     }
     return obj;
   }
-  var modal_template = document.createElement("template");
-  modal_template.innerHTML = '\n <style>\n    :host {\n      position: absolute;\n      top: 0;\n      left: 0;\n      display: grid;\n      place-content: center;\n      outline: 1px solid red;\n      width: 100%;\n      height: 100vh;\n      background-color: rgba(255, 255, 255, .8);\n      z-index: 990;\n    }\n\n    /* if backdrop-filter support: make transparent and blurred */\n    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n      :host {\n        background-color: rgba(255, 255, 255, .05);\n        -webkit-backdrop-filter: blur(4px);\n        backdrop-filter: blur(4px);\n      }\n    }\n\n    #content {\n      outline: 1px solid black;\n      width: 95%;\n      min-width: 400px;\n      max-width: 450px;\n      background: white;\n      padding: 1.5rem 2.2rem;\n      position: relative;\n    }\n\n    #footer {\n      padding-top: 1rem;\n    }\n    \n    #title {\n      margin: 0;\n    }\n\n    #code {\n      margin-top: 0.5rem;\n      margin-bottom: 0.5rem;\n    }\n\n    #code > textarea {\n      font-family: monospace;\n      width: 100%;\n    }\n\n    #close {\n      padding: 0;\n      display: inline-flex;\n      align-items: center;\n      position: absolute;\n      right: 3px;\n      top: 3px;\n    }\n\n    .centered {\n      margin-left: auto;\n      margin-right: auto;\n    }\n  </style>\n  <div id="content">\n    <h2 id = "title"></h2>\n    <button id = \'close\'> '.concat(close_icon, ' </button>\n    <div id = "description"></div>\n    <div id = "code"></div>\n  </div>\n');
   var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
     _inherits2(FocusModal2, _HTMLElement);
     var _super = _createSuper2(FocusModal2);
-    function FocusModal2(opts) {
+    function FocusModal2() {
       var _this;
       _classCallCheck4(this, FocusModal2);
       _this = _super.call(this);
-      _defineProperty6(_assertThisInitialized2(_this), "_on_close", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "content", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "close_btn", void 0);
+      _defineProperty7(_assertThisInitialized2(_this), "_on_close", void 0);
+      _defineProperty7(_assertThisInitialized2(_this), "_title", void 0);
+      _defineProperty7(_assertThisInitialized2(_this), "_max_width", "450px");
+      _defineProperty7(_assertThisInitialized2(_this), "_children", []);
+      _defineProperty7(_assertThisInitialized2(_this), "_description", void 0);
+      _defineProperty7(_assertThisInitialized2(_this), "has_rendered", false);
       _this.attachShadow({
         mode: "open"
-      }).appendChild(modal_template.content.cloneNode(true));
-      _this.shadowRoot.getElementById("title").innerHTML = opts.title;
-      _this.content = _this.shadowRoot.getElementById("content");
-      _this.close_btn = _this.shadowRoot.getElementById("close");
-      if (opts.description) {
-        _this.shadowRoot.getElementById("description").innerHTML = opts.description;
-      }
-      if (opts.code_content) {
-        var code_el = document.createElement("copy-code");
-        code_el.innerHTML = opts.code_content;
-        _this.shadowRoot.getElementById("code").appendChild(code_el);
-      }
+      });
       return _this;
     }
     _createClass4(FocusModal2, [{
+      key: "set_title",
+      value: function set_title(title) {
+        this._title = title;
+        return this;
+      }
+    }, {
+      key: "description",
+      value: function description(_description) {
+        this._description = _description;
+        return this;
+      }
+    }, {
+      key: "max_width",
+      value: function max_width(width) {
+        this._max_width = width;
+        return this;
+      }
+    }, {
       key: "add_element",
       value: function add_element(el) {
-        this.content.appendChild(el);
+        if (this.has_rendered) {
+          this.shadowRoot.getElementById("content").appendChild(el);
+          return this;
+        }
+        this._children.push(el);
         return this;
       }
     }, {
@@ -7416,30 +7303,35 @@
           (_this2$_on_close = _this2._on_close) === null || _this2$_on_close === void 0 ? void 0 : _this2$_on_close.call(_this2);
           _this2.remove();
         };
-        this.close_btn.addEventListener("click", exit_fn);
+        this.shadowRoot.getElementById("close").addEventListener("click", exit_fn);
         this.addEventListener("click", exit_fn);
-        this.content.addEventListener("click", function(event) {
+        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
           event.stopPropagation();
         });
       }
     }, {
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        this.setup_close_callbacks();
+      key: "add_to_page",
+      value: function add_to_page() {
+        document.body.appendChild(this);
+        this.has_rendered = true;
+        return this;
       }
     }, {
-      key: "adoptedCallback",
-      value: function adoptedCallback() {
-        console.log("Adopted callback called");
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         outline: 1px solid black;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this._max_width, ';\n         background: white;\n         padding: 1.5rem 2.2rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 3px;\n         top: 3px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this._title ? "<h2 id = 'title'> ".concat(this._title, " </h2>") : "", "\n       <button id = 'close'> ").concat(close_icon, " </button>\n       ").concat(this._description ? '<div id = "description">'.concat(this._description, "</div>") : "", "\n     </div>\n   ");
+        var content = this.shadowRoot.getElementById("content");
+        this._children.forEach(function(el) {
+          content.appendChild(el);
+        });
+        this.setup_close_callbacks();
       }
     }]);
     return FocusModal2;
   }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
   customElements.define("focus-modal", FocusModal);
-  function create_focus_modal(opts) {
-    var modal = new FocusModal(opts);
-    document.body.appendChild(modal);
-    return modal;
+  function create_focus_modal() {
+    return new FocusModal();
   }
 
   // wrap_in_grided.ts
@@ -7576,10 +7468,10 @@
   }
 
   // Layout_Editor.ts
-  var _templateObject4;
+  var _templateObject3;
   var _templateObject23;
   var _templateObject32;
-  var _templateObject42;
+  var _templateObject4;
   var _templateObject5;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
@@ -7655,7 +7547,7 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral4(strings, raw) {
+  function _taggedTemplateLiteral3(strings, raw) {
     if (!raw) {
       raw = strings.slice(0);
     }
@@ -7679,7 +7571,7 @@
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
         ownKeys4(Object(source), true).forEach(function(key) {
-          _defineProperty7(target, key, source[key]);
+          _defineProperty8(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -7713,7 +7605,7 @@
       _defineProperties5(Constructor, staticProps);
     return Constructor;
   }
-  function _defineProperty7(obj, key, value) {
+  function _defineProperty8(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -7726,15 +7618,15 @@
       var _ref2, _this = this;
       var container = _ref.container, starting_layout = _ref.starting_layout, finish_btn = _ref.finish_btn;
       _classCallCheck5(this, Layout_Editor2);
-      _defineProperty7(this, "gap_size_setting", void 0);
-      _defineProperty7(this, "current_cells", []);
-      _defineProperty7(this, "elements", []);
-      _defineProperty7(this, "container_selector", void 0);
-      _defineProperty7(this, "container", void 0);
-      _defineProperty7(this, "grid_styles", void 0);
-      _defineProperty7(this, "mode", void 0);
-      _defineProperty7(this, "grid_layout", void 0);
-      _defineProperty7(this, "tract_controls", void 0);
+      _defineProperty8(this, "gap_size_setting", void 0);
+      _defineProperty8(this, "current_cells", []);
+      _defineProperty8(this, "elements", []);
+      _defineProperty8(this, "container_selector", void 0);
+      _defineProperty8(this, "container", void 0);
+      _defineProperty8(this, "grid_styles", void 0);
+      _defineProperty8(this, "mode", void 0);
+      _defineProperty8(this, "grid_layout", void 0);
+      _defineProperty8(this, "tract_controls", void 0);
       this.container = (_ref2 = container !== null && container !== void 0 ? container : find_first_grid_node()) !== null && _ref2 !== void 0 ? _ref2 : Block_El("div#grid_page");
       this.grid_styles = this.container.style;
       this.grid_layout = new Grid_Layout(this.container);
@@ -7849,7 +7741,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(new_index, 0, "1fr");
-        this.update_grid(_defineProperty7({}, dir, tract_sizes));
+        this.update_grid(_defineProperty8({}, dir, tract_sizes));
       }
     }, {
       key: "remove_tract",
@@ -7876,7 +7768,7 @@
         });
         var tract_sizes = this.grid_layout[dir];
         tract_sizes.splice(index - 1, 1);
-        this.update_grid(_defineProperty7({}, dir, tract_sizes));
+        this.update_grid(_defineProperty8({}, dir, tract_sizes));
       }
     }, {
       key: "make_el",
@@ -7953,7 +7845,7 @@
         var tract_index = opts.tract_index, dir = opts.dir, new_value = opts.new_value, _opts$dont_send_to_sh = opts.dont_send_to_shiny, dont_send_to_shiny = _opts$dont_send_to_sh === void 0 ? false : _opts$dont_send_to_sh;
         var tract_values = this.grid_layout[dir];
         tract_values[tract_index - 1] = new_value;
-        this.update_grid((_this$update_grid3 = {}, _defineProperty7(_this$update_grid3, dir, tract_values), _defineProperty7(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
+        this.update_grid((_this$update_grid3 = {}, _defineProperty8(_this$update_grid3, dir, tract_values), _defineProperty8(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
       }
     }, {
       key: "update_grid",
@@ -7994,7 +7886,7 @@
     }]);
     return Layout_Editor2;
   }();
-  var grid_cell_styles = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral4(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
+  var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
     remove_elements(app_state.current_cells);
     app_state.current_cells = [];
@@ -8019,10 +7911,10 @@
     }
     app_state.tract_controls = setup_tract_controls(app_state);
   }
-  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(["\n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
-  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral4(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n"])));
-  var current_sel_box = css(_templateObject42 || (_templateObject42 = _taggedTemplateLiteral4(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
-  var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral4(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
+  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
+  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n"])));
+  var current_sel_box = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
+  var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
     var current_selection_box = new Grid_Item({
       el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
@@ -8150,10 +8042,7 @@
         }
       }
     });
-    var modal = create_focus_modal({
-      title: "Name your element:",
-      description: "\n    This name will be used to place items in your app.\n    For instance if you want to place a plot in this element,\n    this name will match the label of the plot output\n    "
-    }).add_element(name_form).on_close(reset_el_creation).focus_on("name_input");
+    var modal = create_focus_modal().set_title("Name your element:").description("\n      This name will be used to place items in your app.\n      For instance if you want to place a plot in this element,\n      this name will match the label of the plot output\n    ").add_element(name_form).on_close(reset_el_creation).add_to_page().focus_on("name_input");
     var warning_msg;
     function warn_about_bad_id(msg) {
       warning_msg = El({
@@ -8244,20 +8133,20 @@
   }
   function show_conflict_popup(conflicting_elements) {
     var conflicting_elements_list = conflicting_elements.reduce(function(id_list, el) {
-      return "\n    ".concat(id_list, "\n    <li> ").concat(el.id, " </li>\n    ");
+      return "\n    ".concat(id_list, "\n    <li> <strong style='font-size: 1.65rem;'> ").concat(el.id, " </strong> </li>\n    ");
     }, "<ul>") + "</ul>";
-    var message_model = focused_modal({
-      header_text: "\n  <h2>Sorry! Can't make that update</h2> \n  <p> This is because it would result in the following elements being removed from your app:</p>\n  ".concat(conflicting_elements_list, "\n  <p> Either re-arrange these elements to not reside in the removed grid or column or remove them from your app before running grided.</p>\n  ")
-    });
-    make_el(message_model.modal, "button#accept_result", {
-      innerHTML: "Okay",
+    var modal = create_focus_modal().set_title("Sorry! Can't make that update").description("<p> This is because it would result in the following elements \n    being removed from your app:</p>\n    ".concat(conflicting_elements_list, "\n    <p> Either re-arrange these elements to not reside in the removed grid or \n    column or remove them from your app before running grided.</p>\n    "));
+    modal.add_element(El({
+      sel_txt: "button#accept_result",
+      text: "Okay",
       event_listener: {
         event: "click",
         func: function func() {
-          message_model.remove();
+          modal.remove();
         }
       }
-    });
+    }));
+    modal.add_to_page();
   }
   function start_layout_editor(opts) {
     new Layout_Editor(opts);
@@ -8406,7 +8295,7 @@
     };
     return _getPrototypeOf3(o);
   }
-  function _defineProperty8(obj, key, value) {
+  function _defineProperty9(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -8421,17 +8310,16 @@
       var _this;
       _classCallCheck6(this, GridPreview2);
       _this = _super.call(this);
-      _defineProperty8(_assertThisInitialized3(_this), "grid", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_render_size", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_shown_size", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "name", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "elements", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "hover_animation", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_on_select", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "grid", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "_render_size", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "_shown_size", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "name", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "elements", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "hover_animation", void 0);
+      _defineProperty9(_assertThisInitialized3(_this), "_on_select", void 0);
       _this.attachShadow({
         mode: "open"
       });
-      _this.name = "default name";
       _this.grid = {
         rows: ["1fr"],
         cols: ["1fr"],
@@ -8450,6 +8338,7 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
+        console.log("connectedCallback()");
         var scale = this._render_size / this._shown_size;
         var scale_units = function scale_units2(unit) {
           if (unit.includes("fr") || unit.includes("auto"))
@@ -8457,7 +8346,7 @@
           return "calc(".concat(unit, "/ ").concat(scale, ")");
         };
         var corner_radius = "".concat(10 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n    <h3> ").concat(this.name, ' </h3>\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
         this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
           _this2._on_select({
@@ -8492,6 +8381,12 @@
       key: "on_select",
       value: function on_select(_on_select) {
         this._on_select = _on_select;
+        return this;
+      }
+    }, {
+      key: "hide_name",
+      value: function hide_name() {
+        this.name = null;
         return this;
       }
     }, {
@@ -8656,7 +8551,7 @@
     };
     return _getPrototypeOf4(o);
   }
-  function _defineProperty9(obj, key, value) {
+  function _defineProperty10(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -8671,11 +8566,11 @@
       var _this;
       _classCallCheck7(this, LayoutGallery2);
       _this = _super.call(this);
-      _defineProperty9(_assertThisInitialized4(_this), "layouts", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "layouts_holder", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "chooser_modal", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_edit_fn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_go_fn", void 0);
+      _defineProperty10(_assertThisInitialized4(_this), "layouts", void 0);
+      _defineProperty10(_assertThisInitialized4(_this), "layouts_holder", void 0);
+      _defineProperty10(_assertThisInitialized4(_this), "chooser_modal", void 0);
+      _defineProperty10(_assertThisInitialized4(_this), "on_edit_fn", void 0);
+      _defineProperty10(_assertThisInitialized4(_this), "on_go_fn", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8686,7 +8581,7 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      \n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
         this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
         this.layouts_holder = this.shadowRoot.getElementById("layouts");
         this.layouts.forEach(function(layout) {
@@ -8716,24 +8611,23 @@
       key: "select_a_grid",
       value: function select_a_grid(selected_layout) {
         var _this3 = this;
-        this.chooser_modal.innerHTML = "";
-        this.chooser_modal.classList.remove("hidden");
-        this.chooser_modal.appendChild(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation());
-        this.chooser_modal.onclick = function() {
-          return _this3.hide_chooser_modal();
+        var modal = create_focus_modal().set_title(selected_layout.name).max_width("95%").add_element(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation().hide_name());
+        var close_gallery = function close_gallery2(event) {
+          event.stopPropagation();
+          _this3.remove();
+          modal.remove();
         };
-        var go_btn = click_button(".go", "Create app with this layout", function(event) {
-          event.stopPropagation();
-          _this3.remove();
-          _this3.on_go_fn(selected_layout);
-        });
-        this.chooser_modal.appendChild(go_btn);
-        var edit_btn = click_button(".edit", "Edit this layout", function(event) {
-          event.stopPropagation();
-          _this3.remove();
-          _this3.on_edit_fn(selected_layout);
-        });
-        this.chooser_modal.appendChild(edit_btn);
+        modal.add_element(El({
+          sel_txt: "div#footer",
+          children: [click_button(".go", "Create app with this layout", function(event) {
+            close_gallery(event);
+            _this3.on_go_fn(selected_layout);
+          }), click_button(".edit", "Edit this layout", function(event) {
+            close_gallery(event);
+            _this3.on_edit_fn(selected_layout);
+          })]
+        }));
+        modal.add_to_page();
       }
     }]);
     return LayoutGallery2;
@@ -8784,13 +8678,8 @@
         }
       });
     });
-    add_shiny_listener("show-layout-code", function(layout_code) {
-      console.log("Showing layout code with webcomponent");
-      create_focus_modal({
-        title: "Layout code",
-        description: "Paste the following declaration into your app to use this layout",
-        code_content: layout_code
-      });
+    add_shiny_listener("show-layout-code", function(opts) {
+      create_focus_modal().set_title("Layout Code").description(opts.description).add_element(copy_code(opts.layout_code)).add_to_page();
     });
   };
 })();

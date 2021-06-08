@@ -196,17 +196,20 @@ layout_from_grided <- function(elements, grid_sizing) {
 }
 
 
-send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
-  layout_call <- paste(
-    "layout <- new_gridlayout(\"",
-    "    ", to_md(current_layout), "\")",
-    sep = "\n")
+send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE) {
 
-  if (error_mode) {
-    session$sendCustomMessage("code_update_problem", layout_call)
-  } else {
-    session$sendCustomMessage("show-layout-code", layout_call);
-    # session$sendCustomMessage("code_modal", layout_call)
-  }
+  # The type property let's the JS know what text to use to explain
+  session$sendCustomMessage("show-layout-code", list(
+    layout_code = paste(
+      "layout <- new_gridlayout(\"",
+      "    ", to_md(current_layout), "\")",
+      sep = "\n"
+    ),
+    description = if (error_mode) {
+      "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails."
+    } else {
+      "Paste the following declaration into your app to use this layout"
+    }
+  ))
 }
 

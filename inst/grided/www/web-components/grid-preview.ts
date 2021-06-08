@@ -14,7 +14,6 @@ export class GridPreview extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
 
-    this.name = `default name`;
     this.grid = { rows: ["1fr"], cols: ["1fr"], gap: "1rem" };
     this.elements = [];
     this._render_size = 1250;
@@ -24,6 +23,7 @@ export class GridPreview extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log("connectedCallback()")
     const scale = this._render_size / this._shown_size;
 
     const scale_units = (unit: string) => {
@@ -48,6 +48,8 @@ export class GridPreview extends HTMLElement {
         gap: ${scale_units(this.grid.gap)};
         padding: ${scale_units(this.grid.gap)};
         background-color: white;
+        margin-left: auto;
+        margin-right: auto;
       }
       ${
         this.hover_animation
@@ -75,7 +77,11 @@ export class GridPreview extends HTMLElement {
       
       .flipped { transform: rotate(-90deg); }
     </style>
-    <h3> ${this.name} </h3>
+      ${
+        this.name 
+          ? `<h3> ${this.name} </h3>`
+          : ``
+      }
     <div id="layout"> ${this.element_divs} </div>
     `;
 
@@ -114,6 +120,10 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
+  hide_name() {
+    this.name = null;
+    return this;
+  }
   turnoff_animation() {
     this.hover_animation = false;
     return this;

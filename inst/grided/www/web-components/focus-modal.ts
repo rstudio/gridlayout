@@ -1,115 +1,40 @@
-import {close_icon} from "../utils-icons";
+import { close_icon } from "../utils-icons";
 import "./copy-code.ts";
-
-const modal_template = document.createElement("template");
-modal_template.innerHTML = `
- <style>
-    :host {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: grid;
-      place-content: center;
-      outline: 1px solid red;
-      width: 100%;
-      height: 100vh;
-      background-color: rgba(255, 255, 255, .8);
-      z-index: 990;
-    }
-
-    /* if backdrop-filter support: make transparent and blurred */
-    @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {
-      :host {
-        background-color: rgba(255, 255, 255, .05);
-        -webkit-backdrop-filter: blur(4px);
-        backdrop-filter: blur(4px);
-      }
-    }
-
-    #content {
-      outline: 1px solid black;
-      width: 95%;
-      min-width: 400px;
-      max-width: 450px;
-      background: white;
-      padding: 1.5rem 2.2rem;
-      position: relative;
-    }
-
-    #footer {
-      padding-top: 1rem;
-    }
-    
-    #title {
-      margin: 0;
-    }
-
-    #code {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    #code > textarea {
-      font-family: monospace;
-      width: 100%;
-    }
-
-    #close {
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      position: absolute;
-      right: 3px;
-      top: 3px;
-    }
-
-    .centered {
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
-  <div id="content">
-    <h2 id = "title"></h2>
-    <button id = 'close'> ${close_icon} </button>
-    <div id = "description"></div>
-    <div id = "code"></div>
-  </div>
-`;
-
-type Focus_Modal_Options = {
-  title: string;
-  description?: string;
-  on_cancel?: () => void;
-  code_content?: string;
-};
 
 class FocusModal extends HTMLElement {
   _on_close: () => void;
-  content: HTMLElement;
-  close_btn: HTMLElement;
+  _title: string;
+  _max_width: string = "450px";
+  _children: HTMLElement[] = [];
+  _description: string;
+  has_rendered: boolean = false;
 
-  constructor(opts: Focus_Modal_Options) {
+  constructor() {
     super();
-    this.attachShadow({ mode: "open" }).appendChild(
-      modal_template.content.cloneNode(true)
-    );
+    this.attachShadow({ mode: "open" });
+  }
 
-    this.shadowRoot.getElementById("title").innerHTML = opts.title;
-    this.content = this.shadowRoot.getElementById("content");
-    this.close_btn = this.shadowRoot.getElementById("close");
+  set_title(title: string) {
+    this._title = title;
+    return this;
+  }
 
-    if (opts.description) {
-      this.shadowRoot.getElementById("description").innerHTML = opts.description;
-    }
-    if (opts.code_content) {
-      const code_el = document.createElement("copy-code");
-      code_el.innerHTML = opts.code_content;
-      this.shadowRoot.getElementById("code").appendChild(code_el);
-    }
+  description(description: string) {
+    this._description = description;
+    return this;
+  }
+
+  max_width(width: string) {
+    this._max_width = width;
+    return this;
   }
 
   add_element(el: HTMLElement) {
-    this.content.appendChild(el);
+    if (this.has_rendered) {
+      this.shadowRoot.getElementById("content").appendChild(el);
+      return this;
+    }
+    this._children.push(el);
     return this;
   }
 
@@ -119,8 +44,8 @@ class FocusModal extends HTMLElement {
   }
 
   // Allows us to make an element focused for immediate action such as typing
-  // in a value etc. 
-  focus_on(el_id: string){
+  // in a value etc.
+  focus_on(el_id: string) {
     this.shadowRoot.getElementById(el_id).focus();
     return this;
   }
@@ -129,30 +54,113 @@ class FocusModal extends HTMLElement {
     // Setup close callbacks for close button and off-modal click
     const exit_fn = () => {
       this._on_close?.();
-      this.remove()
+      this.remove();
     };
-    this.close_btn.addEventListener("click", exit_fn);
+    this.shadowRoot.getElementById("close").addEventListener("click", exit_fn);
     this.addEventListener("click", exit_fn);
     // Stop propigation of click events in the modal content so selecting text
     // or clicking the copy code button doesnt close the modal
-    this.content.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
+    this.shadowRoot
+      .getElementById("content")
+      .addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+  }
+
+  add_to_page() {
+    document.body.appendChild(this);
+    this.has_rendered = true;
+    return this;
   }
 
   connectedCallback() {
-    this.setup_close_callbacks();
-  }
+    this.shadowRoot.innerHTML = `
+    <style>
+       :host {
+         position: absolute;
+         top: 0;
+         left: 0;
+         display: grid;
+         place-content: center;
+         outline: 1px solid red;
+         width: 100%;
+         height: 100vh;
+         background-color: rgba(255, 255, 255, .8);
+         z-index: 990;
+       }
+   
+       /* if backdrop-filter support: make transparent and blurred */
+       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {
+         :host {
+           background-color: rgba(255, 255, 255, .05);
+           -webkit-backdrop-filter: blur(4px);
+           backdrop-filter: blur(4px);
+         }
+       }
+   
+       #content {
+         outline: 1px solid black;
+         width: 95%;
+         min-width: 400px;
+         max-width: ${this._max_width};
+         background: white;
+         padding: 1.5rem 2.2rem;
+         position: relative;
+       }
+   
+       #footer {
+         padding-top: 1rem;
+         display: grid;
+         grid-template-columns: repeat(auto-fit, 150px);
+         justify-content: center;
+         gap: 2rem;
+       }
+       
+       #title {
+         margin: 0;
+       }
+   
+       copy-code {
+         margin-top: 0.5rem;
+         margin-bottom: 0.5rem;
+       }
+   
+       #close {
+         padding: 0;
+         display: inline-flex;
+         align-items: center;
+         position: absolute;
+         right: 3px;
+         top: 3px;
+       }
+   
+       .centered {
+         margin-left: auto;
+         margin-right: auto;
+       }
+     </style>
+     <div id="content">
+       ${this._title ? `<h2 id = 'title'> ${this._title} </h2>` : ``}
+       <button id = 'close'> ${close_icon} </button>
+       ${
+         this._description
+           ? `<div id = "description">${this._description}</div>`
+           : ``
+       }
+     </div>
+   `;
 
-  adoptedCallback() {
-    console.log("Adopted callback called");
+    const content = this.shadowRoot.getElementById("content");
+    this._children.forEach((el) => {
+      content.appendChild(el);
+    });
+
+    this.setup_close_callbacks();
   }
 }
 
 customElements.define("focus-modal", FocusModal);
 
-export function create_focus_modal(opts: Focus_Modal_Options) {
-  const modal = new FocusModal(opts);
-  document.body.appendChild(modal);
-  return modal;
+export function create_focus_modal() {
+  return new FocusModal();
 }

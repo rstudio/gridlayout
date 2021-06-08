@@ -3,6 +3,7 @@ import { Layout_State } from "./Grid_Layout";
 import { start_layout_editor } from "./Layout_Editor";
 import { add_shiny_listener, setShinyInput } from "./utils-shiny";
 import { create_focus_modal } from "./web-components/focus-modal";
+import {copy_code} from "./web-components/copy-code";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
 export const Shiny = (window as any).Shiny;
@@ -51,7 +52,7 @@ window.onload = function () {
         label: "Update app layout",
         on_done: (layout: Layout_Info) => {
           setShinyInput("update_layout", layout);
-        }
+        },
       },
     });
   });
@@ -67,12 +68,14 @@ window.onload = function () {
     });
   });
 
-  add_shiny_listener("show-layout-code", (layout_code: string) => {
-    console.log("Showing layout code with webcomponent");
-    create_focus_modal({
-      title: "Layout code",
-      description: "Paste the following declaration into your app to use this layout",
-      code_content: layout_code,
-    });
-  });
+  add_shiny_listener(
+    "show-layout-code",
+    (opts: { layout_code: string; description: string }) => {
+      create_focus_modal()
+        .set_title("Layout Code")
+        .description(opts.description)
+        .add_element(copy_code(opts.layout_code))
+        .add_to_page();
+    }
+  );
 };

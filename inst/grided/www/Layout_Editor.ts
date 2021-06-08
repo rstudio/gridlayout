@@ -9,9 +9,8 @@ import {
   El,
   Element_Opts,
   make_el,
-  remove_elements
+  remove_elements,
 } from "./make-elements";
-import { focused_modal } from "./make-focused_modal";
 import { get_styles_for_selector_with_targets } from "./utils-cssom";
 import {
   bounding_rect_to_css_pos,
@@ -20,7 +19,7 @@ import {
   get_gap_size,
   get_pos_on_grid,
   grid_position_of_el,
-  make_start_end_for_dir
+  make_start_end_for_dir,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
@@ -31,11 +30,11 @@ import {
   Selection_Rect,
   set_class,
   update_rect_with_delta,
-  XY_Pos
+  XY_Pos,
 } from "./utils-misc";
 import {
   send_elements_to_shiny,
-  send_grid_sizing_to_shiny
+  send_grid_sizing_to_shiny,
 } from "./utils-shiny";
 import { create_focus_modal } from "./web-components/focus-modal";
 import { wrap_in_grided } from "./wrap_in_grided";
@@ -778,16 +777,18 @@ function element_naming_ui(
     },
   });
 
-  const modal = create_focus_modal({
-    title: "Name your element:",
-    description: `
-    This name will be used to place items in your app.
-    For instance if you want to place a plot in this element,
-    this name will match the label of the plot output
-    `,
-  })
+  const modal = create_focus_modal()
+    .set_title("Name your element:")
+    .description(
+      `
+      This name will be used to place items in your app.
+      For instance if you want to place a plot in this element,
+      this name will match the label of the plot output
+    `
+    )
     .add_element(name_form)
     .on_close(reset_el_creation)
+    .add_to_page()
     .focus_on("name_input");
 
   let warning_msg: HTMLElement;
@@ -919,28 +920,33 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
       (id_list, el) =>
         `
     ${id_list}
-    <li> ${el.id} </li>
+    <li> <strong style='font-size: 1.65rem;'> ${el.id} </strong> </li>
     `,
       "<ul>"
     ) + "</ul>";
-  const message_model = focused_modal({
-    header_text: `
-  <h2>Sorry! Can't make that update</h2> 
-  <p> This is because it would result in the following elements being removed from your app:</p>
-  ${conflicting_elements_list}
-  <p> Either re-arrange these elements to not reside in the removed grid or column or remove them from your app before running grided.</p>
-  `,
-  });
 
-  make_el(message_model.modal, "button#accept_result", {
-    innerHTML: `Okay`,
-    event_listener: {
-      event: "click",
-      func: function () {
-        message_model.remove();
+  const modal = create_focus_modal().set_title(`Sorry! Can't make that update`)
+    .description(`<p> This is because it would result in the following elements 
+    being removed from your app:</p>
+    ${conflicting_elements_list}
+    <p> Either re-arrange these elements to not reside in the removed grid or 
+    column or remove them from your app before running grided.</p>
+    `);
+
+  modal.add_element(
+    El({
+      sel_txt: "button#accept_result",
+      text: "Okay",
+      event_listener: {
+        event: "click",
+        func: function () {
+          modal.remove();
+        },
       },
-    },
-  });
+    })
+  );
+
+  modal.add_to_page();
 }
 
 export function start_layout_editor(opts: Layout_Editor_Setup) {
