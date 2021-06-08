@@ -198,7 +198,7 @@ layout_from_grided <- function(elements, grid_sizing) {
 
 send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE){
   layout_call <- paste(
-    "layout <- grid_layout_from_md(layout_table = \"",
+    "layout <- new_gridlayout(\"",
     "    ", to_md(current_layout), "\")",
     sep = "\n")
 
