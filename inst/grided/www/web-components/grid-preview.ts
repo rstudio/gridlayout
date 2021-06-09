@@ -23,7 +23,6 @@ export class GridPreview extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("connectedCallback()")
     const scale = this._render_size / this._shown_size;
 
     const scale_units = (unit: string) => {

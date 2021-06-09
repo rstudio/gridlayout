@@ -1,6 +1,6 @@
 import { css } from "@emotion/css";
-import { Layout_Editor } from "./Layout_Editor";
 import { Tract_Dir } from "./Grid_Layout";
+import { Layout_Editor } from "./Layout_Editor";
 import { make_el, tract_add_or_remove_button } from "./make-elements";
 import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
 
@@ -177,7 +177,9 @@ const tract_controls = css`
   gap: 0.25rem;
   position: absolute;
 
-  &.disabled { display: none; }
+  &.disabled {
+    display: none;
+  }
 
   &.cols-controls {
     height: var(--editor-top-pad);
@@ -323,6 +325,15 @@ export function make_grid_tract_control(
 ): CSS_Input {
   const { size, dir, tract_index } = opts;
 
+  function send_update({ is_dragging }: { is_dragging: boolean }) {
+    app_state.update_tract({
+      tract_index,
+      dir,
+      new_value: unit_input.current_value(),
+      is_dragging,
+    });
+  }
+
   const unit_input = make_css_unit_input({
     parent_el: holder,
     selector: `.unit-input.${dir}-sizing`,
@@ -330,18 +341,9 @@ export function make_grid_tract_control(
     start_unit: get_css_unit(size),
     on_change: (new_val: string) => {
       show_or_hide_dragger(new_val);
-      send_update();
+      send_update({ is_dragging: false });
     },
   });
-
-  function send_update(to_shiny: boolean = true) {
-    app_state.update_tract({
-      tract_index,
-      dir,
-      new_value: unit_input.current_value(),
-      dont_send_to_shiny: !to_shiny,
-    });
-  }
 
   const value_input = <HTMLInputElement>(
     unit_input.form.querySelector(".value-input")
@@ -375,13 +377,13 @@ export function make_grid_tract_control(
             +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
           );
           value_input.value = new_value.toString();
-          send_update(false);
+          send_update({ is_dragging: true });
         },
       },
       {
         event: "dragend",
         func: function (event) {
-          send_update();
+          send_update({ is_dragging: false });
         },
       },
     ],

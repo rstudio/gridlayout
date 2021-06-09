@@ -1,12 +1,10 @@
 // Functions related to grid construction, editings, etc
 
-import { Layout_Editor, Element_Info } from "./Layout_Editor";
 import { Grid_Pos } from "./Grid_Item";
 import { Layout_State, Tract_Dir } from "./Grid_Layout";
-import { Code_Text } from "./make-focused_modal";
+import { Layout_Editor } from "./Layout_Editor";
 import {
   boxes_overlap,
-  concat_nl,
   get_bounding_rect,
   max_w_missing,
   min_w_missing,
@@ -137,44 +135,6 @@ export function bounding_rect_to_css_pos(rect: Selection_Rect) {
   };
 }
 
-export function gen_code_for_layout(
-  elements: Element_Info[],
-  grid_styles: CSSStyleDeclaration
-): Array<Code_Text> {
-  const container_selector = "#container";
-
-  const element_defs = elements.map((el) => {
-    const { start_row, end_row, start_col, end_col } = el.grid_pos;
-    return concat_nl(
-      `#${el.id} {`,
-      `  grid-column: ${make_template_start_end(start_col, end_col)};`,
-      `  grid-row: ${make_template_start_end(start_row, end_row)};`,
-      `}`
-    );
-  });
-
-  const css_code = concat_nl(
-    `${container_selector} {`,
-    `  display: grid;`,
-    `  grid-template-columns: ${grid_styles.gridTemplateColumns};`,
-    `  grid-template-rows: ${grid_styles.gridTemplateRows};`,
-    `  gap: ${get_gap_size(grid_styles)}`,
-    `}`,
-    ...element_defs
-  );
-
-  const html_code = concat_nl(
-    `<div id = ${container_selector}>`,
-    ...elements.map((el) => concat_nl(`  <div id = "#${el.id}">`, `  </div>`)),
-    `</div>`
-  );
-
-  return [
-    { type: "css", code: css_code },
-    { type: "html", code: html_code },
-  ];
-}
-
 export function get_gap_size(style: CSSStyleDeclaration | string) {
   // Older browsers give back both row-gap and column-gap in same query
   // so we need to reduce to a single value before returning
@@ -184,25 +144,6 @@ export function get_gap_size(style: CSSStyleDeclaration | string) {
   );
 
   return gap_size_vec[0];
-}
-
-export function contains_element(
-  layout: Layout_State,
-  el: Element_Info
-): "inside" | "partially" | "outside" {
-  const num_rows = layout.rows.length;
-  const num_cols = layout.cols.length;
-  const { start_row, end_row, start_col, end_col } = el.grid_pos;
-
-  if (start_row > num_rows || start_col > num_cols) {
-    return "outside";
-  }
-
-  if (end_row > num_rows || end_col > num_cols) {
-    return "partially";
-  }
-
-  return "inside";
 }
 
 export function shrink_element_to_layout(

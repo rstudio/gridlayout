@@ -1,8 +1,7 @@
 import { css } from "@emotion/css";
-import { Layout_Element, Layout_Info } from ".";
-import { add_shiny_listeners } from "./add_shiny_listeners";
+import { App_Entry_Type, Layout_Element, Layout_Info } from ".";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
-import { Grid_Layout, Tract_Dir } from "./Grid_Layout";
+import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
 import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
 import {
   Block_El,
@@ -18,7 +17,6 @@ import {
   get_drag_extent_on_grid,
   get_gap_size,
   get_pos_on_grid,
-  grid_position_of_el,
   make_start_end_for_dir,
 } from "./utils-grid";
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
@@ -32,10 +30,6 @@ import {
   update_rect_with_delta,
   XY_Pos,
 } from "./utils-misc";
-import {
-  send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
-} from "./utils-shiny";
 import { create_focus_modal } from "./web-components/focus-modal";
 import { wrap_in_grided } from "./wrap_in_grided";
 
@@ -44,7 +38,7 @@ export type Grid_Update_Options = {
   cols?: string[];
   gap?: string;
   force?: boolean;
-  dont_send_to_shiny?: boolean;
+  dont_update_history?: boolean;
 };
 
 type Drag_Res = {
@@ -67,17 +61,21 @@ export type Finish_Button_Setup = {
   label: string;
   on_done: (layout: Layout_Info) => void;
 };
-type Layout_Editor_Setup = {
-  container?: HTMLElement;
-  starting_layout?: Layout_Info;
-  finish_btn: Finish_Button_Setup;
+
+export type Layout_Editor_Setup = {
+  entry_type: App_Entry_Type;
+  grid?: Layout_State;
+  elements?: Layout_Element[];
+  finish_btn?: Finish_Button_Setup;
+  on_update?: (opts: Layout_Editor_Setup) => void;
 };
 
 export class Layout_Editor {
   gap_size_setting: CSS_Input;
   // All the currently existing cells making up the grid
   current_cells: HTMLElement[] = [];
-  elements: Element_Info[] = [];
+  elements: Grid_Item[] = [];
+  on_update: (opts: Layout_Editor_Setup) => void;
 
   container_selector: string;
   container: HTMLElement;
@@ -87,9 +85,19 @@ export class Layout_Editor {
   tract_controls: {
     update_positions: () => void;
   };
-  constructor({ container, starting_layout, finish_btn }: Layout_Editor_Setup) {
+  entry_type: App_Entry_Type;
+  constructor({
+    entry_type,
+    grid: starting_grid,
+    elements: starting_elements,
+    finish_btn,
+    on_update,
+  }: Layout_Editor_Setup) {
+    this.entry_type = entry_type;
     this.container =
-      container ?? find_first_grid_node() ?? Block_El("div#grid_page");
+      entry_type === "edit-existing-app"
+        ? find_first_grid_node()
+        : Block_El("div#grid_page");
 
     this.grid_styles = this.container.style;
 
@@ -101,16 +109,23 @@ export class Layout_Editor {
     );
     this.gap_size_setting = gap_size_setting;
     this.mode = grid_is_filled ? "Existing" : "New";
+    this.on_update = on_update;
 
-    if (starting_layout) {
-      this.update_grid(starting_layout.grid);
+    if (entry_type !== "edit-existing-app") {
+      // Update grid but dont update history because we need to fill in the
+      // elements first
+      this.update_grid({ ...starting_grid, dont_update_history: true });
 
-      starting_layout.elements.forEach((el_msg: Layout_Element) => {
+      starting_elements.forEach((el_msg: Layout_Element) => {
         const { start_row, end_row, start_col, end_col } = el_msg;
-        this.add_element({
-          id: el_msg.id,
-          grid_pos: { start_row, end_row, start_col, end_col },
-        });
+        // Add elements but dont update history as we do it
+        this.add_element(
+          {
+            id: el_msg.id,
+            grid_pos: { start_row, end_row, start_col, end_col },
+          },
+          false
+        );
       });
     } else if (grid_is_filled) {
       // We need to go into the style sheets to get the starting grid properties
@@ -126,24 +141,18 @@ export class Layout_Editor {
         rows: current_grid_props.gridTemplateRows.split(" "),
         cols: current_grid_props.gridTemplateColumns.split(" "),
         gap: get_gap_size(current_grid_props.gap),
-        force: true,
       });
     } else {
       console.error(
         "Neither starting layout was provided nor is there an existing grid app"
       );
     }
-
-    add_shiny_listeners(this);
   }
 
   get current_layout(): Layout_Info {
     return {
       grid: this.grid_layout.attrs,
-      elements: this.elements.map((el) => ({
-        id: el.id,
-        ...el.grid_pos,
-      })),
+      elements: this.elements.map((el) => el.info),
     };
   }
   // Get the next color in our list of colors.
@@ -161,23 +170,14 @@ export class Layout_Editor {
     return colors[this.elements.length % colors.length];
   }
 
-  get_current_elements(): Element_Info[] {
-    // Make sure grid position is current
-    this.elements.forEach((el) => {
-      el.grid_pos = grid_position_of_el(el.grid_el);
-    });
-
-    return this.elements;
-  }
-  get current_elements(): Element_Info[] {
-    return this.get_current_elements();
-  }
-
-  add_element(el_props: {
-    id: string;
-    grid_pos: Grid_Pos;
-    mirrored_element?: HTMLElement;
-  }) {
+  add_element(
+    el_props: {
+      id: string;
+      grid_pos: Grid_Pos;
+      mirrored_element?: HTMLElement;
+    },
+    send_update: boolean = true
+  ) {
     // If element ids were generated with the grid_container R function then
     // they have a prefix of the container name which we should remove so the
     // added elements list is not ugly looking
@@ -192,35 +192,31 @@ export class Layout_Editor {
 
     grid_item.position = el_props.grid_pos;
 
-    const new_element_entry: Element_Info = {
-      ...el_props,
-      grid_el: grid_item.el,
-      list_el: grid_item.sibling_el,
-      grid_item,
-    };
+    this.elements.push(grid_item);
 
-    this.elements.push(new_element_entry);
-
-    // Let shiny know we have a new element
-    send_elements_to_shiny(this.current_elements);
+    // Only update history if we're told to. This allows us to batch add
+    // elements without polluting history
+    if (send_update) {
+      this.send_update();
+    }
   }
 
   // Removes elements the user has added to the grid by id
   remove_elements(ids: string | Array<string>) {
     as_array(ids).forEach((el_id) => {
       const entry_index = this.elements.findIndex((el) => el.id === el_id);
-      this.elements[entry_index].grid_item.remove();
+      this.elements[entry_index].remove();
       this.elements.splice(entry_index, 1);
     });
 
-    send_elements_to_shiny(this.current_elements);
+    this.send_update();
   }
 
   add_tract(dir: Tract_Dir, new_index: number) {
     this.elements.forEach((el) => {
       const start_id = dir === "rows" ? "start_row" : "start_col";
       const end_id = dir === "rows" ? "end_row" : "end_col";
-      const el_position = el.grid_item.position;
+      const el_position = el.position;
 
       if (new_index >= el_position[end_id]) {
         // no change needed
@@ -230,9 +226,9 @@ export class Layout_Editor {
         el_position[end_id]++;
       } else {
         // Within item span: just end is shifted up
-        el.grid_item[end_id] = el_position[end_id]++;
+        el[end_id] = el_position[end_id]++;
       }
-      el.grid_item.position = el_position;
+      el.position = el_position;
     });
 
     const tract_sizes = this.grid_layout[dir];
@@ -244,9 +240,9 @@ export class Layout_Editor {
   remove_tract(dir: Tract_Dir, index: number) {
     // First check for trouble elements before proceeding so we can error out
     // and tell the user why
-    const trouble_elements: Element_Info[] = this.elements.filter((el) => {
+    const trouble_elements: Grid_Item[] = this.elements.filter((el) => {
       const { start_id, end_id } = make_start_end_for_dir(dir);
-      const el_position = el.grid_item.position;
+      const el_position = el.position;
 
       return (
         el_position[start_id] === el_position[end_id] &&
@@ -262,7 +258,7 @@ export class Layout_Editor {
 
     this.elements.forEach((el) => {
       const { start_id, end_id } = make_start_end_for_dir(dir);
-      const el_position = el.grid_item.position;
+      const el_position = el.position;
 
       if (el_position[start_id] > index) {
         el_position[start_id]--;
@@ -270,7 +266,7 @@ export class Layout_Editor {
       if (el_position[end_id] >= index) {
         el_position[end_id]--;
       }
-      el.grid_item.position = el_position;
+      el.position = el_position;
     });
 
     const tract_sizes = this.grid_layout[dir];
@@ -380,18 +376,24 @@ export class Layout_Editor {
     }
   }
 
+  send_update() {
+    this.on_update({
+      entry_type: this.entry_type,
+      ...this.current_layout,
+    });
+  }
+
   update_tract(opts: {
     tract_index: number;
     dir: Tract_Dir;
     new_value: string;
-    dont_send_to_shiny?: boolean;
+    is_dragging: boolean;
   }) {
-    const { tract_index, dir, new_value, dont_send_to_shiny = false } = opts;
-
+    const { tract_index, dir, new_value, is_dragging } = opts;
     const tract_values = this.grid_layout[dir];
     tract_values[tract_index - 1] = new_value;
 
-    this.update_grid({ [dir]: tract_values, dont_send_to_shiny });
+    this.update_grid({ [dir]: tract_values, dont_update_history: is_dragging });
   }
 
   update_grid(opts: Grid_Update_Options) {
@@ -425,15 +427,15 @@ export class Layout_Editor {
     if (rows_and_cols_updated) {
       // Put some filler text into items spanning auto rows so auto behavior
       // is clear to user
-      this.current_elements.forEach((el) => {
-        el.grid_item.fill_if_in_auto_row();
+      this.elements.forEach((el) => {
+        el.fill_if_in_auto_row();
       });
     }
 
     this.tract_controls.update_positions();
 
-    if (!opts.dont_send_to_shiny) {
-      send_grid_sizing_to_shiny(this.grid_layout.attrs);
+    if (!opts.dont_update_history) {
+      this.send_update();
     }
   }
 } // End of class declaration
@@ -619,6 +621,7 @@ const drag_canvas_styles = css`
 
 function setup_new_item_drag(app_state: Layout_Editor) {
   const current_selection_box = new Grid_Item({
+    id: "selection box",
     el: app_state.make_el(
       `div.drag_selection_box.${added_element_styles}.${current_sel_box}`
     ),
@@ -753,7 +756,7 @@ function element_naming_ui(
         const id = this["name_input"].value.replace(/\s/g, "_");
 
         // Can be replaced with better function operating directly on elements dict
-        const element_exists: boolean = !!app_state.current_elements.find(
+        const element_exists: boolean = !!app_state.elements.find(
           (el) => el.id === id
         );
 
@@ -864,6 +867,7 @@ function draw_elements(
   );
 
   const grid_item = new Grid_Item({
+    id,
     el: grid_el,
     mirrored_el,
     sibling_el: list_el,
@@ -890,7 +894,7 @@ function draw_elements(
         grid_item: grid_item,
         drag_dir: handle_type,
         on_end: () => {
-          send_elements_to_shiny(app_state.current_elements);
+          app_state.send_update();
         },
       });
     }
@@ -914,7 +918,7 @@ function draw_elements(
   return grid_item;
 }
 
-function show_conflict_popup(conflicting_elements: Element_Info[]) {
+function show_conflict_popup(conflicting_elements: Grid_Item[]) {
   const conflicting_elements_list: string =
     conflicting_elements.reduce(
       (id_list, el) =>
@@ -947,8 +951,4 @@ function show_conflict_popup(conflicting_elements: Element_Info[]) {
   );
 
   modal.add_to_page();
-}
-
-export function start_layout_editor(opts: Layout_Editor_Setup) {
-  new Layout_Editor(opts);
 }

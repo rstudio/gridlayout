@@ -13,27 +13,24 @@ import {
 } from "./utils-icons";
 import { setShinyInput } from "./utils-shiny";
 
-
-
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
 // that it contains so they can be overlayed with editable element boxes
-export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Button_Setup) {
+export function wrap_in_grided(
+  app_state: Layout_Editor,
+  finish_btn: Finish_Button_Setup
+) {
   const grid_is_filled = app_state.container.hasChildNodes();
 
   const buttons = [
-    click_button(
-      "#see-layout-code", 
-      "Code for layout",
-      () => setShinyInput("see_layout_code", app_state.current_layout, true)
+    click_button("#see-layout-code", "Code for layout", () =>
+      setShinyInput("see_layout_code", app_state.current_layout, true)
     ),
-    click_button(
-      "#done",
-      finish_btn.label,
-      () => finish_btn.on_done(app_state.current_layout)
-    )
+    click_button("#done", finish_btn.label, () =>
+      finish_btn.on_done(app_state.current_layout)
+    ),
   ];
-  
+
   if (grid_is_filled) {
     buttons.push(
       make_toggle_switch(
@@ -56,7 +53,7 @@ export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Butt
     selector: "#gap_size_chooser",
     on_change: (x) => app_state.update_grid({ gap: x }),
     allowed_units: ["px", "rem"],
-    snap_to_defaults: false
+    snap_to_defaults: false,
   });
 
   const grided_ui = Block_El(
@@ -168,11 +165,15 @@ export function wrap_in_grided(app_state: Layout_Editor, finish_btn: Finish_Butt
     // script or style tags that find their way into the grid container
     if (bbox.width === 0 && bbox.height === 0) return;
 
-    app_state.add_element({
-      id: el.id,
-      grid_pos: get_pos_on_grid(el as HTMLElement),
-      mirrored_element: el as HTMLElement,
-    });
+    app_state.add_element(
+      {
+        id: el.id,
+        grid_pos: get_pos_on_grid(el as HTMLElement),
+        mirrored_element: el as HTMLElement,
+      },
+      false
+    );
+    // second param is false so we don't update history as well
   });
 
   return {

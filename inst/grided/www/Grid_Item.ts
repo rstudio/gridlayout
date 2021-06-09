@@ -1,3 +1,4 @@
+import { Layout_Element } from ".";
 import { Grid_Layout } from "./Grid_Layout";
 import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
 import { get_bounding_rect } from "./utils-misc";
@@ -10,6 +11,7 @@ export type Grid_Pos = {
 };
 
 export class Grid_Item {
+  id: string;
   el: HTMLElement;
   mirrored_el?: HTMLElement;
   sibling_el?: HTMLElement;
@@ -17,6 +19,7 @@ export class Grid_Item {
 
   constructor(opts: {
     el: HTMLElement;
+    id: string;
     mirrored_el?: HTMLElement;
     sibling_el?: HTMLElement;
     parent_layout: Grid_Layout;
@@ -46,6 +49,13 @@ export class Grid_Item {
 
   get style() {
     return this.el.style;
+  }
+
+  get info(): Layout_Element {
+    return {
+      id: this.id,
+      ...this.position,
+    };
   }
 
   fill_if_in_auto_row() {

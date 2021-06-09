@@ -1,4 +1,3 @@
-import { Element_Info } from "./Layout_Editor";
 import { Layout_State } from "./Grid_Layout";
 import { Shiny } from "./index";
 
@@ -25,13 +24,4 @@ export function add_shiny_listener(event_id: string, callback_func: Function) {
 
 export function send_grid_sizing_to_shiny(grid_attrs: Layout_State) {
   setShinyInput("grid_sizing", grid_attrs);
-}
-
-export function send_elements_to_shiny(elements: Element_Info[]) {
-  const elements_by_id = {};
-  elements.forEach(function (el) {
-    elements_by_id[el.id] = { id: el.id, ...el.grid_pos };
-  });
-
-  setShinyInput("elements", elements_by_id);
 }

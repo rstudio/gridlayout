@@ -18,9 +18,11 @@ layout_templates <- list(
     flipped_els = c("sidebar")
   ),
   gen_template_info(
-    "|     |1fr |1fr |
-     |1fr  |A   | B  |
-     |1fr  |C   | D  |",
+    "|     |    |    |
+     |-----|----|----|
+     |1rem |1fr |1fr |
+     |1fr  |A   |B   |
+     |1fr  |C   |D   |",
     "four square"
   ),
   gen_template_info(
