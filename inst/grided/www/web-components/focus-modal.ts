@@ -99,12 +99,13 @@ class FocusModal extends HTMLElement {
        }
    
        #content {
-         outline: 1px solid black;
+         border: 1px solid #bababa;
+         border-radius: 4px;
          width: 95%;
          min-width: 400px;
          max-width: ${this._max_width};
          background: white;
-         padding: 1.5rem 2.2rem;
+         padding: 2rem 3rem;
          position: relative;
        }
    
@@ -130,8 +131,8 @@ class FocusModal extends HTMLElement {
          display: inline-flex;
          align-items: center;
          position: absolute;
-         right: 3px;
-         top: 3px;
+         right: 4px;
+         top: 4px;
        }
    
        .centered {
