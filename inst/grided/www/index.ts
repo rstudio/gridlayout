@@ -1,6 +1,11 @@
 // JS entry point
 import { Layout_State } from "./Grid_Layout";
 import { Layout_Editor, Layout_Editor_Setup } from "./Layout_Editor";
+import {
+  save_editor_history,
+  save_gallery_history,
+  State_Dump,
+} from "./state_tracking";
 import { add_shiny_listener, setShinyInput } from "./utils-shiny";
 import { copy_code } from "./web-components/copy-code";
 import { create_focus_modal } from "./web-components/focus-modal";
@@ -23,53 +28,35 @@ export type Layout_Info = {
   elements: Layout_Element[];
 };
 
-// A serializable format so we can store it in browser history api
-export type App_Entry_Type =
-  | "layout-chooser"
-  | "edit-layout"
-  | "edit-existing-app";
-
-type State_Dump = {
-  type: "layout_edit" | "layout_chooser";
-  data: Layout_Editor_Setup | Layout_Info[];
+export type Gallery_Options = {
+  layouts: Layout_Info[];
+  selected?: string;
 };
 
-const start_layout_chooser = (
-  layouts: Layout_Info[],
+const start_layout_gallery = (
+  opts: Gallery_Options,
   save_history: boolean = true
 ) => {
   if (save_history) {
     // If we're coming from a history pop, then we want to make sure we dont
     // push another thing to the state and break the forward button
-    const state_dump: State_Dump = { type: "layout_chooser", data: layouts };
-    window.history.pushState(state_dump, null, null);
+    save_gallery_history(opts.layouts);
   }
-
-  const gallery: LayoutGallery = layout_gallery(layouts)
+  const gallery: LayoutGallery = layout_gallery(opts.layouts)
+    .on_select((selected: string) => {
+      save_gallery_history(opts.layouts, selected);
+    })
     .on_go((selected_layout: Layout_Info) => {
       setShinyInput("build_app_template", selected_layout);
     })
     .on_edit((selected_layout: Layout_Info) => {
       start_layout_editor({
-        entry_type: "layout-chooser",
+        entry_type: "layout-gallery",
         ...selected_layout,
       });
-    });
-  document.body.appendChild(gallery);
-};
-
-const save_editor_history = ({
-  entry_type,
-  grid,
-  elements,
-}: Layout_Editor_Setup) => {
-  // Strips out the non-serializable properties that are not important to
-  // recreating state
-  const state_dump: State_Dump = {
-    type: "layout_edit",
-    data: { entry_type, grid, elements },
-  };
-  window.history.pushState(state_dump, null, null);
+    })
+    .select_layout(opts.selected);
+  return document.body.appendChild(gallery);
 };
 
 const start_layout_editor = (
@@ -81,7 +68,7 @@ const start_layout_editor = (
   }
 
   opts.finish_btn =
-    opts.entry_type === "layout-chooser"
+    opts.entry_type === "layout-gallery"
       ? {
           label: "Create app",
           on_done: (layout: Layout_Info) => {
@@ -104,7 +91,9 @@ const start_layout_editor = (
 
 window.onload = function () {
   // Add listeners for the three main entry-points
-  add_shiny_listener("layout-chooser", start_layout_chooser);
+  add_shiny_listener("layout-gallery", (layouts: Layout_Info[]) => {
+    start_layout_gallery({ layouts });
+  });
   add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
     start_layout_editor({
       entry_type: "edit-layout",
@@ -133,7 +122,7 @@ window.addEventListener("popstate", function (e) {
   document.body.innerHTML = ``;
   switch (state.type) {
     case "layout_chooser":
-      start_layout_chooser(state.data as Layout_Info[], false);
+      start_layout_gallery(state.data as Gallery_Options, false);
       break;
     case "layout_edit":
       start_layout_editor(state.data as Layout_Editor_Setup, false);

@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { App_Entry_Type, Layout_Element, Layout_Info } from ".";
+import { Layout_Element, Layout_Info } from ".";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
 import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
@@ -54,6 +54,11 @@ export type Element_Info = {
   mirrored_element?: HTMLElement;
   grid_item: Grid_Item;
 };
+
+export type App_Entry_Type =
+  | "layout-gallery"
+  | "edit-layout"
+  | "edit-existing-app";
 
 export type App_Mode = "Existing" | "New";
 

@@ -1,16 +1,16 @@
 import { Layout_Info } from "..";
 import { click_button, El } from "../make-elements";
-import { grid_preview } from "./grid-preview";
 import { create_focus_modal } from "./focus-modal";
+import { grid_preview } from "./grid-preview";
 
 type Select_Fn = (info: Layout_Info) => void;
 export class LayoutGallery extends HTMLElement {
   layouts: Layout_Info[];
+  preselected_layout_name: string;
 
-  layouts_holder: HTMLElement;
-  chooser_modal: HTMLElement;
   on_edit_fn: Select_Fn;
   on_go_fn: Select_Fn;
+  on_select_fn: (name: string) => void;
 
   constructor(layouts: Layout_Info[]) {
     super();
@@ -79,15 +79,24 @@ export class LayoutGallery extends HTMLElement {
     <div id = "chooser-modal" class = "hidden"> </div>
     `;
 
-    this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
-    this.layouts_holder = this.shadowRoot.getElementById("layouts");
-    this.layouts.forEach((layout) => {
-      this.layouts_holder.appendChild(
+    this.shadowRoot.getElementById("layouts").append(
+      ...this.layouts.map((layout) =>
         grid_preview()
           .layout(layout)
-          .on_select((x: Layout_Info) => this.select_a_grid(x))
+          .on_select((x: Layout_Info) => this.focus_on_layout(x))
+      )
+    );
+
+    if (this.preselected_layout_name) {
+      this.focus_on_layout(
+        this.layouts.find(
+          (layout) => layout.name === this.preselected_layout_name
+        ),
+        // Dont fire on select argument because we only preselect from
+        // a history event so we don't want to overwrite the history path.
+        false
       );
-    });
+    }
   }
 
   on_edit(on_edit_fn: Select_Fn) {
@@ -101,10 +110,25 @@ export class LayoutGallery extends HTMLElement {
   }
 
   hide_chooser_modal() {
-    this.chooser_modal.classList.add("hidden");
+    this.shadowRoot.getElementById("chooser-modal").classList.add("hidden");
   }
 
-  select_a_grid(selected_layout: Layout_Info) {
+  select_layout(name?: string) {
+    if (name) {
+      this.preselected_layout_name = name;
+    }
+    return this;
+  }
+
+  on_select(fn: (name: string) => void) {
+    this.on_select_fn = fn;
+    return this;
+  }
+
+  focus_on_layout(
+    selected_layout: Layout_Info,
+    fire_on_select: boolean = true
+  ) {
     const modal = create_focus_modal()
       .set_title(selected_layout.name)
       .max_width("95%")
@@ -141,6 +165,10 @@ export class LayoutGallery extends HTMLElement {
     );
 
     modal.add_to_page();
+
+    if (fire_on_select) {
+      this.on_select_fn(selected_layout.name);
+    }
   }
 }
 

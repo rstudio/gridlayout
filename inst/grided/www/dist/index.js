@@ -8117,6 +8117,33 @@
     modal.add_to_page();
   }
 
+  // state_tracking.ts
+  var save_gallery_history = function save_gallery_history2(layouts, selected) {
+    var opts = {
+      layouts: layouts
+    };
+    if (selected) {
+      opts.selected = selected;
+    }
+    var state_dump = {
+      type: "layout_chooser",
+      data: opts
+    };
+    window.history.pushState(state_dump, null, null);
+  };
+  var save_editor_history = function save_editor_history2(_ref) {
+    var entry_type = _ref.entry_type, grid = _ref.grid, elements = _ref.elements;
+    var state_dump = {
+      type: "layout_edit",
+      data: {
+        entry_type: entry_type,
+        grid: grid,
+        elements: elements
+      }
+    };
+    window.history.pushState(state_dump, null, null);
+  };
+
   // web-components/layout-gallery.ts
   var import_es_array_iterator16 = __toModule(require_es_array_iterator());
   var import_es_map4 = __toModule(require_es_map());
@@ -8392,6 +8419,41 @@
     }
     return _typeof7(obj);
   }
+  function _toConsumableArray6(arr) {
+    return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray8(arr) || _nonIterableSpread6();
+  }
+  function _nonIterableSpread6() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray8(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray8(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray8(o, minLen);
+  }
+  function _iterableToArray6(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles6(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray8(arr);
+  }
+  function _arrayLikeToArray8(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
   function _classCallCheck7(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -8531,10 +8593,10 @@
       _classCallCheck7(this, LayoutGallery2);
       _this = _super.call(this);
       _defineProperty9(_assertThisInitialized4(_this), "layouts", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "layouts_holder", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "chooser_modal", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "preselected_layout_name", void 0);
       _defineProperty9(_assertThisInitialized4(_this), "on_edit_fn", void 0);
       _defineProperty9(_assertThisInitialized4(_this), "on_go_fn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "on_select_fn", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8544,15 +8606,18 @@
     _createClass7(LayoutGallery2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _this2 = this;
+        var _this$shadowRoot$getE, _this2 = this;
         this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        display: block;\n        max-width: 1200px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n   \n    <h2> Select the layout for your app: </h2>\n    <div id = "layouts"></div>\n    <div id = "chooser-modal" class = "hidden"> </div>\n    ';
-        this.chooser_modal = this.shadowRoot.getElementById("chooser-modal");
-        this.layouts_holder = this.shadowRoot.getElementById("layouts");
-        this.layouts.forEach(function(layout) {
-          _this2.layouts_holder.appendChild(grid_preview().layout(layout).on_select(function(x) {
-            return _this2.select_a_grid(x);
-          }));
-        });
+        (_this$shadowRoot$getE = this.shadowRoot.getElementById("layouts")).append.apply(_this$shadowRoot$getE, _toConsumableArray6(this.layouts.map(function(layout) {
+          return grid_preview().layout(layout).on_select(function(x) {
+            return _this2.focus_on_layout(x);
+          });
+        })));
+        if (this.preselected_layout_name) {
+          this.focus_on_layout(this.layouts.find(function(layout) {
+            return layout.name === _this2.preselected_layout_name;
+          }), false);
+        }
       }
     }, {
       key: "on_edit",
@@ -8569,12 +8634,27 @@
     }, {
       key: "hide_chooser_modal",
       value: function hide_chooser_modal() {
-        this.chooser_modal.classList.add("hidden");
+        this.shadowRoot.getElementById("chooser-modal").classList.add("hidden");
       }
     }, {
-      key: "select_a_grid",
-      value: function select_a_grid(selected_layout) {
+      key: "select_layout",
+      value: function select_layout(name) {
+        if (name) {
+          this.preselected_layout_name = name;
+        }
+        return this;
+      }
+    }, {
+      key: "on_select",
+      value: function on_select(fn) {
+        this.on_select_fn = fn;
+        return this;
+      }
+    }, {
+      key: "focus_on_layout",
+      value: function focus_on_layout(selected_layout) {
         var _this3 = this;
+        var fire_on_select = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
         var modal = create_focus_modal().set_title(selected_layout.name).max_width("95%").add_element(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation().hide_name());
         var close_gallery = function close_gallery2(event) {
           event.stopPropagation();
@@ -8592,6 +8672,9 @@
           })]
         }));
         modal.add_to_page();
+        if (fire_on_select) {
+          this.on_select_fn(selected_layout.name);
+        }
       }
     }]);
     return LayoutGallery2;
@@ -8641,42 +8724,28 @@
     return obj;
   }
   var Shiny = window.Shiny;
-  var start_layout_chooser = function start_layout_chooser2(layouts) {
+  var start_layout_gallery = function start_layout_gallery2(opts) {
     var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
     if (save_history) {
-      var state_dump = {
-        type: "layout_chooser",
-        data: layouts
-      };
-      window.history.pushState(state_dump, null, null);
+      save_gallery_history(opts.layouts);
     }
-    var gallery = layout_gallery(layouts).on_go(function(selected_layout) {
+    var gallery = layout_gallery(opts.layouts).on_select(function(selected) {
+      save_gallery_history(opts.layouts, selected);
+    }).on_go(function(selected_layout) {
       setShinyInput("build_app_template", selected_layout);
     }).on_edit(function(selected_layout) {
       start_layout_editor(_objectSpread4({
-        entry_type: "layout-chooser"
+        entry_type: "layout-gallery"
       }, selected_layout));
-    });
-    document.body.appendChild(gallery);
-  };
-  var save_editor_history = function save_editor_history2(_ref) {
-    var entry_type = _ref.entry_type, grid = _ref.grid, elements = _ref.elements;
-    var state_dump = {
-      type: "layout_edit",
-      data: {
-        entry_type: entry_type,
-        grid: grid,
-        elements: elements
-      }
-    };
-    window.history.pushState(state_dump, null, null);
+    }).select_layout(opts.selected);
+    return document.body.appendChild(gallery);
   };
   var start_layout_editor = function start_layout_editor2(opts) {
     var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
     if (save_history) {
       save_editor_history(opts);
     }
-    opts.finish_btn = opts.entry_type === "layout-chooser" ? {
+    opts.finish_btn = opts.entry_type === "layout-gallery" ? {
       label: "Create app",
       on_done: function on_done(layout) {
         setShinyInput("build_app_template", layout);
@@ -8693,7 +8762,11 @@
     return new Layout_Editor(opts);
   };
   window.onload = function() {
-    add_shiny_listener("layout-chooser", start_layout_chooser);
+    add_shiny_listener("layout-gallery", function(layouts) {
+      start_layout_gallery({
+        layouts: layouts
+      });
+    });
     add_shiny_listener("edit-layout", function(layout_info) {
       start_layout_editor(_objectSpread4({
         entry_type: "edit-layout"
@@ -8713,7 +8786,7 @@
     document.body.innerHTML = "";
     switch (state.type) {
       case "layout_chooser":
-        start_layout_chooser(state.data, false);
+        start_layout_gallery(state.data, false);
         break;
       case "layout_edit":
         start_layout_editor(state.data, false);

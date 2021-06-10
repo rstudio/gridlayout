@@ -43,8 +43,8 @@ grided_server_code <- function(
   session$sendCustomMessage("shiny-loaded", 1)
 
   grided_mode <- if (identical(class(starting_layout), "list")) {
-    # Multiple layouts means we want template chooser interface
-    "layoutChooser"
+    # Multiple layouts means we want template gallery interface
+    "layoutGallery"
   } else if (identical(class(starting_layout), "gridlayout")) {
     # Single layout means jump straight to editing UI
     "editLayout"
@@ -57,8 +57,8 @@ grided_server_code <- function(
   }
 
   switch(grided_mode,
-    layoutChooser = session$sendCustomMessage(
-      "layout-chooser",
+    layoutGallery = session$sendCustomMessage(
+      "layout-gallery",
       starting_layout
     ),
     editLayout = session$sendCustomMessage(
