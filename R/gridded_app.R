@@ -23,7 +23,7 @@ grided_app <- function(
     app
   } else {
     # Open gadget in the external viewer
-    viewer <- shiny::browserViewer(.rs.invokeShinyWindowViewer)
+    viewer <- shiny::browserViewer(.rs.invokeShinyWindowExternal)
     shiny::runGadget(app, viewer = viewer)
   }
 }
