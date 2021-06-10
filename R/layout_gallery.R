@@ -40,3 +40,20 @@ layout_gallery <- function(){
 
   grided_app(starting_layout = layout_templates)
 }
+
+
+# Takes a layout definition and turns it into the info ingested by grided
+gen_template_info <- function(layout_table, name, flipped_els = c()){
+  layout_info <-  dump_all_info(new_gridlayout(layout_table))
+  layout_info$name <- name
+
+  # If any elements need to have their id flipped (aka their panel is tall and
+  # skinny), then mark that here
+  for (i in seq_along(layout_info$elements)) {
+    if (layout_info$elements[[i]]$id %in% flipped_els) {
+      layout_info$elements[[i]]$flip_id <- TRUE
+    }
+  }
+
+  layout_info
+}
