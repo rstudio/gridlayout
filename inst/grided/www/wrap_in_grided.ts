@@ -1,3 +1,4 @@
+import { Layout_State } from "./Grid_Layout";
 import { Finish_Button_Setup, Layout_Editor } from "./Layout_Editor";
 import { make_css_unit_input } from "./make-css_unit_input";
 import { Block_El, click_button, make_el, Text_El } from "./make-elements";
@@ -20,15 +21,6 @@ export function wrap_in_grided(
   app_state: Layout_Editor,
   finish_btn: Finish_Button_Setup
 ) {
-
-  const grided_exists = document.getElementById("grided__holder") != null;
-
-  if (grided_exists) {
-    console.log("Grided already exists, skipping wrapping step");
-  } else {
-    console.log("Wrapping with grided UI")
-  }
-
   const grid_is_filled = app_state.container.hasChildNodes();
 
   const buttons = [
@@ -50,20 +42,9 @@ export function wrap_in_grided(
     );
   }
 
-  const settings_panel_el = Block_El("div.panel-body");
-  const gap_size_setting = make_css_unit_input({
-    parent_el: make_el(
-      settings_panel_el,
-      "div#gap_size_chooser.plus_minus_input.settings-grid",
-      {
-        innerHTML: `<span class = "input-label">Panel gap size</span>`,
-      }
-    ),
-    selector: "#gap_size_chooser",
-    on_change: (x) => app_state.update_grid({ gap: x }),
-    allowed_units: ["px", "rem"],
-    snap_to_defaults: false,
-  });
+  const settings_panel_el = Block_El(
+    "div#grided_gap_size_controls.settings.panel-body"
+  );
 
   const grided_ui = Block_El(
     "div#grided__holder",
@@ -135,11 +116,6 @@ export function wrap_in_grided(
   // than it eventually is. I think it's worth it.
   app_state.container.style.maxWidth = "100%";
 
-  if (grid_is_filled) {
-    app_state.container.style.gap = "1rem";
-    app_state.container.style.padding = "1rem";
-  }
-
   function toggle_interaction_mode(interact_is_on: boolean) {
     [
       ...app_state.container.querySelectorAll(".added-element"),
@@ -157,11 +133,27 @@ export function wrap_in_grided(
     });
   }
 
+  if (grid_is_filled) {
+    app_state.container.style.gap = "1rem";
+    app_state.container.style.padding = "1rem";
+    // add_existing_elements_to_app(app_state);
+  }
+}
+
+export function cleanup_grided_ui() {
+  [
+    ...document.querySelectorAll(".grid-cell"),
+    ...document.querySelectorAll(".added-element"),
+    ...document.querySelectorAll(".tract-controls"),
+    document.querySelector(".drag_selection_box"),
+    document.getElementById("drag_canvas"),
+  ].forEach((el) => el.remove());
+}
+
+export function add_existing_elements_to_app(app_state: Layout_Editor) {
   // If grided is running on an existing app, we need to parse the children and
   // add them as elements;
-  console.log(`------- Adding existing elements to layout state`);
   [...app_state.container.children].forEach(function (el: Element) {
-    debugger;
     const bbox = el.getBoundingClientRect();
     // Only keep visible elements. This will (hopefully) filter out and
     // script or style tags that find their way into the grid container
@@ -170,8 +162,8 @@ export function wrap_in_grided(
     // Don't load grided-related elements. These will be there if we are loading
     // from history for an existing app
     if (
-      el.classList.contains('grid-cell') || 
-      el.classList.contains('drag_selection_box') ||
+      el.classList.contains("grid-cell") ||
+      el.classList.contains("drag_selection_box") ||
       el.classList.contains("added-element") ||
       el.id === "drag_canvas"
     ) {
@@ -186,13 +178,33 @@ export function wrap_in_grided(
         mirrored_element: el as HTMLElement,
       },
       false
+      // second param is false so we don't update history as well
     );
-    console.log(`Added ${el.id} to app`);
-    // second param is false so we don't update history as well
+  });
+}
+
+export function hookup_gap_size_controls(
+  app_state: Layout_Editor,
+  settings_panel_el: HTMLElement,
+  starting_gap?: string
+) {
+  const css_input = make_css_unit_input({
+    parent_el: make_el(
+      settings_panel_el,
+      "div#gap_size_chooser.plus_minus_input.settings-grid",
+      {
+        innerHTML: `<span class = "input-label">Panel gap size</span>`,
+      }
+    ),
+    selector: "#gap_size_chooser",
+    on_change: (x) => app_state.update_grid({ gap: x }),
+    allowed_units: ["px", "rem"],
+    snap_to_defaults: false,
   });
 
-  return {
-    gap_size_setting,
-    grid_is_filled,
-  };
+  if (starting_gap) {
+    css_input.update_value(starting_gap);
+  }
+
+  return css_input;
 }

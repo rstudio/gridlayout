@@ -34,7 +34,7 @@ export type Gallery_Options = {
 };
 
 // Fresh start on page
-const clear_page = () =>  document.body.innerHTML = ``;
+const clear_page = () => (document.body.innerHTML = ``);
 
 const start_layout_gallery = (
   opts: Gallery_Options,

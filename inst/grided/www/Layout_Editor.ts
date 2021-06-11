@@ -31,7 +31,12 @@ import {
   XY_Pos,
 } from "./utils-misc";
 import { create_focus_modal } from "./web-components/focus-modal";
-import { wrap_in_grided } from "./wrap_in_grided";
+import {
+  add_existing_elements_to_app,
+  cleanup_grided_ui,
+  hookup_gap_size_controls,
+  wrap_in_grided,
+} from "./wrap_in_grided";
 
 export type Grid_Update_Options = {
   rows?: string[];
@@ -105,7 +110,6 @@ export class Layout_Editor {
       ".wrapped-existing-app"
     ) as HTMLElement;
     if (existing_wrapped_app) {
-      console.log("We already have wrapped this stuff in grided!");
       this.container = existing_wrapped_app;
     } else {
       this.container =
@@ -115,12 +119,21 @@ export class Layout_Editor {
     }
     this.grid_layout = new Grid_Layout(this.container);
 
-    const { gap_size_setting } = wrap_in_grided(this, finish_btn);
-    this.gap_size_setting = gap_size_setting;
+    if (!existing_wrapped_app) {
+      wrap_in_grided(this, finish_btn);
+    } else {
+      cleanup_grided_ui();
+    }
+
+    add_existing_elements_to_app(this);
+
+    this.gap_size_setting = hookup_gap_size_controls(
+      this,
+      document.getElementById("grided_gap_size_controls"),
+      starting_grid?.gap
+    );
 
     this.grid_styles = this.container.style;
-
-    console.log("Getting layout setup");
 
     this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
     this.on_update = on_update;
@@ -141,7 +154,7 @@ export class Layout_Editor {
           false
         );
       });
-    } else if (entry_type === "edit-existing-app") {
+    } else if (entry_type === "edit-existing-app" && !existing_wrapped_app) {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
       // directly computed if we use getComputedStyle()
@@ -155,6 +168,19 @@ export class Layout_Editor {
         rows: current_grid_props.gridTemplateRows.split(" "),
         cols: current_grid_props.gridTemplateColumns.split(" "),
         gap: get_gap_size(current_grid_props.gap),
+      });
+    } else if (entry_type === "edit-existing-app" && existing_wrapped_app) {
+      // match elements to the elements definition and place them correctly
+      this.elements.forEach((grid_el) => {
+        const id = grid_el.id;
+        const element_def = starting_elements.find((el) => el.id === id);
+        grid_el.position = element_def;
+      });
+
+      this.update_grid({
+        ...starting_grid,
+        dont_update_history: true,
+        force: true,
       });
     } else {
       console.error(

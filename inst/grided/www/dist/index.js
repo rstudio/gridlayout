@@ -3762,13 +3762,31 @@
     ];
   }, UNSUPPORTED_Y);
 
-  // node_modules/core-js/modules/es.array.map.js
+  // node_modules/core-js/modules/es.array.find.js
   "use strict";
   var $14 = require_export();
+  var $find = require_array_iteration().find;
+  var addToUnscopables = require_add_to_unscopables();
+  var FIND = "find";
+  var SKIPS_HOLES = true;
+  if (FIND in [])
+    Array(1)[FIND](function() {
+      SKIPS_HOLES = false;
+    });
+  $14({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+    find: function find(callbackfn) {
+      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables(FIND);
+
+  // node_modules/core-js/modules/es.array.map.js
+  "use strict";
+  var $15 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
-  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  $15({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3857,25 +3875,25 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $15 = require_export();
+  var $16 = require_export();
   var $findIndex = require_array_iteration().findIndex;
-  var addToUnscopables = require_add_to_unscopables();
+  var addToUnscopables2 = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
-  var SKIPS_HOLES = true;
+  var SKIPS_HOLES2 = true;
   if (FIND_INDEX in [])
     Array(1)[FIND_INDEX](function() {
-      SKIPS_HOLES = false;
+      SKIPS_HOLES2 = false;
     });
-  $15({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $16({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
-  addToUnscopables(FIND_INDEX);
+  addToUnscopables2(FIND_INDEX);
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $16 = require_export();
+  var $17 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
@@ -3888,7 +3906,7 @@
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $16({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $17({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3944,15 +3962,15 @@
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $17 = require_export();
+  var $18 = require_export();
   var assign = require_object_assign();
-  $17({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $18({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -3979,7 +3997,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $18({ target: "Array", proto: true, forced: FORCED2 }, {
+  $19({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -4006,7 +4024,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $19 = require_export();
+  var $20 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4020,28 +4038,10 @@
       } : handler, timeout);
     };
   };
-  $19({ global: true, bind: true, forced: MSIE }, {
+  $20({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
-
-  // node_modules/core-js/modules/es.array.find.js
-  "use strict";
-  var $20 = require_export();
-  var $find = require_array_iteration().find;
-  var addToUnscopables2 = require_add_to_unscopables();
-  var FIND = "find";
-  var SKIPS_HOLES2 = true;
-  if (FIND in [])
-    Array(1)[FIND](function() {
-      SKIPS_HOLES2 = false;
-    });
-  $20({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
-    find: function find(callbackfn) {
-      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables2(FIND);
 
   // node_modules/core-js/modules/es.string.match.js
   "use strict";
@@ -7375,12 +7375,6 @@
     return arr2;
   }
   function wrap_in_grided(app_state, finish_btn) {
-    var grided_exists = document.getElementById("grided__holder") != null;
-    if (grided_exists) {
-      console.log("Grided already exists, skipping wrapping step");
-    } else {
-      console.log("Wrapping with grided UI");
-    }
     var grid_is_filled = app_state.container.hasChildNodes();
     var buttons = [click_button("#see-layout-code", "Code for layout", function() {
       return setShinyInput("see_layout_code", app_state.current_layout, true);
@@ -7390,30 +7384,13 @@
     if (grid_is_filled) {
       buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
     }
-    var settings_panel_el = Block_El("div.panel-body");
-    var gap_size_setting = make_css_unit_input({
-      parent_el: make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
-        innerHTML: '<span class = "input-label">Panel gap size</span>'
-      }),
-      selector: "#gap_size_chooser",
-      on_change: function on_change(x) {
-        return app_state.update_grid({
-          gap: x
-        });
-      },
-      allowed_units: ["px", "rem"],
-      snap_to_defaults: false
-    });
+    var settings_panel_el = Block_El("div#grided_gap_size_controls.settings.panel-body");
     var grided_ui = Block_El("div#grided__holder", Block_El("div#grided__header", Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), Block_El.apply(void 0, ["div.code_btns"].concat(buttons))), Block_El("div#grided__settings", Text_El("h3", "".concat(settings_icon, " Settings")), settings_panel_el), Block_El("div#grided__instructions", Text_El("h3", "".concat(instructions_icon, " Instructions")), Text_El("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), Block_El("div#grided__elements", Text_El("h3", "".concat(elements_icon, " Added elements")), Block_El("div.panel-body", Block_El("div#added_elements"))), Block_El("div#grided__editor", Block_El("div#editor-wrapper", Text_El("div#editor-browser-header", browser_header_html), Block_El("div#editor-app-window", app_state.container))));
     document.querySelector("body").appendChild(grided_ui);
     app_state.container.style.height = "100%";
     app_state.container.style.width = "100%";
     app_state.container.style.display = "grid";
     app_state.container.style.maxWidth = "100%";
-    if (grid_is_filled) {
-      app_state.container.style.gap = "1rem";
-      app_state.container.style.padding = "1rem";
-    }
     function toggle_interaction_mode(interact_is_on) {
       [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
         if (interact_is_on) {
@@ -7423,9 +7400,18 @@
         }
       });
     }
-    console.log("------- Adding existing elements to layout state");
+    if (grid_is_filled) {
+      app_state.container.style.gap = "1rem";
+      app_state.container.style.padding = "1rem";
+    }
+  }
+  function cleanup_grided_ui() {
+    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".drag_selection_box"), document.getElementById("drag_canvas")]).forEach(function(el) {
+      return el.remove();
+    });
+  }
+  function add_existing_elements_to_app(app_state) {
     _toConsumableArray4(app_state.container.children).forEach(function(el) {
-      debugger;
       var bbox = el.getBoundingClientRect();
       if (bbox.width === 0 && bbox.height === 0)
         return;
@@ -7438,12 +7424,26 @@
         grid_pos: get_pos_on_grid(el),
         mirrored_element: el
       }, false);
-      console.log("Added ".concat(el.id, " to app"));
     });
-    return {
-      gap_size_setting: gap_size_setting,
-      grid_is_filled: grid_is_filled
-    };
+  }
+  function hookup_gap_size_controls(app_state, settings_panel_el, starting_gap) {
+    var css_input = make_css_unit_input({
+      parent_el: make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
+        innerHTML: '<span class = "input-label">Panel gap size</span>'
+      }),
+      selector: "#gap_size_chooser",
+      on_change: function on_change(x) {
+        return app_state.update_grid({
+          gap: x
+        });
+      },
+      allowed_units: ["px", "rem"],
+      snap_to_defaults: false
+    });
+    if (starting_gap) {
+      css_input.update_value(starting_gap);
+    }
+    return css_input;
   }
 
   // Layout_Editor.ts
@@ -7611,16 +7611,19 @@
       this.entry_type = entry_type;
       var existing_wrapped_app = document.querySelector(".wrapped-existing-app");
       if (existing_wrapped_app) {
-        console.log("We already have wrapped this stuff in grided!");
         this.container = existing_wrapped_app;
       } else {
         this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : Block_El("div#grid_page");
       }
       this.grid_layout = new Grid_Layout(this.container);
-      var _wrap_in_grided = wrap_in_grided(this, finish_btn), gap_size_setting = _wrap_in_grided.gap_size_setting;
-      this.gap_size_setting = gap_size_setting;
+      if (!existing_wrapped_app) {
+        wrap_in_grided(this, finish_btn);
+      } else {
+        cleanup_grided_ui();
+      }
+      add_existing_elements_to_app(this);
+      this.gap_size_setting = hookup_gap_size_controls(this, document.getElementById("grided_gap_size_controls"), starting_grid === null || starting_grid === void 0 ? void 0 : starting_grid.gap);
       this.grid_styles = this.container.style;
-      console.log("Getting layout setup");
       this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
       this.on_update = on_update;
       if (entry_type !== "edit-existing-app") {
@@ -7639,13 +7642,25 @@
             }
           }, false);
         });
-      } else if (entry_type === "edit-existing-app") {
+      } else if (entry_type === "edit-existing-app" && !existing_wrapped_app) {
         var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.update_grid({
           rows: current_grid_props.gridTemplateRows.split(" "),
           cols: current_grid_props.gridTemplateColumns.split(" "),
           gap: get_gap_size(current_grid_props.gap)
         });
+      } else if (entry_type === "edit-existing-app" && existing_wrapped_app) {
+        this.elements.forEach(function(grid_el) {
+          var id = grid_el.id;
+          var element_def = starting_elements.find(function(el) {
+            return el.id === id;
+          });
+          grid_el.position = element_def;
+        });
+        this.update_grid(_objectSpread3(_objectSpread3({}, starting_grid), {}, {
+          dont_update_history: true,
+          force: true
+        }));
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
@@ -8759,7 +8774,7 @@
     return document.body.appendChild(gallery);
   };
   var start_layout_editor = function start_layout_editor2(opts) {
-    var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+    var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
     if (save_history) {
       save_editor_history(opts);
     }
@@ -8791,7 +8806,7 @@
     add_shiny_listener("edit-layout", function(layout_info) {
       start_layout_editor(_objectSpread4({
         entry_type: "edit-layout"
-      }, layout_info));
+      }, layout_info), true);
     });
     add_shiny_listener("edit-existing-app", function(layout_info) {
       start_layout_editor({
@@ -8809,7 +8824,7 @@
         start_layout_gallery(state.data, false);
         break;
       case "layout_edit":
-        start_layout_editor(state.data, false);
+        start_layout_editor(state.data);
         break;
       default:
         console.error("How did you get to that state?");
