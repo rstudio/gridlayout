@@ -33,10 +33,14 @@ export type Gallery_Options = {
   selected?: string;
 };
 
+// Fresh start on page
+const clear_page = () =>  document.body.innerHTML = ``;
+
 const start_layout_gallery = (
   opts: Gallery_Options,
   save_history: boolean = true
 ) => {
+  clear_page();
   if (save_history) {
     // If we're coming from a history pop, then we want to make sure we dont
     // push another thing to the state and break the forward button
@@ -65,6 +69,11 @@ const start_layout_editor = (
 ) => {
   if (save_history) {
     save_editor_history(opts);
+  }
+
+  if (opts.entry_type !== "edit-existing-app") {
+    // Don't erase the page if we're editing an existing app
+    clear_page();
   }
 
   opts.finish_btn =
@@ -118,8 +127,7 @@ window.onload = function () {
 
 window.addEventListener("popstate", function (e) {
   const state = e.state as State_Dump;
-  // Fresh start on page
-  document.body.innerHTML = ``;
+
   switch (state.type) {
     case "layout_chooser":
       start_layout_gallery(state.data as Gallery_Options, false);

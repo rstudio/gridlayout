@@ -99,21 +99,30 @@ export class Layout_Editor {
     on_update,
   }: Layout_Editor_Setup) {
     this.entry_type = entry_type;
-    this.container =
-      entry_type === "edit-existing-app"
-        ? find_first_grid_node()
-        : Block_El("div#grid_page");
+
+    // Check if we've already wrapped in grided and tagged the app container
+    const existing_wrapped_app = document.querySelector(
+      ".wrapped-existing-app"
+    ) as HTMLElement;
+    if (existing_wrapped_app) {
+      console.log("We already have wrapped this stuff in grided!");
+      this.container = existing_wrapped_app;
+    } else {
+      this.container =
+        entry_type === "edit-existing-app"
+          ? find_first_grid_node()
+          : Block_El("div#grid_page");
+    }
+    this.grid_layout = new Grid_Layout(this.container);
+
+    const { gap_size_setting } = wrap_in_grided(this, finish_btn);
+    this.gap_size_setting = gap_size_setting;
 
     this.grid_styles = this.container.style;
 
-    this.grid_layout = new Grid_Layout(this.container);
+    console.log("Getting layout setup");
 
-    const { grid_is_filled, gap_size_setting } = wrap_in_grided(
-      this,
-      finish_btn
-    );
-    this.gap_size_setting = gap_size_setting;
-    this.mode = grid_is_filled ? "Existing" : "New";
+    this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
     this.on_update = on_update;
 
     if (entry_type !== "edit-existing-app") {
@@ -132,7 +141,7 @@ export class Layout_Editor {
           false
         );
       });
-    } else if (grid_is_filled) {
+    } else if (entry_type === "edit-existing-app") {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
       // directly computed if we use getComputedStyle()
@@ -834,7 +843,6 @@ function draw_elements(
   const { id, mirrored_el } = el_info;
   const el_color = app_state.next_color;
   const mirrors_existing = typeof mirrored_el !== "undefined";
-
   const grid_el = app_state.make_el(
     `div#${id}.el_${id}.added-element.${added_element_styles}`,
     {

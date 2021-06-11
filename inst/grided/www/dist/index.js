@@ -5784,6 +5784,7 @@
     } else if (num_checks === check_max) {
       alert("Could not find a grid-layout element to edit -- Sorry!");
     }
+    grid_node.classList.add("wrapped-existing-app");
     return grid_node;
   }
   function set_element_in_grid(el, grid_bounds) {
@@ -7374,6 +7375,12 @@
     return arr2;
   }
   function wrap_in_grided(app_state, finish_btn) {
+    var grided_exists = document.getElementById("grided__holder") != null;
+    if (grided_exists) {
+      console.log("Grided already exists, skipping wrapping step");
+    } else {
+      console.log("Wrapping with grided UI");
+    }
     var grid_is_filled = app_state.container.hasChildNodes();
     var buttons = [click_button("#see-layout-code", "Code for layout", function() {
       return setShinyInput("see_layout_code", app_state.current_layout, true);
@@ -7399,13 +7406,13 @@
     });
     var grided_ui = Block_El("div#grided__holder", Block_El("div#grided__header", Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), Block_El.apply(void 0, ["div.code_btns"].concat(buttons))), Block_El("div#grided__settings", Text_El("h3", "".concat(settings_icon, " Settings")), settings_panel_el), Block_El("div#grided__instructions", Text_El("h3", "".concat(instructions_icon, " Instructions")), Text_El("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), Block_El("div#grided__elements", Text_El("h3", "".concat(elements_icon, " Added elements")), Block_El("div.panel-body", Block_El("div#added_elements"))), Block_El("div#grided__editor", Block_El("div#editor-wrapper", Text_El("div#editor-browser-header", browser_header_html), Block_El("div#editor-app-window", app_state.container))));
     document.querySelector("body").appendChild(grided_ui);
-    app_state.grid_styles.height = "100%";
-    app_state.grid_styles.width = "100%";
-    app_state.grid_styles.display = "grid";
-    app_state.grid_styles.maxWidth = "100%";
+    app_state.container.style.height = "100%";
+    app_state.container.style.width = "100%";
+    app_state.container.style.display = "grid";
+    app_state.container.style.maxWidth = "100%";
     if (grid_is_filled) {
-      app_state.grid_styles.gap = "1rem";
-      app_state.grid_styles.padding = "1rem";
+      app_state.container.style.gap = "1rem";
+      app_state.container.style.padding = "1rem";
     }
     function toggle_interaction_mode(interact_is_on) {
       [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
@@ -7416,22 +7423,22 @@
         }
       });
     }
-    function action_button(id, label) {
-      var button_el = Text_El("button#".concat(id), label);
-      button_el.addEventListener("click", function(event) {
-        setShinyInput(id, 1, true);
-      });
-      return button_el;
-    }
+    console.log("------- Adding existing elements to layout state");
     _toConsumableArray4(app_state.container.children).forEach(function(el) {
+      debugger;
       var bbox = el.getBoundingClientRect();
       if (bbox.width === 0 && bbox.height === 0)
         return;
+      if (el.classList.contains("grid-cell") || el.classList.contains("drag_selection_box") || el.classList.contains("added-element") || el.id === "drag_canvas") {
+        el.remove();
+        return;
+      }
       app_state.add_element({
         id: el.id,
         grid_pos: get_pos_on_grid(el),
         mirrored_element: el
       }, false);
+      console.log("Added ".concat(el.id, " to app"));
     });
     return {
       gap_size_setting: gap_size_setting,
@@ -7602,12 +7609,19 @@
       _defineProperty7(this, "tract_controls", void 0);
       _defineProperty7(this, "entry_type", void 0);
       this.entry_type = entry_type;
-      this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : Block_El("div#grid_page");
-      this.grid_styles = this.container.style;
+      var existing_wrapped_app = document.querySelector(".wrapped-existing-app");
+      if (existing_wrapped_app) {
+        console.log("We already have wrapped this stuff in grided!");
+        this.container = existing_wrapped_app;
+      } else {
+        this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : Block_El("div#grid_page");
+      }
       this.grid_layout = new Grid_Layout(this.container);
-      var _wrap_in_grided = wrap_in_grided(this, finish_btn), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
+      var _wrap_in_grided = wrap_in_grided(this, finish_btn), gap_size_setting = _wrap_in_grided.gap_size_setting;
       this.gap_size_setting = gap_size_setting;
-      this.mode = grid_is_filled ? "Existing" : "New";
+      this.grid_styles = this.container.style;
+      console.log("Getting layout setup");
+      this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
       this.on_update = on_update;
       if (entry_type !== "edit-existing-app") {
         this.update_grid(_objectSpread3(_objectSpread3({}, starting_grid), {}, {
@@ -7625,7 +7639,7 @@
             }
           }, false);
         });
-      } else if (grid_is_filled) {
+      } else if (entry_type === "edit-existing-app") {
         var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.update_grid({
           rows: current_grid_props.gridTemplateRows.split(" "),
@@ -8724,8 +8738,12 @@
     return obj;
   }
   var Shiny = window.Shiny;
+  var clear_page = function clear_page2() {
+    return document.body.innerHTML = "";
+  };
   var start_layout_gallery = function start_layout_gallery2(opts) {
     var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+    clear_page();
     if (save_history) {
       save_gallery_history(opts.layouts);
     }
@@ -8744,6 +8762,9 @@
     var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
     if (save_history) {
       save_editor_history(opts);
+    }
+    if (opts.entry_type !== "edit-existing-app") {
+      clear_page();
     }
     opts.finish_btn = opts.entry_type === "layout-gallery" ? {
       label: "Create app",
@@ -8783,7 +8804,6 @@
   };
   window.addEventListener("popstate", function(e) {
     var state = e.state;
-    document.body.innerHTML = "";
     switch (state.type) {
       case "layout_chooser":
         start_layout_gallery(state.data, false);

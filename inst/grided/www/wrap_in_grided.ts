@@ -20,6 +20,15 @@ export function wrap_in_grided(
   app_state: Layout_Editor,
   finish_btn: Finish_Button_Setup
 ) {
+
+  const grided_exists = document.getElementById("grided__holder") != null;
+
+  if (grided_exists) {
+    console.log("Grided already exists, skipping wrapping step");
+  } else {
+    console.log("Wrapping with grided UI")
+  }
+
   const grid_is_filled = app_state.container.hasChildNodes();
 
   const buttons = [
@@ -118,17 +127,17 @@ export function wrap_in_grided(
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
-  app_state.grid_styles.height = "100%";
-  app_state.grid_styles.width = "100%";
-  app_state.grid_styles.display = "grid";
+  app_state.container.style.height = "100%";
+  app_state.container.style.width = "100%";
+  app_state.container.style.display = "grid";
   // Sometimes RMD styles will put a max-width of some amount which can mess
   // stuff up on large screens. The tradeoff is that the app may appear wider
   // than it eventually is. I think it's worth it.
-  app_state.grid_styles.maxWidth = "100%";
+  app_state.container.style.maxWidth = "100%";
 
   if (grid_is_filled) {
-    app_state.grid_styles.gap = "1rem";
-    app_state.grid_styles.padding = "1rem";
+    app_state.container.style.gap = "1rem";
+    app_state.container.style.padding = "1rem";
   }
 
   function toggle_interaction_mode(interact_is_on: boolean) {
@@ -148,22 +157,27 @@ export function wrap_in_grided(
     });
   }
 
-  function action_button(id: string, label: string) {
-    const button_el = Text_El(`button#${id}`, label);
-    button_el.addEventListener("click", function (event) {
-      setShinyInput(id, 1, true);
-    });
-
-    return button_el;
-  }
-
   // If grided is running on an existing app, we need to parse the children and
   // add them as elements;
+  console.log(`------- Adding existing elements to layout state`);
   [...app_state.container.children].forEach(function (el: Element) {
+    debugger;
     const bbox = el.getBoundingClientRect();
     // Only keep visible elements. This will (hopefully) filter out and
     // script or style tags that find their way into the grid container
     if (bbox.width === 0 && bbox.height === 0) return;
+
+    // Don't load grided-related elements. These will be there if we are loading
+    // from history for an existing app
+    if (
+      el.classList.contains('grid-cell') || 
+      el.classList.contains('drag_selection_box') ||
+      el.classList.contains("added-element") ||
+      el.id === "drag_canvas"
+    ) {
+      el.remove();
+      return;
+    }
 
     app_state.add_element(
       {
@@ -173,6 +187,7 @@ export function wrap_in_grided(
       },
       false
     );
+    console.log(`Added ${el.id} to app`);
     // second param is false so we don't update history as well
   });
 

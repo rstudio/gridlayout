@@ -87,6 +87,8 @@ export class LayoutGallery extends HTMLElement {
       )
     );
 
+    // If we have a preselected layout, find it and put it in focus modal
+    // on load.
     if (this.preselected_layout_name) {
       this.focus_on_layout(
         this.layouts.find(

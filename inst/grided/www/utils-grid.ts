@@ -12,6 +12,8 @@ import {
 } from "./utils-misc";
 
 export function find_first_grid_node(): HTMLElement {
+
+
   // Do a BFS for a grid layout element in the page
   let grid_node: HTMLElement;
   let current_node = document.body;
@@ -39,6 +41,8 @@ export function find_first_grid_node(): HTMLElement {
   } else if (num_checks === check_max) {
     alert("Could not find a grid-layout element to edit -- Sorry!");
   }
+
+  grid_node.classList.add("wrapped-existing-app");
 
   return grid_node;
 }
