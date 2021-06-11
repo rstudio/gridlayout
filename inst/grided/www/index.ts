@@ -65,7 +65,7 @@ const start_layout_gallery = (
 
 const start_layout_editor = (
   opts: Layout_Editor_Setup,
-  save_history: boolean = true
+  save_history: boolean = false
 ) => {
   if (save_history) {
     save_editor_history(opts);
@@ -104,10 +104,13 @@ window.onload = function () {
     start_layout_gallery({ layouts });
   });
   add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
-    start_layout_editor({
-      entry_type: "edit-layout",
-      ...layout_info,
-    });
+    start_layout_editor(
+      {
+        entry_type: "edit-layout",
+        ...layout_info,
+      },
+      true
+    );
   });
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
     start_layout_editor({ entry_type: "edit-existing-app" });
@@ -133,7 +136,7 @@ window.addEventListener("popstate", function (e) {
       start_layout_gallery(state.data as Gallery_Options, false);
       break;
     case "layout_edit":
-      start_layout_editor(state.data as Layout_Editor_Setup, false);
+      start_layout_editor(state.data as Layout_Editor_Setup);
       break;
     default:
       console.error("How did you get to that state?");
