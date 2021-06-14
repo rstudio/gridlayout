@@ -7,34 +7,34 @@
 layout_gallery <- function(){
 
   layout_templates <- list(
+     "classic",
     gen_template_info(
-      "|2rem  |200px   |1fr    |
+    "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-     "classic",
      flipped_els = c("sidebar")
     ),
     gen_template_info(
-      "|     |    |    |
+     "four square",
+    "|     |    |    |
      |-----|----|----|
      |1rem |1fr |1fr |
      |1fr  |A   |B   |
-     |1fr  |C   |D   |",
-     "four square"
+     |1fr  |C   |D   |"
     ),
     gen_template_info(
-      "|1rem |1fr       |1fr      |
+     "Focal Chart - Top",
+    "|1rem |1fr       |1fr      |
      |80px |header    |header   |
      |2fr  |chickens  |chickens |
-     |1fr  |treePlot  |yarnPlot |",
-     "Focal Chart - Top"
+     |1fr  |treePlot  |yarnPlot |"
     ),
     gen_template_info(
-      "|1rem |2fr      |1fr      |
+     "Focal Chart - Side",
+    "|1rem |2fr      |1fr      |
      |80px |header   |header   |
      |1fr  |chickens |treePlot |
-     |1fr  |chickens |yarnPlot |",
-     "Focal Chart - Side"
+     |1fr  |chickens |yarnPlot |"
     )
   )
 
@@ -43,7 +43,7 @@ layout_gallery <- function(){
 
 
 # Takes a layout definition and turns it into the info ingested by grided
-gen_template_info <- function(layout_table, name, flipped_els = c()){
+gen_template_info <- function(name, layout_table,  flipped_els = c()){
   layout_info <-  dump_all_info(new_gridlayout(layout_table))
   layout_info$name <- name
 

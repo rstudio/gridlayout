@@ -31,6 +31,15 @@ export class GridPreview extends HTMLElement {
       return `calc(${unit}/ ${scale})`;
     };
 
+    const build_tract_definition = (tract_sizing: string | string[]) => {
+      // If we have a single tract then json serialization will not keep it
+      // as an array and we need to convert it back to one.
+      if (!(tract_sizing instanceof Array)) {
+        tract_sizing = [tract_sizing];
+      }
+      return tract_sizing.map((x) => scale_units(x) ).join(" ");
+    }
+
     const corner_radius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
@@ -42,8 +51,8 @@ export class GridPreview extends HTMLElement {
         width: ${this._shown_size}px;
         height: ${this._shown_size}px;
         display: grid;
-        grid-template-rows: ${this.grid.rows.map((x) => scale_units(x) ).join(" ")};
-        grid-template-columns: ${this.grid.cols.map((x) => scale_units(x)).join(" ")};
+        grid-template-rows: ${build_tract_definition(this.grid.rows)};
+        grid-template-columns: ${build_tract_definition(this.grid.cols)};
         gap: ${scale_units(this.grid.gap)};
         padding: ${30 / scale}px;
         background-color: white;

@@ -8,36 +8,46 @@ setwd(here("inst/grided/"))
 
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
-
 layout_templates <- list(
   gen_template_info(
+    "Classic",
     "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-    "classic",
     flipped_els = c("sidebar")
   ),
   gen_template_info(
+    "Four-Square",
     "|     |    |    |
      |-----|----|----|
      |1rem |1fr |1fr |
      |1fr  |A   |B   |
-     |1fr  |C   |D   |",
-    "four square"
+     |1fr  |C   |D   |"
   ),
   gen_template_info(
+    "Focal Chart - Top",
     "|1rem |1fr       |1fr      |
      |80px |header    |header   |
      |2fr  |chickens  |chickens |
-     |1fr  |treePlot  |yarnPlot |",
-    "Focal Chart - Top"
+     |1fr  |treePlot  |yarnPlot |"
   ),
   gen_template_info(
+    "Focal Chart - Side",
     "|1rem |2fr      |1fr      |
      |80px |header   |header   |
      |1fr  |chickens |treePlot |
-     |1fr  |chickens |yarnPlot |",
-    "Focal Chart - Side"
+     |1fr  |chickens |yarnPlot |"
+  ),
+  gen_template_info(
+    "Scrolling-Stack",
+    "|      |           |
+     |------|-----------|
+     |1rem  |1fr        |
+     |80px  |header     |
+     |400px |chickens   |
+     |400px |treePlot   |
+     |400px |yarnPlot   |
+     |400px |stockTable |"
   )
 )
 
