@@ -31,13 +31,21 @@ export class GridPreview extends HTMLElement {
       return `calc(${unit}/ ${scale})`;
     };
 
-    const corner_radius = `${10 / scale}px`;
+    const corner_radius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
       * { box-sizing: border-box; }
 
       #layout {
-        box-shadow: 0px 0px ${corner_radius} 0px #626262;
+        box-shadow:
+          0 1px 1.4px -42px rgba(0, 0, 0, 0.022),
+          0 2.4px 3.3px -42px rgba(0, 0, 0, 0.032),
+          0 4.5px 6.3px -42px rgba(0, 0, 0, 0.04),
+          0 8px 11.2px -42px rgba(0, 0, 0, 0.048),
+          0 15px 20.9px -42px rgba(0, 0, 0, 0.058),
+          0 36px 50px -42px rgba(0, 0, 0, 0.08)
+        ;
+        border: 1px solid #cfcfcf;
         border-radius: ${corner_radius};
         width: ${this._shown_size}px;
         height: ${this._shown_size}px;
