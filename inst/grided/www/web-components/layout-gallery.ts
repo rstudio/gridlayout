@@ -10,6 +10,7 @@ export class LayoutGallery extends HTMLElement {
 
   on_edit_fn: Select_Fn;
   on_go_fn: Select_Fn;
+  on_cancel_fn: () => void;
   on_select_fn: (name: string) => void;
 
   constructor(layouts: Layout_Info[]) {
@@ -111,8 +112,9 @@ export class LayoutGallery extends HTMLElement {
     return this;
   }
 
-  hide_chooser_modal() {
-    this.shadowRoot.getElementById("chooser-modal").classList.add("hidden");
+  on_cancel(on_cancel_fn: () => void) {
+    this.on_cancel_fn = on_cancel_fn;
+    return this;
   }
 
   select_layout(name?: string) {
@@ -134,6 +136,7 @@ export class LayoutGallery extends HTMLElement {
     const modal = create_focus_modal()
       .set_title(selected_layout.name)
       .max_width("95%")
+      .on_close(this.on_cancel_fn)
       .add_element(
         grid_preview()
           .layout(selected_layout)

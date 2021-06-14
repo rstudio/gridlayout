@@ -50,14 +50,20 @@ const start_layout_gallery = (
     .on_select((selected: string) => {
       save_gallery_history(opts.layouts, selected);
     })
+    .on_cancel(() => {
+      save_gallery_history(opts.layouts);
+    })
     .on_go((selected_layout: Layout_Info) => {
       setShinyInput("build_app_template", selected_layout);
     })
     .on_edit((selected_layout: Layout_Info) => {
-      start_layout_editor({
-        entry_type: "layout-gallery",
-        ...selected_layout,
-      });
+      start_layout_editor(
+        {
+          entry_type: "layout-gallery",
+          ...selected_layout,
+        },
+        true
+      );
     })
     .select_layout(opts.selected);
   return document.body.appendChild(gallery);
@@ -65,7 +71,7 @@ const start_layout_gallery = (
 
 const start_layout_editor = (
   opts: Layout_Editor_Setup,
-  save_history: boolean = false
+  save_history: boolean
 ) => {
   if (save_history) {
     save_editor_history(opts);
@@ -113,12 +119,12 @@ window.onload = function () {
     );
   });
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
-    start_layout_editor({ entry_type: "edit-existing-app" });
+    start_layout_editor({ entry_type: "edit-existing-app" }, true);
   });
-  
+
   add_shiny_listener(
     "show-code-popup",
-    (opts: { title: string; description: string; code: string; }) => {
+    (opts: { title: string; description: string; code: string }) => {
       create_focus_modal()
         .set_title(opts.title)
         .description(opts.description)
@@ -136,7 +142,7 @@ window.addEventListener("popstate", function (e) {
       start_layout_gallery(state.data as Gallery_Options, false);
       break;
     case "layout_edit":
-      start_layout_editor(state.data as Layout_Editor_Setup);
+      start_layout_editor(state.data as Layout_Editor_Setup, false);
       break;
     default:
       console.error("How did you get to that state?");

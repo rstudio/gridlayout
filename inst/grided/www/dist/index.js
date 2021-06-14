@@ -8368,8 +8368,8 @@
             return unit;
           return "calc(".concat(unit, "/ ").concat(scale, ")");
         };
-        var corner_radius = "".concat(10 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: 0px 0px ".concat(corner_radius, " 0px #626262;\n        border-radius: ").concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        var corner_radius = "".concat(20 / scale, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow:\n          0 1px 1.4px -42px rgba(0, 0, 0, 0.022),\n          0 2.4px 3.3px -42px rgba(0, 0, 0, 0.032),\n          0 4.5px 6.3px -42px rgba(0, 0, 0, 0.04),\n          0 8px 11.2px -42px rgba(0, 0, 0, 0.048),\n          0 15px 20.9px -42px rgba(0, 0, 0, 0.058),\n          0 36px 50px -42px rgba(0, 0, 0, 0.08)\n        ;\n        border: 1px solid #cfcfcf;\n        border-radius: ".concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(this.grid.rows.map(scale_units).join(" "), ";\n        grid-template-columns: ").concat(this.grid.cols.map(scale_units).join(" "), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(scale_units(this.grid.gap), ";\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
         this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
           _this2._on_select({
@@ -8628,6 +8628,7 @@
       _defineProperty9(_assertThisInitialized4(_this), "preselected_layout_name", void 0);
       _defineProperty9(_assertThisInitialized4(_this), "on_edit_fn", void 0);
       _defineProperty9(_assertThisInitialized4(_this), "on_go_fn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "on_cancel_fn", void 0);
       _defineProperty9(_assertThisInitialized4(_this), "on_select_fn", void 0);
       _this.attachShadow({
         mode: "open"
@@ -8664,9 +8665,10 @@
         return this;
       }
     }, {
-      key: "hide_chooser_modal",
-      value: function hide_chooser_modal() {
-        this.shadowRoot.getElementById("chooser-modal").classList.add("hidden");
+      key: "on_cancel",
+      value: function on_cancel(on_cancel_fn) {
+        this.on_cancel_fn = on_cancel_fn;
+        return this;
       }
     }, {
       key: "select_layout",
@@ -8687,7 +8689,7 @@
       value: function focus_on_layout(selected_layout) {
         var _this3 = this;
         var fire_on_select = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
-        var modal = create_focus_modal().set_title(selected_layout.name).max_width("95%").add_element(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation().hide_name());
+        var modal = create_focus_modal().set_title(selected_layout.name).max_width("95%").on_close(this.on_cancel_fn).add_element(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation().hide_name());
         var close_gallery = function close_gallery2(event) {
           event.stopPropagation();
           _this3.remove();
@@ -8767,17 +8769,18 @@
     }
     var gallery = layout_gallery(opts.layouts).on_select(function(selected) {
       save_gallery_history(opts.layouts, selected);
+    }).on_cancel(function() {
+      save_gallery_history(opts.layouts);
     }).on_go(function(selected_layout) {
       setShinyInput("build_app_template", selected_layout);
     }).on_edit(function(selected_layout) {
       start_layout_editor(_objectSpread4({
         entry_type: "layout-gallery"
-      }, selected_layout));
+      }, selected_layout), true);
     }).select_layout(opts.selected);
     return document.body.appendChild(gallery);
   };
-  var start_layout_editor = function start_layout_editor2(opts) {
-    var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
+  var start_layout_editor = function start_layout_editor2(opts, save_history) {
     if (save_history) {
       save_editor_history(opts);
     }
@@ -8814,7 +8817,7 @@
     add_shiny_listener("edit-existing-app", function(layout_info) {
       start_layout_editor({
         entry_type: "edit-existing-app"
-      });
+      }, true);
     });
     add_shiny_listener("show-code-popup", function(opts) {
       create_focus_modal().set_title(opts.title).description(opts.description).add_element(copy_code(opts.code)).add_to_page();
@@ -8827,7 +8830,7 @@
         start_layout_gallery(state.data, false);
         break;
       case "layout_edit":
-        start_layout_editor(state.data);
+        start_layout_editor(state.data, false);
         break;
       default:
         console.error("How did you get to that state?");
