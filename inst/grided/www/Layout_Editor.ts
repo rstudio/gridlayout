@@ -30,6 +30,7 @@ import {
   update_rect_with_delta,
   XY_Pos,
 } from "./utils-misc";
+import { setShinyInput } from "./utils-shiny";
 import { create_focus_modal } from "./web-components/focus-modal";
 import {
   add_existing_elements_to_app,
@@ -186,6 +187,12 @@ export class Layout_Editor {
       console.error(
         "Neither starting layout was provided nor is there an existing grid app"
       );
+    }
+
+    // Send info on starting layout to Shiny so it can find layout definition
+    // to edit it after changes have been made
+    if (entry_type !== "layout-gallery") {
+      setShinyInput("starting_layout", this.current_layout, true);
     }
   }
 

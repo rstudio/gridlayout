@@ -1,9 +1,7 @@
-grided_app <- function(
-  starting_layout = new_gridlayout(),
-  on_finish = NULL,
-  finish_button_text = NULL,
-  return_app_obj = FALSE
-) {
+grided_app <- function(starting_layout = new_gridlayout(),
+                       on_finish = NULL,
+                       finish_button_text = NULL,
+                       return_app_obj = FALSE) {
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
@@ -31,13 +29,11 @@ grided_app <- function(
 utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
 
 
-grided_server_code <- function(
-  input, output, session,
-  starting_layout = NULL,
-  on_finish = NULL,
-  finish_button_text = NULL,
-  show_messages = FALSE
-){
+grided_server_code <- function(input, output, session,
+                               starting_layout = NULL,
+                               on_finish = NULL,
+                               finish_button_text = NULL,
+                               show_messages = FALSE) {
 
   # Lets grided know it should send over initial app state
   session$sendCustomMessage("shiny-loaded", 1)
@@ -71,13 +67,9 @@ grided_server_code <- function(
     )
   )
 
-  initial_layout <- NULL
-  # shiny::observe({
-  #   if (is.null(initial_layout)) {
-  #     initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
-  #   }
-  # })
 
+
+  #---- See code for layout ----
   # Get code button will send a popup with the code needed to define currently viewed layout
   shiny::bindEvent(
     shiny::observe({
@@ -100,52 +92,59 @@ grided_server_code <- function(
         code = app_template,
         description = "Paste the following code into an R script to build your app. (If in RStudio this will be done automatically for you)."
       ))
-
     } else {
       rstudioapi::documentNew(text = app_template)
       shiny::stopApp()
     }
   }), input$build_app_template)
 
+
   #---- Update existing layout ----
   # Get update code button will try and find the layout being edited in the currently open editor and update the code
   # This can be overridden by setting the on_finish argument to a function that takes the current layout as input
   shiny::bindEvent(shiny::observe({
-
     updated_layout <- layout_info_to_gridlayout(input$update_layout)
-
-    if(notNull(on_finish)){
+    # If we have a custom on_finish() callback just do that
+    if (notNull(on_finish)) {
       on_finish(updated_layout)
       return()
     }
 
-    if (in_rstudio()) {
+    # If we're in RStudio and we have a starting layout recorded (we really
+    # should if we're in this observe) then we can go about attempting to find
+    # the starting layout in the script and editing it to match the updated
+    # layout
+    if (in_rstudio() && notNull(input$starting_layout)) {
       editor_selection <- rstudioapi::getSourceEditorContext()
 
-      is_initial_layout <- function(x) {
-        identical(to_md(x$layout), to_md(initial_layout))
+      starting_layout <- layout_info_to_gridlayout(input$starting_layout)
+
+      is_starting_layout <- function(x) {
+        identical(to_md(x$layout), to_md(starting_layout))
       }
       layout_table <- Find(
         x = find_layouts_in_file(editor_selection$contents),
-        f = is_initial_layout
+        f = is_starting_layout
       )
+      # If we didnt find the layout table, the user most likely navigated away
+      # from the apps script in their RStudio tabs
+      if (notNull(layout_table)) {
+        update_layout_in_file(editor_selection, layout_table, updated_layout)
+        shiny::stopApp()
+        return()
+      }
     }
-
-    if (is.null(layout_table) || !in_rstudio()) {
-      warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
-      session$sendCustomMessage("show-code-popup", list(
-        title = "Code for layout",
-        code = make_layout_call(layout_info_to_gridlayout(input$see_layout_code)),
-        description = "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails."
-      ))
-    } else {
-      update_layout_in_file(editor_selection, layout_table, updated_layout)
-      shiny::stopApp()
-    }
+    # If we failed to update the layout in the app script, send a popup so the
+    # user can copy and paste the new layout
+    session$sendCustomMessage("show-code-popup", list(
+      title = "Code for layout",
+      code = make_layout_call(updated_layout),
+      description = "Sorry, Couldn't find your layout to update. Make sure it's in active editor tab of RStudio. Here's the code to paste in case all else fails."
+    ))
   }), input$update_layout)
 }
 
-layout_info_to_gridlayout <- function(layout_info){
+layout_info_to_gridlayout <- function(layout_info) {
   new_gridlayout(
     layout_def = layout_info$elements,
     col_sizes = simplify2array(layout_info$grid$cols),
@@ -156,7 +155,7 @@ layout_info_to_gridlayout <- function(layout_info){
 
 
 # This is all the UI related code that needs to be included for grided to wrap app
-grided_resources <- function(){
+grided_resources <- function() {
   shiny::tags$head(
     shiny::includeScript(
       system.file("grided/www/dist/index.js", package = "gridlayout")

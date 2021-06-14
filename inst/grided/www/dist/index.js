@@ -6787,6 +6787,18 @@
     });
   }
 
+  // utils-shiny.ts
+  function setShinyInput(input_id, input_value) {
+    var _Shiny$setInputValue;
+    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
+      priority: "event"
+    } : {});
+  }
+  function add_shiny_listener(event_id, callback_func) {
+    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
+  }
+
   // node_modules/core-js/modules/es.object.set-prototype-of.js
   var $30 = require_export();
   var setPrototypeOf = require_object_set_prototype_of();
@@ -7326,18 +7338,6 @@
   }
   var toggle_styles = '\ndiv.toggle-switch {\n  display: inline-grid;\n  grid-template-columns: 1fr auto 1fr;\n  grid-gap: 3px;\n  width: 180px;\n  align-items: center;\n  justify-items: center;\n  padding-left: 4px;\n  padding-right: 4px;\n}\n\n.toggle-switch > span {\n  font-size: 1rem;\n}\n\n.toggle-switch > .off-text {\n  text-align: end;\n}\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border-radius: 34px;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: "";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  border-radius: 50%;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n';
 
-  // utils-shiny.ts
-  function setShinyInput(input_id, input_value) {
-    var _Shiny$setInputValue;
-    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
-      priority: "event"
-    } : {});
-  }
-  function add_shiny_listener(event_id, callback_func) {
-    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
-  }
-
   // wrap_in_grided.ts
   function _toConsumableArray4(arr) {
     return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
@@ -7663,6 +7663,9 @@
         }));
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
+      }
+      if (entry_type !== "layout-gallery") {
+        setShinyInput("starting_layout", this.current_layout, true);
       }
     }
     _createClass5(Layout_Editor2, [{
