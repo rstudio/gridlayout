@@ -49,6 +49,7 @@ export class GridPreview extends HTMLElement {
         background-color: white;
         margin-left: auto;
         margin-right: auto;
+        overflow: scroll;
       }
       ${
         this.hover_animation
