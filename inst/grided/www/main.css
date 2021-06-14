@@ -15,6 +15,7 @@ body {
   --editor-left-pad: 160px;
   --editor-top-pad: 110px;
   --grid-gap: 1rem;
+  background-color: #edf2f7;
 }
 
 #grided__holder {
