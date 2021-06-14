@@ -6,7 +6,7 @@ class CopyCode extends HTMLElement {
   constructor(code: string) {
     super();
     this.code = code;
-    this.num_of_lines = code.match(/\n/g).length ?? 1;
+    this.num_of_lines = Math.min(code.match(/\n/g).length ?? 1, 25);
     this.attachShadow({ mode: "open" });
   }
 

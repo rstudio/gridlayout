@@ -7036,7 +7036,7 @@
       _defineProperty5(_assertThisInitialized(_this), "code", void 0);
       _defineProperty5(_assertThisInitialized(_this), "num_of_lines", void 0);
       _this.code = code;
-      _this.num_of_lines = (_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1;
+      _this.num_of_lines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
       _this.attachShadow({
         mode: "open"
       });
