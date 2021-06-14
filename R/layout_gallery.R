@@ -7,34 +7,56 @@
 layout_gallery <- function(){
 
   layout_templates <- list(
-     "classic",
     gen_template_info(
-    "|2rem  |200px   |1fr    |
+      "Classic",
+      "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
      flipped_els = c("sidebar")
     ),
     gen_template_info(
-     "four square",
-    "|     |    |    |
+      "Four-Square",
+      "|     |    |    |
      |-----|----|----|
      |1rem |1fr |1fr |
      |1fr  |A   |B   |
      |1fr  |C   |D   |"
     ),
     gen_template_info(
-     "Focal Chart - Top",
-    "|1rem |1fr       |1fr      |
+      "Focal Chart - Top",
+      "|1rem |1fr       |1fr      |
      |80px |header    |header   |
      |2fr  |chickens  |chickens |
      |1fr  |treePlot  |yarnPlot |"
     ),
     gen_template_info(
-     "Focal Chart - Side",
-    "|1rem |2fr      |1fr      |
+      "Focal Chart - Side",
+      "|1rem |2fr      |1fr      |
      |80px |header   |header   |
      |1fr  |chickens |treePlot |
      |1fr  |chickens |yarnPlot |"
+    ),
+    gen_template_info(
+      "Stack",
+      "|      |         |
+     |------|---------|
+     |1rem  |1fr      |
+     |80px  |header   |
+     |1fr   |chickens |
+     |1fr   |treePlot |
+     |1fr   |yarnPlot |
+     |1fr   |stockTable |"
+    ),
+    gen_template_info(
+      "Scrolling-Stack",
+      "|      |           |
+     |------|-----------|
+     |1rem  |1fr        |
+     |80px  |header     |
+     |400px |chickens   |
+     |400px |treePlot   |
+     |400px |yarnPlot   |
+     |400px |stockTable |"
     )
   )
 

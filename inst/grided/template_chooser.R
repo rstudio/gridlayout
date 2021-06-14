@@ -39,6 +39,17 @@ layout_templates <- list(
      |1fr  |chickens |yarnPlot |"
   ),
   gen_template_info(
+    "Stack",
+    "|      |         |
+     |------|---------|
+     |1rem  |1fr      |
+     |80px  |header   |
+     |1fr   |chickens |
+     |1fr   |treePlot |
+     |1fr   |yarnPlot |
+     |1fr   |stockTable |"
+  ),
+  gen_template_info(
     "Scrolling-Stack",
     "|      |           |
      |------|-----------|
