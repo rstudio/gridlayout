@@ -37,23 +37,15 @@ export class GridPreview extends HTMLElement {
       * { box-sizing: border-box; }
 
       #layout {
-        box-shadow:
-          0 1px 1.4px -42px rgba(0, 0, 0, 0.022),
-          0 2.4px 3.3px -42px rgba(0, 0, 0, 0.032),
-          0 4.5px 6.3px -42px rgba(0, 0, 0, 0.04),
-          0 8px 11.2px -42px rgba(0, 0, 0, 0.048),
-          0 15px 20.9px -42px rgba(0, 0, 0, 0.058),
-          0 36px 50px -42px rgba(0, 0, 0, 0.08)
-        ;
-        border: 1px solid #cfcfcf;
+        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
         border-radius: ${corner_radius};
         width: ${this._shown_size}px;
         height: ${this._shown_size}px;
         display: grid;
-        grid-template-rows: ${this.grid.rows.map(scale_units).join(" ")};
-        grid-template-columns: ${this.grid.cols.map(scale_units).join(" ")};
+        grid-template-rows: ${this.grid.rows.map((x) => scale_units(x) ).join(" ")};
+        grid-template-columns: ${this.grid.cols.map((x) => scale_units(x)).join(" ")};
         gap: ${scale_units(this.grid.gap)};
-        padding: ${scale_units(this.grid.gap)};
+        padding: ${30 / scale}px;
         background-color: white;
         margin-left: auto;
         margin-right: auto;
