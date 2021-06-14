@@ -115,14 +115,14 @@ window.onload = function () {
   add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
     start_layout_editor({ entry_type: "edit-existing-app" });
   });
-
+  
   add_shiny_listener(
-    "show-layout-code",
-    (opts: { layout_code: string; description: string }) => {
+    "show-code-popup",
+    (opts: { title: string; description: string; code: string; }) => {
       create_focus_modal()
-        .set_title("Layout Code")
+        .set_title(opts.title)
         .description(opts.description)
-        .add_element(copy_code(opts.layout_code))
+        .add_element(copy_code(opts.code))
         .add_to_page();
     }
   );

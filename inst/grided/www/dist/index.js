@@ -8813,8 +8813,8 @@
         entry_type: "edit-existing-app"
       });
     });
-    add_shiny_listener("show-layout-code", function(opts) {
-      create_focus_modal().set_title("Layout Code").description(opts.description).add_element(copy_code(opts.layout_code)).add_to_page();
+    add_shiny_listener("show-code-popup", function(opts) {
+      create_focus_modal().set_title(opts.title).description(opts.description).add_element(copy_code(opts.code)).add_to_page();
     });
   };
   window.addEventListener("popstate", function(e) {

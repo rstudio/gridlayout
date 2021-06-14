@@ -71,52 +71,48 @@ grided_server_code <- function(
     )
   )
 
-
-  shiny::observe({
-    if (show_messages) {
-      cat("==============================================\nElements Msg:")
-      # lobstr::tree(input$elements)
-      input$elements
-    }
-  })
-
-  shiny::observe({
-    if (show_messages) {
-      cat("==============================================\nSizing Msg:")
-      # lobstr::tree(input$grid_sizing)
-      input$grid_sizing
-    }
-  })
-
   initial_layout <- NULL
-  shiny::observe({
-    shiny::req(input$elements, input$grid_sizing)
-    if (is.null(initial_layout)) {
-      initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
-    }
-  })
+  # shiny::observe({
+  #   if (is.null(initial_layout)) {
+  #     initial_layout <<- layout_from_grided(input$elements, input$grid_sizing)
+  #   }
+  # })
 
   # Get code button will send a popup with the code needed to define currently viewed layout
   shiny::bindEvent(
     shiny::observe({
-      send_layoutcall_popup(session, layout_info_to_gridlayout(input$see_layout_code))
+      session$sendCustomMessage("show-code-popup", list(
+        title = "Code for layout",
+        code = make_layout_call(layout_info_to_gridlayout(input$see_layout_code)),
+        description = "Paste the following declaration into your app to use this layout"
+      ))
     }),
     input$see_layout_code
   )
 
+  #---- Build app template ----
   shiny::bindEvent(shiny::observe({
-    print("User has requested the following app layout be generated")
-    chosen_layout <- layout_info_to_gridlayout(input$build_app_template)
-    rstudioapi::documentNew(text = to_app_template(chosen_layout))
-    shiny::stopApp()
+    app_template <- to_app_template(layout_info_to_gridlayout(input$build_app_template))
+
+    if (!in_rstudio()) {
+      session$sendCustomMessage("show-code-popup", list(
+        title = "Code for app",
+        code = app_template,
+        description = "Paste the following code into an R script to build your app. (If in RStudio this will be done automatically for you)."
+      ))
+
+    } else {
+      rstudioapi::documentNew(text = app_template)
+      shiny::stopApp()
+    }
   }), input$build_app_template)
 
+  #---- Update existing layout ----
   # Get update code button will try and find the layout being edited in the currently open editor and update the code
   # This can be overridden by setting the on_finish argument to a function that takes the current layout as input
   shiny::bindEvent(shiny::observe({
 
     updated_layout <- layout_info_to_gridlayout(input$update_layout)
-    shiny::req(input$elements)
 
     if(notNull(on_finish)){
       on_finish(updated_layout)
@@ -137,7 +133,11 @@ grided_server_code <- function(
 
     if (is.null(layout_table) || !in_rstudio()) {
       warning("Could not find layout table to edit. Make sure your app script with layout definition is open in RStudio. Otherwise use the copy-layout button and manually change layout table.")
-      # send_layoutcall_popup(session, current_layout, error_mode = TRUE)
+      session$sendCustomMessage("show-code-popup", list(
+        title = "Code for layout",
+        code = make_layout_call(layout_info_to_gridlayout(input$see_layout_code)),
+        description = "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails."
+      ))
     } else {
       update_layout_in_file(editor_selection, layout_table, updated_layout)
       shiny::stopApp()
@@ -168,32 +168,10 @@ grided_resources <- function(){
 }
 
 
-# Slightly easier way to build a layout from the elements and grid_sizing inputs
-# provided by grided UI
-layout_from_grided <- function(elements, grid_sizing) {
-  new_gridlayout(
-    elements,
-    col_sizes = as.character(grid_sizing$cols),
-    row_sizes = as.character(grid_sizing$rows),
-    gap = grid_sizing$gap
+make_layout_call <- function(current_layout) {
+  paste(
+    "layout <- new_gridlayout(\"",
+    "    ", to_md(current_layout), "\")",
+    sep = "\n"
   )
 }
-
-
-send_layoutcall_popup <- function(session, current_layout, error_mode = FALSE) {
-
-  # The type property let's the JS know what text to use to explain
-  session$sendCustomMessage("show-layout-code", list(
-    layout_code = paste(
-      "layout <- new_gridlayout(\"",
-      "    ", to_md(current_layout), "\")",
-      sep = "\n"
-    ),
-    description = if (error_mode) {
-      "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails."
-    } else {
-      "Paste the following declaration into your app to use this layout"
-    }
-  ))
-}
-
