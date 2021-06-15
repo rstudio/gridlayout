@@ -105,3 +105,39 @@ screenshot_snapshot_test <- function(screenshot_name, ...) {
     )
   }
 }
+
+library(chromote)
+
+background_shiny_app <- function(app){
+  port <- webshot2:::available_port(getOption("shiny.port"))
+  url <- webshot2:::shiny_url(port)
+  r_background_process <- function(..., envvars = NULL) {
+    if (is.null(envvars)) {
+      envvars <- callr::rcmd_safe_env()
+    }
+    callr::r_bg(..., env = envvars)
+  }
+  # Run app in background with envvars
+  p <- r_background_process(
+    function(...) {
+      devtools::load_all()
+      shiny::runApp(...)
+    },
+    args = list(
+      appDir = app,
+      port = port,
+      display.mode = "normal",
+      launch.browser = FALSE
+    )
+  )
+
+  webshot2:::wait_until_server_exists(
+    url = url,
+    timeout = 60
+  )
+
+  list(
+    p = p,
+    url = url
+  )
+}

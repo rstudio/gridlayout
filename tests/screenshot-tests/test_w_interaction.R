@@ -1,39 +1,15 @@
-library(chromote)
 
 test_that("Basic interaction with grided app", {
-  app <- here::here("inst/grided")
-  port <- webshot2:::available_port(getOption("shiny.port"))
-  url <- webshot2:::shiny_url(port)
-  r_background_process <- function(..., envvars = NULL) {
-    if (is.null(envvars)) {
-      envvars <- callr::rcmd_safe_env()
-    }
-    callr::r_bg(..., env = envvars)
-  }
-  # Run app in background with envvars
-  p <- r_background_process(
-    function(...) {
-      devtools::load_all()
-      shiny::runApp(...)
-    },
-    args = list(
-      appDir = app,
-      port = port,
-      display.mode = "normal",
-      launch.browser = FALSE
-    )
-  )
+  app <- background_shiny_app(here::here("inst/grided"))
+
   on.exit({
-    p$kill()
+    print("Killing shiny server")
+    app$p$kill()
   })
 
-  webshot2:::wait_until_server_exists(
-    url = url,
-    timeout = 60
-  )
   b <- ChromoteSession$new()
 
-  layout_code_popup <- b$Page$navigate(url, wait_ = FALSE) %...>%
+  layout_code_popup <- b$Page$navigate(app$url, wait_ = FALSE) %...>%
     {
       b$Page$loadEventFired(wait_ = FALSE)
       Sys.sleep(1)
