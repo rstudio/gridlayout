@@ -7,7 +7,10 @@ test_that("Basic interaction with grided app", {
     app$p$kill()
   })
 
-  b <- ChromoteSession$new()
+  b <- ChromoteSession$new(
+    width = 1600,
+    height = 1200
+  )
 
   layout_code_popup <- b$Page$navigate(app$url, wait_ = FALSE) %...>%
     {
@@ -43,10 +46,9 @@ test_that("Basic interaction with grided app", {
 
 
   # Remove that new row at top of page
-  remove_new_row <- b$Runtime$evaluate('document.getElementById("controller_for_row_1").querySelector("button.remove-row").click()', wait_ = FALSE) %...>%
-    {
-      b$screenshot(tempfile(fileext = ".png"))
-    }
+  remove_new_row <- b$Runtime$evaluate('document.getElementById("controller_for_row_1").querySelector("button.remove-row").click()', wait_ = FALSE) %...>% {
+    b$screenshot(tempfile(fileext = ".png"))
+  }
 
   expect_snapshot_file(
     b$wait_for(remove_new_row),
