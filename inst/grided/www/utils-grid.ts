@@ -1,14 +1,14 @@
 // Functions related to grid construction, editings, etc
 
 import { Grid_Pos } from "./Grid_Item";
-import { Layout_State, Tract_Dir } from "./Grid_Layout";
+import { Tract_Dir } from "./Grid_Layout";
 import { Layout_Editor } from "./Layout_Editor";
 import {
   boxes_overlap,
   get_bounding_rect,
   max_w_missing,
   min_w_missing,
-  Selection_Rect,
+  Selection_Rect
 } from "./utils-misc";
 
 export function find_first_grid_node(): HTMLElement {
@@ -148,32 +148,6 @@ export function get_gap_size(style: CSSStyleDeclaration | string) {
   );
 
   return gap_size_vec[0];
-}
-
-export function shrink_element_to_layout(
-  layout: Layout_State,
-  el: HTMLElement
-) {
-  const { start_row, start_col, end_row, end_col } = grid_position_of_el(el);
-  el.style.gridRow = make_template_start_end(
-    start_row,
-    Math.min(end_row, layout.rows.length)
-  );
-  el.style.gridColumn = make_template_start_end(
-    start_col,
-    Math.min(end_col, layout.cols.length)
-  );
-}
-
-export function grid_position_of_el(el: HTMLElement): Grid_Pos {
-  const grid_area = el.style.gridArea.split(" / ");
-  return {
-    start_row: +grid_area[0],
-    start_col: +grid_area[1],
-    // Subtract one here because the end in css is the end line, not row
-    end_row: +grid_area[2] - 1,
-    end_col: +grid_area[3] - 1,
-  };
 }
 
 export function make_start_end_for_dir(dir: Tract_Dir) {

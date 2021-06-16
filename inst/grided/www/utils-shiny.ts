@@ -1,5 +1,7 @@
+import { ShinyType } from "shiny";
 import { Layout_State } from "./Grid_Layout";
-import { Shiny } from "./index";
+
+const Shiny = (window as any).Shiny as ShinyType;
 
 // These are functions for communicating with Shiny. They are all optional
 // chained so they won't spit errors if Shiny isn't connected or initialized

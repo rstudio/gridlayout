@@ -6788,6 +6788,7 @@
   }
 
   // utils-shiny.ts
+  var Shiny = window.Shiny;
   function setShinyInput(input_id, input_value) {
     var _Shiny$setInputValue;
     var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
@@ -8765,7 +8766,6 @@
     }
     return obj;
   }
-  var Shiny = window.Shiny;
   var clear_page = function clear_page2() {
     return document.body.innerHTML = "";
   };

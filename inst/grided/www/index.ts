@@ -11,7 +11,6 @@ import { copy_code } from "./web-components/copy-code";
 import { create_focus_modal } from "./web-components/focus-modal";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
-export const Shiny = (window as any).Shiny;
 
 export type Layout_Element = {
   id: string;
