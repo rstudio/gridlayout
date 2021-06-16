@@ -45,6 +45,7 @@ screenshot_demo_app <- function(
     file = screenshot_path,
     vwidth = vwidth,
     vheight = vheight,
+    delay = 1.5,
     cliprect = "viewport"
   )
 
