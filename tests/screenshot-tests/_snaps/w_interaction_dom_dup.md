@@ -105,7 +105,7 @@
       <path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z"></path>
       </svg></div><div class="dragger visible css-y917e4 center" style="background: rgb(77, 175, 74);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z"></path>
-      </svg></div></div></div></div></div><div id="controllerFor_row_1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></div></div></div></div></div><div id="controller-for-row-1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-row rows_1" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -113,13 +113,13 @@
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_1" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_row_2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-row-2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input rows-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_2" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-col cols_1" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -127,7 +127,7 @@
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-col cols_1" title="Remove col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input cols-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>
@@ -242,7 +242,7 @@
       <path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z"></path>
       </svg></div><div class="dragger visible css-y917e4 center" style="background: rgb(77, 175, 74);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z"></path>
-      </svg></div></div></div></div></div><div id="controllerFor_row_1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></div></div></div></div></div><div id="controller-for-row-1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-row rows_1" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -250,13 +250,13 @@
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_1" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_row_2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-row-2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input rows-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_2" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-col cols_1" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -264,7 +264,7 @@
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-col cols_1" title="Remove col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input cols-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>
@@ -379,7 +379,7 @@
       <path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z"></path>
       </svg></div><div class="dragger visible css-y917e4 center" style="background: rgb(77, 175, 74);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z"></path>
-      </svg></div></div></div></div></div><div id="controllerFor_row_1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></div></div></div></div></div><div id="controller-for-row-1" class="tract-controls css-1qkn8e4 rows-controls with-drag" style="top: calc(190px); height: calc(150px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_0" title="Add a row" style="top: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-row rows_1" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -387,13 +387,13 @@
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_1" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_row_2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-row-2" class="tract-controls css-1qkn8e4 rows-controls" style="top: calc(388px); height: calc(654.438px); left: calc(210px - var(--editor-left-pad) - 3rem - 2px);"><button class="css-comkng add-row rows_2" title="Add a row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input rows-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-row rows_2" title="Remove row"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-1" class="tract-controls css-1qkn8e4 cols-controls with-drag" style="left: calc(210px); width: calc(200px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_0" title="Add a col" style="left: var(--incrementer-offset);"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><button class="css-comkng add-col cols_1" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
@@ -401,7 +401,7 @@
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>
       </svg><div class="drag-detector" draggable="true"></div></div><button class="css-comkng remove-col cols_1" title="Remove col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
-      </svg></button></div><div id="controllerFor_col_2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      </svg></button></div><div id="controller-for-col-2" class="tract-controls css-1qkn8e4 cols-controls" style="left: calc(458px); width: calc(747.25px); top: calc(110px - var(--editor-top-pad));"><button class="css-comkng add-col cols_2" title="Add a col"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
       </svg></button><form class="unit-input cols-sizing css-1948ukv"><input class="value-input" type="number" min="0" step="1"><select class="unit-selector" name="units"><option class="fr" value="fr">fr</option><option class="px" value="px">px</option><option class="rem" value="rem">rem</option><option class="auto" value="auto">auto</option></select></form><div class="dragger"><svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">
       <path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z"></path>

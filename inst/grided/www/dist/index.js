@@ -5680,9 +5680,9 @@
     function intervalsOverlap(_ref, _ref2) {
       var _ref3 = _slicedToArray(_ref, 2), aStart = _ref3[0], aEnd = _ref3[1];
       var _ref4 = _slicedToArray(_ref2, 2), bStart = _ref4[0], bEnd = _ref4[1];
-      var aContainsB_endpoint = aStart >= bStart && aStart <= bEnd || aEnd >= bStart && aEnd <= bEnd;
+      var aContainsBsEndpoint = aStart >= bStart && aStart <= bEnd || aEnd >= bStart && aEnd <= bEnd;
       var bCoversA = aStart <= bStart && aEnd >= bEnd;
-      return aContainsB_endpoint || bCoversA;
+      return aContainsBsEndpoint || bCoversA;
     }
   }
   function updateRectWithDelta(rect, delta, dir) {
