@@ -1,14 +1,14 @@
 // Functions related to grid construction, editings, etc
 
-import { Grid_Pos } from "./Grid_Item";
-import { Tract_Dir } from "./Grid_Layout";
-import { Layout_Editor } from "./Layout_Editor";
+import { Grid_Pos } from "./GridItem";
+import { TractDir } from "./GridLayout";
+import { LayoutEditor } from "./Layout_Editor";
 import {
   boxes_overlap,
   get_bounding_rect,
   max_w_missing,
   min_w_missing,
-  Selection_Rect
+  SelectionRect
 } from "./utils-misc";
 
 export function find_first_grid_node(): HTMLElement {
@@ -45,14 +45,6 @@ export function find_first_grid_node(): HTMLElement {
   return grid_node;
 }
 
-function get_styles(container: HTMLElement | CSSStyleDeclaration) {
-  if (container instanceof HTMLElement) {
-    return container.style;
-  } else {
-    return container;
-  }
-}
-
 export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
   if (grid_bounds.start_row) {
     el.style.gridRowStart = grid_bounds.start_row.toString();
@@ -81,8 +73,8 @@ export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
 }
 
 export function get_drag_extent_on_grid(
-  app_state: Layout_Editor,
-  selection_rect: Selection_Rect
+  app_state: LayoutEditor,
+  selection_rect: SelectionRect
 ): Grid_Pos {
   // Reset bounding box definitions so we only use current selection extent
   const sel_bounds: Grid_Pos = {
@@ -107,7 +99,7 @@ export function get_drag_extent_on_grid(
   return sel_bounds;
 }
 
-export function bounding_rect_to_css_pos(rect: Selection_Rect) {
+export function bounding_rect_to_css_pos(rect: SelectionRect) {
   return {
     left: `${rect.left}px`,
     top: `${rect.top}px`,
@@ -127,7 +119,7 @@ export function get_gap_size(style: CSSStyleDeclaration | string) {
   return gap_size_vec[0];
 }
 
-export function make_start_end_for_dir(dir: Tract_Dir) {
+export function make_start_end_for_dir(dir: TractDir) {
   if (dir === "cols") {
     return {
       start_id: "start_col",

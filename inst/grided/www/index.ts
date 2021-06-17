@@ -1,10 +1,10 @@
 // JS entry point
-import { Layout_State } from "./Grid_Layout";
-import { Layout_Editor, Layout_Editor_Setup } from "./Layout_Editor";
+import { LayoutState } from "./GridLayout";
+import { LayoutEditor, LayoutEditorSetup } from "./Layout_Editor";
 import {
   save_editor_history,
   save_gallery_history,
-  State_Dump,
+  StateDump,
 } from "./state_tracking";
 import { add_shiny_listener, setShinyInput } from "./utils-shiny";
 import { copy_code } from "./web-components/copy-code";
@@ -12,7 +12,7 @@ import { create_focus_modal } from "./web-components/focus-modal";
 import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
 
 
-export type Layout_Element = {
+export type LayoutElement = {
   id: string;
   start_row: number;
   end_row: number;
@@ -21,14 +21,14 @@ export type Layout_Element = {
   flip_id?: boolean;
 };
 
-export type Layout_Info = {
+export type LayoutInfo = {
   name?: string;
-  grid: Layout_State;
-  elements: Layout_Element[];
+  grid: LayoutState;
+  elements: LayoutElement[];
 };
 
-export type Gallery_Options = {
-  layouts: Layout_Info[];
+export type GalleryOptions = {
+  layouts: LayoutInfo[];
   selected?: string;
 };
 
@@ -36,7 +36,7 @@ export type Gallery_Options = {
 const clear_page = () => (document.body.innerHTML = ``);
 
 const start_layout_gallery = (
-  opts: Gallery_Options,
+  opts: GalleryOptions,
   save_history: boolean = true
 ) => {
   clear_page();
@@ -52,10 +52,10 @@ const start_layout_gallery = (
     .on_cancel(() => {
       save_gallery_history(opts.layouts);
     })
-    .on_go((selected_layout: Layout_Info) => {
+    .on_go((selected_layout: LayoutInfo) => {
       setShinyInput("build_app_template", selected_layout);
     })
-    .on_edit((selected_layout: Layout_Info) => {
+    .on_edit((selected_layout: LayoutInfo) => {
       start_layout_editor(
         {
           entry_type: "layout-gallery",
@@ -69,7 +69,7 @@ const start_layout_gallery = (
 };
 
 const start_layout_editor = (
-  opts: Layout_Editor_Setup,
+  opts: LayoutEditorSetup,
   save_history: boolean
 ) => {
   if (save_history) {
@@ -85,30 +85,31 @@ const start_layout_editor = (
     opts.entry_type === "layout-gallery"
       ? {
           label: "Create app",
-          on_done: (layout: Layout_Info) => {
+          on_done: (layout: LayoutInfo) => {
             setShinyInput("build_app_template", layout);
           },
         }
       : {
           label: "Update app layout",
-          on_done: (layout: Layout_Info) => {
+          on_done: (layout: LayoutInfo) => {
             setShinyInput("update_layout", layout);
           },
         };
 
-  opts.on_update = (opts: Layout_Editor_Setup) => {
+  opts.on_update = (opts: LayoutEditorSetup) => {
     save_editor_history(opts);
   };
 
-  return new Layout_Editor(opts);
+  return new LayoutEditor(opts);
 };
 
 window.onload = function () {
+  
   // Add listeners for the three main entry-points
-  add_shiny_listener("layout-gallery", (layouts: Layout_Info[]) => {
+  add_shiny_listener("layout-gallery", (layouts: LayoutInfo[]) => {
     start_layout_gallery({ layouts });
   });
-  add_shiny_listener("edit-layout", (layout_info: Layout_Info) => {
+  add_shiny_listener("edit-layout", (layout_info: LayoutInfo) => {
     start_layout_editor(
       {
         entry_type: "edit-layout",
@@ -117,7 +118,7 @@ window.onload = function () {
       true
     );
   });
-  add_shiny_listener("edit-existing-app", (layout_info: Layout_Info) => {
+  add_shiny_listener("edit-existing-app", (layout_info: LayoutInfo) => {
     start_layout_editor({ entry_type: "edit-existing-app" }, true);
   });
 
@@ -134,14 +135,14 @@ window.onload = function () {
 };
 
 window.addEventListener("popstate", function (e) {
-  const state = e.state as State_Dump;
+  const state = e.state as StateDump;
 
   switch (state.type) {
     case "layout_chooser":
-      start_layout_gallery(state.data as Gallery_Options, false);
+      start_layout_gallery(state.data as GalleryOptions, false);
       break;
     case "layout_edit":
-      start_layout_editor(state.data as Layout_Editor_Setup, false);
+      start_layout_editor(state.data as LayoutEditorSetup, false);
       break;
     default:
       console.error("How did you get to that state?");

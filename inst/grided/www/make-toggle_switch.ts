@@ -1,11 +1,11 @@
-import { Block_El, make_el, Shadow_El } from "./make-elements";
+import { block_el, make_el, shadow_el } from "./make-elements";
 
 export function make_toggle_switch(
   off_text: string,
   on_text: string,
   on_change: (is_on: boolean) => void
 ) {
-  const container = Block_El("div.toggle-switch");
+  const container = block_el("div.toggle-switch");
 
   make_el(container, "span.off-text", {
     innerHTML: off_text,
@@ -26,7 +26,7 @@ export function make_toggle_switch(
 
   make_el(label, "span.slider");
 
-  const { el, style_sheet } = Shadow_El("div.toggle-switch", container);
+  const { el, style_sheet } = shadow_el("div.toggle-switch", container);
 
   // Add styles
   style_sheet.innerHTML = `

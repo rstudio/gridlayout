@@ -1562,12 +1562,45 @@
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.2.12.tgz#cd54624dd685f7832b50dd7ce119ddc4eb2585ad"
   integrity sha512-hsPGC/U/0xe/WghMeSgyFsq9nNPfA5oY1Il2AaeAJcu/vTm4Bv8o9ev4eAgxcA61i5WWp72amN20XVyxWwM5aQ==
 
+"@types/bootstrap-datepicker@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap-datepicker/-/bootstrap-datepicker-0.0.14.tgz#89bc5816dd0b802bf8d4923cf5461e2c98cbb450"
+  integrity sha512-ZBwEUuwYpehEHWtkaIDl55N3F6dPz6xEsoPW5esCZdtuhuZdNC/ebFV2n48kATcY5S2HD3V0O5/J8nuEgVk9fQ==
+  dependencies:
+    "@types/jquery" "*"
+
+"@types/bootstrap@3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-3.4.0.tgz#7e74a2421b3984ce53ab459e979a99a78dd802c6"
+  integrity sha512-LS05hVAAsX86qbHg7W+ydwBlNHrVCoFw6wEP3/uW4eYmRXl08bWmPeN/+onM+8qZTFfDgUlG/OItJI8SW972oQ==
+  dependencies:
+    "@types/jquery" "*"
+
+"@types/datatables.net@^1.10.19":
+  version "1.10.19"
+  resolved "https://registry.yarnpkg.com/@types/datatables.net/-/datatables.net-1.10.19.tgz#17c5f94433f761086131c6c8dc055a0e1099d1f9"
+  integrity sha512-WuzgytEmsIpVYZbkce+EvK1UqBI7/cwcC/WgYeAtXdq2zi+yWzJwMT5Yb6irAiOi52DBjeAEeRt3bYzFYvHWCQ==
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/http-proxy@^1.17.5":
   version "1.17.6"
   resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.6.tgz#62dc3fade227d6ac2862c8f19ee0da9da9fd8616"
   integrity sha512-+qsjqR75S/ib0ig0R9WN+CDoZeOBU6F2XLewgC4KVgdXiNHiKKHFEMRHOrs5PbYE97D5vataw5wPj4KLYfUkuQ==
   dependencies:
     "@types/node" "*"
+
+"@types/ion-rangeslider@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/ion-rangeslider/-/ion-rangeslider-2.3.0.tgz#dd089921c21acebc266c37e95d191e721ea21750"
+  integrity sha512-u1k2Ekfg7E/ByCrtqtMk98g3QMXnMyIjCKU397YfjhWnTrms2BteoTanMqe0MJ1zyBBiP6+bwbc7P4cU+RiL+w==
+
+"@types/jquery@*", "@types/jquery@^3.5.5":
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.5.tgz#2c63f47c9c8d96693d272f5453602afd8338c903"
+  integrity sha512-6RXU9Xzpc6vxNrS6FPPapN1SxSHgQ336WC6Jj/N8q30OiaBZ00l1GBgeP7usjVZPivSkGUfL1z/WW6TX989M+w==
+  dependencies:
+    "@types/sizzle" "*"
 
 "@types/node@*":
   version "15.6.1"
@@ -1584,13 +1617,37 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
-"@types/shiny@rstudio/shiny#refs/pull/3425/head":
-  version "1.6.0"
-  resolved "https://codeload.github.com/rstudio/shiny/tar.gz/e29d2b54e4da8f5f4a2b3ceda55b3909ec0de14a"
+"@types/selectize@0.12.34":
+  version "0.12.34"
+  resolved "https://registry.yarnpkg.com/@types/selectize/-/selectize-0.12.34.tgz#24a79e3176103019d2371ae9fc8487dcd1336cea"
+  integrity sha512-OAXHsgsHBMJBHnB6QrFlHVa0+gCE5lgjdpwJDlJLRhrcsM4I2VXrm2vsG00//Rpdm4XgnX17vrBpjHlWOk1ALw==
+
+"@types/shiny@https://github.com/rstudio/shiny#js-alpha-versions":
+  version "1.6.0-alpha.9021"
+  resolved "https://github.com/rstudio/shiny#8ec72e49d092cf583859f8e10b11ea52b2fa83bd"
   dependencies:
-    core-js "^3.13.0"
-    lodash "^4.17.21"
-    util-inspect "https://github.com/deecewan/browser-util-inspect#c0b4350df4378ffd743e8c36dd3898ce3992823e"
+    "@types/bootstrap" "3.4.0"
+    "@types/bootstrap-datepicker" "0.0.14"
+    "@types/datatables.net" "^1.10.19"
+    "@types/ion-rangeslider" "2.3.0"
+    "@types/jquery" "^3.5.5"
+    "@types/selectize" "0.12.34"
+
+"@types/shiny@https://github.com/rstudio/shiny/":
+  version "1.6.0-alpha.9021"
+  resolved "https://github.com/rstudio/shiny/#61ee467deee5520c1d1c795193400aee4d6fff43"
+  dependencies:
+    "@types/bootstrap" "3.4.0"
+    "@types/bootstrap-datepicker" "0.0.14"
+    "@types/datatables.net" "^1.10.19"
+    "@types/ion-rangeslider" "2.3.0"
+    "@types/jquery" "^3.5.5"
+    "@types/selectize" "0.12.34"
+
+"@types/sizzle@*":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.3.tgz#ff5e2f1902969d305225a047c8a0fd5c915cebef"
+  integrity sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==
 
 abab@^2.0.0:
   version "2.0.5"
@@ -2318,11 +2375,6 @@ core-js@^3.12.1, core-js@^3.2.1:
   version "3.12.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.12.1.tgz#6b5af4ff55616c08a44d386f1f510917ff204112"
   integrity sha512-Ne9DKPHTObRuB09Dru5AjwKjY4cJHVGu+y5f7coGn1E9Grkc3p2iBwE9AI/nJzsE29mQF7oq+mhYYRqOMFN1Bw==
-
-core-js@^3.13.0:
-  version "3.14.0"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.14.0.tgz#62322b98c71cc2018b027971a69419e2425c2a6c"
-  integrity sha512-3s+ed8er9ahK+zJpp9ZtuVcDoFzHNiZsPbNAAE4KXgrRHbjSqqNN6xGSXq6bq7TZIbKj4NLrLb6bJ5i+vSVjHA==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -4043,7 +4095,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21:
+lodash@^4.17.15, lodash@^4.17.19:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -5954,10 +6006,6 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-
-"util-inspect@https://github.com/deecewan/browser-util-inspect#c0b4350df4378ffd743e8c36dd3898ce3992823e":
-  version "0.2.0"
-  resolved "https://github.com/deecewan/browser-util-inspect#c0b4350df4378ffd743e8c36dd3898ce3992823e"
 
 util.promisify@~1.0.0:
   version "1.0.1"

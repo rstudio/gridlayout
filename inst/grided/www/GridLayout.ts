@@ -1,16 +1,16 @@
-import { Grid_Pos } from "./Grid_Item";
+import { Grid_Pos } from "./GridItem";
 import { get_gap_size } from "./utils-grid";
 
-export type Tract_Dir = "rows" | "cols";
-type Grid_Attr = "rows" | "cols" | "gap";
+export type TractDir = "rows" | "cols";
+type GridAttr = "rows" | "cols" | "gap";
 
-export type Layout_State = {
+export type LayoutState = {
   rows: string[];
   cols: string[];
   gap: string;
 };
 
-export class Grid_Layout {
+export class GridLayout {
   styles: CSSStyleDeclaration;
   container: HTMLElement;
   constructor(container: HTMLElement) {
@@ -55,7 +55,7 @@ export class Grid_Layout {
     return get_gap_size(this.styles.gap);
   }
 
-  get attrs(): Layout_State {
+  get attrs(): LayoutState {
     return {
       rows: this.rows,
       cols: this.cols,
@@ -63,7 +63,7 @@ export class Grid_Layout {
     };
   }
 
-  is_updated_val(attr: Grid_Attr, values?: string | string[]) {
+  is_updated_val(attr: GridAttr, values?: string | string[]) {
     // Assume no value passed means no update. This allows us to call and check
     // on objects that may not have the attribute in them.
     if (typeof values === "undefined") return false;

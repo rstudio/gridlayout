@@ -44,7 +44,7 @@ body {
     "instructions editor editor"
     "elements     editor editor";
   padding: var(--side-gaps);
-  height: calc(100vh - 2 * var(--side-gaps));
+  height: 100vh;
   grid-gap: var(--side-gaps);
   align-items: stretch;
   justify-items: stretch;

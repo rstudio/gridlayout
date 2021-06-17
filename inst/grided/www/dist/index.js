@@ -5856,7 +5856,7 @@
     }
   }
 
-  // Grid_Item.ts
+  // GridItem.ts
   function ownKeys3(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -5917,9 +5917,9 @@
     }
     return obj;
   }
-  var Grid_Item = /* @__PURE__ */ function() {
-    function Grid_Item2(opts) {
-      _classCallCheck(this, Grid_Item2);
+  var GridItem = /* @__PURE__ */ function() {
+    function GridItem2(opts) {
+      _classCallCheck(this, GridItem2);
       _defineProperty2(this, "id", void 0);
       _defineProperty2(this, "el", void 0);
       _defineProperty2(this, "mirrored_el", void 0);
@@ -5927,7 +5927,7 @@
       _defineProperty2(this, "parent_layout", void 0);
       Object.assign(this, opts);
     }
-    _createClass(Grid_Item2, [{
+    _createClass(GridItem2, [{
       key: "position",
       get: function get() {
         return get_pos_on_grid(this.el);
@@ -5983,10 +5983,10 @@
         }
       }
     }]);
-    return Grid_Item2;
+    return GridItem2;
   }();
 
-  // Grid_Layout.ts
+  // GridLayout.ts
   var import_es_regexp_exec6 = __toModule(require_es_regexp_exec());
   var import_es_array_iterator7 = __toModule(require_es_array_iterator());
   function _typeof3(obj) {
@@ -6032,15 +6032,15 @@
     }
     return obj;
   }
-  var Grid_Layout = /* @__PURE__ */ function() {
-    function Grid_Layout2(container) {
-      _classCallCheck2(this, Grid_Layout2);
+  var GridLayout = /* @__PURE__ */ function() {
+    function GridLayout2(container) {
+      _classCallCheck2(this, GridLayout2);
       _defineProperty3(this, "styles", void 0);
       _defineProperty3(this, "container", void 0);
       this.container = container;
       this.styles = container.style;
     }
-    _createClass2(Grid_Layout2, [{
+    _createClass2(GridLayout2, [{
       key: "rows",
       get: function get() {
         return this.styles.gridTemplateRows.split(" ");
@@ -6119,7 +6119,7 @@
         return this.sizes_for_tract(item_pos, "row");
       }
     }]);
-    return Grid_Layout2;
+    return GridLayout2;
   }();
   function equal_arrays(a, b) {
     if (a.length !== b.length)
@@ -6293,7 +6293,7 @@
     var opts = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
     var el = parent.querySelector(sel_txt);
     if (!el) {
-      el = El({
+      el = create_el({
         sel_txt: sel_txt
       });
       if (opts.props) {
@@ -6320,8 +6320,8 @@
     }
     return el;
   }
-  function Shadow_El(sel_txt) {
-    var shadow_holder = Block_El(sel_txt);
+  function shadow_el(sel_txt) {
+    var shadow_holder = block_el(sel_txt);
     shadow_holder.attachShadow({
       mode: "open"
     });
@@ -6338,7 +6338,7 @@
       style_sheet: style_sheet
     };
   }
-  function El(opts) {
+  function create_el(opts) {
     var _parse_selector_text = parse_selector_text(opts.sel_txt), tag_type = _parse_selector_text.tag_type, el_id = _parse_selector_text.el_id, class_list = _parse_selector_text.class_list;
     var el = document.createElement(tag_type);
     if (el_id)
@@ -6369,17 +6369,17 @@
     }
     return el;
   }
-  function Block_El(sel_txt) {
+  function block_el(sel_txt) {
     for (var _len2 = arguments.length, children = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
       children[_key2 - 1] = arguments[_key2];
     }
-    return El({
+    return create_el({
       sel_txt: sel_txt,
       children: children
     });
   }
-  function Text_El(sel_txt, text) {
-    return El({
+  function text_el(sel_txt, text) {
+    return create_el({
       sel_txt: sel_txt,
       text: text
     });
@@ -6409,7 +6409,7 @@
     return button;
   }
   function click_button(selector, label, on_finish) {
-    var button = Text_El("button".concat(selector), label);
+    var button = text_el("button".concat(selector), label);
     button.addEventListener("click", function(event) {
       on_finish(event);
     });
@@ -7301,7 +7301,7 @@
 
   // make-toggle_switch.ts
   function make_toggle_switch(off_text, on_text, on_change) {
-    var container = Block_El("div.toggle-switch");
+    var container = block_el("div.toggle-switch");
     make_el(container, "span.off-text", {
       innerHTML: off_text
     });
@@ -7321,7 +7321,7 @@
       }
     });
     make_el(label, "span.slider");
-    var _Shadow_El = Shadow_El("div.toggle-switch", container), el = _Shadow_El.el, style_sheet = _Shadow_El.style_sheet;
+    var _shadow_el = shadow_el("div.toggle-switch", container), el = _shadow_el.el, style_sheet = _shadow_el.style_sheet;
     style_sheet.innerHTML = '\n  div.toggle-switch {\n    display: inline-grid;\n    grid-template-columns: 1fr auto 1fr;\n    grid-gap: 3px;\n    width: 180px;\n    align-items: center;\n    justify-items: center;\n    padding-left: 4px;\n    padding-right: 4px;\n  }\n  \n  .toggle-switch > span {\n    font-size: 1rem;\n  }\n  \n  .toggle-switch > .off-text {\n    text-align: end;\n  }\n  \n  .switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }\n  \n  .switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }\n  \n  .slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  .slider:before {\n    position: absolute;\n    content: "";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  input:checked + .slider {\n    background-color: #2196F3;\n  }\n  \n  input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }\n  \n  input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }\n  ';
     return el;
   }
@@ -7372,8 +7372,8 @@
     if (grid_is_filled) {
       buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
     }
-    var settings_panel_el = Block_El("div#grided_gap_size_controls.settings.panel-body");
-    var grided_ui = Block_El("div#grided__holder", Block_El("div#grided__header", Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), Block_El.apply(void 0, ["div.code_btns"].concat(buttons))), Block_El("div#grided__settings", Text_El("h3", "".concat(settings_icon, " Settings")), settings_panel_el), Block_El("div#grided__instructions", Text_El("h3", "".concat(instructions_icon, " Instructions")), Text_El("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), Block_El("div#grided__elements", Text_El("h3", "".concat(elements_icon, " Added elements")), Block_El("div.panel-body", Block_El("div#added_elements"))), Block_El("div#grided__editor", Block_El("div#editor-wrapper", Text_El("div#editor-browser-header", browser_header_html), Block_El("div#editor-app-window", app_state.container))));
+    var settings_panel_el = block_el("div#grided_gap_size_controls.settings.panel-body");
+    var grided_ui = block_el("div#grided__holder", block_el("div#grided__header", text_el("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), block_el.apply(void 0, ["div.code_btns"].concat(buttons))), block_el("div#grided__settings", text_el("h3", "".concat(settings_icon, " Settings")), settings_panel_el), block_el("div#grided__instructions", text_el("h3", "".concat(instructions_icon, " Instructions")), text_el("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), block_el("div#grided__elements", text_el("h3", "".concat(elements_icon, " Added elements")), block_el("div.panel-body", block_el("div#added_elements"))), block_el("div#grided__editor", block_el("div#editor-wrapper", text_el("div#editor-browser-header", browser_header_html), block_el("div#editor-app-window", app_state.container))));
     document.querySelector("body").appendChild(grided_ui);
     app_state.container.style.height = "100%";
     app_state.container.style.width = "100%";
@@ -7580,11 +7580,11 @@
     }
     return obj;
   }
-  var Layout_Editor = /* @__PURE__ */ function() {
-    function Layout_Editor2(_ref) {
+  var LayoutEditor = /* @__PURE__ */ function() {
+    function LayoutEditor2(_ref) {
       var _this = this;
       var entry_type = _ref.entry_type, starting_grid = _ref.grid, starting_elements = _ref.elements, finish_btn = _ref.finish_btn, on_update = _ref.on_update;
-      _classCallCheck5(this, Layout_Editor2);
+      _classCallCheck5(this, LayoutEditor2);
       _defineProperty7(this, "gap_size_setting", void 0);
       _defineProperty7(this, "current_cells", []);
       _defineProperty7(this, "elements", []);
@@ -7601,9 +7601,9 @@
       if (existing_wrapped_app) {
         this.container = existing_wrapped_app;
       } else {
-        this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : Block_El("div#grid_page");
+        this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : block_el("div#grid_page");
       }
-      this.grid_layout = new Grid_Layout(this.container);
+      this.grid_layout = new GridLayout(this.container);
       if (!existing_wrapped_app) {
         wrap_in_grided(this, finish_btn);
       } else {
@@ -7656,7 +7656,7 @@
         setShinyInput("starting_layout", this.current_layout, true);
       }
     }
-    _createClass5(Layout_Editor2, [{
+    _createClass5(LayoutEditor2, [{
       key: "current_layout",
       get: function get() {
         return {
@@ -7870,7 +7870,7 @@
         }
       }
     }]);
-    return Layout_Editor2;
+    return LayoutEditor2;
   }();
   var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
@@ -7904,7 +7904,7 @@
   var current_sel_box = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
   var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
-    var current_selection_box = new Grid_Item({
+    var current_selection_box = new GridItem({
       id: "selection box",
       el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
       parent_layout: app_state.grid_layout
@@ -7983,7 +7983,7 @@
   }
   function element_naming_ui(app_state, _ref4) {
     var grid_pos = _ref4.grid_pos, selection_box = _ref4.selection_box;
-    var name_form = El({
+    var name_form = create_el({
       sel_txt: "form#name_form.centered",
       styles: {
         width: "100%",
@@ -7992,7 +7992,7 @@
         gap: "1rem",
         justifyContent: "center"
       },
-      children: [El({
+      children: [create_el({
         sel_txt: "input#name_input",
         props: {
           type: "text"
@@ -8001,7 +8001,7 @@
           event: "input",
           func: hide_warning_msg
         }
-      }), El({
+      }), create_el({
         sel_txt: "input#name_submit",
         props: {
           type: "submit"
@@ -8034,7 +8034,7 @@
     var modal = create_focus_modal().set_title("Name your element:").description("\n      This name will be used to place items in your app.\n      For instance if you want to place a plot in this element,\n      this name will match the label of the plot output\n    ").add_element(name_form).on_close(reset_el_creation).add_to_page().focus_on("name_input");
     var warning_msg;
     function warn_about_bad_id(msg) {
-      warning_msg = El({
+      warning_msg = create_el({
         sel_txt: "span#bad_id_msg",
         text: msg,
         styles: {
@@ -8086,7 +8086,7 @@
         }
       }]
     });
-    var grid_item = new Grid_Item({
+    var grid_item = new GridItem({
       id: id,
       el: grid_el,
       mirrored_el: mirrored_el,
@@ -8126,7 +8126,7 @@
       return "\n    ".concat(id_list, "\n    <li> <strong style='font-size: 1.65rem;'> ").concat(el.id, " </strong> </li>\n    ");
     }, "<ul>") + "</ul>";
     var modal = create_focus_modal().set_title("Sorry! Can't make that update").description("<p> This is because it would result in the following elements \n    being removed from your app:</p>\n    ".concat(conflicting_elements_list, "\n    <p> Either re-arrange these elements to not reside in the removed grid or \n    column or remove them from your app before running grided.</p>\n    "));
-    modal.add_element(El({
+    modal.add_element(create_el({
       sel_txt: "button#accept_result",
       text: "Okay",
       event_listener: {
@@ -8367,7 +8367,7 @@
           }).join(" ");
         };
         var corner_radius = "".concat(20 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(build_tract_definition(this.grid.rows), ";\n        grid-template-columns: ").concat(build_tract_definition(this.grid.cols), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            animation: wiggle 1s ease;\n            animation-iteration-count: 1;\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            33%  { transform: rotate(2deg)  scale(1.05);  }\n            66%  { transform: rotate(-2deg) scale(1.05);  }\n            100% { transform: rotate(0deg);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(build_tract_definition(this.grid.rows), ";\n        grid-template-columns: ").concat(build_tract_definition(this.grid.cols), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
         this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
           _this2._on_select({
@@ -8638,9 +8638,9 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this$shadowRoot$getE, _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        background-color: #edf2f7;\n        width: 100%;\n        height: 100vh;\n        display: block;\n        position: absolute;\n      }\n      \n      #container {\n        display: block;\n        max-width: 1000px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n    <div id = "container">\n      <h2> Select the layout for your app: </h2>\n      <div id = "layouts"></div>\n      <div id = "chooser-modal" class = "hidden"> </div>\n    </div>\n    ';
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        background-color: #edf2f7;\n        width: 100%;\n        height: 100vh;\n        display: block;\n        position: absolute;\n      }\n      \n      #container {\n        display: block;\n        max-width: 1000px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n    <div id = "container">\n      <h2> Select the layout for your app: </h2>\n      <div id = "layouts"></div>\n      <div id = "chooser-modal" class = "hidden"> </div>\n    </div>\n    ';
         (_this$shadowRoot$getE = this.shadowRoot.getElementById("layouts")).append.apply(_this$shadowRoot$getE, _toConsumableArray6(this.layouts.map(function(layout) {
-          return grid_preview().layout(layout).on_select(function(x) {
+          return grid_preview().layout(layout).shown_size(100).on_select(function(x) {
             return _this2.focus_on_layout(x);
           });
         })));
@@ -8693,7 +8693,7 @@
           _this3.remove();
           modal.remove();
         };
-        modal.add_element(El({
+        modal.add_element(create_el({
           sel_txt: "div#footer",
           children: [click_button(".go", "Create app with this layout", function(event) {
             close_gallery(event);
@@ -8798,7 +8798,7 @@
     opts.on_update = function(opts2) {
       save_editor_history(opts2);
     };
-    return new Layout_Editor(opts);
+    return new LayoutEditor(opts);
   };
   window.onload = function() {
     add_shiny_listener("layout-gallery", function(layouts) {

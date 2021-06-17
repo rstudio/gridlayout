@@ -1,11 +1,11 @@
-export type XY_Pos = {
+export type XYPos = {
   x: number;
   y: number;
 };
 
-export type Drag_Type = "top-left" | "bottom-right" | "center";
+export type DragType = "top-left" | "bottom-right" | "center";
 
-export type Selection_Rect = {
+export type SelectionRect = {
   left: number;
   right: number;
   top: number;
@@ -39,7 +39,7 @@ export function max_w_missing(maybe_a: number | null, b: number) {
 }
 
 // Produce bounding rectangle relative to parent of any element
-export function get_bounding_rect(el: HTMLElement): Selection_Rect | null {
+export function get_bounding_rect(el: HTMLElement): SelectionRect | null {
   if (el.offsetParent === null) {
     return null;
   }
@@ -51,8 +51,8 @@ export function get_bounding_rect(el: HTMLElement): Selection_Rect | null {
 }
 
 export function boxes_overlap(
-  box_a: Selection_Rect,
-  box_b: Selection_Rect
+  box_a: SelectionRect,
+  box_b: SelectionRect
 ): boolean {
   const horizontal_overlap = intervals_overlap(
     [box_a.left, box_a.right],
@@ -83,12 +83,12 @@ export function boxes_overlap(
 }
 
 export function update_rect_with_delta(
-  rect: Selection_Rect,
-  delta: XY_Pos,
-  dir: Drag_Type
-): Selection_Rect {
+  rect: SelectionRect,
+  delta: XYPos,
+  dir: DragType
+): SelectionRect {
   // Need to destructure down to numbers to avoid copy
-  const new_rect: Selection_Rect = { ...rect };
+  const new_rect: SelectionRect = { ...rect };
 
   // The bounding here means that we dont let the user drag the box "inside-out"
   if (dir === "top-left") {

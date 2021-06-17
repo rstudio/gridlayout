@@ -1,6 +1,6 @@
-import { Finish_Button_Setup, Layout_Editor } from "./Layout_Editor";
+import { FinishButtonSetup, LayoutEditor } from "./Layout_Editor";
 import { make_css_unit_input } from "./make-css_unit_input";
-import { Block_El, click_button, make_el, Text_El } from "./make-elements";
+import { block_el, click_button, make_el, text_el } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";
 import { get_pos_on_grid } from "./utils-grid";
 import {
@@ -17,8 +17,8 @@ import { setShinyInput } from "./utils-shiny";
 // information such as if the element passed was empty and if not, the children
 // that it contains so they can be overlayed with editable element boxes
 export function wrap_in_grided(
-  app_state: Layout_Editor,
-  finish_btn: Finish_Button_Setup
+  app_state: LayoutEditor,
+  finish_btn: FinishButtonSetup
 ) {
   const grid_is_filled = app_state.container.hasChildNodes();
 
@@ -41,29 +41,29 @@ export function wrap_in_grided(
     );
   }
 
-  const settings_panel_el = Block_El(
+  const settings_panel_el = block_el(
     "div#grided_gap_size_controls.settings.panel-body"
   );
 
-  const grided_ui = Block_El(
+  const grided_ui = block_el(
     "div#grided__holder",
-    Block_El(
+    block_el(
       "div#grided__header",
-      Text_El(
+      text_el(
         "h2",
         "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"
       ),
-      Block_El("div.code_btns", ...buttons)
+      block_el("div.code_btns", ...buttons)
     ),
-    Block_El(
+    block_el(
       "div#grided__settings",
-      Text_El("h3", `${settings_icon} Settings`),
+      text_el("h3", `${settings_icon} Settings`),
       settings_panel_el
     ),
-    Block_El(
+    block_el(
       "div#grided__instructions",
-      Text_El("h3", `${instructions_icon} Instructions`),
-      Text_El(
+      text_el("h3", `${instructions_icon} Instructions`),
+      text_el(
         "div.panel-body",
         `
       <strong>Add or remove a row/column:</strong>
@@ -87,17 +87,17 @@ export function wrap_in_grided(
       </ul>`
       )
     ),
-    Block_El(
+    block_el(
       "div#grided__elements",
-      Text_El("h3", `${elements_icon} Added elements`),
-      Block_El("div.panel-body", Block_El("div#added_elements"))
+      text_el("h3", `${elements_icon} Added elements`),
+      block_el("div.panel-body", block_el("div#added_elements"))
     ),
-    Block_El(
+    block_el(
       "div#grided__editor",
-      Block_El(
+      block_el(
         "div#editor-wrapper",
-        Text_El("div#editor-browser-header", browser_header_html),
-        Block_El("div#editor-app-window", app_state.container)
+        text_el("div#editor-browser-header", browser_header_html),
+        block_el("div#editor-app-window", app_state.container)
       )
     )
   );
@@ -149,7 +149,7 @@ export function cleanup_grided_ui() {
   ].forEach((el) => el.remove());
 }
 
-export function add_existing_elements_to_app(app_state: Layout_Editor) {
+export function add_existing_elements_to_app(app_state: LayoutEditor) {
   // If grided is running on an existing app, we need to parse the children and
   // add them as elements;
   [...app_state.container.children].forEach(function (el: Element) {
@@ -183,7 +183,7 @@ export function add_existing_elements_to_app(app_state: Layout_Editor) {
 }
 
 export function hookup_gap_size_controls(
-  app_state: Layout_Editor,
+  app_state: LayoutEditor,
   settings_panel_el: HTMLElement,
   starting_gap?: string
 ) {

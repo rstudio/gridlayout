@@ -1,27 +1,27 @@
 import { css } from "@emotion/css";
-import { Grid_Pos } from "./Grid_Item";
-import { Tract_Dir } from "./Grid_Layout";
-import { Layout_Editor } from "./Layout_Editor";
+import { Grid_Pos } from "./GridItem";
+import { TractDir } from "./GridLayout";
+import { LayoutEditor } from "./Layout_Editor";
 import { set_element_in_grid } from "./utils-grid";
 import { plus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
 
-export type Event_Listener = {
+export type EventListener = {
   event: string;
   func: (event: Event) => void;
 };
 
-type Element_Contents = {
+type ElementContents = {
   sel_txt: string;
   text?: string;
   children?: HTMLElement[];
   styles?: object;
   props?: object;
-  event_listener?: Event_Listener | Event_Listener[];
+  event_listener?: EventListener | EventListener[];
 };
 
-export type Element_Opts = {
-  event_listener?: Event_Listener | Event_Listener[];
+export type ElementOpts = {
+  event_listener?: EventListener | EventListener[];
   styles?: object;
   innerHTML?: string;
   data_props?: object;
@@ -52,12 +52,12 @@ export function parse_selector_text(sel_txt: string) {
 export function make_el(
   parent: HTMLElement,
   sel_txt: string,
-  opts: Element_Opts = {}
+  opts: ElementOpts = {}
 ) {
   let el: HTMLElement = parent.querySelector(sel_txt);
   if (!el) {
     // Element doesn't exists so we need to make it
-    el = El({ sel_txt });
+    el = create_el({ sel_txt });
 
     if (opts.props) {
       Object.assign(el, opts.props);
@@ -92,8 +92,8 @@ export function make_el(
 }
 
 
-export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
-  const shadow_holder = Block_El(sel_txt);
+export function shadow_el(sel_txt: string, ...children: HTMLElement[]) {
+  const shadow_holder = block_el(sel_txt);
   shadow_holder.attachShadow({ mode: "open" });
   const style_sheet = document.createElement("style");
 
@@ -107,7 +107,7 @@ export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
   };
 }
 
-export function El(opts: Element_Contents): HTMLElement {
+export function create_el(opts: ElementContents): HTMLElement {
   const { tag_type, el_id, class_list } = parse_selector_text(opts.sel_txt);
 
   const el: HTMLElement = document.createElement(tag_type);
@@ -141,15 +141,15 @@ export function El(opts: Element_Contents): HTMLElement {
   return el;
 }
 
-export function Block_El(sel_txt: string, ...children: HTMLElement[]) {
-  return El({
+export function block_el(sel_txt: string, ...children: HTMLElement[]) {
+  return create_el({
     sel_txt,
     children,
   });
 }
 
-export function Text_El(sel_txt: string, text: string) {
-  return El({
+export function text_el(sel_txt: string, text: string) {
+  return create_el({
     sel_txt,
     text,
   });
@@ -197,11 +197,11 @@ const incrementer_button_class = css`
   }
 `;
 export function tract_add_or_remove_button(
-  app_state: Layout_Editor,
+  app_state: LayoutEditor,
   opts: {
     parent_el: HTMLElement;
     add_or_remove: "add" | "remove";
-    dir: Tract_Dir;
+    dir: TractDir;
     tract_index: number;
     additional_styles?: Record<string, string>;
   }
@@ -247,7 +247,7 @@ export function tract_add_or_remove_button(
 
 
 export function click_button(selector: string, label: string, on_finish: (event?: MouseEvent) => void){
-  const button = Text_El(`button${selector}`, label);
+  const button = text_el(`button${selector}`, label);
   button.addEventListener("click", function (event) {
     on_finish(event);
   });

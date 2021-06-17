@@ -1,5 +1,5 @@
-import { Layout_Element } from ".";
-import { Grid_Layout } from "./Grid_Layout";
+import { LayoutElement } from ".";
+import { GridLayout } from "./GridLayout";
 import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
 import { get_bounding_rect } from "./utils-misc";
 
@@ -10,19 +10,19 @@ export type Grid_Pos = {
   end_row: number;
 };
 
-export class Grid_Item {
+export class GridItem {
   id: string;
   el: HTMLElement;
   mirrored_el?: HTMLElement;
   sibling_el?: HTMLElement;
-  parent_layout: Grid_Layout;
+  parent_layout: GridLayout;
 
   constructor(opts: {
     el: HTMLElement;
     id: string;
     mirrored_el?: HTMLElement;
     sibling_el?: HTMLElement;
-    parent_layout: Grid_Layout;
+    parent_layout: GridLayout;
   }) {
     Object.assign(this, opts);
   }
@@ -51,7 +51,7 @@ export class Grid_Item {
     return this.el.style;
   }
 
-  get info(): Layout_Element {
+  get info(): LayoutElement {
     return {
       id: this.id,
       ...this.position,

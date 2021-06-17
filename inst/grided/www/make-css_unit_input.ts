@@ -1,6 +1,6 @@
 import { css } from "@emotion/css";
-import { Tract_Dir } from "./Grid_Layout";
-import { Layout_Editor } from "./Layout_Editor";
+import { TractDir } from "./GridLayout";
+import { LayoutEditor } from "./Layout_Editor";
 import { make_el, tract_add_or_remove_button } from "./make-elements";
 import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
 
@@ -37,13 +37,13 @@ const css_unit_input = css`
   }
 `;
 
-export type CSS_Input = {
+export type CSSInput = {
   form: HTMLElement;
   current_value: () => string;
   update_value: (new_value: string) => void;
 };
 
-type unit_options = "fr" | "px" | "rem" | "auto";
+type UnitOptions = "fr" | "px" | "rem" | "auto";
 
 const default_values = {
   fr: "1",
@@ -51,8 +51,8 @@ const default_values = {
   rem: "2",
 };
 
-export function get_css_unit(css_size: string): unit_options {
-  return (css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px") as unit_options;
+export function get_css_unit(css_size: string): UnitOptions {
+  return (css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px") as UnitOptions;
 }
 
 export function get_css_value(css_size: string): number | null {
@@ -73,7 +73,7 @@ export function make_css_unit_input({
   on_change = (x: string) => console.log("css unit change", x),
   allowed_units = ["fr", "px", "rem", "auto"],
   snap_to_defaults = true,
-}): CSS_Input {
+}): CSSInput {
   let current_unit = start_unit;
 
   const form = make_el(parent_el, `form${selector}.${css_unit_input}`, {
@@ -118,8 +118,8 @@ export function make_css_unit_input({
     }
   });
 
-  function unit_type(): unit_options {
-    return unit_selector.value as unit_options;
+  function unit_type(): UnitOptions {
+    return unit_selector.value as UnitOptions;
   }
   function num_units() {
     return value_input.value;
@@ -256,8 +256,8 @@ const tract_controls = css`
 `;
 
 export function build_controls_for_dir(
-  app_state: Layout_Editor,
-  dir: Tract_Dir,
+  app_state: LayoutEditor,
+  dir: TractDir,
   editor_container: HTMLElement
 ) {
   // This is the class of the first grid cell for each row or column
@@ -306,7 +306,7 @@ export function build_controls_for_dir(
         matched_cell: el,
         el: holder_el,
         controller: make_grid_tract_control(holder_el, app_state, {
-          dir: dir as Tract_Dir,
+          dir: dir as TractDir,
           size: app_state.grid_layout[dir][tract_index - 1],
           tract_index,
         }),
@@ -316,13 +316,13 @@ export function build_controls_for_dir(
 
 export function make_grid_tract_control(
   holder: HTMLElement,
-  app_state: Layout_Editor,
+  app_state: LayoutEditor,
   opts: {
     size: string;
-    dir: Tract_Dir;
+    dir: TractDir;
     tract_index: number;
   }
-): CSS_Input {
+): CSSInput {
   const { size, dir, tract_index } = opts;
 
   function send_update({ is_dragging }: { is_dragging: boolean }) {

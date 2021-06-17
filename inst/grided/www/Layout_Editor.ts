@@ -1,9 +1,9 @@
 import { css } from "@emotion/css";
-import { Layout_Element, Layout_Info } from ".";
-import { Grid_Item, Grid_Pos } from "./Grid_Item";
-import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
-import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
-import { Block_El, El, Element_Opts, make_el } from "./make-elements";
+import { LayoutElement, LayoutInfo } from ".";
+import { GridItem, Grid_Pos } from "./GridItem";
+import { GridLayout, LayoutState, TractDir } from "./GridLayout";
+import { build_controls_for_dir, CSSInput } from "./make-css_unit_input";
+import { block_el, create_el, ElementOpts, make_el } from "./make-elements";
 import { get_styles_for_selector_with_targets } from "./utils-cssom";
 import {
   bounding_rect_to_css_pos,
@@ -16,13 +16,13 @@ import {
 import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
 import {
   as_array,
-  Drag_Type,
+  DragType,
   filler_text,
   pos_relative_to_container,
-  Selection_Rect,
+  SelectionRect,
   set_class,
   update_rect_with_delta,
-  XY_Pos,
+  XYPos,
 } from "./utils-misc";
 import { setShinyInput } from "./utils-shiny";
 import { create_focus_modal } from "./web-components/focus-modal";
@@ -33,7 +33,7 @@ import {
   wrap_in_grided,
 } from "./wrap_in_grided";
 
-export type Grid_Update_Options = {
+export type GridUpdateOptions = {
   rows?: string[];
   cols?: string[];
   gap?: string;
@@ -41,63 +41,63 @@ export type Grid_Update_Options = {
   dont_update_history?: boolean;
 };
 
-type Drag_Res = {
-  xy: XY_Pos;
+type DragRes = {
+  xy: XYPos;
   grid: Grid_Pos;
 };
 
-export type Element_Info = {
+export type ElementInfo = {
   id: string;
   grid_pos: Grid_Pos;
   grid_el: HTMLElement;
   list_el: HTMLElement;
   mirrored_element?: HTMLElement;
-  grid_item: Grid_Item;
+  grid_item: GridItem;
 };
 
-export type App_Entry_Type =
+export type AppEntryType =
   | "layout-gallery"
   | "edit-layout"
   | "edit-existing-app";
 
-export type App_Mode = "Existing" | "New";
+export type AppMode = "Existing" | "New";
 
-export type Finish_Button_Setup = {
+export type FinishButtonSetup = {
   label: string;
-  on_done: (layout: Layout_Info) => void;
+  on_done: (layout: LayoutInfo) => void;
 };
 
-export type Layout_Editor_Setup = {
-  entry_type: App_Entry_Type;
-  grid?: Layout_State;
-  elements?: Layout_Element[];
-  finish_btn?: Finish_Button_Setup;
-  on_update?: (opts: Layout_Editor_Setup) => void;
+export type LayoutEditorSetup = {
+  entry_type: AppEntryType;
+  grid?: LayoutState;
+  elements?: LayoutElement[];
+  finish_btn?: FinishButtonSetup;
+  on_update?: (opts: LayoutEditorSetup) => void;
 };
 
-export class Layout_Editor {
-  gap_size_setting: CSS_Input;
+export class LayoutEditor {
+  gap_size_setting: CSSInput;
   // All the currently existing cells making up the grid
   current_cells: HTMLElement[] = [];
-  elements: Grid_Item[] = [];
-  on_update: (opts: Layout_Editor_Setup) => void;
+  elements: GridItem[] = [];
+  on_update: (opts: LayoutEditorSetup) => void;
 
   container_selector: string;
   container: HTMLElement;
   grid_styles: CSSStyleDeclaration;
-  mode: App_Mode;
-  grid_layout: Grid_Layout;
+  mode: AppMode;
+  grid_layout: GridLayout;
   tract_controls: {
     update_positions: () => void;
   };
-  entry_type: App_Entry_Type;
+  entry_type: AppEntryType;
   constructor({
     entry_type,
     grid: starting_grid,
     elements: starting_elements,
     finish_btn,
     on_update,
-  }: Layout_Editor_Setup) {
+  }: LayoutEditorSetup) {
     this.entry_type = entry_type;
 
     // Check if we've already wrapped in grided and tagged the app container
@@ -110,9 +110,9 @@ export class Layout_Editor {
       this.container =
         entry_type === "edit-existing-app"
           ? find_first_grid_node()
-          : Block_El("div#grid_page");
+          : block_el("div#grid_page");
     }
-    this.grid_layout = new Grid_Layout(this.container);
+    this.grid_layout = new GridLayout(this.container);
 
     if (!existing_wrapped_app) {
       wrap_in_grided(this, finish_btn);
@@ -138,7 +138,7 @@ export class Layout_Editor {
       // elements first
       this.update_grid({ ...starting_grid, dont_update_history: true });
 
-      starting_elements.forEach((el_msg: Layout_Element) => {
+      starting_elements.forEach((el_msg: LayoutElement) => {
         const { start_row, end_row, start_col, end_col } = el_msg;
         // Add elements but dont update history as we do it
         this.add_element(
@@ -190,7 +190,7 @@ export class Layout_Editor {
     }
   }
 
-  get current_layout(): Layout_Info {
+  get current_layout(): LayoutInfo {
     return {
       grid: this.grid_layout.attrs,
       elements: this.elements.map((el) => el.info),
@@ -253,7 +253,7 @@ export class Layout_Editor {
     this.send_update();
   }
 
-  add_tract(dir: Tract_Dir, new_index: number) {
+  add_tract(dir: TractDir, new_index: number) {
     this.elements.forEach((el) => {
       const start_id = dir === "rows" ? "start_row" : "start_col";
       const end_id = dir === "rows" ? "end_row" : "end_col";
@@ -278,10 +278,10 @@ export class Layout_Editor {
     this.update_grid({ [dir]: tract_sizes });
   }
 
-  remove_tract(dir: Tract_Dir, index: number) {
+  remove_tract(dir: TractDir, index: number) {
     // First check for trouble elements before proceeding so we can error out
     // and tell the user why
-    const trouble_elements: Grid_Item[] = this.elements.filter((el) => {
+    const trouble_elements: GridItem[] = this.elements.filter((el) => {
       const { start_id, end_id } = make_start_end_for_dir(dir);
       const el_position = el.position;
 
@@ -317,27 +317,27 @@ export class Layout_Editor {
   }
 
   // Just so we dont have to always say make_el(this.container...)
-  make_el(sel_txt: string, opts?: Element_Opts) {
+  make_el(sel_txt: string, opts?: ElementOpts) {
     return make_el(this.container, sel_txt, opts);
   }
 
   setup_drag(opts: {
     watching_element: HTMLElement;
-    drag_dir: Drag_Type;
-    grid_item?: Grid_Item;
-    on_start?: (start_loc: XY_Pos) => void;
-    on_drag?: (drag_info: Drag_Res) => void;
-    on_end?: (drag_info: Drag_Res) => void;
+    drag_dir: DragType;
+    grid_item?: GridItem;
+    on_start?: (start_loc: XYPos) => void;
+    on_drag?: (drag_info: DragRes) => void;
+    on_end?: (drag_info: DragRes) => void;
   }) {
     let drag_feedback_rect: HTMLElement;
-    let start_rect: Selection_Rect;
-    let start_loc: XY_Pos;
+    let start_rect: SelectionRect;
+    let start_loc: XYPos;
 
     const editor_el: HTMLElement = document.querySelector("#grided__editor");
 
     const update_grid_pos = (
-      grid_item: Grid_Item,
-      bounding_rect: Selection_Rect
+      grid_item: GridItem,
+      bounding_rect: SelectionRect
     ): Grid_Pos => {
       const grid_extent = get_drag_extent_on_grid(this, bounding_rect);
       grid_item.position = grid_extent;
@@ -382,7 +382,7 @@ export class Layout_Editor {
     };
 
     function drag(event: MouseEvent) {
-      const curr_loc: XY_Pos = event;
+      const curr_loc: XYPos = event;
       // Sometimes the drag event gets fired with nonsense zeros
       if (curr_loc.x === 0 && curr_loc.y === 0) return;
 
@@ -402,7 +402,7 @@ export class Layout_Editor {
     }
 
     function drag_end(event: MouseEvent) {
-      const end_loc: XY_Pos = event;
+      const end_loc: XYPos = event;
       drag_feedback_rect.remove();
       start_rect = null;
       start_loc = null;
@@ -426,7 +426,7 @@ export class Layout_Editor {
 
   update_tract(opts: {
     tract_index: number;
-    dir: Tract_Dir;
+    dir: TractDir;
     new_value: string;
     is_dragging: boolean;
   }) {
@@ -437,7 +437,7 @@ export class Layout_Editor {
     this.update_grid({ [dir]: tract_values, dont_update_history: is_dragging });
   }
 
-  update_grid(opts: Grid_Update_Options) {
+  update_grid(opts: GridUpdateOptions) {
     // Given a new set of attributes, finds which ones changed and updates the
     // corresponding portions of the grid
     let new_num_cells = opts.force ?? false;
@@ -497,7 +497,7 @@ const grid_cell_styles = css`
   }
 `;
 
-function fill_grid_cells(app_state: Layout_Editor) {
+function fill_grid_cells(app_state: LayoutEditor) {
   app_state.current_cells.forEach((e) => e.remove());
   app_state.current_cells = [];
 
@@ -660,8 +660,8 @@ const drag_canvas_styles = css`
   }
 `;
 
-function setup_new_item_drag(app_state: Layout_Editor) {
-  const current_selection_box = new Grid_Item({
+function setup_new_item_drag(app_state: LayoutEditor) {
+  const current_selection_box = new GridItem({
     id: "selection box",
     el: app_state.make_el(
       `div.drag_selection_box.${added_element_styles}.${current_sel_box}`
@@ -695,17 +695,17 @@ function setup_new_item_drag(app_state: Layout_Editor) {
   ].forEach((el) => app_state.container.appendChild(el));
 }
 
-function setup_tract_controls(app_state: Layout_Editor) {
+function setup_tract_controls(app_state: LayoutEditor) {
   const editor_container = document.querySelector(
     "#grided__editor"
   ) as HTMLElement;
 
   const controls: Record<
-    Tract_Dir,
+    TractDir,
     {
       matched_cell: HTMLElement;
       el: HTMLElement;
-      controller: CSS_Input;
+      controller: CSSInput;
     }[]
   > = {
     rows: build_controls_for_dir(app_state, "rows", editor_container),
@@ -727,7 +727,7 @@ function setup_tract_controls(app_state: Layout_Editor) {
     resize_timeout = window.setTimeout(() => update_positions(), 300);
   });
 
-  function update_positions(which_dirs: Tract_Dir[] = ["rows", "cols"]) {
+  function update_positions(which_dirs: TractDir[] = ["rows", "cols"]) {
     const editor_pos = editor_container.getBoundingClientRect();
     const wrapper_pos = pos_relative_to_container(
       editor_pos,
@@ -765,10 +765,10 @@ function setup_tract_controls(app_state: Layout_Editor) {
 }
 
 function element_naming_ui(
-  app_state: Layout_Editor,
+  app_state: LayoutEditor,
   { grid_pos, selection_box }
 ) {
-  const name_form = El({
+  const name_form = create_el({
     sel_txt: `form#name_form.centered`,
     styles: {
       width: "100%",
@@ -778,7 +778,7 @@ function element_naming_ui(
       justifyContent: "center",
     },
     children: [
-      El({
+      create_el({
         sel_txt: "input#name_input",
         props: { type: "text" },
         event_listener: {
@@ -787,7 +787,7 @@ function element_naming_ui(
           func: hide_warning_msg,
         },
       }),
-      El({ sel_txt: "input#name_submit", props: { type: "submit" } }),
+      create_el({ sel_txt: "input#name_submit", props: { type: "submit" } }),
     ],
     event_listener: {
       // Don't leave warning message up while user is typing
@@ -838,7 +838,7 @@ function element_naming_ui(
   let warning_msg: HTMLElement;
 
   function warn_about_bad_id(msg: string) {
-    warning_msg = El({
+    warning_msg = create_el({
       sel_txt: "span#bad_id_msg",
       text: msg,
       styles: {
@@ -864,7 +864,7 @@ function element_naming_ui(
 }
 
 function draw_elements(
-  app_state: Layout_Editor,
+  app_state: LayoutEditor,
   el_info: { id: string; mirrored_el: HTMLElement }
 ) {
   const { id, mirrored_el } = el_info;
@@ -906,7 +906,7 @@ function draw_elements(
     }
   );
 
-  const grid_item = new Grid_Item({
+  const grid_item = new GridItem({
     id,
     el: grid_el,
     mirrored_el,
@@ -915,8 +915,8 @@ function draw_elements(
   });
 
   // Setup drag behavior
-  (["top-left", "bottom-right", "center"] as Drag_Type[]).forEach(
-    (handle_type: Drag_Type) => {
+  (["top-left", "bottom-right", "center"] as DragType[]).forEach(
+    (handle_type: DragType) => {
       app_state.setup_drag({
         watching_element: make_el(
           grid_el,
@@ -958,7 +958,7 @@ function draw_elements(
   return grid_item;
 }
 
-function show_conflict_popup(conflicting_elements: Grid_Item[]) {
+function show_conflict_popup(conflicting_elements: GridItem[]) {
   const conflicting_elements_list: string =
     conflicting_elements.reduce(
       (id_list, el) =>
@@ -978,7 +978,7 @@ function show_conflict_popup(conflicting_elements: Grid_Item[]) {
     `);
 
   modal.add_element(
-    El({
+    create_el({
       sel_txt: "button#accept_result",
       text: "Okay",
       event_listener: {

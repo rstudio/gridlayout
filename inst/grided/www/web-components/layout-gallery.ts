@@ -1,19 +1,19 @@
-import { Layout_Info } from "..";
-import { click_button, El } from "../make-elements";
+import { LayoutInfo } from "..";
+import { click_button, create_el } from "../make-elements";
 import { create_focus_modal } from "./focus-modal";
 import { grid_preview } from "./grid-preview";
 
-type Select_Fn = (info: Layout_Info) => void;
+type SelectFn = (info: LayoutInfo) => void;
 export class LayoutGallery extends HTMLElement {
-  layouts: Layout_Info[];
+  layouts: LayoutInfo[];
   preselected_layout_name: string;
 
-  on_edit_fn: Select_Fn;
-  on_go_fn: Select_Fn;
+  on_edit_fn: SelectFn;
+  on_go_fn: SelectFn;
   on_cancel_fn: () => void;
   on_select_fn: (name: string) => void;
 
-  constructor(layouts: Layout_Info[]) {
+  constructor(layouts: LayoutInfo[]) {
     super();
     this.attachShadow({ mode: "open" });
     this.layouts = layouts;
@@ -42,7 +42,7 @@ export class LayoutGallery extends HTMLElement {
       #layouts {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         grid-gap: 1rem;
         justify-items: center;
       }
@@ -94,7 +94,8 @@ export class LayoutGallery extends HTMLElement {
       ...this.layouts.map((layout) =>
         grid_preview()
           .layout(layout)
-          .on_select((x: Layout_Info) => this.focus_on_layout(x))
+          .shown_size(100)
+          .on_select((x: LayoutInfo) => this.focus_on_layout(x))
       )
     );
 
@@ -112,12 +113,12 @@ export class LayoutGallery extends HTMLElement {
     }
   }
 
-  on_edit(on_edit_fn: Select_Fn) {
+  on_edit(on_edit_fn: SelectFn) {
     this.on_edit_fn = on_edit_fn;
     return this;
   }
 
-  on_go(on_go_fn: Select_Fn) {
+  on_go(on_go_fn: SelectFn) {
     this.on_go_fn = on_go_fn;
     return this;
   }
@@ -140,7 +141,7 @@ export class LayoutGallery extends HTMLElement {
   }
 
   focus_on_layout(
-    selected_layout: Layout_Info,
+    selected_layout: LayoutInfo,
     fire_on_select: boolean = true
   ) {
     const modal = create_focus_modal()
@@ -164,7 +165,7 @@ export class LayoutGallery extends HTMLElement {
     };
 
     modal.add_element(
-      El({
+      create_el({
         sel_txt: `div#footer`,
         children: [
           click_button(".go", "Create app with this layout", (event) => {
@@ -187,7 +188,7 @@ export class LayoutGallery extends HTMLElement {
   }
 }
 
-export function layout_gallery(layouts: Layout_Info[]) {
+export function layout_gallery(layouts: LayoutInfo[]) {
   return new LayoutGallery(layouts);
 }
 

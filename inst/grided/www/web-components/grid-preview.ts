@@ -1,14 +1,14 @@
-import { Layout_Element, Layout_Info } from "..";
-import { Layout_State } from "../Grid_Layout";
+import { LayoutElement, LayoutInfo } from "..";
+import { LayoutState } from "../GridLayout";
 
 export class GridPreview extends HTMLElement {
-  grid: Layout_State;
+  grid: LayoutState;
   _render_size: number;
   _shown_size: number;
   name: string;
-  elements: Layout_Element[];
+  elements: LayoutElement[];
   hover_animation: boolean;
-  _on_select: (info: Layout_Info) => void;
+  _on_select: (info: LayoutInfo) => void;
 
   constructor() {
     super();
@@ -64,14 +64,13 @@ export class GridPreview extends HTMLElement {
         this.hover_animation
           ? `
           #layout:hover {
-            animation: wiggle 1s ease;
-            animation-iteration-count: 1;
+            transition: transform 1s ease;
+            transform: rotate(1deg)  scale(1.05);
             cursor: pointer;
           }
           @keyframes wiggle {
-            33%  { transform: rotate(2deg)  scale(1.05);  }
-            66%  { transform: rotate(-2deg) scale(1.05);  }
-            100% { transform: rotate(0deg);  }
+            50%  { transform: rotate(1deg)  scale(1.05);  }
+            100%  { transform: rotate(-1deg) scale(1.05);  }
           }`
           : ``
       }
@@ -82,6 +81,11 @@ export class GridPreview extends HTMLElement {
         border-radius: ${corner_radius};
         display: grid;
         place-content: center;
+        background-color: darksalmon;
+      }
+
+      #layout > div > div {
+        display: none;
       }
       
       .flipped { transform: rotate(-90deg); }
@@ -107,7 +111,7 @@ export class GridPreview extends HTMLElement {
       });
   }
 
-  layout(layout: Layout_Info) {
+  layout(layout: LayoutInfo) {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
     this.name = layout.name ?? this.name;
@@ -124,7 +128,7 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
-  on_select(on_select: (info: Layout_Info) => void) {
+  on_select(on_select: (info: LayoutInfo) => void) {
     this._on_select = on_select;
     return this;
   }
