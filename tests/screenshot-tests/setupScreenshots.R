@@ -169,5 +169,10 @@ setup_chromote_session <- function(app) {
 }
 
 capture_screenshot <- function(b, pause_length = 1.5){
-  b$screenshot(tempfile(fileext = ".png"), delay = pause_length)
+  Sys.sleep(pause_length)
+  screenshot_path <- tempfile(fileext = ".png")
+  screenshot_data <- b$Page$captureScreenshot(format = "png")$data
+  writeBin(jsonlite::base64_dec(screenshot_data), screenshot_path)
+  screenshot_path
+  # b$screenshot(tempfile(fileext = ".png"), delay = pause_length)
 }

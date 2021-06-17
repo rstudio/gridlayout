@@ -4,7 +4,7 @@
 #'
 #' @return A shiny app object
 #' @export
-layout_gallery <- function(){
+layout_gallery <- function(return_app_obj = FALSE){
 
   layout_templates <- list(
     gen_template_info(
@@ -60,7 +60,7 @@ layout_gallery <- function(){
     )
   )
 
-  grided_app(starting_layout = layout_templates)
+  grided_app(starting_layout = layout_templates, return_app_obj = return_app_obj)
 }
 
 
