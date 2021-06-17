@@ -118,6 +118,7 @@ background_shiny_app <- function(app){
     }
     callr::r_bg(..., env = envvars)
   }
+
   # Run app in background with envvars
   p <- r_background_process(
     function(...) {
@@ -141,4 +142,31 @@ background_shiny_app <- function(app){
     p = p,
     url = url
   )
+}
+
+setup_chromote_session <- function(app) {
+  app <- background_shiny_app(app)
+
+  b <- ChromoteSession$new(
+    width = 1600,
+    height = 1200
+  )
+
+  list(
+    p = app$p,
+    b = b,
+    screenshot = function(delay = 1) {
+      capture_screenshot(b, delay)
+    }
+  )
+}
+
+capture_screenshot <- function(b, pause_length = 1){
+  Sys.sleep(pause_length)
+  screenshot_path <- tempfile(fileext = ".png")
+  screenshot_data <- b$Page$captureScreenshot(format = "png")$data
+  writeBin(jsonlite::base64_dec(screenshot_data), screenshot_path)
+  screenshot_path
+  # Once https://github.com/rstudio/chromote/pull/50 is merged I can use this code instead
+  # b$screenshot(tempfile(fileext = ".png"), delay = 2)
 }

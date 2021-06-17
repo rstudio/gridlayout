@@ -1,15 +1,12 @@
 
 test_that("grided default start", {
+
+  app <- setup_chromote_session(grided_app(return_app_obj = TRUE))
+
+  on.exit({ app$p$kill() })
+
   expect_snapshot_file(
-    test_demo_app(grided_app(return_app_obj = TRUE)),
+    app$screenshot(),
     "grided_default.png"
-  )
-})
-
-
-test_that("geyser app", {
-  expect_snapshot_file(
-    test_demo_app('realtime_layout_update/app.R'),
-    "geyser-grided-app.png"
   )
 })

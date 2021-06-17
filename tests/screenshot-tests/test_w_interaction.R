@@ -16,15 +16,6 @@ test_that("Basic interaction with grided app", {
   )
   # b$view()
 
-  capture_screenshot <- function(b){
-    Sys.sleep(pause_length)
-    screenshot_path <- tempfile(fileext = ".png")
-    screenshot_data <- b$Page$captureScreenshot(format = "png")$data
-    writeBin(jsonlite::base64_dec(screenshot_data), screenshot_path)
-    screenshot_path
-    # Once https://github.com/rstudio/chromote/pull/50 is merged I can use this code instead
-    # b$screenshot(tempfile(fileext = ".png"), delay = 2)
-  }
   # Click the button to get copyable layout code
   layout_code_popup <- b$Page$navigate(app$url, wait_ = FALSE) %...>%
     {
