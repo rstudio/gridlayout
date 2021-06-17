@@ -23,6 +23,14 @@ export class LayoutGallery extends HTMLElement {
     this.shadowRoot.innerHTML = `
     <style>
       :host {
+        background-color: #edf2f7;
+        width: 100%;
+        height: 100vh;
+        display: block;
+        position: absolute;
+      }
+      
+      #container {
         display: block;
         max-width: 1000px;
         margin-left: auto;
@@ -30,6 +38,7 @@ export class LayoutGallery extends HTMLElement {
         padding-left: 1rem;
         padding-right: 1rem;
       }
+
       #layouts {
         width: 100%;
         display: grid;
@@ -74,10 +83,11 @@ export class LayoutGallery extends HTMLElement {
         display: none;
       }
     </style>
-   
-    <h2> Select the layout for your app: </h2>
-    <div id = "layouts"></div>
-    <div id = "chooser-modal" class = "hidden"> </div>
+    <div id = "container">
+      <h2> Select the layout for your app: </h2>
+      <div id = "layouts"></div>
+      <div id = "chooser-modal" class = "hidden"> </div>
+    </div>
     `;
 
     this.shadowRoot.getElementById("layouts").append(
