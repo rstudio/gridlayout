@@ -1,8 +1,7 @@
 test_that("Remarker with tabs", {
-
   app <- rmarkdown:::shiny_prerendered_app(
     input_rmd = here::here("inst/demo_apps/remarker/app.Rmd"),
-    render_args = NULL,
+    render_args = list(quiet = TRUE),
     theme = NULL
   )
 
