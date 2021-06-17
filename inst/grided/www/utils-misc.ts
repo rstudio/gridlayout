@@ -70,7 +70,7 @@ export function boxesOverlap(
     //   aaaaaaaaaa
     // bbbbbb
     //         bbbbbb
-    const aContainsB_endpoint =
+    const aContainsBsEndpoint =
       (aStart >= bStart && aStart <= bEnd) ||
       (aEnd >= bStart && aEnd <= bEnd);
 
@@ -78,7 +78,7 @@ export function boxesOverlap(
     // bbbbbbbbbb
     const bCoversA = aStart <= bStart && aEnd >= bEnd;
 
-    return aContainsB_endpoint || bCoversA;
+    return aContainsBsEndpoint || bCoversA;
   }
 }
 
