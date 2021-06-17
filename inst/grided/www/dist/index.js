@@ -6776,16 +6776,16 @@
   }
 
   // utils-shiny.ts
-  var Shiny = window.Shiny;
   function setShinyInput(input_id, input_value) {
-    var _Shiny$setInputValue;
+    var _window$Shiny, _window$Shiny$setInpu;
     var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
+    (_window$Shiny = window.Shiny) === null || _window$Shiny === void 0 ? void 0 : (_window$Shiny$setInpu = _window$Shiny.setInputValue) === null || _window$Shiny$setInpu === void 0 ? void 0 : _window$Shiny$setInpu.call(_window$Shiny, input_id, input_value, is_event ? {
       priority: "event"
     } : {});
   }
   function add_shiny_listener(event_id, callback_func) {
-    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
+    var _window$Shiny2;
+    (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(event_id, callback_func);
   }
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
