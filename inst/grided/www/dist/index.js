@@ -3553,7 +3553,7 @@
   var defineWellKnownSymbol2 = require_define_well_known_symbol();
   defineWellKnownSymbol2("iterator");
 
-  // Layout_Editor.ts
+  // LayoutEditor.ts
   var import_es_array_iterator14 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
@@ -3650,7 +3650,7 @@
     });
   }
 
-  // Layout_Editor.ts
+  // LayoutEditor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.string.split.js
@@ -7434,7 +7434,7 @@
     return css_input;
   }
 
-  // Layout_Editor.ts
+  // LayoutEditor.ts
   var _templateObject3;
   var _templateObject23;
   var _templateObject32;

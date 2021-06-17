@@ -1,6 +1,6 @@
 import { css } from "@emotion/css";
 import { TractDir } from "./GridLayout";
-import { LayoutEditor } from "./Layout_Editor";
+import { LayoutEditor } from "./LayoutEditor";
 import { make_el, tract_add_or_remove_button } from "./make-elements";
 import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
 

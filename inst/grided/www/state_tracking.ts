@@ -1,5 +1,5 @@
 import { GalleryOptions, LayoutInfo } from "./index";
-import { LayoutEditorSetup } from "./Layout_Editor";
+import { LayoutEditorSetup } from "./LayoutEditor";
 
 export type StateDump = {
   type: "layout_edit" | "layout_chooser";

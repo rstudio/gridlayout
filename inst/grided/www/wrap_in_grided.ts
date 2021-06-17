@@ -1,4 +1,4 @@
-import { FinishButtonSetup, LayoutEditor } from "./Layout_Editor";
+import { FinishButtonSetup, LayoutEditor } from "./LayoutEditor";
 import { make_css_unit_input } from "./make-css_unit_input";
 import { block_el, click_button, make_el, text_el } from "./make-elements";
 import { make_toggle_switch } from "./make-toggle_switch";

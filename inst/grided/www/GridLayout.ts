@@ -1,4 +1,4 @@
-import { Grid_Pos } from "./GridItem";
+import { GridPos } from "./GridItem";
 import { get_gap_size } from "./utils-grid";
 
 export type TractDir = "rows" | "cols";
@@ -74,7 +74,7 @@ export class GridLayout {
     }
   }
 
-  sizes_for_tract(item_pos: Grid_Pos, dir: "row" | "col"): string[] {
+  sizes_for_tract(item_pos: GridPos, dir: "row" | "col"): string[] {
     const start_index: number =
       item_pos[`start_${dir}`] ?? item_pos[`end_${dir}`];
     const end_index: number =
@@ -86,7 +86,7 @@ export class GridLayout {
     );
   }
 
-  item_row_sizes(item_pos: Grid_Pos) {
+  item_row_sizes(item_pos: GridPos) {
     return this.sizes_for_tract(item_pos, "row");
   }
 }

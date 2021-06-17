@@ -1,8 +1,8 @@
 // Functions related to grid construction, editings, etc
 
-import { Grid_Pos } from "./GridItem";
+import { GridPos } from "./GridItem";
 import { TractDir } from "./GridLayout";
-import { LayoutEditor } from "./Layout_Editor";
+import { LayoutEditor } from "./LayoutEditor";
 import {
   boxes_overlap,
   get_bounding_rect,
@@ -45,7 +45,7 @@ export function find_first_grid_node(): HTMLElement {
   return grid_node;
 }
 
-export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
+export function set_element_in_grid(el: HTMLElement, grid_bounds: GridPos) {
   if (grid_bounds.start_row) {
     el.style.gridRowStart = grid_bounds.start_row.toString();
   }
@@ -62,7 +62,7 @@ export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {
   el.style.display = "block"; // make sure we can see the element
 }
 
-export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
+export function get_pos_on_grid(grid_el: HTMLElement): GridPos {
   const el_styles = getComputedStyle(grid_el);
   return {
     start_row: +el_styles.gridRowStart,
@@ -75,9 +75,9 @@ export function get_pos_on_grid(grid_el: HTMLElement): Grid_Pos {
 export function get_drag_extent_on_grid(
   app_state: LayoutEditor,
   selection_rect: SelectionRect
-): Grid_Pos {
+): GridPos {
   // Reset bounding box definitions so we only use current selection extent
-  const sel_bounds: Grid_Pos = {
+  const sel_bounds: GridPos = {
     start_col: null,
     end_col: null,
     start_row: null,

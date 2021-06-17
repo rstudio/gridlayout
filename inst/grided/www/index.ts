@@ -1,6 +1,6 @@
 // JS entry point
 import { LayoutState } from "./GridLayout";
-import { LayoutEditor, LayoutEditorSetup } from "./Layout_Editor";
+import { LayoutEditor, LayoutEditorSetup } from "./LayoutEditor";
 import {
   save_editor_history,
   save_gallery_history,

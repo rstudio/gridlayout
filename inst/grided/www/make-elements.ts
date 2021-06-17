@@ -1,7 +1,7 @@
 import { css } from "@emotion/css";
-import { Grid_Pos } from "./GridItem";
+import { GridPos } from "./GridItem";
 import { TractDir } from "./GridLayout";
-import { LayoutEditor } from "./Layout_Editor";
+import { LayoutEditor } from "./LayoutEditor";
 import { set_element_in_grid } from "./utils-grid";
 import { plus_icon, trashcan_icon } from "./utils-icons";
 import { as_array } from "./utils-misc";
@@ -25,7 +25,7 @@ export type ElementOpts = {
   styles?: object;
   innerHTML?: string;
   data_props?: object;
-  grid_pos?: Grid_Pos;
+  grid_pos?: GridPos;
   props?: object;
 };
 

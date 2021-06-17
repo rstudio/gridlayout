@@ -1,6 +1,6 @@
 import { css } from "@emotion/css";
 import { LayoutElement, LayoutInfo } from ".";
-import { GridItem, Grid_Pos } from "./GridItem";
+import { GridItem, GridPos } from "./GridItem";
 import { GridLayout, LayoutState, TractDir } from "./GridLayout";
 import { build_controls_for_dir, CSSInput } from "./make-css_unit_input";
 import { block_el, create_el, ElementOpts, make_el } from "./make-elements";
@@ -43,12 +43,12 @@ export type GridUpdateOptions = {
 
 type DragRes = {
   xy: XYPos;
-  grid: Grid_Pos;
+  grid: GridPos;
 };
 
 export type ElementInfo = {
   id: string;
-  grid_pos: Grid_Pos;
+  grid_pos: GridPos;
   grid_el: HTMLElement;
   list_el: HTMLElement;
   mirrored_element?: HTMLElement;
@@ -214,7 +214,7 @@ export class LayoutEditor {
   add_element(
     el_props: {
       id: string;
-      grid_pos: Grid_Pos;
+      grid_pos: GridPos;
       mirrored_element?: HTMLElement;
     },
     send_update: boolean = true
@@ -338,7 +338,7 @@ export class LayoutEditor {
     const update_grid_pos = (
       grid_item: GridItem,
       bounding_rect: SelectionRect
-    ): Grid_Pos => {
+    ): GridPos => {
       const grid_extent = get_drag_extent_on_grid(this, bounding_rect);
       grid_item.position = grid_extent;
       return grid_extent;

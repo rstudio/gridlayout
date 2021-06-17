@@ -3,7 +3,7 @@ import { GridLayout } from "./GridLayout";
 import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
 import { get_bounding_rect } from "./utils-misc";
 
-export type Grid_Pos = {
+export type GridPos = {
   start_col: number;
   start_row: number;
   end_col: number;
@@ -27,7 +27,7 @@ export class GridItem {
     Object.assign(this, opts);
   }
 
-  set position(pos: Grid_Pos) {
+  set position(pos: GridPos) {
     set_element_in_grid(this.el, pos);
     if (this.has_mirrored) {
       set_element_in_grid(this.mirrored_el, pos);
