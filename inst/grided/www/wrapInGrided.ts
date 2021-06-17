@@ -33,11 +33,7 @@ export function wrapInGrided(
 
   if (gridIsFilled) {
     buttons.push(
-      makeToggleSwitch(
-        "Edit layout",
-        "Interact mode",
-        toggleInteractionMode
-      )
+      makeToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode)
     );
   }
 

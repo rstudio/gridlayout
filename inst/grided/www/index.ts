@@ -4,7 +4,7 @@ import { LayoutEditor, LayoutEditorSetup } from "./LayoutEditor";
 import {
   saveEditorHistory,
   saveGalleryHistory,
-  StateDump
+  StateDump,
 } from "./state_tracking";
 import { addShinyListener, setShinyInput } from "./utils-shiny";
 import { copyCode } from "./web-components/copy-code";

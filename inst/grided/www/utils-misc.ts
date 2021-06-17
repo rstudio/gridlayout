@@ -71,8 +71,7 @@ export function boxesOverlap(
     // bbbbbb
     //         bbbbbb
     const aContainsBsEndpoint =
-      (aStart >= bStart && aStart <= bEnd) ||
-      (aEnd >= bStart && aEnd <= bEnd);
+      (aStart >= bStart && aStart <= bEnd) || (aEnd >= bStart && aEnd <= bEnd);
 
     //   aaaaaa
     // bbbbbbbbbb

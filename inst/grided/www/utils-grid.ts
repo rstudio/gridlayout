@@ -8,7 +8,7 @@ import {
   getBoundingRect,
   maxWithMissing,
   minWithMissing,
-  SelectionRect
+  SelectionRect,
 } from "./utils-misc";
 
 export function findFirstGridNode(): HTMLElement {
@@ -112,9 +112,7 @@ export function getGapSize(style: CSSStyleDeclaration | string) {
   // Older browsers give back both row-gap and column-gap in same query
   // so we need to reduce to a single value before returning
 
-  const gapSizeVec = (typeof style === "string" ? style : style.gap).split(
-    " "
-  );
+  const gapSizeVec = (typeof style === "string" ? style : style.gap).split(" ");
 
   return gapSizeVec[0];
 }

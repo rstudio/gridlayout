@@ -75,10 +75,8 @@ export class GridLayout {
   }
 
   sizesForTract(itemPos: GridPos, dir: "row" | "col"): string[] {
-    const startIndex: number =
-      itemPos[`start_${dir}`] ?? itemPos[`end_${dir}`];
-    const endIndex: number =
-      itemPos[`end_${dir}`] ?? itemPos[`start_${dir}`];
+    const startIndex: number = itemPos[`start_${dir}`] ?? itemPos[`end_${dir}`];
+    const endIndex: number = itemPos[`end_${dir}`] ?? itemPos[`start_${dir}`];
 
     const tractSizes = dir === "row" ? this.rows : this.cols;
     return tractSizes.filter(

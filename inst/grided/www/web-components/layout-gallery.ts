@@ -140,10 +140,7 @@ export class LayoutGallery extends HTMLElement {
     return this;
   }
 
-  focusOnLayout(
-    selectedLayout: LayoutInfo,
-    fireOnSelect: boolean = true
-  ) {
+  focusOnLayout(selectedLayout: LayoutInfo, fireOnSelect: boolean = true) {
     const modal = createFocusModal()
       .setTitle(selectedLayout.name)
       .maxWidth("95%")

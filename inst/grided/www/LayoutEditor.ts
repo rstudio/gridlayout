@@ -392,10 +392,7 @@ export class LayoutEditor {
         opts.dragDir
       );
 
-      Object.assign(
-        dragFeedbackRect.style,
-        boundingRectToCssPos(newRect)
-      );
+      Object.assign(dragFeedbackRect.style, boundingRectToCssPos(newRect));
 
       const gridExtent = updateGridPos(opts.gridItem, newRect);
       if (opts.onDrag) opts.onDrag({ xy: currLoc, grid: gridExtent });
@@ -504,18 +501,15 @@ function fillGridCells(appState: LayoutEditor) {
   for (let rowI = 1; rowI <= appState.gridLayout.numRows; rowI++) {
     for (let colI = 1; colI <= appState.gridLayout.numCols; colI++) {
       appState.currentCells.push(
-        appState.makeEl(
-          `div.r${rowI}.c${colI}.grid-cell.${gridCellStyles}`,
-          {
-            dataProps: { row: rowI, col: colI },
-            gridPos: {
-              start_row: rowI,
-              end_row: rowI,
-              start_col: colI,
-              end_col: colI,
-            },
-          }
-        )
+        appState.makeEl(`div.r${rowI}.c${colI}.grid-cell.${gridCellStyles}`, {
+          dataProps: { row: rowI, col: colI },
+          gridPos: {
+            start_row: rowI,
+            end_row: rowI,
+            start_col: colI,
+            end_col: colI,
+          },
+        })
       );
     }
   }
@@ -668,9 +662,7 @@ function setupNewItemDrag(appState: LayoutEditor) {
     ),
     parentLayout: appState.gridLayout,
   });
-  const dragCanvas = appState.makeEl(
-    `div#dragCanvas.${dragCanvasStyles}`
-  );
+  const dragCanvas = appState.makeEl(`div#dragCanvas.${dragCanvasStyles}`);
 
   appState.setupDrag({
     watchingElement: dragCanvas,
@@ -736,10 +728,7 @@ function setupTractControls(appState: LayoutEditor) {
 
     for (const dir of whichDirs) {
       controls[dir].forEach(({ matchedCell, el }) => {
-        const boundingRect = posRelativeToContainer(
-          editorPos,
-          matchedCell
-        );
+        const boundingRect = posRelativeToContainer(editorPos, matchedCell);
 
         Object.assign(
           el.style,
@@ -764,10 +753,7 @@ function setupTractControls(appState: LayoutEditor) {
   };
 }
 
-function elementNamingUi(
-  appState: LayoutEditor,
-  { gridPos, selectionBox }
-) {
+function elementNamingUi(appState: LayoutEditor, { gridPos, selectionBox }) {
   const nameForm = createEl({
     selTxt: `form#nameForm.centered`,
     styles: {

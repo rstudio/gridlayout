@@ -99,11 +99,9 @@ export function makeCssUnitInput({
     },
   });
 
-  const unitSelector = <HTMLSelectElement>(
-    makeEl(form, "select.unit-selector", {
-      props: { name: "units" },
-    })
-  );
+  const unitSelector = <HTMLSelectElement>makeEl(form, "select.unit-selector", {
+    props: { name: "units" },
+  });
 
   allowedUnits.forEach(function (unitType) {
     const unitOption = <HTMLOptionElement>(

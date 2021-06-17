@@ -37,8 +37,8 @@ export class GridPreview extends HTMLElement {
       if (!(tractSizing instanceof Array)) {
         tractSizing = [tractSizing];
       }
-      return tractSizing.map((x) => scaleUnits(x) ).join(" ");
-    }
+      return tractSizing.map((x) => scaleUnits(x)).join(" ");
+    };
 
     const cornerRadius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
@@ -90,11 +90,7 @@ export class GridPreview extends HTMLElement {
       
       .flipped { transform: rotate(-90deg); }
     </style>
-      ${
-        this.name 
-          ? `<h3> ${this.name} </h3>`
-          : ``
-      }
+      ${this.name ? `<h3> ${this.name} </h3>` : ``}
     <div id="layout"> ${this.elementDivs} </div>
     `;
 
@@ -145,13 +141,13 @@ export class GridPreview extends HTMLElement {
   get elementDivs() {
     let elementDivs = "";
     this.elements.forEach(
-      ({ id, start_row, start_col, end_row, end_col, flipId = false }) => {
+      ({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
         const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
           "/"
         );
         elementDivs += `
       <div style='grid-area:${gridArea}'>
-        <div ${flipId ? `class=flipped` : ``}>${id}</div>
+        <div ${flip_id ? `class=flipped` : ``}>${id}</div>
       </div>
     `;
       }

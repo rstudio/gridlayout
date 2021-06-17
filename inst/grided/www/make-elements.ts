@@ -29,7 +29,6 @@ export type ElementOpts = {
   props?: object;
 };
 
-
 export function parseSelectorText(selTxt: string) {
   // Safari doesn't support lookbehinds for regex so we have to make it manually
   const idMatch: RegExpMatchArray = selTxt.match(/#([^\.]+)/g);
@@ -91,16 +90,13 @@ export function makeEl(
   return el;
 }
 
-
 export function shadowEl(selTxt: string, ...children: HTMLElement[]) {
   const shadowHolder = blockEl(selTxt);
   shadowHolder.attachShadow({ mode: "open" });
   const styleSheet = document.createElement("style");
 
   shadowHolder.shadowRoot.appendChild(styleSheet);
-  children.forEach((childEl) =>
-    shadowHolder.shadowRoot.appendChild(childEl)
-  );
+  children.forEach((childEl) => shadowHolder.shadowRoot.appendChild(childEl));
   return {
     el: shadowHolder,
     styleSheet,
@@ -206,19 +202,11 @@ export function tractAddOrRemoveButton(
     additionalStyles?: Record<string, string>;
   }
 ) {
-  const {
-    parentEl,
-    addOrRemove,
-    dir,
-    tractIndex,
-    additionalStyles,
-  } = opts;
+  const { parentEl, addOrRemove, dir, tractIndex, additionalStyles } = opts;
   const dirSingular = dir === "rows" ? "row" : "col";
 
   const label =
-    addOrRemove === "add"
-      ? `Add a ${dirSingular}`
-      : `Remove ${dirSingular}`;
+    addOrRemove === "add" ? `Add a ${dirSingular}` : `Remove ${dirSingular}`;
 
   const button = makeEl(
     parentEl,
@@ -245,8 +233,11 @@ export function tractAddOrRemoveButton(
   return button;
 }
 
-
-export function clickButton(selector: string, label: string, onFinish: (event?: MouseEvent) => void){
+export function clickButton(
+  selector: string,
+  label: string,
+  onFinish: (event?: MouseEvent) => void
+) {
   const button = textEl(`button${selector}`, label);
   button.addEventListener("click", function (event) {
     onFinish(event);

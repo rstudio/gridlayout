@@ -8421,9 +8421,9 @@
       get: function get() {
         var elementDivs = "";
         this.elements.forEach(function(_ref) {
-          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flipId = _ref.flipId, flipId = _ref$flipId === void 0 ? false : _ref$flipId;
+          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
           var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
-          elementDivs += "\n      <div style='grid-area:".concat(gridArea, "'>\n        <div ").concat(flipId ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
+          elementDivs += "\n      <div style='grid-area:".concat(gridArea, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
         });
         return elementDivs;
       }
