@@ -23,7 +23,3 @@ export function setShinyInput(
 export function add_shiny_listener(event_id: string, callback_func: Function) {
   Shiny?.addCustomMessageHandler(event_id, callback_func);
 }
-
-export function send_grid_sizing_to_shiny(grid_attrs: Layout_State) {
-  setShinyInput("grid_sizing", grid_attrs);
-}

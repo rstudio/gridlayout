@@ -12,8 +12,6 @@ import {
 } from "./utils-misc";
 
 export function find_first_grid_node(): HTMLElement {
-
-
   // Do a BFS for a grid layout element in the page
   let grid_node: HTMLElement;
   let current_node = document.body;
@@ -53,27 +51,6 @@ function get_styles(container: HTMLElement | CSSStyleDeclaration) {
   } else {
     return container;
   }
-}
-
-export function get_rows(grid_container: HTMLElement | CSSStyleDeclaration) {
-  return get_styles(grid_container).gridTemplateRows.split(" ");
-}
-
-export function get_cols(grid_container: HTMLElement | CSSStyleDeclaration) {
-  return get_styles(grid_container).gridTemplateColumns.split(" ");
-}
-
-// Builds the start/end css string for a grid-{row,column}
-export function make_template_start_end(start: number, end?: number): string {
-  // If we only have a single value just assume we take up one row
-  // If single index is a negative one, we need to subtract instead of add to it
-  const negative_index: boolean = start < 0;
-
-  // Grid works with lines so if we want an element to end at the 4th column we
-  // need to tell it to end at the (4+1)5th line, so we add one
-  end = end ? end + 1 : start + (negative_index ? -1 : 1);
-  // end = end ? +end + 1 : start + (negative_index ? -1 : 1);
-  return `${start} / ${end}`;
 }
 
 export function set_element_in_grid(el: HTMLElement, grid_bounds: Grid_Pos) {

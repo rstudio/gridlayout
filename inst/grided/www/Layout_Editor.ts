@@ -3,13 +3,7 @@ import { Layout_Element, Layout_Info } from ".";
 import { Grid_Item, Grid_Pos } from "./Grid_Item";
 import { Grid_Layout, Layout_State, Tract_Dir } from "./Grid_Layout";
 import { build_controls_for_dir, CSS_Input } from "./make-css_unit_input";
-import {
-  Block_El,
-  El,
-  Element_Opts,
-  make_el,
-  remove_elements,
-} from "./make-elements";
+import { Block_El, El, Element_Opts, make_el } from "./make-elements";
 import { get_styles_for_selector_with_targets } from "./utils-cssom";
 import {
   bounding_rect_to_css_pos,
@@ -504,7 +498,7 @@ const grid_cell_styles = css`
 `;
 
 function fill_grid_cells(app_state: Layout_Editor) {
-  remove_elements(app_state.current_cells);
+  app_state.current_cells.forEach((e) => e.remove());
   app_state.current_cells = [];
 
   for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {

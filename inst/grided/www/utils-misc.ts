@@ -12,14 +12,6 @@ export type Selection_Rect = {
   bottom: number;
 };
 
-export function concat_nl(...component_strings: string[]) {
-  return component_strings.join("\n");
-}
-
-export function concat_sp(...component_strings: string[]) {
-  return component_strings.join(" ");
-}
-
 export function as_array<T>(content: T | Array<T>): Array<T> {
   if (content instanceof Array) {
     return content;
@@ -141,14 +133,6 @@ export function set_class(
   });
 }
 
-export function overlap<Type>(a: Type[], b: Type[]) {
-  for (let i = 0; i < a.length; ++i) {
-    if (b.includes(a[i])) return true;
-  }
-
-  return false;
-}
-
 export const filler_text = `
 <div class = "filler_text">
   This filler text demonstrates how the height of an element spanning an "auto"
@@ -158,15 +142,18 @@ export const filler_text = `
   specimen book.
 </div>`;
 
-export function pos_relative_to_container(container: DOMRect, child_el: HTMLElement) {
+export function pos_relative_to_container(
+  container: DOMRect,
+  child_el: HTMLElement
+) {
   const pos = child_el.getBoundingClientRect();
 
   return {
-    top:    pos.top - container.top,
+    top: pos.top - container.top,
     bottom: pos.bottom - container.bottom,
-    left:   pos.left - container.left,
-    right:  pos.right - container.right,
+    left: pos.left - container.left,
+    right: pos.right - container.right,
     height: pos.height,
     width: pos.width,
-  }
+  };
 }

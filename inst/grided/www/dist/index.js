@@ -6276,21 +6276,17 @@
     }
     return arr2;
   }
-  function extract_id(sel_txt) {
+  function parse_selector_text(sel_txt) {
     var id_match = sel_txt.match(/#([^\.]+)/g);
-    return id_match ? id_match[0].replace("#", "") : null;
-  }
-  function extract_classes(sel_txt) {
-    var class_list = sel_txt.match(/\.([^\.#]+)/g);
-    return class_list ? _toConsumableArray2(class_list).map(function(c) {
+    var el_id = id_match ? id_match[0].replace("#", "") : null;
+    var all_classes = sel_txt.match(/\.([^\.#]+)/g);
+    var class_list = all_classes ? _toConsumableArray2(all_classes).map(function(c) {
       return c.replace(".", "");
     }) : null;
-  }
-  function parse_selector_text(sel_txt) {
     return {
       tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
-      el_id: extract_id(sel_txt),
-      class_list: extract_classes(sel_txt)
+      el_id: el_id,
+      class_list: class_list
     };
   }
   function make_el(parent, sel_txt) {
@@ -6323,11 +6319,6 @@
       set_element_in_grid(el, opts.grid_pos);
     }
     return el;
-  }
-  function remove_elements(els_to_remove) {
-    els_to_remove.forEach(function(e) {
-      return e.remove();
-    });
   }
   function Shadow_El(sel_txt) {
     var shadow_holder = Block_El(sel_txt);
@@ -6393,12 +6384,12 @@
       text: text
     });
   }
-  var incrementer_button = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
+  var incrementer_button_class = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
   function tract_add_or_remove_button(app_state, opts) {
     var parent_el = opts.parent_el, add_or_remove = opts.add_or_remove, dir = opts.dir, tract_index = opts.tract_index, additional_styles = opts.additional_styles;
     var dir_singular = dir === "rows" ? "row" : "col";
     var label = add_or_remove === "add" ? "Add a ".concat(dir_singular) : "Remove ".concat(dir_singular);
-    var button = make_el(parent_el, "button.".concat(incrementer_button, ".").concat(add_or_remove, "-").concat(dir_singular, ".").concat(dir, "_").concat(tract_index), {
+    var button = make_el(parent_el, "button.".concat(incrementer_button_class, ".").concat(add_or_remove, "-").concat(dir_singular, ".").concat(dir, "_").concat(tract_index), {
       innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
       styles: additional_styles,
       event_listener: {
@@ -6766,20 +6757,17 @@
     }
     return arr2;
   }
-  function get_all_rules_for_selector(selector_text) {
+  function get_styles_for_selector_with_targets(selector_text, target_properties) {
     var defines_ruleset = function defines_ruleset2(selector_text2) {
       return function(rule) {
         return rule.selectorText === selector_text2;
       };
     };
-    return _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
+    var all_rules_for_selector = _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
       return _toConsumableArray3(style_sheet.rules).find(defines_ruleset(selector_text));
     }).map(function(x) {
       return _toConsumableArray3(x.cssRules).find(defines_ruleset(selector_text)).style;
     });
-  }
-  function get_styles_for_selector_with_targets(selector_text, target_properties) {
-    var all_rules_for_selector = get_all_rules_for_selector(selector_text);
     return all_rules_for_selector.find(function(rule) {
       return target_properties.every(function(x) {
         return rule[x];
@@ -7334,10 +7322,9 @@
     });
     make_el(label, "span.slider");
     var _Shadow_El = Shadow_El("div.toggle-switch", container), el = _Shadow_El.el, style_sheet = _Shadow_El.style_sheet;
-    style_sheet.innerHTML = toggle_styles;
+    style_sheet.innerHTML = '\n  div.toggle-switch {\n    display: inline-grid;\n    grid-template-columns: 1fr auto 1fr;\n    grid-gap: 3px;\n    width: 180px;\n    align-items: center;\n    justify-items: center;\n    padding-left: 4px;\n    padding-right: 4px;\n  }\n  \n  .toggle-switch > span {\n    font-size: 1rem;\n  }\n  \n  .toggle-switch > .off-text {\n    text-align: end;\n  }\n  \n  .switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }\n  \n  .switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }\n  \n  .slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  .slider:before {\n    position: absolute;\n    content: "";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  input:checked + .slider {\n    background-color: #2196F3;\n  }\n  \n  input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }\n  \n  input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }\n  ';
     return el;
   }
-  var toggle_styles = '\ndiv.toggle-switch {\n  display: inline-grid;\n  grid-template-columns: 1fr auto 1fr;\n  grid-gap: 3px;\n  width: 180px;\n  align-items: center;\n  justify-items: center;\n  padding-left: 4px;\n  padding-right: 4px;\n}\n\n.toggle-switch > span {\n  font-size: 1rem;\n}\n\n.toggle-switch > .off-text {\n  text-align: end;\n}\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border-radius: 34px;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: "";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  border-radius: 50%;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n';
 
   // wrap_in_grided.ts
   function _toConsumableArray4(arr) {
@@ -7704,7 +7691,7 @@
       }
     }, {
       key: "remove_elements",
-      value: function remove_elements2(ids) {
+      value: function remove_elements(ids) {
         var _this2 = this;
         as_array(ids).forEach(function(el_id) {
           var entry_index = _this2.elements.findIndex(function(el) {
@@ -7887,7 +7874,9 @@
   }();
   var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
-    remove_elements(app_state.current_cells);
+    app_state.current_cells.forEach(function(e) {
+      return e.remove();
+    });
     app_state.current_cells = [];
     for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
       for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {

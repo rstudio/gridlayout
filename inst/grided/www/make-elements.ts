@@ -29,22 +29,20 @@ export type Element_Opts = {
   props?: object;
 };
 
-// Safari doesn't support lookbehinds for regex so we have to make it manually
-function extract_id(sel_txt: string): string | null {
-  const id_match: RegExpMatchArray = sel_txt.match(/#([^\.]+)/g);
-  return id_match ? id_match[0].replace("#", "") : null;
-}
-
-function extract_classes(sel_txt: string): Array<string> | null {
-  const class_list: RegExpMatchArray = sel_txt.match(/\.([^\.#]+)/g);
-  return class_list ? [...class_list].map((c) => c.replace(".", "")) : null;
-}
 
 export function parse_selector_text(sel_txt: string) {
+  // Safari doesn't support lookbehinds for regex so we have to make it manually
+  const id_match: RegExpMatchArray = sel_txt.match(/#([^\.]+)/g);
+  const el_id = id_match ? id_match[0].replace("#", "") : null;
+
+  const all_classes: RegExpMatchArray = sel_txt.match(/\.([^\.#]+)/g);
+  const class_list = all_classes
+    ? [...all_classes].map((c) => c.replace(".", ""))
+    : null;
   return {
     tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
-    el_id: extract_id(sel_txt),
-    class_list: extract_classes(sel_txt),
+    el_id,
+    class_list,
   };
 }
 
@@ -93,12 +91,6 @@ export function make_el(
   return el;
 }
 
-// Given a list of elements from a query selector, remove them all
-export function remove_elements(
-  els_to_remove: NodeListOf<Element> | Element[]
-): void {
-  els_to_remove.forEach((e) => e.remove());
-}
 
 export function Shadow_El(sel_txt: string, ...children: HTMLElement[]) {
   const shadow_holder = Block_El(sel_txt);
@@ -162,7 +154,7 @@ export function Text_El(sel_txt: string, text: string) {
     text,
   });
 }
-const incrementer_button = css`
+const incrementer_button_class = css`
   font-size: 15px;
   height: 2em;
   width: 2em;
@@ -230,7 +222,7 @@ export function tract_add_or_remove_button(
 
   const button = make_el(
     parent_el,
-    `button.${incrementer_button}.${add_or_remove}-${dir_singular}.${dir}_${tract_index}`,
+    `button.${incrementer_button_class}.${add_or_remove}-${dir_singular}.${dir}_${tract_index}`,
     {
       innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
       styles: additional_styles,
