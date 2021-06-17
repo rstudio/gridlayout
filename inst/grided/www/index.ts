@@ -5,7 +5,7 @@ import {
   saveEditorHistory,
   saveGalleryHistory,
   StateDump,
-} from "./state_tracking";
+} from "./stateTracking";
 import { addShinyListener, setShinyInput } from "./utils-shiny";
 import { copyCode } from "./web-components/copy-code";
 import { createFocusModal } from "./web-components/focus-modal";

@@ -8139,7 +8139,7 @@
     modal.addToPage();
   }
 
-  // state_tracking.ts
+  // stateTracking.ts
   var saveGalleryHistory = function saveGalleryHistory2(layouts, selected) {
     var opts = {
       layouts: layouts
