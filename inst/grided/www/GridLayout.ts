@@ -1,5 +1,5 @@
 import { GridPos } from "./GridItem";
-import { get_gap_size } from "./utils-grid";
+import { getGapSize } from "./utils-grid";
 
 export type TractDir = "rows" | "cols";
 type GridAttr = "rows" | "cols" | "gap";
@@ -18,41 +18,41 @@ export class GridLayout {
     this.styles = container.style;
   }
 
-  set rows(new_rows: string[]) {
-    if (typeof new_rows === "undefined") return;
-    this.styles.gridTemplateRows = new_rows.join(" ");
+  set rows(newRows: string[]) {
+    if (typeof newRows === "undefined") return;
+    this.styles.gridTemplateRows = newRows.join(" ");
   }
   get rows(): string[] {
     return this.styles.gridTemplateRows.split(" ");
   }
-  get num_rows() {
+  get numRows() {
     return this.rows.length;
   }
 
-  set cols(new_cols: string[]) {
-    if (typeof new_cols === "undefined") return;
-    this.styles.gridTemplateColumns = new_cols.join(" ");
+  set cols(newCols: string[]) {
+    if (typeof newCols === "undefined") return;
+    this.styles.gridTemplateColumns = newCols.join(" ");
   }
   get cols(): string[] {
     return this.styles.gridTemplateColumns.split(" ");
   }
-  get num_cols() {
+  get numCols() {
     return this.cols.length;
   }
 
-  set gap(new_gap: string) {
-    if (typeof new_gap === "undefined") return;
+  set gap(newGap: string) {
+    if (typeof newGap === "undefined") return;
     // This sets the --grid-gap variable so that the controls that need the
     // info can use it to keep a constant distance from the grid holder
-    document.querySelector("body").style.setProperty("--grid-gap", new_gap);
-    // this.container.parentElement.style.setProperty("--grid-gap", new_gap);
+    document.querySelector("body").style.setProperty("--grid-gap", newGap);
+    // this.container.parentElement.style.setProperty("--grid-gap", newGap);
     // We dont use css variables in the exported css that existing apps used
     // so we need to modify both gap and padding
-    this.styles.gap = new_gap;
-    this.styles.padding = new_gap;
+    this.styles.gap = newGap;
+    this.styles.padding = newGap;
   }
   get gap(): string {
-    return get_gap_size(this.styles.gap);
+    return getGapSize(this.styles.gap);
   }
 
   get attrs(): LayoutState {
@@ -63,35 +63,35 @@ export class GridLayout {
     };
   }
 
-  is_updated_val(attr: GridAttr, values?: string | string[]) {
+  isUpdatedVal(attr: GridAttr, values?: string | string[]) {
     // Assume no value passed means no update. This allows us to call and check
     // on objects that may not have the attribute in them.
     if (typeof values === "undefined") return false;
     if (attr === "gap") {
       return values !== this.gap;
     } else if (typeof values === "object") {
-      return !equal_arrays(this[attr], values);
+      return !equalArrays(this[attr], values);
     }
   }
 
-  sizes_for_tract(item_pos: GridPos, dir: "row" | "col"): string[] {
-    const start_index: number =
-      item_pos[`start_${dir}`] ?? item_pos[`end_${dir}`];
-    const end_index: number =
-      item_pos[`end_${dir}`] ?? item_pos[`start_${dir}`];
+  sizesForTract(itemPos: GridPos, dir: "row" | "col"): string[] {
+    const startIndex: number =
+      itemPos[`start_${dir}`] ?? itemPos[`end_${dir}`];
+    const endIndex: number =
+      itemPos[`end_${dir}`] ?? itemPos[`start_${dir}`];
 
-    const tract_sizes = dir === "row" ? this.rows : this.cols;
-    return tract_sizes.filter(
-      (val: string, i: number) => i + 1 >= start_index && i + 1 <= end_index
+    const tractSizes = dir === "row" ? this.rows : this.cols;
+    return tractSizes.filter(
+      (val: string, i: number) => i + 1 >= startIndex && i + 1 <= endIndex
     );
   }
 
-  item_row_sizes(item_pos: GridPos) {
-    return this.sizes_for_tract(item_pos, "row");
+  itemRowSizes(itemPos: GridPos) {
+    return this.sizesForTract(itemPos, "row");
   }
 }
 
-function equal_arrays<Type>(a: Type[], b: Type[]) {
+function equalArrays<Type>(a: Type[], b: Type[]) {
   if (a.length !== b.length) return false;
 
   for (let i = 0; i < a.length; ++i) {

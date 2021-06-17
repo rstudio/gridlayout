@@ -3,12 +3,12 @@ import { LayoutState } from "../GridLayout";
 
 export class GridPreview extends HTMLElement {
   grid: LayoutState;
-  _render_size: number;
-  _shown_size: number;
+  RenderSize: number;
+  ShownSize: number;
   name: string;
   elements: LayoutElement[];
-  hover_animation: boolean;
-  _on_select: (info: LayoutInfo) => void;
+  hoverAnimation: boolean;
+  OnSelect: (info: LayoutInfo) => void;
 
   constructor() {
     super();
@@ -16,44 +16,44 @@ export class GridPreview extends HTMLElement {
 
     this.grid = { rows: ["1fr"], cols: ["1fr"], gap: "1rem" };
     this.elements = [];
-    this._render_size = 1250;
-    this._shown_size = 250;
-    this._on_select = () => console.log(`Selected ${this.name}`);
-    this.hover_animation = true;
+    this.RenderSize = 1250;
+    this.ShownSize = 250;
+    this.OnSelect = () => console.log(`Selected ${this.name}`);
+    this.hoverAnimation = true;
   }
 
   connectedCallback() {
-    const scale = this._render_size / this._shown_size;
+    const scale = this.RenderSize / this.ShownSize;
 
-    const scale_units = (unit: string) => {
+    const scaleUnits = (unit: string) => {
       // Dont calc with relative units ()
       if (unit.includes("fr") || unit.includes("auto")) return unit;
       return `calc(${unit}/ ${scale})`;
     };
 
-    const build_tract_definition = (tract_sizing: string | string[]) => {
+    const buildTractDefinition = (tractSizing: string | string[]) => {
       // If we have a single tract then json serialization will not keep it
       // as an array and we need to convert it back to one.
-      if (!(tract_sizing instanceof Array)) {
-        tract_sizing = [tract_sizing];
+      if (!(tractSizing instanceof Array)) {
+        tractSizing = [tractSizing];
       }
-      return tract_sizing.map((x) => scale_units(x) ).join(" ");
+      return tractSizing.map((x) => scaleUnits(x) ).join(" ");
     }
 
-    const corner_radius = `${20 / scale}px`;
+    const cornerRadius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
       * { box-sizing: border-box; }
 
       #layout {
         box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
-        border-radius: ${corner_radius};
-        width: ${this._shown_size}px;
-        height: ${this._shown_size}px;
+        border-radius: ${cornerRadius};
+        width: ${this.ShownSize}px;
+        height: ${this.ShownSize}px;
         display: grid;
-        grid-template-rows: ${build_tract_definition(this.grid.rows)};
-        grid-template-columns: ${build_tract_definition(this.grid.cols)};
-        gap: ${scale_units(this.grid.gap)};
+        grid-template-rows: ${buildTractDefinition(this.grid.rows)};
+        grid-template-columns: ${buildTractDefinition(this.grid.cols)};
+        gap: ${scaleUnits(this.grid.gap)};
         padding: ${30 / scale}px;
         background-color: white;
         margin-left: auto;
@@ -61,7 +61,7 @@ export class GridPreview extends HTMLElement {
         overflow: scroll;
       }
       ${
-        this.hover_animation
+        this.hoverAnimation
           ? `
           #layout:hover {
             transition: transform 1s ease;
@@ -78,7 +78,7 @@ export class GridPreview extends HTMLElement {
         width: 100%;
         height: 100%;
         border: 1px solid #bababa;
-        border-radius: ${corner_radius};
+        border-radius: ${cornerRadius};
         display: grid;
         place-content: center;
         background-color: darksalmon;
@@ -95,7 +95,7 @@ export class GridPreview extends HTMLElement {
           ? `<h3> ${this.name} </h3>`
           : ``
       }
-    <div id="layout"> ${this.element_divs} </div>
+    <div id="layout"> ${this.elementDivs} </div>
     `;
 
     this.shadowRoot
@@ -103,7 +103,7 @@ export class GridPreview extends HTMLElement {
       .addEventListener("click", (event) => {
         // Dont let the gallery background pickup event and kill selection
         event.stopPropagation();
-        this._on_select({
+        this.OnSelect({
           name: this.name,
           elements: this.elements,
           grid: this.grid,
@@ -118,50 +118,50 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
-  render_size(new_size: number) {
-    this._render_size = new_size;
+  renderSize(newSize: number) {
+    this.RenderSize = newSize;
     return this;
   }
 
-  shown_size(new_size: number) {
-    this._shown_size = new_size;
+  shownSize(newSize: number) {
+    this.ShownSize = newSize;
     return this;
   }
 
-  on_select(on_select: (info: LayoutInfo) => void) {
-    this._on_select = on_select;
+  onSelect(onSelect: (info: LayoutInfo) => void) {
+    this.OnSelect = onSelect;
     return this;
   }
 
-  hide_name() {
+  hideName() {
     this.name = null;
     return this;
   }
-  turnoff_animation() {
-    this.hover_animation = false;
+  turnoffAnimation() {
+    this.hoverAnimation = false;
     return this;
   }
 
-  get element_divs() {
-    let element_divs = "";
+  get elementDivs() {
+    let elementDivs = "";
     this.elements.forEach(
-      ({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
-        const grid_area = [start_row, start_col, end_row + 1, end_col + 1].join(
+      ({ id, start_row, start_col, end_row, end_col, flipId = false }) => {
+        const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
           "/"
         );
-        element_divs += `
-      <div style='grid-area:${grid_area}'>
-        <div ${flip_id ? `class=flipped` : ``}>${id}</div>
+        elementDivs += `
+      <div style='grid-area:${gridArea}'>
+        <div ${flipId ? `class=flipped` : ``}>${id}</div>
       </div>
     `;
       }
     );
 
-    return element_divs;
+    return elementDivs;
   }
 }
 
-export function grid_preview() {
+export function gridPreview() {
   return new GridPreview();
 }
 

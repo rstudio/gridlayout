@@ -1,35 +1,35 @@
-import { block_el, make_el, shadow_el } from "./make-elements";
+import { blockEl, makeEl, shadowEl } from "./make-elements";
 
-export function make_toggle_switch(
-  off_text: string,
-  on_text: string,
-  on_change: (is_on: boolean) => void
+export function makeToggleSwitch(
+  offText: string,
+  onText: string,
+  onChange: (isOn: boolean) => void
 ) {
-  const container = block_el("div.toggle-switch");
+  const container = blockEl("div.toggle-switch");
 
-  make_el(container, "span.off-text", {
-    innerHTML: off_text,
+  makeEl(container, "span.off-text", {
+    innerHTML: offText,
   });
-  const label = make_el(container, "label.switch");
-  make_el(container, "span.on-text", {
-    innerHTML: on_text,
+  const label = makeEl(container, "label.switch");
+  makeEl(container, "span.on-text", {
+    innerHTML: onText,
   });
-  make_el(label, "input", {
+  makeEl(label, "input", {
     props: { type: "checkbox" },
-    event_listener: {
+    eventListener: {
       event: "change",
       func: (event) => {
-        on_change((event.target as HTMLInputElement).checked);
+        onChange((event.target as HTMLInputElement).checked);
       },
     },
   });
 
-  make_el(label, "span.slider");
+  makeEl(label, "span.slider");
 
-  const { el, style_sheet } = shadow_el("div.toggle-switch", container);
+  const { el, styleSheet } = shadowEl("div.toggle-switch", container);
 
   // Add styles
-  style_sheet.innerHTML = `
+  styleSheet.innerHTML = `
   div.toggle-switch {
     display: inline-grid;
     grid-template-columns: 1fr auto 1fr;

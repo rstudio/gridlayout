@@ -1,63 +1,63 @@
-import { close_icon } from "../utils-icons";
+import { closeIcon } from "../utils-icons";
 import "./copy-code.ts";
 
 class FocusModal extends HTMLElement {
-  _on_close: () => void;
-  _title: string;
-  _max_width: string = "450px";
-  _children: HTMLElement[] = [];
-  _description: string;
-  has_rendered: boolean = false;
+  OnClose: () => void;
+  Title: string;
+  MaxWidth: string = "450px";
+  Children: HTMLElement[] = [];
+  Description: string;
+  hasRendered: boolean = false;
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
   }
 
-  set_title(title: string) {
-    this._title = title;
+  setTitle(title: string) {
+    this.Title = title;
     return this;
   }
 
   description(description: string) {
-    this._description = description;
+    this.Description = description;
     return this;
   }
 
-  max_width(width: string) {
-    this._max_width = width;
+  maxWidth(width: string) {
+    this.MaxWidth = width;
     return this;
   }
 
-  add_element(el: HTMLElement) {
-    if (this.has_rendered) {
+  addElement(el: HTMLElement) {
+    if (this.hasRendered) {
       this.shadowRoot.getElementById("content").appendChild(el);
       return this;
     }
-    this._children.push(el);
+    this.Children.push(el);
     return this;
   }
 
-  on_close(callback: () => void) {
-    this._on_close = callback;
+  onClose(callback: () => void) {
+    this.OnClose = callback;
     return this;
   }
 
   // Allows us to make an element focused for immediate action such as typing
   // in a value etc.
-  focus_on(el_id: string) {
-    this.shadowRoot.getElementById(el_id).focus();
+  focusOn(elId: string) {
+    this.shadowRoot.getElementById(elId).focus();
     return this;
   }
 
-  setup_close_callbacks() {
+  setupCloseCallbacks() {
     // Setup close callbacks for close button and off-modal click
-    const exit_fn = () => {
-      this._on_close?.();
+    const exitFn = () => {
+      this.OnClose?.();
       this.remove();
     };
-    this.shadowRoot.getElementById("close").addEventListener("click", exit_fn);
-    this.addEventListener("click", exit_fn);
+    this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
+    this.addEventListener("click", exitFn);
     // Stop propigation of click events in the modal content so selecting text
     // or clicking the copy code button doesnt close the modal
     this.shadowRoot
@@ -67,9 +67,9 @@ class FocusModal extends HTMLElement {
       });
   }
 
-  add_to_page() {
+  addToPage() {
     document.body.appendChild(this);
-    this.has_rendered = true;
+    this.hasRendered = true;
     return this;
   }
 
@@ -103,7 +103,7 @@ class FocusModal extends HTMLElement {
          border-radius: 4px;
          width: 95%;
          min-width: 400px;
-         max-width: ${this._max_width};
+         max-width: ${this.MaxWidth};
          background: white;
          padding: 2rem 3rem;
          position: relative;
@@ -141,27 +141,27 @@ class FocusModal extends HTMLElement {
        }
      </style>
      <div id="content">
-       ${this._title ? `<h2 id = 'title'> ${this._title} </h2>` : ``}
-       <button id = 'close'> ${close_icon} </button>
+       ${this.Title ? `<h2 id = 'title'> ${this.Title} </h2>` : ``}
+       <button id = 'close'> ${closeIcon} </button>
        ${
-         this._description
-           ? `<div id = "description">${this._description}</div>`
+         this.Description
+           ? `<div id = "description">${this.Description}</div>`
            : ``
        }
      </div>
    `;
 
     const content = this.shadowRoot.getElementById("content");
-    this._children.forEach((el) => {
+    this.Children.forEach((el) => {
       content.appendChild(el);
     });
 
-    this.setup_close_callbacks();
+    this.setupCloseCallbacks();
   }
 }
 
 customElements.define("focus-modal", FocusModal);
 
-export function create_focus_modal() {
+export function createFocusModal() {
   return new FocusModal();
 }

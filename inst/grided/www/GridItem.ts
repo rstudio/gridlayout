@@ -1,7 +1,7 @@
 import { LayoutElement } from ".";
 import { GridLayout } from "./GridLayout";
-import { get_pos_on_grid, set_element_in_grid } from "./utils-grid";
-import { get_bounding_rect } from "./utils-misc";
+import { getPosOnGrid, setElementInGrid } from "./utils-grid";
+import { getBoundingRect } from "./utils-misc";
 
 export type GridPos = {
   start_col: number;
@@ -13,38 +13,38 @@ export type GridPos = {
 export class GridItem {
   id: string;
   el: HTMLElement;
-  mirrored_el?: HTMLElement;
-  sibling_el?: HTMLElement;
-  parent_layout: GridLayout;
+  mirroredEl?: HTMLElement;
+  siblingEl?: HTMLElement;
+  parentLayout: GridLayout;
 
   constructor(opts: {
     el: HTMLElement;
     id: string;
-    mirrored_el?: HTMLElement;
-    sibling_el?: HTMLElement;
-    parent_layout: GridLayout;
+    mirroredEl?: HTMLElement;
+    siblingEl?: HTMLElement;
+    parentLayout: GridLayout;
   }) {
     Object.assign(this, opts);
   }
 
   set position(pos: GridPos) {
-    set_element_in_grid(this.el, pos);
-    if (this.has_mirrored) {
-      set_element_in_grid(this.mirrored_el, pos);
+    setElementInGrid(this.el, pos);
+    if (this.hasMirrored) {
+      setElementInGrid(this.mirroredEl, pos);
     }
-    this.fill_if_in_auto_row();
+    this.fillIfInAutoRow();
   }
 
   get position() {
-    return get_pos_on_grid(this.el);
+    return getPosOnGrid(this.el);
   }
 
-  get bounding_rect() {
-    return get_bounding_rect(this.el);
+  get boundingRect() {
+    return getBoundingRect(this.el);
   }
 
-  get has_mirrored() {
-    return typeof this.mirrored_el !== "undefined";
+  get hasMirrored() {
+    return typeof this.mirroredEl !== "undefined";
   }
 
   get style() {
@@ -58,12 +58,12 @@ export class GridItem {
     };
   }
 
-  fill_if_in_auto_row() {
-    const in_auto_row = this.parent_layout
-      .item_row_sizes(this.position)
+  fillIfInAutoRow() {
+    const inAutoRow = this.parentLayout
+      .itemRowSizes(this.position)
       .includes("auto");
 
-    if (in_auto_row && !this.has_mirrored) {
+    if (inAutoRow && !this.hasMirrored) {
       this.el.classList.add("in-auto-row");
     } else {
       this.el.classList.remove("in-auto-row");
@@ -72,11 +72,11 @@ export class GridItem {
 
   remove() {
     this.el.remove();
-    if (this.has_mirrored) {
-      this.mirrored_el.remove();
+    if (this.hasMirrored) {
+      this.mirroredEl.remove();
     }
-    if (this.sibling_el) {
-      this.sibling_el.remove();
+    if (this.siblingEl) {
+      this.siblingEl.remove();
     }
   }
 }

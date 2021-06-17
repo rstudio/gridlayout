@@ -1,17 +1,17 @@
 import { LayoutInfo } from "..";
-import { click_button, create_el } from "../make-elements";
-import { create_focus_modal } from "./focus-modal";
-import { grid_preview } from "./grid-preview";
+import { clickButton, createEl } from "../make-elements";
+import { createFocusModal } from "./focus-modal";
+import { gridPreview } from "./grid-preview";
 
 type SelectFn = (info: LayoutInfo) => void;
 export class LayoutGallery extends HTMLElement {
   layouts: LayoutInfo[];
-  preselected_layout_name: string;
+  preselectedLayoutName: string;
 
-  on_edit_fn: SelectFn;
-  on_go_fn: SelectFn;
-  on_cancel_fn: () => void;
-  on_select_fn: (name: string) => void;
+  onEditFn: SelectFn;
+  onGoFn: SelectFn;
+  onCancelFn: () => void;
+  onSelectFn: (name: string) => void;
 
   constructor(layouts: LayoutInfo[]) {
     super();
@@ -92,19 +92,19 @@ export class LayoutGallery extends HTMLElement {
 
     this.shadowRoot.getElementById("layouts").append(
       ...this.layouts.map((layout) =>
-        grid_preview()
+        gridPreview()
           .layout(layout)
-          .shown_size(100)
-          .on_select((x: LayoutInfo) => this.focus_on_layout(x))
+          .shownSize(100)
+          .onSelect((x: LayoutInfo) => this.focusOnLayout(x))
       )
     );
 
     // If we have a preselected layout, find it and put it in focus modal
     // on load.
-    if (this.preselected_layout_name) {
-      this.focus_on_layout(
+    if (this.preselectedLayoutName) {
+      this.focusOnLayout(
         this.layouts.find(
-          (layout) => layout.name === this.preselected_layout_name
+          (layout) => layout.name === this.preselectedLayoutName
         ),
         // Dont fire on select argument because we only preselect from
         // a history event so we don't want to overwrite the history path.
@@ -113,50 +113,50 @@ export class LayoutGallery extends HTMLElement {
     }
   }
 
-  on_edit(on_edit_fn: SelectFn) {
-    this.on_edit_fn = on_edit_fn;
+  onEdit(onEditFn: SelectFn) {
+    this.onEditFn = onEditFn;
     return this;
   }
 
-  on_go(on_go_fn: SelectFn) {
-    this.on_go_fn = on_go_fn;
+  onGo(onGoFn: SelectFn) {
+    this.onGoFn = onGoFn;
     return this;
   }
 
-  on_cancel(on_cancel_fn: () => void) {
-    this.on_cancel_fn = on_cancel_fn;
+  onCancel(onCancelFn: () => void) {
+    this.onCancelFn = onCancelFn;
     return this;
   }
 
-  select_layout(name?: string) {
+  selectLayout(name?: string) {
     if (name) {
-      this.preselected_layout_name = name;
+      this.preselectedLayoutName = name;
     }
     return this;
   }
 
-  on_select(fn: (name: string) => void) {
-    this.on_select_fn = fn;
+  onSelect(fn: (name: string) => void) {
+    this.onSelectFn = fn;
     return this;
   }
 
-  focus_on_layout(
-    selected_layout: LayoutInfo,
-    fire_on_select: boolean = true
+  focusOnLayout(
+    selectedLayout: LayoutInfo,
+    fireOnSelect: boolean = true
   ) {
-    const modal = create_focus_modal()
-      .set_title(selected_layout.name)
-      .max_width("95%")
-      .on_close(this.on_cancel_fn)
-      .add_element(
-        grid_preview()
-          .layout(selected_layout)
-          .shown_size(650)
-          .turnoff_animation()
-          .hide_name()
+    const modal = createFocusModal()
+      .setTitle(selectedLayout.name)
+      .maxWidth("95%")
+      .onClose(this.onCancelFn)
+      .addElement(
+        gridPreview()
+          .layout(selectedLayout)
+          .shownSize(650)
+          .turnoffAnimation()
+          .hideName()
       );
 
-    const close_gallery = (event: MouseEvent) => {
+    const closeGallery = (event: MouseEvent) => {
       // Stop propigation of click event down so it doesn't trigger the
       // background click-to-go-back behavior
       event.stopPropagation();
@@ -164,31 +164,31 @@ export class LayoutGallery extends HTMLElement {
       modal.remove();
     };
 
-    modal.add_element(
-      create_el({
-        sel_txt: `div#footer`,
+    modal.addElement(
+      createEl({
+        selTxt: `div#footer`,
         children: [
-          click_button(".go", "Create app with this layout", (event) => {
-            close_gallery(event);
-            this.on_go_fn(selected_layout);
+          clickButton(".go", "Create app with this layout", (event) => {
+            closeGallery(event);
+            this.onGoFn(selectedLayout);
           }),
-          click_button(".edit", "Edit this layout", (event) => {
-            close_gallery(event);
-            this.on_edit_fn(selected_layout);
+          clickButton(".edit", "Edit this layout", (event) => {
+            closeGallery(event);
+            this.onEditFn(selectedLayout);
           }),
         ],
       })
     );
 
-    modal.add_to_page();
+    modal.addToPage();
 
-    if (fire_on_select) {
-      this.on_select_fn(selected_layout.name);
+    if (fireOnSelect) {
+      this.onSelectFn(selectedLayout.name);
     }
   }
 }
 
-export function layout_gallery(layouts: LayoutInfo[]) {
+export function layoutGallery(layouts: LayoutInfo[]) {
   return new LayoutGallery(layouts);
 }
 

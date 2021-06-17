@@ -2,15 +2,14 @@
 import { LayoutState } from "./GridLayout";
 import { LayoutEditor, LayoutEditorSetup } from "./LayoutEditor";
 import {
-  save_editor_history,
-  save_gallery_history,
-  StateDump,
+  saveEditorHistory,
+  saveGalleryHistory,
+  StateDump
 } from "./state_tracking";
-import { add_shiny_listener, setShinyInput } from "./utils-shiny";
-import { copy_code } from "./web-components/copy-code";
-import { create_focus_modal } from "./web-components/focus-modal";
-import { LayoutGallery, layout_gallery } from "./web-components/layout-gallery";
-
+import { addShinyListener, setShinyInput } from "./utils-shiny";
+import { copyCode } from "./web-components/copy-code";
+import { createFocusModal } from "./web-components/focus-modal";
+import { LayoutGallery, layoutGallery } from "./web-components/layout-gallery";
 
 export type LayoutElement = {
   id: string;
@@ -33,103 +32,99 @@ export type GalleryOptions = {
 };
 
 // Fresh start on page
-const clear_page = () => (document.body.innerHTML = ``);
+const clearPage = () => (document.body.innerHTML = ``);
 
-const start_layout_gallery = (
+const startLayoutGallery = (
   opts: GalleryOptions,
-  save_history: boolean = true
+  saveHistory: boolean = true
 ) => {
-  clear_page();
-  if (save_history) {
+  clearPage();
+  if (saveHistory) {
     // If we're coming from a history pop, then we want to make sure we dont
     // push another thing to the state and break the forward button
-    save_gallery_history(opts.layouts);
+    saveGalleryHistory(opts.layouts);
   }
-  const gallery: LayoutGallery = layout_gallery(opts.layouts)
-    .on_select((selected: string) => {
-      save_gallery_history(opts.layouts, selected);
+  const gallery: LayoutGallery = layoutGallery(opts.layouts)
+    .onSelect((selected: string) => {
+      saveGalleryHistory(opts.layouts, selected);
     })
-    .on_cancel(() => {
-      save_gallery_history(opts.layouts);
+    .onCancel(() => {
+      saveGalleryHistory(opts.layouts);
     })
-    .on_go((selected_layout: LayoutInfo) => {
-      setShinyInput("build_app_template", selected_layout);
+    .onGo((selectedLayout: LayoutInfo) => {
+      setShinyInput("build_app_template", selectedLayout);
     })
-    .on_edit((selected_layout: LayoutInfo) => {
-      start_layout_editor(
+    .onEdit((selectedLayout: LayoutInfo) => {
+      startLayoutEditor(
         {
-          entry_type: "layout-gallery",
-          ...selected_layout,
+          entryType: "layout-gallery",
+          ...selectedLayout,
         },
         true
       );
     })
-    .select_layout(opts.selected);
+    .selectLayout(opts.selected);
   return document.body.appendChild(gallery);
 };
 
-const start_layout_editor = (
-  opts: LayoutEditorSetup,
-  save_history: boolean
-) => {
-  if (save_history) {
-    save_editor_history(opts);
+const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
+  if (saveHistory) {
+    saveEditorHistory(opts);
   }
 
-  if (opts.entry_type !== "edit-existing-app") {
+  if (opts.entryType !== "edit-existing-app") {
     // Don't erase the page if we're editing an existing app
-    clear_page();
+    clearPage();
   }
 
-  opts.finish_btn =
-    opts.entry_type === "layout-gallery"
+  opts.finishBtn =
+    opts.entryType === "layout-gallery"
       ? {
           label: "Create app",
-          on_done: (layout: LayoutInfo) => {
+          onDone: (layout: LayoutInfo) => {
             setShinyInput("build_app_template", layout);
           },
         }
       : {
           label: "Update app layout",
-          on_done: (layout: LayoutInfo) => {
+          onDone: (layout: LayoutInfo) => {
             setShinyInput("update_layout", layout);
           },
         };
 
-  opts.on_update = (opts: LayoutEditorSetup) => {
-    save_editor_history(opts);
+  opts.onUpdate = (opts: LayoutEditorSetup) => {
+    saveEditorHistory(opts);
   };
 
   return new LayoutEditor(opts);
 };
 
 window.onload = function () {
-  
   // Add listeners for the three main entry-points
-  add_shiny_listener("layout-gallery", (layouts: LayoutInfo[]) => {
-    start_layout_gallery({ layouts });
+  addShinyListener("layout-gallery", (layouts: LayoutInfo[]) => {
+    startLayoutGallery({ layouts });
   });
-  add_shiny_listener("edit-layout", (layout_info: LayoutInfo) => {
-    start_layout_editor(
+  addShinyListener("edit-layout", (layoutInfo: LayoutInfo) => {
+    startLayoutEditor(
       {
-        entry_type: "edit-layout",
-        ...layout_info,
+        entryType: "edit-layout",
+        ...layoutInfo,
       },
       true
     );
   });
-  add_shiny_listener("edit-existing-app", (layout_info: LayoutInfo) => {
-    start_layout_editor({ entry_type: "edit-existing-app" }, true);
+  addShinyListener("edit-existing-app", (layoutInfo: LayoutInfo) => {
+    startLayoutEditor({ entryType: "edit-existing-app" }, true);
   });
 
-  add_shiny_listener(
+  addShinyListener(
     "show-code-popup",
     (opts: { title: string; description: string; code: string }) => {
-      create_focus_modal()
-        .set_title(opts.title)
+      createFocusModal()
+        .setTitle(opts.title)
         .description(opts.description)
-        .add_element(copy_code(opts.code))
-        .add_to_page();
+        .addElement(copyCode(opts.code))
+        .addToPage();
     }
   );
 };
@@ -138,11 +133,11 @@ window.addEventListener("popstate", function (e) {
   const state = e.state as StateDump;
 
   switch (state.type) {
-    case "layout_chooser":
-      start_layout_gallery(state.data as GalleryOptions, false);
+    case "layoutChooser":
+      startLayoutGallery(state.data as GalleryOptions, false);
       break;
-    case "layout_edit":
-      start_layout_editor(state.data as LayoutEditorSetup, false);
+    case "layoutEdit":
+      startLayoutEditor(state.data as LayoutEditorSetup, false);
       break;
     default:
       console.error("How did you get to that state?");

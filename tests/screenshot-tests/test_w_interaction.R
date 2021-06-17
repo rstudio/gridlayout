@@ -41,7 +41,7 @@ test_that("Basic interaction with grided app", {
   # First, close the layout popup by clicking on background
   add_new_row <- b$Runtime$evaluate('document.querySelector("focus-modal").click()', wait_ = FALSE) %...>%
     {
-      b$Runtime$evaluate('document.getElementById("controller_for_row_1").querySelector("button.add-row").click()', wait_ = FALSE)
+      b$Runtime$evaluate('document.getElementById("controller-for-row-1").querySelector("button.add-row").click()', wait_ = FALSE)
     } %...>%
     {
       capture_screenshot(b)
@@ -53,7 +53,7 @@ test_that("Basic interaction with grided app", {
   )
 
   # Remove that new row at top of page
-  remove_new_row <- b$Runtime$evaluate('document.getElementById("controller_for_row_1").querySelector("button.remove-row").click()', wait_ = FALSE) %...>%
+  remove_new_row <- b$Runtime$evaluate('document.getElementById("controller-for-row-1").querySelector("button.remove-row").click()', wait_ = FALSE) %...>%
     {
       capture_screenshot(b)
     }

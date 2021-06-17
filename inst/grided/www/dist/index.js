@@ -5642,23 +5642,23 @@
     if (Array.isArray(arr))
       return arr;
   }
-  function as_array(content) {
+  function asArray(content) {
     if (content instanceof Array) {
       return content;
     } else {
       return [content];
     }
   }
-  function compare_w_missing(compare_fn, maybe_a, b) {
-    return maybe_a ? compare_fn(maybe_a, b) : b;
+  function compareWithMissing(compareFn, maybeA, b) {
+    return maybeA ? compareFn(maybeA, b) : b;
   }
-  function min_w_missing(maybe_a, b) {
-    return compare_w_missing(Math.min, maybe_a, b);
+  function minWithMissing(maybeA, b) {
+    return compareWithMissing(Math.min, maybeA, b);
   }
-  function max_w_missing(maybe_a, b) {
-    return compare_w_missing(Math.max, maybe_a, b);
+  function maxWithMissing(maybeA, b) {
+    return compareWithMissing(Math.max, maybeA, b);
   }
-  function get_bounding_rect(el) {
+  function getBoundingRect(el) {
     if (el.offsetParent === null) {
       return null;
     }
@@ -5673,52 +5673,52 @@
       bottom: top + height
     };
   }
-  function boxes_overlap(box_a, box_b) {
-    var horizontal_overlap = intervals_overlap([box_a.left, box_a.right], [box_b.left, box_b.right]);
-    var vertical_overlap = intervals_overlap([box_a.top, box_a.bottom], [box_b.top, box_b.bottom]);
-    return horizontal_overlap && vertical_overlap;
-    function intervals_overlap(_ref, _ref2) {
-      var _ref3 = _slicedToArray(_ref, 2), a_start = _ref3[0], a_end = _ref3[1];
-      var _ref4 = _slicedToArray(_ref2, 2), b_start = _ref4[0], b_end = _ref4[1];
-      var a_contains_b_endpoint = a_start >= b_start && a_start <= b_end || a_end >= b_start && a_end <= b_end;
-      var b_covers_a = a_start <= b_start && a_end >= b_end;
-      return a_contains_b_endpoint || b_covers_a;
+  function boxesOverlap(boxA, boxB) {
+    var horizontalOverlap = intervalsOverlap([boxA.left, boxA.right], [boxB.left, boxB.right]);
+    var verticalOverlap = intervalsOverlap([boxA.top, boxA.bottom], [boxB.top, boxB.bottom]);
+    return horizontalOverlap && verticalOverlap;
+    function intervalsOverlap(_ref, _ref2) {
+      var _ref3 = _slicedToArray(_ref, 2), aStart = _ref3[0], aEnd = _ref3[1];
+      var _ref4 = _slicedToArray(_ref2, 2), bStart = _ref4[0], bEnd = _ref4[1];
+      var aContainsB_endpoint = aStart >= bStart && aStart <= bEnd || aEnd >= bStart && aEnd <= bEnd;
+      var bCoversA = aStart <= bStart && aEnd >= bEnd;
+      return aContainsB_endpoint || bCoversA;
     }
   }
-  function update_rect_with_delta(rect, delta, dir) {
-    var new_rect = _objectSpread({}, rect);
+  function updateRectWithDelta(rect, delta, dir) {
+    var newRect = _objectSpread({}, rect);
     if (dir === "top-left") {
-      new_rect.left = new_rect.left + delta.x;
-      new_rect.top = new_rect.top + delta.y;
+      newRect.left = newRect.left + delta.x;
+      newRect.top = newRect.top + delta.y;
     } else if (dir === "bottom-right") {
-      new_rect.right = new_rect.right + delta.x, new_rect.left;
-      new_rect.bottom = new_rect.bottom + delta.y, new_rect.top;
+      newRect.right = newRect.right + delta.x, newRect.left;
+      newRect.bottom = newRect.bottom + delta.y, newRect.top;
     } else {
-      new_rect.left += delta.x;
-      new_rect.top += delta.y;
-      new_rect.right += delta.x;
-      new_rect.bottom += delta.y;
+      newRect.left += delta.x;
+      newRect.top += delta.y;
+      newRect.right += delta.x;
+      newRect.bottom += delta.y;
     }
-    if (new_rect.left > new_rect.right) {
-      var left = new_rect.left, right = new_rect.right;
-      new_rect.right = left;
-      new_rect.left = right;
+    if (newRect.left > newRect.right) {
+      var left = newRect.left, right = newRect.right;
+      newRect.right = left;
+      newRect.left = right;
     }
-    if (new_rect.top > new_rect.bottom) {
-      var top = new_rect.top, bottom = new_rect.bottom;
-      new_rect.bottom = top;
-      new_rect.top = bottom;
+    if (newRect.top > newRect.bottom) {
+      var top = newRect.top, bottom = newRect.bottom;
+      newRect.bottom = top;
+      newRect.top = bottom;
     }
-    return new_rect;
+    return newRect;
   }
-  function set_class(elements, class_name) {
+  function setClass(elements, className) {
     elements.forEach(function(el) {
-      el.classList.add(class_name);
+      el.classList.add(className);
     });
   }
-  var filler_text = '\n<div class = "filler_text">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
-  function pos_relative_to_container(container, child_el) {
-    var pos = child_el.getBoundingClientRect();
+  var fillerText = '\n<div class = "fillerText">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
+  function posRelativeToContainer(container, childEl) {
+    var pos = childEl.getBoundingClientRect();
     return {
       top: pos.top - container.top,
       bottom: pos.bottom - container.bottom,
@@ -5765,72 +5765,72 @@
     }
     return arr2;
   }
-  function find_first_grid_node() {
-    var grid_node;
-    var current_node = document.body;
-    var node_queue = _toConsumableArray(current_node.children);
-    var num_checks = 0;
-    var check_max = 100;
-    while (typeof grid_node === "undefined" && node_queue.length > 0 && num_checks++ < check_max) {
-      current_node = node_queue.shift();
-      node_queue = [].concat(_toConsumableArray(node_queue), _toConsumableArray(current_node.children));
-      if (getComputedStyle(current_node).display === "grid") {
-        grid_node = current_node;
+  function findFirstGridNode() {
+    var gridNode;
+    var currentNode = document.body;
+    var nodeQueue = _toConsumableArray(currentNode.children);
+    var numChecks = 0;
+    var checkMax = 100;
+    while (typeof gridNode === "undefined" && nodeQueue.length > 0 && numChecks++ < checkMax) {
+      currentNode = nodeQueue.shift();
+      nodeQueue = [].concat(_toConsumableArray(nodeQueue), _toConsumableArray(currentNode.children));
+      if (getComputedStyle(currentNode).display === "grid") {
+        gridNode = currentNode;
       }
     }
-    if (typeof grid_node === "undefined" && num_checks < check_max) {
-      var _grid_node = document.createElement("div");
-      current_node.appendChild(_grid_node);
-    } else if (num_checks === check_max) {
+    if (typeof gridNode === "undefined" && numChecks < checkMax) {
+      var _gridNode = document.createElement("div");
+      currentNode.appendChild(_gridNode);
+    } else if (numChecks === checkMax) {
       alert("Could not find a grid-layout element to edit -- Sorry!");
     }
-    grid_node.classList.add("wrapped-existing-app");
-    return grid_node;
+    gridNode.classList.add("wrapped-existing-app");
+    return gridNode;
   }
-  function set_element_in_grid(el, grid_bounds) {
-    if (grid_bounds.start_row) {
-      el.style.gridRowStart = grid_bounds.start_row.toString();
+  function setElementInGrid(el, gridBounds) {
+    if (gridBounds.start_row) {
+      el.style.gridRowStart = gridBounds.start_row.toString();
     }
-    if (grid_bounds.end_row) {
-      el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
+    if (gridBounds.end_row) {
+      el.style.gridRowEnd = (gridBounds.end_row + 1).toString();
     }
-    if (grid_bounds.start_col) {
-      el.style.gridColumnStart = grid_bounds.start_col.toString();
+    if (gridBounds.start_col) {
+      el.style.gridColumnStart = gridBounds.start_col.toString();
     }
-    if (grid_bounds.end_col) {
-      el.style.gridColumnEnd = (grid_bounds.end_col + 1).toString();
+    if (gridBounds.end_col) {
+      el.style.gridColumnEnd = (gridBounds.end_col + 1).toString();
     }
     el.style.display = "block";
   }
-  function get_pos_on_grid(grid_el) {
-    var el_styles = getComputedStyle(grid_el);
+  function getPosOnGrid(gridEl) {
+    var elStyles = getComputedStyle(gridEl);
     return {
-      start_row: +el_styles.gridRowStart,
-      start_col: +el_styles.gridColumnStart,
-      end_row: +el_styles.gridRowEnd - 1,
-      end_col: +el_styles.gridColumnEnd - 1
+      start_row: +elStyles.gridRowStart,
+      start_col: +elStyles.gridColumnStart,
+      end_row: +elStyles.gridRowEnd - 1,
+      end_col: +elStyles.gridColumnEnd - 1
     };
   }
-  function get_drag_extent_on_grid(app_state, selection_rect) {
-    var sel_bounds = {
+  function getDragExtentOnGrid(appState, selectionRect) {
+    var selBounds = {
       start_col: null,
       end_col: null,
       start_row: null,
       end_row: null
     };
-    app_state.current_cells.forEach(function(el) {
-      if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
-        var el_row = +el.dataset.row;
-        var el_col = +el.dataset.col;
-        sel_bounds.start_row = min_w_missing(sel_bounds.start_row, el_row);
-        sel_bounds.end_row = max_w_missing(sel_bounds.end_row, el_row);
-        sel_bounds.start_col = min_w_missing(sel_bounds.start_col, el_col);
-        sel_bounds.end_col = max_w_missing(sel_bounds.end_col, el_col);
+    appState.currentCells.forEach(function(el) {
+      if (boxesOverlap(getBoundingRect(el), selectionRect)) {
+        var elRow = +el.dataset.row;
+        var elCol = +el.dataset.col;
+        selBounds.start_row = minWithMissing(selBounds.start_row, elRow);
+        selBounds.end_row = maxWithMissing(selBounds.end_row, elRow);
+        selBounds.start_col = minWithMissing(selBounds.start_col, elCol);
+        selBounds.end_col = maxWithMissing(selBounds.end_col, elCol);
       }
     });
-    return sel_bounds;
+    return selBounds;
   }
-  function bounding_rect_to_css_pos(rect) {
+  function boundingRectToCssPos(rect) {
     return {
       left: "".concat(rect.left, "px"),
       top: "".concat(rect.top, "px"),
@@ -5838,20 +5838,20 @@
       height: "".concat(rect.bottom - rect.top, "px")
     };
   }
-  function get_gap_size(style) {
-    var gap_size_vec = (typeof style === "string" ? style : style.gap).split(" ");
-    return gap_size_vec[0];
+  function getGapSize(style) {
+    var gapSizeVec = (typeof style === "string" ? style : style.gap).split(" ");
+    return gapSizeVec[0];
   }
-  function make_start_end_for_dir(dir) {
+  function makeStartEndForDir(dir) {
     if (dir === "cols") {
       return {
-        start_id: "start_col",
-        end_id: "end_col"
+        startId: "start_col",
+        endId: "end_col"
       };
     } else {
       return {
-        start_id: "start_row",
-        end_id: "end_row"
+        startId: "start_row",
+        endId: "end_row"
       };
     }
   }
@@ -5922,32 +5922,32 @@
       _classCallCheck(this, GridItem2);
       _defineProperty2(this, "id", void 0);
       _defineProperty2(this, "el", void 0);
-      _defineProperty2(this, "mirrored_el", void 0);
-      _defineProperty2(this, "sibling_el", void 0);
-      _defineProperty2(this, "parent_layout", void 0);
+      _defineProperty2(this, "mirroredEl", void 0);
+      _defineProperty2(this, "siblingEl", void 0);
+      _defineProperty2(this, "parentLayout", void 0);
       Object.assign(this, opts);
     }
     _createClass(GridItem2, [{
       key: "position",
       get: function get() {
-        return get_pos_on_grid(this.el);
+        return getPosOnGrid(this.el);
       },
       set: function set(pos) {
-        set_element_in_grid(this.el, pos);
-        if (this.has_mirrored) {
-          set_element_in_grid(this.mirrored_el, pos);
+        setElementInGrid(this.el, pos);
+        if (this.hasMirrored) {
+          setElementInGrid(this.mirroredEl, pos);
         }
-        this.fill_if_in_auto_row();
+        this.fillIfInAutoRow();
       }
     }, {
-      key: "bounding_rect",
+      key: "boundingRect",
       get: function get() {
-        return get_bounding_rect(this.el);
+        return getBoundingRect(this.el);
       }
     }, {
-      key: "has_mirrored",
+      key: "hasMirrored",
       get: function get() {
-        return typeof this.mirrored_el !== "undefined";
+        return typeof this.mirroredEl !== "undefined";
       }
     }, {
       key: "style",
@@ -5962,10 +5962,10 @@
         }, this.position);
       }
     }, {
-      key: "fill_if_in_auto_row",
-      value: function fill_if_in_auto_row() {
-        var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
-        if (in_auto_row && !this.has_mirrored) {
+      key: "fillIfInAutoRow",
+      value: function fillIfInAutoRow() {
+        var inAutoRow = this.parentLayout.itemRowSizes(this.position).includes("auto");
+        if (inAutoRow && !this.hasMirrored) {
           this.el.classList.add("in-auto-row");
         } else {
           this.el.classList.remove("in-auto-row");
@@ -5975,11 +5975,11 @@
       key: "remove",
       value: function remove() {
         this.el.remove();
-        if (this.has_mirrored) {
-          this.mirrored_el.remove();
+        if (this.hasMirrored) {
+          this.mirroredEl.remove();
         }
-        if (this.sibling_el) {
-          this.sibling_el.remove();
+        if (this.siblingEl) {
+          this.siblingEl.remove();
         }
       }
     }]);
@@ -6045,13 +6045,13 @@
       get: function get() {
         return this.styles.gridTemplateRows.split(" ");
       },
-      set: function set(new_rows) {
-        if (typeof new_rows === "undefined")
+      set: function set(newRows) {
+        if (typeof newRows === "undefined")
           return;
-        this.styles.gridTemplateRows = new_rows.join(" ");
+        this.styles.gridTemplateRows = newRows.join(" ");
       }
     }, {
-      key: "num_rows",
+      key: "numRows",
       get: function get() {
         return this.rows.length;
       }
@@ -6060,27 +6060,27 @@
       get: function get() {
         return this.styles.gridTemplateColumns.split(" ");
       },
-      set: function set(new_cols) {
-        if (typeof new_cols === "undefined")
+      set: function set(newCols) {
+        if (typeof newCols === "undefined")
           return;
-        this.styles.gridTemplateColumns = new_cols.join(" ");
+        this.styles.gridTemplateColumns = newCols.join(" ");
       }
     }, {
-      key: "num_cols",
+      key: "numCols",
       get: function get() {
         return this.cols.length;
       }
     }, {
       key: "gap",
       get: function get() {
-        return get_gap_size(this.styles.gap);
+        return getGapSize(this.styles.gap);
       },
-      set: function set(new_gap) {
-        if (typeof new_gap === "undefined")
+      set: function set(newGap) {
+        if (typeof newGap === "undefined")
           return;
-        document.querySelector("body").style.setProperty("--grid-gap", new_gap);
-        this.styles.gap = new_gap;
-        this.styles.padding = new_gap;
+        document.querySelector("body").style.setProperty("--grid-gap", newGap);
+        this.styles.gap = newGap;
+        this.styles.padding = newGap;
       }
     }, {
       key: "attrs",
@@ -6092,36 +6092,36 @@
         };
       }
     }, {
-      key: "is_updated_val",
-      value: function is_updated_val(attr, values) {
+      key: "isUpdatedVal",
+      value: function isUpdatedVal(attr, values) {
         if (typeof values === "undefined")
           return false;
         if (attr === "gap") {
           return values !== this.gap;
         } else if (_typeof3(values) === "object") {
-          return !equal_arrays(this[attr], values);
+          return !equalArrays(this[attr], values);
         }
       }
     }, {
-      key: "sizes_for_tract",
-      value: function sizes_for_tract(item_pos, dir) {
-        var _item_pos$, _item_pos$2;
-        var start_index = (_item_pos$ = item_pos["start_".concat(dir)]) !== null && _item_pos$ !== void 0 ? _item_pos$ : item_pos["end_".concat(dir)];
-        var end_index = (_item_pos$2 = item_pos["end_".concat(dir)]) !== null && _item_pos$2 !== void 0 ? _item_pos$2 : item_pos["start_".concat(dir)];
-        var tract_sizes = dir === "row" ? this.rows : this.cols;
-        return tract_sizes.filter(function(val, i) {
-          return i + 1 >= start_index && i + 1 <= end_index;
+      key: "sizesForTract",
+      value: function sizesForTract(itemPos, dir) {
+        var _itemPos$, _itemPos$2;
+        var startIndex = (_itemPos$ = itemPos["start_".concat(dir)]) !== null && _itemPos$ !== void 0 ? _itemPos$ : itemPos["end_".concat(dir)];
+        var endIndex = (_itemPos$2 = itemPos["end_".concat(dir)]) !== null && _itemPos$2 !== void 0 ? _itemPos$2 : itemPos["start_".concat(dir)];
+        var tractSizes = dir === "row" ? this.rows : this.cols;
+        return tractSizes.filter(function(val, i) {
+          return i + 1 >= startIndex && i + 1 <= endIndex;
         });
       }
     }, {
-      key: "item_row_sizes",
-      value: function item_row_sizes(item_pos) {
-        return this.sizes_for_tract(item_pos, "row");
+      key: "itemRowSizes",
+      value: function itemRowSizes(itemPos) {
+        return this.sizesForTract(itemPos, "row");
       }
     }]);
     return GridLayout2;
   }();
-  function equal_arrays(a, b) {
+  function equalArrays(a, b) {
     if (a.length !== b.length)
       return false;
     for (var i = 0; i < a.length; ++i) {
@@ -6131,7 +6131,7 @@
     return true;
   }
 
-  // make-css_unit_input.ts
+  // make-cssUnitInput.ts
   var import_es_array_iterator9 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
 
@@ -6219,19 +6219,19 @@
   var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
 
   // utils-icons.ts
-  var vertical_drag_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
-  var horizontal_drag_icon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
-  var trashcan_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
-  var se_arrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
-  var nw_arrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
-  var drag_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
-  var plus_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
-  var settings_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
-  var instructions_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
-  var elements_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
-  var clipboard_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
-  var close_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
-  var browser_header_html = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
+  var verticalDragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
+  var horizontalDragIcon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
+  var trashcanIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
+  var seArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
+  var nwArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
+  var dragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
+  var plusIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
+  var settingsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
+  var instructionsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
+  var elementsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
+  var clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
+  var closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
+  var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
 
   // make-elements.ts
   var _templateObject;
@@ -6276,33 +6276,33 @@
     }
     return arr2;
   }
-  function parse_selector_text(sel_txt) {
-    var id_match = sel_txt.match(/#([^\.]+)/g);
-    var el_id = id_match ? id_match[0].replace("#", "") : null;
-    var all_classes = sel_txt.match(/\.([^\.#]+)/g);
-    var class_list = all_classes ? _toConsumableArray2(all_classes).map(function(c) {
+  function parseSelectorText(selTxt) {
+    var idMatch = selTxt.match(/#([^\.]+)/g);
+    var elId = idMatch ? idMatch[0].replace("#", "") : null;
+    var allClasses = selTxt.match(/\.([^\.#]+)/g);
+    var classList = allClasses ? _toConsumableArray2(allClasses).map(function(c) {
       return c.replace(".", "");
     }) : null;
     return {
-      tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
-      el_id: el_id,
-      class_list: class_list
+      tagType: selTxt.match(/^([^#\.]+)+/g)[0],
+      elId: elId,
+      classList: classList
     };
   }
-  function make_el(parent, sel_txt) {
+  function makeEl(parent, selTxt) {
     var opts = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
-    var el = parent.querySelector(sel_txt);
+    var el = parent.querySelector(selTxt);
     if (!el) {
-      el = create_el({
-        sel_txt: sel_txt
+      el = createEl({
+        selTxt: selTxt
       });
       if (opts.props) {
         Object.assign(el, opts.props);
       }
       parent.appendChild(el);
     }
-    if (opts.event_listener) {
-      as_array(opts.event_listener).forEach(function(listener) {
+    if (opts.eventListener) {
+      asArray(opts.eventListener).forEach(function(listener) {
         return el["on" + listener.event] = listener.func;
       });
     }
@@ -6312,39 +6312,39 @@
     if (opts.innerHTML) {
       el.innerHTML = opts.innerHTML;
     }
-    if (opts.data_props) {
-      Object.assign(el.dataset, opts.data_props);
+    if (opts.dataProps) {
+      Object.assign(el.dataset, opts.dataProps);
     }
-    if (opts.grid_pos) {
-      set_element_in_grid(el, opts.grid_pos);
+    if (opts.gridPos) {
+      setElementInGrid(el, opts.gridPos);
     }
     return el;
   }
-  function shadow_el(sel_txt) {
-    var shadow_holder = block_el(sel_txt);
-    shadow_holder.attachShadow({
+  function shadowEl(selTxt) {
+    var shadowHolder = blockEl(selTxt);
+    shadowHolder.attachShadow({
       mode: "open"
     });
-    var style_sheet = document.createElement("style");
-    shadow_holder.shadowRoot.appendChild(style_sheet);
+    var styleSheet = document.createElement("style");
+    shadowHolder.shadowRoot.appendChild(styleSheet);
     for (var _len = arguments.length, children = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       children[_key - 1] = arguments[_key];
     }
-    children.forEach(function(child_el) {
-      return shadow_holder.shadowRoot.appendChild(child_el);
+    children.forEach(function(childEl) {
+      return shadowHolder.shadowRoot.appendChild(childEl);
     });
     return {
-      el: shadow_holder,
-      style_sheet: style_sheet
+      el: shadowHolder,
+      styleSheet: styleSheet
     };
   }
-  function create_el(opts) {
-    var _parse_selector_text = parse_selector_text(opts.sel_txt), tag_type = _parse_selector_text.tag_type, el_id = _parse_selector_text.el_id, class_list = _parse_selector_text.class_list;
-    var el = document.createElement(tag_type);
-    if (el_id)
-      el.id = el_id;
-    if (class_list) {
-      class_list.forEach(function(x) {
+  function createEl(opts) {
+    var _parseSelectorText = parseSelectorText(opts.selTxt), tagType = _parseSelectorText.tagType, elId = _parseSelectorText.elId, classList = _parseSelectorText.classList;
+    var el = document.createElement(tagType);
+    if (elId)
+      el.id = elId;
+    if (classList) {
+      classList.forEach(function(x) {
         return el.classList.add(x);
       });
     }
@@ -6352,8 +6352,8 @@
       el.innerHTML = opts.text;
     }
     if (opts.children) {
-      opts.children.forEach(function(child_el) {
-        return el.appendChild(child_el);
+      opts.children.forEach(function(childEl) {
+        return el.appendChild(childEl);
       });
     }
     if (opts.styles) {
@@ -6362,43 +6362,43 @@
     if (opts.props) {
       Object.assign(el, opts.props);
     }
-    if (opts.event_listener) {
-      as_array(opts.event_listener).forEach(function(listener) {
+    if (opts.eventListener) {
+      asArray(opts.eventListener).forEach(function(listener) {
         return el["on" + listener.event] = listener.func;
       });
     }
     return el;
   }
-  function block_el(sel_txt) {
+  function blockEl(selTxt) {
     for (var _len2 = arguments.length, children = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
       children[_key2 - 1] = arguments[_key2];
     }
-    return create_el({
-      sel_txt: sel_txt,
+    return createEl({
+      selTxt: selTxt,
       children: children
     });
   }
-  function text_el(sel_txt, text) {
-    return create_el({
-      sel_txt: sel_txt,
+  function textEl(selTxt, text) {
+    return createEl({
+      selTxt: selTxt,
       text: text
     });
   }
-  var incrementer_button_class = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
-  function tract_add_or_remove_button(app_state, opts) {
-    var parent_el = opts.parent_el, add_or_remove = opts.add_or_remove, dir = opts.dir, tract_index = opts.tract_index, additional_styles = opts.additional_styles;
-    var dir_singular = dir === "rows" ? "row" : "col";
-    var label = add_or_remove === "add" ? "Add a ".concat(dir_singular) : "Remove ".concat(dir_singular);
-    var button = make_el(parent_el, "button.".concat(incrementer_button_class, ".").concat(add_or_remove, "-").concat(dir_singular, ".").concat(dir, "_").concat(tract_index), {
-      innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
-      styles: additional_styles,
-      event_listener: {
+  var incrementerButtonClass = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
+  function tractAddOrRemoveButton(appState, opts) {
+    var parentEl = opts.parentEl, addOrRemove = opts.addOrRemove, dir = opts.dir, tractIndex = opts.tractIndex, additionalStyles = opts.additionalStyles;
+    var dirSingular = dir === "rows" ? "row" : "col";
+    var label = addOrRemove === "add" ? "Add a ".concat(dirSingular) : "Remove ".concat(dirSingular);
+    var button = makeEl(parentEl, "button.".concat(incrementerButtonClass, ".").concat(addOrRemove, "-").concat(dirSingular, ".").concat(dir, "_").concat(tractIndex), {
+      innerHTML: addOrRemove === "add" ? plusIcon : trashcanIcon,
+      styles: additionalStyles,
+      eventListener: {
         event: "click",
         func: function func() {
-          if (add_or_remove === "add") {
-            app_state.add_tract(dir, tract_index);
+          if (addOrRemove === "add") {
+            appState.addTract(dir, tractIndex);
           } else {
-            app_state.remove_tract(dir, tract_index);
+            appState.removeTract(dir, tractIndex);
           }
         }
       },
@@ -6408,15 +6408,15 @@
     });
     return button;
   }
-  function click_button(selector, label, on_finish) {
-    var button = text_el("button".concat(selector), label);
+  function clickButton(selector, label, onFinish) {
+    var button = textEl("button".concat(selector), label);
     button.addEventListener("click", function(event) {
-      on_finish(event);
+      onFinish(event);
     });
     return button;
   }
 
-  // make-css_unit_input.ts
+  // make-cssUnitInput.ts
   var _templateObject2;
   var _templateObject22;
   function _defineProperty4(obj, key, value) {
@@ -6493,28 +6493,28 @@
     }
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
-  var css_unit_input = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .value_input.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
-  var default_values = {
+  var cssUnitInput = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .valueInput.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
+  var defaultValues = {
     fr: "1",
     px: "100",
     rem: "2"
   };
-  function get_css_unit(css_size) {
-    return css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px";
+  function getCssUnit(cssSize) {
+    return cssSize.match(/(px|\%|rem|fr|auto)/g)[0] || "px";
   }
-  function get_css_value(css_size) {
-    var value = css_size.match(/^[\d|\.]*/g)[0];
+  function getCssValue(cssSize) {
+    var value = cssSize.match(/^[\d|\.]*/g)[0];
     return value === "" ? null : Number(value);
   }
-  function make_css_unit_input(_ref) {
-    var parent_el = _ref.parent_el, _ref$selector = _ref.selector, selector = _ref$selector === void 0 ? "" : _ref$selector, _ref$start_val = _ref.start_val, start_val = _ref$start_val === void 0 ? 1 : _ref$start_val, _ref$start_unit = _ref.start_unit, start_unit = _ref$start_unit === void 0 ? "fr" : _ref$start_unit, _ref$on_change = _ref.on_change, on_change = _ref$on_change === void 0 ? function(x) {
+  function makeCssUnitInput(_ref) {
+    var parentEl = _ref.parentEl, _ref$selector = _ref.selector, selector = _ref$selector === void 0 ? "" : _ref$selector, _ref$startVal = _ref.startVal, startVal = _ref$startVal === void 0 ? 1 : _ref$startVal, _ref$startUnit = _ref.startUnit, startUnit = _ref$startUnit === void 0 ? "fr" : _ref$startUnit, _ref$onChange = _ref.onChange, onChange = _ref$onChange === void 0 ? function(x) {
       return console.log("css unit change", x);
-    } : _ref$on_change, _ref$allowed_units = _ref.allowed_units, allowed_units = _ref$allowed_units === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowed_units, _ref$snap_to_defaults = _ref.snap_to_defaults, snap_to_defaults = _ref$snap_to_defaults === void 0 ? true : _ref$snap_to_defaults;
-    var current_unit = start_unit;
-    var form = make_el(parent_el, "form".concat(selector, ".").concat(css_unit_input), {
-      event_listener: [{
+    } : _ref$onChange, _ref$allowedUnits = _ref.allowedUnits, allowedUnits = _ref$allowedUnits === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowedUnits, _ref$snapToDefaults = _ref.snapToDefaults, snapToDefaults = _ref$snapToDefaults === void 0 ? true : _ref$snapToDefaults;
+    var currentUnit = startUnit;
+    var form = makeEl(parentEl, "form".concat(selector, ".").concat(cssUnitInput), {
+      eventListener: [{
         event: "change",
-        func: on_update
+        func: onUpdate
       }, {
         event: "submit",
         func: function func(e) {
@@ -6522,59 +6522,59 @@
         }
       }]
     });
-    var value_input = make_el(form, "input.value-input", {
+    var valueInput = makeEl(form, "input.value-input", {
       props: {
         type: "number",
         min: 0,
-        value: start_val,
+        value: startVal,
         step: 1,
         "aria-live": "polite"
       }
     });
-    var unit_selector = make_el(form, "select.unit-selector", {
+    var unitSelector = makeEl(form, "select.unit-selector", {
       props: {
         name: "units"
       }
     });
-    allowed_units.forEach(function(unit_type2) {
-      var unit_option = make_el(unit_selector, "option.".concat(unit_type2), {
+    allowedUnits.forEach(function(unitType2) {
+      var unitOption = makeEl(unitSelector, "option.".concat(unitType2), {
         props: {
-          value: unit_type2
+          value: unitType2
         },
-        innerHTML: unit_type2
+        innerHTML: unitType2
       });
-      if (unit_type2 === start_unit) {
-        unit_option.selected = true;
+      if (unitType2 === startUnit) {
+        unitOption.selected = true;
       }
     });
-    function unit_type() {
-      return unit_selector.value;
+    function unitType() {
+      return unitSelector.value;
     }
-    function num_units() {
-      return value_input.value;
+    function numUnits() {
+      return valueInput.value;
     }
-    function current_value() {
-      if (unit_type() === "auto")
+    function currentValue() {
+      if (unitType() === "auto")
         return "auto";
-      return "".concat(num_units()).concat(unit_type());
+      return "".concat(numUnits()).concat(unitType());
     }
-    function on_update() {
-      var val = current_value();
-      update_value(val);
-      on_change(val);
+    function onUpdate() {
+      var val = currentValue();
+      updateValue(val);
+      onChange(val);
     }
-    function update_value(new_value) {
-      var units = get_css_unit(new_value);
-      var count = get_css_value(new_value);
+    function updateValue(newValue) {
+      var units = getCssUnit(newValue);
+      var count = getCssValue(newValue);
       if (count === null && units === "auto") {
-        value_input.classList.add("disabled");
-        value_input.value = "";
+        valueInput.classList.add("disabled");
+        valueInput.value = "";
       } else {
-        value_input.classList.remove("disabled");
-        var using_old_units_default = value_input.value === default_values[current_unit] && snap_to_defaults;
-        value_input.value = count === null || using_old_units_default ? default_values[units] : count.toString();
+        valueInput.classList.remove("disabled");
+        var usingOldUnitsDefault = valueInput.value === defaultValues[currentUnit] && snapToDefaults;
+        valueInput.value = count === null || usingOldUnitsDefault ? defaultValues[units] : count.toString();
       }
-      var _iterator = _createForOfIteratorHelper(unit_selector.children), _step;
+      var _iterator = _createForOfIteratorHelper(unitSelector.children), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var opt = _step.value;
@@ -6585,127 +6585,127 @@
       } finally {
         _iterator.f();
       }
-      current_unit = units;
+      currentUnit = units;
     }
-    update_value("".concat(start_val).concat(start_unit));
+    updateValue("".concat(startVal).concat(startUnit));
     return {
       form: form,
-      current_value: current_value,
-      update_value: update_value
+      currentValue: currentValue,
+      updateValue: updateValue
     };
   }
-  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled {\n    display: none;\n  }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
-  function build_controls_for_dir(app_state, dir, editor_container) {
-    var target_class = dir === "rows" ? "c1" : "r1";
-    var dir_singular = dir === "rows" ? "row" : "col";
-    editor_container.querySelectorAll(".".concat(dir, "-controls")).forEach(function(el) {
+  var tractControls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled {\n    display: none;\n  }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  function buildControlsForDir(appState, dir, editorContainer) {
+    var targetClass = dir === "rows" ? "c1" : "r1";
+    var dirSingular = dir === "rows" ? "row" : "col";
+    editorContainer.querySelectorAll(".".concat(dir, "-controls")).forEach(function(el) {
       return el.remove();
     });
-    return app_state.current_cells.filter(function(el) {
-      return el.classList.contains(target_class);
+    return appState.currentCells.filter(function(el) {
+      return el.classList.contains(targetClass);
     }).map(function(el) {
-      var tract_index = +el.dataset[dir_singular];
-      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".tract-controls.").concat(tract_controls, ".").concat(dir, "-controls"));
-      if (tract_index === 1) {
-        tract_add_or_remove_button(app_state, {
-          parent_el: holder_el,
-          add_or_remove: "add",
+      var tractIndex = +el.dataset[dirSingular];
+      var holderEl = makeEl(editorContainer, "div#controller-for-".concat(dirSingular, "-").concat(tractIndex, ".tract-controls.").concat(tractControls, ".").concat(dir, "-controls"));
+      if (tractIndex === 1) {
+        tractAddOrRemoveButton(appState, {
+          parentEl: holderEl,
+          addOrRemove: "add",
           dir: dir,
-          tract_index: 0,
-          additional_styles: _defineProperty4({}, dir === "rows" ? "top" : "left", "var(--incrementer-offset)")
+          tractIndex: 0,
+          additionalStyles: _defineProperty4({}, dir === "rows" ? "top" : "left", "var(--incrementer-offset)")
         });
       }
-      tract_add_or_remove_button(app_state, {
-        parent_el: holder_el,
-        add_or_remove: "add",
+      tractAddOrRemoveButton(appState, {
+        parentEl: holderEl,
+        addOrRemove: "add",
         dir: dir,
-        tract_index: tract_index
+        tractIndex: tractIndex
       });
       return {
-        matched_cell: el,
-        el: holder_el,
-        controller: make_grid_tract_control(holder_el, app_state, {
+        matchedCell: el,
+        el: holderEl,
+        controller: makeGridTractControl(holderEl, appState, {
           dir: dir,
-          size: app_state.grid_layout[dir][tract_index - 1],
-          tract_index: tract_index
+          size: appState.gridLayout[dir][tractIndex - 1],
+          tractIndex: tractIndex
         })
       };
     });
   }
-  function make_grid_tract_control(holder, app_state, opts) {
-    var size = opts.size, dir = opts.dir, tract_index = opts.tract_index;
-    function send_update(_ref2) {
-      var is_dragging = _ref2.is_dragging;
-      app_state.update_tract({
-        tract_index: tract_index,
+  function makeGridTractControl(holder, appState, opts) {
+    var size = opts.size, dir = opts.dir, tractIndex = opts.tractIndex;
+    function sendUpdate(_ref2) {
+      var isDragging = _ref2.isDragging;
+      appState.updateTract({
+        tractIndex: tractIndex,
         dir: dir,
-        new_value: unit_input.current_value(),
-        is_dragging: is_dragging
+        newValue: unitInput.currentValue(),
+        isDragging: isDragging
       });
     }
-    var unit_input = make_css_unit_input({
-      parent_el: holder,
+    var unitInput = makeCssUnitInput({
+      parentEl: holder,
       selector: ".unit-input.".concat(dir, "-sizing"),
-      start_val: get_css_value(size),
-      start_unit: get_css_unit(size),
-      on_change: function on_change(new_val) {
-        show_or_hide_dragger(new_val);
-        send_update({
-          is_dragging: false
+      startVal: getCssValue(size),
+      startUnit: getCssUnit(size),
+      onChange: function onChange(newVal) {
+        showOrHideDragger(newVal);
+        sendUpdate({
+          isDragging: false
         });
       }
     });
-    var value_input = unit_input.form.querySelector(".value-input");
-    var drag_dir = dir === "rows" ? "y" : "x";
-    var resizer = make_el(holder, "div.dragger", {
-      innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon
+    var valueInput = unitInput.form.querySelector(".value-input");
+    var dragDir = dir === "rows" ? "y" : "x";
+    var resizer = makeEl(holder, "div.dragger", {
+      innerHTML: dir === "rows" ? verticalDragIcon : horizontalDragIcon
     });
-    make_el(resizer, "div.drag-detector", {
+    makeEl(resizer, "div.drag-detector", {
       props: {
         draggable: true
       },
-      event_listener: [{
+      eventListener: [{
         event: "dragstart",
         func: function func(event) {
-          this.dataset.baseline = value_input.value;
-          this.dataset.start = event[drag_dir];
+          this.dataset.baseline = valueInput.value;
+          this.dataset.start = event[dragDir];
         }
       }, {
         event: "drag",
         func: function func(event) {
-          var drag_pos = event[drag_dir];
-          if (drag_pos === 0)
+          var dragPos = event[dragDir];
+          if (dragPos === 0)
             return;
-          var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
-          value_input.value = new_value.toString();
-          send_update({
-            is_dragging: true
+          var newValue = Math.max(0, +this.dataset.baseline + (event[dragDir] - this.dataset.start));
+          valueInput.value = newValue.toString();
+          sendUpdate({
+            isDragging: true
           });
         }
       }, {
         event: "dragend",
         func: function func(event) {
-          send_update({
-            is_dragging: false
+          sendUpdate({
+            isDragging: false
           });
         }
       }]
     });
-    tract_add_or_remove_button(app_state, {
-      parent_el: holder,
-      add_or_remove: "remove",
+    tractAddOrRemoveButton(appState, {
+      parentEl: holder,
+      addOrRemove: "remove",
       dir: dir,
-      tract_index: tract_index
+      tractIndex: tractIndex
     });
-    function show_or_hide_dragger(curr_val) {
-      if (get_css_unit(curr_val) === "px") {
+    function showOrHideDragger(currVal) {
+      if (getCssUnit(currVal) === "px") {
         holder.classList.add("with-drag");
       } else {
         holder.classList.remove("with-drag");
       }
     }
-    show_or_hide_dragger(unit_input.current_value());
-    return unit_input;
+    showOrHideDragger(unitInput.currentValue());
+    return unitInput;
   }
 
   // node_modules/core-js/modules/es.array.every.js
@@ -6757,35 +6757,35 @@
     }
     return arr2;
   }
-  function get_styles_for_selector_with_targets(selector_text, target_properties) {
-    var defines_ruleset = function defines_ruleset2(selector_text2) {
+  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
+    var definesRuleset = function definesRuleset2(selectorText2) {
       return function(rule) {
-        return rule.selectorText === selector_text2;
+        return rule.selectorText === selectorText2;
       };
     };
-    var all_rules_for_selector = _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
-      return _toConsumableArray3(style_sheet.rules).find(defines_ruleset(selector_text));
+    var allRulesForSelector = _toConsumableArray3(document.styleSheets).filter(function(styleSheet) {
+      return _toConsumableArray3(styleSheet.rules).find(definesRuleset(selectorText));
     }).map(function(x) {
-      return _toConsumableArray3(x.cssRules).find(defines_ruleset(selector_text)).style;
+      return _toConsumableArray3(x.cssRules).find(definesRuleset(selectorText)).style;
     });
-    return all_rules_for_selector.find(function(rule) {
-      return target_properties.every(function(x) {
+    return allRulesForSelector.find(function(rule) {
+      return targetProperties.every(function(x) {
         return rule[x];
       });
     });
   }
 
   // utils-shiny.ts
-  function setShinyInput(input_id, input_value) {
+  function setShinyInput(inputId, inputValue) {
     var _window$Shiny, _window$Shiny$setInpu;
-    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    (_window$Shiny = window.Shiny) === null || _window$Shiny === void 0 ? void 0 : (_window$Shiny$setInpu = _window$Shiny.setInputValue) === null || _window$Shiny$setInpu === void 0 ? void 0 : _window$Shiny$setInpu.call(_window$Shiny, input_id, input_value, is_event ? {
+    var isEvent = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+    (_window$Shiny = window.Shiny) === null || _window$Shiny === void 0 ? void 0 : (_window$Shiny$setInpu = _window$Shiny.setInputValue) === null || _window$Shiny$setInpu === void 0 ? void 0 : _window$Shiny$setInpu.call(_window$Shiny, inputId, inputValue, isEvent ? {
       priority: "event"
     } : {});
   }
-  function add_shiny_listener(event_id, callback_func) {
+  function addShinyListener(eventId, callbackFunc) {
     var _window$Shiny2;
-    (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(event_id, callback_func);
+    (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(eventId, callbackFunc);
   }
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
@@ -7023,9 +7023,9 @@
       _classCallCheck3(this, CopyCode2);
       _this = _super.call(this);
       _defineProperty5(_assertThisInitialized(_this), "code", void 0);
-      _defineProperty5(_assertThisInitialized(_this), "num_of_lines", void 0);
+      _defineProperty5(_assertThisInitialized(_this), "numOfLines", void 0);
       _this.code = code;
-      _this.num_of_lines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
+      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
       _this.attachShadow({
         mode: "open"
       });
@@ -7034,10 +7034,10 @@
     _createClass3(CopyCode2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.num_of_lines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboard_icon, " Copy Code </button>\n   ");
-        var code_el = this.shadowRoot.getElementById("code");
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
+        var codeEl = this.shadowRoot.getElementById("code");
         this.shadowRoot.getElementById("copy").addEventListener("click", function() {
-          code_el.select();
+          codeEl.select();
           document.execCommand("copy");
         });
       }
@@ -7049,7 +7049,7 @@
     return CopyCode2;
   }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
   customElements.define("copy-code", CopyCode);
-  function copy_code(code) {
+  function copyCode(code) {
     return new CopyCode(code);
   }
 
@@ -7205,128 +7205,128 @@
       var _this;
       _classCallCheck4(this, FocusModal2);
       _this = _super.call(this);
-      _defineProperty6(_assertThisInitialized2(_this), "_on_close", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "_title", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "_max_width", "450px");
-      _defineProperty6(_assertThisInitialized2(_this), "_children", []);
-      _defineProperty6(_assertThisInitialized2(_this), "_description", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "has_rendered", false);
+      _defineProperty6(_assertThisInitialized2(_this), "OnClose", void 0);
+      _defineProperty6(_assertThisInitialized2(_this), "Title", void 0);
+      _defineProperty6(_assertThisInitialized2(_this), "MaxWidth", "450px");
+      _defineProperty6(_assertThisInitialized2(_this), "Children", []);
+      _defineProperty6(_assertThisInitialized2(_this), "Description", void 0);
+      _defineProperty6(_assertThisInitialized2(_this), "hasRendered", false);
       _this.attachShadow({
         mode: "open"
       });
       return _this;
     }
     _createClass4(FocusModal2, [{
-      key: "set_title",
-      value: function set_title(title) {
-        this._title = title;
+      key: "setTitle",
+      value: function setTitle(title) {
+        this.Title = title;
         return this;
       }
     }, {
       key: "description",
       value: function description(_description) {
-        this._description = _description;
+        this.Description = _description;
         return this;
       }
     }, {
-      key: "max_width",
-      value: function max_width(width) {
-        this._max_width = width;
+      key: "maxWidth",
+      value: function maxWidth(width) {
+        this.MaxWidth = width;
         return this;
       }
     }, {
-      key: "add_element",
-      value: function add_element(el) {
-        if (this.has_rendered) {
+      key: "addElement",
+      value: function addElement(el) {
+        if (this.hasRendered) {
           this.shadowRoot.getElementById("content").appendChild(el);
           return this;
         }
-        this._children.push(el);
+        this.Children.push(el);
         return this;
       }
     }, {
-      key: "on_close",
-      value: function on_close(callback) {
-        this._on_close = callback;
+      key: "onClose",
+      value: function onClose(callback) {
+        this.OnClose = callback;
         return this;
       }
     }, {
-      key: "focus_on",
-      value: function focus_on(el_id) {
-        this.shadowRoot.getElementById(el_id).focus();
+      key: "focusOn",
+      value: function focusOn(elId) {
+        this.shadowRoot.getElementById(elId).focus();
         return this;
       }
     }, {
-      key: "setup_close_callbacks",
-      value: function setup_close_callbacks() {
+      key: "setupCloseCallbacks",
+      value: function setupCloseCallbacks() {
         var _this2 = this;
-        var exit_fn = function exit_fn2() {
-          var _this2$_on_close;
-          (_this2$_on_close = _this2._on_close) === null || _this2$_on_close === void 0 ? void 0 : _this2$_on_close.call(_this2);
+        var exitFn = function exitFn2() {
+          var _this2$OnClose;
+          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
           _this2.remove();
         };
-        this.shadowRoot.getElementById("close").addEventListener("click", exit_fn);
-        this.addEventListener("click", exit_fn);
+        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
+        this.addEventListener("click", exitFn);
         this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
           event.stopPropagation();
         });
       }
     }, {
-      key: "add_to_page",
-      value: function add_to_page() {
+      key: "addToPage",
+      value: function addToPage() {
         document.body.appendChild(this);
-        this.has_rendered = true;
+        this.hasRendered = true;
         return this;
       }
     }, {
       key: "connectedCallback",
       value: function connectedCallback() {
-        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this._max_width, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this._title ? "<h2 id = 'title'> ".concat(this._title, " </h2>") : "", "\n       <button id = 'close'> ").concat(close_icon, " </button>\n       ").concat(this._description ? '<div id = "description">'.concat(this._description, "</div>") : "", "\n     </div>\n   ");
+        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
         var content = this.shadowRoot.getElementById("content");
-        this._children.forEach(function(el) {
+        this.Children.forEach(function(el) {
           content.appendChild(el);
         });
-        this.setup_close_callbacks();
+        this.setupCloseCallbacks();
       }
     }]);
     return FocusModal2;
   }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
   customElements.define("focus-modal", FocusModal);
-  function create_focus_modal() {
+  function createFocusModal() {
     return new FocusModal();
   }
 
-  // wrap_in_grided.ts
+  // wrapInGrided.ts
   var import_es_array_iterator13 = __toModule(require_es_array_iterator());
 
-  // make-toggle_switch.ts
-  function make_toggle_switch(off_text, on_text, on_change) {
-    var container = block_el("div.toggle-switch");
-    make_el(container, "span.off-text", {
-      innerHTML: off_text
+  // make-toggleSwitch.ts
+  function makeToggleSwitch(offText, onText, onChange) {
+    var container = blockEl("div.toggle-switch");
+    makeEl(container, "span.off-text", {
+      innerHTML: offText
     });
-    var label = make_el(container, "label.switch");
-    make_el(container, "span.on-text", {
-      innerHTML: on_text
+    var label = makeEl(container, "label.switch");
+    makeEl(container, "span.on-text", {
+      innerHTML: onText
     });
-    make_el(label, "input", {
+    makeEl(label, "input", {
       props: {
         type: "checkbox"
       },
-      event_listener: {
+      eventListener: {
         event: "change",
         func: function func(event) {
-          on_change(event.target.checked);
+          onChange(event.target.checked);
         }
       }
     });
-    make_el(label, "span.slider");
-    var _shadow_el = shadow_el("div.toggle-switch", container), el = _shadow_el.el, style_sheet = _shadow_el.style_sheet;
-    style_sheet.innerHTML = '\n  div.toggle-switch {\n    display: inline-grid;\n    grid-template-columns: 1fr auto 1fr;\n    grid-gap: 3px;\n    width: 180px;\n    align-items: center;\n    justify-items: center;\n    padding-left: 4px;\n    padding-right: 4px;\n  }\n  \n  .toggle-switch > span {\n    font-size: 1rem;\n  }\n  \n  .toggle-switch > .off-text {\n    text-align: end;\n  }\n  \n  .switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }\n  \n  .switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }\n  \n  .slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  .slider:before {\n    position: absolute;\n    content: "";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  input:checked + .slider {\n    background-color: #2196F3;\n  }\n  \n  input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }\n  \n  input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }\n  ';
+    makeEl(label, "span.slider");
+    var _shadowEl = shadowEl("div.toggle-switch", container), el = _shadowEl.el, styleSheet = _shadowEl.styleSheet;
+    styleSheet.innerHTML = '\n  div.toggle-switch {\n    display: inline-grid;\n    grid-template-columns: 1fr auto 1fr;\n    grid-gap: 3px;\n    width: 180px;\n    align-items: center;\n    justify-items: center;\n    padding-left: 4px;\n    padding-right: 4px;\n  }\n  \n  .toggle-switch > span {\n    font-size: 1rem;\n  }\n  \n  .toggle-switch > .off-text {\n    text-align: end;\n  }\n  \n  .switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }\n  \n  .switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }\n  \n  .slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  .slider:before {\n    position: absolute;\n    content: "";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  input:checked + .slider {\n    background-color: #2196F3;\n  }\n  \n  input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }\n  \n  input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }\n  ';
     return el;
   }
 
-  // wrap_in_grided.ts
+  // wrapInGrided.ts
   function _toConsumableArray4(arr) {
     return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
   }
@@ -7362,76 +7362,76 @@
     }
     return arr2;
   }
-  function wrap_in_grided(app_state, finish_btn) {
-    var grid_is_filled = app_state.container.hasChildNodes();
-    var buttons = [click_button("#see-layout-code", "Code for layout", function() {
-      return setShinyInput("see_layout_code", app_state.current_layout, true);
-    }), click_button("#done", finish_btn.label, function() {
-      return finish_btn.on_done(app_state.current_layout);
+  function wrapInGrided(appState, finishBtn) {
+    var gridIsFilled = appState.container.hasChildNodes();
+    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
+      return setShinyInput("see_layout_code", appState.currentLayout, true);
+    }), clickButton("#done", finishBtn.label, function() {
+      return finishBtn.onDone(appState.currentLayout);
     })];
-    if (grid_is_filled) {
-      buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
+    if (gridIsFilled) {
+      buttons.push(makeToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
     }
-    var settings_panel_el = block_el("div#grided_gap_size_controls.settings.panel-body");
-    var grided_ui = block_el("div#grided__holder", block_el("div#grided__header", text_el("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), block_el.apply(void 0, ["div.code-btns"].concat(buttons))), block_el("div#grided__settings", text_el("h3", "".concat(settings_icon, " Settings")), settings_panel_el), block_el("div#grided__instructions", text_el("h3", "".concat(instructions_icon, " Instructions")), text_el("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), block_el("div#grided__elements", text_el("h3", "".concat(elements_icon, " Added elements")), block_el("div.panel-body", block_el("div#added-elements"))), block_el("div#grided__editor", block_el("div#editor-wrapper", text_el("div#editor-browser-header", browser_header_html), block_el("div#editor-app-window", app_state.container))));
-    document.querySelector("body").appendChild(grided_ui);
-    app_state.container.style.height = "100%";
-    app_state.container.style.width = "100%";
-    app_state.container.style.display = "grid";
-    app_state.container.style.maxWidth = "100%";
-    function toggle_interaction_mode(interact_is_on) {
-      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added-elements"), grided_ui.querySelector("#drag-canvas")]).forEach(function(el) {
-        if (interact_is_on) {
+    var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
+    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.panel-body", blockEl("div#added-elements"))), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
+    document.querySelector("body").appendChild(gridedUi);
+    appState.container.style.height = "100%";
+    appState.container.style.width = "100%";
+    appState.container.style.display = "grid";
+    appState.container.style.maxWidth = "100%";
+    function toggleInteractionMode(interactIsOn) {
+      [].concat(_toConsumableArray4(appState.container.querySelectorAll(".added-element")), _toConsumableArray4(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray4(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#grided__settings .panel-body"), gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
+        if (interactIsOn) {
           el.classList.add("disabled");
         } else {
           el.classList.remove("disabled");
         }
       });
     }
-    if (grid_is_filled) {
-      app_state.container.style.gap = "1rem";
-      app_state.container.style.padding = "1rem";
+    if (gridIsFilled) {
+      appState.container.style.gap = "1rem";
+      appState.container.style.padding = "1rem";
     }
   }
-  function cleanup_grided_ui() {
-    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".drag_selection_box"), document.getElementById("drag-canvas")]).forEach(function(el) {
+  function cleanupGridedUi() {
+    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".dragSelectionBox"), document.getElementById("drag-canvas")]).forEach(function(el) {
       return el.remove();
     });
   }
-  function add_existing_elements_to_app(app_state) {
-    _toConsumableArray4(app_state.container.children).forEach(function(el) {
+  function addExistingElementsToApp(appState) {
+    _toConsumableArray4(appState.container.children).forEach(function(el) {
       var bbox = el.getBoundingClientRect();
       if (bbox.width === 0 && bbox.height === 0)
         return;
-      if (el.classList.contains("grid-cell") || el.classList.contains("drag_selection_box") || el.classList.contains("added-element") || el.id === "drag-canvas") {
+      if (el.classList.contains("grid-cell") || el.classList.contains("dragSelectionBox") || el.classList.contains("added-element") || el.id === "drag-canvas") {
         el.remove();
         return;
       }
-      app_state.add_element({
+      appState.addElement({
         id: el.id,
-        grid_pos: get_pos_on_grid(el),
-        mirrored_element: el
+        gridPos: getPosOnGrid(el),
+        mirroredElement: el
       }, false);
     });
   }
-  function hookup_gap_size_controls(app_state, settings_panel_el, starting_gap) {
-    var css_input = make_css_unit_input({
-      parent_el: make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
+  function hookupGapSizeControls(appState, settingsPanelEl, startingGap) {
+    var cssInput = makeCssUnitInput({
+      parentEl: makeEl(settingsPanelEl, "div#gapSizeChooser.plusMinusInput.settings-grid", {
         innerHTML: '<span class = "input-label">Panel gap size</span>'
       }),
-      selector: "#gap_size_chooser",
-      on_change: function on_change(x) {
-        return app_state.update_grid({
+      selector: "#gapSizeChooser",
+      onChange: function onChange(x) {
+        return appState.updateGrid({
           gap: x
         });
       },
-      allowed_units: ["px", "rem"],
-      snap_to_defaults: false
+      allowedUnits: ["px", "rem"],
+      snapToDefaults: false
     });
-    if (starting_gap) {
-      css_input.update_value(starting_gap);
+    if (startingGap) {
+      cssInput.updateValue(startingGap);
     }
-    return css_input;
+    return cssInput;
   }
 
   // LayoutEditor.ts
@@ -7583,46 +7583,46 @@
   var LayoutEditor = /* @__PURE__ */ function() {
     function LayoutEditor2(_ref) {
       var _this = this;
-      var entry_type = _ref.entry_type, starting_grid = _ref.grid, starting_elements = _ref.elements, finish_btn = _ref.finish_btn, on_update = _ref.on_update;
+      var entryType = _ref.entryType, startingGrid = _ref.grid, startingElements = _ref.elements, finishBtn = _ref.finishBtn, onUpdate = _ref.onUpdate;
       _classCallCheck5(this, LayoutEditor2);
-      _defineProperty7(this, "gap_size_setting", void 0);
-      _defineProperty7(this, "current_cells", []);
+      _defineProperty7(this, "gapSizeSetting", void 0);
+      _defineProperty7(this, "currentCells", []);
       _defineProperty7(this, "elements", []);
-      _defineProperty7(this, "on_update", void 0);
-      _defineProperty7(this, "container_selector", void 0);
+      _defineProperty7(this, "onUpdate", void 0);
+      _defineProperty7(this, "containerSelector", void 0);
       _defineProperty7(this, "container", void 0);
-      _defineProperty7(this, "grid_styles", void 0);
+      _defineProperty7(this, "gridStyles", void 0);
       _defineProperty7(this, "mode", void 0);
-      _defineProperty7(this, "grid_layout", void 0);
-      _defineProperty7(this, "tract_controls", void 0);
-      _defineProperty7(this, "entry_type", void 0);
-      this.entry_type = entry_type;
-      var existing_wrapped_app = document.querySelector(".wrapped-existing-app");
-      if (existing_wrapped_app) {
-        this.container = existing_wrapped_app;
+      _defineProperty7(this, "gridLayout", void 0);
+      _defineProperty7(this, "tractControls", void 0);
+      _defineProperty7(this, "entryType", void 0);
+      this.entryType = entryType;
+      var existingWrappedApp = document.querySelector(".wrapped-existing-app");
+      if (existingWrappedApp) {
+        this.container = existingWrappedApp;
       } else {
-        this.container = entry_type === "edit-existing-app" ? find_first_grid_node() : block_el("div#grid_page");
+        this.container = entryType === "edit-existing-app" ? findFirstGridNode() : blockEl("div#gridPage");
       }
-      this.grid_layout = new GridLayout(this.container);
-      if (!existing_wrapped_app) {
-        wrap_in_grided(this, finish_btn);
+      this.gridLayout = new GridLayout(this.container);
+      if (!existingWrappedApp) {
+        wrapInGrided(this, finishBtn);
       } else {
-        cleanup_grided_ui();
+        cleanupGridedUi();
       }
-      add_existing_elements_to_app(this);
-      this.gap_size_setting = hookup_gap_size_controls(this, document.getElementById("grided_gap_size_controls"), starting_grid === null || starting_grid === void 0 ? void 0 : starting_grid.gap);
-      this.grid_styles = this.container.style;
-      this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
-      this.on_update = on_update;
-      if (entry_type !== "edit-existing-app") {
-        this.update_grid(_objectSpread3(_objectSpread3({}, starting_grid), {}, {
-          dont_update_history: true
+      addExistingElementsToApp(this);
+      this.gapSizeSetting = hookupGapSizeControls(this, document.getElementById("gridedGapSizeControls"), startingGrid === null || startingGrid === void 0 ? void 0 : startingGrid.gap);
+      this.gridStyles = this.container.style;
+      this.mode = entryType === "edit-existing-app" ? "Existing" : "New";
+      this.onUpdate = onUpdate;
+      if (entryType !== "edit-existing-app") {
+        this.updateGrid(_objectSpread3(_objectSpread3({}, startingGrid), {}, {
+          dontUpdateHistory: true
         }));
-        starting_elements.forEach(function(el_msg) {
-          var start_row = el_msg.start_row, end_row = el_msg.end_row, start_col = el_msg.start_col, end_col = el_msg.end_col;
-          _this.add_element({
-            id: el_msg.id,
-            grid_pos: {
+        startingElements.forEach(function(elMsg) {
+          var start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
+          _this.addElement({
+            id: elMsg.id,
+            gridPos: {
               start_row: start_row,
               end_row: end_row,
               start_col: start_col,
@@ -7630,341 +7630,341 @@
             }
           }, false);
         });
-      } else if (entry_type === "edit-existing-app" && !existing_wrapped_app) {
-        var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
-        this.update_grid({
-          rows: current_grid_props.gridTemplateRows.split(" "),
-          cols: current_grid_props.gridTemplateColumns.split(" "),
-          gap: get_gap_size(current_grid_props.gap)
+      } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
+        var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
+        this.updateGrid({
+          rows: currentGridProps.gridTemplateRows.split(" "),
+          cols: currentGridProps.gridTemplateColumns.split(" "),
+          gap: getGapSize(currentGridProps.gap)
         });
-      } else if (entry_type === "edit-existing-app" && existing_wrapped_app) {
-        this.elements.forEach(function(grid_el) {
-          var id = grid_el.id;
-          var element_def = starting_elements.find(function(el) {
+      } else if (entryType === "edit-existing-app" && existingWrappedApp) {
+        this.elements.forEach(function(gridEl) {
+          var id = gridEl.id;
+          var elementDef = startingElements.find(function(el) {
             return el.id === id;
           });
-          grid_el.position = element_def;
+          gridEl.position = elementDef;
         });
-        this.update_grid(_objectSpread3(_objectSpread3({}, starting_grid), {}, {
-          dont_update_history: true,
+        this.updateGrid(_objectSpread3(_objectSpread3({}, startingGrid), {}, {
+          dontUpdateHistory: true,
           force: true
         }));
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
-      if (entry_type !== "layout-gallery") {
-        setShinyInput("starting_layout", this.current_layout, true);
+      if (entryType !== "layout-gallery") {
+        setShinyInput("starting-layout", this.currentLayout, true);
       }
     }
     _createClass5(LayoutEditor2, [{
-      key: "current_layout",
+      key: "currentLayout",
       get: function get() {
         return {
-          grid: this.grid_layout.attrs,
+          grid: this.gridLayout.attrs,
           elements: this.elements.map(function(el) {
             return el.info;
           })
         };
       }
     }, {
-      key: "next_color",
+      key: "nextColor",
       get: function get() {
         var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
         return colors[this.elements.length % colors.length];
       }
     }, {
-      key: "add_element",
-      value: function add_element(el_props) {
-        var send_update = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
-        if (el_props.mirrored_element) {
-          el_props.id = el_props.id.replace(/^.+?__/g, "");
+      key: "addElement",
+      value: function addElement(elProps) {
+        var sendUpdate = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+        if (elProps.mirroredElement) {
+          elProps.id = elProps.id.replace(/^.+?__/g, "");
         }
-        var grid_item = draw_elements(this, {
-          id: el_props.id,
-          mirrored_el: el_props.mirrored_element
+        var gridItem = drawElements(this, {
+          id: elProps.id,
+          mirroredEl: elProps.mirroredElement
         });
-        grid_item.position = el_props.grid_pos;
-        this.elements.push(grid_item);
-        if (send_update) {
-          this.send_update();
+        gridItem.position = elProps.gridPos;
+        this.elements.push(gridItem);
+        if (sendUpdate) {
+          this.sendUpdate();
         }
       }
     }, {
-      key: "remove_elements",
-      value: function remove_elements(ids) {
+      key: "removeElements",
+      value: function removeElements(ids) {
         var _this2 = this;
-        as_array(ids).forEach(function(el_id) {
-          var entry_index = _this2.elements.findIndex(function(el) {
-            return el.id === el_id;
+        asArray(ids).forEach(function(elId) {
+          var entryIndex = _this2.elements.findIndex(function(el) {
+            return el.id === elId;
           });
-          _this2.elements[entry_index].remove();
-          _this2.elements.splice(entry_index, 1);
+          _this2.elements[entryIndex].remove();
+          _this2.elements.splice(entryIndex, 1);
         });
-        this.send_update();
+        this.sendUpdate();
       }
     }, {
-      key: "add_tract",
-      value: function add_tract(dir, new_index) {
+      key: "addTract",
+      value: function addTract(dir, newIndex) {
         this.elements.forEach(function(el) {
-          var start_id = dir === "rows" ? "start_row" : "start_col";
-          var end_id = dir === "rows" ? "end_row" : "end_col";
-          var el_position = el.position;
-          if (new_index >= el_position[end_id]) {
-          } else if (new_index < el_position[start_id]) {
-            el_position[start_id]++;
-            el_position[end_id]++;
+          var startId = dir === "rows" ? "start_row" : "start_col";
+          var endId = dir === "rows" ? "end_row" : "end_col";
+          var elPosition = el.position;
+          if (newIndex >= elPosition[endId]) {
+          } else if (newIndex < elPosition[startId]) {
+            elPosition[startId]++;
+            elPosition[endId]++;
           } else {
-            el[end_id] = el_position[end_id]++;
+            el[endId] = elPosition[endId]++;
           }
-          el.position = el_position;
+          el.position = elPosition;
         });
-        var tract_sizes = this.grid_layout[dir];
-        tract_sizes.splice(new_index, 0, "1fr");
-        this.update_grid(_defineProperty7({}, dir, tract_sizes));
+        var tractSizes = this.gridLayout[dir];
+        tractSizes.splice(newIndex, 0, "1fr");
+        this.updateGrid(_defineProperty7({}, dir, tractSizes));
       }
     }, {
-      key: "remove_tract",
-      value: function remove_tract(dir, index) {
-        var trouble_elements = this.elements.filter(function(el) {
-          var _make_start_end_for_d = make_start_end_for_dir(dir), start_id = _make_start_end_for_d.start_id, end_id = _make_start_end_for_d.end_id;
-          var el_position = el.position;
-          return el_position[start_id] === el_position[end_id] && el_position[start_id] === index;
+      key: "removeTract",
+      value: function removeTract(dir, index) {
+        var troubleElements = this.elements.filter(function(el) {
+          var _makeStartEndForDir = makeStartEndForDir(dir), startId = _makeStartEndForDir.startId, endId = _makeStartEndForDir.endId;
+          var elPosition = el.position;
+          return elPosition[startId] === elPosition[endId] && elPosition[startId] === index;
         });
-        if (trouble_elements.length > 0) {
-          show_conflict_popup(trouble_elements);
+        if (troubleElements.length > 0) {
+          showConflictPopup(troubleElements);
           return;
         }
         this.elements.forEach(function(el) {
-          var _make_start_end_for_d2 = make_start_end_for_dir(dir), start_id = _make_start_end_for_d2.start_id, end_id = _make_start_end_for_d2.end_id;
-          var el_position = el.position;
-          if (el_position[start_id] > index) {
-            el_position[start_id]--;
+          var _makeStartEndForDir2 = makeStartEndForDir(dir), startId = _makeStartEndForDir2.startId, endId = _makeStartEndForDir2.endId;
+          var elPosition = el.position;
+          if (elPosition[startId] > index) {
+            elPosition[startId]--;
           }
-          if (el_position[end_id] >= index) {
-            el_position[end_id]--;
+          if (elPosition[endId] >= index) {
+            elPosition[endId]--;
           }
-          el.position = el_position;
+          el.position = elPosition;
         });
-        var tract_sizes = this.grid_layout[dir];
-        tract_sizes.splice(index - 1, 1);
-        this.update_grid(_defineProperty7({}, dir, tract_sizes));
+        var tractSizes = this.gridLayout[dir];
+        tractSizes.splice(index - 1, 1);
+        this.updateGrid(_defineProperty7({}, dir, tractSizes));
       }
     }, {
-      key: "make_el",
-      value: function make_el2(sel_txt, opts) {
-        return make_el(this.container, sel_txt, opts);
+      key: "makeEl",
+      value: function makeEl2(selTxt, opts) {
+        return makeEl(this.container, selTxt, opts);
       }
     }, {
-      key: "setup_drag",
-      value: function setup_drag(opts) {
+      key: "setupDrag",
+      value: function setupDrag(opts) {
         var _this3 = this;
-        var drag_feedback_rect;
-        var start_rect;
-        var start_loc;
-        var editor_el = document.querySelector("#grided__editor");
-        var update_grid_pos = function update_grid_pos2(grid_item, bounding_rect) {
-          var grid_extent = get_drag_extent_on_grid(_this3, bounding_rect);
-          grid_item.position = grid_extent;
-          return grid_extent;
+        var dragFeedbackRect;
+        var startRect;
+        var startLoc;
+        var editorEl = document.querySelector("#grided__editor");
+        var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
+          var gridExtent = getDragExtentOnGrid(_this3, boundingRect);
+          gridItem.position = gridExtent;
+          return gridExtent;
         };
-        opts.watching_element.onmousedown = function(event) {
-          var _opts$grid_item;
-          start_loc = event;
-          _this3.container.appendChild(opts.grid_item.el);
-          start_rect = ((_opts$grid_item = opts.grid_item) === null || _opts$grid_item === void 0 ? void 0 : _opts$grid_item.bounding_rect) || {
+        opts.watchingElement.onmousedown = function(event) {
+          var _opts$gridItem;
+          startLoc = event;
+          _this3.container.appendChild(opts.gridItem.el);
+          startRect = ((_opts$gridItem = opts.gridItem) === null || _opts$gridItem === void 0 ? void 0 : _opts$gridItem.boundingRect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
-          drag_feedback_rect = make_el(_this3.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
-            styles: _objectSpread3({}, bounding_rect_to_css_pos(start_rect))
+          dragFeedbackRect = makeEl(_this3.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+            styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
-          update_grid_pos(opts.grid_item, start_rect);
-          if (opts.on_start)
-            opts.on_start(start_loc);
-          editor_el.addEventListener("mousemove", drag);
-          editor_el.addEventListener("mouseup", drag_end);
+          updateGridPos(opts.gridItem, startRect);
+          if (opts.onStart)
+            opts.onStart(startLoc);
+          editorEl.addEventListener("mousemove", drag);
+          editorEl.addEventListener("mouseup", dragEnd);
         };
         function drag(event) {
-          var curr_loc = event;
-          if (curr_loc.x === 0 && curr_loc.y === 0)
+          var currLoc = event;
+          if (currLoc.x === 0 && currLoc.y === 0)
             return;
-          var new_rect = update_rect_with_delta(start_rect, {
-            x: curr_loc.x - start_loc.x,
-            y: curr_loc.y - start_loc.y
-          }, opts.drag_dir);
-          Object.assign(drag_feedback_rect.style, bounding_rect_to_css_pos(new_rect));
-          var grid_extent = update_grid_pos(opts.grid_item, new_rect);
-          if (opts.on_drag)
-            opts.on_drag({
-              xy: curr_loc,
-              grid: grid_extent
+          var newRect = updateRectWithDelta(startRect, {
+            x: currLoc.x - startLoc.x,
+            y: currLoc.y - startLoc.y
+          }, opts.dragDir);
+          Object.assign(dragFeedbackRect.style, boundingRectToCssPos(newRect));
+          var gridExtent = updateGridPos(opts.gridItem, newRect);
+          if (opts.onDrag)
+            opts.onDrag({
+              xy: currLoc,
+              grid: gridExtent
             });
         }
-        function drag_end(event) {
-          var _opts$grid_item2;
-          var end_loc = event;
-          drag_feedback_rect.remove();
-          start_rect = null;
-          start_loc = null;
-          if (opts.on_end)
-            opts.on_end({
-              xy: end_loc,
-              grid: ((_opts$grid_item2 = opts.grid_item) === null || _opts$grid_item2 === void 0 ? void 0 : _opts$grid_item2.position) || get_pos_on_grid(this.parentElement)
+        function dragEnd(event) {
+          var _opts$gridItem2;
+          var endLoc = event;
+          dragFeedbackRect.remove();
+          startRect = null;
+          startLoc = null;
+          if (opts.onEnd)
+            opts.onEnd({
+              xy: endLoc,
+              grid: ((_opts$gridItem2 = opts.gridItem) === null || _opts$gridItem2 === void 0 ? void 0 : _opts$gridItem2.position) || getPosOnGrid(this.parentElement)
             });
-          editor_el.removeEventListener("mousemove", drag);
-          editor_el.removeEventListener("mouseup", drag_end);
+          editorEl.removeEventListener("mousemove", drag);
+          editorEl.removeEventListener("mouseup", dragEnd);
         }
       }
     }, {
-      key: "send_update",
-      value: function send_update() {
-        this.on_update(_objectSpread3({
-          entry_type: this.entry_type
-        }, this.current_layout));
+      key: "sendUpdate",
+      value: function sendUpdate() {
+        this.onUpdate(_objectSpread3({
+          entryType: this.entryType
+        }, this.currentLayout));
       }
     }, {
-      key: "update_tract",
-      value: function update_tract(opts) {
-        var _this$update_grid3;
-        var tract_index = opts.tract_index, dir = opts.dir, new_value = opts.new_value, is_dragging = opts.is_dragging;
-        var tract_values = this.grid_layout[dir];
-        tract_values[tract_index - 1] = new_value;
-        this.update_grid((_this$update_grid3 = {}, _defineProperty7(_this$update_grid3, dir, tract_values), _defineProperty7(_this$update_grid3, "dont_update_history", is_dragging), _this$update_grid3));
+      key: "updateTract",
+      value: function updateTract(opts) {
+        var _this$updateGrid3;
+        var tractIndex = opts.tractIndex, dir = opts.dir, newValue = opts.newValue, isDragging = opts.isDragging;
+        var tractValues = this.gridLayout[dir];
+        tractValues[tractIndex - 1] = newValue;
+        this.updateGrid((_this$updateGrid3 = {}, _defineProperty7(_this$updateGrid3, dir, tractValues), _defineProperty7(_this$updateGrid3, "dontUpdateHistory", isDragging), _this$updateGrid3));
       }
     }, {
-      key: "update_grid",
-      value: function update_grid(opts) {
+      key: "updateGrid",
+      value: function updateGrid(opts) {
         var _opts$force, _opts$force2;
-        var new_num_cells = (_opts$force = opts.force) !== null && _opts$force !== void 0 ? _opts$force : false;
-        var rows_and_cols_updated = (_opts$force2 = opts.force) !== null && _opts$force2 !== void 0 ? _opts$force2 : false;
-        if (this.grid_layout.is_updated_val("rows", opts.rows)) {
-          if (this.grid_layout.num_rows !== opts.rows.length)
-            new_num_cells = true;
-          rows_and_cols_updated = true;
-          this.grid_layout.rows = opts.rows;
+        var newNumCells = (_opts$force = opts.force) !== null && _opts$force !== void 0 ? _opts$force : false;
+        var rowsAndColsUpdated = (_opts$force2 = opts.force) !== null && _opts$force2 !== void 0 ? _opts$force2 : false;
+        if (this.gridLayout.isUpdatedVal("rows", opts.rows)) {
+          if (this.gridLayout.numRows !== opts.rows.length)
+            newNumCells = true;
+          rowsAndColsUpdated = true;
+          this.gridLayout.rows = opts.rows;
         }
-        if (this.grid_layout.is_updated_val("cols", opts.cols)) {
-          if (this.grid_layout.num_cols !== opts.cols.length)
-            new_num_cells = true;
-          rows_and_cols_updated = true;
-          this.grid_layout.cols = opts.cols;
+        if (this.gridLayout.isUpdatedVal("cols", opts.cols)) {
+          if (this.gridLayout.numCols !== opts.cols.length)
+            newNumCells = true;
+          rowsAndColsUpdated = true;
+          this.gridLayout.cols = opts.cols;
         }
-        if (this.grid_layout.is_updated_val("gap", opts.gap)) {
-          this.grid_layout.gap = opts.gap;
-          this.gap_size_setting.update_value(opts.gap);
+        if (this.gridLayout.isUpdatedVal("gap", opts.gap)) {
+          this.gridLayout.gap = opts.gap;
+          this.gapSizeSetting.updateValue(opts.gap);
         }
-        if (new_num_cells) {
-          fill_grid_cells(this);
-          setup_new_item_drag(this);
+        if (newNumCells) {
+          fillGridCells(this);
+          setupNewItemDrag(this);
         }
-        if (rows_and_cols_updated) {
+        if (rowsAndColsUpdated) {
           this.elements.forEach(function(el) {
-            el.fill_if_in_auto_row();
+            el.fillIfInAutoRow();
           });
         }
-        this.tract_controls.update_positions();
-        if (!opts.dont_update_history) {
-          this.send_update();
+        this.tractControls.updatePositions();
+        if (!opts.dontUpdateHistory) {
+          this.sendUpdate();
         }
       }
     }]);
     return LayoutEditor2;
   }();
-  var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
-  function fill_grid_cells(app_state) {
-    app_state.current_cells.forEach(function(e) {
+  var gridCellStyles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
+  function fillGridCells(appState) {
+    appState.currentCells.forEach(function(e) {
       return e.remove();
     });
-    app_state.current_cells = [];
-    for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
-      for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-        app_state.current_cells.push(app_state.make_el("div.r".concat(row_i, ".c").concat(col_i, ".grid-cell.").concat(grid_cell_styles), {
-          data_props: {
-            row: row_i,
-            col: col_i
+    appState.currentCells = [];
+    for (var rowI = 1; rowI <= appState.gridLayout.numRows; rowI++) {
+      for (var colI = 1; colI <= appState.gridLayout.numCols; colI++) {
+        appState.currentCells.push(appState.makeEl("div.r".concat(rowI, ".c").concat(colI, ".grid-cell.").concat(gridCellStyles), {
+          dataProps: {
+            row: rowI,
+            col: colI
           },
-          grid_pos: {
-            start_row: row_i,
-            end_row: row_i,
-            start_col: col_i,
-            end_col: col_i
+          gridPos: {
+            start_row: rowI,
+            end_row: rowI,
+            start_col: colI,
+            end_col: colI
           }
         }));
       }
     }
-    if (app_state.mode === "Existing") {
-      set_class(app_state.current_cells, "transparent");
+    if (appState.mode === "Existing") {
+      setClass(appState.currentCells, "transparent");
     }
-    app_state.tract_controls = setup_tract_controls(app_state);
+    appState.tractControls = setupTractControls(appState);
   }
-  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
-  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
-  var current_sel_box = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
-  var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
-  function setup_new_item_drag(app_state) {
-    var current_selection_box = new GridItem({
+  var addedElementStyles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .fillerText {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .fillerText {\n    display: block;\n  }\n"])));
+  var draggerHandle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
+  var currentSelBox = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
+  var dragCanvasStyles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
+  function setupNewItemDrag(appState) {
+    var currentSelectionBox = new GridItem({
       id: "selection box",
-      el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
-      parent_layout: app_state.grid_layout
+      el: appState.makeEl("div.dragSelectionBox.".concat(addedElementStyles, ".").concat(currentSelBox)),
+      parentLayout: appState.gridLayout
     });
-    var drag_canvas = app_state.make_el("div#drag_canvas.".concat(drag_canvas_styles));
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_item: current_selection_box,
-      drag_dir: "bottom-right",
-      on_start: function on_start() {
-        current_selection_box.style.borderColor = app_state.next_color;
+    var dragCanvas = appState.makeEl("div#dragCanvas.".concat(dragCanvasStyles));
+    appState.setupDrag({
+      watchingElement: dragCanvas,
+      gridItem: currentSelectionBox,
+      dragDir: "bottom-right",
+      onStart: function onStart() {
+        currentSelectionBox.style.borderColor = appState.nextColor;
       },
-      on_end: function on_end(_ref2) {
+      onEnd: function onEnd(_ref2) {
         var grid = _ref2.grid;
-        element_naming_ui(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box
+        elementNamingUi(appState, {
+          gridPos: grid,
+          selectionBox: currentSelectionBox
         });
       }
     });
-    [drag_canvas].concat(_toConsumableArray5(app_state.container.querySelectorAll(".added-element"))).forEach(function(el) {
-      return app_state.container.appendChild(el);
+    [dragCanvas].concat(_toConsumableArray5(appState.container.querySelectorAll(".added-element"))).forEach(function(el) {
+      return appState.container.appendChild(el);
     });
   }
-  function setup_tract_controls(app_state) {
-    var editor_container = document.querySelector("#grided__editor");
+  function setupTractControls(appState) {
+    var editorContainer = document.querySelector("#grided__editor");
     var controls = {
-      rows: build_controls_for_dir(app_state, "rows", editor_container),
-      cols: build_controls_for_dir(app_state, "cols", editor_container)
+      rows: buildControlsForDir(appState, "rows", editorContainer),
+      cols: buildControlsForDir(appState, "cols", editorContainer)
     };
-    update_positions();
-    editor_container.querySelector("#editor-app-window").onscroll = function() {
-      return update_positions(["rows"]);
+    updatePositions();
+    editorContainer.querySelector("#editor-app-window").onscroll = function() {
+      return updatePositions(["rows"]);
     };
-    var resize_timeout;
+    var resizeTimeout;
     window.addEventListener("resize", function() {
-      clearTimeout(resize_timeout);
-      resize_timeout = window.setTimeout(function() {
-        return update_positions();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(function() {
+        return updatePositions();
       }, 300);
     });
-    function update_positions() {
-      var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
-      var editor_pos = editor_container.getBoundingClientRect();
-      var wrapper_pos = pos_relative_to_container(editor_pos, editor_container.querySelector("#editor-wrapper"));
-      var _iterator = _createForOfIteratorHelper2(which_dirs), _step;
+    function updatePositions() {
+      var whichDirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
+      var editorPos = editorContainer.getBoundingClientRect();
+      var wrapperPos = posRelativeToContainer(editorPos, editorContainer.querySelector("#editor-wrapper"));
+      var _iterator = _createForOfIteratorHelper2(whichDirs), _step;
       try {
         var _loop = function _loop2() {
           var dir = _step.value;
           controls[dir].forEach(function(_ref3) {
-            var matched_cell = _ref3.matched_cell, el = _ref3.el;
-            var bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
+            var matchedCell = _ref3.matchedCell, el = _ref3.el;
+            var boundingRect = posRelativeToContainer(editorPos, matchedCell);
             Object.assign(el.style, dir === "cols" ? {
-              left: "calc(".concat(bounding_rect.left, "px)"),
-              width: "calc(".concat(bounding_rect.width, "px)"),
-              top: "calc(".concat(wrapper_pos.top, "px - var(--editor-top-pad))")
+              left: "calc(".concat(boundingRect.left, "px)"),
+              width: "calc(".concat(boundingRect.width, "px)"),
+              top: "calc(".concat(wrapperPos.top, "px - var(--editor-top-pad))")
             } : {
-              top: "calc(".concat(bounding_rect.top, "px)"),
-              height: "calc(".concat(bounding_rect.height, "px)"),
-              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
+              top: "calc(".concat(boundingRect.top, "px)"),
+              height: "calc(".concat(boundingRect.height, "px)"),
+              left: "calc(".concat(boundingRect.left, "px - var(--editor-left-pad) - ").concat(appState.gridLayout.attrs.gap, " - 2px)")
             });
           });
         };
@@ -7978,13 +7978,13 @@
       }
     }
     return {
-      update_positions: update_positions
+      updatePositions: updatePositions
     };
   }
-  function element_naming_ui(app_state, _ref4) {
-    var grid_pos = _ref4.grid_pos, selection_box = _ref4.selection_box;
-    var name_form = create_el({
-      sel_txt: "form#name_form.centered",
+  function elementNamingUi(appState, _ref4) {
+    var gridPos = _ref4.gridPos, selectionBox = _ref4.selectionBox;
+    var nameForm = createEl({
+      selTxt: "form#nameForm.centered",
       styles: {
         width: "100%",
         display: "grid",
@@ -7992,50 +7992,50 @@
         gap: "1rem",
         justifyContent: "center"
       },
-      children: [create_el({
-        sel_txt: "input#name_input",
+      children: [createEl({
+        selTxt: "input#nameInput",
         props: {
           type: "text"
         },
-        event_listener: {
+        eventListener: {
           event: "input",
-          func: hide_warning_msg
+          func: hideWarningMsg
         }
-      }), create_el({
-        sel_txt: "input#name_submit",
+      }), createEl({
+        selTxt: "input#nameSubmit",
         props: {
           type: "submit"
         }
       })],
-      event_listener: {
+      eventListener: {
         event: "submit",
         func: function func(event) {
           event.preventDefault();
-          var id = this["name_input"].value.replace(/\s/g, "_");
-          var element_exists = !!app_state.elements.find(function(el) {
+          var id = this["nameInput"].value.replace(/\s/g, "_");
+          var elementExists = !!appState.elements.find(function(el) {
             return el.id === id;
           });
-          if (element_exists) {
-            warn_about_bad_id("You already have an element with the id ".concat(id, ", all ids need to be unique."));
+          if (elementExists) {
+            warnAboutBadId("You already have an element with the id ".concat(id, ", all ids need to be unique."));
             return;
           }
           if (id.match(/^[^a-zA-Z]/g)) {
-            warn_about_bad_id("Valid ids need to start with a character.");
+            warnAboutBadId("Valid ids need to start with a character.");
             return;
           }
-          app_state.add_element({
+          appState.addElement({
             id: id,
-            grid_pos: grid_pos
+            gridPos: gridPos
           });
-          reset_el_creation();
+          resetElCreation();
         }
       }
     });
-    var modal = create_focus_modal().set_title("Name your element:").description("\n      This name will be used to place items in your app.\n      For instance if you want to place a plot in this element,\n      this name will match the label of the plot output\n    ").add_element(name_form).on_close(reset_el_creation).add_to_page().focus_on("name_input");
-    var warning_msg;
-    function warn_about_bad_id(msg) {
-      warning_msg = create_el({
-        sel_txt: "span#bad_id_msg",
+    var modal = createFocusModal().setTitle("Name your element:").description("\n      This name will be used to place items in your app.\n      For instance if you want to place a plot in this element,\n      this name will match the label of the plot output\n    ").addElement(nameForm).onClose(resetElCreation).addToPage().focusOn("nameInput");
+    var warningMsg;
+    function warnAboutBadId(msg) {
+      warningMsg = createEl({
+        selTxt: "span#badIdMsg",
         text: msg,
         styles: {
           color: "orangered",
@@ -8044,126 +8044,126 @@
           fontSize: "0.9rem"
         }
       });
-      modal.add_element(warning_msg);
+      modal.addElement(warningMsg);
     }
-    function hide_warning_msg() {
-      if (warning_msg) {
-        warning_msg.remove();
+    function hideWarningMsg() {
+      if (warningMsg) {
+        warningMsg.remove();
       }
     }
-    function reset_el_creation() {
+    function resetElCreation() {
       modal.remove();
-      selection_box.style.display = "none";
+      selectionBox.style.display = "none";
     }
   }
-  function draw_elements(app_state, el_info) {
-    var id = el_info.id, mirrored_el = el_info.mirrored_el;
-    var el_color = app_state.next_color;
-    var mirrors_existing = typeof mirrored_el !== "undefined";
-    var grid_el = app_state.make_el("div#".concat(id, ".el_").concat(id, ".added-element.").concat(added_element_styles), {
-      innerHTML: filler_text,
+  function drawElements(appState, elInfo) {
+    var id = elInfo.id, mirroredEl = elInfo.mirroredEl;
+    var elColor = appState.nextColor;
+    var mirrorsExisting = typeof mirroredEl !== "undefined";
+    var gridEl = appState.makeEl("div#".concat(id, ".el_").concat(id, ".added-element.").concat(addedElementStyles), {
+      innerHTML: fillerText,
       styles: {
-        borderColor: app_state.next_color,
+        borderColor: appState.nextColor,
         position: "relative"
       }
     });
-    var list_el = make_el(document.querySelector("#added-elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles, ".in-list"), {
+    var listEl = makeEl(document.querySelector("#added-elements"), "div.el_".concat(id, ".added-element.").concat(addedElementStyles, ".in-list"), {
       innerHTML: id,
       styles: {
-        borderColor: el_color
+        borderColor: elColor
       },
-      event_listener: [{
+      eventListener: [{
         event: "mouseover",
         func: function func() {
           this.classList.add("hovered");
-          grid_el.classList.add("hovered");
+          gridEl.classList.add("hovered");
         }
       }, {
         event: "mouseout",
         func: function func() {
           this.classList.remove("hovered");
-          grid_el.classList.remove("hovered");
+          gridEl.classList.remove("hovered");
         }
       }]
     });
-    var grid_item = new GridItem({
+    var gridItem = new GridItem({
       id: id,
-      el: grid_el,
-      mirrored_el: mirrored_el,
-      sibling_el: list_el,
-      parent_layout: app_state.grid_layout
+      el: gridEl,
+      mirroredEl: mirroredEl,
+      siblingEl: listEl,
+      parentLayout: appState.gridLayout
     });
-    ["top-left", "bottom-right", "center"].forEach(function(handle_type) {
-      app_state.setup_drag({
-        watching_element: make_el(grid_el, "div.dragger.visible.".concat(dragger_handle, ".").concat(handle_type), {
+    ["top-left", "bottom-right", "center"].forEach(function(handleType) {
+      appState.setupDrag({
+        watchingElement: makeEl(gridEl, "div.dragger.visible.".concat(draggerHandle, ".").concat(handleType), {
           styles: {
-            background: el_color
+            background: elColor
           },
-          innerHTML: handle_type === "center" ? drag_icon : handle_type === "bottom-right" ? se_arrow : nw_arrow
+          innerHTML: handleType === "center" ? dragIcon : handleType === "bottom-right" ? seArrow : nwArrow
         }),
-        grid_item: grid_item,
-        drag_dir: handle_type,
-        on_end: function on_end() {
-          app_state.send_update();
+        gridItem: gridItem,
+        dragDir: handleType,
+        onEnd: function onEnd() {
+          appState.sendUpdate();
         }
       });
     });
-    if (!mirrors_existing) {
-      make_el(list_el, "button.remove-el", {
-        innerHTML: trashcan_icon,
-        event_listener: {
+    if (!mirrorsExisting) {
+      makeEl(listEl, "button.remove-el", {
+        innerHTML: trashcanIcon,
+        eventListener: {
           event: "click",
           func: function func() {
-            app_state.remove_elements(id);
+            appState.removeElements(id);
           }
         }
       });
     }
-    return grid_item;
+    return gridItem;
   }
-  function show_conflict_popup(conflicting_elements) {
-    var conflicting_elements_list = conflicting_elements.reduce(function(id_list, el) {
-      return "\n    ".concat(id_list, "\n    <li> <strong style='font-size: 1.65rem;'> ").concat(el.id, " </strong> </li>\n    ");
+  function showConflictPopup(conflictingElements) {
+    var conflictingElementsList = conflictingElements.reduce(function(idList, el) {
+      return "\n    ".concat(idList, "\n    <li> <strong style='font-size: 1.65rem;'> ").concat(el.id, " </strong> </li>\n    ");
     }, "<ul>") + "</ul>";
-    var modal = create_focus_modal().set_title("Sorry! Can't make that update").description("<p> This is because it would result in the following elements \n    being removed from your app:</p>\n    ".concat(conflicting_elements_list, "\n    <p> Either re-arrange these elements to not reside in the removed grid or \n    column or remove them from your app before running grided.</p>\n    "));
-    modal.add_element(create_el({
-      sel_txt: "button#accept_result",
+    var modal = createFocusModal().setTitle("Sorry! Can't make that update").description("<p> This is because it would result in the following elements \n    being removed from your app:</p>\n    ".concat(conflictingElementsList, "\n    <p> Either re-arrange these elements to not reside in the removed grid or \n    column or remove them from your app before running grided.</p>\n    "));
+    modal.addElement(createEl({
+      selTxt: "button#acceptResult",
       text: "Okay",
-      event_listener: {
+      eventListener: {
         event: "click",
         func: function func() {
           modal.remove();
         }
       }
     }));
-    modal.add_to_page();
+    modal.addToPage();
   }
 
   // state_tracking.ts
-  var save_gallery_history = function save_gallery_history2(layouts, selected) {
+  var saveGalleryHistory = function saveGalleryHistory2(layouts, selected) {
     var opts = {
       layouts: layouts
     };
     if (selected) {
       opts.selected = selected;
     }
-    var state_dump = {
-      type: "layout_chooser",
+    var stateDump = {
+      type: "layoutChooser",
       data: opts
     };
-    window.history.pushState(state_dump, null, null);
+    window.history.pushState(stateDump, null, null);
   };
-  var save_editor_history = function save_editor_history2(_ref) {
-    var entry_type = _ref.entry_type, grid = _ref.grid, elements = _ref.elements;
-    var state_dump = {
-      type: "layout_edit",
+  var saveEditorHistory = function saveEditorHistory2(_ref) {
+    var entryType = _ref.entryType, grid = _ref.grid, elements = _ref.elements;
+    var stateDump = {
+      type: "layoutEdit",
       data: {
-        entry_type: entry_type,
+        entryType: entryType,
         grid: grid,
         elements: elements
       }
     };
-    window.history.pushState(state_dump, null, null);
+    window.history.pushState(stateDump, null, null);
   };
 
   // web-components/layout-gallery.ts
@@ -8325,12 +8325,12 @@
       _classCallCheck6(this, GridPreview2);
       _this = _super.call(this);
       _defineProperty8(_assertThisInitialized3(_this), "grid", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_render_size", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_shown_size", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "RenderSize", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "ShownSize", void 0);
       _defineProperty8(_assertThisInitialized3(_this), "name", void 0);
       _defineProperty8(_assertThisInitialized3(_this), "elements", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "hover_animation", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "_on_select", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "hoverAnimation", void 0);
+      _defineProperty8(_assertThisInitialized3(_this), "OnSelect", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8340,37 +8340,37 @@
         gap: "1rem"
       };
       _this.elements = [];
-      _this._render_size = 1250;
-      _this._shown_size = 250;
-      _this._on_select = function() {
+      _this.RenderSize = 1250;
+      _this.ShownSize = 250;
+      _this.OnSelect = function() {
         return console.log("Selected ".concat(_this.name));
       };
-      _this.hover_animation = true;
+      _this.hoverAnimation = true;
       return _this;
     }
     _createClass6(GridPreview2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        var scale = this._render_size / this._shown_size;
-        var scale_units = function scale_units2(unit) {
+        var scale = this.RenderSize / this.ShownSize;
+        var scaleUnits = function scaleUnits2(unit) {
           if (unit.includes("fr") || unit.includes("auto"))
             return unit;
           return "calc(".concat(unit, "/ ").concat(scale, ")");
         };
-        var build_tract_definition = function build_tract_definition2(tract_sizing) {
-          if (!(tract_sizing instanceof Array)) {
-            tract_sizing = [tract_sizing];
+        var buildTractDefinition = function buildTractDefinition2(tractSizing) {
+          if (!(tractSizing instanceof Array)) {
+            tractSizing = [tractSizing];
           }
-          return tract_sizing.map(function(x) {
-            return scale_units(x);
+          return tractSizing.map(function(x) {
+            return scaleUnits(x);
           }).join(" ");
         };
-        var corner_radius = "".concat(20 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(corner_radius, ";\n        width: ").concat(this._shown_size, "px;\n        height: ").concat(this._shown_size, "px;\n        display: grid;\n        grid-template-rows: ").concat(build_tract_definition(this.grid.rows), ";\n        grid-template-columns: ").concat(build_tract_definition(this.grid.cols), ";\n        gap: ").concat(scale_units(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hover_animation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(corner_radius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.element_divs, " </div>\n    ");
+        var cornerRadius = "".concat(20 / scale, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(cornerRadius, ";\n        width: ").concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols), ";\n        gap: ").concat(scaleUnits(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.elementDivs, " </div>\n    ");
         this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
-          _this2._on_select({
+          _this2.OnSelect({
             name: _this2.name,
             elements: _this2.elements,
             grid: _this2.grid
@@ -8387,50 +8387,50 @@
         return this;
       }
     }, {
-      key: "render_size",
-      value: function render_size(new_size) {
-        this._render_size = new_size;
+      key: "renderSize",
+      value: function renderSize(newSize) {
+        this.RenderSize = newSize;
         return this;
       }
     }, {
-      key: "shown_size",
-      value: function shown_size(new_size) {
-        this._shown_size = new_size;
+      key: "shownSize",
+      value: function shownSize(newSize) {
+        this.ShownSize = newSize;
         return this;
       }
     }, {
-      key: "on_select",
-      value: function on_select(_on_select) {
-        this._on_select = _on_select;
+      key: "onSelect",
+      value: function onSelect(_onSelect) {
+        this.OnSelect = _onSelect;
         return this;
       }
     }, {
-      key: "hide_name",
-      value: function hide_name() {
+      key: "hideName",
+      value: function hideName() {
         this.name = null;
         return this;
       }
     }, {
-      key: "turnoff_animation",
-      value: function turnoff_animation() {
-        this.hover_animation = false;
+      key: "turnoffAnimation",
+      value: function turnoffAnimation() {
+        this.hoverAnimation = false;
         return this;
       }
     }, {
-      key: "element_divs",
+      key: "elementDivs",
       get: function get() {
-        var element_divs = "";
+        var elementDivs = "";
         this.elements.forEach(function(_ref) {
-          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
-          var grid_area = [start_row, start_col, end_row + 1, end_col + 1].join("/");
-          element_divs += "\n      <div style='grid-area:".concat(grid_area, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
+          var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flipId = _ref.flipId, flipId = _ref$flipId === void 0 ? false : _ref$flipId;
+          var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
+          elementDivs += "\n      <div style='grid-area:".concat(gridArea, "'>\n        <div ").concat(flipId ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
         });
-        return element_divs;
+        return elementDivs;
       }
     }]);
     return GridPreview2;
   }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
-  function grid_preview() {
+  function gridPreview() {
     return new GridPreview();
   }
   customElements.define("grid-preview", GridPreview);
@@ -8623,11 +8623,11 @@
       _classCallCheck7(this, LayoutGallery2);
       _this = _super.call(this);
       _defineProperty9(_assertThisInitialized4(_this), "layouts", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "preselected_layout_name", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_edit_fn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_go_fn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_cancel_fn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "on_select_fn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "preselectedLayoutName", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "onEditFn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "onGoFn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "onCancelFn", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "onSelectFn", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8640,78 +8640,78 @@
         var _this$shadowRoot$getE, _this2 = this;
         this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        background-color: #edf2f7;\n        width: 100%;\n        height: 100vh;\n        display: block;\n        position: absolute;\n      }\n      \n      #container {\n        display: block;\n        max-width: 1000px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n    <div id = "container">\n      <h2> Select the layout for your app: </h2>\n      <div id = "layouts"></div>\n      <div id = "chooser-modal" class = "hidden"> </div>\n    </div>\n    ';
         (_this$shadowRoot$getE = this.shadowRoot.getElementById("layouts")).append.apply(_this$shadowRoot$getE, _toConsumableArray6(this.layouts.map(function(layout) {
-          return grid_preview().layout(layout).shown_size(100).on_select(function(x) {
-            return _this2.focus_on_layout(x);
+          return gridPreview().layout(layout).shownSize(100).onSelect(function(x) {
+            return _this2.focusOnLayout(x);
           });
         })));
-        if (this.preselected_layout_name) {
-          this.focus_on_layout(this.layouts.find(function(layout) {
-            return layout.name === _this2.preselected_layout_name;
+        if (this.preselectedLayoutName) {
+          this.focusOnLayout(this.layouts.find(function(layout) {
+            return layout.name === _this2.preselectedLayoutName;
           }), false);
         }
       }
     }, {
-      key: "on_edit",
-      value: function on_edit(on_edit_fn) {
-        this.on_edit_fn = on_edit_fn;
+      key: "onEdit",
+      value: function onEdit(onEditFn) {
+        this.onEditFn = onEditFn;
         return this;
       }
     }, {
-      key: "on_go",
-      value: function on_go(on_go_fn) {
-        this.on_go_fn = on_go_fn;
+      key: "onGo",
+      value: function onGo(onGoFn) {
+        this.onGoFn = onGoFn;
         return this;
       }
     }, {
-      key: "on_cancel",
-      value: function on_cancel(on_cancel_fn) {
-        this.on_cancel_fn = on_cancel_fn;
+      key: "onCancel",
+      value: function onCancel(onCancelFn) {
+        this.onCancelFn = onCancelFn;
         return this;
       }
     }, {
-      key: "select_layout",
-      value: function select_layout(name) {
+      key: "selectLayout",
+      value: function selectLayout(name) {
         if (name) {
-          this.preselected_layout_name = name;
+          this.preselectedLayoutName = name;
         }
         return this;
       }
     }, {
-      key: "on_select",
-      value: function on_select(fn) {
-        this.on_select_fn = fn;
+      key: "onSelect",
+      value: function onSelect(fn) {
+        this.onSelectFn = fn;
         return this;
       }
     }, {
-      key: "focus_on_layout",
-      value: function focus_on_layout(selected_layout) {
+      key: "focusOnLayout",
+      value: function focusOnLayout(selectedLayout) {
         var _this3 = this;
-        var fire_on_select = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
-        var modal = create_focus_modal().set_title(selected_layout.name).max_width("95%").on_close(this.on_cancel_fn).add_element(grid_preview().layout(selected_layout).shown_size(650).turnoff_animation().hide_name());
-        var close_gallery = function close_gallery2(event) {
+        var fireOnSelect = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+        var modal = createFocusModal().setTitle(selectedLayout.name).maxWidth("95%").onClose(this.onCancelFn).addElement(gridPreview().layout(selectedLayout).shownSize(650).turnoffAnimation().hideName());
+        var closeGallery = function closeGallery2(event) {
           event.stopPropagation();
           _this3.remove();
           modal.remove();
         };
-        modal.add_element(create_el({
-          sel_txt: "div#footer",
-          children: [click_button(".go", "Create app with this layout", function(event) {
-            close_gallery(event);
-            _this3.on_go_fn(selected_layout);
-          }), click_button(".edit", "Edit this layout", function(event) {
-            close_gallery(event);
-            _this3.on_edit_fn(selected_layout);
+        modal.addElement(createEl({
+          selTxt: "div#footer",
+          children: [clickButton(".go", "Create app with this layout", function(event) {
+            closeGallery(event);
+            _this3.onGoFn(selectedLayout);
+          }), clickButton(".edit", "Edit this layout", function(event) {
+            closeGallery(event);
+            _this3.onEditFn(selectedLayout);
           })]
         }));
-        modal.add_to_page();
-        if (fire_on_select) {
-          this.on_select_fn(selected_layout.name);
+        modal.addToPage();
+        if (fireOnSelect) {
+          this.onSelectFn(selectedLayout.name);
         }
       }
     }]);
     return LayoutGallery2;
   }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
-  function layout_gallery(layouts) {
+  function layoutGallery(layouts) {
     return new LayoutGallery(layouts);
   }
   customElements.define("layout-gallery", LayoutGallery);
@@ -8755,79 +8755,79 @@
     }
     return obj;
   }
-  var clear_page = function clear_page2() {
+  var clearPage = function clearPage2() {
     return document.body.innerHTML = "";
   };
-  var start_layout_gallery = function start_layout_gallery2(opts) {
-    var save_history = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
-    clear_page();
-    if (save_history) {
-      save_gallery_history(opts.layouts);
+  var startLayoutGallery = function startLayoutGallery2(opts) {
+    var saveHistory = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+    clearPage();
+    if (saveHistory) {
+      saveGalleryHistory(opts.layouts);
     }
-    var gallery = layout_gallery(opts.layouts).on_select(function(selected) {
-      save_gallery_history(opts.layouts, selected);
-    }).on_cancel(function() {
-      save_gallery_history(opts.layouts);
-    }).on_go(function(selected_layout) {
-      setShinyInput("build_app_template", selected_layout);
-    }).on_edit(function(selected_layout) {
-      start_layout_editor(_objectSpread4({
-        entry_type: "layout-gallery"
-      }, selected_layout), true);
-    }).select_layout(opts.selected);
+    var gallery = layoutGallery(opts.layouts).onSelect(function(selected) {
+      saveGalleryHistory(opts.layouts, selected);
+    }).onCancel(function() {
+      saveGalleryHistory(opts.layouts);
+    }).onGo(function(selectedLayout) {
+      setShinyInput("build_app_template", selectedLayout);
+    }).onEdit(function(selectedLayout) {
+      startLayoutEditor(_objectSpread4({
+        entryType: "layout-gallery"
+      }, selectedLayout), true);
+    }).selectLayout(opts.selected);
     return document.body.appendChild(gallery);
   };
-  var start_layout_editor = function start_layout_editor2(opts, save_history) {
-    if (save_history) {
-      save_editor_history(opts);
+  var startLayoutEditor = function startLayoutEditor2(opts, saveHistory) {
+    if (saveHistory) {
+      saveEditorHistory(opts);
     }
-    if (opts.entry_type !== "edit-existing-app") {
-      clear_page();
+    if (opts.entryType !== "edit-existing-app") {
+      clearPage();
     }
-    opts.finish_btn = opts.entry_type === "layout-gallery" ? {
+    opts.finishBtn = opts.entryType === "layout-gallery" ? {
       label: "Create app",
-      on_done: function on_done(layout) {
+      onDone: function onDone(layout) {
         setShinyInput("build_app_template", layout);
       }
     } : {
       label: "Update app layout",
-      on_done: function on_done(layout) {
+      onDone: function onDone(layout) {
         setShinyInput("update_layout", layout);
       }
     };
-    opts.on_update = function(opts2) {
-      save_editor_history(opts2);
+    opts.onUpdate = function(opts2) {
+      saveEditorHistory(opts2);
     };
     return new LayoutEditor(opts);
   };
   window.onload = function() {
-    add_shiny_listener("layout-gallery", function(layouts) {
-      start_layout_gallery({
+    addShinyListener("layout-gallery", function(layouts) {
+      startLayoutGallery({
         layouts: layouts
       });
     });
-    add_shiny_listener("edit-layout", function(layout_info) {
-      start_layout_editor(_objectSpread4({
-        entry_type: "edit-layout"
-      }, layout_info), true);
+    addShinyListener("edit-layout", function(layoutInfo) {
+      startLayoutEditor(_objectSpread4({
+        entryType: "edit-layout"
+      }, layoutInfo), true);
     });
-    add_shiny_listener("edit-existing-app", function(layout_info) {
-      start_layout_editor({
-        entry_type: "edit-existing-app"
+    addShinyListener("edit-existing-app", function(layoutInfo) {
+      startLayoutEditor({
+        entryType: "edit-existing-app"
       }, true);
     });
-    add_shiny_listener("show-code-popup", function(opts) {
-      create_focus_modal().set_title(opts.title).description(opts.description).add_element(copy_code(opts.code)).add_to_page();
+    addShinyListener("show-code-popup", function(opts) {
+      createFocusModal().setTitle(opts.title).description(opts.description).addElement(copyCode(opts.code)).addToPage();
     });
   };
   window.addEventListener("popstate", function(e) {
     var state = e.state;
     switch (state.type) {
-      case "layout_chooser":
-        start_layout_gallery(state.data, false);
+      case "layoutChooser":
+        startLayoutGallery(state.data, false);
         break;
-      case "layout_edit":
-        start_layout_editor(state.data, false);
+      case "layoutEdit":
+        startLayoutEditor(state.data, false);
         break;
       default:
         console.error("How did you get to that state?");

@@ -1,10 +1,10 @@
 import { css } from "@emotion/css";
 import { TractDir } from "./GridLayout";
 import { LayoutEditor } from "./LayoutEditor";
-import { make_el, tract_add_or_remove_button } from "./make-elements";
-import { horizontal_drag_icon, vertical_drag_icon } from "./utils-icons";
+import { makeEl, tractAddOrRemoveButton } from "./make-elements";
+import { horizontalDragIcon, verticalDragIcon } from "./utils-icons";
 
-const css_unit_input = css`
+const cssUnitInput = css`
   display: grid;
   grid-template-columns: repeat(2, 55px);
   justify-content: center; /* Make sure to sit in middle of control */
@@ -31,7 +31,7 @@ const css_unit_input = css`
     font-size: 1.1rem;
   }
 
-  .value_input.disabled {
+  .valueInput.disabled {
     opacity: 0.15;
     pointer-events: none;
   }
@@ -39,24 +39,24 @@ const css_unit_input = css`
 
 export type CSSInput = {
   form: HTMLElement;
-  current_value: () => string;
-  update_value: (new_value: string) => void;
+  currentValue: () => string;
+  updateValue: (newValue: string) => void;
 };
 
 type UnitOptions = "fr" | "px" | "rem" | "auto";
 
-const default_values = {
+const defaultValues = {
   fr: "1",
   px: "100",
   rem: "2",
 };
 
-export function get_css_unit(css_size: string): UnitOptions {
-  return (css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px") as UnitOptions;
+export function getCssUnit(cssSize: string): UnitOptions {
+  return (cssSize.match(/(px|\%|rem|fr|auto)/g)[0] || "px") as UnitOptions;
 }
 
-export function get_css_value(css_size: string): number | null {
-  const value = css_size.match(/^[\d|\.]*/g)[0];
+export function getCssValue(cssSize: string): number | null {
+  const value = cssSize.match(/^[\d|\.]*/g)[0];
   return value === "" ? null : Number(value);
 }
 
@@ -65,20 +65,20 @@ export function get_css_value(css_size: string): number | null {
 // specifically related to the app and its state
 // Input with value text box on left and unit selector dropdown on right
 // Used to make valid css sizes
-export function make_css_unit_input({
-  parent_el,
+export function makeCssUnitInput({
+  parentEl,
   selector = "",
-  start_val = 1,
-  start_unit = "fr",
-  on_change = (x: string) => console.log("css unit change", x),
-  allowed_units = ["fr", "px", "rem", "auto"],
-  snap_to_defaults = true,
+  startVal = 1,
+  startUnit = "fr",
+  onChange = (x: string) => console.log("css unit change", x),
+  allowedUnits = ["fr", "px", "rem", "auto"],
+  snapToDefaults = true,
 }): CSSInput {
-  let current_unit = start_unit;
+  let currentUnit = startUnit;
 
-  const form = make_el(parent_el, `form${selector}.${css_unit_input}`, {
-    event_listener: [
-      { event: "change", func: on_update },
+  const form = makeEl(parentEl, `form${selector}.${cssUnitInput}`, {
+    eventListener: [
+      { event: "change", func: onUpdate },
       {
         event: "submit",
         func: function (e) {
@@ -89,90 +89,90 @@ export function make_css_unit_input({
     ],
   });
 
-  const value_input = <HTMLInputElement>make_el(form, "input.value-input", {
+  const valueInput = <HTMLInputElement>makeEl(form, "input.value-input", {
     props: {
       type: "number",
       min: 0,
-      value: start_val,
+      value: startVal,
       step: 1,
       "aria-live": "polite",
     },
   });
 
-  const unit_selector = <HTMLSelectElement>(
-    make_el(form, "select.unit-selector", {
+  const unitSelector = <HTMLSelectElement>(
+    makeEl(form, "select.unit-selector", {
       props: { name: "units" },
     })
   );
 
-  allowed_units.forEach(function (unit_type) {
-    const unit_option = <HTMLOptionElement>(
-      make_el(unit_selector, `option.${unit_type}`, {
-        props: { value: unit_type },
-        innerHTML: unit_type,
+  allowedUnits.forEach(function (unitType) {
+    const unitOption = <HTMLOptionElement>(
+      makeEl(unitSelector, `option.${unitType}`, {
+        props: { value: unitType },
+        innerHTML: unitType,
       })
     );
 
-    if (unit_type === start_unit) {
-      unit_option.selected = true;
+    if (unitType === startUnit) {
+      unitOption.selected = true;
     }
   });
 
-  function unit_type(): UnitOptions {
-    return unit_selector.value as UnitOptions;
+  function unitType(): UnitOptions {
+    return unitSelector.value as UnitOptions;
   }
-  function num_units() {
-    return value_input.value;
+  function numUnits() {
+    return valueInput.value;
   }
-  function current_value() {
-    if (unit_type() === "auto") return "auto";
-    return `${num_units()}${unit_type()}`;
-  }
-
-  function on_update() {
-    const val = current_value();
-    update_value(val);
-    on_change(val);
+  function currentValue() {
+    if (unitType() === "auto") return "auto";
+    return `${numUnits()}${unitType()}`;
   }
 
-  function update_value(new_value: string) {
-    const units = get_css_unit(new_value);
-    const count = get_css_value(new_value);
+  function onUpdate() {
+    const val = currentValue();
+    updateValue(val);
+    onChange(val);
+  }
+
+  function updateValue(newValue: string) {
+    const units = getCssUnit(newValue);
+    const count = getCssValue(newValue);
 
     if (count === null && units === "auto") {
       // Using a unit without values so disable value input
-      value_input.classList.add("disabled");
-      value_input.value = "";
+      valueInput.classList.add("disabled");
+      valueInput.value = "";
     } else {
-      value_input.classList.remove("disabled");
+      valueInput.classList.remove("disabled");
 
       // If the user is flipping through multiple units we dont want to just
       // stick to whatever value was last set as the unit unless they've changed
       // it from the default. E.g. flipping from default of 100px to rem
       // shouldn't result in a 100rem wide track which then needs to be adjusted
-      const using_old_units_default =
-        value_input.value === default_values[current_unit] && snap_to_defaults;
-      value_input.value =
-        count === null || using_old_units_default
-          ? default_values[units]
+      const usingOldUnitsDefault =
+        valueInput.value === defaultValues[currentUnit] && snapToDefaults;
+      valueInput.value =
+        count === null || usingOldUnitsDefault
+          ? defaultValues[units]
           : count.toString();
     }
 
-    for (let opt of unit_selector.children as HTMLCollectionOf<
+    for (let opt of unitSelector.children as HTMLCollectionOf<
       HTMLOptionElement
     >) {
       opt.selected = opt.value === units;
     }
 
-    current_unit = units;
+    currentUnit = units;
   }
 
-  update_value(`${start_val}${start_unit}`);
+  updateValue(`${startVal}${startUnit}`);
 
-  return { form, current_value, update_value };
+  return { form, currentValue, updateValue };
 }
 
-const tract_controls = css`
+const tractControls = css`
   display: grid;
   gap: 0.25rem;
   position: absolute;
@@ -255,155 +255,155 @@ const tract_controls = css`
   }
 `;
 
-export function build_controls_for_dir(
-  app_state: LayoutEditor,
+export function buildControlsForDir(
+  appState: LayoutEditor,
   dir: TractDir,
-  editor_container: HTMLElement
+  editorContainer: HTMLElement
 ) {
   // This is the class of the first grid cell for each row or column
-  const target_class = dir === "rows" ? "c1" : "r1";
-  const dir_singular = dir === "rows" ? "row" : "col";
+  const targetClass = dir === "rows" ? "c1" : "r1";
+  const dirSingular = dir === "rows" ? "row" : "col";
 
   // Make sure we dont have any controls hanging around
-  editor_container
+  editorContainer
     .querySelectorAll(`.${dir}-controls`)
     .forEach((el) => el.remove());
 
   // Builds the controls and tract addition buttons for all cells
-  return app_state.current_cells
-    .filter((el) => el.classList.contains(target_class))
+  return appState.currentCells
+    .filter((el) => el.classList.contains(targetClass))
     .map((el) => {
-      const tract_index: number = +el.dataset[dir_singular];
+      const tractIndex: number = +el.dataset[dirSingular];
 
-      const holder_el = make_el(
-        editor_container,
-        `div#controller_for_${dir_singular}_${tract_index}.tract-controls.${tract_controls}.${dir}-controls`
+      const holderEl = makeEl(
+        editorContainer,
+        `div#controller-for-${dirSingular}-${tractIndex}.tract-controls.${tractControls}.${dir}-controls`
       );
 
-      if (tract_index === 1) {
+      if (tractIndex === 1) {
         // Add an additional button before the first row and column. Otherwise
         // the user would not be able to add a row or column at the very start
         // of the grid.
-        tract_add_or_remove_button(app_state, {
-          parent_el: holder_el,
-          add_or_remove: "add",
+        tractAddOrRemoveButton(appState, {
+          parentEl: holderEl,
+          addOrRemove: "add",
           dir,
-          tract_index: 0,
-          additional_styles: {
+          tractIndex: 0,
+          additionalStyles: {
             [dir === "rows" ? "top" : "left"]: "var(--incrementer-offset)",
           },
         });
       }
 
-      tract_add_or_remove_button(app_state, {
-        parent_el: holder_el,
-        add_or_remove: "add",
+      tractAddOrRemoveButton(appState, {
+        parentEl: holderEl,
+        addOrRemove: "add",
         dir,
-        tract_index,
+        tractIndex,
       });
 
       return {
-        matched_cell: el,
-        el: holder_el,
-        controller: make_grid_tract_control(holder_el, app_state, {
+        matchedCell: el,
+        el: holderEl,
+        controller: makeGridTractControl(holderEl, appState, {
           dir: dir as TractDir,
-          size: app_state.grid_layout[dir][tract_index - 1],
-          tract_index,
+          size: appState.gridLayout[dir][tractIndex - 1],
+          tractIndex,
         }),
       };
     });
 }
 
-export function make_grid_tract_control(
+export function makeGridTractControl(
   holder: HTMLElement,
-  app_state: LayoutEditor,
+  appState: LayoutEditor,
   opts: {
     size: string;
     dir: TractDir;
-    tract_index: number;
+    tractIndex: number;
   }
 ): CSSInput {
-  const { size, dir, tract_index } = opts;
+  const { size, dir, tractIndex } = opts;
 
-  function send_update({ is_dragging }: { is_dragging: boolean }) {
-    app_state.update_tract({
-      tract_index,
+  function sendUpdate({ isDragging }: { isDragging: boolean }) {
+    appState.updateTract({
+      tractIndex,
       dir,
-      new_value: unit_input.current_value(),
-      is_dragging,
+      newValue: unitInput.currentValue(),
+      isDragging,
     });
   }
 
-  const unit_input = make_css_unit_input({
-    parent_el: holder,
+  const unitInput = makeCssUnitInput({
+    parentEl: holder,
     selector: `.unit-input.${dir}-sizing`,
-    start_val: get_css_value(size),
-    start_unit: get_css_unit(size),
-    on_change: (new_val: string) => {
-      show_or_hide_dragger(new_val);
-      send_update({ is_dragging: false });
+    startVal: getCssValue(size),
+    startUnit: getCssUnit(size),
+    onChange: (newVal: string) => {
+      showOrHideDragger(newVal);
+      sendUpdate({ isDragging: false });
     },
   });
 
-  const value_input = <HTMLInputElement>(
-    unit_input.form.querySelector(".value-input")
+  const valueInput = <HTMLInputElement>(
+    unitInput.form.querySelector(".value-input")
   );
-  const drag_dir = dir === "rows" ? "y" : "x";
+  const dragDir = dir === "rows" ? "y" : "x";
 
-  const resizer = make_el(holder, "div.dragger", {
-    innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon,
+  const resizer = makeEl(holder, "div.dragger", {
+    innerHTML: dir === "rows" ? verticalDragIcon : horizontalDragIcon,
   });
   // Place an invisible div over the main one that we let be dragged. This means
   // we can use the nice drag interaction callbacks without the ugly default
   // drag behavior of two copies of the div and zooming back to the start pos etc.
-  make_el(resizer, "div.drag-detector", {
+  makeEl(resizer, "div.drag-detector", {
     props: { draggable: true },
-    event_listener: [
+    eventListener: [
       {
         event: "dragstart",
         func: function (event) {
-          this.dataset.baseline = value_input.value;
-          this.dataset.start = event[drag_dir];
+          this.dataset.baseline = valueInput.value;
+          this.dataset.start = event[dragDir];
         },
       },
       {
         event: "drag",
         func: function (event) {
-          const drag_pos = event[drag_dir];
+          const dragPos = event[dragDir];
           // At the end of the drag we get a drag event with 0 values that throws stuff off
-          if (drag_pos === 0) return;
-          const new_value = Math.max(
+          if (dragPos === 0) return;
+          const newValue = Math.max(
             0,
-            +this.dataset.baseline + (event[drag_dir] - this.dataset.start)
+            +this.dataset.baseline + (event[dragDir] - this.dataset.start)
           );
-          value_input.value = new_value.toString();
-          send_update({ is_dragging: true });
+          valueInput.value = newValue.toString();
+          sendUpdate({ isDragging: true });
         },
       },
       {
         event: "dragend",
         func: function (event) {
-          send_update({ is_dragging: false });
+          sendUpdate({ isDragging: false });
         },
       },
     ],
   });
 
-  tract_add_or_remove_button(app_state, {
-    parent_el: holder,
-    add_or_remove: "remove",
+  tractAddOrRemoveButton(appState, {
+    parentEl: holder,
+    addOrRemove: "remove",
     dir,
-    tract_index,
+    tractIndex,
   });
 
-  function show_or_hide_dragger(curr_val: string) {
-    if (get_css_unit(curr_val) === "px") {
+  function showOrHideDragger(currVal: string) {
+    if (getCssUnit(currVal) === "px") {
       holder.classList.add("with-drag");
     } else {
       holder.classList.remove("with-drag");
     }
   }
-  show_or_hide_dragger(unit_input.current_value());
+  showOrHideDragger(unitInput.currentValue());
 
-  return unit_input;
+  return unitInput;
 }

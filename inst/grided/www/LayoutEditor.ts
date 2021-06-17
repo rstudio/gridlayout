@@ -2,43 +2,43 @@ import { css } from "@emotion/css";
 import { LayoutElement, LayoutInfo } from ".";
 import { GridItem, GridPos } from "./GridItem";
 import { GridLayout, LayoutState, TractDir } from "./GridLayout";
-import { build_controls_for_dir, CSSInput } from "./make-css_unit_input";
-import { block_el, create_el, ElementOpts, make_el } from "./make-elements";
-import { get_styles_for_selector_with_targets } from "./utils-cssom";
+import { buildControlsForDir, CSSInput } from "./make-cssUnitInput";
+import { blockEl, createEl, ElementOpts, makeEl } from "./make-elements";
+import { getStylesForSelectorWithTargets } from "./utils-cssom";
 import {
-  bounding_rect_to_css_pos,
-  find_first_grid_node,
-  get_drag_extent_on_grid,
-  get_gap_size,
-  get_pos_on_grid,
-  make_start_end_for_dir,
+  boundingRectToCssPos,
+  findFirstGridNode,
+  getDragExtentOnGrid,
+  getGapSize,
+  getPosOnGrid,
+  makeStartEndForDir,
 } from "./utils-grid";
-import { drag_icon, nw_arrow, se_arrow, trashcan_icon } from "./utils-icons";
+import { dragIcon, nwArrow, seArrow, trashcanIcon } from "./utils-icons";
 import {
-  as_array,
+  asArray,
   DragType,
-  filler_text,
-  pos_relative_to_container,
+  fillerText,
+  posRelativeToContainer,
   SelectionRect,
-  set_class,
-  update_rect_with_delta,
+  setClass,
+  updateRectWithDelta,
   XYPos,
 } from "./utils-misc";
 import { setShinyInput } from "./utils-shiny";
-import { create_focus_modal } from "./web-components/focus-modal";
+import { createFocusModal } from "./web-components/focus-modal";
 import {
-  add_existing_elements_to_app,
-  cleanup_grided_ui,
-  hookup_gap_size_controls,
-  wrap_in_grided,
-} from "./wrap_in_grided";
+  addExistingElementsToApp,
+  cleanupGridedUi,
+  hookupGapSizeControls,
+  wrapInGrided,
+} from "./wrapInGrided";
 
 export type GridUpdateOptions = {
   rows?: string[];
   cols?: string[];
   gap?: string;
   force?: boolean;
-  dont_update_history?: boolean;
+  dontUpdateHistory?: boolean;
 };
 
 type DragRes = {
@@ -48,11 +48,11 @@ type DragRes = {
 
 export type ElementInfo = {
   id: string;
-  grid_pos: GridPos;
-  grid_el: HTMLElement;
-  list_el: HTMLElement;
-  mirrored_element?: HTMLElement;
-  grid_item: GridItem;
+  gridPos: GridPos;
+  gridEl: HTMLElement;
+  listEl: HTMLElement;
+  mirroredElement?: HTMLElement;
+  gridItem: GridItem;
 };
 
 export type AppEntryType =
@@ -64,117 +64,117 @@ export type AppMode = "Existing" | "New";
 
 export type FinishButtonSetup = {
   label: string;
-  on_done: (layout: LayoutInfo) => void;
+  onDone: (layout: LayoutInfo) => void;
 };
 
 export type LayoutEditorSetup = {
-  entry_type: AppEntryType;
+  entryType: AppEntryType;
   grid?: LayoutState;
   elements?: LayoutElement[];
-  finish_btn?: FinishButtonSetup;
-  on_update?: (opts: LayoutEditorSetup) => void;
+  finishBtn?: FinishButtonSetup;
+  onUpdate?: (opts: LayoutEditorSetup) => void;
 };
 
 export class LayoutEditor {
-  gap_size_setting: CSSInput;
+  gapSizeSetting: CSSInput;
   // All the currently existing cells making up the grid
-  current_cells: HTMLElement[] = [];
+  currentCells: HTMLElement[] = [];
   elements: GridItem[] = [];
-  on_update: (opts: LayoutEditorSetup) => void;
+  onUpdate: (opts: LayoutEditorSetup) => void;
 
-  container_selector: string;
+  containerSelector: string;
   container: HTMLElement;
-  grid_styles: CSSStyleDeclaration;
+  gridStyles: CSSStyleDeclaration;
   mode: AppMode;
-  grid_layout: GridLayout;
-  tract_controls: {
-    update_positions: () => void;
+  gridLayout: GridLayout;
+  tractControls: {
+    updatePositions: () => void;
   };
-  entry_type: AppEntryType;
+  entryType: AppEntryType;
   constructor({
-    entry_type,
-    grid: starting_grid,
-    elements: starting_elements,
-    finish_btn,
-    on_update,
+    entryType,
+    grid: startingGrid,
+    elements: startingElements,
+    finishBtn,
+    onUpdate,
   }: LayoutEditorSetup) {
-    this.entry_type = entry_type;
+    this.entryType = entryType;
 
     // Check if we've already wrapped in grided and tagged the app container
-    const existing_wrapped_app = document.querySelector(
+    const existingWrappedApp = document.querySelector(
       ".wrapped-existing-app"
     ) as HTMLElement;
-    if (existing_wrapped_app) {
-      this.container = existing_wrapped_app;
+    if (existingWrappedApp) {
+      this.container = existingWrappedApp;
     } else {
       this.container =
-        entry_type === "edit-existing-app"
-          ? find_first_grid_node()
-          : block_el("div#grid_page");
+        entryType === "edit-existing-app"
+          ? findFirstGridNode()
+          : blockEl("div#gridPage");
     }
-    this.grid_layout = new GridLayout(this.container);
+    this.gridLayout = new GridLayout(this.container);
 
-    if (!existing_wrapped_app) {
-      wrap_in_grided(this, finish_btn);
+    if (!existingWrappedApp) {
+      wrapInGrided(this, finishBtn);
     } else {
-      cleanup_grided_ui();
+      cleanupGridedUi();
     }
 
-    add_existing_elements_to_app(this);
+    addExistingElementsToApp(this);
 
-    this.gap_size_setting = hookup_gap_size_controls(
+    this.gapSizeSetting = hookupGapSizeControls(
       this,
-      document.getElementById("grided_gap_size_controls"),
-      starting_grid?.gap
+      document.getElementById("gridedGapSizeControls"),
+      startingGrid?.gap
     );
 
-    this.grid_styles = this.container.style;
+    this.gridStyles = this.container.style;
 
-    this.mode = entry_type === "edit-existing-app" ? "Existing" : "New";
-    this.on_update = on_update;
+    this.mode = entryType === "edit-existing-app" ? "Existing" : "New";
+    this.onUpdate = onUpdate;
 
-    if (entry_type !== "edit-existing-app") {
+    if (entryType !== "edit-existing-app") {
       // Update grid but dont update history because we need to fill in the
       // elements first
-      this.update_grid({ ...starting_grid, dont_update_history: true });
+      this.updateGrid({ ...startingGrid, dontUpdateHistory: true });
 
-      starting_elements.forEach((el_msg: LayoutElement) => {
-        const { start_row, end_row, start_col, end_col } = el_msg;
+      startingElements.forEach((elMsg: LayoutElement) => {
+        const { start_row, end_row, start_col, end_col } = elMsg;
         // Add elements but dont update history as we do it
-        this.add_element(
+        this.addElement(
           {
-            id: el_msg.id,
-            grid_pos: { start_row, end_row, start_col, end_col },
+            id: elMsg.id,
+            gridPos: { start_row, end_row, start_col, end_col },
           },
           false
         );
       });
-    } else if (entry_type === "edit-existing-app" && !existing_wrapped_app) {
+    } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
       // directly computed if we use getComputedStyle()
-      const current_grid_props = get_styles_for_selector_with_targets(
+      const currentGridProps = getStylesForSelectorWithTargets(
         `#${this.container.id}`,
         ["gridTemplateColumns", "gridTemplateRows"]
       );
 
       // Make sure grid matches the one the app is working with
-      this.update_grid({
-        rows: current_grid_props.gridTemplateRows.split(" "),
-        cols: current_grid_props.gridTemplateColumns.split(" "),
-        gap: get_gap_size(current_grid_props.gap),
+      this.updateGrid({
+        rows: currentGridProps.gridTemplateRows.split(" "),
+        cols: currentGridProps.gridTemplateColumns.split(" "),
+        gap: getGapSize(currentGridProps.gap),
       });
-    } else if (entry_type === "edit-existing-app" && existing_wrapped_app) {
+    } else if (entryType === "edit-existing-app" && existingWrappedApp) {
       // match elements to the elements definition and place them correctly
-      this.elements.forEach((grid_el) => {
-        const id = grid_el.id;
-        const element_def = starting_elements.find((el) => el.id === id);
-        grid_el.position = element_def;
+      this.elements.forEach((gridEl) => {
+        const id = gridEl.id;
+        const elementDef = startingElements.find((el) => el.id === id);
+        gridEl.position = elementDef;
       });
 
-      this.update_grid({
-        ...starting_grid,
-        dont_update_history: true,
+      this.updateGrid({
+        ...startingGrid,
+        dontUpdateHistory: true,
         force: true,
       });
     } else {
@@ -185,19 +185,19 @@ export class LayoutEditor {
 
     // Send info on starting layout to Shiny so it can find layout definition
     // to edit it after changes have been made
-    if (entry_type !== "layout-gallery") {
-      setShinyInput("starting_layout", this.current_layout, true);
+    if (entryType !== "layout-gallery") {
+      setShinyInput("starting-layout", this.currentLayout, true);
     }
   }
 
-  get current_layout(): LayoutInfo {
+  get currentLayout(): LayoutInfo {
     return {
-      grid: this.grid_layout.attrs,
+      grid: this.gridLayout.attrs,
       elements: this.elements.map((el) => el.info),
     };
   }
   // Get the next color in our list of colors.
-  get next_color() {
+  get nextColor() {
     const colors = [
       "#e41a1c",
       "#377eb8",
@@ -211,277 +211,277 @@ export class LayoutEditor {
     return colors[this.elements.length % colors.length];
   }
 
-  add_element(
-    el_props: {
+  addElement(
+    elProps: {
       id: string;
-      grid_pos: GridPos;
-      mirrored_element?: HTMLElement;
+      gridPos: GridPos;
+      mirroredElement?: HTMLElement;
     },
-    send_update: boolean = true
+    sendUpdate: boolean = true
   ) {
-    // If element ids were generated with the grid_container R function then
+    // If element ids were generated with the gridContainer R function then
     // they have a prefix of the container name which we should remove so the
     // added elements list is not ugly looking
-    if (el_props.mirrored_element) {
-      el_props.id = el_props.id.replace(/^.+?__/g, "");
+    if (elProps.mirroredElement) {
+      elProps.id = elProps.id.replace(/^.+?__/g, "");
     }
 
-    const grid_item = draw_elements(this, {
-      id: el_props.id,
-      mirrored_el: el_props.mirrored_element,
+    const gridItem = drawElements(this, {
+      id: elProps.id,
+      mirroredEl: elProps.mirroredElement,
     });
 
-    grid_item.position = el_props.grid_pos;
+    gridItem.position = elProps.gridPos;
 
-    this.elements.push(grid_item);
+    this.elements.push(gridItem);
 
     // Only update history if we're told to. This allows us to batch add
     // elements without polluting history
-    if (send_update) {
-      this.send_update();
+    if (sendUpdate) {
+      this.sendUpdate();
     }
   }
 
   // Removes elements the user has added to the grid by id
-  remove_elements(ids: string | Array<string>) {
-    as_array(ids).forEach((el_id) => {
-      const entry_index = this.elements.findIndex((el) => el.id === el_id);
-      this.elements[entry_index].remove();
-      this.elements.splice(entry_index, 1);
+  removeElements(ids: string | Array<string>) {
+    asArray(ids).forEach((elId) => {
+      const entryIndex = this.elements.findIndex((el) => el.id === elId);
+      this.elements[entryIndex].remove();
+      this.elements.splice(entryIndex, 1);
     });
 
-    this.send_update();
+    this.sendUpdate();
   }
 
-  add_tract(dir: TractDir, new_index: number) {
+  addTract(dir: TractDir, newIndex: number) {
     this.elements.forEach((el) => {
-      const start_id = dir === "rows" ? "start_row" : "start_col";
-      const end_id = dir === "rows" ? "end_row" : "end_col";
-      const el_position = el.position;
+      const startId = dir === "rows" ? "start_row" : "start_col";
+      const endId = dir === "rows" ? "end_row" : "end_col";
+      const elPosition = el.position;
 
-      if (new_index >= el_position[end_id]) {
+      if (newIndex >= elPosition[endId]) {
         // no change needed
-      } else if (new_index < el_position[start_id]) {
+      } else if (newIndex < elPosition[startId]) {
         // Before item span means everything is shifted up
-        el_position[start_id]++;
-        el_position[end_id]++;
+        elPosition[startId]++;
+        elPosition[endId]++;
       } else {
         // Within item span: just end is shifted up
-        el[end_id] = el_position[end_id]++;
+        el[endId] = elPosition[endId]++;
       }
-      el.position = el_position;
+      el.position = elPosition;
     });
 
-    const tract_sizes = this.grid_layout[dir];
-    tract_sizes.splice(new_index, 0, "1fr");
+    const tractSizes = this.gridLayout[dir];
+    tractSizes.splice(newIndex, 0, "1fr");
 
-    this.update_grid({ [dir]: tract_sizes });
+    this.updateGrid({ [dir]: tractSizes });
   }
 
-  remove_tract(dir: TractDir, index: number) {
+  removeTract(dir: TractDir, index: number) {
     // First check for trouble elements before proceeding so we can error out
     // and tell the user why
-    const trouble_elements: GridItem[] = this.elements.filter((el) => {
-      const { start_id, end_id } = make_start_end_for_dir(dir);
-      const el_position = el.position;
+    const troubleElements: GridItem[] = this.elements.filter((el) => {
+      const { startId, endId } = makeStartEndForDir(dir);
+      const elPosition = el.position;
 
       return (
-        el_position[start_id] === el_position[end_id] &&
-        el_position[start_id] === index
+        elPosition[startId] === elPosition[endId] &&
+        elPosition[startId] === index
       );
     });
 
-    if (trouble_elements.length > 0) {
-      show_conflict_popup(trouble_elements);
+    if (troubleElements.length > 0) {
+      showConflictPopup(troubleElements);
       // End early
       return;
     }
 
     this.elements.forEach((el) => {
-      const { start_id, end_id } = make_start_end_for_dir(dir);
-      const el_position = el.position;
+      const { startId, endId } = makeStartEndForDir(dir);
+      const elPosition = el.position;
 
-      if (el_position[start_id] > index) {
-        el_position[start_id]--;
+      if (elPosition[startId] > index) {
+        elPosition[startId]--;
       }
-      if (el_position[end_id] >= index) {
-        el_position[end_id]--;
+      if (elPosition[endId] >= index) {
+        elPosition[endId]--;
       }
-      el.position = el_position;
+      el.position = elPosition;
     });
 
-    const tract_sizes = this.grid_layout[dir];
-    tract_sizes.splice(index - 1, 1);
+    const tractSizes = this.gridLayout[dir];
+    tractSizes.splice(index - 1, 1);
 
-    this.update_grid({ [dir]: tract_sizes });
+    this.updateGrid({ [dir]: tractSizes });
   }
 
-  // Just so we dont have to always say make_el(this.container...)
-  make_el(sel_txt: string, opts?: ElementOpts) {
-    return make_el(this.container, sel_txt, opts);
+  // Just so we dont have to always say makeEl(this.container...)
+  makeEl(selTxt: string, opts?: ElementOpts) {
+    return makeEl(this.container, selTxt, opts);
   }
 
-  setup_drag(opts: {
-    watching_element: HTMLElement;
-    drag_dir: DragType;
-    grid_item?: GridItem;
-    on_start?: (start_loc: XYPos) => void;
-    on_drag?: (drag_info: DragRes) => void;
-    on_end?: (drag_info: DragRes) => void;
+  setupDrag(opts: {
+    watchingElement: HTMLElement;
+    dragDir: DragType;
+    gridItem?: GridItem;
+    onStart?: (startLoc: XYPos) => void;
+    onDrag?: (dragInfo: DragRes) => void;
+    onEnd?: (dragInfo: DragRes) => void;
   }) {
-    let drag_feedback_rect: HTMLElement;
-    let start_rect: SelectionRect;
-    let start_loc: XYPos;
+    let dragFeedbackRect: HTMLElement;
+    let startRect: SelectionRect;
+    let startLoc: XYPos;
 
-    const editor_el: HTMLElement = document.querySelector("#grided__editor");
+    const editorEl: HTMLElement = document.querySelector("#grided__editor");
 
-    const update_grid_pos = (
-      grid_item: GridItem,
-      bounding_rect: SelectionRect
+    const updateGridPos = (
+      gridItem: GridItem,
+      boundingRect: SelectionRect
     ): GridPos => {
-      const grid_extent = get_drag_extent_on_grid(this, bounding_rect);
-      grid_item.position = grid_extent;
-      return grid_extent;
+      const gridExtent = getDragExtentOnGrid(this, boundingRect);
+      gridItem.position = gridExtent;
+      return gridExtent;
     };
 
-    opts.watching_element.onmousedown = (event: MouseEvent) => {
-      start_loc = event as DragEvent;
+    opts.watchingElement.onmousedown = (event: MouseEvent) => {
+      startLoc = event as DragEvent;
 
       // make sure dragged element is on top
-      this.container.appendChild(opts.grid_item.el);
+      this.container.appendChild(opts.gridItem.el);
 
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
       // of the drag
-      start_rect = opts.grid_item?.bounding_rect || {
+      startRect = opts.gridItem?.boundingRect || {
         left: event.offsetX,
         right: event.offsetX,
         top: event.offsetY,
         bottom: event.offsetY,
       };
 
-      drag_feedback_rect = make_el(
-        this.container.querySelector("#drag_canvas"),
+      dragFeedbackRect = makeEl(
+        this.container.querySelector("#dragCanvas"),
         "div.drag-feedback-rect",
         {
           styles: {
-            ...bounding_rect_to_css_pos(start_rect),
+            ...boundingRectToCssPos(startRect),
           },
         }
       );
 
       // We start grid position here in case user selects by simply clicking,
       // which would mean we never get to run the drag function
-      update_grid_pos(opts.grid_item, start_rect);
+      updateGridPos(opts.gridItem, startRect);
 
-      if (opts.on_start) opts.on_start(start_loc);
+      if (opts.onStart) opts.onStart(startLoc);
 
       // Add listener to editor so we can continue to track this drag
-      editor_el.addEventListener("mousemove", drag);
-      editor_el.addEventListener("mouseup", drag_end);
+      editorEl.addEventListener("mousemove", drag);
+      editorEl.addEventListener("mouseup", dragEnd);
     };
 
     function drag(event: MouseEvent) {
-      const curr_loc: XYPos = event;
+      const currLoc: XYPos = event;
       // Sometimes the drag event gets fired with nonsense zeros
-      if (curr_loc.x === 0 && curr_loc.y === 0) return;
+      if (currLoc.x === 0 && currLoc.y === 0) return;
 
-      const new_rect = update_rect_with_delta(
-        start_rect,
-        { x: curr_loc.x - start_loc.x, y: curr_loc.y - start_loc.y },
-        opts.drag_dir
+      const newRect = updateRectWithDelta(
+        startRect,
+        { x: currLoc.x - startLoc.x, y: currLoc.y - startLoc.y },
+        opts.dragDir
       );
 
       Object.assign(
-        drag_feedback_rect.style,
-        bounding_rect_to_css_pos(new_rect)
+        dragFeedbackRect.style,
+        boundingRectToCssPos(newRect)
       );
 
-      const grid_extent = update_grid_pos(opts.grid_item, new_rect);
-      if (opts.on_drag) opts.on_drag({ xy: curr_loc, grid: grid_extent });
+      const gridExtent = updateGridPos(opts.gridItem, newRect);
+      if (opts.onDrag) opts.onDrag({ xy: currLoc, grid: gridExtent });
     }
 
-    function drag_end(event: MouseEvent) {
-      const end_loc: XYPos = event;
-      drag_feedback_rect.remove();
-      start_rect = null;
-      start_loc = null;
-      if (opts.on_end)
-        opts.on_end({
-          xy: end_loc,
-          grid: opts.grid_item?.position || get_pos_on_grid(this.parentElement),
+    function dragEnd(event: MouseEvent) {
+      const endLoc: XYPos = event;
+      dragFeedbackRect.remove();
+      startRect = null;
+      startLoc = null;
+      if (opts.onEnd)
+        opts.onEnd({
+          xy: endLoc,
+          grid: opts.gridItem?.position || getPosOnGrid(this.parentElement),
         });
 
-      editor_el.removeEventListener("mousemove", drag);
-      editor_el.removeEventListener("mouseup", drag_end);
+      editorEl.removeEventListener("mousemove", drag);
+      editorEl.removeEventListener("mouseup", dragEnd);
     }
   }
 
-  send_update() {
-    this.on_update({
-      entry_type: this.entry_type,
-      ...this.current_layout,
+  sendUpdate() {
+    this.onUpdate({
+      entryType: this.entryType,
+      ...this.currentLayout,
     });
   }
 
-  update_tract(opts: {
-    tract_index: number;
+  updateTract(opts: {
+    tractIndex: number;
     dir: TractDir;
-    new_value: string;
-    is_dragging: boolean;
+    newValue: string;
+    isDragging: boolean;
   }) {
-    const { tract_index, dir, new_value, is_dragging } = opts;
-    const tract_values = this.grid_layout[dir];
-    tract_values[tract_index - 1] = new_value;
+    const { tractIndex, dir, newValue, isDragging } = opts;
+    const tractValues = this.gridLayout[dir];
+    tractValues[tractIndex - 1] = newValue;
 
-    this.update_grid({ [dir]: tract_values, dont_update_history: is_dragging });
+    this.updateGrid({ [dir]: tractValues, dontUpdateHistory: isDragging });
   }
 
-  update_grid(opts: GridUpdateOptions) {
+  updateGrid(opts: GridUpdateOptions) {
     // Given a new set of attributes, finds which ones changed and updates the
     // corresponding portions of the grid
-    let new_num_cells = opts.force ?? false;
-    let rows_and_cols_updated = opts.force ?? false;
+    let newNumCells = opts.force ?? false;
+    let rowsAndColsUpdated = opts.force ?? false;
 
-    if (this.grid_layout.is_updated_val("rows", opts.rows)) {
-      if (this.grid_layout.num_rows !== opts.rows.length) new_num_cells = true;
-      rows_and_cols_updated = true;
-      this.grid_layout.rows = opts.rows;
+    if (this.gridLayout.isUpdatedVal("rows", opts.rows)) {
+      if (this.gridLayout.numRows !== opts.rows.length) newNumCells = true;
+      rowsAndColsUpdated = true;
+      this.gridLayout.rows = opts.rows;
     }
 
-    if (this.grid_layout.is_updated_val("cols", opts.cols)) {
-      if (this.grid_layout.num_cols !== opts.cols.length) new_num_cells = true;
-      rows_and_cols_updated = true;
-      this.grid_layout.cols = opts.cols;
+    if (this.gridLayout.isUpdatedVal("cols", opts.cols)) {
+      if (this.gridLayout.numCols !== opts.cols.length) newNumCells = true;
+      rowsAndColsUpdated = true;
+      this.gridLayout.cols = opts.cols;
     }
 
-    if (this.grid_layout.is_updated_val("gap", opts.gap)) {
-      this.grid_layout.gap = opts.gap;
-      this.gap_size_setting.update_value(opts.gap);
+    if (this.gridLayout.isUpdatedVal("gap", opts.gap)) {
+      this.gridLayout.gap = opts.gap;
+      this.gapSizeSetting.updateValue(opts.gap);
     }
 
-    if (new_num_cells) {
-      fill_grid_cells(this);
-      setup_new_item_drag(this);
+    if (newNumCells) {
+      fillGridCells(this);
+      setupNewItemDrag(this);
     }
 
-    if (rows_and_cols_updated) {
+    if (rowsAndColsUpdated) {
       // Put some filler text into items spanning auto rows so auto behavior
       // is clear to user
       this.elements.forEach((el) => {
-        el.fill_if_in_auto_row();
+        el.fillIfInAutoRow();
       });
     }
 
-    this.tract_controls.update_positions();
+    this.tractControls.updatePositions();
 
-    if (!opts.dont_update_history) {
-      this.send_update();
+    if (!opts.dontUpdateHistory) {
+      this.sendUpdate();
     }
   }
 } // End of class declaration
 
-const grid_cell_styles = css`
+const gridCellStyles = css`
   background: var(--off-white, grey);
   border: 1px solid var(--gray, grey);
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -497,22 +497,22 @@ const grid_cell_styles = css`
   }
 `;
 
-function fill_grid_cells(app_state: LayoutEditor) {
-  app_state.current_cells.forEach((e) => e.remove());
-  app_state.current_cells = [];
+function fillGridCells(appState: LayoutEditor) {
+  appState.currentCells.forEach((e) => e.remove());
+  appState.currentCells = [];
 
-  for (let row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
-    for (let col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-      app_state.current_cells.push(
-        app_state.make_el(
-          `div.r${row_i}.c${col_i}.grid-cell.${grid_cell_styles}`,
+  for (let rowI = 1; rowI <= appState.gridLayout.numRows; rowI++) {
+    for (let colI = 1; colI <= appState.gridLayout.numCols; colI++) {
+      appState.currentCells.push(
+        appState.makeEl(
+          `div.r${rowI}.c${colI}.grid-cell.${gridCellStyles}`,
           {
-            data_props: { row: row_i, col: col_i },
-            grid_pos: {
-              start_row: row_i,
-              end_row: row_i,
-              start_col: col_i,
-              end_col: col_i,
+            dataProps: { row: rowI, col: colI },
+            gridPos: {
+              start_row: rowI,
+              end_row: rowI,
+              start_col: colI,
+              end_col: colI,
             },
           }
         )
@@ -520,14 +520,14 @@ function fill_grid_cells(app_state: LayoutEditor) {
     }
   }
 
-  if (app_state.mode === "Existing") {
-    set_class(app_state.current_cells, "transparent");
+  if (appState.mode === "Existing") {
+    setClass(appState.currentCells, "transparent");
   }
 
-  app_state.tract_controls = setup_tract_controls(app_state);
+  appState.tractControls = setupTractControls(appState);
 }
 
-const added_element_styles = css`
+const addedElementStyles = css`
   border-radius: var(--element-roundness);
   border-width: 3px;
   border-style: solid;
@@ -557,18 +557,18 @@ const added_element_styles = css`
      so it doesn't distract. Not sure if this is the best way to do it but I think
      it's worth a go. 
   */
-  .filler_text {
+  .fillerText {
     color: rgba(128, 128, 128, 0.5);
     user-select: none;
     display: none;
   }
 
-  &.in-auto-row .filler_text {
+  &.in-auto-row .fillerText {
     display: block;
   }
 `;
 
-const dragger_handle = css`
+const draggerHandle = css`
   --radius: 18px;
   font-size: 12px;
   position: absolute;
@@ -623,13 +623,13 @@ const dragger_handle = css`
   }
 `;
 
-const current_sel_box = css`
+const currentSelBox = css`
   border-style: dashed;
   display: none;
   pointer-events: none;
 `;
 
-const drag_canvas_styles = css`
+const dragCanvasStyles = css`
   margin-left: calc(-1 * var(--grid-gap));
   margin-top: calc(-1 * var(--grid-gap));
   width: calc(100% + 2 * var(--grid-gap));
@@ -660,29 +660,29 @@ const drag_canvas_styles = css`
   }
 `;
 
-function setup_new_item_drag(app_state: LayoutEditor) {
-  const current_selection_box = new GridItem({
+function setupNewItemDrag(appState: LayoutEditor) {
+  const currentSelectionBox = new GridItem({
     id: "selection box",
-    el: app_state.make_el(
-      `div.drag_selection_box.${added_element_styles}.${current_sel_box}`
+    el: appState.makeEl(
+      `div.dragSelectionBox.${addedElementStyles}.${currentSelBox}`
     ),
-    parent_layout: app_state.grid_layout,
+    parentLayout: appState.gridLayout,
   });
-  const drag_canvas = app_state.make_el(
-    `div#drag_canvas.${drag_canvas_styles}`
+  const dragCanvas = appState.makeEl(
+    `div#dragCanvas.${dragCanvasStyles}`
   );
 
-  app_state.setup_drag({
-    watching_element: drag_canvas,
-    grid_item: current_selection_box,
-    drag_dir: "bottom-right",
-    on_start: () => {
-      current_selection_box.style.borderColor = app_state.next_color;
+  appState.setupDrag({
+    watchingElement: dragCanvas,
+    gridItem: currentSelectionBox,
+    dragDir: "bottom-right",
+    onStart: () => {
+      currentSelectionBox.style.borderColor = appState.nextColor;
     },
-    on_end: ({ grid }) => {
-      element_naming_ui(app_state, {
-        grid_pos: grid,
-        selection_box: current_selection_box,
+    onEnd: ({ grid }) => {
+      elementNamingUi(appState, {
+        gridPos: grid,
+        selectionBox: currentSelectionBox,
       });
     },
   });
@@ -690,69 +690,69 @@ function setup_new_item_drag(app_state: LayoutEditor) {
   // Make sure any added elements sit on top by re-appending them to grid holder
   // Make sure that the drag detector sits over everything
   [
-    drag_canvas,
-    ...app_state.container.querySelectorAll(".added-element"),
-  ].forEach((el) => app_state.container.appendChild(el));
+    dragCanvas,
+    ...appState.container.querySelectorAll(".added-element"),
+  ].forEach((el) => appState.container.appendChild(el));
 }
 
-function setup_tract_controls(app_state: LayoutEditor) {
-  const editor_container = document.querySelector(
+function setupTractControls(appState: LayoutEditor) {
+  const editorContainer = document.querySelector(
     "#grided__editor"
   ) as HTMLElement;
 
   const controls: Record<
     TractDir,
     {
-      matched_cell: HTMLElement;
+      matchedCell: HTMLElement;
       el: HTMLElement;
       controller: CSSInput;
     }[]
   > = {
-    rows: build_controls_for_dir(app_state, "rows", editor_container),
-    cols: build_controls_for_dir(app_state, "cols", editor_container),
+    rows: buildControlsForDir(appState, "rows", editorContainer),
+    cols: buildControlsForDir(appState, "cols", editorContainer),
   };
 
-  update_positions();
+  updatePositions();
 
   // Make sure when we scroll or resize the editor window the controls follow
-  (editor_container.querySelector(
+  (editorContainer.querySelector(
     "#editor-app-window"
-  ) as HTMLElement).onscroll = () => update_positions(["rows"]);
+  ) as HTMLElement).onscroll = () => updatePositions(["rows"]);
 
   // Use a timeout trick to debounce the tract updating on resizing to only
   // fire after resize is done
-  let resize_timeout: number;
+  let resizeTimeout: number;
   window.addEventListener("resize", () => {
-    clearTimeout(resize_timeout);
-    resize_timeout = window.setTimeout(() => update_positions(), 300);
+    clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(() => updatePositions(), 300);
   });
 
-  function update_positions(which_dirs: TractDir[] = ["rows", "cols"]) {
-    const editor_pos = editor_container.getBoundingClientRect();
-    const wrapper_pos = pos_relative_to_container(
-      editor_pos,
-      editor_container.querySelector("#editor-wrapper")
+  function updatePositions(whichDirs: TractDir[] = ["rows", "cols"]) {
+    const editorPos = editorContainer.getBoundingClientRect();
+    const wrapperPos = posRelativeToContainer(
+      editorPos,
+      editorContainer.querySelector("#editor-wrapper")
     );
 
-    for (const dir of which_dirs) {
-      controls[dir].forEach(({ matched_cell, el }) => {
-        const bounding_rect = pos_relative_to_container(
-          editor_pos,
-          matched_cell
+    for (const dir of whichDirs) {
+      controls[dir].forEach(({ matchedCell, el }) => {
+        const boundingRect = posRelativeToContainer(
+          editorPos,
+          matchedCell
         );
 
         Object.assign(
           el.style,
           dir === "cols"
             ? {
-                left: `calc(${bounding_rect.left}px)`,
-                width: `calc(${bounding_rect.width}px)`,
-                top: `calc(${wrapper_pos.top}px - var(--editor-top-pad))`,
+                left: `calc(${boundingRect.left}px)`,
+                width: `calc(${boundingRect.width}px)`,
+                top: `calc(${wrapperPos.top}px - var(--editor-top-pad))`,
               }
             : {
-                top: `calc(${bounding_rect.top}px)`,
-                height: `calc(${bounding_rect.height}px)`,
-                left: `calc(${bounding_rect.left}px - var(--editor-left-pad) - ${app_state.grid_layout.attrs.gap} - 2px)`,
+                top: `calc(${boundingRect.top}px)`,
+                height: `calc(${boundingRect.height}px)`,
+                left: `calc(${boundingRect.left}px - var(--editor-left-pad) - ${appState.gridLayout.attrs.gap} - 2px)`,
               }
         );
       });
@@ -760,16 +760,16 @@ function setup_tract_controls(app_state: LayoutEditor) {
   }
 
   return {
-    update_positions,
+    updatePositions,
   };
 }
 
-function element_naming_ui(
-  app_state: LayoutEditor,
-  { grid_pos, selection_box }
+function elementNamingUi(
+  appState: LayoutEditor,
+  { gridPos, selectionBox }
 ) {
-  const name_form = create_el({
-    sel_txt: `form#name_form.centered`,
+  const nameForm = createEl({
+    selTxt: `form#nameForm.centered`,
     styles: {
       width: "100%",
       display: "grid",
@@ -778,51 +778,51 @@ function element_naming_ui(
       justifyContent: "center",
     },
     children: [
-      create_el({
-        sel_txt: "input#name_input",
+      createEl({
+        selTxt: "input#nameInput",
         props: { type: "text" },
-        event_listener: {
+        eventListener: {
           // Don't leave warning message up while user is typing
           event: "input",
-          func: hide_warning_msg,
+          func: hideWarningMsg,
         },
       }),
-      create_el({ sel_txt: "input#name_submit", props: { type: "submit" } }),
+      createEl({ selTxt: "input#nameSubmit", props: { type: "submit" } }),
     ],
-    event_listener: {
+    eventListener: {
       // Don't leave warning message up while user is typing
       event: "submit",
       func: function (event) {
         event.preventDefault();
-        const id = this["name_input"].value.replace(/\s/g, "_");
+        const id = this["nameInput"].value.replace(/\s/g, "_");
 
         // Can be replaced with better function operating directly on elements dict
-        const element_exists: boolean = !!app_state.elements.find(
+        const elementExists: boolean = !!appState.elements.find(
           (el) => el.id === id
         );
 
-        if (element_exists) {
+        if (elementExists) {
           // Cant have duplicate ids!
-          warn_about_bad_id(
+          warnAboutBadId(
             `You already have an element with the id ${id}, all ids need to be unique.`
           );
           return;
         }
         if (id.match(/^[^a-zA-Z]/g)) {
-          warn_about_bad_id(`Valid ids need to start with a character.`);
+          warnAboutBadId(`Valid ids need to start with a character.`);
           return;
         }
 
         // Add the new element in to grid
-        app_state.add_element({ id, grid_pos });
+        appState.addElement({ id, gridPos });
 
-        reset_el_creation();
+        resetElCreation();
       },
     },
   });
 
-  const modal = create_focus_modal()
-    .set_title("Name your element:")
+  const modal = createFocusModal()
+    .setTitle("Name your element:")
     .description(
       `
       This name will be used to place items in your app.
@@ -830,16 +830,16 @@ function element_naming_ui(
       this name will match the label of the plot output
     `
     )
-    .add_element(name_form)
-    .on_close(reset_el_creation)
-    .add_to_page()
-    .focus_on("name_input");
+    .addElement(nameForm)
+    .onClose(resetElCreation)
+    .addToPage()
+    .focusOn("nameInput");
 
-  let warning_msg: HTMLElement;
+  let warningMsg: HTMLElement;
 
-  function warn_about_bad_id(msg: string) {
-    warning_msg = create_el({
-      sel_txt: "span#bad_id_msg",
+  function warnAboutBadId(msg: string) {
+    warningMsg = createEl({
+      selTxt: "span#badIdMsg",
       text: msg,
       styles: {
         color: "orangered",
@@ -848,140 +848,140 @@ function element_naming_ui(
         fontSize: "0.9rem",
       },
     });
-    modal.add_element(warning_msg);
+    modal.addElement(warningMsg);
   }
-  function hide_warning_msg() {
-    if (warning_msg) {
-      warning_msg.remove();
+  function hideWarningMsg() {
+    if (warningMsg) {
+      warningMsg.remove();
     }
   }
-  function reset_el_creation() {
+  function resetElCreation() {
     // All done here so get rid of the whole interface.
     modal.remove();
     // Remove the temporary dragged element
-    selection_box.style.display = "none";
+    selectionBox.style.display = "none";
   }
 }
 
-function draw_elements(
-  app_state: LayoutEditor,
-  el_info: { id: string; mirrored_el: HTMLElement }
+function drawElements(
+  appState: LayoutEditor,
+  elInfo: { id: string; mirroredEl: HTMLElement }
 ) {
-  const { id, mirrored_el } = el_info;
-  const el_color = app_state.next_color;
-  const mirrors_existing = typeof mirrored_el !== "undefined";
-  const grid_el = app_state.make_el(
-    `div#${id}.el_${id}.added-element.${added_element_styles}`,
+  const { id, mirroredEl } = elInfo;
+  const elColor = appState.nextColor;
+  const mirrorsExisting = typeof mirroredEl !== "undefined";
+  const gridEl = appState.makeEl(
+    `div#${id}.el_${id}.added-element.${addedElementStyles}`,
     {
-      innerHTML: filler_text,
+      innerHTML: fillerText,
       styles: {
-        borderColor: app_state.next_color,
+        borderColor: appState.nextColor,
         position: "relative",
       },
     }
   );
 
-  const list_el = make_el(
+  const listEl = makeEl(
     document.querySelector("#added-elements"),
-    `div.el_${id}.added-element.${added_element_styles}.in-list`,
+    `div.el_${id}.added-element.${addedElementStyles}.in-list`,
     {
       innerHTML: id,
-      styles: { borderColor: el_color },
-      event_listener: [
+      styles: { borderColor: elColor },
+      eventListener: [
         {
           event: "mouseover",
           func: function () {
             this.classList.add("hovered");
-            grid_el.classList.add("hovered");
+            gridEl.classList.add("hovered");
           },
         },
         {
           event: "mouseout",
           func: function () {
             this.classList.remove("hovered");
-            grid_el.classList.remove("hovered");
+            gridEl.classList.remove("hovered");
           },
         },
       ],
     }
   );
 
-  const grid_item = new GridItem({
+  const gridItem = new GridItem({
     id,
-    el: grid_el,
-    mirrored_el,
-    sibling_el: list_el,
-    parent_layout: app_state.grid_layout,
+    el: gridEl,
+    mirroredEl,
+    siblingEl: listEl,
+    parentLayout: appState.gridLayout,
   });
 
   // Setup drag behavior
   (["top-left", "bottom-right", "center"] as DragType[]).forEach(
-    (handle_type: DragType) => {
-      app_state.setup_drag({
-        watching_element: make_el(
-          grid_el,
-          `div.dragger.visible.${dragger_handle}.${handle_type}`,
+    (handleType: DragType) => {
+      appState.setupDrag({
+        watchingElement: makeEl(
+          gridEl,
+          `div.dragger.visible.${draggerHandle}.${handleType}`,
           {
-            styles: { background: el_color },
+            styles: { background: elColor },
             innerHTML:
-              handle_type === "center"
-                ? drag_icon
-                : handle_type === "bottom-right"
-                ? se_arrow
-                : nw_arrow,
+              handleType === "center"
+                ? dragIcon
+                : handleType === "bottom-right"
+                ? seArrow
+                : nwArrow,
           }
         ),
-        grid_item: grid_item,
-        drag_dir: handle_type,
-        on_end: () => {
-          app_state.send_update();
+        gridItem: gridItem,
+        dragDir: handleType,
+        onEnd: () => {
+          appState.sendUpdate();
         },
       });
     }
   );
 
-  if (!mirrors_existing) {
+  if (!mirrorsExisting) {
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
     // they can delete that new element but they can't delete the existing elements
-    make_el(list_el, "button.remove-el", {
-      innerHTML: trashcan_icon,
-      event_listener: {
+    makeEl(listEl, "button.remove-el", {
+      innerHTML: trashcanIcon,
+      eventListener: {
         event: "click",
         func: () => {
-          app_state.remove_elements(id);
+          appState.removeElements(id);
         },
       },
     });
   }
 
-  return grid_item;
+  return gridItem;
 }
 
-function show_conflict_popup(conflicting_elements: GridItem[]) {
-  const conflicting_elements_list: string =
-    conflicting_elements.reduce(
-      (id_list, el) =>
+function showConflictPopup(conflictingElements: GridItem[]) {
+  const conflictingElementsList: string =
+    conflictingElements.reduce(
+      (idList, el) =>
         `
-    ${id_list}
+    ${idList}
     <li> <strong style='font-size: 1.65rem;'> ${el.id} </strong> </li>
     `,
       "<ul>"
     ) + "</ul>";
 
-  const modal = create_focus_modal().set_title(`Sorry! Can't make that update`)
+  const modal = createFocusModal().setTitle(`Sorry! Can't make that update`)
     .description(`<p> This is because it would result in the following elements 
     being removed from your app:</p>
-    ${conflicting_elements_list}
+    ${conflictingElementsList}
     <p> Either re-arrange these elements to not reside in the removed grid or 
     column or remove them from your app before running grided.</p>
     `);
 
-  modal.add_element(
-    create_el({
-      sel_txt: "button#accept_result",
+  modal.addElement(
+    createEl({
+      selTxt: "button#acceptResult",
       text: "Okay",
-      event_listener: {
+      eventListener: {
         event: "click",
         func: function () {
           modal.remove();
@@ -990,5 +990,5 @@ function show_conflict_popup(conflicting_elements: GridItem[]) {
     })
   );
 
-  modal.add_to_page();
+  modal.addToPage();
 }

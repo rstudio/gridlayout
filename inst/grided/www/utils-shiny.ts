@@ -11,18 +11,18 @@ declare global {
 // yet.
 
 export function setShinyInput(
-  input_id: string,
-  input_value: any,
-  is_event = false
+  inputId: string,
+  inputValue: any,
+  isEvent = false
 ) {
   // Sent input value to shiny but only if it's initialized
   window.Shiny?.setInputValue?.(
-    input_id,
-    input_value,
-    is_event ? { priority: "event" } : {}
+    inputId,
+    inputValue,
+    isEvent ? { priority: "event" } : {}
   );
 }
 
-export function add_shiny_listener(event_id: string, callback_func: Function) {
-  window.Shiny?.addCustomMessageHandler(event_id, callback_func);
+export function addShinyListener(eventId: string, callbackFunc: Function) {
+  window.Shiny?.addCustomMessageHandler(eventId, callbackFunc);
 }

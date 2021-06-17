@@ -1,12 +1,12 @@
-import { clipboard_icon } from "../utils-icons";
+import { clipboardIcon } from "../utils-icons";
 
 class CopyCode extends HTMLElement {
   code: string;
-  num_of_lines: number;
+  numOfLines: number;
   constructor(code: string) {
     super();
     this.code = code;
-    this.num_of_lines = Math.min(code.match(/\n/g).length ?? 1, 25);
+    this.numOfLines = Math.min(code.match(/\n/g).length ?? 1, 25);
     this.attachShadow({ mode: "open" });
   }
 
@@ -50,19 +50,19 @@ class CopyCode extends HTMLElement {
          transform: scale(0.8);
        }
      </style>
-     <textarea id = 'code' rows = ${this.num_of_lines + 1}>${
+     <textarea id = 'code' rows = ${this.numOfLines + 1}>${
       this.code
     }</textarea>
      <div id = "type"> R </div>
-     <button id = 'copy'> ${clipboard_icon} Copy Code </button>
+     <button id = 'copy'> ${clipboardIcon} Copy Code </button>
    `;
 
-    const code_el = this.shadowRoot.getElementById(
+    const codeEl = this.shadowRoot.getElementById(
       "code"
     ) as HTMLTextAreaElement;
 
     this.shadowRoot.getElementById("copy").addEventListener("click", () => {
-      code_el.select();
+      codeEl.select();
       document.execCommand("copy");
     });
   }
@@ -72,6 +72,6 @@ class CopyCode extends HTMLElement {
 
 customElements.define("copy-code", CopyCode);
 
-export function copy_code(code: string) {
+export function copyCode(code: string) {
   return new CopyCode(code);
 }

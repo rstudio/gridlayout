@@ -12,7 +12,7 @@ export type SelectionRect = {
   bottom: number;
 };
 
-export function as_array<T>(content: T | Array<T>): Array<T> {
+export function asArray<T>(content: T | Array<T>): Array<T> {
   if (content instanceof Array) {
     return content;
   } else {
@@ -22,24 +22,24 @@ export function as_array<T>(content: T | Array<T>): Array<T> {
 
 // Passing an undefined value to a compare like min or max will always give undefined
 // These functions let you default to the second option in the case the first is falsy
-export function compare_w_missing(
-  compare_fn: (...values: number[]) => number,
-  maybe_a: number | null,
+function compareWithMissing(
+  compareFn: (...values: number[]) => number,
+  maybeA: number | null,
   b: number
 ) {
-  return maybe_a ? compare_fn(maybe_a, b) : b;
+  return maybeA ? compareFn(maybeA, b) : b;
 }
 
-export function min_w_missing(maybe_a: number | null, b: number) {
-  return compare_w_missing(Math.min, maybe_a, b);
+export function minWithMissing(maybeA: number | null, b: number) {
+  return compareWithMissing(Math.min, maybeA, b);
 }
 
-export function max_w_missing(maybe_a: number | null, b: number) {
-  return compare_w_missing(Math.max, maybe_a, b);
+export function maxWithMissing(maybeA: number | null, b: number) {
+  return compareWithMissing(Math.max, maybeA, b);
 }
 
 // Produce bounding rectangle relative to parent of any element
-export function get_bounding_rect(el: HTMLElement): SelectionRect | null {
+export function getBoundingRect(el: HTMLElement): SelectionRect | null {
   if (el.offsetParent === null) {
     return null;
   }
@@ -50,91 +50,91 @@ export function get_bounding_rect(el: HTMLElement): SelectionRect | null {
   return { left: left, right: left + width, top: top, bottom: top + height };
 }
 
-export function boxes_overlap(
-  box_a: SelectionRect,
-  box_b: SelectionRect
+export function boxesOverlap(
+  boxA: SelectionRect,
+  boxB: SelectionRect
 ): boolean {
-  const horizontal_overlap = intervals_overlap(
-    [box_a.left, box_a.right],
-    [box_b.left, box_b.right]
+  const horizontalOverlap = intervalsOverlap(
+    [boxA.left, boxA.right],
+    [boxB.left, boxB.right]
   );
-  const vertical_overlap = intervals_overlap(
-    [box_a.top, box_a.bottom],
-    [box_b.top, box_b.bottom]
+  const verticalOverlap = intervalsOverlap(
+    [boxA.top, boxA.bottom],
+    [boxB.top, boxB.bottom]
   );
 
-  return horizontal_overlap && vertical_overlap;
+  return horizontalOverlap && verticalOverlap;
 
   // Figure out of two intervals overlap eachother
-  function intervals_overlap([a_start, a_end], [b_start, b_end]) {
+  function intervalsOverlap([aStart, aEnd], [bStart, bEnd]) {
     //   aaaaaaaaaa
     // bbbbbb
     //         bbbbbb
-    const a_contains_b_endpoint =
-      (a_start >= b_start && a_start <= b_end) ||
-      (a_end >= b_start && a_end <= b_end);
+    const aContainsB_endpoint =
+      (aStart >= bStart && aStart <= bEnd) ||
+      (aEnd >= bStart && aEnd <= bEnd);
 
     //   aaaaaa
     // bbbbbbbbbb
-    const b_covers_a = a_start <= b_start && a_end >= b_end;
+    const bCoversA = aStart <= bStart && aEnd >= bEnd;
 
-    return a_contains_b_endpoint || b_covers_a;
+    return aContainsB_endpoint || bCoversA;
   }
 }
 
-export function update_rect_with_delta(
+export function updateRectWithDelta(
   rect: SelectionRect,
   delta: XYPos,
   dir: DragType
 ): SelectionRect {
   // Need to destructure down to numbers to avoid copy
-  const new_rect: SelectionRect = { ...rect };
+  const newRect: SelectionRect = { ...rect };
 
   // The bounding here means that we dont let the user drag the box "inside-out"
   if (dir === "top-left") {
-    new_rect.left = new_rect.left + delta.x;
-    new_rect.top = new_rect.top + delta.y;
+    newRect.left = newRect.left + delta.x;
+    newRect.top = newRect.top + delta.y;
   } else if (dir === "bottom-right") {
-    (new_rect.right = new_rect.right + delta.x), new_rect.left;
-    (new_rect.bottom = new_rect.bottom + delta.y), new_rect.top;
+    (newRect.right = newRect.right + delta.x), newRect.left;
+    (newRect.bottom = newRect.bottom + delta.y), newRect.top;
   } else {
     // Just move the box
-    new_rect.left += delta.x;
-    new_rect.top += delta.y;
-    new_rect.right += delta.x;
-    new_rect.bottom += delta.y;
+    newRect.left += delta.x;
+    newRect.top += delta.y;
+    newRect.right += delta.x;
+    newRect.bottom += delta.y;
   }
 
   // Make sure positions are proper for bounding box (in case box was flipped inside out)
-  if (new_rect.left > new_rect.right) {
-    const { left, right } = new_rect;
-    new_rect.right = left;
-    new_rect.left = right;
+  if (newRect.left > newRect.right) {
+    const { left, right } = newRect;
+    newRect.right = left;
+    newRect.left = right;
   }
-  if (new_rect.top > new_rect.bottom) {
-    const { top, bottom } = new_rect;
-    new_rect.bottom = top;
-    new_rect.top = bottom;
+  if (newRect.top > newRect.bottom) {
+    const { top, bottom } = newRect;
+    newRect.bottom = top;
+    newRect.top = bottom;
   }
 
-  return new_rect;
+  return newRect;
 }
 
 export function flatten<Type>(arr: Type[][]): Type[] {
   return [].concat(...arr);
 }
 
-export function set_class(
+export function setClass(
   elements: NodeListOf<HTMLElement> | HTMLElement[],
-  class_name: string
+  className: string
 ) {
   elements.forEach((el) => {
-    el.classList.add(class_name);
+    el.classList.add(className);
   });
 }
 
-export const filler_text = `
-<div class = "filler_text">
+export const fillerText = `
+<div class = "fillerText">
   This filler text demonstrates how the height of an element spanning an "auto"
   row is influenced by its content. While you're here...
   Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
@@ -142,11 +142,11 @@ export const filler_text = `
   specimen book.
 </div>`;
 
-export function pos_relative_to_container(
+export function posRelativeToContainer(
   container: DOMRect,
-  child_el: HTMLElement
+  childEl: HTMLElement
 ) {
-  const pos = child_el.getBoundingClientRect();
+  const pos = childEl.getBoundingClientRect();
 
   return {
     top: pos.top - container.top,
