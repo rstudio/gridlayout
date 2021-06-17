@@ -7373,14 +7373,14 @@
       buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
     }
     var settings_panel_el = block_el("div#grided_gap_size_controls.settings.panel-body");
-    var grided_ui = block_el("div#grided__holder", block_el("div#grided__header", text_el("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), block_el.apply(void 0, ["div.code_btns"].concat(buttons))), block_el("div#grided__settings", text_el("h3", "".concat(settings_icon, " Settings")), settings_panel_el), block_el("div#grided__instructions", text_el("h3", "".concat(instructions_icon, " Instructions")), text_el("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), block_el("div#grided__elements", text_el("h3", "".concat(elements_icon, " Added elements")), block_el("div.panel-body", block_el("div#added_elements"))), block_el("div#grided__editor", block_el("div#editor-wrapper", text_el("div#editor-browser-header", browser_header_html), block_el("div#editor-app-window", app_state.container))));
+    var grided_ui = block_el("div#grided__holder", block_el("div#grided__header", text_el("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), block_el.apply(void 0, ["div.code-btns"].concat(buttons))), block_el("div#grided__settings", text_el("h3", "".concat(settings_icon, " Settings")), settings_panel_el), block_el("div#grided__instructions", text_el("h3", "".concat(instructions_icon, " Instructions")), text_el("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), block_el("div#grided__elements", text_el("h3", "".concat(elements_icon, " Added elements")), block_el("div.panel-body", block_el("div#added-elements"))), block_el("div#grided__editor", block_el("div#editor-wrapper", text_el("div#editor-browser-header", browser_header_html), block_el("div#editor-app-window", app_state.container))));
     document.querySelector("body").appendChild(grided_ui);
     app_state.container.style.height = "100%";
     app_state.container.style.width = "100%";
     app_state.container.style.display = "grid";
     app_state.container.style.maxWidth = "100%";
     function toggle_interaction_mode(interact_is_on) {
-      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
+      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added-elements"), grided_ui.querySelector("#drag-canvas")]).forEach(function(el) {
         if (interact_is_on) {
           el.classList.add("disabled");
         } else {
@@ -7394,7 +7394,7 @@
     }
   }
   function cleanup_grided_ui() {
-    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".drag_selection_box"), document.getElementById("drag_canvas")]).forEach(function(el) {
+    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".drag_selection_box"), document.getElementById("drag-canvas")]).forEach(function(el) {
       return el.remove();
     });
   }
@@ -7403,7 +7403,7 @@
       var bbox = el.getBoundingClientRect();
       if (bbox.width === 0 && bbox.height === 0)
         return;
-      if (el.classList.contains("grid-cell") || el.classList.contains("drag_selection_box") || el.classList.contains("added-element") || el.id === "drag_canvas") {
+      if (el.classList.contains("grid-cell") || el.classList.contains("drag_selection_box") || el.classList.contains("added-element") || el.id === "drag-canvas") {
         el.remove();
         return;
       }
@@ -7872,7 +7872,7 @@
     }]);
     return LayoutEditor2;
   }();
-  var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
+  var grid_cell_styles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fill_grid_cells(app_state) {
     app_state.current_cells.forEach(function(e) {
       return e.remove();
@@ -7899,8 +7899,8 @@
     }
     app_state.tract_controls = setup_tract_controls(app_state);
   }
-  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
-  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n"])));
+  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
+  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
   var current_sel_box = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
   var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setup_new_item_drag(app_state) {
@@ -8067,7 +8067,7 @@
         position: "relative"
       }
     });
-    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles, ".in-list"), {
+    var list_el = make_el(document.querySelector("#added-elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles, ".in-list"), {
       innerHTML: id,
       styles: {
         borderColor: el_color
@@ -8109,7 +8109,7 @@
       });
     });
     if (!mirrors_existing) {
-      make_el(list_el, "button.remove_el", {
+      make_el(list_el, "button.remove-el", {
         innerHTML: trashcan_icon,
         event_listener: {
           event: "click",

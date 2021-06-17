@@ -53,7 +53,7 @@ export function wrap_in_grided(
         "h2",
         "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"
       ),
-      block_el("div.code_btns", ...buttons)
+      block_el("div.code-btns", ...buttons)
     ),
     block_el(
       "div#grided__settings",
@@ -90,7 +90,7 @@ export function wrap_in_grided(
     block_el(
       "div#grided__elements",
       text_el("h3", `${elements_icon} Added elements`),
-      block_el("div.panel-body", block_el("div#added_elements"))
+      block_el("div.panel-body", block_el("div#added-elements"))
     ),
     block_el(
       "div#grided__editor",
@@ -121,8 +121,8 @@ export function wrap_in_grided(
       ...app_state.container.querySelectorAll(".grid-cell"),
       ...grided_ui.querySelectorAll(".tract-controls"),
       grided_ui.querySelector("#grided__settings .panel-body"),
-      grided_ui.querySelector("#added_elements"),
-      grided_ui.querySelector("#drag_canvas"),
+      grided_ui.querySelector("#added-elements"),
+      grided_ui.querySelector("#drag-canvas"),
     ].forEach(function (el: Element) {
       if (interact_is_on) {
         el.classList.add("disabled");
@@ -145,7 +145,7 @@ export function cleanup_grided_ui() {
     ...document.querySelectorAll(".added-element"),
     ...document.querySelectorAll(".tract-controls"),
     document.querySelector(".drag_selection_box"),
-    document.getElementById("drag_canvas"),
+    document.getElementById("drag-canvas"),
   ].forEach((el) => el.remove());
 }
 
@@ -164,7 +164,7 @@ export function add_existing_elements_to_app(app_state: LayoutEditor) {
       el.classList.contains("grid-cell") ||
       el.classList.contains("drag_selection_box") ||
       el.classList.contains("added-element") ||
-      el.id === "drag_canvas"
+      el.id === "drag-canvas"
     ) {
       el.remove();
       return;

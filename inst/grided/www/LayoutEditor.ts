@@ -485,7 +485,7 @@ const grid_cell_styles = css`
   background: var(--off-white, grey);
   border: 1px solid var(--gray, grey);
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: var(--element_roundness);
+  border-radius: var(--element-roundness);
 
   &.transparent {
     background: none;
@@ -528,7 +528,7 @@ function fill_grid_cells(app_state: LayoutEditor) {
 }
 
 const added_element_styles = css`
-  border-radius: var(--element_roundness);
+  border-radius: var(--element-roundness);
   border-width: 3px;
   border-style: solid;
   transition: border-width 0.2s ease-in-out;
@@ -599,7 +599,7 @@ const dragger_handle = css`
   &.center {
     top: calc(50% - var(--radius) / 2);
     right: calc(50% - var(--radius) / 2);
-    border-radius: var(--element_roundness);
+    border-radius: var(--element-roundness);
     cursor: grab;
   }
   &.center:active {
@@ -619,7 +619,7 @@ const dragger_handle = css`
 
   &.top-left,
   &.bottom-right {
-    border-radius: var(--element_roundness) 0;
+    border-radius: var(--element-roundness) 0;
   }
 `;
 
@@ -882,7 +882,7 @@ function draw_elements(
   );
 
   const list_el = make_el(
-    document.querySelector("#added_elements"),
+    document.querySelector("#added-elements"),
     `div.el_${id}.added-element.${added_element_styles}.in-list`,
     {
       innerHTML: id,
@@ -944,7 +944,7 @@ function draw_elements(
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
     // they can delete that new element but they can't delete the existing elements
-    make_el(list_el, "button.remove_el", {
+    make_el(list_el, "button.remove-el", {
       innerHTML: trashcan_icon,
       event_listener: {
         event: "click",
