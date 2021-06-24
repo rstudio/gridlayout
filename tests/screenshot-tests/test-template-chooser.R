@@ -1,8 +1,11 @@
+# source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 pause_length <- 1
 test_that("Basic interaction with grided app", {
 
   app <- setup_chromote_session(layout_gallery(return_app_obj = TRUE))
   # app$b$view()
+  # app$b$Emulation$setScrollbarsHidden(hidden = FALSE, wait_ = FALSE)
+  # app$b$parent$debug_messages(TRUE)
   on.exit({ app$p$kill() })
 
   expect_snapshot_file(
@@ -40,7 +43,8 @@ test_that("Basic interaction with grided app", {
   )
 
   # Add new column after first one
-  app$b$Runtime$evaluate('document.querySelector("button.add-col.cols_1").click()')
+
+  app$b$Runtime$evaluate('document.querySelector("#controller-for-col-1 > add-or-remove-button:nth-child(2)").shadowRoot.querySelector("button").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),
     "layout-col-added.png"
