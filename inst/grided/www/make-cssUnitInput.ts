@@ -1,8 +1,9 @@
 import { css } from "@emotion/css";
 import { TractDir } from "./GridLayout";
 import { LayoutEditor } from "./LayoutEditor";
-import { makeEl, tractAddOrRemoveButton } from "./make-elements";
+import { makeEl } from "./make-elements";
 import { horizontalDragIcon, verticalDragIcon } from "./utils-icons";
+import { AddOrRemoveButton } from "./web-components/add-or-remove-button";
 
 const cssUnitInput = css`
   display: grid;
@@ -209,8 +210,7 @@ const tractControls = css`
     align-content: center;
   }
 
-  .remove-row,
-  .remove-col {
+  add-or-remove-button {
     grid-area: remove-tract;
   }
 
@@ -282,23 +282,25 @@ export function buildControlsForDir(
         // Add an additional button before the first row and column. Otherwise
         // the user would not be able to add a row or column at the very start
         // of the grid.
-        tractAddOrRemoveButton(appState, {
-          parentEl: holderEl,
-          addOrRemove: "add",
-          dir,
-          tractIndex: 0,
-          additionalStyles: {
-            [dir === "rows" ? "top" : "left"]: "var(--incrementer-offset)",
-          },
-        });
+        holderEl.appendChild(
+          new AddOrRemoveButton()
+            .setAddOrRemove("add")
+            .setRowOrCol(dirSingular)
+            .setFirst()
+            .onPress(() => {
+              appState.addTract(dir, 0);
+            })
+        );
       }
 
-      tractAddOrRemoveButton(appState, {
-        parentEl: holderEl,
-        addOrRemove: "add",
-        dir,
-        tractIndex,
-      });
+      holderEl.appendChild(
+        new AddOrRemoveButton()
+          .setAddOrRemove("add")
+          .setRowOrCol(dirSingular)
+          .onPress(() => {
+            appState.addTract(dir, tractIndex);
+          })
+      );
 
       return {
         matchedCell: el,
@@ -387,12 +389,14 @@ export function makeGridTractControl(
     ],
   });
 
-  tractAddOrRemoveButton(appState, {
-    parentEl: holder,
-    addOrRemove: "remove",
-    dir,
-    tractIndex,
-  });
+  holder.appendChild(
+    new AddOrRemoveButton()
+      .setAddOrRemove("remove")
+      .setRowOrCol(dir)
+      .onPress(() => {
+        appState.removeTract(dir, tractIndex);
+      })
+  );
 
   function showOrHideDragger(currVal: string) {
     if (getCssUnit(currVal) === "px") {

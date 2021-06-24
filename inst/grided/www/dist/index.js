@@ -3554,7 +3554,7 @@
   defineWellKnownSymbol2("iterator");
 
   // LayoutEditor.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
   "use strict";
@@ -5080,11 +5080,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof8(obj2) {
+      _typeof = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof8(obj2) {
+      _typeof = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5377,11 +5377,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof8(obj2) {
+      _typeof2 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof8(obj2) {
+      _typeof2 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -6117,7 +6117,7 @@
   }
 
   // make-cssUnitInput.ts
-  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.number.constructor.js
@@ -6200,32 +6200,8 @@
   var key;
 
   // make-elements.ts
-  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
-
-  // utils-icons.ts
-  var verticalDragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
-  var horizontalDragIcon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
-  var trashcanIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
-  var seArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
-  var nwArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
-  var dragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
-  var plusIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
-  var settingsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
-  var instructionsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
-  var elementsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
-  var clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
-  var closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
-  var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
-
-  // make-elements.ts
-  var _templateObject;
-  function _taggedTemplateLiteral(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
+  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
   function _toConsumableArray2(arr) {
     return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray3(arr) || _nonIterableSpread2();
   }
@@ -6351,30 +6327,6 @@
       text: text
     });
   }
-  var incrementerButtonClass = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
-  function tractAddOrRemoveButton(appState, opts) {
-    var parentEl = opts.parentEl, addOrRemove = opts.addOrRemove, dir = opts.dir, tractIndex = opts.tractIndex, additionalStyles = opts.additionalStyles;
-    var dirSingular = dir === "rows" ? "row" : "col";
-    var label = addOrRemove === "add" ? "Add a ".concat(dirSingular) : "Remove ".concat(dirSingular);
-    var button = makeEl(parentEl, "button.".concat(incrementerButtonClass, ".").concat(addOrRemove, "-").concat(dirSingular, ".").concat(dir, "_").concat(tractIndex), {
-      innerHTML: addOrRemove === "add" ? plusIcon : trashcanIcon,
-      styles: additionalStyles,
-      eventListener: {
-        event: "click",
-        func: function func() {
-          if (addOrRemove === "add") {
-            appState.addTract(dir, tractIndex);
-          } else {
-            appState.removeTract(dir, tractIndex);
-          }
-        }
-      },
-      props: {
-        title: label
-      }
-    });
-    return button;
-  }
   function clickButton(selector, label, onFinish) {
     var button = textEl("button".concat(selector), label);
     button.addEventListener("click", function(event) {
@@ -6383,9 +6335,234 @@
     return button;
   }
 
-  // make-cssUnitInput.ts
-  var _templateObject2;
-  var _templateObject22;
+  // utils-icons.ts
+  var verticalDragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
+  var horizontalDragIcon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
+  var trashcanIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
+  var seArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
+  var nwArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
+  var dragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
+  var plusIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
+  var settingsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
+  var instructionsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
+  var elementsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
+  var clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
+  var closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
+  var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
+
+  // node_modules/core-js/modules/es.object.set-prototype-of.js
+  var $29 = require_export();
+  var setPrototypeOf = require_object_set_prototype_of();
+  $29({ target: "Object", stat: true }, {
+    setPrototypeOf: setPrototypeOf
+  });
+
+  // node_modules/core-js/modules/es.object.get-prototype-of.js
+  var $30 = require_export();
+  var fails8 = require_fails();
+  var toObject5 = require_to_object();
+  var nativeGetPrototypeOf = require_object_get_prototype_of();
+  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+  var FAILS_ON_PRIMITIVES4 = fails8(function() {
+    nativeGetPrototypeOf(1);
+  });
+  $30({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+    getPrototypeOf: function getPrototypeOf(it) {
+      return nativeGetPrototypeOf(toObject5(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.reflect.construct.js
+  var $31 = require_export();
+  var getBuiltIn2 = require_get_built_in();
+  var aFunction = require_a_function();
+  var anObject6 = require_an_object();
+  var isObject6 = require_is_object();
+  var create4 = require_object_create();
+  var bind2 = require_function_bind();
+  var fails9 = require_fails();
+  var nativeConstruct = getBuiltIn2("Reflect", "construct");
+  var NEW_TARGET_BUG = fails9(function() {
+    function F() {
+    }
+    return !(nativeConstruct(function() {
+    }, [], F) instanceof F);
+  });
+  var ARGS_BUG = !fails9(function() {
+    nativeConstruct(function() {
+    });
+  });
+  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
+  $31({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+    construct: function construct(Target, args) {
+      aFunction(Target);
+      anObject6(args);
+      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
+      if (ARGS_BUG && !NEW_TARGET_BUG)
+        return nativeConstruct(Target, args, newTarget);
+      if (Target == newTarget) {
+        switch (args.length) {
+          case 0:
+            return new Target();
+          case 1:
+            return new Target(args[0]);
+          case 2:
+            return new Target(args[0], args[1]);
+          case 3:
+            return new Target(args[0], args[1], args[2]);
+          case 4:
+            return new Target(args[0], args[1], args[2], args[3]);
+        }
+        var $args = [null];
+        $args.push.apply($args, args);
+        return new (bind2.apply(Target, $args))();
+      }
+      var proto = newTarget.prototype;
+      var instance = create4(isObject6(proto) ? proto : Object.prototype);
+      var result = Function.apply.call(Target, instance, args);
+      return isObject6(result) ? result : instance;
+    }
+  });
+
+  // web-components/add-or-remove-button.ts
+  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
+  var import_es_map = __toModule(require_es_map());
+  function _typeof3(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof3 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof3 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof3(obj);
+  }
+  function _classCallCheck3(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties3(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass3(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties3(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties3(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf(subClass, superClass);
+  }
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+  function _possibleConstructorReturn(self2, call) {
+    if (call && (_typeof3(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized(self2);
+  }
+  function _assertThisInitialized(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf(Wrapper, Class2);
+    };
+    return _wrapNativeSuper(Class);
+  }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf(o);
+  }
   function _defineProperty4(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
@@ -6394,6 +6571,76 @@
     }
     return obj;
   }
+  var AddOrRemoveButton = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits(AddOrRemoveButton2, _HTMLElement);
+    var _super = _createSuper(AddOrRemoveButton2);
+    function AddOrRemoveButton2() {
+      var _this;
+      _classCallCheck3(this, AddOrRemoveButton2);
+      _this = _super.call(this);
+      _defineProperty4(_assertThisInitialized(_this), "_onPress", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      return _this;
+    }
+    _createClass3(AddOrRemoveButton2, [{
+      key: "addOrRemove",
+      get: function get() {
+        return this.getAttribute("add_or_remove");
+      }
+    }, {
+      key: "setAddOrRemove",
+      value: function setAddOrRemove(newValue) {
+        this.setAttribute("add_or_remove", newValue);
+        return this;
+      }
+    }, {
+      key: "rowOrCol",
+      get: function get() {
+        return this.getAttribute("row_or_col");
+      }
+    }, {
+      key: "setRowOrCol",
+      value: function setRowOrCol(newValue) {
+        if (newValue === "rows")
+          newValue = "row";
+        if (newValue === "cols")
+          newValue = "col";
+        this.setAttribute("row_or_col", newValue);
+        return this;
+      }
+    }, {
+      key: "setFirst",
+      value: function setFirst() {
+        this.setAttribute("is_first", "");
+        return this;
+      }
+    }, {
+      key: "onPress",
+      value: function onPress(fn) {
+        this._onPress = fn;
+        return this;
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        var firstButton = this.hasAttribute("is_first");
+        var buttonClass = this.addOrRemove === "add" ? this.rowOrCol === "row" ? "add-row" : "add-col" : "remove";
+        this.shadowRoot.innerHTML = "\n    <style>\n      button {\n        --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n        font-size: 15px;\n        height: 2em;\n        width: 2em;\n        border-radius: 50%;\n        background-color: rgba(255, 255, 255, 0);\n        border: 1px solid rgba(255, 255, 255, 0);\n        padding: 0;\n        color: var(--dark-gray, gray);\n        transition: color 0.2s, background-color 0.2s;\n      }\n\n      .add-row, .add-col {position: absolute;}\n      .add-row {\n        ".concat(firstButton ? "top" : "bottom", ": var(--incrementer-offset);\n        right: 2px;\n      }\n      .add-col {\n        ").concat(firstButton ? "left" : "right", ": var(--incrementer-offset);\n        bottom: 2px;\n      }\n\n      button:hover {\n        background-color: var(--dark-gray, gray);\n        color: white;\n      }\n\n      svg {\n        max-height: 100%;\n        max-width: 100%;\n      }\n    </style>\n      <button \n        class = ").concat(buttonClass, '\n        title = "').concat(this.addOrRemove === "add" ? "Add a" : "Remove", " ").concat(this.rowOrCol, '">\n        ').concat(this.addOrRemove === "add" ? plusIcon : trashcanIcon, "\n      </button>\n   ");
+        this.shadowRoot.querySelector("button").addEventListener("click", function() {
+          _this2._onPress();
+        });
+      }
+    }]);
+    return AddOrRemoveButton2;
+  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
+  customElements.define("add-or-remove-button", AddOrRemoveButton);
+
+  // make-cssUnitInput.ts
+  var _templateObject;
+  var _templateObject2;
   function _createForOfIteratorHelper(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -6454,13 +6701,13 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral2(strings, raw) {
+  function _taggedTemplateLiteral(strings, raw) {
     if (!raw) {
       raw = strings.slice(0);
     }
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
-  var cssUnitInput = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .valueInput.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
+  var cssUnitInput = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .valueInput.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
   var defaultValues = {
     fr: "1",
     px: "100",
@@ -6561,7 +6808,7 @@
       updateValue: updateValue
     };
   }
-  var tractControls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled {\n    display: none;\n  }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  var tractControls = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled {\n    display: none;\n  }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  add-or-remove-button {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
   function buildControlsForDir(appState, dir, editorContainer) {
     var targetClass = dir === "rows" ? "c1" : "r1";
     var dirSingular = dir === "rows" ? "row" : "col";
@@ -6574,20 +6821,13 @@
       var tractIndex = +el.dataset[dirSingular];
       var holderEl = makeEl(editorContainer, "div#controller-for-".concat(dirSingular, "-").concat(tractIndex, ".tract-controls.").concat(tractControls, ".").concat(dir, "-controls"));
       if (tractIndex === 1) {
-        tractAddOrRemoveButton(appState, {
-          parentEl: holderEl,
-          addOrRemove: "add",
-          dir: dir,
-          tractIndex: 0,
-          additionalStyles: _defineProperty4({}, dir === "rows" ? "top" : "left", "var(--incrementer-offset)")
-        });
+        holderEl.appendChild(new AddOrRemoveButton().setAddOrRemove("add").setRowOrCol(dirSingular).setFirst().onPress(function() {
+          appState.addTract(dir, 0);
+        }));
       }
-      tractAddOrRemoveButton(appState, {
-        parentEl: holderEl,
-        addOrRemove: "add",
-        dir: dir,
-        tractIndex: tractIndex
-      });
+      holderEl.appendChild(new AddOrRemoveButton().setAddOrRemove("add").setRowOrCol(dirSingular).onPress(function() {
+        appState.addTract(dir, tractIndex);
+      }));
       return {
         matchedCell: el,
         el: holderEl,
@@ -6658,12 +6898,9 @@
         }
       }]
     });
-    tractAddOrRemoveButton(appState, {
-      parentEl: holder,
-      addOrRemove: "remove",
-      dir: dir,
-      tractIndex: tractIndex
-    });
+    holder.appendChild(new AddOrRemoveButton().setAddOrRemove("remove").setRowOrCol(dir).onPress(function() {
+      appState.removeTract(dir, tractIndex);
+    }));
     function showOrHideDragger(currVal) {
       if (getCssUnit(currVal) === "px") {
         holder.classList.add("with-drag");
@@ -6677,18 +6914,18 @@
 
   // node_modules/core-js/modules/es.array.every.js
   "use strict";
-  var $29 = require_export();
+  var $32 = require_export();
   var $every = require_array_iteration().every;
   var arrayMethodIsStrict4 = require_array_method_is_strict();
   var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $29({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+  $32({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
     every: function every(callbackfn) {
       return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // utils-cssom.ts
-  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
   function _toConsumableArray3(arr) {
     return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
   }
@@ -6755,280 +6992,22 @@
     (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(eventId, callbackFunc);
   }
 
-  // node_modules/core-js/modules/es.object.set-prototype-of.js
-  var $30 = require_export();
-  var setPrototypeOf = require_object_set_prototype_of();
-  $30({ target: "Object", stat: true }, {
-    setPrototypeOf: setPrototypeOf
-  });
-
-  // node_modules/core-js/modules/es.object.get-prototype-of.js
-  var $31 = require_export();
-  var fails8 = require_fails();
-  var toObject5 = require_to_object();
-  var nativeGetPrototypeOf = require_object_get_prototype_of();
-  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
-  var FAILS_ON_PRIMITIVES4 = fails8(function() {
-    nativeGetPrototypeOf(1);
-  });
-  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
-    getPrototypeOf: function getPrototypeOf(it) {
-      return nativeGetPrototypeOf(toObject5(it));
-    }
-  });
-
-  // node_modules/core-js/modules/es.reflect.construct.js
-  var $32 = require_export();
-  var getBuiltIn2 = require_get_built_in();
-  var aFunction = require_a_function();
-  var anObject6 = require_an_object();
-  var isObject6 = require_is_object();
-  var create4 = require_object_create();
-  var bind2 = require_function_bind();
-  var fails9 = require_fails();
-  var nativeConstruct = getBuiltIn2("Reflect", "construct");
-  var NEW_TARGET_BUG = fails9(function() {
-    function F() {
-    }
-    return !(nativeConstruct(function() {
-    }, [], F) instanceof F);
-  });
-  var ARGS_BUG = !fails9(function() {
-    nativeConstruct(function() {
-    });
-  });
-  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
-  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
-    construct: function construct(Target, args) {
-      aFunction(Target);
-      anObject6(args);
-      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
-      if (ARGS_BUG && !NEW_TARGET_BUG)
-        return nativeConstruct(Target, args, newTarget);
-      if (Target == newTarget) {
-        switch (args.length) {
-          case 0:
-            return new Target();
-          case 1:
-            return new Target(args[0]);
-          case 2:
-            return new Target(args[0], args[1]);
-          case 3:
-            return new Target(args[0], args[1], args[2]);
-          case 4:
-            return new Target(args[0], args[1], args[2], args[3]);
-        }
-        var $args = [null];
-        $args.push.apply($args, args);
-        return new (bind2.apply(Target, $args))();
-      }
-      var proto = newTarget.prototype;
-      var instance = create4(isObject6(proto) ? proto : Object.prototype);
-      var result = Function.apply.call(Target, instance, args);
-      return isObject6(result) ? result : instance;
-    }
-  });
-
   // web-components/focus-modal.ts
-  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
-  var import_es_map2 = __toModule(require_es_map());
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
 
   // web-components/copy-code.ts
   var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
-  var import_es_map = __toModule(require_es_map());
-  function _typeof3(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof8(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof3 = function _typeof8(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof3(obj);
-  }
-  function _classCallCheck3(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties3(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor)
-        descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-  function _createClass3(Constructor, protoProps, staticProps) {
-    if (protoProps)
-      _defineProperties3(Constructor.prototype, protoProps);
-    if (staticProps)
-      _defineProperties3(Constructor, staticProps);
-    return Constructor;
-  }
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
-    if (superClass)
-      _setPrototypeOf(subClass, superClass);
-  }
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived), result;
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return _possibleConstructorReturn(this, result);
-    };
-  }
-  function _possibleConstructorReturn(self2, call) {
-    if (call && (_typeof3(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-    return _assertThisInitialized(self2);
-  }
-  function _assertThisInitialized(self2) {
-    if (self2 === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self2;
-  }
-  function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper = function _wrapNativeSuper6(Class2) {
-      if (Class2 === null || !_isNativeFunction(Class2))
-        return Class2;
-      if (typeof Class2 !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class2))
-          return _cache.get(Class2);
-        _cache.set(Class2, Wrapper);
-      }
-      function Wrapper() {
-        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
-      }
-      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf(Wrapper, Class2);
-    };
-    return _wrapNativeSuper(Class);
-  }
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
-    } else {
-      _construct = function _construct6(Parent2, args2, Class2) {
-        var a = [null];
-        a.push.apply(a, args2);
-        var Constructor = Function.bind.apply(Parent2, a);
-        var instance = new Constructor();
-        if (Class2)
-          _setPrototypeOf(instance, Class2.prototype);
-        return instance;
-      };
-    }
-    return _construct.apply(null, arguments);
-  }
-  function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct)
-      return false;
-    if (Reflect.construct.sham)
-      return false;
-    if (typeof Proxy === "function")
-      return true;
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-      }));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function _isNativeFunction(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
-      o2.__proto__ = p2;
-      return o2;
-    };
-    return _setPrototypeOf(o, p);
-  }
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
-      return o2.__proto__ || Object.getPrototypeOf(o2);
-    };
-    return _getPrototypeOf(o);
-  }
-  function _defineProperty5(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits(CopyCode2, _HTMLElement);
-    var _super = _createSuper(CopyCode2);
-    function CopyCode2(code) {
-      var _code$match$length;
-      var _this;
-      _classCallCheck3(this, CopyCode2);
-      _this = _super.call(this);
-      _defineProperty5(_assertThisInitialized(_this), "code", void 0);
-      _defineProperty5(_assertThisInitialized(_this), "numOfLines", void 0);
-      _this.code = code;
-      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
-      _this.attachShadow({
-        mode: "open"
-      });
-      return _this;
-    }
-    _createClass3(CopyCode2, [{
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
-        var codeEl = this.shadowRoot.getElementById("code");
-        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
-          codeEl.select();
-          document.execCommand("copy");
-        });
-      }
-    }, {
-      key: "disconnectedCallback",
-      value: function disconnectedCallback() {
-      }
-    }]);
-    return CopyCode2;
-  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
-  customElements.define("copy-code", CopyCode);
-  function copyCode(code) {
-    return new CopyCode(code);
-  }
-
-  // web-components/focus-modal.ts
+  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  var import_es_map2 = __toModule(require_es_map());
   function _typeof4(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof4 = function _typeof8(obj2) {
+      _typeof4 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof4 = function _typeof8(obj2) {
+      _typeof4 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -7091,7 +7070,7 @@
   }
   function _wrapNativeSuper2(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper2 = function _wrapNativeSuper6(Class2) {
+    _wrapNativeSuper2 = function _wrapNativeSuper7(Class2) {
       if (Class2 === null || !_isNativeFunction2(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
@@ -7114,7 +7093,7 @@
     if (_isNativeReflectConstruct2()) {
       _construct2 = Reflect.construct;
     } else {
-      _construct2 = function _construct6(Parent2, args2, Class2) {
+      _construct2 = function _construct7(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
@@ -7145,17 +7124,201 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
   function _setPrototypeOf2(o, p) {
-    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
     return _setPrototypeOf2(o, p);
   }
   function _getPrototypeOf2(o) {
-    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
     return _getPrototypeOf2(o);
+  }
+  function _defineProperty5(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(CopyCode2, _HTMLElement);
+    var _super = _createSuper2(CopyCode2);
+    function CopyCode2(code) {
+      var _code$match$length;
+      var _this;
+      _classCallCheck4(this, CopyCode2);
+      _this = _super.call(this);
+      _defineProperty5(_assertThisInitialized2(_this), "code", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "numOfLines", void 0);
+      _this.code = code;
+      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
+      _this.attachShadow({
+        mode: "open"
+      });
+      return _this;
+    }
+    _createClass4(CopyCode2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
+        var codeEl = this.shadowRoot.getElementById("code");
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          codeEl.select();
+          document.execCommand("copy");
+        });
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+      }
+    }]);
+    return CopyCode2;
+  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  customElements.define("copy-code", CopyCode);
+  function copyCode(code) {
+    return new CopyCode(code);
+  }
+
+  // web-components/focus-modal.ts
+  function _typeof5(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof5 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof5 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof5(obj);
+  }
+  function _classCallCheck5(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties5(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass5(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties5(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties5(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits3(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf3(subClass, superClass);
+  }
+  function _createSuper3(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf3(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf3(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn3(this, result);
+    };
+  }
+  function _possibleConstructorReturn3(self2, call) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized3(self2);
+  }
+  function _assertThisInitialized3(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper3(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper3 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction3(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf3(Wrapper, Class2);
+    };
+    return _wrapNativeSuper3(Class);
+  }
+  function _construct3(Parent, args, Class) {
+    if (_isNativeReflectConstruct3()) {
+      _construct3 = Reflect.construct;
+    } else {
+      _construct3 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf3(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct3.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct3() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction3(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf3(o, p) {
+    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf3(o, p);
+  }
+  function _getPrototypeOf3(o) {
+    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf3(o);
   }
   function _defineProperty6(obj, key, value) {
     if (key in obj) {
@@ -7166,24 +7329,24 @@
     return obj;
   }
   var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits2(FocusModal2, _HTMLElement);
-    var _super = _createSuper2(FocusModal2);
+    _inherits3(FocusModal2, _HTMLElement);
+    var _super = _createSuper3(FocusModal2);
     function FocusModal2() {
       var _this;
-      _classCallCheck4(this, FocusModal2);
+      _classCallCheck5(this, FocusModal2);
       _this = _super.call(this);
-      _defineProperty6(_assertThisInitialized2(_this), "OnClose", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "Title", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "MaxWidth", "450px");
-      _defineProperty6(_assertThisInitialized2(_this), "Children", []);
-      _defineProperty6(_assertThisInitialized2(_this), "Description", void 0);
-      _defineProperty6(_assertThisInitialized2(_this), "hasRendered", false);
+      _defineProperty6(_assertThisInitialized3(_this), "OnClose", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "Title", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "MaxWidth", "450px");
+      _defineProperty6(_assertThisInitialized3(_this), "Children", []);
+      _defineProperty6(_assertThisInitialized3(_this), "Description", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "hasRendered", false);
       _this.attachShadow({
         mode: "open"
       });
       return _this;
     }
-    _createClass4(FocusModal2, [{
+    _createClass5(FocusModal2, [{
       key: "setTitle",
       value: function setTitle(title) {
         this.Title = title;
@@ -7257,37 +7420,37 @@
       }
     }]);
     return FocusModal2;
-  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
   customElements.define("focus-modal", FocusModal);
   function createFocusModal() {
     return new FocusModal();
   }
 
   // wrapInGrided.ts
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
 
   // web-components/toggle-switch.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
-  var import_es_map3 = __toModule(require_es_map());
-  function _typeof5(obj) {
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
+  function _typeof6(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof5 = function _typeof8(obj2) {
+      _typeof6 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof5 = function _typeof8(obj2) {
+      _typeof6 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof5(obj);
+    return _typeof6(obj);
   }
-  function _classCallCheck5(instance, Constructor) {
+  function _classCallCheck6(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties5(target, props) {
+  function _defineProperties6(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -7297,50 +7460,50 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass5(Constructor, protoProps, staticProps) {
+  function _createClass6(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties5(Constructor.prototype, protoProps);
+      _defineProperties6(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties5(Constructor, staticProps);
+      _defineProperties6(Constructor, staticProps);
     return Constructor;
   }
-  function _inherits3(subClass, superClass) {
+  function _inherits4(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
     if (superClass)
-      _setPrototypeOf3(subClass, superClass);
+      _setPrototypeOf4(subClass, superClass);
   }
-  function _createSuper3(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+  function _createSuper4(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf3(Derived), result;
+      var Super = _getPrototypeOf4(Derived), result;
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf3(this).constructor;
+        var NewTarget = _getPrototypeOf4(this).constructor;
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-      return _possibleConstructorReturn3(this, result);
+      return _possibleConstructorReturn4(this, result);
     };
   }
-  function _possibleConstructorReturn3(self2, call) {
-    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn4(self2, call) {
+    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
       return call;
     }
-    return _assertThisInitialized3(self2);
+    return _assertThisInitialized4(self2);
   }
-  function _assertThisInitialized3(self2) {
+  function _assertThisInitialized4(self2) {
     if (self2 === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self2;
   }
-  function _wrapNativeSuper3(Class) {
+  function _wrapNativeSuper4(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper3 = function _wrapNativeSuper6(Class2) {
-      if (Class2 === null || !_isNativeFunction3(Class2))
+    _wrapNativeSuper4 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction4(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
         throw new TypeError("Super expression must either be null or a function");
@@ -7351,30 +7514,30 @@
         _cache.set(Class2, Wrapper);
       }
       function Wrapper() {
-        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
       }
       Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf3(Wrapper, Class2);
+      return _setPrototypeOf4(Wrapper, Class2);
     };
-    return _wrapNativeSuper3(Class);
+    return _wrapNativeSuper4(Class);
   }
-  function _construct3(Parent, args, Class) {
-    if (_isNativeReflectConstruct3()) {
-      _construct3 = Reflect.construct;
+  function _construct4(Parent, args, Class) {
+    if (_isNativeReflectConstruct4()) {
+      _construct4 = Reflect.construct;
     } else {
-      _construct3 = function _construct6(Parent2, args2, Class2) {
+      _construct4 = function _construct7(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
         var instance = new Constructor();
         if (Class2)
-          _setPrototypeOf3(instance, Class2.prototype);
+          _setPrototypeOf4(instance, Class2.prototype);
         return instance;
       };
     }
-    return _construct3.apply(null, arguments);
+    return _construct4.apply(null, arguments);
   }
-  function _isNativeReflectConstruct3() {
+  function _isNativeReflectConstruct4() {
     if (typeof Reflect === "undefined" || !Reflect.construct)
       return false;
     if (Reflect.construct.sham)
@@ -7389,21 +7552,21 @@
       return false;
     }
   }
-  function _isNativeFunction3(fn) {
+  function _isNativeFunction4(fn) {
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function _setPrototypeOf3(o, p) {
-    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
+  function _setPrototypeOf4(o, p) {
+    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
-    return _setPrototypeOf3(o, p);
+    return _setPrototypeOf4(o, p);
   }
-  function _getPrototypeOf3(o) {
-    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
+  function _getPrototypeOf4(o) {
+    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
-    return _getPrototypeOf3(o);
+    return _getPrototypeOf4(o);
   }
   function _defineProperty7(obj, key, value) {
     if (key in obj) {
@@ -7414,15 +7577,15 @@
     return obj;
   }
   var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits3(ToggleSwitch2, _HTMLElement);
-    var _super = _createSuper3(ToggleSwitch2);
+    _inherits4(ToggleSwitch2, _HTMLElement);
+    var _super = _createSuper4(ToggleSwitch2);
     function ToggleSwitch2(offText, onText, onChange) {
       var _this;
-      _classCallCheck5(this, ToggleSwitch2);
+      _classCallCheck6(this, ToggleSwitch2);
       _this = _super.call(this);
-      _defineProperty7(_assertThisInitialized3(_this), "offText", void 0);
-      _defineProperty7(_assertThisInitialized3(_this), "onText", void 0);
-      _defineProperty7(_assertThisInitialized3(_this), "onChange", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "offText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onChange", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -7431,7 +7594,7 @@
       _this.onChange = onChange;
       return _this;
     }
-    _createClass5(ToggleSwitch2, [{
+    _createClass6(ToggleSwitch2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
@@ -7442,7 +7605,7 @@
       }
     }]);
     return ToggleSwitch2;
-  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
   customElements.define("toggle-switch", ToggleSwitch);
 
   // wrapInGrided.ts
@@ -7557,7 +7720,7 @@
 
   // LayoutEditor.ts
   var _templateObject3;
-  var _templateObject23;
+  var _templateObject22;
   var _templateObject32;
   var _templateObject4;
   var _templateObject5;
@@ -7635,7 +7798,7 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral3(strings, raw) {
+  function _taggedTemplateLiteral2(strings, raw) {
     if (!raw) {
       raw = strings.slice(0);
     }
@@ -7671,12 +7834,12 @@
     }
     return target;
   }
-  function _classCallCheck6(instance, Constructor) {
+  function _classCallCheck7(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties6(target, props) {
+  function _defineProperties7(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -7686,11 +7849,11 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass6(Constructor, protoProps, staticProps) {
+  function _createClass7(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties6(Constructor.prototype, protoProps);
+      _defineProperties7(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties6(Constructor, staticProps);
+      _defineProperties7(Constructor, staticProps);
     return Constructor;
   }
   function _defineProperty8(obj, key, value) {
@@ -7705,7 +7868,7 @@
     function LayoutEditor2(_ref) {
       var _this = this;
       var entryType = _ref.entryType, startingGrid = _ref.grid, startingElements = _ref.elements, finishBtn = _ref.finishBtn, onUpdate = _ref.onUpdate;
-      _classCallCheck6(this, LayoutEditor2);
+      _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
       _defineProperty8(this, "elements", []);
@@ -7778,7 +7941,7 @@
         setShinyInput("starting-layout", this.currentLayout, true);
       }
     }
-    _createClass6(LayoutEditor2, [{
+    _createClass7(LayoutEditor2, [{
       key: "currentLayout",
       get: function get() {
         return {
@@ -7994,7 +8157,7 @@
     }]);
     return LayoutEditor2;
   }();
-  var gridCellStyles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
+  var gridCellStyles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral2(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
   function fillGridCells(appState) {
     appState.currentCells.forEach(function(e) {
       return e.remove();
@@ -8021,10 +8184,10 @@
     }
     appState.tractControls = setupTractControls(appState);
   }
-  var addedElementStyles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral3(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .fillerText {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .fillerText {\n    display: block;\n  }\n"])));
-  var draggerHandle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral3(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
-  var currentSelBox = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral3(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
-  var dragCanvasStyles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral3(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
+  var addedElementStyles = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .fillerText {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .fillerText {\n    display: block;\n  }\n"])));
+  var draggerHandle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral2(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
+  var currentSelBox = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral2(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
+  var dragCanvasStyles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral2(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
   function setupNewItemDrag(appState) {
     var currentSelectionBox = new GridItem({
       id: "selection box",
@@ -8289,31 +8452,31 @@
   };
 
   // web-components/layout-gallery.ts
-  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
-  var import_es_map5 = __toModule(require_es_map());
+  var import_es_array_iterator17 = __toModule(require_es_array_iterator());
+  var import_es_map6 = __toModule(require_es_map());
 
   // web-components/grid-preview.ts
-  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
-  var import_es_map4 = __toModule(require_es_map());
-  function _typeof6(obj) {
+  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
+  var import_es_map5 = __toModule(require_es_map());
+  function _typeof7(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof6 = function _typeof8(obj2) {
+      _typeof7 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof6 = function _typeof8(obj2) {
+      _typeof7 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof6(obj);
+    return _typeof7(obj);
   }
-  function _classCallCheck7(instance, Constructor) {
+  function _classCallCheck8(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties7(target, props) {
+  function _defineProperties8(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -8323,50 +8486,50 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass7(Constructor, protoProps, staticProps) {
+  function _createClass8(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties7(Constructor.prototype, protoProps);
+      _defineProperties8(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties7(Constructor, staticProps);
+      _defineProperties8(Constructor, staticProps);
     return Constructor;
   }
-  function _inherits4(subClass, superClass) {
+  function _inherits5(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
     if (superClass)
-      _setPrototypeOf4(subClass, superClass);
+      _setPrototypeOf5(subClass, superClass);
   }
-  function _createSuper4(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
+  function _createSuper5(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct5();
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf4(Derived), result;
+      var Super = _getPrototypeOf5(Derived), result;
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf4(this).constructor;
+        var NewTarget = _getPrototypeOf5(this).constructor;
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-      return _possibleConstructorReturn4(this, result);
+      return _possibleConstructorReturn5(this, result);
     };
   }
-  function _possibleConstructorReturn4(self2, call) {
-    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn5(self2, call) {
+    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
       return call;
     }
-    return _assertThisInitialized4(self2);
+    return _assertThisInitialized5(self2);
   }
-  function _assertThisInitialized4(self2) {
+  function _assertThisInitialized5(self2) {
     if (self2 === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self2;
   }
-  function _wrapNativeSuper4(Class) {
+  function _wrapNativeSuper5(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper4 = function _wrapNativeSuper6(Class2) {
-      if (Class2 === null || !_isNativeFunction4(Class2))
+    _wrapNativeSuper5 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction5(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
         throw new TypeError("Super expression must either be null or a function");
@@ -8377,30 +8540,30 @@
         _cache.set(Class2, Wrapper);
       }
       function Wrapper() {
-        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
+        return _construct5(Class2, arguments, _getPrototypeOf5(this).constructor);
       }
       Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf4(Wrapper, Class2);
+      return _setPrototypeOf5(Wrapper, Class2);
     };
-    return _wrapNativeSuper4(Class);
+    return _wrapNativeSuper5(Class);
   }
-  function _construct4(Parent, args, Class) {
-    if (_isNativeReflectConstruct4()) {
-      _construct4 = Reflect.construct;
+  function _construct5(Parent, args, Class) {
+    if (_isNativeReflectConstruct5()) {
+      _construct5 = Reflect.construct;
     } else {
-      _construct4 = function _construct6(Parent2, args2, Class2) {
+      _construct5 = function _construct7(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
         var instance = new Constructor();
         if (Class2)
-          _setPrototypeOf4(instance, Class2.prototype);
+          _setPrototypeOf5(instance, Class2.prototype);
         return instance;
       };
     }
-    return _construct4.apply(null, arguments);
+    return _construct5.apply(null, arguments);
   }
-  function _isNativeReflectConstruct4() {
+  function _isNativeReflectConstruct5() {
     if (typeof Reflect === "undefined" || !Reflect.construct)
       return false;
     if (Reflect.construct.sham)
@@ -8415,21 +8578,21 @@
       return false;
     }
   }
-  function _isNativeFunction4(fn) {
+  function _isNativeFunction5(fn) {
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function _setPrototypeOf4(o, p) {
-    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
+  function _setPrototypeOf5(o, p) {
+    _setPrototypeOf5 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
-    return _setPrototypeOf4(o, p);
+    return _setPrototypeOf5(o, p);
   }
-  function _getPrototypeOf4(o) {
-    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
+  function _getPrototypeOf5(o) {
+    _getPrototypeOf5 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
-    return _getPrototypeOf4(o);
+    return _getPrototypeOf5(o);
   }
   function _defineProperty9(obj, key, value) {
     if (key in obj) {
@@ -8440,19 +8603,19 @@
     return obj;
   }
   var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits4(GridPreview2, _HTMLElement);
-    var _super = _createSuper4(GridPreview2);
+    _inherits5(GridPreview2, _HTMLElement);
+    var _super = _createSuper5(GridPreview2);
     function GridPreview2() {
       var _this;
-      _classCallCheck7(this, GridPreview2);
+      _classCallCheck8(this, GridPreview2);
       _this = _super.call(this);
-      _defineProperty9(_assertThisInitialized4(_this), "grid", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "RenderSize", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "ShownSize", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "name", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "elements", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "hoverAnimation", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "OnSelect", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "grid", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "RenderSize", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "ShownSize", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8470,7 +8633,7 @@
       _this.hoverAnimation = true;
       return _this;
     }
-    _createClass7(GridPreview2, [{
+    _createClass8(GridPreview2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
@@ -8551,25 +8714,25 @@
       }
     }]);
     return GridPreview2;
-  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper5(HTMLElement));
   function gridPreview() {
     return new GridPreview();
   }
   customElements.define("grid-preview", GridPreview);
 
   // web-components/layout-gallery.ts
-  function _typeof7(obj) {
+  function _typeof8(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof7 = function _typeof8(obj2) {
+      _typeof8 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof7 = function _typeof8(obj2) {
+      _typeof8 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof7(obj);
+    return _typeof8(obj);
   }
   function _toConsumableArray6(arr) {
     return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray8(arr) || _nonIterableSpread6();
@@ -8606,12 +8769,12 @@
     }
     return arr2;
   }
-  function _classCallCheck8(instance, Constructor) {
+  function _classCallCheck9(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties8(target, props) {
+  function _defineProperties9(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -8621,50 +8784,50 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass8(Constructor, protoProps, staticProps) {
+  function _createClass9(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties8(Constructor.prototype, protoProps);
+      _defineProperties9(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties8(Constructor, staticProps);
+      _defineProperties9(Constructor, staticProps);
     return Constructor;
   }
-  function _inherits5(subClass, superClass) {
+  function _inherits6(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
     if (superClass)
-      _setPrototypeOf5(subClass, superClass);
+      _setPrototypeOf6(subClass, superClass);
   }
-  function _createSuper5(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct5();
+  function _createSuper6(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct6();
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf5(Derived), result;
+      var Super = _getPrototypeOf6(Derived), result;
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf5(this).constructor;
+        var NewTarget = _getPrototypeOf6(this).constructor;
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-      return _possibleConstructorReturn5(this, result);
+      return _possibleConstructorReturn6(this, result);
     };
   }
-  function _possibleConstructorReturn5(self2, call) {
-    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn6(self2, call) {
+    if (call && (_typeof8(call) === "object" || typeof call === "function")) {
       return call;
     }
-    return _assertThisInitialized5(self2);
+    return _assertThisInitialized6(self2);
   }
-  function _assertThisInitialized5(self2) {
+  function _assertThisInitialized6(self2) {
     if (self2 === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self2;
   }
-  function _wrapNativeSuper5(Class) {
+  function _wrapNativeSuper6(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper5 = function _wrapNativeSuper6(Class2) {
-      if (Class2 === null || !_isNativeFunction5(Class2))
+    _wrapNativeSuper6 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction6(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
         throw new TypeError("Super expression must either be null or a function");
@@ -8675,30 +8838,30 @@
         _cache.set(Class2, Wrapper);
       }
       function Wrapper() {
-        return _construct5(Class2, arguments, _getPrototypeOf5(this).constructor);
+        return _construct6(Class2, arguments, _getPrototypeOf6(this).constructor);
       }
       Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf5(Wrapper, Class2);
+      return _setPrototypeOf6(Wrapper, Class2);
     };
-    return _wrapNativeSuper5(Class);
+    return _wrapNativeSuper6(Class);
   }
-  function _construct5(Parent, args, Class) {
-    if (_isNativeReflectConstruct5()) {
-      _construct5 = Reflect.construct;
+  function _construct6(Parent, args, Class) {
+    if (_isNativeReflectConstruct6()) {
+      _construct6 = Reflect.construct;
     } else {
-      _construct5 = function _construct6(Parent2, args2, Class2) {
+      _construct6 = function _construct7(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
         var instance = new Constructor();
         if (Class2)
-          _setPrototypeOf5(instance, Class2.prototype);
+          _setPrototypeOf6(instance, Class2.prototype);
         return instance;
       };
     }
-    return _construct5.apply(null, arguments);
+    return _construct6.apply(null, arguments);
   }
-  function _isNativeReflectConstruct5() {
+  function _isNativeReflectConstruct6() {
     if (typeof Reflect === "undefined" || !Reflect.construct)
       return false;
     if (Reflect.construct.sham)
@@ -8713,21 +8876,21 @@
       return false;
     }
   }
-  function _isNativeFunction5(fn) {
+  function _isNativeFunction6(fn) {
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function _setPrototypeOf5(o, p) {
-    _setPrototypeOf5 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
+  function _setPrototypeOf6(o, p) {
+    _setPrototypeOf6 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
-    return _setPrototypeOf5(o, p);
+    return _setPrototypeOf6(o, p);
   }
-  function _getPrototypeOf5(o) {
-    _getPrototypeOf5 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
+  function _getPrototypeOf6(o) {
+    _getPrototypeOf6 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
-    return _getPrototypeOf5(o);
+    return _getPrototypeOf6(o);
   }
   function _defineProperty10(obj, key, value) {
     if (key in obj) {
@@ -8738,25 +8901,25 @@
     return obj;
   }
   var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits5(LayoutGallery2, _HTMLElement);
-    var _super = _createSuper5(LayoutGallery2);
+    _inherits6(LayoutGallery2, _HTMLElement);
+    var _super = _createSuper6(LayoutGallery2);
     function LayoutGallery2(layouts) {
       var _this;
-      _classCallCheck8(this, LayoutGallery2);
+      _classCallCheck9(this, LayoutGallery2);
       _this = _super.call(this);
-      _defineProperty10(_assertThisInitialized5(_this), "layouts", void 0);
-      _defineProperty10(_assertThisInitialized5(_this), "preselectedLayoutName", void 0);
-      _defineProperty10(_assertThisInitialized5(_this), "onEditFn", void 0);
-      _defineProperty10(_assertThisInitialized5(_this), "onGoFn", void 0);
-      _defineProperty10(_assertThisInitialized5(_this), "onCancelFn", void 0);
-      _defineProperty10(_assertThisInitialized5(_this), "onSelectFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "layouts", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "preselectedLayoutName", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onEditFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onGoFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onCancelFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onSelectFn", void 0);
       _this.attachShadow({
         mode: "open"
       });
       _this.layouts = layouts;
       return _this;
     }
-    _createClass8(LayoutGallery2, [{
+    _createClass9(LayoutGallery2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this$shadowRoot$getE, _this2 = this;
@@ -8832,7 +8995,7 @@
       }
     }]);
     return LayoutGallery2;
-  }(/* @__PURE__ */ _wrapNativeSuper5(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper6(HTMLElement));
   function layoutGallery(layouts) {
     return new LayoutGallery(layouts);
   }

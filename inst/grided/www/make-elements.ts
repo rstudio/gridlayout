@@ -1,9 +1,5 @@
-import { css } from "@emotion/css";
 import { GridPos } from "./GridItem";
-import { TractDir } from "./GridLayout";
-import { LayoutEditor } from "./LayoutEditor";
 import { setElementInGrid } from "./utils-grid";
-import { plusIcon, trashcanIcon } from "./utils-icons";
 import { asArray } from "./utils-misc";
 
 export type EventListener = {
@@ -149,88 +145,6 @@ export function textEl(selTxt: string, text: string) {
     selTxt,
     text,
   });
-}
-const incrementerButtonClass = css`
-  font-size: 15px;
-  height: 2em;
-  width: 2em;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0);
-  border: 1px solid rgba(255, 255, 255, 0);
-  padding: 0;
-  color: var(--dark-gray, gray);
-  transition: color 0.2s, background-color 0.2s;
-
-  &.remove-col {
-    font-size: 12px;
-  }
-
-  &.add-row,
-  &.add-col {
-    /* This offset is enough to place the button on the outside of the row/column
-      spanning div and centered in the grid tract */
-    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);
-    position: absolute;
-    right: 2px;
-    bottom: 2px;
-  }
-
-  &.add-row {
-    bottom: var(--incrementer-offset);
-  }
-  &.add-col {
-    right: var(--incrementer-offset);
-  }
-
-  &:hover {
-    background-color: var(--dark-gray);
-    color: white;
-  }
-
-  & > svg {
-    max-height: 100%;
-    max-width: 100%;
-  }
-`;
-export function tractAddOrRemoveButton(
-  appState: LayoutEditor,
-  opts: {
-    parentEl: HTMLElement;
-    addOrRemove: "add" | "remove";
-    dir: TractDir;
-    tractIndex: number;
-    additionalStyles?: Record<string, string>;
-  }
-) {
-  const { parentEl, addOrRemove, dir, tractIndex, additionalStyles } = opts;
-  const dirSingular = dir === "rows" ? "row" : "col";
-
-  const label =
-    addOrRemove === "add" ? `Add a ${dirSingular}` : `Remove ${dirSingular}`;
-
-  const button = makeEl(
-    parentEl,
-    `button.${incrementerButtonClass}.${addOrRemove}-${dirSingular}.${dir}_${tractIndex}`,
-    {
-      innerHTML: addOrRemove === "add" ? plusIcon : trashcanIcon,
-      styles: additionalStyles,
-      eventListener: {
-        event: "click",
-        func: () => {
-          if (addOrRemove === "add") {
-            appState.addTract(dir, tractIndex);
-          } else {
-            appState.removeTract(dir, tractIndex);
-          }
-        },
-      },
-      props: {
-        title: label,
-      },
-    }
-  );
-
-  return button;
 }
 
 export function clickButton(
