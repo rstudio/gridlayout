@@ -7615,6 +7615,7 @@
             }
           }, false);
         });
+        this.tractControls.updatePositions();
       } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
         var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
         this.updateGrid({

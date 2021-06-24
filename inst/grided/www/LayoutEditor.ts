@@ -149,6 +149,10 @@ export class LayoutEditor {
           false
         );
       });
+
+      // Layout usually shifts a bit after adding elements so run precautionary
+      // controls position update to make sure they're in right place.
+      this.tractControls.updatePositions();
     } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
