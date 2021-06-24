@@ -1,7 +1,7 @@
 import { FinishButtonSetup, LayoutEditor } from "./LayoutEditor";
 import { makeCssUnitInput } from "./make-cssUnitInput";
 import { blockEl, clickButton, makeEl, textEl } from "./make-elements";
-import { makeToggleSwitch } from "./make-toggleSwitch";
+import { ToggleSwitch } from "./web-components/toggle-switch";
 import { getPosOnGrid } from "./utils-grid";
 import {
   browserHeaderHtml,
@@ -33,7 +33,7 @@ export function wrapInGrided(
 
   if (gridIsFilled) {
     buttons.push(
-      makeToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode)
+      new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode)
     );
   }
 
@@ -120,6 +120,8 @@ export function wrapInGrided(
       gridedUi.querySelector("#added-elements"),
       gridedUi.querySelector("#drag-canvas"),
     ].forEach(function (el: Element) {
+      if (!el) return; // Only try and enable or disable an element if it exists
+
       if (interactIsOn) {
         el.classList.add("disabled");
       } else {

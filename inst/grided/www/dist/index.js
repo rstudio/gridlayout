@@ -3554,7 +3554,7 @@
   defineWellKnownSymbol2("iterator");
 
   // LayoutEditor.ts
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
   "use strict";
@@ -5080,11 +5080,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof7(obj2) {
+      _typeof = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof7(obj2) {
+      _typeof = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5377,11 +5377,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof7(obj2) {
+      _typeof2 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof7(obj2) {
+      _typeof2 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -6305,24 +6305,6 @@
     }
     return el;
   }
-  function shadowEl(selTxt) {
-    var shadowHolder = blockEl(selTxt);
-    shadowHolder.attachShadow({
-      mode: "open"
-    });
-    var styleSheet = document.createElement("style");
-    shadowHolder.shadowRoot.appendChild(styleSheet);
-    for (var _len = arguments.length, children = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      children[_key - 1] = arguments[_key];
-    }
-    children.forEach(function(childEl) {
-      return shadowHolder.shadowRoot.appendChild(childEl);
-    });
-    return {
-      el: shadowHolder,
-      styleSheet: styleSheet
-    };
-  }
   function createEl(opts) {
     var _parseSelectorText = parseSelectorText(opts.selTxt), tagType = _parseSelectorText.tagType, elId = _parseSelectorText.elId, classList = _parseSelectorText.classList;
     var el = document.createElement(tagType);
@@ -6858,11 +6840,11 @@
   function _typeof3(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof7(obj2) {
+      _typeof3 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof3 = function _typeof7(obj2) {
+      _typeof3 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -6925,7 +6907,7 @@
   }
   function _wrapNativeSuper(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper = function _wrapNativeSuper5(Class2) {
+    _wrapNativeSuper = function _wrapNativeSuper6(Class2) {
       if (Class2 === null || !_isNativeFunction(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
@@ -6948,7 +6930,7 @@
     if (_isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
-      _construct = function _construct5(Parent2, args2, Class2) {
+      _construct = function _construct6(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
@@ -6979,14 +6961,14 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
     return _setPrototypeOf(o, p);
   }
   function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
     return _getPrototypeOf(o);
@@ -7042,11 +7024,11 @@
   function _typeof4(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof4 = function _typeof7(obj2) {
+      _typeof4 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof4 = function _typeof7(obj2) {
+      _typeof4 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -7109,7 +7091,7 @@
   }
   function _wrapNativeSuper2(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper2 = function _wrapNativeSuper5(Class2) {
+    _wrapNativeSuper2 = function _wrapNativeSuper6(Class2) {
       if (Class2 === null || !_isNativeFunction2(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
@@ -7132,7 +7114,7 @@
     if (_isNativeReflectConstruct2()) {
       _construct2 = Reflect.construct;
     } else {
-      _construct2 = function _construct5(Parent2, args2, Class2) {
+      _construct2 = function _construct6(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
@@ -7163,14 +7145,14 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
   function _setPrototypeOf2(o, p) {
-    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
     return _setPrototypeOf2(o, p);
   }
   function _getPrototypeOf2(o) {
-    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
     return _getPrototypeOf2(o);
@@ -7282,34 +7264,186 @@
   }
 
   // wrapInGrided.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
 
-  // make-toggleSwitch.ts
-  function makeToggleSwitch(offText, onText, onChange) {
-    var container = blockEl("div.toggle-switch");
-    makeEl(container, "span.off-text", {
-      innerHTML: offText
-    });
-    var label = makeEl(container, "label.switch");
-    makeEl(container, "span.on-text", {
-      innerHTML: onText
-    });
-    makeEl(label, "input", {
-      props: {
-        type: "checkbox"
-      },
-      eventListener: {
-        event: "change",
-        func: function func(event) {
-          onChange(event.target.checked);
-        }
-      }
-    });
-    makeEl(label, "span.slider");
-    var _shadowEl = shadowEl("div.toggle-switch", container), el = _shadowEl.el, styleSheet = _shadowEl.styleSheet;
-    styleSheet.innerHTML = '\n  div.toggle-switch {\n    display: inline-grid;\n    grid-template-columns: 1fr auto 1fr;\n    grid-gap: 3px;\n    width: 180px;\n    align-items: center;\n    justify-items: center;\n    padding-left: 4px;\n    padding-right: 4px;\n  }\n  \n  .toggle-switch > span {\n    font-size: 1rem;\n  }\n  \n  .toggle-switch > .off-text {\n    text-align: end;\n  }\n  \n  .switch {\n    position: relative;\n    display: inline-block;\n    width: 60px;\n    height: 34px;\n  }\n  \n  .switch input {\n    opacity: 0;\n    width: 0;\n    height: 0;\n  }\n  \n  .slider {\n    position: absolute;\n    cursor: pointer;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    border-radius: 34px;\n    background-color: #ccc;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  .slider:before {\n    position: absolute;\n    content: "";\n    height: 26px;\n    width: 26px;\n    left: 4px;\n    bottom: 4px;\n    border-radius: 50%;\n    background-color: white;\n    -webkit-transition: .4s;\n    transition: .4s;\n  }\n  \n  input:checked + .slider {\n    background-color: #2196F3;\n  }\n  \n  input:focus + .slider {\n    box-shadow: 0 0 1px #2196F3;\n  }\n  \n  input:checked + .slider:before {\n    -webkit-transform: translateX(26px);\n    -ms-transform: translateX(26px);\n    transform: translateX(26px);\n  }\n  ';
-    return el;
+  // web-components/toggle-switch.ts
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
+  function _typeof5(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof5 = function _typeof8(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof5 = function _typeof8(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof5(obj);
   }
+  function _classCallCheck5(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties5(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass5(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties5(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties5(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits3(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf3(subClass, superClass);
+  }
+  function _createSuper3(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf3(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf3(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn3(this, result);
+    };
+  }
+  function _possibleConstructorReturn3(self2, call) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized3(self2);
+  }
+  function _assertThisInitialized3(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper3(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper3 = function _wrapNativeSuper6(Class2) {
+      if (Class2 === null || !_isNativeFunction3(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf3(Wrapper, Class2);
+    };
+    return _wrapNativeSuper3(Class);
+  }
+  function _construct3(Parent, args, Class) {
+    if (_isNativeReflectConstruct3()) {
+      _construct3 = Reflect.construct;
+    } else {
+      _construct3 = function _construct6(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf3(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct3.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct3() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction3(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf3(o, p) {
+    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf3(o, p);
+  }
+  function _getPrototypeOf3(o) {
+    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf3(o);
+  }
+  function _defineProperty7(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(ToggleSwitch2, _HTMLElement);
+    var _super = _createSuper3(ToggleSwitch2);
+    function ToggleSwitch2(offText, onText, onChange) {
+      var _this;
+      _classCallCheck5(this, ToggleSwitch2);
+      _this = _super.call(this);
+      _defineProperty7(_assertThisInitialized3(_this), "offText", void 0);
+      _defineProperty7(_assertThisInitialized3(_this), "onText", void 0);
+      _defineProperty7(_assertThisInitialized3(_this), "onChange", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.offText = offText;
+      _this.onText = onText;
+      _this.onChange = onChange;
+      return _this;
+    }
+    _createClass5(ToggleSwitch2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 1px;\n        width: 180px;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      span {\n        font-size: 1rem;\n      }\n\n      #off-text {\n        text-align: end;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
+        this.shadowRoot.getElementById("switch-value").addEventListener("change", function(event) {
+          return _this2.onChange(event.target.checked);
+        });
+      }
+    }]);
+    return ToggleSwitch2;
+  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
+  customElements.define("toggle-switch", ToggleSwitch);
 
   // wrapInGrided.ts
   function _toConsumableArray4(arr) {
@@ -7355,7 +7489,7 @@
       return finishBtn.onDone(appState.currentLayout);
     })];
     if (gridIsFilled) {
-      buttons.push(makeToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
+      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
     }
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.panel-body", blockEl("div#added-elements"))), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
@@ -7366,6 +7500,8 @@
     appState.container.style.maxWidth = "100%";
     function toggleInteractionMode(interactIsOn) {
       [].concat(_toConsumableArray4(appState.container.querySelectorAll(".added-element")), _toConsumableArray4(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray4(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#grided__settings .panel-body"), gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
+        if (!el)
+          return;
         if (interactIsOn) {
           el.classList.add("disabled");
         } else {
@@ -7523,7 +7659,7 @@
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
         ownKeys4(Object(source), true).forEach(function(key) {
-          _defineProperty7(target, key, source[key]);
+          _defineProperty8(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -7535,12 +7671,12 @@
     }
     return target;
   }
-  function _classCallCheck5(instance, Constructor) {
+  function _classCallCheck6(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties5(target, props) {
+  function _defineProperties6(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -7550,14 +7686,14 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass5(Constructor, protoProps, staticProps) {
+  function _createClass6(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties5(Constructor.prototype, protoProps);
+      _defineProperties6(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties5(Constructor, staticProps);
+      _defineProperties6(Constructor, staticProps);
     return Constructor;
   }
-  function _defineProperty7(obj, key, value) {
+  function _defineProperty8(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -7569,18 +7705,18 @@
     function LayoutEditor2(_ref) {
       var _this = this;
       var entryType = _ref.entryType, startingGrid = _ref.grid, startingElements = _ref.elements, finishBtn = _ref.finishBtn, onUpdate = _ref.onUpdate;
-      _classCallCheck5(this, LayoutEditor2);
-      _defineProperty7(this, "gapSizeSetting", void 0);
-      _defineProperty7(this, "currentCells", []);
-      _defineProperty7(this, "elements", []);
-      _defineProperty7(this, "onUpdate", void 0);
-      _defineProperty7(this, "containerSelector", void 0);
-      _defineProperty7(this, "container", void 0);
-      _defineProperty7(this, "gridStyles", void 0);
-      _defineProperty7(this, "mode", void 0);
-      _defineProperty7(this, "gridLayout", void 0);
-      _defineProperty7(this, "tractControls", void 0);
-      _defineProperty7(this, "entryType", void 0);
+      _classCallCheck6(this, LayoutEditor2);
+      _defineProperty8(this, "gapSizeSetting", void 0);
+      _defineProperty8(this, "currentCells", []);
+      _defineProperty8(this, "elements", []);
+      _defineProperty8(this, "onUpdate", void 0);
+      _defineProperty8(this, "containerSelector", void 0);
+      _defineProperty8(this, "container", void 0);
+      _defineProperty8(this, "gridStyles", void 0);
+      _defineProperty8(this, "mode", void 0);
+      _defineProperty8(this, "gridLayout", void 0);
+      _defineProperty8(this, "tractControls", void 0);
+      _defineProperty8(this, "entryType", void 0);
       this.entryType = entryType;
       var existingWrappedApp = document.querySelector(".wrapped-existing-app");
       if (existingWrappedApp) {
@@ -7642,7 +7778,7 @@
         setShinyInput("starting-layout", this.currentLayout, true);
       }
     }
-    _createClass5(LayoutEditor2, [{
+    _createClass6(LayoutEditor2, [{
       key: "currentLayout",
       get: function get() {
         return {
@@ -7706,7 +7842,7 @@
         });
         var tractSizes = this.gridLayout[dir];
         tractSizes.splice(newIndex, 0, "1fr");
-        this.updateGrid(_defineProperty7({}, dir, tractSizes));
+        this.updateGrid(_defineProperty8({}, dir, tractSizes));
       }
     }, {
       key: "removeTract",
@@ -7733,7 +7869,7 @@
         });
         var tractSizes = this.gridLayout[dir];
         tractSizes.splice(index - 1, 1);
-        this.updateGrid(_defineProperty7({}, dir, tractSizes));
+        this.updateGrid(_defineProperty8({}, dir, tractSizes));
       }
     }, {
       key: "makeEl",
@@ -7817,7 +7953,7 @@
         var tractIndex = opts.tractIndex, dir = opts.dir, newValue = opts.newValue, isDragging = opts.isDragging;
         var tractValues = this.gridLayout[dir];
         tractValues[tractIndex - 1] = newValue;
-        this.updateGrid((_this$updateGrid3 = {}, _defineProperty7(_this$updateGrid3, dir, tractValues), _defineProperty7(_this$updateGrid3, "dontUpdateHistory", isDragging), _this$updateGrid3));
+        this.updateGrid((_this$updateGrid3 = {}, _defineProperty8(_this$updateGrid3, dir, tractValues), _defineProperty8(_this$updateGrid3, "dontUpdateHistory", isDragging), _this$updateGrid3));
       }
     }, {
       key: "updateGrid",
@@ -8153,31 +8289,31 @@
   };
 
   // web-components/layout-gallery.ts
-  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
-  var import_es_map4 = __toModule(require_es_map());
+  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
+  var import_es_map5 = __toModule(require_es_map());
 
   // web-components/grid-preview.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
-  var import_es_map3 = __toModule(require_es_map());
-  function _typeof5(obj) {
+  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
+  function _typeof6(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof5 = function _typeof7(obj2) {
+      _typeof6 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof5 = function _typeof7(obj2) {
+      _typeof6 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof5(obj);
+    return _typeof6(obj);
   }
-  function _classCallCheck6(instance, Constructor) {
+  function _classCallCheck7(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties6(target, props) {
+  function _defineProperties7(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -8187,50 +8323,50 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass6(Constructor, protoProps, staticProps) {
+  function _createClass7(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties6(Constructor.prototype, protoProps);
+      _defineProperties7(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties6(Constructor, staticProps);
+      _defineProperties7(Constructor, staticProps);
     return Constructor;
   }
-  function _inherits3(subClass, superClass) {
+  function _inherits4(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
     if (superClass)
-      _setPrototypeOf3(subClass, superClass);
+      _setPrototypeOf4(subClass, superClass);
   }
-  function _createSuper3(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+  function _createSuper4(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf3(Derived), result;
+      var Super = _getPrototypeOf4(Derived), result;
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf3(this).constructor;
+        var NewTarget = _getPrototypeOf4(this).constructor;
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-      return _possibleConstructorReturn3(this, result);
+      return _possibleConstructorReturn4(this, result);
     };
   }
-  function _possibleConstructorReturn3(self2, call) {
-    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn4(self2, call) {
+    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
       return call;
     }
-    return _assertThisInitialized3(self2);
+    return _assertThisInitialized4(self2);
   }
-  function _assertThisInitialized3(self2) {
+  function _assertThisInitialized4(self2) {
     if (self2 === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self2;
   }
-  function _wrapNativeSuper3(Class) {
+  function _wrapNativeSuper4(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper3 = function _wrapNativeSuper5(Class2) {
-      if (Class2 === null || !_isNativeFunction3(Class2))
+    _wrapNativeSuper4 = function _wrapNativeSuper6(Class2) {
+      if (Class2 === null || !_isNativeFunction4(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
         throw new TypeError("Super expression must either be null or a function");
@@ -8241,30 +8377,30 @@
         _cache.set(Class2, Wrapper);
       }
       function Wrapper() {
-        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
       }
       Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf3(Wrapper, Class2);
+      return _setPrototypeOf4(Wrapper, Class2);
     };
-    return _wrapNativeSuper3(Class);
+    return _wrapNativeSuper4(Class);
   }
-  function _construct3(Parent, args, Class) {
-    if (_isNativeReflectConstruct3()) {
-      _construct3 = Reflect.construct;
+  function _construct4(Parent, args, Class) {
+    if (_isNativeReflectConstruct4()) {
+      _construct4 = Reflect.construct;
     } else {
-      _construct3 = function _construct5(Parent2, args2, Class2) {
+      _construct4 = function _construct6(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
         var instance = new Constructor();
         if (Class2)
-          _setPrototypeOf3(instance, Class2.prototype);
+          _setPrototypeOf4(instance, Class2.prototype);
         return instance;
       };
     }
-    return _construct3.apply(null, arguments);
+    return _construct4.apply(null, arguments);
   }
-  function _isNativeReflectConstruct3() {
+  function _isNativeReflectConstruct4() {
     if (typeof Reflect === "undefined" || !Reflect.construct)
       return false;
     if (Reflect.construct.sham)
@@ -8279,23 +8415,23 @@
       return false;
     }
   }
-  function _isNativeFunction3(fn) {
+  function _isNativeFunction4(fn) {
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function _setPrototypeOf3(o, p) {
-    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+  function _setPrototypeOf4(o, p) {
+    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
-    return _setPrototypeOf3(o, p);
+    return _setPrototypeOf4(o, p);
   }
-  function _getPrototypeOf3(o) {
-    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+  function _getPrototypeOf4(o) {
+    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
-    return _getPrototypeOf3(o);
+    return _getPrototypeOf4(o);
   }
-  function _defineProperty8(obj, key, value) {
+  function _defineProperty9(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -8304,19 +8440,19 @@
     return obj;
   }
   var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits3(GridPreview2, _HTMLElement);
-    var _super = _createSuper3(GridPreview2);
+    _inherits4(GridPreview2, _HTMLElement);
+    var _super = _createSuper4(GridPreview2);
     function GridPreview2() {
       var _this;
-      _classCallCheck6(this, GridPreview2);
+      _classCallCheck7(this, GridPreview2);
       _this = _super.call(this);
-      _defineProperty8(_assertThisInitialized3(_this), "grid", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "RenderSize", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "ShownSize", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "name", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "elements", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "hoverAnimation", void 0);
-      _defineProperty8(_assertThisInitialized3(_this), "OnSelect", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "grid", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "RenderSize", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "ShownSize", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "name", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "elements", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "hoverAnimation", void 0);
+      _defineProperty9(_assertThisInitialized4(_this), "OnSelect", void 0);
       _this.attachShadow({
         mode: "open"
       });
@@ -8334,7 +8470,7 @@
       _this.hoverAnimation = true;
       return _this;
     }
-    _createClass6(GridPreview2, [{
+    _createClass7(GridPreview2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
@@ -8415,25 +8551,25 @@
       }
     }]);
     return GridPreview2;
-  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
   function gridPreview() {
     return new GridPreview();
   }
   customElements.define("grid-preview", GridPreview);
 
   // web-components/layout-gallery.ts
-  function _typeof6(obj) {
+  function _typeof7(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof6 = function _typeof7(obj2) {
+      _typeof7 = function _typeof8(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof6 = function _typeof7(obj2) {
+      _typeof7 = function _typeof8(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof6(obj);
+    return _typeof7(obj);
   }
   function _toConsumableArray6(arr) {
     return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray8(arr) || _nonIterableSpread6();
@@ -8470,12 +8606,12 @@
     }
     return arr2;
   }
-  function _classCallCheck7(instance, Constructor) {
+  function _classCallCheck8(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties7(target, props) {
+  function _defineProperties8(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -8485,50 +8621,50 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass7(Constructor, protoProps, staticProps) {
+  function _createClass8(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties7(Constructor.prototype, protoProps);
+      _defineProperties8(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties7(Constructor, staticProps);
+      _defineProperties8(Constructor, staticProps);
     return Constructor;
   }
-  function _inherits4(subClass, superClass) {
+  function _inherits5(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
     if (superClass)
-      _setPrototypeOf4(subClass, superClass);
+      _setPrototypeOf5(subClass, superClass);
   }
-  function _createSuper4(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
+  function _createSuper5(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct5();
     return function _createSuperInternal() {
-      var Super = _getPrototypeOf4(Derived), result;
+      var Super = _getPrototypeOf5(Derived), result;
       if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf4(this).constructor;
+        var NewTarget = _getPrototypeOf5(this).constructor;
         result = Reflect.construct(Super, arguments, NewTarget);
       } else {
         result = Super.apply(this, arguments);
       }
-      return _possibleConstructorReturn4(this, result);
+      return _possibleConstructorReturn5(this, result);
     };
   }
-  function _possibleConstructorReturn4(self2, call) {
-    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+  function _possibleConstructorReturn5(self2, call) {
+    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
       return call;
     }
-    return _assertThisInitialized4(self2);
+    return _assertThisInitialized5(self2);
   }
-  function _assertThisInitialized4(self2) {
+  function _assertThisInitialized5(self2) {
     if (self2 === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self2;
   }
-  function _wrapNativeSuper4(Class) {
+  function _wrapNativeSuper5(Class) {
     var _cache = typeof Map === "function" ? new Map() : void 0;
-    _wrapNativeSuper4 = function _wrapNativeSuper5(Class2) {
-      if (Class2 === null || !_isNativeFunction4(Class2))
+    _wrapNativeSuper5 = function _wrapNativeSuper6(Class2) {
+      if (Class2 === null || !_isNativeFunction5(Class2))
         return Class2;
       if (typeof Class2 !== "function") {
         throw new TypeError("Super expression must either be null or a function");
@@ -8539,30 +8675,30 @@
         _cache.set(Class2, Wrapper);
       }
       function Wrapper() {
-        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
+        return _construct5(Class2, arguments, _getPrototypeOf5(this).constructor);
       }
       Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
-      return _setPrototypeOf4(Wrapper, Class2);
+      return _setPrototypeOf5(Wrapper, Class2);
     };
-    return _wrapNativeSuper4(Class);
+    return _wrapNativeSuper5(Class);
   }
-  function _construct4(Parent, args, Class) {
-    if (_isNativeReflectConstruct4()) {
-      _construct4 = Reflect.construct;
+  function _construct5(Parent, args, Class) {
+    if (_isNativeReflectConstruct5()) {
+      _construct5 = Reflect.construct;
     } else {
-      _construct4 = function _construct5(Parent2, args2, Class2) {
+      _construct5 = function _construct6(Parent2, args2, Class2) {
         var a = [null];
         a.push.apply(a, args2);
         var Constructor = Function.bind.apply(Parent2, a);
         var instance = new Constructor();
         if (Class2)
-          _setPrototypeOf4(instance, Class2.prototype);
+          _setPrototypeOf5(instance, Class2.prototype);
         return instance;
       };
     }
-    return _construct4.apply(null, arguments);
+    return _construct5.apply(null, arguments);
   }
-  function _isNativeReflectConstruct4() {
+  function _isNativeReflectConstruct5() {
     if (typeof Reflect === "undefined" || !Reflect.construct)
       return false;
     if (Reflect.construct.sham)
@@ -8577,23 +8713,23 @@
       return false;
     }
   }
-  function _isNativeFunction4(fn) {
+  function _isNativeFunction5(fn) {
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function _setPrototypeOf4(o, p) {
-    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o2, p2) {
+  function _setPrototypeOf5(o, p) {
+    _setPrototypeOf5 = Object.setPrototypeOf || function _setPrototypeOf6(o2, p2) {
       o2.__proto__ = p2;
       return o2;
     };
-    return _setPrototypeOf4(o, p);
+    return _setPrototypeOf5(o, p);
   }
-  function _getPrototypeOf4(o) {
-    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o2) {
+  function _getPrototypeOf5(o) {
+    _getPrototypeOf5 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf6(o2) {
       return o2.__proto__ || Object.getPrototypeOf(o2);
     };
-    return _getPrototypeOf4(o);
+    return _getPrototypeOf5(o);
   }
-  function _defineProperty9(obj, key, value) {
+  function _defineProperty10(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -8602,25 +8738,25 @@
     return obj;
   }
   var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits4(LayoutGallery2, _HTMLElement);
-    var _super = _createSuper4(LayoutGallery2);
+    _inherits5(LayoutGallery2, _HTMLElement);
+    var _super = _createSuper5(LayoutGallery2);
     function LayoutGallery2(layouts) {
       var _this;
-      _classCallCheck7(this, LayoutGallery2);
+      _classCallCheck8(this, LayoutGallery2);
       _this = _super.call(this);
-      _defineProperty9(_assertThisInitialized4(_this), "layouts", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "preselectedLayoutName", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "onEditFn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "onGoFn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "onCancelFn", void 0);
-      _defineProperty9(_assertThisInitialized4(_this), "onSelectFn", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "layouts", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "preselectedLayoutName", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "onEditFn", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "onGoFn", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "onCancelFn", void 0);
+      _defineProperty10(_assertThisInitialized5(_this), "onSelectFn", void 0);
       _this.attachShadow({
         mode: "open"
       });
       _this.layouts = layouts;
       return _this;
     }
-    _createClass7(LayoutGallery2, [{
+    _createClass8(LayoutGallery2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this$shadowRoot$getE, _this2 = this;
@@ -8696,7 +8832,7 @@
       }
     }]);
     return LayoutGallery2;
-  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
+  }(/* @__PURE__ */ _wrapNativeSuper5(HTMLElement));
   function layoutGallery(layouts) {
     return new LayoutGallery(layouts);
   }
@@ -8721,7 +8857,7 @@
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
         ownKeys5(Object(source), true).forEach(function(key) {
-          _defineProperty10(target, key, source[key]);
+          _defineProperty11(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -8733,7 +8869,7 @@
     }
     return target;
   }
-  function _defineProperty10(obj, key, value) {
+  function _defineProperty11(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
