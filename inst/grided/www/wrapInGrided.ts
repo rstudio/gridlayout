@@ -1,7 +1,6 @@
 import { FinishButtonSetup, LayoutEditor } from "./LayoutEditor";
 import { makeCssUnitInput } from "./make-cssUnitInput";
 import { blockEl, clickButton, makeEl, textEl } from "./make-elements";
-import { ToggleSwitch } from "./web-components/toggle-switch";
 import { getPosOnGrid } from "./utils-grid";
 import {
   browserHeaderHtml,
@@ -12,6 +11,7 @@ import {
   trashcanIcon,
 } from "./utils-icons";
 import { setShinyInput } from "./utils-shiny";
+import { ToggleSwitch } from "./web-components/toggle-switch";
 
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
