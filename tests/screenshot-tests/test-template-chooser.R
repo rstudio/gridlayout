@@ -2,7 +2,7 @@ pause_length <- 1
 test_that("Basic interaction with grided app", {
 
   app <- setup_chromote_session(layout_gallery(return_app_obj = TRUE))
-  app$b$view()
+  # app$b$view()
   on.exit({ app$p$kill() })
 
   expect_snapshot_file(
