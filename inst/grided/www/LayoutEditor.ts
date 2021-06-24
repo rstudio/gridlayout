@@ -34,8 +34,8 @@ import {
 } from "./wrapInGrided";
 
 export type GridUpdateOptions = {
-  rows?: string[];
-  cols?: string[];
+  rows?: string[] | string;
+  cols?: string[] | string;
   gap?: string;
   force?: boolean;
   dontUpdateHistory?: boolean;

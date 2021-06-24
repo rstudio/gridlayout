@@ -1,5 +1,6 @@
 import { GridPos } from "./GridItem";
 import { getGapSize } from "./utils-grid";
+import { asArray } from "./utils-misc";
 
 export type TractDir = "rows" | "cols";
 type GridAttr = "rows" | "cols" | "gap";
@@ -18,9 +19,9 @@ export class GridLayout {
     this.styles = container.style;
   }
 
-  set rows(newRows: string[]) {
+  set rows(newRows: string[] | string) {
     if (typeof newRows === "undefined") return;
-    this.styles.gridTemplateRows = newRows.join(" ");
+    this.styles.gridTemplateRows = asArray(newRows).join(" ");
   }
   get rows(): string[] {
     return this.styles.gridTemplateRows.split(" ");
@@ -29,9 +30,9 @@ export class GridLayout {
     return this.rows.length;
   }
 
-  set cols(newCols: string[]) {
+  set cols(newCols: string[] | string) {
     if (typeof newCols === "undefined") return;
-    this.styles.gridTemplateColumns = newCols.join(" ");
+    this.styles.gridTemplateColumns = asArray(newCols).join(" ");
   }
   get cols(): string[] {
     return this.styles.gridTemplateColumns.split(" ");
@@ -69,9 +70,8 @@ export class GridLayout {
     if (typeof values === "undefined") return false;
     if (attr === "gap") {
       return values !== this.gap;
-    } else if (typeof values === "object") {
-      return !equalArrays(this[attr], values);
     }
+    return !equalArrays(this[attr], asArray(values));
   }
 
   sizesForTract(itemPos: GridPos, dir: "row" | "col"): string[] {

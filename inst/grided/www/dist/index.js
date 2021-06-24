@@ -3554,7 +3554,7 @@
   defineWellKnownSymbol2("iterator");
 
   // LayoutEditor.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
   "use strict";
@@ -5080,11 +5080,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof8(obj2) {
+      _typeof = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof8(obj2) {
+      _typeof = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5377,11 +5377,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof8(obj2) {
+      _typeof2 = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof8(obj2) {
+      _typeof2 = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5988,20 +5988,6 @@
 
   // GridLayout.ts
   var import_es_regexp_exec6 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
-  function _typeof3(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof8(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof3 = function _typeof8(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof3(obj);
-  }
   function _classCallCheck2(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -6048,7 +6034,7 @@
       set: function set(newRows) {
         if (typeof newRows === "undefined")
           return;
-        this.styles.gridTemplateRows = newRows.join(" ");
+        this.styles.gridTemplateRows = asArray(newRows).join(" ");
       }
     }, {
       key: "numRows",
@@ -6063,7 +6049,7 @@
       set: function set(newCols) {
         if (typeof newCols === "undefined")
           return;
-        this.styles.gridTemplateColumns = newCols.join(" ");
+        this.styles.gridTemplateColumns = asArray(newCols).join(" ");
       }
     }, {
       key: "numCols",
@@ -6098,9 +6084,8 @@
           return false;
         if (attr === "gap") {
           return values !== this.gap;
-        } else if (_typeof3(values) === "object") {
-          return !equalArrays(this[attr], values);
         }
+        return !equalArrays(this[attr], asArray(values));
       }
     }, {
       key: "sizesForTract",
@@ -6132,7 +6117,7 @@
   }
 
   // make-cssUnitInput.ts
-  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.number.constructor.js
@@ -6215,7 +6200,7 @@
   var key;
 
   // make-elements.ts
-  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
 
   // utils-icons.ts
@@ -6721,7 +6706,7 @@
   });
 
   // utils-cssom.ts
-  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator9 = __toModule(require_es_array_iterator());
   function _toConsumableArray3(arr) {
     return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
   }
@@ -6863,25 +6848,25 @@
   });
 
   // web-components/focus-modal.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
   var import_es_map2 = __toModule(require_es_map());
 
   // web-components/copy-code.ts
   var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
   var import_es_map = __toModule(require_es_map());
-  function _typeof4(obj) {
+  function _typeof3(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof4 = function _typeof8(obj2) {
+      _typeof3 = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof4 = function _typeof8(obj2) {
+      _typeof3 = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof4(obj);
+    return _typeof3(obj);
   }
   function _classCallCheck3(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -6927,7 +6912,7 @@
     };
   }
   function _possibleConstructorReturn(self2, call) {
-    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
+    if (call && (_typeof3(call) === "object" || typeof call === "function")) {
       return call;
     }
     return _assertThisInitialized(self2);
@@ -7054,18 +7039,18 @@
   }
 
   // web-components/focus-modal.ts
-  function _typeof5(obj) {
+  function _typeof4(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof5 = function _typeof8(obj2) {
+      _typeof4 = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof5 = function _typeof8(obj2) {
+      _typeof4 = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof5(obj);
+    return _typeof4(obj);
   }
   function _classCallCheck4(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -7111,7 +7096,7 @@
     };
   }
   function _possibleConstructorReturn2(self2, call) {
-    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
       return call;
     }
     return _assertThisInitialized2(self2);
@@ -7297,7 +7282,7 @@
   }
 
   // wrapInGrided.ts
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
 
   // make-toggleSwitch.ts
   function makeToggleSwitch(offText, onText, onChange) {
@@ -8167,24 +8152,24 @@
   };
 
   // web-components/layout-gallery.ts
-  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
   var import_es_map4 = __toModule(require_es_map());
 
   // web-components/grid-preview.ts
-  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
   var import_es_map3 = __toModule(require_es_map());
-  function _typeof6(obj) {
+  function _typeof5(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof6 = function _typeof8(obj2) {
+      _typeof5 = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof6 = function _typeof8(obj2) {
+      _typeof5 = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof6(obj);
+    return _typeof5(obj);
   }
   function _classCallCheck6(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -8230,7 +8215,7 @@
     };
   }
   function _possibleConstructorReturn3(self2, call) {
-    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
       return call;
     }
     return _assertThisInitialized3(self2);
@@ -8436,18 +8421,18 @@
   customElements.define("grid-preview", GridPreview);
 
   // web-components/layout-gallery.ts
-  function _typeof7(obj) {
+  function _typeof6(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof7 = function _typeof8(obj2) {
+      _typeof6 = function _typeof7(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof7 = function _typeof8(obj2) {
+      _typeof6 = function _typeof7(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
-    return _typeof7(obj);
+    return _typeof6(obj);
   }
   function _toConsumableArray6(arr) {
     return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray8(arr) || _nonIterableSpread6();
@@ -8528,7 +8513,7 @@
     };
   }
   function _possibleConstructorReturn4(self2, call) {
-    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
+    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
       return call;
     }
     return _assertThisInitialized4(self2);
