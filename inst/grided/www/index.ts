@@ -24,6 +24,8 @@ export type LayoutInfo = {
   name?: string;
   grid: LayoutState;
   elements: LayoutElement[];
+  // If live app code exists for layout it's sent as a character vector
+  live_app?: string[];
 };
 
 export type GalleryOptions = {
@@ -32,7 +34,20 @@ export type GalleryOptions = {
 };
 
 // Fresh start on page
-const clearPage = () => (document.body.innerHTML = ``);
+const clearPage = () => {
+  // We want to keep the div shiny uses to dump app UI in the app so we want to
+  // take it out of the dom before erasing page contents, then add it back after
+
+  const appDumpDiv = document.getElementById("app_dump");
+  if (appDumpDiv) {
+    appDumpDiv.parentNode.removeChild(appDumpDiv);
+  }
+  document.body.innerHTML = ``;
+  if (appDumpDiv) {
+    document.body.append(appDumpDiv);
+    console.log("Re-adding app dump div");
+  }
+};
 
 const startLayoutGallery = (
   opts: GalleryOptions,
@@ -54,11 +69,12 @@ const startLayoutGallery = (
     .onGo((selectedLayout: LayoutInfo) => {
       setShinyInput("build_app_template", selectedLayout);
     })
-    .onEdit((selectedLayout: LayoutInfo) => {
+    .onEdit((selectedLayout: LayoutInfo, liveApp?: Boolean) => {
       startLayoutEditor(
         {
-          entryType: "layout-gallery",
+          entryType: liveApp ? "layout-gallery-live" : "layout-gallery",
           ...selectedLayout,
+          liveAppId: liveApp ? selectedLayout.name : undefined,
         },
         true
       );
