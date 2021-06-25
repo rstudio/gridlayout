@@ -4,11 +4,12 @@ import { createFocusModal } from "./focus-modal";
 import { gridPreview } from "./grid-preview";
 
 type SelectFn = (info: LayoutInfo) => void;
+type EditFn = (info: LayoutInfo, liveApp?: boolean) => void;
 export class LayoutGallery extends HTMLElement {
   layouts: LayoutInfo[];
   preselectedLayoutName: string;
 
-  onEditFn: SelectFn;
+  onEditFn: EditFn;
   onGoFn: SelectFn;
   onCancelFn: () => void;
   onSelectFn: (name: string) => void;
@@ -95,7 +96,7 @@ export class LayoutGallery extends HTMLElement {
         gridPreview()
           .layout(layout)
           .shownSize(100)
-          .onSelect((x: LayoutInfo) => this.focusOnLayout(x))
+          .onSelect(() => this.focusOnLayout(layout))
       )
     );
 
@@ -113,7 +114,7 @@ export class LayoutGallery extends HTMLElement {
     }
   }
 
-  onEdit(onEditFn: SelectFn) {
+  onEdit(onEditFn: EditFn) {
     this.onEditFn = onEditFn;
     return this;
   }
@@ -161,19 +162,30 @@ export class LayoutGallery extends HTMLElement {
       modal.remove();
     };
 
+    let actionButtons = [
+      clickButton(".go", "Create app with this layout", (event) => {
+        closeGallery(event);
+        this.onGoFn(selectedLayout);
+      }),
+      clickButton(".edit", "Edit this layout", (event) => {
+        closeGallery(event);
+        this.onEditFn(selectedLayout, false);
+      }),
+    ];
+
+    if (selectedLayout.live_app) {
+      actionButtons.push(
+        clickButton(".edit-live", "Edit layout with live app", (event) => {
+          closeGallery(event);
+          this.onEditFn(selectedLayout, true);
+        })
+      );
+    }
+
     modal.addElement(
       createEl({
         selTxt: `div#footer`,
-        children: [
-          clickButton(".go", "Create app with this layout", (event) => {
-            closeGallery(event);
-            this.onGoFn(selectedLayout);
-          }),
-          clickButton(".edit", "Edit this layout", (event) => {
-            closeGallery(event);
-            this.onEditFn(selectedLayout);
-          }),
-        ],
+        children: actionButtons,
       })
     );
 

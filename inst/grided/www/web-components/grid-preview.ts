@@ -6,9 +6,10 @@ export class GridPreview extends HTMLElement {
   RenderSize: number;
   ShownSize: number;
   name: string;
+  hasLiveApp: boolean;
   elements: LayoutElement[];
   hoverAnimation: boolean;
-  OnSelect: (info: LayoutInfo) => void;
+  OnSelect: () => void;
 
   constructor() {
     super();
@@ -99,11 +100,7 @@ export class GridPreview extends HTMLElement {
       .addEventListener("click", (event) => {
         // Dont let the gallery background pickup event and kill selection
         event.stopPropagation();
-        this.OnSelect({
-          name: this.name,
-          elements: this.elements,
-          grid: this.grid,
-        });
+        this.OnSelect();
       });
   }
 
@@ -111,6 +108,7 @@ export class GridPreview extends HTMLElement {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
     this.name = layout.name ?? this.name;
+    this.hasLiveApp = layout.live_app !== undefined;
     return this;
   }
 
@@ -124,7 +122,7 @@ export class GridPreview extends HTMLElement {
     return this;
   }
 
-  onSelect(onSelect: (info: LayoutInfo) => void) {
+  onSelect(onSelect: () => void) {
     this.OnSelect = onSelect;
     return this;
   }
