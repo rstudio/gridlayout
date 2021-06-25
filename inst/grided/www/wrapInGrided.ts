@@ -151,6 +151,9 @@ export function addExistingElementsToApp(appState: LayoutEditor) {
   // If grided is running on an existing app, we need to parse the children and
   // add them as elements;
   [...appState.container.children].forEach(function (el: Element) {
+    // Existing apps will have the dragCanvas as a child. Ignore it
+    if (el.id === "dragCanvas") return;
+
     const bbox = el.getBoundingClientRect();
     // Only keep visible elements. This will (hopefully) filter out and
     // script or style tags that find their way into the grid container
