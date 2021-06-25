@@ -66,7 +66,7 @@
                 <div id="distPlot" class="shiny-plot-output shiny-bound-output" style="width:100%;height:100%;" aria-live="polite"><img src=></div>
               </div>
             </div>
-          <div class="r1 c1 grid-cell css-1woxl8e transparent" data-row="1" data-col="1" style="grid-area: 1 / 1 / 2 / 2; display: block;"></div><div class="r1 c2 grid-cell css-1woxl8e transparent" data-row="1" data-col="2" style="grid-area: 1 / 2 / 2 / 3; display: block;"></div><div class="r2 c1 grid-cell css-1woxl8e transparent" data-row="2" data-col="1" style="grid-area: 2 / 1 / 3 / 2; display: block;"></div><div class="r2 c2 grid-cell css-1woxl8e transparent" data-row="2" data-col="2" style="grid-area: 2 / 2 / 3 / 3; display: block;"></div><div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
+          <div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
       <div class="fillerText">
         This filler text demonstrates how the height of an element spanning an "auto"
         row is influenced by its content. While you're here...
@@ -183,7 +183,7 @@
                 <div id="distPlot" class="shiny-plot-output shiny-bound-output" style="width:100%;height:100%;" aria-live="polite"><img src=></div>
               </div>
             </div>
-          <div class="r1 c1 grid-cell css-1woxl8e transparent" data-row="1" data-col="1" style="grid-area: 1 / 1 / 2 / 2; display: block;"></div><div class="r1 c2 grid-cell css-1woxl8e transparent" data-row="1" data-col="2" style="grid-area: 1 / 2 / 2 / 3; display: block;"></div><div class="r2 c1 grid-cell css-1woxl8e transparent" data-row="2" data-col="1" style="grid-area: 2 / 1 / 3 / 2; display: block;"></div><div class="r2 c2 grid-cell css-1woxl8e transparent" data-row="2" data-col="2" style="grid-area: 2 / 2 / 3 / 3; display: block;"></div><div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
+          <div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
       <div class="fillerText">
         This filler text demonstrates how the height of an element spanning an "auto"
         row is influenced by its content. While you're here...
@@ -300,7 +300,7 @@
                 <div id="distPlot" class="shiny-plot-output shiny-bound-output" style="width:100%;height:100%;" aria-live="polite"><img src=></div>
               </div>
             </div>
-          <div class="r1 c1 grid-cell css-1woxl8e transparent" data-row="1" data-col="1" style="grid-area: 1 / 1 / 2 / 2; display: block;"></div><div class="r1 c2 grid-cell css-1woxl8e transparent" data-row="1" data-col="2" style="grid-area: 1 / 2 / 2 / 3; display: block;"></div><div class="r2 c1 grid-cell css-1woxl8e transparent" data-row="2" data-col="1" style="grid-area: 2 / 1 / 3 / 2; display: block;"></div><div class="r2 c2 grid-cell css-1woxl8e transparent" data-row="2" data-col="2" style="grid-area: 2 / 2 / 3 / 3; display: block;"></div><div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
+          <div class="dragSelectionBox css-7gu40m css-agza8z"></div><div id="dragCanvas" class="css-1okdk2r"></div><div id="header" class="el_header added-element css-7gu40m" style="border-color: rgb(228, 26, 28); position: relative; grid-area: 1 / 1 / 2 / 3; display: block;">
       <div class="fillerText">
         This filler text demonstrates how the height of an element spanning an "auto"
         row is influenced by its content. While you're here...

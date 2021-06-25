@@ -146,11 +146,17 @@ background_shiny_app <- function(app){
 
 setup_chromote_session <- function(app) {
   app <- background_shiny_app(app)
+  m <- Chromote$new(Chrome$new(args = c(
+    "--disable-gpu",
+    c("--force-color-profile", "srgb")
+  )))
+  set_default_chromote_object(m)
 
   b <- ChromoteSession$new(
     width = 1600,
     height = 1200
   )
+
 
   b$Page$navigate(app$url, wait_ = FALSE) %...>%
   {
