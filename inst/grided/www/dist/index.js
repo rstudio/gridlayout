@@ -30,18 +30,6 @@
     }, enumerable: true } : { value: module, enumerable: true })), module);
   };
 
-  // node_modules/core-js/internals/global.js
-  var require_global = __commonJS({
-    "node_modules/core-js/internals/global.js": function(exports, module) {
-      var check = function(it) {
-        return it && it.Math == Math && it;
-      };
-      module.exports = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof global == "object" && global) || function() {
-        return this;
-      }() || Function("return this")();
-    }
-  });
-
   // node_modules/core-js/internals/fails.js
   var require_fails = __commonJS({
     "node_modules/core-js/internals/fails.js": function(exports, module) {
@@ -64,6 +52,114 @@
           return 7;
         } })[1] != 7;
       });
+    }
+  });
+
+  // node_modules/core-js/internals/global.js
+  var require_global = __commonJS({
+    "node_modules/core-js/internals/global.js": function(exports, module) {
+      var check = function(it) {
+        return it && it.Math == Math && it;
+      };
+      module.exports = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof global == "object" && global) || function() {
+        return this;
+      }() || Function("return this")();
+    }
+  });
+
+  // node_modules/core-js/internals/is-object.js
+  var require_is_object = __commonJS({
+    "node_modules/core-js/internals/is-object.js": function(exports, module) {
+      module.exports = function(it) {
+        return typeof it === "object" ? it !== null : typeof it === "function";
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/document-create-element.js
+  var require_document_create_element = __commonJS({
+    "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
+      var global8 = require_global();
+      var isObject7 = require_is_object();
+      var document2 = global8.document;
+      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
+      module.exports = function(it) {
+        return EXISTS ? document2.createElement(it) : {};
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/ie8-dom-define.js
+  var require_ie8_dom_define = __commonJS({
+    "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
+      var DESCRIPTORS10 = require_descriptors();
+      var fails10 = require_fails();
+      var createElement = require_document_create_element();
+      module.exports = !DESCRIPTORS10 && !fails10(function() {
+        return Object.defineProperty(createElement("div"), "a", {
+          get: function() {
+            return 7;
+          }
+        }).a != 7;
+      });
+    }
+  });
+
+  // node_modules/core-js/internals/an-object.js
+  var require_an_object = __commonJS({
+    "node_modules/core-js/internals/an-object.js": function(exports, module) {
+      var isObject7 = require_is_object();
+      module.exports = function(it) {
+        if (!isObject7(it)) {
+          throw TypeError(String(it) + " is not an object");
+        }
+        return it;
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/to-primitive.js
+  var require_to_primitive = __commonJS({
+    "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
+      var isObject7 = require_is_object();
+      module.exports = function(input, PREFERRED_STRING) {
+        if (!isObject7(input))
+          return input;
+        var fn, val;
+        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        throw TypeError("Can't convert object to primitive value");
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/object-define-property.js
+  var require_object_define_property = __commonJS({
+    "node_modules/core-js/internals/object-define-property.js": function(exports) {
+      var DESCRIPTORS10 = require_descriptors();
+      var IE8_DOM_DEFINE = require_ie8_dom_define();
+      var anObject7 = require_an_object();
+      var toPrimitive3 = require_to_primitive();
+      var $defineProperty2 = Object.defineProperty;
+      exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
+        anObject7(O);
+        P = toPrimitive3(P, true);
+        anObject7(Attributes);
+        if (IE8_DOM_DEFINE)
+          try {
+            return $defineProperty2(O, P, Attributes);
+          } catch (error) {
+          }
+        if ("get" in Attributes || "set" in Attributes)
+          throw TypeError("Accessors not supported");
+        if ("value" in Attributes)
+          O[P] = Attributes.value;
+        return O;
+      };
     }
   });
 
@@ -141,34 +237,6 @@
     }
   });
 
-  // node_modules/core-js/internals/is-object.js
-  var require_is_object = __commonJS({
-    "node_modules/core-js/internals/is-object.js": function(exports, module) {
-      module.exports = function(it) {
-        return typeof it === "object" ? it !== null : typeof it === "function";
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/to-primitive.js
-  var require_to_primitive = __commonJS({
-    "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
-      var isObject7 = require_is_object();
-      module.exports = function(input, PREFERRED_STRING) {
-        if (!isObject7(input))
-          return input;
-        var fn, val;
-        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        throw TypeError("Can't convert object to primitive value");
-      };
-    }
-  });
-
   // node_modules/core-js/internals/to-object.js
   var require_to_object = __commonJS({
     "node_modules/core-js/internals/to-object.js": function(exports, module) {
@@ -187,35 +255,6 @@
       module.exports = function hasOwn(it, key) {
         return hasOwnProperty.call(toObject6(it), key);
       };
-    }
-  });
-
-  // node_modules/core-js/internals/document-create-element.js
-  var require_document_create_element = __commonJS({
-    "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
-      var global8 = require_global();
-      var isObject7 = require_is_object();
-      var document2 = global8.document;
-      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
-      module.exports = function(it) {
-        return EXISTS ? document2.createElement(it) : {};
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/ie8-dom-define.js
-  var require_ie8_dom_define = __commonJS({
-    "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
-      var DESCRIPTORS10 = require_descriptors();
-      var fails10 = require_fails();
-      var createElement = require_document_create_element();
-      module.exports = !DESCRIPTORS10 && !fails10(function() {
-        return Object.defineProperty(createElement("div"), "a", {
-          get: function() {
-            return 7;
-          }
-        }).a != 7;
-      });
     }
   });
 
@@ -240,45 +279,6 @@
           }
         if (has4(O, P))
           return createPropertyDescriptor2(!propertyIsEnumerableModule2.f.call(O, P), O[P]);
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/an-object.js
-  var require_an_object = __commonJS({
-    "node_modules/core-js/internals/an-object.js": function(exports, module) {
-      var isObject7 = require_is_object();
-      module.exports = function(it) {
-        if (!isObject7(it)) {
-          throw TypeError(String(it) + " is not an object");
-        }
-        return it;
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/object-define-property.js
-  var require_object_define_property = __commonJS({
-    "node_modules/core-js/internals/object-define-property.js": function(exports) {
-      var DESCRIPTORS10 = require_descriptors();
-      var IE8_DOM_DEFINE = require_ie8_dom_define();
-      var anObject7 = require_an_object();
-      var toPrimitive3 = require_to_primitive();
-      var $defineProperty2 = Object.defineProperty;
-      exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
-        anObject7(O);
-        P = toPrimitive3(P, true);
-        anObject7(Attributes);
-        if (IE8_DOM_DEFINE)
-          try {
-            return $defineProperty2(O, P, Attributes);
-          } catch (error) {
-          }
-        if ("get" in Attributes || "set" in Attributes)
-          throw TypeError("Accessors not supported");
-        if ("value" in Attributes)
-          O[P] = Attributes.value;
-        return O;
       };
     }
   });
@@ -3036,13 +3036,33 @@
     }
   });
 
+  // node_modules/core-js/modules/es.function.name.js
+  var DESCRIPTORS = require_descriptors();
+  var defineProperty = require_object_define_property().f;
+  var FunctionPrototype = Function.prototype;
+  var FunctionPrototypeToString = FunctionPrototype.toString;
+  var nameRE = /^\s*function ([^ (]*)/;
+  var NAME = "name";
+  if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
+    defineProperty(FunctionPrototype, NAME, {
+      configurable: true,
+      get: function() {
+        try {
+          return FunctionPrototypeToString.call(this).match(nameRE)[1];
+        } catch (error) {
+          return "";
+        }
+      }
+    });
+  }
+
   // node_modules/core-js/modules/es.symbol.js
   "use strict";
   var $ = require_export();
   var global2 = require_global();
   var getBuiltIn = require_get_built_in();
   var IS_PURE = require_is_pure();
-  var DESCRIPTORS = require_descriptors();
+  var DESCRIPTORS2 = require_descriptors();
   var NATIVE_SYMBOL = require_native_symbol();
   var USE_SYMBOL_AS_UID = require_use_symbol_as_uid();
   var fails = require_fails();
@@ -3094,7 +3114,7 @@
   var WellKnownSymbolsStore = shared("wks");
   var QObject = global2.QObject;
   var USE_SETTER = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-  var setSymbolDescriptor = DESCRIPTORS && fails(function() {
+  var setSymbolDescriptor = DESCRIPTORS2 && fails(function() {
     return nativeObjectCreate(nativeDefineProperty({}, "a", {
       get: function() {
         return nativeDefineProperty(this, "a", { value: 7 }).a;
@@ -3116,7 +3136,7 @@
       tag: tag,
       description: description
     });
-    if (!DESCRIPTORS)
+    if (!DESCRIPTORS2)
       symbol.description = description;
     return symbol;
   };
@@ -3125,7 +3145,7 @@
   } : function(it) {
     return Object(it) instanceof $Symbol;
   };
-  var $defineProperty = function defineProperty(O, P, Attributes) {
+  var $defineProperty = function defineProperty2(O, P, Attributes) {
     if (O === ObjectPrototype)
       $defineProperty(ObjectPrototypeSymbols, P, Attributes);
     anObject(O);
@@ -3150,7 +3170,7 @@
     var properties = toIndexedObject(Properties);
     var keys2 = objectKeys(properties).concat($getOwnPropertySymbols(properties));
     $forEach(keys2, function(key) {
-      if (!DESCRIPTORS || $propertyIsEnumerable.call(properties, key))
+      if (!DESCRIPTORS2 || $propertyIsEnumerable.call(properties, key))
         $defineProperty(O, key, properties[key]);
     });
     return O;
@@ -3209,7 +3229,7 @@
           this[HIDDEN][tag] = false;
         setSymbolDescriptor(this, tag, createPropertyDescriptor(1, value));
       };
-      if (DESCRIPTORS && USE_SETTER)
+      if (DESCRIPTORS2 && USE_SETTER)
         setSymbolDescriptor(ObjectPrototype, tag, { configurable: true, set: setter });
       return wrap(tag, description);
     };
@@ -3227,7 +3247,7 @@
     wrappedWellKnownSymbolModule.f = function(name) {
       return wrap(wellKnownSymbol(name), name);
     };
-    if (DESCRIPTORS) {
+    if (DESCRIPTORS2) {
       nativeDefineProperty($Symbol[PROTOTYPE], "description", {
         configurable: true,
         get: function description() {
@@ -3268,7 +3288,7 @@
       USE_SETTER = false;
     }
   });
-  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS }, {
+  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
     create: $create,
     defineProperty: $defineProperty,
     defineProperties: $defineProperties,
@@ -3322,14 +3342,14 @@
   // node_modules/core-js/modules/es.symbol.description.js
   "use strict";
   var $2 = require_export();
-  var DESCRIPTORS2 = require_descriptors();
+  var DESCRIPTORS3 = require_descriptors();
   var global3 = require_global();
   var has2 = require_has();
   var isObject2 = require_is_object();
-  var defineProperty2 = require_object_define_property().f;
+  var defineProperty3 = require_object_define_property().f;
   var copyConstructorProperties = require_copy_constructor_properties();
   var NativeSymbol = global3.Symbol;
-  if (DESCRIPTORS2 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
+  if (DESCRIPTORS3 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
     EmptyStringDescriptionStore = {};
     SymbolWrapper = function Symbol2() {
       var description = arguments.length < 1 || arguments[0] === void 0 ? void 0 : String(arguments[0]);
@@ -3344,7 +3364,7 @@
     symbolToString = symbolPrototype.toString;
     native = String(NativeSymbol("test")) == "Symbol(test)";
     regexp = /^Symbol\((.*)\)[^)]+$/;
-    defineProperty2(symbolPrototype, "description", {
+    defineProperty3(symbolPrototype, "description", {
       configurable: true,
       get: function description() {
         var symbol = isObject2(this) ? this.valueOf() : this;
@@ -3368,9 +3388,9 @@
 
   // node_modules/core-js/modules/es.object.define-property.js
   var $3 = require_export();
-  var DESCRIPTORS3 = require_descriptors();
+  var DESCRIPTORS4 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $3({ target: "Object", stat: true, forced: !DESCRIPTORS3, sham: !DESCRIPTORS3 }, {
+  $3({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
@@ -3405,12 +3425,12 @@
   var fails3 = require_fails();
   var toIndexedObject2 = require_to_indexed_object();
   var nativeGetOwnPropertyDescriptor2 = require_object_get_own_property_descriptor().f;
-  var DESCRIPTORS4 = require_descriptors();
+  var DESCRIPTORS5 = require_descriptors();
   var FAILS_ON_PRIMITIVES2 = fails3(function() {
     nativeGetOwnPropertyDescriptor2(1);
   });
-  var FORCED = !DESCRIPTORS4 || FAILS_ON_PRIMITIVES2;
-  $6({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS4 }, {
+  var FORCED = !DESCRIPTORS5 || FAILS_ON_PRIMITIVES2;
+  $6({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
     getOwnPropertyDescriptor: function getOwnPropertyDescriptor2(it, key) {
       return nativeGetOwnPropertyDescriptor2(toIndexedObject2(it), key);
     }
@@ -3444,12 +3464,12 @@
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptors.js
   var $8 = require_export();
-  var DESCRIPTORS5 = require_descriptors();
+  var DESCRIPTORS6 = require_descriptors();
   var ownKeys = require_own_keys();
   var toIndexedObject3 = require_to_indexed_object();
   var getOwnPropertyDescriptorModule2 = require_object_get_own_property_descriptor();
   var createProperty = require_create_property();
-  $8({ target: "Object", stat: true, sham: !DESCRIPTORS5 }, {
+  $8({ target: "Object", stat: true, sham: !DESCRIPTORS6 }, {
     getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
       var O = toIndexedObject3(object);
       var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule2.f;
@@ -3468,9 +3488,9 @@
 
   // node_modules/core-js/modules/es.object.define-properties.js
   var $9 = require_export();
-  var DESCRIPTORS6 = require_descriptors();
+  var DESCRIPTORS7 = require_descriptors();
   var defineProperties2 = require_object_define_properties();
-  $9({ target: "Object", stat: true, forced: !DESCRIPTORS6, sham: !DESCRIPTORS6 }, {
+  $9({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperties: defineProperties2
   });
 
@@ -3630,25 +3650,23 @@
     from: from
   });
 
-  // node_modules/core-js/modules/es.function.name.js
-  var DESCRIPTORS7 = require_descriptors();
-  var defineProperty3 = require_object_define_property().f;
-  var FunctionPrototype = Function.prototype;
-  var FunctionPrototypeToString = FunctionPrototype.toString;
-  var nameRE = /^\s*function ([^ (]*)/;
-  var NAME = "name";
-  if (DESCRIPTORS7 && !(NAME in FunctionPrototype)) {
-    defineProperty3(FunctionPrototype, NAME, {
-      configurable: true,
-      get: function() {
-        try {
-          return FunctionPrototypeToString.call(this).match(nameRE)[1];
-        } catch (error) {
-          return "";
-        }
-      }
+  // node_modules/core-js/modules/es.array.find.js
+  "use strict";
+  var $14 = require_export();
+  var $find = require_array_iteration().find;
+  var addToUnscopables = require_add_to_unscopables();
+  var FIND = "find";
+  var SKIPS_HOLES = true;
+  if (FIND in [])
+    Array(1)[FIND](function() {
+      SKIPS_HOLES = false;
     });
-  }
+  $14({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+    find: function find(callbackfn) {
+      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables(FIND);
 
   // LayoutEditor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
@@ -3761,24 +3779,6 @@
       }
     ];
   }, UNSUPPORTED_Y);
-
-  // node_modules/core-js/modules/es.array.find.js
-  "use strict";
-  var $14 = require_export();
-  var $find = require_array_iteration().find;
-  var addToUnscopables = require_add_to_unscopables();
-  var FIND = "find";
-  var SKIPS_HOLES = true;
-  if (FIND in [])
-    Array(1)[FIND](function() {
-      SKIPS_HOLES = false;
-    });
-  $14({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
-    find: function find(callbackfn) {
-      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables(FIND);
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
@@ -7684,6 +7684,8 @@
   }
   function addExistingElementsToApp(appState) {
     _toConsumableArray4(appState.container.children).forEach(function(el) {
+      if (el.id === "dragCanvas")
+        return;
       var bbox = el.getBoundingClientRect();
       if (bbox.width === 0 && bbox.height === 0)
         return;
@@ -7865,9 +7867,7 @@
     return obj;
   }
   var LayoutEditor = /* @__PURE__ */ function() {
-    function LayoutEditor2(_ref) {
-      var _this = this;
-      var entryType = _ref.entryType, startingGrid = _ref.grid, startingElements = _ref.elements, finishBtn = _ref.finishBtn, onUpdate = _ref.onUpdate;
+    function LayoutEditor2(opts) {
       _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
@@ -7880,29 +7880,32 @@
       _defineProperty8(this, "gridLayout", void 0);
       _defineProperty8(this, "tractControls", void 0);
       _defineProperty8(this, "entryType", void 0);
-      this.entryType = entryType;
-      var existingWrappedApp = document.querySelector(".wrapped-existing-app");
-      if (existingWrappedApp) {
-        this.container = existingWrappedApp;
+      this.entryType = opts.entryType;
+      this.onUpdate = opts.onUpdate;
+      if (this.entryType === "edit-existing-app") {
+        this.wrapExistingApp(opts);
+      } else if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
+        this.loadLayoutTemplate(opts);
       } else {
-        this.container = entryType === "edit-existing-app" ? findFirstGridNode() : blockEl("div#gridPage");
+        console.error("Neither starting layout was provided nor is there an existing grid app");
       }
-      this.gridLayout = new GridLayout(this.container);
-      if (!existingWrappedApp) {
-        wrapInGrided(this, finishBtn);
-      } else {
-        cleanupGridedUi();
+      if (this.entryType === "edit-layout" || this.entryType === "edit-existing-app") {
+        setShinyInput("starting-layout", this.currentLayout, true);
       }
-      addExistingElementsToApp(this);
-      this.gapSizeSetting = hookupGapSizeControls(this, document.getElementById("gridedGapSizeControls"), startingGrid === null || startingGrid === void 0 ? void 0 : startingGrid.gap);
-      this.gridStyles = this.container.style;
-      this.mode = entryType === "edit-existing-app" ? "Existing" : "New";
-      this.onUpdate = onUpdate;
-      if (entryType !== "edit-existing-app") {
-        this.updateGrid(_objectSpread3(_objectSpread3({}, startingGrid), {}, {
+    }
+    _createClass7(LayoutEditor2, [{
+      key: "loadLayoutTemplate",
+      value: function loadLayoutTemplate(opts) {
+        var _this = this;
+        this.mode = "New";
+        this.container = blockEl("div#gridPage");
+        this.gridLayout = new GridLayout(this.container);
+        wrapInGrided(this, opts.finishBtn);
+        this.hookupGapSizeControls(opts.grid.gap);
+        this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
         }));
-        startingElements.forEach(function(elMsg) {
+        opts.elements.forEach(function(elMsg) {
           var start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
           _this.addElement({
             id: elMsg.id,
@@ -7915,33 +7918,47 @@
           }, false);
         });
         this.tractControls.updatePositions();
-      } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
-        var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
-        this.updateGrid({
-          rows: currentGridProps.gridTemplateRows.split(" "),
-          cols: currentGridProps.gridTemplateColumns.split(" "),
-          gap: getGapSize(currentGridProps.gap)
-        });
-      } else if (entryType === "edit-existing-app" && existingWrappedApp) {
-        this.elements.forEach(function(gridEl) {
-          var id = gridEl.id;
-          var elementDef = startingElements.find(function(el) {
-            return el.id === id;
+      }
+    }, {
+      key: "wrapExistingApp",
+      value: function wrapExistingApp(opts) {
+        var _opts$grid;
+        this.mode = "Existing";
+        var alreadyWrappedApp = document.querySelector(".wrapped-existing-app");
+        this.container = alreadyWrappedApp !== null && alreadyWrappedApp !== void 0 ? alreadyWrappedApp : findFirstGridNode();
+        this.gridStyles = this.container.style;
+        this.gridLayout = new GridLayout(this.container);
+        if (alreadyWrappedApp) {
+          cleanupGridedUi();
+          this.elements.forEach(function(gridEl) {
+            var id = gridEl.id;
+            var elementDef = opts.elements.find(function(el) {
+              return el.id === id;
+            });
+            gridEl.position = elementDef;
           });
-          gridEl.position = elementDef;
-        });
-        this.updateGrid(_objectSpread3(_objectSpread3({}, startingGrid), {}, {
-          dontUpdateHistory: true,
+        } else {
+          wrapInGrided(this, opts.finishBtn);
+          var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
+          opts.grid = {
+            rows: currentGridProps.gridTemplateRows.split(" "),
+            cols: currentGridProps.gridTemplateColumns.split(" "),
+            gap: getGapSize(currentGridProps.gap)
+          };
+        }
+        addExistingElementsToApp(this);
+        this.hookupGapSizeControls((_opts$grid = opts.grid) === null || _opts$grid === void 0 ? void 0 : _opts$grid.gap);
+        this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
+          dontUpdateHistory: Boolean(alreadyWrappedApp),
           force: true
         }));
-      } else {
-        console.error("Neither starting layout was provided nor is there an existing grid app");
       }
-      if (entryType !== "layout-gallery") {
-        setShinyInput("starting-layout", this.currentLayout, true);
+    }, {
+      key: "hookupGapSizeControls",
+      value: function hookupGapSizeControls2(initialGapSize) {
+        this.gapSizeSetting = hookupGapSizeControls(this, document.getElementById("gridedGapSizeControls"), initialGapSize);
       }
-    }
-    _createClass7(LayoutEditor2, [{
+    }, {
       key: "currentLayout",
       get: function get() {
         return {
@@ -8202,8 +8219,8 @@
       onStart: function onStart() {
         currentSelectionBox.style.borderColor = appState.nextColor;
       },
-      onEnd: function onEnd(_ref2) {
-        var grid = _ref2.grid;
+      onEnd: function onEnd(_ref) {
+        var grid = _ref.grid;
         elementNamingUi(appState, {
           gridPos: grid,
           selectionBox: currentSelectionBox
@@ -8239,8 +8256,8 @@
       try {
         var _loop = function _loop2() {
           var dir = _step.value;
-          controls[dir].forEach(function(_ref3) {
-            var matchedCell = _ref3.matchedCell, el = _ref3.el;
+          controls[dir].forEach(function(_ref2) {
+            var matchedCell = _ref2.matchedCell, el = _ref2.el;
             var boundingRect = posRelativeToContainer(editorPos, matchedCell);
             Object.assign(el.style, dir === "cols" ? {
               left: "calc(".concat(boundingRect.left, "px)"),
@@ -8266,8 +8283,8 @@
       updatePositions: updatePositions
     };
   }
-  function elementNamingUi(appState, _ref4) {
-    var gridPos = _ref4.gridPos, selectionBox = _ref4.selectionBox;
+  function elementNamingUi(appState, _ref3) {
+    var gridPos = _ref3.gridPos, selectionBox = _ref3.selectionBox;
     var nameForm = createEl({
       selTxt: "form#nameForm.centered",
       styles: {
@@ -8613,6 +8630,7 @@
       _defineProperty9(_assertThisInitialized5(_this), "RenderSize", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "ShownSize", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "hasLiveApp", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
@@ -8655,11 +8673,7 @@
         this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(cornerRadius, ";\n        width: ").concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols), ";\n        gap: ").concat(scaleUnits(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.elementDivs, " </div>\n    ");
         this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
           event.stopPropagation();
-          _this2.OnSelect({
-            name: _this2.name,
-            elements: _this2.elements,
-            grid: _this2.grid
-          });
+          _this2.OnSelect();
         });
       }
     }, {
@@ -8669,6 +8683,7 @@
         Object.assign(this.grid, _layout.grid);
         this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
         this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
+        this.hasLiveApp = _layout.live_app !== void 0;
         return this;
       }
     }, {
@@ -8925,8 +8940,8 @@
         var _this$shadowRoot$getE, _this2 = this;
         this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        background-color: #edf2f7;\n        width: 100%;\n        height: 100vh;\n        display: block;\n        position: absolute;\n      }\n      \n      #container {\n        display: block;\n        max-width: 1000px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n    <div id = "container">\n      <h2> Select the layout for your app: </h2>\n      <div id = "layouts"></div>\n      <div id = "chooser-modal" class = "hidden"> </div>\n    </div>\n    ';
         (_this$shadowRoot$getE = this.shadowRoot.getElementById("layouts")).append.apply(_this$shadowRoot$getE, _toConsumableArray6(this.layouts.map(function(layout) {
-          return gridPreview().layout(layout).shownSize(100).onSelect(function(x) {
-            return _this2.focusOnLayout(x);
+          return gridPreview().layout(layout).shownSize(100).onSelect(function() {
+            return _this2.focusOnLayout(layout);
           });
         })));
         if (this.preselectedLayoutName) {
@@ -8978,15 +8993,22 @@
           _this3.remove();
           modal.remove();
         };
+        var actionButtons = [clickButton(".go", "Create app with this layout", function(event) {
+          closeGallery(event);
+          _this3.onGoFn(selectedLayout);
+        }), clickButton(".edit", "Edit this layout", function(event) {
+          closeGallery(event);
+          _this3.onEditFn(selectedLayout, false);
+        })];
+        if (selectedLayout.live_app) {
+          actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
+            closeGallery(event);
+            _this3.onEditFn(selectedLayout, true);
+          }));
+        }
         modal.addElement(createEl({
           selTxt: "div#footer",
-          children: [clickButton(".go", "Create app with this layout", function(event) {
-            closeGallery(event);
-            _this3.onGoFn(selectedLayout);
-          }), clickButton(".edit", "Edit this layout", function(event) {
-            closeGallery(event);
-            _this3.onEditFn(selectedLayout);
-          })]
+          children: actionButtons
         }));
         modal.addToPage();
         if (fireOnSelect) {
@@ -9041,7 +9063,15 @@
     return obj;
   }
   var clearPage = function clearPage2() {
-    return document.body.innerHTML = "";
+    var appDumpDiv = document.getElementById("app_dump");
+    if (appDumpDiv) {
+      appDumpDiv.parentNode.removeChild(appDumpDiv);
+    }
+    document.body.innerHTML = "";
+    if (appDumpDiv) {
+      document.body.append(appDumpDiv);
+      console.log("Re-adding app dump div");
+    }
   };
   var startLayoutGallery = function startLayoutGallery2(opts) {
     var saveHistory = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
@@ -9055,10 +9085,12 @@
       saveGalleryHistory(opts.layouts);
     }).onGo(function(selectedLayout) {
       setShinyInput("build_app_template", selectedLayout);
-    }).onEdit(function(selectedLayout) {
-      startLayoutEditor(_objectSpread4({
-        entryType: "layout-gallery"
-      }, selectedLayout), true);
+    }).onEdit(function(selectedLayout, liveApp) {
+      startLayoutEditor(_objectSpread4(_objectSpread4({
+        entryType: liveApp ? "layout-gallery-live" : "layout-gallery"
+      }, selectedLayout), {}, {
+        liveAppId: liveApp ? selectedLayout.name : void 0
+      }), true);
     }).selectLayout(opts.selected);
     return document.body.appendChild(gallery);
   };

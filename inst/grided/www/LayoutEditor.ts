@@ -24,7 +24,7 @@ import {
   updateRectWithDelta,
   XYPos,
 } from "./utils-misc";
-import { setShinyInput } from "./utils-shiny";
+import { addShinyListener, sendShinyEvent, setShinyInput } from "./utils-shiny";
 import { createFocusModal } from "./web-components/focus-modal";
 import {
   addExistingElementsToApp,
@@ -57,6 +57,7 @@ export type ElementInfo = {
 
 export type AppEntryType =
   | "layout-gallery"
+  | "layout-gallery-live"
   | "edit-layout"
   | "edit-existing-app";
 
@@ -73,6 +74,7 @@ export type LayoutEditorSetup = {
   elements?: LayoutElement[];
   finishBtn?: FinishButtonSetup;
   onUpdate?: (opts: LayoutEditorSetup) => void;
+  liveAppId?: string;
 };
 
 export class LayoutEditor {
@@ -91,69 +93,103 @@ export class LayoutEditor {
     updatePositions: () => void;
   };
   entryType: AppEntryType;
-  constructor({
-    entryType,
-    grid: startingGrid,
-    elements: startingElements,
-    finishBtn,
-    onUpdate,
-  }: LayoutEditorSetup) {
-    this.entryType = entryType;
+  constructor(opts: LayoutEditorSetup) {
+    this.entryType = opts.entryType;
+    this.onUpdate = opts.onUpdate;
 
-    // Check if we've already wrapped in grided and tagged the app container
-    const existingWrappedApp = document.querySelector(
-      ".wrapped-existing-app"
-    ) as HTMLElement;
-    if (existingWrappedApp) {
-      this.container = existingWrappedApp;
+    if (this.entryType === "edit-existing-app") {
+      this.wrapExistingApp(opts);
+    } else if (
+      this.entryType === "layout-gallery" ||
+      this.entryType === "edit-layout"
+    ) {
+      this.loadLayoutTemplate(opts);
     } else {
-      this.container =
-        entryType === "edit-existing-app"
-          ? findFirstGridNode()
-          : blockEl("div#gridPage");
+      console.error(
+        "Neither starting layout was provided nor is there an existing grid app"
+      );
     }
+
+    // If we've requested a live app from the layout gallery we need to wait
+    // for it to be sent over by shiny and then wrap it with grided interface
+    // if (this.entryType === "layout-gallery-live") {
+    //   // Request that Shiny dumps app code to the waiting UI output div
+    //   console.log("Requested app dump");
+    //   setShinyInput("live_app_request", liveAppId, true);
+    //   const observer = new MutationObserver((mutationsList, observer) => {
+    //     console.log("App dump successfull");
+    //   });
+
+    //   observer.observe(document.getElementById("app_dump"), {
+    //     childList: true,
+    //   });
+    // }
+
+    // Send info on starting layout to Shiny so it can find layout definition
+    // to edit it after changes have been made
+    if (
+      this.entryType === "edit-layout" ||
+      this.entryType === "edit-existing-app"
+    ) {
+      setShinyInput("starting-layout", this.currentLayout, true);
+    }
+  }
+
+  loadLayoutTemplate(opts: LayoutEditorSetup) {
+    this.mode = "New";
+    this.container = blockEl("div#gridPage");
+
     this.gridLayout = new GridLayout(this.container);
 
-    if (!existingWrappedApp) {
-      wrapInGrided(this, finishBtn);
-    } else {
-      cleanupGridedUi();
-    }
+    wrapInGrided(this, opts.finishBtn);
 
-    addExistingElementsToApp(this);
+    this.hookupGapSizeControls(opts.grid.gap);
 
-    this.gapSizeSetting = hookupGapSizeControls(
-      this,
-      document.getElementById("gridedGapSizeControls"),
-      startingGrid?.gap
-    );
+    // Update grid but dont update history because we need to fill in the
+    // elements first
+    this.updateGrid({ ...opts.grid, dontUpdateHistory: true });
 
+    opts.elements.forEach((elMsg: LayoutElement) => {
+      const { start_row, end_row, start_col, end_col } = elMsg;
+      // Add elements but dont update history as we do it
+      this.addElement(
+        {
+          id: elMsg.id,
+          gridPos: { start_row, end_row, start_col, end_col },
+        },
+        false
+      );
+    });
+
+    // Layout usually shifts a bit after adding elements so run precautionary
+    // controls position update to make sure they're in right place.
+    this.tractControls.updatePositions();
+  }
+
+  wrapExistingApp(opts: LayoutEditorSetup) {
+    this.mode = "Existing";
+    // Check if we've already wrapped in grided and tagged the app container
+    const alreadyWrappedApp = document.querySelector(
+      ".wrapped-existing-app"
+    ) as HTMLElement;
+
+    this.container = alreadyWrappedApp ?? findFirstGridNode();
     this.gridStyles = this.container.style;
 
-    this.mode = entryType === "edit-existing-app" ? "Existing" : "New";
-    this.onUpdate = onUpdate;
+    this.gridLayout = new GridLayout(this.container);
 
-    if (entryType !== "edit-existing-app") {
-      // Update grid but dont update history because we need to fill in the
-      // elements first
-      this.updateGrid({ ...startingGrid, dontUpdateHistory: true });
+    if (alreadyWrappedApp) {
+      cleanupGridedUi();
 
-      startingElements.forEach((elMsg: LayoutElement) => {
-        const { start_row, end_row, start_col, end_col } = elMsg;
-        // Add elements but dont update history as we do it
-        this.addElement(
-          {
-            id: elMsg.id,
-            gridPos: { start_row, end_row, start_col, end_col },
-          },
-          false
-        );
+      // Re-wrap elements into grided UI/State
+      this.elements.forEach((gridEl) => {
+        const id = gridEl.id;
+        const elementDef = opts.elements.find((el) => el.id === id);
+        gridEl.position = elementDef;
       });
+    } else {
+      wrapInGrided(this, opts.finishBtn);
 
-      // Layout usually shifts a bit after adding elements so run precautionary
-      // controls position update to make sure they're in right place.
-      this.tractControls.updatePositions();
-    } else if (entryType === "edit-existing-app" && !existingWrappedApp) {
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are
       // directly computed if we use getComputedStyle()
@@ -161,37 +197,31 @@ export class LayoutEditor {
         `#${this.container.id}`,
         ["gridTemplateColumns", "gridTemplateRows"]
       );
-
       // Make sure grid matches the one the app is working with
-      this.updateGrid({
+      opts.grid = {
         rows: currentGridProps.gridTemplateRows.split(" "),
         cols: currentGridProps.gridTemplateColumns.split(" "),
         gap: getGapSize(currentGridProps.gap),
-      });
-    } else if (entryType === "edit-existing-app" && existingWrappedApp) {
-      // match elements to the elements definition and place them correctly
-      this.elements.forEach((gridEl) => {
-        const id = gridEl.id;
-        const elementDef = startingElements.find((el) => el.id === id);
-        gridEl.position = elementDef;
-      });
-
-      this.updateGrid({
-        ...startingGrid,
-        dontUpdateHistory: true,
-        force: true,
-      });
-    } else {
-      console.error(
-        "Neither starting layout was provided nor is there an existing grid app"
-      );
+      };
     }
 
-    // Send info on starting layout to Shiny so it can find layout definition
-    // to edit it after changes have been made
-    if (entryType !== "layout-gallery") {
-      setShinyInput("starting-layout", this.currentLayout, true);
-    }
+    addExistingElementsToApp(this);
+
+    this.hookupGapSizeControls(opts.grid?.gap);
+
+    this.updateGrid({
+      ...opts.grid,
+      dontUpdateHistory: Boolean(alreadyWrappedApp),
+      force: true,
+    });
+  }
+
+  hookupGapSizeControls(initialGapSize?: string) {
+    this.gapSizeSetting = hookupGapSizeControls(
+      this,
+      document.getElementById("gridedGapSizeControls"),
+      initialGapSize
+    );
   }
 
   get currentLayout(): LayoutInfo {
