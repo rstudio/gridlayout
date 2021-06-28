@@ -5800,7 +5800,6 @@
     if (gridBounds.end_col) {
       el.style.gridColumnEnd = (gridBounds.end_col + 1).toString();
     }
-    el.style.display = "block";
   }
   function getPosOnGrid(gridEl) {
     var elStyles = getComputedStyle(gridEl);

@@ -23,12 +23,12 @@ body {
 
 /*kill the transitions on any descendant elements of .notransition*/
 /* Used for testing */
-.notransition * { 
-  -webkit-transition: none !important; 
-  -moz-transition: none !important; 
-  -o-transition: none !important; 
-  -ms-transition: none !important; 
-  transition: none !important; 
+.notransition * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
 }
 
 #grided__holder {
@@ -58,21 +58,20 @@ body {
   border-radius: var(--edge-round);
 }
 
-h3 {
+#grided__holder > div > h3 {
   margin: calc(-1 * var(--side-gaps)); /* Make header span top of boxes */
   background: var(--blue);
   padding: calc(0.75 * var(--side-gaps)) var(--side-gaps);
   border-radius: var(--edge-round) var(--edge-round) 0 0;
   color: white;
 }
+/* Makes icons lineup better with the text in headers */
+#grided__holder > div > h3 > svg {
+  margin-bottom: -5px;
+}
 
 .panel-body {
   margin-top: calc(2 * var(--side-gaps));
-}
-
-/* Makes icons lineup better with the text in headers */
-h3 > svg {
-  margin-bottom: -5px;
 }
 
 * {
