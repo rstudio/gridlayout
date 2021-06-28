@@ -185,15 +185,13 @@ export function addExistingElementsToApp(
       false // So we don't update history as well
     );
 
+    // If we have a definition for an element with this ID, use that defintion
+    // to place the element on the grid. This allows us to update positions
+    // of elements that may already exist.
     const existingElementDefinition = elementDefs.find(
-      (elDef) => elDef.id === el.id
+      (elDef) => elDef.id === gridElement.id
     );
-
     if (existingElementDefinition) {
-      // If we have a definition for an element with this ID, use that defintion
-      // to place the element on the grid. This allows us to update positions
-      // of elements that may already exist.
-      console.log(`Updating position of ${el.id}`);
       gridElement.position = existingElementDefinition;
     }
   });
