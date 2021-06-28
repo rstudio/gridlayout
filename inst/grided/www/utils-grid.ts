@@ -58,8 +58,6 @@ export function setElementInGrid(el: HTMLElement, gridBounds: GridPos) {
   if (gridBounds.end_col) {
     el.style.gridColumnEnd = (gridBounds.end_col + 1).toString();
   }
-
-  el.style.display = "block"; // make sure we can see the element
 }
 
 export function getPosOnGrid(gridEl: HTMLElement): GridPos {
