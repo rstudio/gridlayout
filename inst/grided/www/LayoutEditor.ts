@@ -104,7 +104,10 @@ export class LayoutEditor {
       // Both entering from the layout gallery or just editing a layout need to
       // build from scratch the whole layout.
       this.loadLayoutTemplate(opts);
-    } else if (this.entryType === "edit-existing-app") {
+    } else if (
+      this.entryType === "edit-existing-app" ||
+      Boolean(document.querySelector(".wrapped-existing-app"))
+    ) {
       // If we're wrapping an existing app that already exists, then we can
       // start that process immediately.
       this.wrapExistingApp(opts);
@@ -181,14 +184,10 @@ export class LayoutEditor {
     this.gridLayout = new GridLayout(this.container);
 
     if (alreadyWrappedApp) {
+      // If we're reloading an existing grided app we need to clean up the state
+      // connected components like the tract sizes before rebuilding them to
+      // avoid conflicts
       cleanupGridedUi();
-
-      // Re-wrap elements into grided UI/State
-      this.elements.forEach((gridEl) => {
-        const id = gridEl.id;
-        const elementDef = opts.elements.find((el) => el.id === id);
-        gridEl.position = elementDef;
-      });
     } else {
       wrapInGrided(this, opts.finishBtn);
 
@@ -207,7 +206,8 @@ export class LayoutEditor {
       };
     }
 
-    addExistingElementsToApp(this);
+    // Need to sync grided state with existing app elements
+    addExistingElementsToApp(this, opts.elements);
 
     this.hookupGapSizeControls(opts.grid?.gap);
 
@@ -276,6 +276,8 @@ export class LayoutEditor {
     if (sendUpdate) {
       this.sendUpdate();
     }
+
+    return gridItem;
   }
 
   // Removes elements the user has added to the grid by id

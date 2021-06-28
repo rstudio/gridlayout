@@ -1,3 +1,4 @@
+import { LayoutElement, LayoutInfo } from ".";
 import { FinishButtonSetup, LayoutEditor } from "./LayoutEditor";
 import { makeCssUnitInput } from "./make-cssUnitInput";
 import { blockEl, clickButton, makeEl, textEl } from "./make-elements";
@@ -138,16 +139,20 @@ export function wrapInGrided(
 }
 
 export function cleanupGridedUi() {
+  // debugger;
   [
     ...document.querySelectorAll(".grid-cell"),
     ...document.querySelectorAll(".added-element"),
     ...document.querySelectorAll(".tract-controls"),
     document.querySelector(".dragSelectionBox"),
     document.getElementById("drag-canvas"),
-  ].forEach((el) => el.remove());
+  ].forEach((el) => el?.remove());
 }
 
-export function addExistingElementsToApp(appState: LayoutEditor) {
+export function addExistingElementsToApp(
+  appState: LayoutEditor,
+  elementDefs: LayoutElement[] = []
+) {
   // If grided is running on an existing app, we need to parse the children and
   // add them as elements;
   [...appState.container.children].forEach(function (el: Element) {
@@ -171,15 +176,26 @@ export function addExistingElementsToApp(appState: LayoutEditor) {
       return;
     }
 
-    appState.addElement(
+    const gridElement = appState.addElement(
       {
         id: el.id,
         gridPos: getPosOnGrid(el as HTMLElement),
         mirroredElement: el as HTMLElement,
       },
-      false
-      // second param is false so we don't update history as well
+      false // So we don't update history as well
     );
+
+    const existingElementDefinition = elementDefs.find(
+      (elDef) => elDef.id === el.id
+    );
+
+    if (existingElementDefinition) {
+      // If we have a definition for an element with this ID, use that defintion
+      // to place the element on the grid. This allows us to update positions
+      // of elements that may already exist.
+      console.log(`Updating position of ${el.id}`);
+      gridElement.position = existingElementDefinition;
+    }
   });
 }
 

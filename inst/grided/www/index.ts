@@ -88,8 +88,8 @@ const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
     saveEditorHistory(opts);
   }
 
-  if (opts.entryType !== "edit-existing-app") {
-    // Don't erase the page if we're editing an existing app
+  if (opts.entryType === "edit-layout" || opts.entryType === "layout-gallery") {
+    // Wipe the whole page if we're in abstract layout editing mode
     clearPage();
   }
 

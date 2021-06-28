@@ -3650,24 +3650,6 @@
     from: from
   });
 
-  // node_modules/core-js/modules/es.array.find.js
-  "use strict";
-  var $14 = require_export();
-  var $find = require_array_iteration().find;
-  var addToUnscopables = require_add_to_unscopables();
-  var FIND = "find";
-  var SKIPS_HOLES = true;
-  if (FIND in [])
-    Array(1)[FIND](function() {
-      SKIPS_HOLES = false;
-    });
-  $14({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
-    find: function find(callbackfn) {
-      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables(FIND);
-
   // LayoutEditor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
@@ -3782,11 +3764,11 @@
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
-  var $15 = require_export();
+  var $14 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
-  $15({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3875,25 +3857,25 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $16 = require_export();
+  var $15 = require_export();
   var $findIndex = require_array_iteration().findIndex;
-  var addToUnscopables2 = require_add_to_unscopables();
+  var addToUnscopables = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
-  var SKIPS_HOLES2 = true;
+  var SKIPS_HOLES = true;
   if (FIND_INDEX in [])
     Array(1)[FIND_INDEX](function() {
-      SKIPS_HOLES2 = false;
+      SKIPS_HOLES = false;
     });
-  $16({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $15({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
-  addToUnscopables2(FIND_INDEX);
+  addToUnscopables(FIND_INDEX);
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $17 = require_export();
+  var $16 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
@@ -3906,7 +3888,7 @@
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $17({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $16({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3962,15 +3944,15 @@
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $18 = require_export();
+  var $17 = require_export();
   var assign = require_object_assign();
-  $18({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $17({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $19 = require_export();
+  var $18 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -3997,7 +3979,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $19({ target: "Array", proto: true, forced: FORCED2 }, {
+  $18({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -4024,7 +4006,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $20 = require_export();
+  var $19 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4038,10 +4020,28 @@
       } : handler, timeout);
     };
   };
-  $20({ global: true, bind: true, forced: MSIE }, {
+  $19({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
+
+  // node_modules/core-js/modules/es.array.find.js
+  "use strict";
+  var $20 = require_export();
+  var $find = require_array_iteration().find;
+  var addToUnscopables2 = require_add_to_unscopables();
+  var FIND = "find";
+  var SKIPS_HOLES2 = true;
+  if (FIND in [])
+    Array(1)[FIND](function() {
+      SKIPS_HOLES2 = false;
+    });
+  $20({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+    find: function find(callbackfn) {
+      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables2(FIND);
 
   // node_modules/core-js/modules/es.string.match.js
   "use strict";
@@ -7678,10 +7678,11 @@
   }
   function cleanupGridedUi() {
     [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".dragSelectionBox"), document.getElementById("drag-canvas")]).forEach(function(el) {
-      return el.remove();
+      return el === null || el === void 0 ? void 0 : el.remove();
     });
   }
   function addExistingElementsToApp(appState) {
+    var elementDefs = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [];
     _toConsumableArray4(appState.container.children).forEach(function(el) {
       if (el.id === "dragCanvas")
         return;
@@ -7692,11 +7693,18 @@
         el.remove();
         return;
       }
-      appState.addElement({
+      var gridElement = appState.addElement({
         id: el.id,
         gridPos: getPosOnGrid(el),
         mirroredElement: el
       }, false);
+      var existingElementDefinition = elementDefs.find(function(elDef) {
+        return elDef.id === el.id;
+      });
+      if (existingElementDefinition) {
+        console.log("Updating position of ".concat(el.id));
+        gridElement.position = existingElementDefinition;
+      }
     });
   }
   function hookupGapSizeControls(appState, settingsPanelEl, startingGap) {
@@ -7884,7 +7892,7 @@
       this.onUpdate = opts.onUpdate;
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
-      } else if (this.entryType === "edit-existing-app") {
+      } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
         this.wrapExistingApp(opts);
       } else if (this.entryType === "layout-gallery-live") {
         setShinyInput("live_app_request", opts.liveAppId, true);
@@ -7938,13 +7946,6 @@
         this.gridLayout = new GridLayout(this.container);
         if (alreadyWrappedApp) {
           cleanupGridedUi();
-          this.elements.forEach(function(gridEl) {
-            var id = gridEl.id;
-            var elementDef = opts.elements.find(function(el) {
-              return el.id === id;
-            });
-            gridEl.position = elementDef;
-          });
         } else {
           wrapInGrided(this, opts.finishBtn);
           var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
@@ -7954,7 +7955,7 @@
             gap: getGapSize(currentGridProps.gap)
           };
         }
-        addExistingElementsToApp(this);
+        addExistingElementsToApp(this, opts.elements);
         this.hookupGapSizeControls((_opts$grid = opts.grid) === null || _opts$grid === void 0 ? void 0 : _opts$grid.gap);
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: Boolean(alreadyWrappedApp),
@@ -7998,6 +7999,7 @@
         if (sendUpdate) {
           this.sendUpdate();
         }
+        return gridItem;
       }
     }, {
       key: "removeElements",
@@ -9106,7 +9108,7 @@
     if (saveHistory) {
       saveEditorHistory(opts);
     }
-    if (opts.entryType !== "edit-existing-app") {
+    if (opts.entryType === "edit-layout" || opts.entryType === "layout-gallery") {
       clearPage();
     }
     opts.finishBtn = opts.entryType === "layout-gallery" ? {
