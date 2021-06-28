@@ -109,6 +109,7 @@ screenshot_snapshot_test <- function(screenshot_name, ...) {
 
 library(chromote)
 
+# Lifted almost completely from webshot2::appshot, just we stop before the screenshot
 background_shiny_app <- function(app){
   port <- webshot2:::available_port(getOption("shiny.port"))
   url <- webshot2:::shiny_url(port)
@@ -144,6 +145,9 @@ background_shiny_app <- function(app){
   )
 }
 
+# Creates a chromote session for interacting with a provided Shiny app
+# Adds some small convenience methods like screenshots for test-that and
+# a simple back button
 setup_chromote_session <- function(app) {
   app <- background_shiny_app(app)
   m <- Chromote$new(Chrome$new(args = c(
@@ -157,7 +161,6 @@ setup_chromote_session <- function(app) {
     height = 1200
   )
 
-
   b$Page$navigate(app$url, wait_ = FALSE) %...>%
   {
     b$Page$loadEventFired(wait_ = FALSE)
@@ -165,28 +168,23 @@ setup_chromote_session <- function(app) {
   } %>%
     b$wait_for()
 
-  go_back <- function(n_steps = 1){
-    # Back button to return to main layout viewer
-    history <- b$Page$getNavigationHistory()$entries
-    n_entries <- length(history)
-    b$Page$navigateToHistoryEntry(history[[n_entries-n_steps]]$id)
-  }
-
   list(
     p = app$p,
     b = b,
     screenshot = function(delay = 1) {
-      capture_screenshot(b, delay)
+      Sys.sleep(delay)
+      screenshot_path <- tempfile(fileext = ".png")
+      screenshot_data <- b$Page$captureScreenshot(format = "png")$data
+      writeBin(jsonlite::base64_dec(screenshot_data), screenshot_path)
+      screenshot_path
+      # Alternatively we could use the built-in screenshot function if we desire
+      # b$screenshot(tempfile(fileext = ".png"), delay = pause_length)
     },
-    go_back = go_back
+    go_back = function(n_steps = 1){
+      # Back button to return to main layout viewer
+      history <- b$Page$getNavigationHistory()$entries
+      n_entries <- length(history)
+      b$Page$navigateToHistoryEntry(history[[n_entries-n_steps]]$id)
+    }
   )
-}
-
-capture_screenshot <- function(b, pause_length = 1.5){
-  Sys.sleep(pause_length)
-  screenshot_path <- tempfile(fileext = ".png")
-  screenshot_data <- b$Page$captureScreenshot(format = "png")$data
-  writeBin(jsonlite::base64_dec(screenshot_data), screenshot_path)
-  screenshot_path
-  # b$screenshot(tempfile(fileext = ".png"), delay = pause_length)
 }
