@@ -6,7 +6,10 @@ grided_app <- function(starting_layout = new_gridlayout(),
   requireNamespace("shiny", quietly = TRUE)
 
   app <- shiny::shinyApp(
-    ui = shiny::fluidPage(grided_resources()),
+    ui = shiny::fluidPage(
+      grided_resources(),
+      shiny::uiOutput('app_dump')
+    ),
     server = function(input, output, session) {
       grided_server_code(
         input, output, session,
