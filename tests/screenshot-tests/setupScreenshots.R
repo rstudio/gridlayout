@@ -165,12 +165,20 @@ setup_chromote_session <- function(app) {
   } %>%
     b$wait_for()
 
+  go_back <- function(n_steps = 1){
+    # Back button to return to main layout viewer
+    history <- b$Page$getNavigationHistory()$entries
+    n_entries <- length(history)
+    b$Page$navigateToHistoryEntry(history[[n_entries-n_steps]]$id)
+  }
+
   list(
     p = app$p,
     b = b,
     screenshot = function(delay = 1) {
       capture_screenshot(b, delay)
-    }
+    },
+    go_back = go_back
   )
 }
 

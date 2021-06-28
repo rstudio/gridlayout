@@ -20,15 +20,8 @@ test_that("Basic interaction with grided app", {
     "second-layout-selected.png"
   )
 
-  go_back <- function(n_steps = 1){
-    # Back button to return to main layout viewer
-    history <- app$b$Page$getNavigationHistory()$entries
-    n_entries <- length(history)
-    app$b$Page$navigateToHistoryEntry(history[[n_entries-n_steps]]$id)
-  }
-
   # Go back to landing page
-  go_back()
+  app$go_back()
   expect_snapshot_file(
     app$screenshot(pause_length),
     "back-to-start.png"
@@ -43,7 +36,6 @@ test_that("Basic interaction with grided app", {
   )
 
   # Add new column after first one
-
   app$b$Runtime$evaluate('document.querySelector("#controller-for-col-1 > add-or-remove-button:nth-child(2)").shadowRoot.querySelector("button").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),
@@ -51,7 +43,7 @@ test_that("Basic interaction with grided app", {
   )
 
   # Go back two times to focus on layout screen
-  go_back(2)
+  app$go_back(2)
   expect_snapshot_file(
     app$screenshot(pause_length),
     "focus-on-chosen-layout.png"
