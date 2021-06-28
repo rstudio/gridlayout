@@ -30,7 +30,7 @@ import {
   addExistingElementsToApp,
   cleanupGridedUi,
   hookupGapSizeControls,
-  wrapInGrided,
+  setupGridedUI,
 } from "./wrapInGrided";
 
 export type GridUpdateOptions = {
@@ -146,7 +146,7 @@ export class LayoutEditor {
 
     this.gridLayout = new GridLayout(this.container);
 
-    wrapInGrided(this, opts.finishBtn);
+    setupGridedUI(this, opts.finishBtn);
 
     this.hookupGapSizeControls(opts.grid.gap);
 
@@ -189,7 +189,7 @@ export class LayoutEditor {
       // avoid conflicts
       cleanupGridedUi();
     } else {
-      wrapInGrided(this, opts.finishBtn);
+      setupGridedUI(this, opts.finishBtn);
 
       // We need to go into the style sheets to get the starting grid properties
       // because they arent reflected in the `.style` property and sizes are

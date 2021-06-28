@@ -7643,7 +7643,7 @@
     }
     return arr2;
   }
-  function wrapInGrided(appState, finishBtn) {
+  function setupGridedUI(appState, finishBtn) {
     var gridIsFilled = appState.container.hasChildNodes();
     var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
       return setShinyInput("see_layout_code", appState.currentLayout, true);
@@ -7699,10 +7699,9 @@
         mirroredElement: el
       }, false);
       var existingElementDefinition = elementDefs.find(function(elDef) {
-        return elDef.id === el.id;
+        return elDef.id === gridElement.id;
       });
       if (existingElementDefinition) {
-        console.log("Updating position of ".concat(el.id));
         gridElement.position = existingElementDefinition;
       }
     });
@@ -7916,7 +7915,7 @@
         this.mode = "New";
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
-        wrapInGrided(this, opts.finishBtn);
+        setupGridedUI(this, opts.finishBtn);
         this.hookupGapSizeControls(opts.grid.gap);
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
@@ -7947,7 +7946,7 @@
         if (alreadyWrappedApp) {
           cleanupGridedUi();
         } else {
-          wrapInGrided(this, opts.finishBtn);
+          setupGridedUI(this, opts.finishBtn);
           var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
           opts.grid = {
             rows: currentGridProps.gridTemplateRows.split(" "),

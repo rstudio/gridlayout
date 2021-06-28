@@ -17,7 +17,7 @@ import { ToggleSwitch } from "./web-components/toggle-switch";
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
 // that it contains so they can be overlayed with editable element boxes
-export function wrapInGrided(
+export function setupGridedUI(
   appState: LayoutEditor,
   finishBtn: FinishButtonSetup
 ) {
@@ -134,12 +134,10 @@ export function wrapInGrided(
   if (gridIsFilled) {
     appState.container.style.gap = "1rem";
     appState.container.style.padding = "1rem";
-    // addExistingElementsToApp(appState);
   }
 }
 
 export function cleanupGridedUi() {
-  // debugger;
   [
     ...document.querySelectorAll(".grid-cell"),
     ...document.querySelectorAll(".added-element"),
