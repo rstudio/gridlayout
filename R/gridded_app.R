@@ -99,17 +99,13 @@ grided_server_code <- function(input, output, session,
   }), input$build_app_template)
 
   shiny::bindEvent(shiny::observe({
-    print(paste("User has requested the app from layout", input$live_app_request, "be sent."))
-
     chosen_layout <- Filter(function(layout) layout$name == input$live_app_request, starting_layout)[[1]]
 
     if (is.null(chosen_layout)){
       stop("Something horrible has happened, that layout does not exist")
     }
 
-    print("Running chosen apps app code...")
     chosen_layout$live_app(input, output)
-    session$sendCustomMessage("live-app-loaded", TRUE)
   }), input$live_app_request)
 
 

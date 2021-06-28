@@ -24,7 +24,7 @@ import {
   updateRectWithDelta,
   XYPos,
 } from "./utils-misc";
-import { addShinyListener, sendShinyEvent, setShinyInput } from "./utils-shiny";
+import { setShinyInput } from "./utils-shiny";
 import { createFocusModal } from "./web-components/focus-modal";
 import {
   addExistingElementsToApp,
@@ -97,33 +97,35 @@ export class LayoutEditor {
     this.entryType = opts.entryType;
     this.onUpdate = opts.onUpdate;
 
-    if (this.entryType === "edit-existing-app") {
-      this.wrapExistingApp(opts);
-    } else if (
+    if (
       this.entryType === "layout-gallery" ||
       this.entryType === "edit-layout"
     ) {
+      // Both entering from the layout gallery or just editing a layout need to
+      // build from scratch the whole layout.
       this.loadLayoutTemplate(opts);
+    } else if (this.entryType === "edit-existing-app") {
+      // If we're wrapping an existing app that already exists, then we can
+      // start that process immediately.
+      this.wrapExistingApp(opts);
+    } else if (this.entryType === "layout-gallery-live") {
+      // If we've requested a live app from the layout gallery we need to wait
+      // for it to be sent over by shiny and then wrap it with grided interface
+      setShinyInput("live_app_request", opts.liveAppId, true);
+
+      new MutationObserver((mutationsList, observer) => {
+        this.wrapExistingApp(opts);
+        // Turnoff observer so it doesnt get triggered again when we remove
+        // the elements inside the app dump div
+        observer.disconnect();
+      }).observe(document.getElementById("app_dump"), {
+        childList: true,
+      });
     } else {
       console.error(
         "Neither starting layout was provided nor is there an existing grid app"
       );
     }
-
-    // If we've requested a live app from the layout gallery we need to wait
-    // for it to be sent over by shiny and then wrap it with grided interface
-    // if (this.entryType === "layout-gallery-live") {
-    //   // Request that Shiny dumps app code to the waiting UI output div
-    //   console.log("Requested app dump");
-    //   setShinyInput("live_app_request", liveAppId, true);
-    //   const observer = new MutationObserver((mutationsList, observer) => {
-    //     console.log("App dump successfull");
-    //   });
-
-    //   observer.observe(document.getElementById("app_dump"), {
-    //     childList: true,
-    //   });
-    // }
 
     // Send info on starting layout to Shiny so it can find layout definition
     // to edit it after changes have been made

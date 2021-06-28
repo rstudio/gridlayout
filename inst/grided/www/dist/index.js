@@ -7868,6 +7868,7 @@
   }
   var LayoutEditor = /* @__PURE__ */ function() {
     function LayoutEditor2(opts) {
+      var _this = this;
       _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
@@ -7882,10 +7883,18 @@
       _defineProperty8(this, "entryType", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
-      if (this.entryType === "edit-existing-app") {
-        this.wrapExistingApp(opts);
-      } else if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
+      if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
+      } else if (this.entryType === "edit-existing-app") {
+        this.wrapExistingApp(opts);
+      } else if (this.entryType === "layout-gallery-live") {
+        setShinyInput("live_app_request", opts.liveAppId, true);
+        new MutationObserver(function(mutationsList, observer) {
+          _this.wrapExistingApp(opts);
+          observer.disconnect();
+        }).observe(document.getElementById("app_dump"), {
+          childList: true
+        });
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
@@ -7896,7 +7905,7 @@
     _createClass7(LayoutEditor2, [{
       key: "loadLayoutTemplate",
       value: function loadLayoutTemplate(opts) {
-        var _this = this;
+        var _this2 = this;
         this.mode = "New";
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
@@ -7907,7 +7916,7 @@
         }));
         opts.elements.forEach(function(elMsg) {
           var start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
-          _this.addElement({
+          _this2.addElement({
             id: elMsg.id,
             gridPos: {
               start_row: start_row,
@@ -7994,13 +8003,13 @@
     }, {
       key: "removeElements",
       value: function removeElements(ids) {
-        var _this2 = this;
+        var _this3 = this;
         asArray(ids).forEach(function(elId) {
-          var entryIndex = _this2.elements.findIndex(function(el) {
+          var entryIndex = _this3.elements.findIndex(function(el) {
             return el.id === elId;
           });
-          _this2.elements[entryIndex].remove();
-          _this2.elements.splice(entryIndex, 1);
+          _this3.elements[entryIndex].remove();
+          _this3.elements.splice(entryIndex, 1);
         });
         this.sendUpdate();
       }
@@ -8059,27 +8068,27 @@
     }, {
       key: "setupDrag",
       value: function setupDrag(opts) {
-        var _this3 = this;
+        var _this4 = this;
         var dragFeedbackRect;
         var startRect;
         var startLoc;
         var editorEl = document.querySelector("#grided__editor");
         var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
-          var gridExtent = getDragExtentOnGrid(_this3, boundingRect);
+          var gridExtent = getDragExtentOnGrid(_this4, boundingRect);
           gridItem.position = gridExtent;
           return gridExtent;
         };
         opts.watchingElement.onmousedown = function(event) {
           var _opts$gridItem;
           startLoc = event;
-          _this3.container.appendChild(opts.gridItem.el);
+          _this4.container.appendChild(opts.gridItem.el);
           startRect = ((_opts$gridItem = opts.gridItem) === null || _opts$gridItem === void 0 ? void 0 : _opts$gridItem.boundingRect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
-          dragFeedbackRect = makeEl(_this3.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+          dragFeedbackRect = makeEl(_this4.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
           updateGridPos(opts.gridItem, startRect);
