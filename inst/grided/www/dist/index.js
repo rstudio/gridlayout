@@ -1268,73 +1268,6 @@
     }
   });
 
-  // node_modules/core-js/internals/freezing.js
-  var require_freezing = __commonJS({
-    "node_modules/core-js/internals/freezing.js": function(exports, module) {
-      var fails10 = require_fails();
-      module.exports = !fails10(function() {
-        return Object.isExtensible(Object.preventExtensions({}));
-      });
-    }
-  });
-
-  // node_modules/core-js/internals/internal-metadata.js
-  var require_internal_metadata = __commonJS({
-    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
-      var hiddenKeys2 = require_hidden_keys();
-      var isObject7 = require_is_object();
-      var has4 = require_has();
-      var defineProperty5 = require_object_define_property().f;
-      var uid2 = require_uid();
-      var FREEZING2 = require_freezing();
-      var METADATA = uid2("meta");
-      var id = 0;
-      var isExtensible = Object.isExtensible || function() {
-        return true;
-      };
-      var setMetadata = function(it) {
-        defineProperty5(it, METADATA, { value: {
-          objectID: "O" + ++id,
-          weakData: {}
-        } });
-      };
-      var fastKey = function(it, create5) {
-        if (!isObject7(it))
-          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return "F";
-          if (!create5)
-            return "E";
-          setMetadata(it);
-        }
-        return it[METADATA].objectID;
-      };
-      var getWeakData = function(it, create5) {
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return true;
-          if (!create5)
-            return false;
-          setMetadata(it);
-        }
-        return it[METADATA].weakData;
-      };
-      var onFreeze2 = function(it) {
-        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
-          setMetadata(it);
-        return it;
-      };
-      var meta = module.exports = {
-        REQUIRED: false,
-        fastKey: fastKey,
-        getWeakData: getWeakData,
-        onFreeze: onFreeze2
-      };
-      hiddenKeys2[METADATA] = true;
-    }
-  });
-
   // node_modules/core-js/internals/to-string-tag-support.js
   var require_to_string_tag_support = __commonJS({
     "node_modules/core-js/internals/to-string-tag-support.js": function(exports, module) {
@@ -1859,6 +1792,73 @@
         }
         return ITERATION_SUPPORT;
       };
+    }
+  });
+
+  // node_modules/core-js/internals/freezing.js
+  var require_freezing = __commonJS({
+    "node_modules/core-js/internals/freezing.js": function(exports, module) {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
+        return Object.isExtensible(Object.preventExtensions({}));
+      });
+    }
+  });
+
+  // node_modules/core-js/internals/internal-metadata.js
+  var require_internal_metadata = __commonJS({
+    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
+      var hiddenKeys2 = require_hidden_keys();
+      var isObject7 = require_is_object();
+      var has4 = require_has();
+      var defineProperty5 = require_object_define_property().f;
+      var uid2 = require_uid();
+      var FREEZING2 = require_freezing();
+      var METADATA = uid2("meta");
+      var id = 0;
+      var isExtensible = Object.isExtensible || function() {
+        return true;
+      };
+      var setMetadata = function(it) {
+        defineProperty5(it, METADATA, { value: {
+          objectID: "O" + ++id,
+          weakData: {}
+        } });
+      };
+      var fastKey = function(it, create5) {
+        if (!isObject7(it))
+          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return "F";
+          if (!create5)
+            return "E";
+          setMetadata(it);
+        }
+        return it[METADATA].objectID;
+      };
+      var getWeakData = function(it, create5) {
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return true;
+          if (!create5)
+            return false;
+          setMetadata(it);
+        }
+        return it[METADATA].weakData;
+      };
+      var onFreeze2 = function(it) {
+        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
+          setMetadata(it);
+        return it;
+      };
+      var meta = module.exports = {
+        REQUIRED: false,
+        fastKey: fastKey,
+        getWeakData: getWeakData,
+        onFreeze: onFreeze2
+      };
+      hiddenKeys2[METADATA] = true;
     }
   });
 
@@ -3494,71 +3494,11 @@
     defineProperties: defineProperties2
   });
 
-  // node_modules/core-js/modules/es.array.slice.js
-  "use strict";
-  var $10 = require_export();
-  var isObject3 = require_is_object();
-  var isArray2 = require_is_array();
-  var toAbsoluteIndex = require_to_absolute_index();
-  var toLength = require_to_length();
-  var toIndexedObject4 = require_to_indexed_object();
-  var createProperty2 = require_create_property();
-  var wellKnownSymbol2 = require_well_known_symbol();
-  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("slice");
-  var SPECIES = wellKnownSymbol2("species");
-  var nativeSlice = [].slice;
-  var max = Math.max;
-  $10({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
-    slice: function slice(start, end) {
-      var O = toIndexedObject4(this);
-      var length2 = toLength(O.length);
-      var k = toAbsoluteIndex(start, length2);
-      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
-      var Constructor, result, n;
-      if (isArray2(O)) {
-        Constructor = O.constructor;
-        if (typeof Constructor == "function" && (Constructor === Array || isArray2(Constructor.prototype))) {
-          Constructor = void 0;
-        } else if (isObject3(Constructor)) {
-          Constructor = Constructor[SPECIES];
-          if (Constructor === null)
-            Constructor = void 0;
-        }
-        if (Constructor === Array || Constructor === void 0) {
-          return nativeSlice.call(O, k, fin);
-        }
-      }
-      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
-      for (n = 0; k < fin; k++, n++)
-        if (k in O)
-          createProperty2(result, n, O[k]);
-      result.length = n;
-      return result;
-    }
-  });
-
-  // node_modules/core-js/modules/es.object.freeze.js
-  var $11 = require_export();
-  var FREEZING = require_freezing();
-  var fails4 = require_fails();
-  var isObject4 = require_is_object();
-  var onFreeze = require_internal_metadata().onFreeze;
-  var $freeze = Object.freeze;
-  var FAILS_ON_PRIMITIVES3 = fails4(function() {
-    $freeze(1);
-  });
-  $11({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
-    freeze: function freeze(it) {
-      return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
-    }
-  });
-
   // node_modules/core-js/modules/es.array.is-array.js
-  var $12 = require_export();
-  var isArray3 = require_is_array();
-  $12({ target: "Array", stat: true }, {
-    isArray: isArray3
+  var $10 = require_export();
+  var isArray2 = require_is_array();
+  $10({ target: "Array", stat: true }, {
+    isArray: isArray2
   });
 
   // node_modules/core-js/modules/es.object.to-string.js
@@ -3607,9 +3547,9 @@
   var DOMIterables2 = require_dom_iterables();
   var ArrayIteratorMethods = require_es_array_iterator();
   var createNonEnumerableProperty3 = require_create_non_enumerable_property();
-  var wellKnownSymbol3 = require_well_known_symbol();
-  var ITERATOR = wellKnownSymbol3("iterator");
-  var TO_STRING_TAG = wellKnownSymbol3("toStringTag");
+  var wellKnownSymbol2 = require_well_known_symbol();
+  var ITERATOR = wellKnownSymbol2("iterator");
+  var TO_STRING_TAG = wellKnownSymbol2("toStringTag");
   var ArrayValues = ArrayIteratorMethods.values;
   for (var COLLECTION_NAME in DOMIterables2) {
     Collection = global5[COLLECTION_NAME];
@@ -3640,14 +3580,89 @@
   var METHOD_NAME;
 
   // node_modules/core-js/modules/es.array.from.js
-  var $13 = require_export();
+  var $11 = require_export();
   var from = require_array_from();
   var checkCorrectnessOfIteration = require_check_correctness_of_iteration();
   var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
     Array.from(iterable);
   });
-  $13({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
+  $11({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
     from: from
+  });
+
+  // node_modules/core-js/modules/es.array.slice.js
+  "use strict";
+  var $12 = require_export();
+  var isObject3 = require_is_object();
+  var isArray3 = require_is_array();
+  var toAbsoluteIndex = require_to_absolute_index();
+  var toLength = require_to_length();
+  var toIndexedObject4 = require_to_indexed_object();
+  var createProperty2 = require_create_property();
+  var wellKnownSymbol3 = require_well_known_symbol();
+  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("slice");
+  var SPECIES = wellKnownSymbol3("species");
+  var nativeSlice = [].slice;
+  var max = Math.max;
+  $12({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+    slice: function slice(start, end) {
+      var O = toIndexedObject4(this);
+      var length2 = toLength(O.length);
+      var k = toAbsoluteIndex(start, length2);
+      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
+      var Constructor, result, n;
+      if (isArray3(O)) {
+        Constructor = O.constructor;
+        if (typeof Constructor == "function" && (Constructor === Array || isArray3(Constructor.prototype))) {
+          Constructor = void 0;
+        } else if (isObject3(Constructor)) {
+          Constructor = Constructor[SPECIES];
+          if (Constructor === null)
+            Constructor = void 0;
+        }
+        if (Constructor === Array || Constructor === void 0) {
+          return nativeSlice.call(O, k, fin);
+        }
+      }
+      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
+      for (n = 0; k < fin; k++, n++)
+        if (k in O)
+          createProperty2(result, n, O[k]);
+      result.length = n;
+      return result;
+    }
+  });
+
+  // node_modules/core-js/modules/es.object.freeze.js
+  var $13 = require_export();
+  var FREEZING = require_freezing();
+  var fails4 = require_fails();
+  var isObject4 = require_is_object();
+  var onFreeze = require_internal_metadata().onFreeze;
+  var $freeze = Object.freeze;
+  var FAILS_ON_PRIMITIVES3 = fails4(function() {
+    $freeze(1);
+  });
+  $13({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
+    freeze: function freeze(it) {
+      return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.join.js
+  "use strict";
+  var $14 = require_export();
+  var IndexedObject = require_indexed_object();
+  var toIndexedObject5 = require_to_indexed_object();
+  var arrayMethodIsStrict = require_array_method_is_strict();
+  var nativeJoin = [].join;
+  var ES3_STRINGS = IndexedObject != Object;
+  var STRICT_METHOD = arrayMethodIsStrict("join", ",");
+  $14({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+    join: function join(separator) {
+      return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
+    }
   });
 
   // LayoutEditor.ts
@@ -3764,11 +3779,11 @@
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
-  var $14 = require_export();
+  var $15 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
-  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  $15({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3855,27 +3870,45 @@
     ];
   });
 
-  // node_modules/core-js/modules/es.array.find-index.js
+  // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $15 = require_export();
-  var $findIndex = require_array_iteration().findIndex;
+  var $16 = require_export();
+  var $find = require_array_iteration().find;
   var addToUnscopables = require_add_to_unscopables();
-  var FIND_INDEX = "findIndex";
+  var FIND = "find";
   var SKIPS_HOLES = true;
-  if (FIND_INDEX in [])
-    Array(1)[FIND_INDEX](function() {
+  if (FIND in [])
+    Array(1)[FIND](function() {
       SKIPS_HOLES = false;
     });
-  $15({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $16({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+    find: function find(callbackfn) {
+      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables(FIND);
+
+  // node_modules/core-js/modules/es.array.find-index.js
+  "use strict";
+  var $17 = require_export();
+  var $findIndex = require_array_iteration().findIndex;
+  var addToUnscopables2 = require_add_to_unscopables();
+  var FIND_INDEX = "findIndex";
+  var SKIPS_HOLES2 = true;
+  if (FIND_INDEX in [])
+    Array(1)[FIND_INDEX](function() {
+      SKIPS_HOLES2 = false;
+    });
+  $17({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
-  addToUnscopables(FIND_INDEX);
+  addToUnscopables2(FIND_INDEX);
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $16 = require_export();
+  var $18 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
@@ -3888,7 +3921,7 @@
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $16({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $18({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3944,15 +3977,15 @@
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $17 = require_export();
+  var $19 = require_export();
   var assign = require_object_assign();
-  $17({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $19({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $18 = require_export();
+  var $20 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -3979,7 +4012,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $18({ target: "Array", proto: true, forced: FORCED2 }, {
+  $20({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -4006,7 +4039,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $19 = require_export();
+  var $21 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4020,28 +4053,10 @@
       } : handler, timeout);
     };
   };
-  $19({ global: true, bind: true, forced: MSIE }, {
+  $21({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
-
-  // node_modules/core-js/modules/es.array.find.js
-  "use strict";
-  var $20 = require_export();
-  var $find = require_array_iteration().find;
-  var addToUnscopables2 = require_add_to_unscopables();
-  var FIND = "find";
-  var SKIPS_HOLES2 = true;
-  if (FIND in [])
-    Array(1)[FIND](function() {
-      SKIPS_HOLES2 = false;
-    });
-  $20({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
-    find: function find(callbackfn) {
-      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables2(FIND);
 
   // node_modules/core-js/modules/es.string.match.js
   "use strict";
@@ -4085,14 +4100,14 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $21 = require_export();
+  var $22 = require_export();
   var $reduce = require_array_reduce().left;
-  var arrayMethodIsStrict = require_array_method_is_strict();
+  var arrayMethodIsStrict2 = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
-  var STRICT_METHOD = arrayMethodIsStrict("reduce");
+  var STRICT_METHOD2 = arrayMethodIsStrict2("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $21({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+  $22({ target: "Array", proto: true, forced: !STRICT_METHOD2 || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4105,13 +4120,13 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $22 = require_export();
+  var $23 = require_export();
   var $indexOf = require_array_includes().indexOf;
-  var arrayMethodIsStrict2 = require_array_method_is_strict();
+  var arrayMethodIsStrict3 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
-  var STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-  $22({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+  var STRICT_METHOD3 = arrayMethodIsStrict3("indexOf");
+  $23({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD3 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4215,10 +4230,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $23 = require_export();
+  var $24 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $23({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $24({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -4226,23 +4241,6 @@
 
   // node_modules/stylis/src/Utility.js
   var import_es_regexp_exec = __toModule(require_es_regexp_exec());
-
-  // node_modules/core-js/modules/es.array.join.js
-  "use strict";
-  var $24 = require_export();
-  var IndexedObject = require_indexed_object();
-  var toIndexedObject5 = require_to_indexed_object();
-  var arrayMethodIsStrict3 = require_array_method_is_strict();
-  var nativeJoin = [].join;
-  var ES3_STRINGS = IndexedObject != Object;
-  var STRICT_METHOD3 = arrayMethodIsStrict3("join", ",");
-  $24({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
-    join: function join(separator) {
-      return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
-    }
-  });
-
-  // node_modules/stylis/src/Utility.js
   var abs = Math.abs;
   var from2 = String.fromCharCode;
   function hash(value, length2) {
@@ -6911,72 +6909,8 @@
     return unitInput;
   }
 
-  // node_modules/core-js/modules/es.array.every.js
-  "use strict";
-  var $32 = require_export();
-  var $every = require_array_iteration().every;
-  var arrayMethodIsStrict4 = require_array_method_is_strict();
-  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $32({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
-    every: function every(callbackfn) {
-      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // utils-cssom.ts
-  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
-  function _toConsumableArray3(arr) {
-    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
-  }
-  function _nonIterableSpread3() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _unsupportedIterableToArray5(o, minLen) {
-    if (!o)
-      return;
-    if (typeof o === "string")
-      return _arrayLikeToArray5(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor)
-      n = o.constructor.name;
-    if (n === "Map" || n === "Set")
-      return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray5(o, minLen);
-  }
-  function _iterableToArray3(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles3(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray5(arr);
-  }
-  function _arrayLikeToArray5(arr, len) {
-    if (len == null || len > arr.length)
-      len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-    return arr2;
-  }
-  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
-    var definesRuleset = function definesRuleset2(selectorText2) {
-      return function(rule) {
-        return rule.selectorText === selectorText2;
-      };
-    };
-    var allRulesForSelector = _toConsumableArray3(document.styleSheets).filter(function(styleSheet) {
-      return _toConsumableArray3(styleSheet.rules).find(definesRuleset(selectorText));
-    }).map(function(x) {
-      return _toConsumableArray3(x.cssRules).find(definesRuleset(selectorText)).style;
-    });
-    return allRulesForSelector.find(function(rule) {
-      return targetProperties.every(function(x) {
-        return rule[x];
-      });
-    });
-  }
+  // setupGridedUI.ts
+  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
 
   // utils-shiny.ts
   function setShinyInput(inputId, inputValue) {
@@ -6991,13 +6925,8 @@
     (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(eventId, callbackFunc);
   }
 
-  // web-components/focus-modal.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
-  var import_es_map3 = __toModule(require_es_map());
-
-  // web-components/copy-code.ts
-  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  // web-components/toggle-switch.ts
+  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
   var import_es_map2 = __toModule(require_es_map());
   function _typeof4(obj) {
     "@babel/helpers - typeof";
@@ -7143,46 +7072,183 @@
     }
     return obj;
   }
-  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits2(CopyCode2, _HTMLElement);
-    var _super = _createSuper2(CopyCode2);
-    function CopyCode2(code) {
-      var _code$match$length;
+  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(ToggleSwitch2, _HTMLElement);
+    var _super = _createSuper2(ToggleSwitch2);
+    function ToggleSwitch2(offText, onText, onChange) {
       var _this;
-      _classCallCheck4(this, CopyCode2);
+      _classCallCheck4(this, ToggleSwitch2);
       _this = _super.call(this);
-      _defineProperty5(_assertThisInitialized2(_this), "code", void 0);
-      _defineProperty5(_assertThisInitialized2(_this), "numOfLines", void 0);
-      _this.code = code;
-      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
+      _defineProperty5(_assertThisInitialized2(_this), "offText", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "onText", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "onChange", void 0);
       _this.attachShadow({
         mode: "open"
       });
+      _this.offText = offText;
+      _this.onText = onText;
+      _this.onChange = onChange;
       return _this;
     }
-    _createClass4(CopyCode2, [{
+    _createClass4(ToggleSwitch2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
-        var codeEl = this.shadowRoot.getElementById("code");
-        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
-          codeEl.select();
-          document.execCommand("copy");
+        var _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 1px;\n        width: 180px;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      span {\n        font-size: 1rem;\n      }\n\n      #off-text {\n        text-align: end;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
+        this.shadowRoot.getElementById("switch-value").addEventListener("change", function(event) {
+          return _this2.onChange(event.target.checked);
         });
       }
-    }, {
-      key: "disconnectedCallback",
-      value: function disconnectedCallback() {
-      }
     }]);
-    return CopyCode2;
+    return ToggleSwitch2;
   }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
-  customElements.define("copy-code", CopyCode);
-  function copyCode(code) {
-    return new CopyCode(code);
+  customElements.define("toggle-switch", ToggleSwitch);
+
+  // setupGridedUI.ts
+  function _toConsumableArray3(arr) {
+    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
+  }
+  function _nonIterableSpread3() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray5(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray5(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray5(o, minLen);
+  }
+  function _iterableToArray3(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles3(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray5(arr);
+  }
+  function _arrayLikeToArray5(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function setupGridedUI(appState, finishBtn) {
+    var gridIsFilled = appState.container.hasChildNodes();
+    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
+      return setShinyInput("see_layout_code", appState.currentLayout, true);
+    }), clickButton("#done", finishBtn.label, function() {
+      return finishBtn.onDone(appState.currentLayout);
+    })];
+    if (gridIsFilled) {
+      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
+    }
+    var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
+    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.panel-body", blockEl("div#added-elements"))), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
+    document.querySelector("body").appendChild(gridedUi);
+    appState.container.style.height = "100%";
+    appState.container.style.width = "100%";
+    appState.container.style.display = "grid";
+    appState.container.style.maxWidth = "100%";
+    function toggleInteractionMode(interactIsOn) {
+      [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#grided__settings .panel-body"), gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
+        if (!el)
+          return;
+        if (interactIsOn) {
+          el.classList.add("disabled");
+        } else {
+          el.classList.remove("disabled");
+        }
+      });
+    }
+    if (gridIsFilled) {
+      appState.container.style.gap = "1rem";
+      appState.container.style.padding = "1rem";
+    }
+  }
+
+  // node_modules/core-js/modules/es.array.every.js
+  "use strict";
+  var $32 = require_export();
+  var $every = require_array_iteration().every;
+  var arrayMethodIsStrict4 = require_array_method_is_strict();
+  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
+  $32({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+    every: function every(callbackfn) {
+      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // utils-cssom.ts
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  function _toConsumableArray4(arr) {
+    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
+  }
+  function _nonIterableSpread4() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray6(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray6(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray6(o, minLen);
+  }
+  function _iterableToArray4(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles4(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray6(arr);
+  }
+  function _arrayLikeToArray6(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
+    var definesRuleset = function definesRuleset2(selectorText2) {
+      return function(rule) {
+        return rule.selectorText === selectorText2;
+      };
+    };
+    var allRulesForSelector = _toConsumableArray4(document.styleSheets).filter(function(styleSheet) {
+      return _toConsumableArray4(styleSheet.rules).find(definesRuleset(selectorText));
+    }).map(function(x) {
+      return _toConsumableArray4(x.cssRules).find(definesRuleset(selectorText)).style;
+    });
+    return allRulesForSelector.find(function(rule) {
+      return targetProperties.every(function(x) {
+        return rule[x];
+      });
+    });
   }
 
   // web-components/focus-modal.ts
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
+
+  // web-components/copy-code.ts
+  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
   function _typeof5(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -7327,110 +7393,46 @@
     }
     return obj;
   }
-  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits3(FocusModal2, _HTMLElement);
-    var _super = _createSuper3(FocusModal2);
-    function FocusModal2() {
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(CopyCode2, _HTMLElement);
+    var _super = _createSuper3(CopyCode2);
+    function CopyCode2(code) {
+      var _code$match$length;
       var _this;
-      _classCallCheck5(this, FocusModal2);
+      _classCallCheck5(this, CopyCode2);
       _this = _super.call(this);
-      _defineProperty6(_assertThisInitialized3(_this), "OnClose", void 0);
-      _defineProperty6(_assertThisInitialized3(_this), "Title", void 0);
-      _defineProperty6(_assertThisInitialized3(_this), "MaxWidth", "450px");
-      _defineProperty6(_assertThisInitialized3(_this), "Children", []);
-      _defineProperty6(_assertThisInitialized3(_this), "Description", void 0);
-      _defineProperty6(_assertThisInitialized3(_this), "hasRendered", false);
+      _defineProperty6(_assertThisInitialized3(_this), "code", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "numOfLines", void 0);
+      _this.code = code;
+      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
       _this.attachShadow({
         mode: "open"
       });
       return _this;
     }
-    _createClass5(FocusModal2, [{
-      key: "setTitle",
-      value: function setTitle(title) {
-        this.Title = title;
-        return this;
-      }
-    }, {
-      key: "description",
-      value: function description(_description) {
-        this.Description = _description;
-        return this;
-      }
-    }, {
-      key: "maxWidth",
-      value: function maxWidth(width) {
-        this.MaxWidth = width;
-        return this;
-      }
-    }, {
-      key: "addElement",
-      value: function addElement(el) {
-        if (this.hasRendered) {
-          this.shadowRoot.getElementById("content").appendChild(el);
-          return this;
-        }
-        this.Children.push(el);
-        return this;
-      }
-    }, {
-      key: "onClose",
-      value: function onClose(callback) {
-        this.OnClose = callback;
-        return this;
-      }
-    }, {
-      key: "focusOn",
-      value: function focusOn(elId) {
-        this.shadowRoot.getElementById(elId).focus();
-        return this;
-      }
-    }, {
-      key: "setupCloseCallbacks",
-      value: function setupCloseCallbacks() {
-        var _this2 = this;
-        var exitFn = function exitFn2() {
-          var _this2$OnClose;
-          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
-          _this2.remove();
-        };
-        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
-        this.addEventListener("click", exitFn);
-        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
-          event.stopPropagation();
-        });
-      }
-    }, {
-      key: "addToPage",
-      value: function addToPage() {
-        document.body.appendChild(this);
-        this.hasRendered = true;
-        return this;
-      }
-    }, {
+    _createClass5(CopyCode2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
-        var content = this.shadowRoot.getElementById("content");
-        this.Children.forEach(function(el) {
-          content.appendChild(el);
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
+        var codeEl = this.shadowRoot.getElementById("code");
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          codeEl.select();
+          document.execCommand("copy");
         });
-        this.setupCloseCallbacks();
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
       }
     }]);
-    return FocusModal2;
+    return CopyCode2;
   }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
-  customElements.define("focus-modal", FocusModal);
-  function createFocusModal() {
-    return new FocusModal();
+  customElements.define("copy-code", CopyCode);
+  function copyCode(code) {
+    return new CopyCode(code);
   }
 
-  // wrapInGrided.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
-
-  // web-components/toggle-switch.ts
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
-  var import_es_map4 = __toModule(require_es_map());
+  // web-components/focus-modal.ts
   function _typeof6(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -7575,155 +7577,102 @@
     }
     return obj;
   }
-  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits4(ToggleSwitch2, _HTMLElement);
-    var _super = _createSuper4(ToggleSwitch2);
-    function ToggleSwitch2(offText, onText, onChange) {
+  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits4(FocusModal2, _HTMLElement);
+    var _super = _createSuper4(FocusModal2);
+    function FocusModal2() {
       var _this;
-      _classCallCheck6(this, ToggleSwitch2);
+      _classCallCheck6(this, FocusModal2);
       _this = _super.call(this);
-      _defineProperty7(_assertThisInitialized4(_this), "offText", void 0);
-      _defineProperty7(_assertThisInitialized4(_this), "onText", void 0);
-      _defineProperty7(_assertThisInitialized4(_this), "onChange", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "OnClose", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "Title", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "MaxWidth", "450px");
+      _defineProperty7(_assertThisInitialized4(_this), "Children", []);
+      _defineProperty7(_assertThisInitialized4(_this), "Description", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "hasRendered", false);
       _this.attachShadow({
         mode: "open"
       });
-      _this.offText = offText;
-      _this.onText = onText;
-      _this.onChange = onChange;
       return _this;
     }
-    _createClass6(ToggleSwitch2, [{
+    _createClass6(FocusModal2, [{
+      key: "setTitle",
+      value: function setTitle(title) {
+        this.Title = title;
+        return this;
+      }
+    }, {
+      key: "description",
+      value: function description(_description) {
+        this.Description = _description;
+        return this;
+      }
+    }, {
+      key: "maxWidth",
+      value: function maxWidth(width) {
+        this.MaxWidth = width;
+        return this;
+      }
+    }, {
+      key: "addElement",
+      value: function addElement(el) {
+        if (this.hasRendered) {
+          this.shadowRoot.getElementById("content").appendChild(el);
+          return this;
+        }
+        this.Children.push(el);
+        return this;
+      }
+    }, {
+      key: "onClose",
+      value: function onClose(callback) {
+        this.OnClose = callback;
+        return this;
+      }
+    }, {
+      key: "focusOn",
+      value: function focusOn(elId) {
+        this.shadowRoot.getElementById(elId).focus();
+        return this;
+      }
+    }, {
+      key: "setupCloseCallbacks",
+      value: function setupCloseCallbacks() {
+        var _this2 = this;
+        var exitFn = function exitFn2() {
+          var _this2$OnClose;
+          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
+          _this2.remove();
+        };
+        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
+        this.addEventListener("click", exitFn);
+        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
+          event.stopPropagation();
+        });
+      }
+    }, {
+      key: "addToPage",
+      value: function addToPage() {
+        document.body.appendChild(this);
+        this.hasRendered = true;
+        return this;
+      }
+    }, {
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 1px;\n        width: 180px;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      span {\n        font-size: 1rem;\n      }\n\n      #off-text {\n        text-align: end;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
-        this.shadowRoot.getElementById("switch-value").addEventListener("change", function(event) {
-          return _this2.onChange(event.target.checked);
+        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
+        var content = this.shadowRoot.getElementById("content");
+        this.Children.forEach(function(el) {
+          content.appendChild(el);
         });
+        this.setupCloseCallbacks();
       }
     }]);
-    return ToggleSwitch2;
+    return FocusModal2;
   }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
-  customElements.define("toggle-switch", ToggleSwitch);
-
-  // wrapInGrided.ts
-  function _toConsumableArray4(arr) {
-    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
-  }
-  function _nonIterableSpread4() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _unsupportedIterableToArray6(o, minLen) {
-    if (!o)
-      return;
-    if (typeof o === "string")
-      return _arrayLikeToArray6(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor)
-      n = o.constructor.name;
-    if (n === "Map" || n === "Set")
-      return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray6(o, minLen);
-  }
-  function _iterableToArray4(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles4(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray6(arr);
-  }
-  function _arrayLikeToArray6(arr, len) {
-    if (len == null || len > arr.length)
-      len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-    return arr2;
-  }
-  function setupGridedUI(appState, finishBtn) {
-    var gridIsFilled = appState.container.hasChildNodes();
-    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
-      return setShinyInput("see_layout_code", appState.currentLayout, true);
-    }), clickButton("#done", finishBtn.label, function() {
-      return finishBtn.onDone(appState.currentLayout);
-    })];
-    if (gridIsFilled) {
-      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
-    }
-    var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
-    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.panel-body", blockEl("div#added-elements"))), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
-    document.querySelector("body").appendChild(gridedUi);
-    appState.container.style.height = "100%";
-    appState.container.style.width = "100%";
-    appState.container.style.display = "grid";
-    appState.container.style.maxWidth = "100%";
-    function toggleInteractionMode(interactIsOn) {
-      [].concat(_toConsumableArray4(appState.container.querySelectorAll(".added-element")), _toConsumableArray4(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray4(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#grided__settings .panel-body"), gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
-        if (!el)
-          return;
-        if (interactIsOn) {
-          el.classList.add("disabled");
-        } else {
-          el.classList.remove("disabled");
-        }
-      });
-    }
-    if (gridIsFilled) {
-      appState.container.style.gap = "1rem";
-      appState.container.style.padding = "1rem";
-    }
-  }
-  function cleanupGridedUi() {
-    [].concat(_toConsumableArray4(document.querySelectorAll(".grid-cell")), _toConsumableArray4(document.querySelectorAll(".added-element")), _toConsumableArray4(document.querySelectorAll(".tract-controls")), [document.querySelector(".dragSelectionBox"), document.getElementById("drag-canvas")]).forEach(function(el) {
-      return el === null || el === void 0 ? void 0 : el.remove();
-    });
-  }
-  function addExistingElementsToApp(appState) {
-    var elementDefs = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [];
-    _toConsumableArray4(appState.container.children).forEach(function(el) {
-      if (el.id === "dragCanvas")
-        return;
-      var bbox = el.getBoundingClientRect();
-      if (bbox.width === 0 && bbox.height === 0)
-        return;
-      if (el.classList.contains("grid-cell") || el.classList.contains("dragSelectionBox") || el.classList.contains("added-element") || el.id === "drag-canvas") {
-        el.remove();
-        return;
-      }
-      var gridElement = appState.addElement({
-        id: el.id,
-        gridPos: getPosOnGrid(el),
-        mirroredElement: el
-      }, false);
-      var existingElementDefinition = elementDefs.find(function(elDef) {
-        return elDef.id === gridElement.id;
-      });
-      if (existingElementDefinition) {
-        gridElement.position = existingElementDefinition;
-      }
-    });
-  }
-  function hookupGapSizeControls(appState, settingsPanelEl, startingGap) {
-    var cssInput = makeCssUnitInput({
-      parentEl: makeEl(settingsPanelEl, "div#gapSizeChooser.plusMinusInput.settings-grid", {
-        innerHTML: '<span class = "input-label">Panel gap size</span>'
-      }),
-      selector: "#gapSizeChooser",
-      onChange: function onChange(x) {
-        return appState.updateGrid({
-          gap: x
-        });
-      },
-      allowedUnits: ["px", "rem"],
-      snapToDefaults: false
-    });
-    if (startingGap) {
-      cssInput.updateValue(startingGap);
-    }
-    return cssInput;
+  customElements.define("focus-modal", FocusModal);
+  function createFocusModal() {
+    return new FocusModal();
   }
 
   // LayoutEditor.ts
@@ -7771,6 +7720,12 @@
       }
     } };
   }
+  function _taggedTemplateLiteral2(strings, raw) {
+    if (!raw) {
+      raw = strings.slice(0);
+    }
+    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
+  }
   function _toConsumableArray5(arr) {
     return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray7(arr) || _nonIterableSpread5();
   }
@@ -7805,12 +7760,6 @@
       arr2[i] = arr[i];
     }
     return arr2;
-  }
-  function _taggedTemplateLiteral2(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
   function ownKeys4(object, enumerableOnly) {
     var keys2 = Object.keys(object);
@@ -7944,7 +7893,9 @@
         this.gridStyles = this.container.style;
         this.gridLayout = new GridLayout(this.container);
         if (alreadyWrappedApp) {
-          cleanupGridedUi();
+          document.querySelectorAll([".grid-cell", ".added-element", ".tract-controls", ".dragSelectionBox", "#drag-canvas"].join(",")).forEach(function(el) {
+            return el === null || el === void 0 ? void 0 : el.remove();
+          });
         } else {
           setupGridedUI(this, opts.finishBtn);
           var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
@@ -7954,7 +7905,7 @@
             gap: getGapSize(currentGridProps.gap)
           };
         }
-        addExistingElementsToApp(this, opts.elements);
+        this.addExistingElementsToApp(opts.elements);
         this.hookupGapSizeControls((_opts$grid = opts.grid) === null || _opts$grid === void 0 ? void 0 : _opts$grid.gap);
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: Boolean(alreadyWrappedApp),
@@ -7963,8 +7914,24 @@
       }
     }, {
       key: "hookupGapSizeControls",
-      value: function hookupGapSizeControls2(initialGapSize) {
-        this.gapSizeSetting = hookupGapSizeControls(this, document.getElementById("gridedGapSizeControls"), initialGapSize);
+      value: function hookupGapSizeControls(initialGapSize) {
+        var _this3 = this;
+        this.gapSizeSetting = makeCssUnitInput({
+          parentEl: makeEl(document.getElementById("gridedGapSizeControls"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
+            innerHTML: '<span class = "input-label">Panel gap size</span>'
+          }),
+          selector: "#gapSizeChooser",
+          onChange: function onChange(x) {
+            return _this3.updateGrid({
+              gap: x
+            });
+          },
+          allowedUnits: ["px", "rem"],
+          snapToDefaults: false
+        });
+        if (initialGapSize) {
+          this.gapSizeSetting.updateValue(initialGapSize);
+        }
       }
     }, {
       key: "currentLayout",
@@ -8001,15 +7968,43 @@
         return gridItem;
       }
     }, {
+      key: "addExistingElementsToApp",
+      value: function addExistingElementsToApp() {
+        var _this4 = this;
+        var elementDefs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
+        _toConsumableArray5(this.container.children).forEach(function(el) {
+          if (el.id === "dragCanvas")
+            return;
+          var bbox = el.getBoundingClientRect();
+          if (bbox.width === 0 && bbox.height === 0)
+            return;
+          if (el.classList.contains("grid-cell") || el.classList.contains("dragSelectionBox") || el.classList.contains("added-element") || el.id === "drag-canvas") {
+            el.remove();
+            return;
+          }
+          var gridElement = _this4.addElement({
+            id: el.id,
+            gridPos: getPosOnGrid(el),
+            mirroredElement: el
+          }, false);
+          var existingElementDefinition = elementDefs.find(function(elDef) {
+            return elDef.id === gridElement.id;
+          });
+          if (existingElementDefinition) {
+            gridElement.position = existingElementDefinition;
+          }
+        });
+      }
+    }, {
       key: "removeElements",
       value: function removeElements(ids) {
-        var _this3 = this;
+        var _this5 = this;
         asArray(ids).forEach(function(elId) {
-          var entryIndex = _this3.elements.findIndex(function(el) {
+          var entryIndex = _this5.elements.findIndex(function(el) {
             return el.id === elId;
           });
-          _this3.elements[entryIndex].remove();
-          _this3.elements.splice(entryIndex, 1);
+          _this5.elements[entryIndex].remove();
+          _this5.elements.splice(entryIndex, 1);
         });
         this.sendUpdate();
       }
@@ -8068,27 +8063,27 @@
     }, {
       key: "setupDrag",
       value: function setupDrag(opts) {
-        var _this4 = this;
+        var _this6 = this;
         var dragFeedbackRect;
         var startRect;
         var startLoc;
         var editorEl = document.querySelector("#grided__editor");
         var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
-          var gridExtent = getDragExtentOnGrid(_this4, boundingRect);
+          var gridExtent = getDragExtentOnGrid(_this6, boundingRect);
           gridItem.position = gridExtent;
           return gridExtent;
         };
         opts.watchingElement.onmousedown = function(event) {
           var _opts$gridItem;
           startLoc = event;
-          _this4.container.appendChild(opts.gridItem.el);
+          _this6.container.appendChild(opts.gridItem.el);
           startRect = ((_opts$gridItem = opts.gridItem) === null || _opts$gridItem === void 0 ? void 0 : _opts$gridItem.boundingRect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
-          dragFeedbackRect = makeEl(_this4.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+          dragFeedbackRect = makeEl(_this6.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
           updateGridPos(opts.gridItem, startRect);

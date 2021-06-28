@@ -1,8 +1,5 @@
-import { LayoutElement, LayoutInfo } from ".";
 import { FinishButtonSetup, LayoutEditor } from "./LayoutEditor";
-import { makeCssUnitInput } from "./make-cssUnitInput";
-import { blockEl, clickButton, makeEl, textEl } from "./make-elements";
-import { getPosOnGrid } from "./utils-grid";
+import { blockEl, clickButton, textEl } from "./make-elements";
 import {
   browserHeaderHtml,
   elementsIcon,
@@ -135,88 +132,4 @@ export function setupGridedUI(
     appState.container.style.gap = "1rem";
     appState.container.style.padding = "1rem";
   }
-}
-
-export function cleanupGridedUi() {
-  [
-    ...document.querySelectorAll(".grid-cell"),
-    ...document.querySelectorAll(".added-element"),
-    ...document.querySelectorAll(".tract-controls"),
-    document.querySelector(".dragSelectionBox"),
-    document.getElementById("drag-canvas"),
-  ].forEach((el) => el?.remove());
-}
-
-export function addExistingElementsToApp(
-  appState: LayoutEditor,
-  elementDefs: LayoutElement[] = []
-) {
-  // If grided is running on an existing app, we need to parse the children and
-  // add them as elements;
-  [...appState.container.children].forEach(function (el: Element) {
-    // Existing apps will have the dragCanvas as a child. Ignore it
-    if (el.id === "dragCanvas") return;
-
-    const bbox = el.getBoundingClientRect();
-    // Only keep visible elements. This will (hopefully) filter out and
-    // script or style tags that find their way into the grid container
-    if (bbox.width === 0 && bbox.height === 0) return;
-
-    // Don't load grided-related elements. These will be there if we are loading
-    // from history for an existing app
-    if (
-      el.classList.contains("grid-cell") ||
-      el.classList.contains("dragSelectionBox") ||
-      el.classList.contains("added-element") ||
-      el.id === "drag-canvas"
-    ) {
-      el.remove();
-      return;
-    }
-
-    const gridElement = appState.addElement(
-      {
-        id: el.id,
-        gridPos: getPosOnGrid(el as HTMLElement),
-        mirroredElement: el as HTMLElement,
-      },
-      false // So we don't update history as well
-    );
-
-    // If we have a definition for an element with this ID, use that defintion
-    // to place the element on the grid. This allows us to update positions
-    // of elements that may already exist.
-    const existingElementDefinition = elementDefs.find(
-      (elDef) => elDef.id === gridElement.id
-    );
-    if (existingElementDefinition) {
-      gridElement.position = existingElementDefinition;
-    }
-  });
-}
-
-export function hookupGapSizeControls(
-  appState: LayoutEditor,
-  settingsPanelEl: HTMLElement,
-  startingGap?: string
-) {
-  const cssInput = makeCssUnitInput({
-    parentEl: makeEl(
-      settingsPanelEl,
-      "div#gapSizeChooser.plusMinusInput.settings-grid",
-      {
-        innerHTML: `<span class = "input-label">Panel gap size</span>`,
-      }
-    ),
-    selector: "#gapSizeChooser",
-    onChange: (x) => appState.updateGrid({ gap: x }),
-    allowedUnits: ["px", "rem"],
-    snapToDefaults: false,
-  });
-
-  if (startingGap) {
-    cssInput.updateValue(startingGap);
-  }
-
-  return cssInput;
 }

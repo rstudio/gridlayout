@@ -2,8 +2,13 @@ import { css } from "@emotion/css";
 import { LayoutElement, LayoutInfo } from ".";
 import { GridItem, GridPos } from "./GridItem";
 import { GridLayout, LayoutState, TractDir } from "./GridLayout";
-import { buildControlsForDir, CSSInput } from "./make-cssUnitInput";
+import {
+  buildControlsForDir,
+  CSSInput,
+  makeCssUnitInput,
+} from "./make-cssUnitInput";
 import { blockEl, createEl, ElementOpts, makeEl } from "./make-elements";
+import { setupGridedUI } from "./setupGridedUI";
 import { getStylesForSelectorWithTargets } from "./utils-cssom";
 import {
   boundingRectToCssPos,
@@ -26,12 +31,6 @@ import {
 } from "./utils-misc";
 import { setShinyInput } from "./utils-shiny";
 import { createFocusModal } from "./web-components/focus-modal";
-import {
-  addExistingElementsToApp,
-  cleanupGridedUi,
-  hookupGapSizeControls,
-  setupGridedUI,
-} from "./wrapInGrided";
 
 export type GridUpdateOptions = {
   rows?: string[] | string;
@@ -180,14 +179,23 @@ export class LayoutEditor {
 
     this.container = alreadyWrappedApp ?? findFirstGridNode();
     this.gridStyles = this.container.style;
-
     this.gridLayout = new GridLayout(this.container);
 
     if (alreadyWrappedApp) {
       // If we're reloading an existing grided app we need to clean up the state
       // connected components like the tract sizes before rebuilding them to
       // avoid conflicts
-      cleanupGridedUi();
+      document
+        .querySelectorAll(
+          [
+            ".grid-cell",
+            ".added-element",
+            ".tract-controls",
+            ".dragSelectionBox",
+            "#drag-canvas",
+          ].join(",")
+        )
+        .forEach((el) => el?.remove());
     } else {
       setupGridedUI(this, opts.finishBtn);
 
@@ -207,7 +215,7 @@ export class LayoutEditor {
     }
 
     // Need to sync grided state with existing app elements
-    addExistingElementsToApp(this, opts.elements);
+    this.addExistingElementsToApp(opts.elements);
 
     this.hookupGapSizeControls(opts.grid?.gap);
 
@@ -219,11 +227,23 @@ export class LayoutEditor {
   }
 
   hookupGapSizeControls(initialGapSize?: string) {
-    this.gapSizeSetting = hookupGapSizeControls(
-      this,
-      document.getElementById("gridedGapSizeControls"),
-      initialGapSize
-    );
+    this.gapSizeSetting = makeCssUnitInput({
+      parentEl: makeEl(
+        document.getElementById("gridedGapSizeControls"),
+        "div#gapSizeChooser.plusMinusInput.settings-grid",
+        {
+          innerHTML: `<span class = "input-label">Panel gap size</span>`,
+        }
+      ),
+      selector: "#gapSizeChooser",
+      onChange: (x) => this.updateGrid({ gap: x }),
+      allowedUnits: ["px", "rem"],
+      snapToDefaults: false,
+    });
+
+    if (initialGapSize) {
+      this.gapSizeSetting.updateValue(initialGapSize);
+    }
   }
 
   get currentLayout(): LayoutInfo {
@@ -278,6 +298,51 @@ export class LayoutEditor {
     }
 
     return gridItem;
+  }
+
+  addExistingElementsToApp(elementDefs: LayoutElement[] = []) {
+    // If grided is running on an existing app, we need to parse the children and
+    // add them as elements;
+    [...this.container.children].forEach((el: Element) => {
+      // Existing apps will have the dragCanvas as a child. Ignore it
+      if (el.id === "dragCanvas") return;
+
+      const bbox = el.getBoundingClientRect();
+      // Only keep visible elements. This will (hopefully) filter out and
+      // script or style tags that find their way into the grid container
+      if (bbox.width === 0 && bbox.height === 0) return;
+
+      // Don't load grided-related elements. These will be there if we are loading
+      // from history for an existing app
+      if (
+        el.classList.contains("grid-cell") ||
+        el.classList.contains("dragSelectionBox") ||
+        el.classList.contains("added-element") ||
+        el.id === "drag-canvas"
+      ) {
+        el.remove();
+        return;
+      }
+
+      const gridElement = this.addElement(
+        {
+          id: el.id,
+          gridPos: getPosOnGrid(el as HTMLElement),
+          mirroredElement: el as HTMLElement,
+        },
+        false // So we don't update history as well
+      );
+
+      // If we have a definition for an element with this ID, use that defintion
+      // to place the element on the grid. This allows us to update positions
+      // of elements that may already exist.
+      const existingElementDefinition = elementDefs.find(
+        (elDef) => elDef.id === gridElement.id
+      );
+      if (existingElementDefinition) {
+        gridElement.position = existingElementDefinition;
+      }
+    });
   }
 
   // Removes elements the user has added to the grid by id
