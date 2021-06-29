@@ -13,29 +13,27 @@ layout_gallery <- function(return_app_obj = FALSE){
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
      flipped_els = c("sidebar"),
-     live_app = function(input, output) {
-       output$app_dump <- renderUI({
-         print("Rendering clasic app UI")
-         grid_container(
+     live_app = function() {
+       list(
+         ui = grid_page(
            layout = "|2rem  |200px   |1fr    |
                     |150px |header  |header |
                     |1fr   |sidebar |plot   |",
-           use_bslib_card_styles = FALSE,
-           elements = list(
-             header = title_panel("This is my header"),
-             sidebar = grid_panel(
-               title = "Settings",
-               sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
-             ),
-             plot = plotOutput("distPlot")
-           )
-         )
-       })
-       output$distPlot <- renderPlot({
-         x    <- faithful[, 2]
-         bins <- seq(min(x), max(x), length.out = input$bins + 1)
-         hist(x, breaks = bins, col = 'darkgray', border = 'white')
-       })
+           header = title_panel("This is my header"),
+           sidebar = grid_panel(
+             title = "Settings",
+             sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+           ),
+           plot = plotOutput("distPlot")
+         ),
+         server = function(input, output) {
+           output$distPlot <- renderPlot({
+             x <- faithful[, 2]
+             bins <- seq(min(x), max(x), length.out = input$bins + 1)
+             hist(x, breaks = bins, col = "darkgray", border = "white")
+           })
+         }
+       )
      }
     ),
     gen_template_info(
@@ -83,6 +81,7 @@ layout_gallery <- function(return_app_obj = FALSE){
      |400px |stockTable |"
     )
   )
+
 
   grided_app(starting_layout = layout_templates, return_app_obj = return_app_obj)
 }
