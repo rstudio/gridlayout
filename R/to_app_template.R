@@ -13,25 +13,28 @@ to_app_template <- function(x) {
 }
 
 #' @export
-to_app_template.default <- function(x){
+to_app_template.default <- function(x) {
   cat("to_app_template generic")
 }
-paste_nl <- function(...){
+paste_nl <- function(...) {
   paste(..., sep = "\n")
 }
 #' @export
-to_app_template.gridlayout <- function(x){
+to_app_template.gridlayout <- function(x) {
   element_divs <- paste(
     lapply(
       get_elements(x),
-      function(el){
+      function(el) {
         paste_nl(
           paste0("  ", el$id, " = grid_panel("),
           paste0("    title = \"", el$id, "\","),
           paste0("    p(\"content for ", el$id, "\")"),
-          "  )")
+          "  )"
+        )
       }
-    ), collapse = ",\n")
+    ),
+    collapse = ",\n"
+  )
 
   paste_nl(
     "library(shiny)\nlibrary(gridlayout)",
