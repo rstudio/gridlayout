@@ -70,8 +70,6 @@ grided_server_code <- function(input, output, session,
     )
   )
 
-
-
   #---- See code for layout ----
   # Get code button will send a popup with the code needed to define currently viewed layout
   shiny::bindEvent(
@@ -87,7 +85,20 @@ grided_server_code <- function(input, output, session,
 
   #---- Build app template ----
   shiny::bindEvent(shiny::observe({
-    app_template <- to_app_template(layout_info_to_gridlayout(input$build_app_template))
+    layout_info <- input$build_app_template
+
+    # If layout editor is in live app mode, then we will also recieve the name of the layout we're currently editing.
+    app_template <- if (notNull(layout_info$name)) {
+      layout_app <- find_layout_by_name(starting_layout, input$live_app_request)$live_app
+
+      # browser()
+      ui_defn <- deparse(body(layout_app$ui))[-1]
+      ui_defn <- ui_defn[-length(ui_defn)]
+
+
+    } else {
+     to_app_template(layout_info_to_gridlayout(input$build_app_template))
+    }
 
     if (!in_rstudio()) {
       session$sendCustomMessage("show-code-popup", list(
@@ -102,13 +113,21 @@ grided_server_code <- function(input, output, session,
   }), input$build_app_template)
 
   shiny::bindEvent(shiny::observe({
-    chosen_layout <- Filter(function(layout) layout$name == input$live_app_request, starting_layout)[[1]]
+    chosen_layout <- find_layout_by_name(starting_layout, input$live_app_request)
 
     if (is.null(chosen_layout)){
       stop("Something horrible has happened, that layout does not exist")
     }
 
-    chosen_layout$live_app(input, output)
+    live_app_code <- chosen_layout$live_app
+
+    # Inject the ui code
+    # Ui is a function so we can preserve code formatting easily for template dumping
+    output$app_dump <- renderUI({ live_app_code$ui() })
+
+    # Run server code
+    live_app_code$server(input, output)
+
   }), input$live_app_request)
 
 
@@ -155,6 +174,10 @@ grided_server_code <- function(input, output, session,
       description = "Sorry, Couldn't find your layout to update. Make sure it's in active editor tab of RStudio. Here's the code to paste in case all else fails."
     ))
   }), input$update_layout)
+}
+
+find_layout_by_name <- function(layouts, name) {
+  Filter(function(layout) layout$name == name, layouts)[[1]]
 }
 
 layout_info_to_gridlayout <- function(layout_info) {

@@ -15,30 +15,27 @@ layout_templates <- list(
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
     flipped_els = c("sidebar"),
-    live_app = function(input, output) {
-      output$app_dump <- renderUI({
-        print("Rendering clasic app UI")
-        grid_container(
-          layout = "|2rem  |200px   |1fr    |
-                    |150px |header  |header |
-                    |1fr   |sidebar |plot   |",
-          use_bslib_card_styles = FALSE,
-          elements = list(
-            header = title_panel("This is my header"),
-            sidebar = grid_panel(
-              title = "Settings",
-              sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
-            ),
-            plot = plotOutput("distPlot")
-          )
-        )
-      })
-      output$distPlot <- renderPlot({
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-      })
-    }
+    live_app = list(
+      ui = function(){grid_page(
+        layout = "|2rem  |200px   |1fr    |
+                  |150px |header  |header |
+                  |1fr   |sidebar |plot   |",
+        header = title_panel("This is my header"),
+        sidebar = grid_panel(
+          title = "Settings",
+          sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+        ),
+        plot = plotOutput("distPlot"),
+        just_container = TRUE
+      )},
+      server = function(input, output) {
+        output$distPlot <- renderPlot({
+          x <- faithful[, 2]
+          bins <- seq(min(x), max(x), length.out = input$bins + 1)
+          hist(x, breaks = bins, col = "darkgray", border = "white")
+        })
+      }
+    )
   ),
   gen_template_info(
     "Four-Square",
@@ -86,6 +83,8 @@ layout_templates <- list(
   )
 )
 
+
+
 shinyApp(
   ui = shiny::fluidPage(
     tags$head(
@@ -93,10 +92,9 @@ shinyApp(
       tags$script(src = "dist/index.js"),
       tags$title("GridEd")
     ),
-    uiOutput('app_dump')
+    uiOutput("app_dump")
   ),
   server = function(input, output, session) {
     grided_server_code(input, output, session, starting_layout = layout_templates, show_messages = TRUE)
   }
 )
-
