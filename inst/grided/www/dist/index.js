@@ -7836,6 +7836,7 @@
       _defineProperty8(this, "gridLayout", void 0);
       _defineProperty8(this, "tractControls", void 0);
       _defineProperty8(this, "entryType", void 0);
+      _defineProperty8(this, "layoutName", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
@@ -7853,6 +7854,7 @@
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
+      this.layoutName = opts === null || opts === void 0 ? void 0 : opts.liveAppId;
       if (this.entryType === "edit-layout" || this.entryType === "edit-existing-app") {
         setShinyInput("starting-layout", this.currentLayout, true);
       }
@@ -7936,12 +7938,16 @@
     }, {
       key: "currentLayout",
       get: function get() {
-        return {
+        var layout = {
           grid: this.gridLayout.attrs,
           elements: this.elements.map(function(el) {
             return el.info;
           })
         };
+        if (this.layoutName) {
+          layout.name = this.layoutName;
+        }
+        return layout;
       }
     }, {
       key: "nextColor",
@@ -9105,7 +9111,8 @@
     if (opts.entryType === "edit-layout" || opts.entryType === "layout-gallery") {
       clearPage();
     }
-    opts.finishBtn = opts.entryType === "layout-gallery" ? {
+    var gallery_app = opts.entryType === "layout-gallery" || opts.entryType === "layout-gallery-live";
+    opts.finishBtn = gallery_app ? {
       label: "Create app",
       onDone: function onDone(layout) {
         setShinyInput("build_app_template", layout);

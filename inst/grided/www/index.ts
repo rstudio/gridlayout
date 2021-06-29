@@ -93,20 +93,23 @@ const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
     clearPage();
   }
 
-  opts.finishBtn =
-    opts.entryType === "layout-gallery"
-      ? {
-          label: "Create app",
-          onDone: (layout: LayoutInfo) => {
-            setShinyInput("build_app_template", layout);
-          },
-        }
-      : {
-          label: "Update app layout",
-          onDone: (layout: LayoutInfo) => {
-            setShinyInput("update_layout", layout);
-          },
-        };
+  const gallery_app =
+    opts.entryType === "layout-gallery" ||
+    opts.entryType === "layout-gallery-live";
+
+  opts.finishBtn = gallery_app
+    ? {
+        label: "Create app",
+        onDone: (layout: LayoutInfo) => {
+          setShinyInput("build_app_template", layout);
+        },
+      }
+    : {
+        label: "Update app layout",
+        onDone: (layout: LayoutInfo) => {
+          setShinyInput("update_layout", layout);
+        },
+      };
 
   opts.onUpdate = (opts: LayoutEditorSetup) => {
     saveEditorHistory(opts);

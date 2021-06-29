@@ -92,6 +92,9 @@ export class LayoutEditor {
     updatePositions: () => void;
   };
   entryType: AppEntryType;
+  // Stores the name of the current template (if we're coming in from the template viewer)
+  layoutName?: string;
+
   constructor(opts: LayoutEditorSetup) {
     this.entryType = opts.entryType;
     this.onUpdate = opts.onUpdate;
@@ -128,6 +131,8 @@ export class LayoutEditor {
         "Neither starting layout was provided nor is there an existing grid app"
       );
     }
+
+    this.layoutName = opts?.liveAppId;
 
     // Send info on starting layout to Shiny so it can find layout definition
     // to edit it after changes have been made
@@ -247,10 +252,16 @@ export class LayoutEditor {
   }
 
   get currentLayout(): LayoutInfo {
-    return {
+    const layout: LayoutInfo = {
       grid: this.gridLayout.attrs,
       elements: this.elements.map((el) => el.info),
     };
+
+    if (this.layoutName) {
+      layout.name = this.layoutName;
+    }
+
+    return layout;
   }
   // Get the next color in our list of colors.
   get nextColor() {
