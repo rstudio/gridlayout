@@ -22,9 +22,10 @@
 #' @param flag_mismatches Should mismatches between the named arguments and
 #'   layout elements trigger an error?
 #' @param just_container Should the app layout be given as a standalone output
-#'   (like calling `grid_container()`)? This is almost always set to `FALSE`.
-#'   Note that extra arguments and themes will be disgarded when this is set to
-#'   `TRUE`.
+#'   (like calling [`grid_container()`])? Defaults to [`shiny::isRunning()`] so if
+#'   app is produced in a [`shiny::renderUI()`] type call it knows not to try and
+#'   recreate the whole page. Note that extra arguments and themes will be
+#'   discarded when this is set to `TRUE`.
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
@@ -64,7 +65,7 @@
 #'   }
 #' )
 #' }
-grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE, just_container = FALSE){
+grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE, just_container = shiny::isRunning()){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
