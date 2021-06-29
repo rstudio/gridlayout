@@ -54,6 +54,10 @@ str_extract <- function(text, pattern){
 
 collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
+split_by_line <- function(text){
+  if (length(text) > 1 || !is.character(text)) stop("split_by_line() needs a single character element")
+  strsplit(text, split = "\n")[[1]]
+}
 
 # Make text bold
 emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
