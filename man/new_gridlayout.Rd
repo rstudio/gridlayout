@@ -67,19 +67,19 @@ follows:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
   "| header | header |
    | plota  | plotb  |" )
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
-##        1fr    1fr   
-##    1fr header header
-##    1fr plota  plotb 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plota  plotb 
 ## Gap of 1rem. Total height of viewport.
 ## 
-## Alternate layouts:   
-##    
-##    - Width < 500px 
-##              1fr   
-##       85px  header
-##       350px plota 
-##       350px plotb 
-##    Gap of 1rem. Total height of auto.
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plota 
+##     350px plotb 
+##   Gap of 1rem. Total height of auto.
 }
 
 To avoid multi-line strings and the indentation trouble they can cause,
@@ -88,19 +88,19 @@ corresponds to a row in your table:\if{html}{\out{<div class="r">}}\preformatted
   "| header | header |",
   "| plota  | plotb  |" ))
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
-##        1fr    1fr   
-##    1fr header header
-##    1fr plota  plotb 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plota  plotb 
 ## Gap of 1rem. Total height of viewport.
 ## 
-## Alternate layouts:   
-##    
-##    - Width < 500px 
-##              1fr   
-##       85px  header
-##       350px plota 
-##       350px plotb 
-##    Gap of 1rem. Total height of auto.
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plota 
+##     350px plotb 
+##   Gap of 1rem. Total height of auto.
 }
 
 \emph{An important caveat of this style is it is not currently able to be detected
@@ -128,19 +128,19 @@ The same layout as declared above can be accomplished with the following:\if{htm
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
 ) )
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
-##        1fr    1fr   
-##    1fr header header
-##    1fr plot_a plot_b
+##       1fr    1fr   
+##   1fr header header
+##   1fr plot_a plot_b
 ## Gap of 1rem. Total height of viewport.
 ## 
-## Alternate layouts:   
-##    
-##    - Width < 500px 
-##              1fr   
-##       85px  header
-##       350px plot_a
-##       350px plot_b
-##    Gap of 1rem. Total height of auto.
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plot_a
+##     350px plot_b
+##   Gap of 1rem. Total height of auto.
 }
 }
 
@@ -175,19 +175,19 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="r">}}\preformatted{n
   )
 )
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
-##        1fr    1fr   
-##    1fr header header
-##    1fr plot_a plot_b
+##       1fr    1fr   
+##   1fr header header
+##   1fr plot_a plot_b
 ## Gap of 1rem. Total height of viewport.
 ## 
-## Alternate layouts:   
-##    
-##    - Width < 500px 
-##            1fr   
-##       1fr header
-##       1fr plot_a
-##       1fr plot_b
-##    Gap of 1rem. Total height of viewport.
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##          1fr   
+##     1fr header
+##     1fr plot_a
+##     1fr plot_b
+##   Gap of 1rem. Total height of viewport.
 }
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.

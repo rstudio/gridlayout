@@ -4,7 +4,7 @@
 \alias{layout_gallery}
 \title{Layout Gallery}
 \usage{
-layout_gallery()
+layout_gallery(return_app_obj = FALSE)
 }
 \value{
 A shiny app object
