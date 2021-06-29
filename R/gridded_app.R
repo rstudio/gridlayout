@@ -87,17 +87,13 @@ grided_server_code <- function(input, output, session,
   shiny::bindEvent(shiny::observe({
     layout_info <- input$build_app_template
 
-    # If layout editor is in live app mode, then we will also recieve the name of the layout we're currently editing.
     app_template <- if (notNull(layout_info$name)) {
+      # If layout editor is in live app mode, then we will also receive the name
+      # of the layout we're currently editing.
       layout_app <- find_layout_by_name(starting_layout, input$live_app_request)$live_app
-
-      # browser()
-      ui_defn <- deparse(body(layout_app$ui))[-1]
-      ui_defn <- ui_defn[-length(ui_defn)]
-
-
+      gallery_app_to_app_template(layout_app)
     } else {
-     to_app_template(layout_info_to_gridlayout(input$build_app_template))
+      to_app_template(layout_info_to_gridlayout(input$build_app_template))
     }
 
     if (!in_rstudio()) {
@@ -119,11 +115,11 @@ grided_server_code <- function(input, output, session,
       stop("Something horrible has happened, that layout does not exist")
     }
 
-    live_app_code <- chosen_layout$live_app
+    live_app_code <- chosen_layout$live_app()
 
     # Inject the ui code
     # Ui is a function so we can preserve code formatting easily for template dumping
-    output$app_dump <- renderUI({ live_app_code$ui() })
+    output$app_dump <- renderUI({ live_app_code$ui })
 
     # Run server code
     live_app_code$server(input, output)
