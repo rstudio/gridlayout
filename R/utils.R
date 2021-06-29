@@ -56,17 +56,30 @@ italicize <- function(...) if(is_installed("crayon")) crayon::italic(...) else a
 invert_text <- function(...) if(is_installed("crayon")) crayon::inverse(...) else as.character(...)
 
 indent_text <- function(text, num_spaces = 2) {
-  lines <- strsplit(
-    text,
-    split = "\n"
-  )[[1]]
 
-  indent <- paste(rep(" ", times = num_spaces), collapse = "")
-  indented_lines <- map_chr(lines, function(line) paste(indent, line))
+  # If we have a single length vector, assume it needs to be split on new-lines
+  if (length(text) == 1) {
+    text <- strsplit(
+      text,
+      split = "\n"
+    )[[1]]
+  }
 
-  paste(indented_lines, collapse = "\n")
+  text <- if (num_spaces > 0) {
+    paste0(
+      paste(rep(" ", times = num_spaces), collapse = ""),
+      text
+    )
+  } else {
+    str_replace_all(
+      text,
+      pattern = paste0("^(\\s{1,", abs(num_spaces), "})"),
+      replacement = ""
+    )
+  }
+
+  paste(text, collapse = "\n")
 }
-
 
 # extract from a list of lists to whatever level is desired
 extract <- function(x, ...) {

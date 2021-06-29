@@ -5,19 +5,19 @@
         "\n|2rem  |200px   |1fr    |\n|80px  |header  |header |\n|1fr   |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-              200px   1fr   
-         80px header  header
-         1fr  sidebar plot  
+             200px   1fr   
+        80px header  header
+        1fr  sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Only row sizes
 
@@ -25,19 +25,19 @@
       new_gridlayout("\n|80px  |header  |header |\n|1fr   |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-              1fr     1fr   
-         80px header  header
-         1fr  sidebar plot  
+             1fr     1fr   
+        80px header  header
+        1fr  sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Only col sizes
 
@@ -45,19 +45,19 @@
       new_gridlayout("\n|200px   |1fr    |\n|header  |header |\n|sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-             200px   1fr   
-         1fr header  header
-         1fr sidebar plot  
+            200px   1fr   
+        1fr header  header
+        1fr sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Gap and row sizes
 
@@ -66,19 +66,19 @@
         "\n|2rem  |        |       |\n|80px  |header  |header |\n|1fr   |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-              1fr     1fr   
-         80px header  header
-         1fr  sidebar plot  
+             1fr     1fr   
+        80px header  header
+        1fr  sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Only gap size
 
@@ -87,19 +87,19 @@
         "\n|2rem  |        |       |\n|      |header  |header |\n|      |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-             1fr     1fr   
-         1fr header  header
-         1fr sidebar plot  
+            1fr     1fr   
+        1fr header  header
+        1fr sidebar plot  
       Gap of 2rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Single column
 
@@ -108,20 +108,20 @@
         "\n|----- |--------|\n|2rem  |1fr     |\n|80px  |header  |\n|auto  |sidebar |\n|400px |plot    |")
     Output
       gridlayout of 3 elements: 
-               1fr    
-         80px  header 
-         auto  sidebar
-         400px plot   
+              1fr    
+        80px  header 
+        auto  sidebar
+        400px plot   
       Gap of 2rem. Total height of auto.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- Single row
 
@@ -130,17 +130,17 @@
         "\n|2rem  |auto   | 200px  | 1fr    |\n|80px  |header |sidebar |sidebar |")
     Output
       gridlayout of 2 elements: 
-              auto   200px   1fr    
-         80px header sidebar sidebar
+             auto   200px   1fr    
+        80px header sidebar sidebar
       Gap of 2rem. Total height of auto.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+        Gap of 1rem. Total height of auto.
 
 # Markdown parsing -- No sizes
 
@@ -148,17 +148,17 @@
       new_gridlayout("\n|header  |header |\n|sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-             1fr     1fr   
-         1fr header  header
-         1fr sidebar plot  
+            1fr     1fr   
+        1fr header  header
+        1fr sidebar plot  
       Gap of 1rem. Total height of viewport.
       
-      Alternate layouts:   
-         
-         - Width < 500px 
-                   1fr    
-            85px  header 
-            350px sidebar
-            350px plot   
-         Gap of 1rem. Total height of auto.
+      Alternate layouts:  
+        
+        - Width < 500px 
+                 1fr    
+          85px  header 
+          350px sidebar
+          350px plot   
+        Gap of 1rem. Total height of auto.
 
