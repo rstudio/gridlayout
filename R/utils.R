@@ -29,6 +29,11 @@ str_trim <- function(text, side = c("both", "left", "right")){
   text
 }
 
+vec_trim <- function(vec, n_start = 1, n_end = n_start) {
+  # Trim off n elements from beginning and end of a vector
+  vec[seq.int(from = n_start+1, to = length(vec) - n_end)]
+}
+
 str_detect <- function(text, pattern, fixed = FALSE){
   grepl(pattern = pattern, x = text, perl = !fixed, fixed = fixed)
 }
