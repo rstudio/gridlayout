@@ -14,11 +14,17 @@
 #'   than an error will be thrown. This behavior can be overridden using the
 #'   `flag_mismatches` argument. Any unnamed arguments are added to the page
 #'   after the container. This can be used to do things like things to the
-#'   `head` or `meta` sections of the page.
+#'   `head` or `meta` sections of the page. Note that the ids of
+#'   `use_bslib_card_styles`, `theme`, `flag_mismatches`, and `just_container`
+#'   are not allowed as they correspond to arguments to the function.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
 #' @param flag_mismatches Should mismatches between the named arguments and
 #'   layout elements trigger an error?
+#' @param just_container Should the app layout be given as a standalone output
+#'   (like calling `grid_container()`)? This is almost always set to `FALSE`.
+#'   Note that extra arguments and themes will be disgarded when this is set to
+#'   `TRUE`.
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
@@ -58,7 +64,7 @@
 #'   }
 #' )
 #' }
-grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE){
+grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE, just_container = FALSE){
 
   requireNamespace("shiny", quietly = TRUE)
   # Kinda silly to have a grid page without a layout
@@ -80,15 +86,19 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
             "This is likely a mistake for grid_page()")
   }
 
+  container <- grid_container(
+    id = "grid_page",
+    layout = layout,
+    elements = named_args,
+    use_bslib_card_styles = use_bslib_card_styles,
+    flag_mismatches = flag_mismatches
+  )
+
+  if (just_container) return(container)
+
   shiny::fluidPage(
     theme = theme,
-    grid_container(
-      id = "grid_page",
-      layout = layout,
-      elements = named_args,
-      use_bslib_card_styles = use_bslib_card_styles,
-      flag_mismatches = flag_mismatches
-    ),
+    container,
     #any extra args not matched to layout will get added after
     unnamed_args
   )
