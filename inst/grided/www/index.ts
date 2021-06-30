@@ -74,7 +74,7 @@ const startLayoutGallery = (
         {
           entryType: liveApp ? "layout-gallery-live" : "layout-gallery",
           ...selectedLayout,
-          liveAppId: liveApp ? selectedLayout.name : undefined,
+          layoutName: selectedLayout.name,
         },
         true
       );
@@ -97,11 +97,17 @@ const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
     opts.entryType === "layout-gallery" ||
     opts.entryType === "layout-gallery-live";
 
+  debugger;
   opts.finishBtn = gallery_app
     ? {
         label: "Create app",
         onDone: (layout: LayoutInfo) => {
-          setShinyInput("build_app_template", layout);
+          setShinyInput(
+            opts.entryType === "layout-gallery"
+              ? "build_app_template"
+              : "build_live_app_template",
+            layout
+          );
         },
       }
     : {

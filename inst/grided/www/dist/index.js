@@ -7844,7 +7844,7 @@
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
         this.wrapExistingApp(opts);
       } else if (this.entryType === "layout-gallery-live") {
-        setShinyInput("live_app_request", opts.liveAppId, true);
+        setShinyInput("live_app_request", opts.layoutName, true);
         new MutationObserver(function(mutationsList, observer) {
           _this.wrapExistingApp(opts);
           observer.disconnect();
@@ -7854,7 +7854,7 @@
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
-      this.layoutName = opts === null || opts === void 0 ? void 0 : opts.liveAppId;
+      this.layoutName = opts === null || opts === void 0 ? void 0 : opts.layoutName;
       if (this.entryType === "edit-layout" || this.entryType === "edit-existing-app") {
         setShinyInput("starting-layout", this.currentLayout, true);
       }
@@ -9099,7 +9099,7 @@
       startLayoutEditor(_objectSpread4(_objectSpread4({
         entryType: liveApp ? "layout-gallery-live" : "layout-gallery"
       }, selectedLayout), {}, {
-        liveAppId: liveApp ? selectedLayout.name : void 0
+        layoutName: selectedLayout.name
       }), true);
     }).selectLayout(opts.selected);
     return document.body.appendChild(gallery);
@@ -9112,10 +9112,11 @@
       clearPage();
     }
     var gallery_app = opts.entryType === "layout-gallery" || opts.entryType === "layout-gallery-live";
+    debugger;
     opts.finishBtn = gallery_app ? {
       label: "Create app",
       onDone: function onDone(layout) {
-        setShinyInput("build_app_template", layout);
+        setShinyInput(opts.entryType === "layout-gallery" ? "build_app_template" : "build_live_app_template", layout);
       }
     } : {
       label: "Update app layout",

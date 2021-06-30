@@ -84,16 +84,14 @@ grided_server_code <- function(input, output, session,
   )
 
   #---- Build app template ----
-  shiny::bindEvent(shiny::observe({
-    layout_info <- input$build_app_template
-
+  generate_app_template <- function(layout_info, is_live_app){
     desired_layout <- layout_info_to_gridlayout(layout_info)
 
-    app_template <- if (notNull(layout_info$name)) {
+    app_template <- if (is_live_app) {
       # If layout editor is in live app mode, then we will also receive the name
       # of the layout we're currently editing. We use this to get the live-app's
       # code.
-      layout_app <- find_layout_by_name(starting_layout, input$live_app_request)$live_app
+      layout_app <- find_layout_by_name(starting_layout, layout_info$name)$live_app
       gallery_app_to_app_template(layout_app, desired_layout)
     } else {
       to_app_template(desired_layout)
@@ -109,7 +107,15 @@ grided_server_code <- function(input, output, session,
       rstudioapi::documentNew(text = app_template)
       shiny::stopApp()
     }
+  }
+
+  shiny::bindEvent(shiny::observe({
+    generate_app_template(input$build_app_template, is_live_app = FALSE)
   }), input$build_app_template)
+
+  shiny::bindEvent(shiny::observe({
+    generate_app_template(input$build_live_app_template, is_live_app = TRUE)
+  }), input$build_live_app_template)
 
   shiny::bindEvent(shiny::observe({
     chosen_layout <- find_layout_by_name(starting_layout, input$live_app_request)
@@ -175,8 +181,16 @@ grided_server_code <- function(input, output, session,
   }), input$update_layout)
 }
 
+
+
 find_layout_by_name <- function(layouts, name) {
-  Filter(function(layout) layout$name == name, layouts)[[1]]
+  layout <- Filter(function(layout) layout$name == name, layouts)[[1]]
+
+  if (is.null(layout)) {
+    stop("Couldn't find layout ", name)
+  }
+
+  layout
 }
 
 layout_info_to_gridlayout <- function(layout_info) {

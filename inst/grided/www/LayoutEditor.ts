@@ -73,7 +73,7 @@ export type LayoutEditorSetup = {
   elements?: LayoutElement[];
   finishBtn?: FinishButtonSetup;
   onUpdate?: (opts: LayoutEditorSetup) => void;
-  liveAppId?: string;
+  layoutName?: string;
 };
 
 export class LayoutEditor {
@@ -116,7 +116,7 @@ export class LayoutEditor {
     } else if (this.entryType === "layout-gallery-live") {
       // If we've requested a live app from the layout gallery we need to wait
       // for it to be sent over by shiny and then wrap it with grided interface
-      setShinyInput("live_app_request", opts.liveAppId, true);
+      setShinyInput("live_app_request", opts.layoutName, true);
 
       new MutationObserver((mutationsList, observer) => {
         this.wrapExistingApp(opts);
@@ -132,7 +132,7 @@ export class LayoutEditor {
       );
     }
 
-    this.layoutName = opts?.liveAppId;
+    this.layoutName = opts?.layoutName;
 
     // Send info on starting layout to Shiny so it can find layout definition
     // to edit it after changes have been made
