@@ -13,28 +13,7 @@ layout_gallery <- function(return_app_obj = FALSE){
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
      flipped_els = c("sidebar"),
-     live_app = function() {
-       list(
-         ui = grid_page(
-           layout = "|2rem  |200px   |1fr    |
-                    |150px |header  |header |
-                    |1fr   |sidebar |plot   |",
-           header = title_panel("This is my header"),
-           sidebar = grid_panel(
-             title = "Settings",
-             sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
-           ),
-           plot = plotOutput("distPlot")
-         ),
-         server = function(input, output) {
-           output$distPlot <- renderPlot({
-             x <- faithful[, 2]
-             bins <- seq(min(x), max(x), length.out = input$bins + 1)
-             hist(x, breaks = bins, col = "darkgray", border = "white")
-           })
-         }
-       )
-     }
+     app_loc = "classic.R"
     ),
     gen_template_info(
       "Four-Square",
@@ -88,12 +67,10 @@ layout_gallery <- function(return_app_obj = FALSE){
 
 
 # Takes a layout definition and turns it into the info ingested by grided
-gen_template_info <- function(name, layout_table,  flipped_els = c(), live_app = NULL, app_loc = NULL){
+gen_template_info <- function(name, layout_table,  flipped_els = c(), app_loc = NULL){
   layout_info <- dump_all_info(new_gridlayout(layout_table))
   layout_info$name <- name
-  if (notNull(live_app)) {
-    layout_info$live_app <- live_app
-  }
+
   if (notNull(app_loc)) {
     layout_info$app_loc <- app_loc
   }
