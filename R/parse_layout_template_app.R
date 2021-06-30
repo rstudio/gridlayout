@@ -6,8 +6,11 @@ line_of <- function(app_lines, text){
   which(str_detect(app_lines, paste("#'", text)))
 }
 parse_layout_template_app <- function(app_script) {
-  app_lines <- read_template_app(app_script)
+  if (!requireNamespace("rlang", quietly = TRUE)) {
+    stop("The rlang package is needed to run live apps. Install it with `install.packages('rlang')`.")
+  }
 
+  app_lines <- read_template_app(app_script)
 
   get_chunk <- function(id) {
     # Shift by one to avoid comment itself

@@ -21,7 +21,8 @@ Suggests:
     fs,
     glue,
     ggplot2,
-    gt
+    gt,
+    rlang
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
