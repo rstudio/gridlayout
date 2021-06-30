@@ -3,7 +3,7 @@
 #' Returns the string of an entire shiny app built around a desired layout.
 #' Designed to be used with the `gridlayout` app-starter addin.
 #'
-#' @inheritParams to_css
+#' @param x An object of class `gridlayout`
 #'
 #' @return Character string of Shiny app that uses desired layout
 #' @export
