@@ -6,10 +6,6 @@ line_of <- function(app_lines, text){
   which(str_detect(app_lines, paste("#'", text)))
 }
 parse_layout_template_app <- function(app_script) {
-  if (!requireNamespace("rlang", quietly = TRUE)) {
-    stop("The rlang package is needed to run live apps. Install it with `install.packages('rlang')`.")
-  }
-
   app_lines <- read_template_app(app_script)
 
   get_chunk <- function(id) {
@@ -23,9 +19,9 @@ parse_layout_template_app <- function(app_script) {
   ui_text <- get_chunk("ui")
   server_text <- get_chunk("server")
   local({
-    eval(rlang::parse_expr(layout_text))
-    eval(rlang::parse_expr(ui_text))
-    eval(rlang::parse_expr(server_text))
+    eval(parse(text = layout_text))
+    eval(parse(text = ui_text))
+    eval(parse(text = server_text))
     list(layout = app_layout, ui = ui, server = server)
   })
 }

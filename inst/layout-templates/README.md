@@ -2,6 +2,10 @@
 
 This folder stores the live-apps for the layout templates chooser. These apps aim to illustrate good Shiny code and are built for a given layout.
 
+## Including in layout gallery
+
+Currently you need to add an entry to the `layout_templates` list defined in `layout_gallery.R`. You want to match the layout used in the template app with the one in the passed to `gen_template_info()`; linking the two with the optional `app_loc` argument that specifies the name of the script for your app in the top level of `inst/layout-templates/`. Eventually this process will probably be automated but the duplication of layouts allows there to be no build or runtime step to parses the layouts. 
+
 ## Guidelines
 
 The code within a template app is parsed by R for wrapping into the layout editor so there's a few formatting guidlines that need to be met. Here's an example template app...
@@ -50,4 +54,4 @@ There are three sections denoted by roxygen style `#'` comments along with `star
 
 ## Considerations
 
-When an app is loaded into the grided layout editor all three sections are read in and parsed via `rlang::parse_expr()` in the order `layout -> ui -> server`. This means that these sections need to stand on their own and any variables defined or packages included outside will not be seen. 
+When an app is loaded into the grided layout editor all three sections are read in and parsed via `base::parse(text = <section-text>)` in the order `layout -> ui -> server`. This means that these sections need to stand on their own and any variables defined or packages included outside will not be seen. 
