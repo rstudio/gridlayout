@@ -173,7 +173,7 @@ export class LayoutGallery extends HTMLElement {
       }),
     ];
 
-    if (selectedLayout.live_app) {
+    if (selectedLayout.app_loc) {
       actionButtons.push(
         clickButton(".edit-live", "Edit layout with live app", (event) => {
           closeGallery(event);

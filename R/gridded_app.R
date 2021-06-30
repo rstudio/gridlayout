@@ -91,8 +91,8 @@ grided_server_code <- function(input, output, session,
       # If layout editor is in live app mode, then we will also receive the name
       # of the layout we're currently editing. We use this to get the live-app's
       # code.
-      layout_app <- find_layout_by_name(starting_layout, layout_info$name)$live_app
-      gallery_app_to_app_template(layout_app, desired_layout)
+      layout_app <- find_layout_by_name(starting_layout, layout_info$name)$app_loc
+      prepare_template_for_saving(layout_app, updated_layout = desired_layout)
     } else {
       to_app_template(desired_layout)
     }
@@ -118,13 +118,14 @@ grided_server_code <- function(input, output, session,
   }), input$build_live_app_template)
 
   shiny::bindEvent(shiny::observe({
+
     chosen_layout <- find_layout_by_name(starting_layout, input$live_app_request)
 
     if (is.null(chosen_layout)){
       stop("Something horrible has happened, that layout does not exist")
     }
 
-    live_app_code <- chosen_layout$live_app()
+    live_app_code <- parse_layout_template_app(chosen_layout$app_loc)
 
     # Inject the ui code
     # Ui is a function so we can preserve code formatting easily for template dumping

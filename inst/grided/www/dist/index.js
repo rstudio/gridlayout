@@ -8693,7 +8693,7 @@
         Object.assign(this.grid, _layout.grid);
         this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
         this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
-        this.hasLiveApp = _layout.live_app !== void 0;
+        this.hasLiveApp = _layout.app_loc !== void 0;
         return this;
       }
     }, {
@@ -9010,7 +9010,7 @@
           closeGallery(event);
           _this3.onEditFn(selectedLayout, false);
         })];
-        if (selectedLayout.live_app) {
+        if (selectedLayout.app_loc) {
           actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
             closeGallery(event);
             _this3.onEditFn(selectedLayout, true);
@@ -9112,7 +9112,6 @@
       clearPage();
     }
     var gallery_app = opts.entryType === "layout-gallery" || opts.entryType === "layout-gallery-live";
-    debugger;
     opts.finishBtn = gallery_app ? {
       label: "Create app",
       onDone: function onDone(layout) {

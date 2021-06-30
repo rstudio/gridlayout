@@ -25,7 +25,7 @@ export type LayoutInfo = {
   grid: LayoutState;
   elements: LayoutElement[];
   // If live app code exists for layout it's sent as a character vector
-  live_app?: string[];
+  app_loc?: string;
 };
 
 export type GalleryOptions = {
@@ -97,7 +97,6 @@ const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
     opts.entryType === "layout-gallery" ||
     opts.entryType === "layout-gallery-live";
 
-  debugger;
   opts.finishBtn = gallery_app
     ? {
         label: "Create app",

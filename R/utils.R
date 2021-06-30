@@ -59,6 +59,10 @@ split_by_line <- function(text){
   strsplit(text, split = "\n")[[1]]
 }
 
+collapse_by_newline <- function(text_vec){
+  paste(text_vec, collapse = "\n")
+}
+
 # Make text bold
 emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
 italicize <- function(...) if(is_installed("crayon")) crayon::italic(...) else as.character(...)

@@ -108,7 +108,7 @@ export class GridPreview extends HTMLElement {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
     this.name = layout.name ?? this.name;
-    this.hasLiveApp = layout.live_app !== undefined;
+    this.hasLiveApp = layout.app_loc !== undefined;
     return this;
   }
 
