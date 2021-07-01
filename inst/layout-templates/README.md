@@ -4,7 +4,7 @@ This folder stores the live-apps for the layout templates chooser. These apps ai
 
 ## Including in layout gallery
 
-Currently you need to add an entry to the `layout_templates` list defined in `layout_gallery.R`. You want to match the layout used in the template app with the one in the passed to `gen_template_info()`; linking the two with the optional `app_loc` argument that specifies the name of the script for your app in the top level of `inst/layout-templates/`. Eventually this process will probably be automated but the duplication of layouts allows there to be no build or runtime step to parses the layouts. 
+Currently you need to add an entry to the `layout_templates` list defined in `layout_gallery.R`. You want to match the layout used in the template app with the one in the passed to `gen_template_info()`; linking the two with the optional `app_loc` argument that specifies the name of the script for your app in the top level of `inst/layout-templates/`. Eventually this process will probably be automated but the duplication of layouts means there is no build or runtime step to parse the layouts. 
 
 ## Guidelines
 
