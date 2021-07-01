@@ -1,14 +1,7 @@
-// Let Typescript know that we will have a Shiny global object available
-import type { ShinyType } from "shiny";
-declare global {
-  interface Window {
-    Shiny: ShinyType;
-  }
-}
-
 // These are functions for communicating with Shiny. They are all optional
 // chained so they won't spit errors if Shiny isn't connected or initialized
 // yet.
+import type { Shiny } from "shiny/srcts/types/src/shiny";
 
 export function setShinyInput(
   inputId: string,
@@ -23,6 +16,9 @@ export function setShinyInput(
   );
 }
 
-export function addShinyListener(eventId: string, callbackFunc: Function) {
+export function addShinyListener(
+  eventId: Parameters<Shiny["addCustomMessageHandler"]>[0],
+  callbackFunc: Parameters<Shiny["addCustomMessageHandler"]>[1]
+) {
   window.Shiny?.addCustomMessageHandler(eventId, callbackFunc);
 }

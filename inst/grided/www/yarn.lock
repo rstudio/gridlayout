@@ -1595,7 +1595,7 @@
   resolved "https://registry.yarnpkg.com/@types/ion-rangeslider/-/ion-rangeslider-2.3.0.tgz#dd089921c21acebc266c37e95d191e721ea21750"
   integrity sha512-u1k2Ekfg7E/ByCrtqtMk98g3QMXnMyIjCKU397YfjhWnTrms2BteoTanMqe0MJ1zyBBiP6+bwbc7P4cU+RiL+w==
 
-"@types/jquery@*", "@types/jquery@^3.5.5":
+"@types/jquery@*", "@types/jquery@^3.5.5", "@types/jquery@patch:@types/jquery@3.5.5#./srcts/patch/types-jquery.patch":
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.5.tgz#2c63f47c9c8d96693d272f5453602afd8338c903"
   integrity sha512-6RXU9Xzpc6vxNrS6FPPapN1SxSHgQ336WC6Jj/N8q30OiaBZ00l1GBgeP7usjVZPivSkGUfL1z/WW6TX989M+w==
@@ -1622,26 +1622,15 @@
   resolved "https://registry.yarnpkg.com/@types/selectize/-/selectize-0.12.34.tgz#24a79e3176103019d2371ae9fc8487dcd1336cea"
   integrity sha512-OAXHsgsHBMJBHnB6QrFlHVa0+gCE5lgjdpwJDlJLRhrcsM4I2VXrm2vsG00//Rpdm4XgnX17vrBpjHlWOk1ALw==
 
-"@types/shiny@https://github.com/rstudio/shiny#js-alpha-versions":
+"@types/shiny@https://github.com/rstudio/shiny/#ts_namespace":
   version "1.6.0-alpha.9021"
-  resolved "https://github.com/rstudio/shiny#8ec72e49d092cf583859f8e10b11ea52b2fa83bd"
+  resolved "https://github.com/rstudio/shiny/#eedbe1e55868d1db88885d9755d4666aa431a0cb"
   dependencies:
     "@types/bootstrap" "3.4.0"
     "@types/bootstrap-datepicker" "0.0.14"
     "@types/datatables.net" "^1.10.19"
     "@types/ion-rangeslider" "2.3.0"
-    "@types/jquery" "^3.5.5"
-    "@types/selectize" "0.12.34"
-
-"@types/shiny@https://github.com/rstudio/shiny/":
-  version "1.6.0-alpha.9021"
-  resolved "https://github.com/rstudio/shiny/#61ee467deee5520c1d1c795193400aee4d6fff43"
-  dependencies:
-    "@types/bootstrap" "3.4.0"
-    "@types/bootstrap-datepicker" "0.0.14"
-    "@types/datatables.net" "^1.10.19"
-    "@types/ion-rangeslider" "2.3.0"
-    "@types/jquery" "^3.5.5"
+    "@types/jquery" "patch:@types/jquery@3.5.5#./srcts/patch/types-jquery.patch"
     "@types/selectize" "0.12.34"
 
 "@types/sizzle@*":
