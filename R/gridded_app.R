@@ -226,8 +226,33 @@ grided_resources <- function() {
 
 make_layout_call <- function(current_layout) {
   paste(
-    "layout <- new_gridlayout(\"",
-    "    ", to_md(current_layout), "\")",
+    "app_layout <- new_gridlayout(\"",
+    indent_text(to_md(current_layout), 2),
+    "\")",
     sep = "\n"
   )
+}
+
+prepare_template_for_saving <- function(app_script, updated_layout = NULL) {
+  app_lines <- readLines(con = system.file(paste0("layout-templates/", app_script), package = "gridlayout"))
+
+  if (notNull(updated_layout)) {
+    layout_pos <- find_layouts_in_file(app_lines)[[1]]
+
+    # Now break the app code into pre layout, and post layout, and sandwich the
+    # new layout between them
+
+    # Indices are squeezed by one to not include comments themselves
+    layout_start <- which(str_detect(app_lines, "#' start-layout")) - 1
+    layout_end <- which(str_detect(app_lines, "#' end-layout")) + 1
+
+    app_lines <- c(
+      app_lines[1:layout_start],
+      make_layout_call(updated_layout),
+      app_lines[layout_end:length(app_lines)]
+    )
+  }
+
+  # Remove the guiding comment lines
+  app_lines[!str_detect(app_lines, "#'", fixed = TRUE)]
 }
