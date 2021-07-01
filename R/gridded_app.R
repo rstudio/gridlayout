@@ -125,7 +125,14 @@ grided_server_code <- function(input, output, session,
       stop("Something horrible has happened, that layout does not exist")
     }
 
-    live_app_code <- parse_layout_template_app(chosen_layout$app_loc)
+    # Source app script that _should_ have the layout, ui, and server stored as
+    # variables We wrap this sourcing in a local to avoid namespace collisions and
+    # collect the results in a list
+    live_app_code <- local({
+      app_loc <- system.file(paste0("layout-templates/", chosen_layout$app_loc), package = "gridlayout")
+      source(app_loc, local = TRUE)
+      list(ui = ui, server = server)
+    })
 
     # Inject the ui code
     # Ui is a function so we can preserve code formatting easily for template dumping
