@@ -91,7 +91,7 @@ grided_server_code <- function(input, output, session,
       # If layout editor is in live app mode, then we will also receive the name
       # of the layout we're currently editing. We use this to get the live-app's
       # code.
-      layout_app <- find_layout_by_name(starting_layout, layout_info$name)$app_loc
+      layout_app <- find_layout_template(starting_layout, layout_info$name)
       prepare_template_for_saving(layout_app, updated_layout = desired_layout)
     } else {
       to_app_template(desired_layout)
@@ -119,14 +119,13 @@ grided_server_code <- function(input, output, session,
 
   shiny::bindEvent(shiny::observe({
 
-    chosen_layout_script <- find_layout_by_name(starting_layout, input$live_app_request)$app_loc
-    app_loc <- system.file(paste0("layout-templates/", chosen_layout_script), package = "gridlayout")
+    chosen_layout_app <- find_layout_template(starting_layout, input$live_app_request)
 
     # Source app script that _should_ have the layout, ui, and server stored as
     # variables We wrap this sourcing in a local to avoid namespace collisions and
     # collect the results in a list
     live_app_code <- local({
-      source(app_loc, local = TRUE)
+      source(chosen_layout_app, local = TRUE)
       list(ui = ui, server = server)
     })
 
@@ -183,14 +182,20 @@ grided_server_code <- function(input, output, session,
 
 
 
-find_layout_by_name <- function(layouts, name) {
+find_layout_template <- function(layouts, name) {
   layout <- Filter(function(layout) layout$name == name, layouts)[[1]]
 
   if (is.null(layout)) {
     stop("Couldn't find layout ", name)
   }
 
-  layout
+  app_loc <- layout$app_loc
+  if (is.null(layout)) {
+    stop("That layout doesn't have a live-app-template")
+  }
+
+
+  system.file(paste0("layout-templates/", app_loc), package = "gridlayout")
 }
 
 layout_info_to_gridlayout <- function(layout_info) {
@@ -226,7 +231,7 @@ make_layout_call <- function(current_layout) {
 }
 
 prepare_template_for_saving <- function(app_script, updated_layout = NULL) {
-  app_lines <- readLines(con = system.file(paste0("layout-templates/", app_script), package = "gridlayout"))
+  app_lines <- readLines(con = app_script)
 
   if (notNull(updated_layout)) {
     layout_pos <- find_layouts_in_file(app_lines)[[1]]
