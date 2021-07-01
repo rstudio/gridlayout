@@ -119,28 +119,20 @@ grided_server_code <- function(input, output, session,
 
   shiny::bindEvent(shiny::observe({
 
-    chosen_layout <- find_layout_by_name(starting_layout, input$live_app_request)
-
-    if (is.null(chosen_layout)){
-      stop("Something horrible has happened, that layout does not exist")
-    }
+    chosen_layout_script <- find_layout_by_name(starting_layout, input$live_app_request)$app_loc
+    app_loc <- system.file(paste0("layout-templates/", chosen_layout_script), package = "gridlayout")
 
     # Source app script that _should_ have the layout, ui, and server stored as
     # variables We wrap this sourcing in a local to avoid namespace collisions and
     # collect the results in a list
     live_app_code <- local({
-      app_loc <- system.file(paste0("layout-templates/", chosen_layout$app_loc), package = "gridlayout")
       source(app_loc, local = TRUE)
       list(ui = ui, server = server)
     })
 
-    # Inject the ui code
-    # Ui is a function so we can preserve code formatting easily for template dumping
-    output$app_dump <- renderUI({ live_app_code$ui })
-
-    # Run server code
+    # Send the UI code to the hidden renderOutput div and start server logic
+    output$app_dump <- shiny::renderUI({ live_app_code$ui })
     live_app_code$server(input, output)
-
   }), input$live_app_request)
 
 
