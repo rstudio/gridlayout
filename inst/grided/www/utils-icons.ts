@@ -56,6 +56,10 @@ export const clipboardIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24"
 
 export const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>`;
 
+export const updownIcon = `<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+<path fill="currentColor" d="M17.45,17.55L12,23L6.55,17.55L7.96,16.14L11,19.17V4.83L7.96,7.86L6.55,6.45L12,1L17.45,6.45L16.04,7.86L13,4.83V19.17L16.04,16.14L17.45,17.55Z" />
+</svg>`;
+
 export const browserHeaderHtml = `<div id="buttons-container">
   <div></div>
   <div></div>

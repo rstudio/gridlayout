@@ -6345,6 +6345,7 @@
   var elementsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
   var clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
   var closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
+  var updownIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M17.45,17.55L12,23L6.55,17.55L7.96,16.14L11,19.17V4.83L7.96,7.86L6.55,6.45L12,1L17.45,6.45L16.04,7.86L13,4.83V19.17L16.04,16.14L17.45,17.55Z" />\n</svg>';
   var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
@@ -8680,11 +8681,19 @@
           }).join(" ");
         };
         var cornerRadius = "".concat(20 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #layout {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(cornerRadius, ";\n        width: ").concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols), ";\n        gap: ").concat(scaleUnits(this.grid.gap), ";\n        padding: ").concat(30 / scale, "px;\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      #layout > div {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n    <div id="layout"> ').concat(this.elementDivs, " </div>\n    ");
-        this.shadowRoot.getElementById("layout").addEventListener("click", function(event) {
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        border-radius: ".concat(cornerRadius, ";\n        width: ").concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        padding: ").concat(30 / scale, "px;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols), ";\n        gap: ").concat(scaleUnits(this.grid.gap), ";\n        background-color: white;\n        margin-left: auto;\n        margin-right: auto;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n\n      #layout > div > div {\n        display: none;\n      }\n      \n      .flipped { transform: rotate(-90deg); }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
+        var layoutDiv = this.shadowRoot.getElementById("layout");
+        layoutDiv.addEventListener("click", function(event) {
           event.stopPropagation();
           _this2.OnSelect();
         });
+        var canScroll = layoutDiv.scrollHeight > layoutDiv.clientHeight;
+        if (canScroll) {
+          var scrollIconDiv = document.createElement("div");
+          scrollIconDiv.innerHTML = updownIcon;
+          scrollIconDiv.id = "scroll-icon";
+          this.shadowRoot.getElementById("window").append(scrollIconDiv);
+        }
       }
     }, {
       key: "layout",
@@ -8733,7 +8742,7 @@
         this.elements.forEach(function(_ref) {
           var id = _ref.id, start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col, _ref$flip_id = _ref.flip_id, flip_id = _ref$flip_id === void 0 ? false : _ref$flip_id;
           var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
-          elementDivs += "\n      <div style='grid-area:".concat(gridArea, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
+          elementDivs += '\n      <div class="element" style=\'grid-area:'.concat(gridArea, "'>\n        <div ").concat(flip_id ? "class=flipped" : "", ">").concat(id, "</div>\n      </div>\n    ");
         });
         return elementDivs;
       }

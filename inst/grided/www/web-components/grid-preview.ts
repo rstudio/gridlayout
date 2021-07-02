@@ -1,5 +1,6 @@
 import { LayoutElement, LayoutInfo } from "..";
 import { LayoutState } from "../GridLayout";
+import { updownIcon } from "../utils-icons";
 
 export class GridPreview extends HTMLElement {
   grid: LayoutState;
@@ -40,22 +41,26 @@ export class GridPreview extends HTMLElement {
       }
       return tractSizing.map((x) => scaleUnits(x)).join(" ");
     };
-
     const cornerRadius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
       * { box-sizing: border-box; }
 
-      #layout {
+      #window {
         box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
         border-radius: ${cornerRadius};
         width: ${this.ShownSize}px;
         height: ${this.ShownSize}px;
+        position: relative;
+        padding: ${30 / scale}px;
+      }
+      #layout {
+        width: 100%;
+        height: 100%;
         display: grid;
         grid-template-rows: ${buildTractDefinition(this.grid.rows)};
         grid-template-columns: ${buildTractDefinition(this.grid.cols)};
         gap: ${scaleUnits(this.grid.gap)};
-        padding: ${30 / scale}px;
         background-color: white;
         margin-left: auto;
         margin-right: auto;
@@ -75,7 +80,7 @@ export class GridPreview extends HTMLElement {
           }`
           : ``
       }
-      #layout > div {
+      .element {
         width: 100%;
         height: 100%;
         border: 1px solid #bababa;
@@ -85,6 +90,17 @@ export class GridPreview extends HTMLElement {
         background-color: darksalmon;
       }
 
+      #scroll-icon {
+        position: absolute;
+        right: 6px;
+        top: 38px;
+        color: dimgrey;
+      }
+
+      #scroll-icon > svg {
+        filter: drop-shadow(0 0 0.5rem white);
+      }
+
       #layout > div > div {
         display: none;
       }
@@ -92,16 +108,29 @@ export class GridPreview extends HTMLElement {
       .flipped { transform: rotate(-90deg); }
     </style>
       ${this.name ? `<h3> ${this.name} </h3>` : ``}
-    <div id="layout"> ${this.elementDivs} </div>
+
+      <div id="window">
+        <div id="layout"> ${this.elementDivs} </div>
+      </div>
     `;
 
-    this.shadowRoot
-      .getElementById("layout")
-      .addEventListener("click", (event) => {
-        // Dont let the gallery background pickup event and kill selection
-        event.stopPropagation();
-        this.OnSelect();
-      });
+    const layoutDiv = this.shadowRoot.getElementById("layout");
+
+    layoutDiv.addEventListener("click", (event) => {
+      // Dont let the gallery background pickup event and kill selection
+      event.stopPropagation();
+      this.OnSelect();
+    });
+
+    // Check if element is scrollable and add visual indicator if it can
+    const canScroll = layoutDiv.scrollHeight > layoutDiv.clientHeight;
+    if (canScroll) {
+      const scrollIconDiv = document.createElement("div");
+      scrollIconDiv.innerHTML = updownIcon;
+      scrollIconDiv.id = "scroll-icon";
+      this.shadowRoot.getElementById("window").append(scrollIconDiv);
+    }
+    // debugger;
   }
 
   layout(layout: LayoutInfo) {
@@ -144,7 +173,7 @@ export class GridPreview extends HTMLElement {
           "/"
         );
         elementDivs += `
-      <div style='grid-area:${gridArea}'>
+      <div class="element" style='grid-area:${gridArea}'>
         <div ${flip_id ? `class=flipped` : ``}>${id}</div>
       </div>
     `;
