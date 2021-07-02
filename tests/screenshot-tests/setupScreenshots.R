@@ -152,7 +152,7 @@ setup_chromote_session <- function(app) {
   app <- background_shiny_app(app)
   m <- Chromote$new(Chrome$new(args = c(
     "--disable-gpu",
-    c("--force-color-profile", "srgb")
+    '--force-color-profile="srgb'
   )))
   set_default_chromote_object(m)
 
