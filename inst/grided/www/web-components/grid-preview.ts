@@ -52,6 +52,8 @@ export class GridPreview extends HTMLElement {
         width: ${this.ShownSize}px;
         height: ${this.ShownSize}px;
         position: relative;
+        margin-left: auto;
+        margin-right: auto;
         padding: ${30 / scale}px;
       }
       #layout {
@@ -62,8 +64,6 @@ export class GridPreview extends HTMLElement {
         grid-template-columns: ${buildTractDefinition(this.grid.cols)};
         gap: ${scaleUnits(this.grid.gap)};
         background-color: white;
-        margin-left: auto;
-        margin-right: auto;
         overflow: scroll;
       }
       ${
