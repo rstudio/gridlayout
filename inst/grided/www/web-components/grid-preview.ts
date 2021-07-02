@@ -47,18 +47,18 @@ export class GridPreview extends HTMLElement {
       * { box-sizing: border-box; }
 
       #window {
-        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
-        border-radius: ${cornerRadius};
         width: ${this.ShownSize}px;
         height: ${this.ShownSize}px;
         position: relative;
         margin-left: auto;
         margin-right: auto;
-        padding: ${30 / scale}px;
       }
       #layout {
         width: 100%;
         height: 100%;
+        padding: ${30 / scale}px;
+        border-radius: ${cornerRadius};
+        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
         display: grid;
         grid-template-rows: ${buildTractDefinition(this.grid.rows)};
         grid-template-columns: ${buildTractDefinition(this.grid.cols)};
