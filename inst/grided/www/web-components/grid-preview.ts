@@ -100,12 +100,6 @@ export class GridPreview extends HTMLElement {
       #scroll-icon > svg {
         filter: drop-shadow(0 0 0.5rem white);
       }
-
-      #layout > div > div {
-        display: none;
-      }
-      
-      .flipped { transform: rotate(-90deg); }
     </style>
       ${this.name ? `<h3> ${this.name} </h3>` : ``}
 
@@ -130,7 +124,6 @@ export class GridPreview extends HTMLElement {
       scrollIconDiv.id = "scroll-icon";
       this.shadowRoot.getElementById("window").append(scrollIconDiv);
     }
-    // debugger;
   }
 
   layout(layout: LayoutInfo) {
@@ -160,6 +153,7 @@ export class GridPreview extends HTMLElement {
     this.name = null;
     return this;
   }
+
   turnoffAnimation() {
     this.hoverAnimation = false;
     return this;
@@ -167,18 +161,12 @@ export class GridPreview extends HTMLElement {
 
   get elementDivs() {
     let elementDivs = "";
-    this.elements.forEach(
-      ({ id, start_row, start_col, end_row, end_col, flip_id = false }) => {
-        const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
-          "/"
-        );
-        elementDivs += `
-      <div class="element" style='grid-area:${gridArea}'>
-        <div ${flip_id ? `class=flipped` : ``}>${id}</div>
-      </div>
-    `;
-      }
-    );
+    this.elements.forEach(({ start_row, start_col, end_row, end_col }) => {
+      const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
+        "/"
+      );
+      elementDivs += `<div class="element" style='grid-area:${gridArea}'></div>`;
+    });
 
     return elementDivs;
   }

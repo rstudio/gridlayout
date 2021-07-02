@@ -14,7 +14,6 @@ layout_templates <- list(
     "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-    flipped_els = c("sidebar"),
     app_loc = "classic.R"
   ),
   gen_template_info(

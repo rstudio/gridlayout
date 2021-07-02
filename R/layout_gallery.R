@@ -12,7 +12,6 @@ layout_gallery <- function(return_app_obj = FALSE){
       "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-     flipped_els = c("sidebar"),
      app_loc = "classic.R"
     ),
     gen_template_info(
@@ -67,21 +66,9 @@ layout_gallery <- function(return_app_obj = FALSE){
 
 
 # Takes a layout definition and turns it into the info ingested by grided
-gen_template_info <- function(name, layout_table,  flipped_els = c(), app_loc = NULL){
+gen_template_info <- function(name, layout_table, app_loc = NULL){
   layout_info <- dump_all_info(new_gridlayout(layout_table))
   layout_info$name <- name
-
-  if (notNull(app_loc)) {
-    layout_info$app_loc <- app_loc
-  }
-
-  # If any elements need to have their id flipped (aka their panel is tall and
-  # skinny), then mark that here
-  for (i in seq_along(layout_info$elements)) {
-    if (layout_info$elements[[i]]$id %in% flipped_els) {
-      layout_info$elements[[i]]$flip_id <- TRUE
-    }
-  }
-
+  layout_info$app_loc <- app_loc
   layout_info
 }
