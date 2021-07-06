@@ -4,6 +4,7 @@ library(gridlayout)
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
 
+#' start-layout
 app_layout <- "
 |     |    |    |
 |-----|----|----|
@@ -11,15 +12,17 @@ app_layout <- "
 |1fr  |A   |B   |
 |1fr  |C   |D   |
 "
+#' end-layout
 
-chicks_by_group <- as.list(by(data = ChickWeight$Chick, ChickWeight$Diet, FUN = unique))
+chicks_by_group <- by(data = ChickWeight$Chick, ChickWeight$Diet, FUN = unique)
 names(chicks_by_group) <- paste("Diet:", names(chicks_by_group))
 
 ui <- grid_page(
   layout = app_layout,
   A = grid_panel(
     title = "About the ChickWeights dataset",
-    p("The body weights of the chicks were measured at birth and every second day thereafter until day 20. They were also measured on day 21. There were four groups on chicks on different protein diets."),
+    p("The body weights of the chicks were measured at birth and every second day thereafter until day 20.
+      They were also measured on day 21. There were four groups on chicks on different protein diets."),
     v_align = "center"
   ),
   B = grid_panel(
