@@ -1,6 +1,5 @@
 library(shiny)
 library(gridlayout)
-library(ggplot2)
 
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
@@ -13,63 +12,53 @@ app_layout <- "
 |1fr  |C   |D   |
 "
 
+chicks_by_group <- as.list(by(data = ChickWeight$Chick, ChickWeight$Diet, FUN = unique))
+names(chicks_by_group) <- paste("Diet:", names(chicks_by_group))
+
 ui <- grid_page(
   layout = app_layout,
   A = grid_panel(
-    title = "A",
-    plotOutput("weightRanges", height = "100%",  click = "chick_select")
-  ),
-  C = grid_panel(
-    title = "C",
-    plotOutput("chickPlot", height = "100%",  click = "plot_click")
+    title = "About the ChickWeights dataset",
+    p("The body weights of the chicks were measured at birth and every second day thereafter until day 20. They were also measured on day 21. There were four groups on chicks on different protein diets."),
+    v_align = "center"
   ),
   B = grid_panel(
-    title = "B",
-    p("content for B")
+    title = "Filters",
+    selectInput("diet", label = "Diet", choices = levels(ChickWeight$Diet)),
+    selectInput("chick", label = "Highlighted Chick", choices = chicks_by_group),
+    v_align = "center"
+  ),
+  C = grid_panel(
+    title = "Weights by diet",
+    plotOutput("weightRanges")
   ),
   D = grid_panel(
-    title = "D",
-    p("content for D")
+    title = "Weight trajectories",
+    plotOutput("chickPlot")
   )
 )
 
-ChickWeight$Chick <- reorder(ChickWeight$Chick, as.integer(as.character(ChickWeight$Chick)))
-chick_ids <- unique(ChickWeight$Chick)
 
 server <- function(input, output, session) {
+  time_range <- c(0, max(ChickWeight$Time))
+  weight_range <- c(0, max(ChickWeight$weight))
 
-  chosen_chick <- reactiveVal()
-  # Place server code here
   output$chickPlot <- renderPlot({
-    print(paste("Plotting with chick", chosen_chick()))
-    plot(0, 0, xlim = c(0, max(ChickWeight$Time)), ylim = c(0, max(ChickWeight$weight)), type = "n")
-    for (id in chick_ids) {
-      print(paste("Plotting trajectory for", id))
-      chick_data <- ChickWeight[ChickWeight$Chick == id, ]
+    data_for_diet <- ChickWeight[ChickWeight$Diet == input$diet, ]
 
-      color <- if (!is.null(chosen_chick()) && as.integer(chosen_chick()) == as.integer(id)) {
-        print("Found chick in lines")
-        "blue"
-      } else {
-        "grey"
-      }
-      lines(x = chick_data$Time, y = chick_data$weight, col = color)
+    plot(0, 0, xlim = time_range, ylim = weight_range, type = "n", xlab = "Time", ylab = "Weight (grams)")
+
+    for (id in unique(data_for_diet$Chick)) {
+      chick_data <- data_for_diet[data_for_diet$Chick == id, ]
+      lines(
+        x = chick_data$Time, y = chick_data$weight,
+        col = if (input$chick == id) "blue" else "grey"
+      )
     }
   })
 
   output$weightRanges <- renderPlot({
-    plot(ChickWeight$Chick, ChickWeight$weight)
-  })
-
-
-
-  observe({
-    nearest_chick <- nearPoints(ChickWeight, input$chick_select, xvar = "Chick", yvar = "weight")
-
-    if(nrow(nearest_chick) > 0) {
-      print("New chick chosen!")
-      chosen_chick(nearest_chick[1,'Chick'])
-    }
+    plot(ChickWeight$Diet, ChickWeight$weight, xlab = "Diet", ylab = "Weight (grams)", ylim = weight_range)
   })
 }
 

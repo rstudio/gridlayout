@@ -22,7 +22,8 @@ layout_templates <- list(
      |-----|----|----|
      |1rem |1fr |1fr |
      |1fr  |A   |B   |
-     |1fr  |C   |D   |"
+     |1fr  |C   |D   |",
+    app_loc = "four-square.R"
   ),
   gen_template_info(
     "Focal Chart - Top",
