@@ -63,7 +63,7 @@ gallery_app_to_app_template <- function(layout_app, updated_layout = NULL) {
   # The first and last lines open and close the function and list bodies, so
   # drop those. Drop an additional line at the end because the calling
   # environment is printed as well
-  app_code <- vec_trim(capture.output({
+  app_code <- trim_vec(capture.output({
     layout_app
   }), n_start = 2, n_end = 3)
 
