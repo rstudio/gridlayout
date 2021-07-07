@@ -7,7 +7,6 @@ app_layout <- "|2rem  |200px   |1fr    |
                |1fr   |sidebar |plot   |"
 #' end-layout
 
-#' start-ui
 ui <- grid_page(
   layout = app_layout,
   header = title_panel("This is my header"),
@@ -17,9 +16,7 @@ ui <- grid_page(
   ),
   plot = plotOutput("distPlot")
 )
-#' end-ui
 
-#' start-server
 server <- function(input, output) {
   output$distPlot <- renderPlot({
     x <- faithful[, 2]
@@ -27,6 +24,5 @@ server <- function(input, output) {
     hist(x, breaks = bins, col = "darkgray", border = "white")
   })
 }
-#' end-server
 
 shinyApp(ui, server)
