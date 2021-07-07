@@ -291,7 +291,7 @@ new_gridlayout_template <- function(
   empty_grid <- length(elements) == 0
 
   # Validate row and column sizes.
-  sizes <- map_w_names(
+  sizes <- map_name_val(
     list(row = row_sizes, col = col_sizes),
     function(dir, sizes) {
       start_vals <- extract_dbl(elements, "start_" %+% dir)

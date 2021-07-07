@@ -111,7 +111,8 @@ extract_chr <- function(x, ...){
   as.character(extract(x, ...))
 }
 
-map_w_names <- function(x, fn){
+map_name_val <- function(x, fn){
+  # callback is function(name, val)
   Map(names(x), x, f = fn)
 }
 
