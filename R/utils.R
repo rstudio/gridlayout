@@ -1,5 +1,5 @@
-str_replace <- function(text, pattern, replacement){
-  sub(pattern = pattern, replacement = replacement, x = text, perl = TRUE)
+str_replace <- function(text, pattern, replacement, fixed = FALSE){
+  sub(pattern = pattern, replacement = replacement, x = text, perl = !fixed, fixed = fixed)
 }
 
 str_replace_all <- function(text, pattern, replacement, fixed = FALSE){
