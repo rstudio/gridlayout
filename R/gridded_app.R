@@ -92,7 +92,7 @@ grided_server_code <- function(input, output, session,
       # of the layout we're currently editing. We use this to get the live-app's
       # code.
       layout_app <- find_layout_template(starting_layout, layout_info$name)
-      prepare_template_for_saving(layout_app, updated_layout = desired_layout)
+      build_live_template_app(layout_app, updated_layout = desired_layout)
     } else {
       to_app_template(desired_layout)
     }
@@ -228,28 +228,4 @@ make_layout_call <- function(current_layout) {
     "\")",
     sep = "\n"
   )
-}
-
-prepare_template_for_saving <- function(app_script, updated_layout = NULL) {
-  app_lines <- readLines(con = app_script)
-
-  if (notNull(updated_layout)) {
-    layout_pos <- find_layouts_in_file(app_lines)[[1]]
-
-    # Now break the app code into pre layout, and post layout, and sandwich the
-    # new layout between them
-
-    # Indices are squeezed by one to not include comments themselves
-    layout_start <- which(str_detect(app_lines, "#' start-layout")) - 1
-    layout_end <- which(str_detect(app_lines, "#' end-layout")) + 1
-
-    app_lines <- c(
-      app_lines[1:layout_start],
-      make_layout_call(updated_layout),
-      app_lines[layout_end:length(app_lines)]
-    )
-  }
-
-  # Remove the guiding comment lines
-  app_lines[!str_detect(app_lines, "#'", fixed = TRUE)]
 }
