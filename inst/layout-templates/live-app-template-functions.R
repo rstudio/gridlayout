@@ -10,16 +10,20 @@ about_chick_weights_panel <- function(){
   )
 }
 
+
+
 chooser_dropdowns_panel <- function(){
   #' start-app-scope
-  chicks_by_group <- by(data = ChickWeight$Chick, ChickWeight$Diet, FUN = unique)
-  names(chicks_by_group) <- paste("Diet:", names(chicks_by_group))
+  chicks_by_diet <- list()
+  for (diet in levels(ChickWeight$Diet)) {
+    chicks_by_diet[[paste("Diet:", diet)]] <- unique(ChickWeight$Chick[ChickWeight$Diet == diet])
+  }
   #' end-app-scope
 
   grid_panel(
     title = "Filters",
     selectInput("diet", label = "Diet", choices = levels(ChickWeight$Diet)),
-    selectInput("chick", label = "Highlighted Chick", choices = chicks_by_group),
+    selectInput("chick", label = "Highlighted Chick", choices = chicks_by_diet),
     v_align = "center"
   )
 }
