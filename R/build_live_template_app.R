@@ -19,7 +19,7 @@ build_live_template_app <- function(app_loc, updated_layout) {
   }
 
   # Remove the guiding comment lines and sourcing function
-  app_lines <- app_lines[!str_detect(app_lines, "^#\\'|^source")]
+  app_lines <- app_lines[!str_detect(app_lines, "^#\\'|^source|^library")]
 
   # Make a single string so multiline regexes are easier to work with
   app_script <- collapse_by_newline(app_lines)
