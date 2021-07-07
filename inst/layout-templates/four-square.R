@@ -1,10 +1,4 @@
-library(shiny)
-library(gridlayout)
-
 source(system.file("layout-templates/live-app-template-functions.R", package = "gridlayout"))
-
-options(shiny.autoreload = TRUE)
-shiny::devmode(TRUE)
 
 #' start-layout
 app_layout <- "
