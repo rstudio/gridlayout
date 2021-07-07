@@ -33,8 +33,9 @@ panel_weight_trajectories_for_diet <- function(){
   )
 }
 
-weight_trajectories_for_diet <- function(input) {
-  renderPlot({
+weight_trajectories_for_diet <- function(input, output) {
+  output$chickPlot <- renderPlot({
+    # Filter to the current diet
     data_for_diet <- ChickWeight[ChickWeight$Diet == input$diet, ]
 
     plot(
@@ -62,8 +63,8 @@ panel_weight_dist_by_diet <- function(){
   )
 }
 
-weight_dist_by_diet <- function(input) {
-  renderPlot({
+weight_dist_by_diet <- function(input, output) {
+  output$weightRanges <- renderPlot({
     plot(
       x = ChickWeight$Diet, xlab = "Diet",
       y = ChickWeight$weight, ylab = "Weight (grams)",

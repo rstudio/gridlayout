@@ -1,6 +1,8 @@
 library(shiny)
 library(gridlayout)
 
+source(system.file("layout-templates/live-app-template-functions.R", package = "gridlayout"))
+
 options(shiny.autoreload = TRUE)
 shiny::devmode(TRUE)
 
@@ -23,10 +25,9 @@ ui <- grid_page(
   D = panel_weight_trajectories_for_diet()
 )
 
-
 server <- function(input, output, session) {
-  output$chickPlot <- weight_trajectories_for_diet(input)
-  output$weightRanges <- weight_dist_by_diet(input)
+  weight_trajectories_for_diet(input, output)
+  weight_dist_by_diet(input, output)
 }
 
 shinyApp(ui, server)
