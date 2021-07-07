@@ -4,13 +4,13 @@ template_functions_loc <- system.file("layout-templates/live-app-template-functi
 
 template_funcs <- local({
   source(template_functions_loc, local = TRUE, keep.source = TRUE)
-  # Wrap functions into a list so we can parse
-  ce <- as.list.environment(rlang::current_env())
-  map_name_val(ce, function(func_id, func) {
-    as.character(attr(func, 'srcref'))
-  })
+  # Wrap functions into a list so we can parse and dump function source to character vector
+  lapply(
+    as.list.environment(rlang::current_env()),
+    function(func) {
+      as.character(attr(func, "srcref"))
+    }
+  )
 })
-
-
 
 ltree(template_funcs)
