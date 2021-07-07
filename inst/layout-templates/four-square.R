@@ -19,15 +19,15 @@ app_layout <- "
 
 ui <- grid_page(
   layout = app_layout,
-  A = panel_about_chick_weights(),
-  B = panel_chooser_dropdowns(),
-  C = panel_weight_dist_by_diet(),
-  D = panel_weight_trajectories_for_diet()
+  A = about_chick_weights_panel(),
+  B = chooser_dropdowns_panel(),
+  C = weight_dist_by_diet_panel(),
+  D = weight_trajectories_for_diet_panel()
 )
 
 server <- function(input, output, session) {
-  weight_trajectories_for_diet(input, output)
-  weight_dist_by_diet(input, output)
+  weight_trajectories_for_diet_server(input, output)
+  weight_dist_by_diet_server(input, output)
 }
 
 shinyApp(ui, server)

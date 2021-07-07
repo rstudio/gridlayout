@@ -1,7 +1,7 @@
 # Various UI and Server components to built live-template apps. Comments of  "#'
 # start-app-scope" and "#' end-app-scope" denote code chunks that will be placed
 # outside of ui and server functions in the compiled app.
-panel_about_chick_weights <- function(){
+about_chick_weights_panel <- function(){
   grid_panel(
     title = "About the ChickWeights dataset",
     p("The body weights of the chicks were measured at birth and every second day thereafter until day 20.
@@ -10,7 +10,7 @@ panel_about_chick_weights <- function(){
   )
 }
 
-panel_chooser_dropdowns <- function(){
+chooser_dropdowns_panel <- function(){
   #' start-app-scope
   chicks_by_group <- by(data = ChickWeight$Chick, ChickWeight$Diet, FUN = unique)
   names(chicks_by_group) <- paste("Diet:", names(chicks_by_group))
@@ -26,14 +26,14 @@ panel_chooser_dropdowns <- function(){
 
 
 
-panel_weight_trajectories_for_diet <- function(){
+weight_trajectories_for_diet_panel <- function(){
   grid_panel(
     title = "Weight trajectories",
     plotOutput("chickPlot")
   )
 }
 
-weight_trajectories_for_diet <- function(input, output) {
+weight_trajectories_for_diet_server <- function(input, output) {
   output$chickPlot <- renderPlot({
     # Filter to the current diet
     data_for_diet <- ChickWeight[ChickWeight$Diet == input$diet, ]
@@ -56,14 +56,14 @@ weight_trajectories_for_diet <- function(input, output) {
 }
 
 
-panel_weight_dist_by_diet <- function(){
+weight_dist_by_diet_panel <- function(){
   grid_panel(
     title = "Weights by diet",
     plotOutput("weightRanges")
   )
 }
 
-weight_dist_by_diet <- function(input, output) {
+weight_dist_by_diet_server <- function(input, output) {
   output$weightRanges <- renderPlot({
     plot(
       x = ChickWeight$Diet, xlab = "Diet",
