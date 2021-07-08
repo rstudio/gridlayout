@@ -4,7 +4,7 @@ source(system.file("layout-templates/live-app-template-functions.R", package = "
 app_layout <- "
   |1rem |1fr      |
   |80px |header   |
-  |1fr  |controls |
+  |auto |controls |
   |1fr  |mainPlot |
   |1fr  |subPlot  |"
 #' end-layout
