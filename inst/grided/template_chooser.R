@@ -17,6 +17,13 @@ layout_templates <- list(
     app_loc = "classic.R"
   ),
   gen_template_info(
+    "Blank-Slate",
+    "|2rem  |200px   |1fr    |
+     |150px |header  |header |
+     |1fr   |sidebar |plot   |",
+    empty = TRUE
+  ),
+  gen_template_info(
     "Four-Square",
     "|1rem |1fr |1fr |
      |1fr  |A   |B   |
