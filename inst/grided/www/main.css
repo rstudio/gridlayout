@@ -37,7 +37,7 @@ body {
   font-size: 18px;
   display: grid;
   grid-template-columns: 300px 1fr 150px;
-  grid-template-rows: 50px auto auto 1fr;
+  grid-template-rows: 50px auto 1fr auto;
   grid-template-areas:
     "header       header header"
     "settings     editor editor"
@@ -129,6 +129,7 @@ img {
 
 #grided__instructions {
   grid-area: instructions;
+  overflow: scroll;
 }
 
 #grided__elements {
