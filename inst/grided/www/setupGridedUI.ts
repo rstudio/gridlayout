@@ -39,6 +39,8 @@ export function setupGridedUI(
     "div#gridedGapSizeControls.settings.panel-body"
   );
 
+  const addedElements = blockEl("div#added-elements");
+
   const gridedUi = blockEl(
     "div#grided__holder",
     blockEl(
@@ -84,7 +86,7 @@ export function setupGridedUI(
     blockEl(
       "div#grided__elements",
       textEl("h3", `${elementsIcon} Added elements`),
-      blockEl("div.panel-body", blockEl("div#added-elements"))
+      blockEl("div.panel-body", addedElements)
     ),
     blockEl(
       "div#grided__editor",
@@ -98,6 +100,18 @@ export function setupGridedUI(
 
   // Make grided UI direct child of the body
   document.querySelector("body").appendChild(gridedUi);
+
+  // Watch the elements list and use a placeholder when no elements are
+  // currently in the app
+  new MutationObserver((mutationsList, observer) => {
+    // The empty class triggers the appearance of psuedoelement that tells the
+    // user how to add elements to the app
+    if (addedElements.hasChildNodes()) {
+      addedElements.classList.remove("empty");
+    } else {
+      addedElements.classList.add("empty");
+    }
+  }).observe(addedElements, { childList: true });
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.

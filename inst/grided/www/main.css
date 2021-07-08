@@ -142,6 +142,12 @@ img {
   cursor: pointer;
 }
 
+#added-elements.empty::after {
+  content: "No elements in app. Add one by dragging and dropping in the editor window!";
+  font-style: italic;
+  color: var(--off-black);
+}
+
 #grided__editor {
   grid-area: editor;
   /* Leaves space for the row and column editing controls */
