@@ -7847,9 +7847,11 @@
       _defineProperty8(this, "gridLayout", void 0);
       _defineProperty8(this, "tractControls", void 0);
       _defineProperty8(this, "entryType", void 0);
+      _defineProperty8(this, "liveApp", void 0);
       _defineProperty8(this, "layoutName", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
+      this.liveApp = this.entryType === "edit-existing-app" || this.entryType === "layout-gallery-live";
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
@@ -8186,6 +8188,9 @@
           this.elements.forEach(function(el) {
             el.fillIfInAutoRow();
           });
+          if (this.liveApp) {
+            window.dispatchEvent(new Event("resize"));
+          }
         }
         this.tractControls.updatePositions();
         if (!opts.dontUpdateHistory) {

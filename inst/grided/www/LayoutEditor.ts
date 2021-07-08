@@ -92,12 +92,17 @@ export class LayoutEditor {
     updatePositions: () => void;
   };
   entryType: AppEntryType;
+  liveApp: boolean;
   // Stores the name of the current template (if we're coming in from the template viewer)
   layoutName?: string;
 
   constructor(opts: LayoutEditorSetup) {
     this.entryType = opts.entryType;
     this.onUpdate = opts.onUpdate;
+
+    this.liveApp =
+      this.entryType === "edit-existing-app" ||
+      this.entryType === "layout-gallery-live";
 
     if (
       this.entryType === "layout-gallery" ||
@@ -584,6 +589,10 @@ export class LayoutEditor {
       this.elements.forEach((el) => {
         el.fillIfInAutoRow();
       });
+
+      if (this.liveApp) {
+        window.dispatchEvent(new Event("resize"));
+      }
     }
 
     this.tractControls.updatePositions();
