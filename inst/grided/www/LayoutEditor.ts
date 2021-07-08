@@ -461,9 +461,6 @@ export class LayoutEditor {
     opts.watchingElement.onmousedown = (event: MouseEvent) => {
       startLoc = event as DragEvent;
 
-      // make sure dragged element is on top
-      this.container.appendChild(opts.gridItem.el);
-
       // If this is a new element drag there wont be a bounding box for the grid
       // element yet, so we need to make a new zero-width/height one at start
       // of the drag
@@ -473,6 +470,10 @@ export class LayoutEditor {
         top: event.offsetY,
         bottom: event.offsetY,
       };
+
+      // Make sure that the grid item being dragged is not obscured by other
+      // elements on top of it
+      this.container.appendChild(opts.gridItem.el);
 
       dragFeedbackRect = makeEl(
         this.container.querySelector("#dragCanvas"),
@@ -509,6 +510,7 @@ export class LayoutEditor {
       Object.assign(dragFeedbackRect.style, boundingRectToCssPos(newRect));
 
       const gridExtent = updateGridPos(opts.gridItem, newRect);
+
       if (opts.onDrag) opts.onDrag({ xy: currLoc, grid: gridExtent });
     }
 
@@ -783,7 +785,10 @@ function setupNewItemDrag(appState: LayoutEditor) {
     gridItem: currentSelectionBox,
     dragDir: "bottom-right",
     onStart: () => {
+      // Make the snap-to-grid selection box show up and preview next element
+      // color
       currentSelectionBox.style.borderColor = appState.nextColor;
+      currentSelectionBox.style.display = "block";
     },
     onEnd: ({ grid }) => {
       elementNamingUi(appState, {

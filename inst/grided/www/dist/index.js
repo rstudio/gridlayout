@@ -8093,13 +8093,13 @@
         opts.watchingElement.onmousedown = function(event) {
           var _opts$gridItem;
           startLoc = event;
-          _this6.container.appendChild(opts.gridItem.el);
           startRect = ((_opts$gridItem = opts.gridItem) === null || _opts$gridItem === void 0 ? void 0 : _opts$gridItem.boundingRect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
+          _this6.container.appendChild(opts.gridItem.el);
           dragFeedbackRect = makeEl(_this6.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
@@ -8239,6 +8239,7 @@
       dragDir: "bottom-right",
       onStart: function onStart() {
         currentSelectionBox.style.borderColor = appState.nextColor;
+        currentSelectionBox.style.display = "block";
       },
       onEnd: function onEnd(_ref) {
         var grid = _ref.grid;
