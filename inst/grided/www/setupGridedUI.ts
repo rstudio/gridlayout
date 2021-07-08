@@ -39,7 +39,21 @@ export function setupGridedUI(
     "div#gridedGapSizeControls.settings.panel-body"
   );
 
-  const addedElements = blockEl("div#added-elements");
+  // Initialize added elements with empty class because at this point it
+  // always is empty
+  const addedElements = blockEl("div#added-elements.empty");
+
+  // Watch the elements list and use a placeholder when no elements are
+  // currently in the app
+  new MutationObserver((mutationsList, observer) => {
+    // The empty class triggers the appearance of psuedoelement that tells the
+    // user how to add elements to the app
+    if (addedElements.hasChildNodes()) {
+      addedElements.classList.remove("empty");
+    } else {
+      addedElements.classList.add("empty");
+    }
+  }).observe(addedElements, { childList: true });
 
   const gridedUi = blockEl(
     "div#grided__holder",
@@ -100,18 +114,6 @@ export function setupGridedUI(
 
   // Make grided UI direct child of the body
   document.querySelector("body").appendChild(gridedUi);
-
-  // Watch the elements list and use a placeholder when no elements are
-  // currently in the app
-  new MutationObserver((mutationsList, observer) => {
-    // The empty class triggers the appearance of psuedoelement that tells the
-    // user how to add elements to the app
-    if (addedElements.hasChildNodes()) {
-      addedElements.classList.remove("empty");
-    } else {
-      addedElements.classList.add("empty");
-    }
-  }).observe(addedElements, { childList: true });
 
   // Setup some basic styles for the container to make sure it fits into the
   // grided interface properly.
