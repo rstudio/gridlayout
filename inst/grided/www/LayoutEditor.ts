@@ -163,18 +163,31 @@ export class LayoutEditor {
     // elements first
     this.updateGrid({ ...opts.grid, dontUpdateHistory: true });
 
-    const attachUiToElement = (id: string) => {
+    const attachUiToElement = (uiFunctionName: string) => {
       const ui_for_element = document.querySelector(
-        `[data-grided-ui-name="${opts.ui_functions[id]}"]`
+        `[data-grided-ui-name="${uiFunctionName}"]`
       );
+
+      console.log(`Moving ${uiFunctionName} into app editor`);
+
       this.container.append(ui_for_element);
       return ui_for_element as HTMLElement;
     };
     opts.elements?.forEach((elMsg: LayoutElement) => {
-      const { id, start_row, end_row, start_col, end_col } = elMsg;
+      const {
+        id,
+        start_row,
+        end_row,
+        start_col,
+        end_col,
+        ui_function = null,
+      } = elMsg;
 
       const mirroredElement =
-        opts.entryType === "layout-gallery-live" ? attachUiToElement(id) : null;
+        opts.entryType === "layout-gallery-live"
+          ? attachUiToElement(ui_function)
+          : null;
+
       // Add elements but dont update history as we do it
       this.addElement(
         {

@@ -55,6 +55,7 @@ export class GridItem {
     return {
       id: this.id,
       ...this.position,
+      ui_function: this?.mirroredEl?.dataset?.gridedUiName,
     };
   }
 

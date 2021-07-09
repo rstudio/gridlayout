@@ -17,14 +17,13 @@ export type LayoutElement = {
   end_row: number;
   start_col: number;
   end_col: number;
-  flip_id?: boolean;
+  ui_function?: string;
 };
 
 export type LayoutInfo = {
   name?: string;
   grid: LayoutState;
   elements: LayoutElement[];
-  ui_functions?: { [key: string]: string };
   // If live app code exists for layout it's sent as a character vector
   app_loc?: string;
 };
