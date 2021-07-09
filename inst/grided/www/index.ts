@@ -36,11 +36,19 @@ export type GalleryOptions = {
 
 // Fresh start on page
 const clearPage = () => {
-  // We want to keep the div shiny uses to dump app UI in the app so we want to
+  // We want to keep the div shiny uses t o dump app UI in the app so we want to
   // take it out of the dom before erasing page contents, then add it back after
 
   const appDumpDiv = document.getElementById("app_dump");
   if (appDumpDiv) {
+    document
+      .querySelectorAll("[data-grided-ui-name]")
+      .forEach((el: HTMLElement) => {
+        if (el.parentElement === appDumpDiv) return;
+        console.log(`Moving ${el.dataset["gridedUiName"]} back to app dump`);
+        appDumpDiv.append(el);
+        $(el).trigger("hidden");
+      });
     appDumpDiv.parentNode.removeChild(appDumpDiv);
   }
   document.body.innerHTML = ``;
