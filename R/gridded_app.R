@@ -117,6 +117,8 @@ grided_server_code <- function(input, output, session,
     generate_app_template(input$build_live_app_template, is_live_app = TRUE)
   }), input$build_live_app_template)
 
+
+  #---- Setup live-app template ----
   shiny::bindEvent(shiny::observe({
 
     chosen_layout_app <- find_layout_template(starting_layout, input$live_app_request)
