@@ -30,6 +30,18 @@
     }, enumerable: true } : { value: module, enumerable: true })), module);
   };
 
+  // node_modules/core-js/internals/global.js
+  var require_global = __commonJS({
+    "node_modules/core-js/internals/global.js": function(exports, module) {
+      var check = function(it) {
+        return it && it.Math == Math && it;
+      };
+      module.exports = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof global == "object" && global) || function() {
+        return this;
+      }() || Function("return this")();
+    }
+  });
+
   // node_modules/core-js/internals/fails.js
   var require_fails = __commonJS({
     "node_modules/core-js/internals/fails.js": function(exports, module) {
@@ -52,114 +64,6 @@
           return 7;
         } })[1] != 7;
       });
-    }
-  });
-
-  // node_modules/core-js/internals/global.js
-  var require_global = __commonJS({
-    "node_modules/core-js/internals/global.js": function(exports, module) {
-      var check = function(it) {
-        return it && it.Math == Math && it;
-      };
-      module.exports = check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || check(typeof self == "object" && self) || check(typeof global == "object" && global) || function() {
-        return this;
-      }() || Function("return this")();
-    }
-  });
-
-  // node_modules/core-js/internals/is-object.js
-  var require_is_object = __commonJS({
-    "node_modules/core-js/internals/is-object.js": function(exports, module) {
-      module.exports = function(it) {
-        return typeof it === "object" ? it !== null : typeof it === "function";
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/document-create-element.js
-  var require_document_create_element = __commonJS({
-    "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
-      var global8 = require_global();
-      var isObject7 = require_is_object();
-      var document2 = global8.document;
-      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
-      module.exports = function(it) {
-        return EXISTS ? document2.createElement(it) : {};
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/ie8-dom-define.js
-  var require_ie8_dom_define = __commonJS({
-    "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
-      var DESCRIPTORS10 = require_descriptors();
-      var fails10 = require_fails();
-      var createElement = require_document_create_element();
-      module.exports = !DESCRIPTORS10 && !fails10(function() {
-        return Object.defineProperty(createElement("div"), "a", {
-          get: function() {
-            return 7;
-          }
-        }).a != 7;
-      });
-    }
-  });
-
-  // node_modules/core-js/internals/an-object.js
-  var require_an_object = __commonJS({
-    "node_modules/core-js/internals/an-object.js": function(exports, module) {
-      var isObject7 = require_is_object();
-      module.exports = function(it) {
-        if (!isObject7(it)) {
-          throw TypeError(String(it) + " is not an object");
-        }
-        return it;
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/to-primitive.js
-  var require_to_primitive = __commonJS({
-    "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
-      var isObject7 = require_is_object();
-      module.exports = function(input, PREFERRED_STRING) {
-        if (!isObject7(input))
-          return input;
-        var fn, val;
-        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
-          return val;
-        throw TypeError("Can't convert object to primitive value");
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/object-define-property.js
-  var require_object_define_property = __commonJS({
-    "node_modules/core-js/internals/object-define-property.js": function(exports) {
-      var DESCRIPTORS10 = require_descriptors();
-      var IE8_DOM_DEFINE = require_ie8_dom_define();
-      var anObject7 = require_an_object();
-      var toPrimitive3 = require_to_primitive();
-      var $defineProperty2 = Object.defineProperty;
-      exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
-        anObject7(O);
-        P = toPrimitive3(P, true);
-        anObject7(Attributes);
-        if (IE8_DOM_DEFINE)
-          try {
-            return $defineProperty2(O, P, Attributes);
-          } catch (error) {
-          }
-        if ("get" in Attributes || "set" in Attributes)
-          throw TypeError("Accessors not supported");
-        if ("value" in Attributes)
-          O[P] = Attributes.value;
-        return O;
-      };
     }
   });
 
@@ -237,6 +141,34 @@
     }
   });
 
+  // node_modules/core-js/internals/is-object.js
+  var require_is_object = __commonJS({
+    "node_modules/core-js/internals/is-object.js": function(exports, module) {
+      module.exports = function(it) {
+        return typeof it === "object" ? it !== null : typeof it === "function";
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/to-primitive.js
+  var require_to_primitive = __commonJS({
+    "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
+      var isObject7 = require_is_object();
+      module.exports = function(input, PREFERRED_STRING) {
+        if (!isObject7(input))
+          return input;
+        var fn, val;
+        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
+          return val;
+        throw TypeError("Can't convert object to primitive value");
+      };
+    }
+  });
+
   // node_modules/core-js/internals/to-object.js
   var require_to_object = __commonJS({
     "node_modules/core-js/internals/to-object.js": function(exports, module) {
@@ -255,6 +187,35 @@
       module.exports = function hasOwn(it, key) {
         return hasOwnProperty.call(toObject6(it), key);
       };
+    }
+  });
+
+  // node_modules/core-js/internals/document-create-element.js
+  var require_document_create_element = __commonJS({
+    "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
+      var global8 = require_global();
+      var isObject7 = require_is_object();
+      var document2 = global8.document;
+      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
+      module.exports = function(it) {
+        return EXISTS ? document2.createElement(it) : {};
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/ie8-dom-define.js
+  var require_ie8_dom_define = __commonJS({
+    "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
+      var DESCRIPTORS10 = require_descriptors();
+      var fails10 = require_fails();
+      var createElement = require_document_create_element();
+      module.exports = !DESCRIPTORS10 && !fails10(function() {
+        return Object.defineProperty(createElement("div"), "a", {
+          get: function() {
+            return 7;
+          }
+        }).a != 7;
+      });
     }
   });
 
@@ -279,6 +240,45 @@
           }
         if (has4(O, P))
           return createPropertyDescriptor2(!propertyIsEnumerableModule2.f.call(O, P), O[P]);
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/an-object.js
+  var require_an_object = __commonJS({
+    "node_modules/core-js/internals/an-object.js": function(exports, module) {
+      var isObject7 = require_is_object();
+      module.exports = function(it) {
+        if (!isObject7(it)) {
+          throw TypeError(String(it) + " is not an object");
+        }
+        return it;
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/object-define-property.js
+  var require_object_define_property = __commonJS({
+    "node_modules/core-js/internals/object-define-property.js": function(exports) {
+      var DESCRIPTORS10 = require_descriptors();
+      var IE8_DOM_DEFINE = require_ie8_dom_define();
+      var anObject7 = require_an_object();
+      var toPrimitive3 = require_to_primitive();
+      var $defineProperty2 = Object.defineProperty;
+      exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
+        anObject7(O);
+        P = toPrimitive3(P, true);
+        anObject7(Attributes);
+        if (IE8_DOM_DEFINE)
+          try {
+            return $defineProperty2(O, P, Attributes);
+          } catch (error) {
+          }
+        if ("get" in Attributes || "set" in Attributes)
+          throw TypeError("Accessors not supported");
+        if ("value" in Attributes)
+          O[P] = Attributes.value;
+        return O;
       };
     }
   });
@@ -772,6 +772,61 @@
     }
   });
 
+  // node_modules/core-js/internals/a-function.js
+  var require_a_function = __commonJS({
+    "node_modules/core-js/internals/a-function.js": function(exports, module) {
+      module.exports = function(it) {
+        if (typeof it != "function") {
+          throw TypeError(String(it) + " is not a function");
+        }
+        return it;
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/function-bind-context.js
+  var require_function_bind_context = __commonJS({
+    "node_modules/core-js/internals/function-bind-context.js": function(exports, module) {
+      var aFunction2 = require_a_function();
+      module.exports = function(fn, that, length2) {
+        aFunction2(fn);
+        if (that === void 0)
+          return fn;
+        switch (length2) {
+          case 0:
+            return function() {
+              return fn.call(that);
+            };
+          case 1:
+            return function(a) {
+              return fn.call(that, a);
+            };
+          case 2:
+            return function(a, b) {
+              return fn.call(that, a, b);
+            };
+          case 3:
+            return function(a, b, c) {
+              return fn.call(that, a, b, c);
+            };
+        }
+        return function() {
+          return fn.apply(that, arguments);
+        };
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/is-array.js
+  var require_is_array = __commonJS({
+    "node_modules/core-js/internals/is-array.js": function(exports, module) {
+      var classof2 = require_classof_raw();
+      module.exports = Array.isArray || function isArray5(arg) {
+        return classof2(arg) == "Array";
+      };
+    }
+  });
+
   // node_modules/core-js/internals/engine-user-agent.js
   var require_engine_user_agent = __commonJS({
     "node_modules/core-js/internals/engine-user-agent.js": function(exports, module) {
@@ -824,12 +879,188 @@
     }
   });
 
-  // node_modules/core-js/internals/is-array.js
-  var require_is_array = __commonJS({
-    "node_modules/core-js/internals/is-array.js": function(exports, module) {
-      var classof2 = require_classof_raw();
-      module.exports = Array.isArray || function isArray5(arg) {
-        return classof2(arg) == "Array";
+  // node_modules/core-js/internals/well-known-symbol.js
+  var require_well_known_symbol = __commonJS({
+    "node_modules/core-js/internals/well-known-symbol.js": function(exports, module) {
+      var global8 = require_global();
+      var shared2 = require_shared();
+      var has4 = require_has();
+      var uid2 = require_uid();
+      var NATIVE_SYMBOL2 = require_native_symbol();
+      var USE_SYMBOL_AS_UID2 = require_use_symbol_as_uid();
+      var WellKnownSymbolsStore2 = shared2("wks");
+      var Symbol2 = global8.Symbol;
+      var createWellKnownSymbol = USE_SYMBOL_AS_UID2 ? Symbol2 : Symbol2 && Symbol2.withoutSetter || uid2;
+      module.exports = function(name) {
+        if (!has4(WellKnownSymbolsStore2, name) || !(NATIVE_SYMBOL2 || typeof WellKnownSymbolsStore2[name] == "string")) {
+          if (NATIVE_SYMBOL2 && has4(Symbol2, name)) {
+            WellKnownSymbolsStore2[name] = Symbol2[name];
+          } else {
+            WellKnownSymbolsStore2[name] = createWellKnownSymbol("Symbol." + name);
+          }
+        }
+        return WellKnownSymbolsStore2[name];
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-species-create.js
+  var require_array_species_create = __commonJS({
+    "node_modules/core-js/internals/array-species-create.js": function(exports, module) {
+      var isObject7 = require_is_object();
+      var isArray5 = require_is_array();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(originalArray, length2) {
+        var C;
+        if (isArray5(originalArray)) {
+          C = originalArray.constructor;
+          if (typeof C == "function" && (C === Array || isArray5(C.prototype)))
+            C = void 0;
+          else if (isObject7(C)) {
+            C = C[SPECIES2];
+            if (C === null)
+              C = void 0;
+          }
+        }
+        return new (C === void 0 ? Array : C)(length2 === 0 ? 0 : length2);
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-iteration.js
+  var require_array_iteration = __commonJS({
+    "node_modules/core-js/internals/array-iteration.js": function(exports, module) {
+      var bind3 = require_function_bind_context();
+      var IndexedObject2 = require_indexed_object();
+      var toObject6 = require_to_object();
+      var toLength7 = require_to_length();
+      var arraySpeciesCreate3 = require_array_species_create();
+      var push = [].push;
+      var createMethod = function(TYPE) {
+        var IS_MAP = TYPE == 1;
+        var IS_FILTER = TYPE == 2;
+        var IS_SOME = TYPE == 3;
+        var IS_EVERY = TYPE == 4;
+        var IS_FIND_INDEX = TYPE == 6;
+        var IS_FILTER_OUT = TYPE == 7;
+        var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+        return function($this, callbackfn, that, specificCreate) {
+          var O = toObject6($this);
+          var self2 = IndexedObject2(O);
+          var boundFunction = bind3(callbackfn, that, 3);
+          var length2 = toLength7(self2.length);
+          var index = 0;
+          var create5 = specificCreate || arraySpeciesCreate3;
+          var target = IS_MAP ? create5($this, length2) : IS_FILTER || IS_FILTER_OUT ? create5($this, 0) : void 0;
+          var value, result;
+          for (; length2 > index; index++)
+            if (NO_HOLES || index in self2) {
+              value = self2[index];
+              result = boundFunction(value, index, O);
+              if (TYPE) {
+                if (IS_MAP)
+                  target[index] = result;
+                else if (result)
+                  switch (TYPE) {
+                    case 3:
+                      return true;
+                    case 5:
+                      return value;
+                    case 6:
+                      return index;
+                    case 2:
+                      push.call(target, value);
+                  }
+                else
+                  switch (TYPE) {
+                    case 4:
+                      return false;
+                    case 7:
+                      push.call(target, value);
+                  }
+              }
+            }
+          return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
+        };
+      };
+      module.exports = {
+        forEach: createMethod(0),
+        map: createMethod(1),
+        filter: createMethod(2),
+        some: createMethod(3),
+        every: createMethod(4),
+        find: createMethod(5),
+        findIndex: createMethod(6),
+        filterOut: createMethod(7)
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-method-is-strict.js
+  var require_array_method_is_strict = __commonJS({
+    "node_modules/core-js/internals/array-method-is-strict.js": function(exports, module) {
+      "use strict";
+      var fails10 = require_fails();
+      module.exports = function(METHOD_NAME, argument) {
+        var method = [][METHOD_NAME];
+        return !!method && fails10(function() {
+          method.call(null, argument || function() {
+            throw 1;
+          }, 1);
+        });
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/array-for-each.js
+  var require_array_for_each = __commonJS({
+    "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
+      "use strict";
+      var $forEach2 = require_array_iteration().forEach;
+      var arrayMethodIsStrict5 = require_array_method_is_strict();
+      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
+      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
+        return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+      } : [].forEach;
+    }
+  });
+
+  // node_modules/core-js/internals/dom-iterables.js
+  var require_dom_iterables = __commonJS({
+    "node_modules/core-js/internals/dom-iterables.js": function(exports, module) {
+      module.exports = {
+        CSSRuleList: 0,
+        CSSStyleDeclaration: 0,
+        CSSValueList: 0,
+        ClientRectList: 0,
+        DOMRectList: 0,
+        DOMStringList: 0,
+        DOMTokenList: 1,
+        DataTransferItemList: 0,
+        FileList: 0,
+        HTMLAllCollection: 0,
+        HTMLCollection: 0,
+        HTMLFormElement: 0,
+        HTMLSelectElement: 0,
+        MediaList: 0,
+        MimeTypeArray: 0,
+        NamedNodeMap: 0,
+        NodeList: 1,
+        PaintRequestList: 0,
+        Plugin: 0,
+        PluginArray: 0,
+        SVGLengthList: 0,
+        SVGNumberList: 0,
+        SVGPathSegList: 0,
+        SVGPointList: 0,
+        SVGStringList: 0,
+        SVGTransformList: 0,
+        SourceBufferList: 0,
+        StyleSheetList: 0,
+        TextTrackCueList: 0,
+        TextTrackList: 0,
+        TouchList: 0
       };
     }
   });
@@ -960,31 +1191,6 @@
     }
   });
 
-  // node_modules/core-js/internals/well-known-symbol.js
-  var require_well_known_symbol = __commonJS({
-    "node_modules/core-js/internals/well-known-symbol.js": function(exports, module) {
-      var global8 = require_global();
-      var shared2 = require_shared();
-      var has4 = require_has();
-      var uid2 = require_uid();
-      var NATIVE_SYMBOL2 = require_native_symbol();
-      var USE_SYMBOL_AS_UID2 = require_use_symbol_as_uid();
-      var WellKnownSymbolsStore2 = shared2("wks");
-      var Symbol2 = global8.Symbol;
-      var createWellKnownSymbol = USE_SYMBOL_AS_UID2 ? Symbol2 : Symbol2 && Symbol2.withoutSetter || uid2;
-      module.exports = function(name) {
-        if (!has4(WellKnownSymbolsStore2, name) || !(NATIVE_SYMBOL2 || typeof WellKnownSymbolsStore2[name] == "string")) {
-          if (NATIVE_SYMBOL2 && has4(Symbol2, name)) {
-            WellKnownSymbolsStore2[name] = Symbol2[name];
-          } else {
-            WellKnownSymbolsStore2[name] = createWellKnownSymbol("Symbol." + name);
-          }
-        }
-        return WellKnownSymbolsStore2[name];
-      };
-    }
-  });
-
   // node_modules/core-js/internals/well-known-symbol-wrapped.js
   var require_well_known_symbol_wrapped = __commonJS({
     "node_modules/core-js/internals/well-known-symbol-wrapped.js": function(exports) {
@@ -1025,144 +1231,6 @@
     }
   });
 
-  // node_modules/core-js/internals/a-function.js
-  var require_a_function = __commonJS({
-    "node_modules/core-js/internals/a-function.js": function(exports, module) {
-      module.exports = function(it) {
-        if (typeof it != "function") {
-          throw TypeError(String(it) + " is not a function");
-        }
-        return it;
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/function-bind-context.js
-  var require_function_bind_context = __commonJS({
-    "node_modules/core-js/internals/function-bind-context.js": function(exports, module) {
-      var aFunction2 = require_a_function();
-      module.exports = function(fn, that, length2) {
-        aFunction2(fn);
-        if (that === void 0)
-          return fn;
-        switch (length2) {
-          case 0:
-            return function() {
-              return fn.call(that);
-            };
-          case 1:
-            return function(a) {
-              return fn.call(that, a);
-            };
-          case 2:
-            return function(a, b) {
-              return fn.call(that, a, b);
-            };
-          case 3:
-            return function(a, b, c) {
-              return fn.call(that, a, b, c);
-            };
-        }
-        return function() {
-          return fn.apply(that, arguments);
-        };
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/array-species-create.js
-  var require_array_species_create = __commonJS({
-    "node_modules/core-js/internals/array-species-create.js": function(exports, module) {
-      var isObject7 = require_is_object();
-      var isArray5 = require_is_array();
-      var wellKnownSymbol5 = require_well_known_symbol();
-      var SPECIES2 = wellKnownSymbol5("species");
-      module.exports = function(originalArray, length2) {
-        var C;
-        if (isArray5(originalArray)) {
-          C = originalArray.constructor;
-          if (typeof C == "function" && (C === Array || isArray5(C.prototype)))
-            C = void 0;
-          else if (isObject7(C)) {
-            C = C[SPECIES2];
-            if (C === null)
-              C = void 0;
-          }
-        }
-        return new (C === void 0 ? Array : C)(length2 === 0 ? 0 : length2);
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/array-iteration.js
-  var require_array_iteration = __commonJS({
-    "node_modules/core-js/internals/array-iteration.js": function(exports, module) {
-      var bind3 = require_function_bind_context();
-      var IndexedObject2 = require_indexed_object();
-      var toObject6 = require_to_object();
-      var toLength7 = require_to_length();
-      var arraySpeciesCreate3 = require_array_species_create();
-      var push = [].push;
-      var createMethod = function(TYPE) {
-        var IS_MAP = TYPE == 1;
-        var IS_FILTER = TYPE == 2;
-        var IS_SOME = TYPE == 3;
-        var IS_EVERY = TYPE == 4;
-        var IS_FIND_INDEX = TYPE == 6;
-        var IS_FILTER_OUT = TYPE == 7;
-        var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
-        return function($this, callbackfn, that, specificCreate) {
-          var O = toObject6($this);
-          var self2 = IndexedObject2(O);
-          var boundFunction = bind3(callbackfn, that, 3);
-          var length2 = toLength7(self2.length);
-          var index = 0;
-          var create5 = specificCreate || arraySpeciesCreate3;
-          var target = IS_MAP ? create5($this, length2) : IS_FILTER || IS_FILTER_OUT ? create5($this, 0) : void 0;
-          var value, result;
-          for (; length2 > index; index++)
-            if (NO_HOLES || index in self2) {
-              value = self2[index];
-              result = boundFunction(value, index, O);
-              if (TYPE) {
-                if (IS_MAP)
-                  target[index] = result;
-                else if (result)
-                  switch (TYPE) {
-                    case 3:
-                      return true;
-                    case 5:
-                      return value;
-                    case 6:
-                      return index;
-                    case 2:
-                      push.call(target, value);
-                  }
-                else
-                  switch (TYPE) {
-                    case 4:
-                      return false;
-                    case 7:
-                      push.call(target, value);
-                  }
-              }
-            }
-          return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
-        };
-      };
-      module.exports = {
-        forEach: createMethod(0),
-        map: createMethod(1),
-        filter: createMethod(2),
-        some: createMethod(3),
-        every: createMethod(4),
-        find: createMethod(5),
-        findIndex: createMethod(6),
-        filterOut: createMethod(7)
-      };
-    }
-  });
-
   // node_modules/core-js/internals/array-method-has-species-support.js
   var require_array_method_has_species_support = __commonJS({
     "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
@@ -1179,74 +1247,6 @@
           };
           return array[METHOD_NAME](Boolean).foo !== 1;
         });
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/array-method-is-strict.js
-  var require_array_method_is_strict = __commonJS({
-    "node_modules/core-js/internals/array-method-is-strict.js": function(exports, module) {
-      "use strict";
-      var fails10 = require_fails();
-      module.exports = function(METHOD_NAME, argument) {
-        var method = [][METHOD_NAME];
-        return !!method && fails10(function() {
-          method.call(null, argument || function() {
-            throw 1;
-          }, 1);
-        });
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/array-for-each.js
-  var require_array_for_each = __commonJS({
-    "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
-      "use strict";
-      var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict5 = require_array_method_is_strict();
-      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
-      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
-        return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-      } : [].forEach;
-    }
-  });
-
-  // node_modules/core-js/internals/dom-iterables.js
-  var require_dom_iterables = __commonJS({
-    "node_modules/core-js/internals/dom-iterables.js": function(exports, module) {
-      module.exports = {
-        CSSRuleList: 0,
-        CSSStyleDeclaration: 0,
-        CSSValueList: 0,
-        ClientRectList: 0,
-        DOMRectList: 0,
-        DOMStringList: 0,
-        DOMTokenList: 1,
-        DataTransferItemList: 0,
-        FileList: 0,
-        HTMLAllCollection: 0,
-        HTMLCollection: 0,
-        HTMLFormElement: 0,
-        HTMLSelectElement: 0,
-        MediaList: 0,
-        MimeTypeArray: 0,
-        NamedNodeMap: 0,
-        NodeList: 1,
-        PaintRequestList: 0,
-        Plugin: 0,
-        PluginArray: 0,
-        SVGLengthList: 0,
-        SVGNumberList: 0,
-        SVGPathSegList: 0,
-        SVGPointList: 0,
-        SVGStringList: 0,
-        SVGTransformList: 0,
-        SourceBufferList: 0,
-        StyleSheetList: 0,
-        TextTrackCueList: 0,
-        TextTrackList: 0,
-        TouchList: 0
       };
     }
   });
@@ -3036,6 +3036,32 @@
     }
   });
 
+  // node_modules/core-js/modules/es.array.for-each.js
+  "use strict";
+  var $2 = require_export();
+  var forEach = require_array_for_each();
+  $2({ target: "Array", proto: true, forced: [].forEach != forEach }, {
+    forEach: forEach
+  });
+
+  // node_modules/core-js/modules/web.dom-collections.for-each.js
+  var global2 = require_global();
+  var DOMIterables = require_dom_iterables();
+  var forEach2 = require_array_for_each();
+  var createNonEnumerableProperty = require_create_non_enumerable_property();
+  for (var COLLECTION_NAME in DOMIterables) {
+    Collection = global2[COLLECTION_NAME];
+    CollectionPrototype = Collection && Collection.prototype;
+    if (CollectionPrototype && CollectionPrototype.forEach !== forEach2)
+      try {
+        createNonEnumerableProperty(CollectionPrototype, "forEach", forEach2);
+      } catch (error) {
+        CollectionPrototype.forEach = forEach2;
+      }
+  }
+  var Collection;
+  var CollectionPrototype;
+
   // node_modules/core-js/modules/es.function.name.js
   var DESCRIPTORS = require_descriptors();
   var defineProperty = require_object_define_property().f;
@@ -3058,8 +3084,8 @@
 
   // node_modules/core-js/modules/es.symbol.js
   "use strict";
-  var $2 = require_export();
-  var global2 = require_global();
+  var $3 = require_export();
+  var global3 = require_global();
   var getBuiltIn = require_get_built_in();
   var IS_PURE = require_is_pure();
   var DESCRIPTORS2 = require_descriptors();
@@ -3082,7 +3108,7 @@
   var getOwnPropertyDescriptorModule = require_object_get_own_property_descriptor();
   var definePropertyModule = require_object_define_property();
   var propertyIsEnumerableModule = require_object_property_is_enumerable();
-  var createNonEnumerableProperty = require_create_non_enumerable_property();
+  var createNonEnumerableProperty2 = require_create_non_enumerable_property();
   var redefine = require_redefine();
   var shared = require_shared();
   var sharedKey = require_shared_key();
@@ -3101,7 +3127,7 @@
   var setInternalState = InternalStateModule.set;
   var getInternalState = InternalStateModule.getterFor(SYMBOL);
   var ObjectPrototype = Object[PROTOTYPE];
-  var $Symbol = global2.Symbol;
+  var $Symbol = global3.Symbol;
   var $stringify = getBuiltIn("JSON", "stringify");
   var nativeGetOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
   var nativeDefineProperty = definePropertyModule.f;
@@ -3112,7 +3138,7 @@
   var StringToSymbolRegistry = shared("string-to-symbol-registry");
   var SymbolToStringRegistry = shared("symbol-to-string-registry");
   var WellKnownSymbolsStore = shared("wks");
-  var QObject = global2.QObject;
+  var QObject = global3.QObject;
   var USE_SETTER = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
   var setSymbolDescriptor = DESCRIPTORS2 && fails(function() {
     return nativeObjectCreate(nativeDefineProperty({}, "a", {
@@ -3259,13 +3285,13 @@
       }
     }
   }
-  $2({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
+  $3({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
     Symbol: $Symbol
   });
   $forEach(objectKeys(WellKnownSymbolsStore), function(name) {
     defineWellKnownSymbol(name);
   });
-  $2({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
+  $3({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
     "for": function(key) {
       var string = String(key);
       if (has(StringToSymbolRegistry, string))
@@ -3288,17 +3314,17 @@
       USE_SETTER = false;
     }
   });
-  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
+  $3({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
     create: $create,
     defineProperty: $defineProperty,
     defineProperties: $defineProperties,
     getOwnPropertyDescriptor: $getOwnPropertyDescriptor
   });
-  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
+  $3({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
     getOwnPropertyNames: $getOwnPropertyNames,
     getOwnPropertySymbols: $getOwnPropertySymbols
   });
-  $2({ target: "Object", stat: true, forced: fails(function() {
+  $3({ target: "Object", stat: true, forced: fails(function() {
     getOwnPropertySymbolsModule.f(1);
   }) }, {
     getOwnPropertySymbols: function getOwnPropertySymbols2(it) {
@@ -3310,7 +3336,7 @@
       var symbol = $Symbol();
       return $stringify([symbol]) != "[null]" || $stringify({ a: symbol }) != "{}" || $stringify(Object(symbol)) != "{}";
     });
-    $2({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
+    $3({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
       stringify: function stringify2(it, replacer, space) {
         var args = [it];
         var index = 1;
@@ -3334,21 +3360,21 @@
   }
   var FORCED_JSON_STRINGIFY;
   if (!$Symbol[PROTOTYPE][TO_PRIMITIVE]) {
-    createNonEnumerableProperty($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+    createNonEnumerableProperty2($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
   }
   setToStringTag($Symbol, SYMBOL);
   hiddenKeys[HIDDEN] = true;
 
   // node_modules/core-js/modules/es.symbol.description.js
   "use strict";
-  var $3 = require_export();
+  var $4 = require_export();
   var DESCRIPTORS3 = require_descriptors();
-  var global3 = require_global();
+  var global4 = require_global();
   var has2 = require_has();
   var isObject2 = require_is_object();
   var defineProperty3 = require_object_define_property().f;
   var copyConstructorProperties = require_copy_constructor_properties();
-  var NativeSymbol = global3.Symbol;
+  var NativeSymbol = global4.Symbol;
   if (DESCRIPTORS3 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
     EmptyStringDescriptionStore = {};
     SymbolWrapper = function Symbol2() {
@@ -3375,7 +3401,7 @@
         return desc === "" ? void 0 : desc;
       }
     });
-    $3({ global: true, forced: true }, {
+    $4({ global: true, forced: true }, {
       Symbol: SymbolWrapper
     });
   }
@@ -3387,22 +3413,22 @@
   var regexp;
 
   // node_modules/core-js/modules/es.object.define-property.js
-  var $4 = require_export();
+  var $5 = require_export();
   var DESCRIPTORS4 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $4({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
+  $5({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
   // node_modules/core-js/modules/es.object.keys.js
-  var $5 = require_export();
+  var $6 = require_export();
   var toObject2 = require_to_object();
   var nativeKeys = require_object_keys();
   var fails2 = require_fails();
   var FAILS_ON_PRIMITIVES = fails2(function() {
     nativeKeys(1);
   });
-  $5({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
+  $6({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
     keys: function keys(it) {
       return nativeKeys(toObject2(it));
     }
@@ -3410,18 +3436,18 @@
 
   // node_modules/core-js/modules/es.array.filter.js
   "use strict";
-  var $6 = require_export();
+  var $7 = require_export();
   var $filter = require_array_iteration().filter;
   var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("filter");
-  $6({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
     filter: function filter(callbackfn) {
       return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
-  var $7 = require_export();
+  var $8 = require_export();
   var fails3 = require_fails();
   var toIndexedObject2 = require_to_indexed_object();
   var nativeGetOwnPropertyDescriptor2 = require_object_get_own_property_descriptor().f;
@@ -3430,37 +3456,11 @@
     nativeGetOwnPropertyDescriptor2(1);
   });
   var FORCED = !DESCRIPTORS5 || FAILS_ON_PRIMITIVES2;
-  $7({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
+  $8({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
     getOwnPropertyDescriptor: function getOwnPropertyDescriptor2(it, key) {
       return nativeGetOwnPropertyDescriptor2(toIndexedObject2(it), key);
     }
   });
-
-  // node_modules/core-js/modules/es.array.for-each.js
-  "use strict";
-  var $8 = require_export();
-  var forEach = require_array_for_each();
-  $8({ target: "Array", proto: true, forced: [].forEach != forEach }, {
-    forEach: forEach
-  });
-
-  // node_modules/core-js/modules/web.dom-collections.for-each.js
-  var global4 = require_global();
-  var DOMIterables = require_dom_iterables();
-  var forEach2 = require_array_for_each();
-  var createNonEnumerableProperty2 = require_create_non_enumerable_property();
-  for (var COLLECTION_NAME in DOMIterables) {
-    Collection = global4[COLLECTION_NAME];
-    CollectionPrototype = Collection && Collection.prototype;
-    if (CollectionPrototype && CollectionPrototype.forEach !== forEach2)
-      try {
-        createNonEnumerableProperty2(CollectionPrototype, "forEach", forEach2);
-      } catch (error) {
-        CollectionPrototype.forEach = forEach2;
-      }
-  }
-  var Collection;
-  var CollectionPrototype;
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptors.js
   var $9 = require_export();
@@ -5954,9 +5954,12 @@
     }, {
       key: "info",
       get: function get() {
-        return _objectSpread2({
+        var _this$mirroredEl, _this$mirroredEl$data;
+        return _objectSpread2(_objectSpread2({
           id: this.id
-        }, this.position);
+        }, this.position), {}, {
+          ui_function: this === null || this === void 0 ? void 0 : (_this$mirroredEl = this.mirroredEl) === null || _this$mirroredEl === void 0 ? void 0 : (_this$mirroredEl$data = _this$mirroredEl.dataset) === null || _this$mirroredEl$data === void 0 ? void 0 : _this$mirroredEl$data.gridedUiName
+        });
       }
     }, {
       key: "fillIfInAutoRow",
@@ -7842,7 +7845,6 @@
       _defineProperty8(this, "containerSelector", void 0);
       _defineProperty8(this, "container", void 0);
       _defineProperty8(this, "gridStyles", void 0);
-      _defineProperty8(this, "mode", void 0);
       _defineProperty8(this, "gridLayout", void 0);
       _defineProperty8(this, "tractControls", void 0);
       _defineProperty8(this, "entryType", void 0);
@@ -7869,7 +7871,6 @@
       key: "loadLayoutTemplate",
       value: function loadLayoutTemplate(opts) {
         var _this = this, _opts$elements;
-        this.mode = "New";
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
         setupGridedUI(this, opts.finishBtn);
@@ -7877,14 +7878,15 @@
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
         }));
-        var attachUiToElement = function attachUiToElement2(id) {
-          var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(opts.ui_functions[id], '"]'));
+        var attachUiToElement = function attachUiToElement2(uiFunctionName) {
+          var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(uiFunctionName, '"]'));
+          console.log("Moving ".concat(uiFunctionName, " into app editor"));
           _this.container.append(ui_for_element);
           return ui_for_element;
         };
         (_opts$elements = opts.elements) === null || _opts$elements === void 0 ? void 0 : _opts$elements.forEach(function(elMsg) {
-          var id = elMsg.id, start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
-          var mirroredElement = opts.entryType === "layout-gallery-live" ? attachUiToElement(id) : null;
+          var id = elMsg.id, start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col, _elMsg$ui_function = elMsg.ui_function, ui_function = _elMsg$ui_function === void 0 ? null : _elMsg$ui_function;
+          var mirroredElement = opts.entryType === "layout-gallery-live" ? attachUiToElement(ui_function) : null;
           _this.addElement({
             id: id,
             gridPos: {
@@ -7905,7 +7907,6 @@
       key: "wrapExistingApp",
       value: function wrapExistingApp(opts) {
         var _opts$grid;
-        this.mode = "Existing";
         var alreadyWrappedApp = document.querySelector(".wrapped-existing-app");
         this.container = alreadyWrappedApp !== null && alreadyWrappedApp !== void 0 ? alreadyWrappedApp : findFirstGridNode();
         this.gridStyles = this.container.style;
@@ -8225,7 +8226,7 @@
         }));
       }
     }
-    if (appState.mode === "Existing") {
+    if (appState.entryType === "layout-gallery-live" || appState.entryType === "edit-existing-app") {
       setClass(appState.currentCells, "transparent");
     }
     appState.tractControls = setupTractControls(appState);
@@ -9115,6 +9116,13 @@
   var clearPage = function clearPage2() {
     var appDumpDiv = document.getElementById("app_dump");
     if (appDumpDiv) {
+      document.querySelectorAll("[data-grided-ui-name]").forEach(function(el) {
+        if (el.parentElement === appDumpDiv)
+          return;
+        console.log("Moving ".concat(el.dataset["gridedUiName"], " back to app dump"));
+        appDumpDiv.append(el);
+        $(el).trigger("hidden");
+      });
       appDumpDiv.parentNode.removeChild(appDumpDiv);
     }
     document.body.innerHTML = "";
@@ -9148,7 +9156,7 @@
     if (saveHistory) {
       saveEditorHistory(opts);
     }
-    if (opts.entryType === "edit-layout" || opts.entryType === "layout-gallery") {
+    if (opts.entryType !== "edit-existing-app") {
       clearPage();
     }
     var gallery_app = opts.entryType === "layout-gallery" || opts.entryType === "layout-gallery-live";
