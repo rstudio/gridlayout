@@ -162,16 +162,24 @@ export class LayoutGallery extends HTMLElement {
       modal.remove();
     };
 
-    let actionButtons = [
-      clickButton(".go", "Create app with this layout", (event) => {
-        closeGallery(event);
-        this.onGoFn(selectedLayout);
-      }),
+    let actionButtons: HTMLElement[] = [];
+
+    if (selectedLayout.elements) {
+      // Only allow jumping straight to app template if the layout has elements
+      actionButtons.push(
+        clickButton(".go", "Create app with this layout", (event) => {
+          closeGallery(event);
+          this.onGoFn(selectedLayout);
+        })
+      );
+    }
+
+    actionButtons.push(
       clickButton(".edit", "Edit this layout", (event) => {
         closeGallery(event);
         this.onEditFn(selectedLayout, false);
-      }),
-    ];
+      })
+    );
 
     if (selectedLayout.app_loc) {
       actionButtons.push(

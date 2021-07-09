@@ -8659,7 +8659,6 @@
       _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hasLiveApp", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
-      _defineProperty9(_assertThisInitialized5(_this), "blankGrid", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
       _this.attachShadow({
@@ -8671,7 +8670,6 @@
         gap: "1rem"
       };
       _this.elements = [];
-      _this.blankGrid = true;
       _this.RenderSize = 1250;
       _this.ShownSize = 250;
       _this.OnSelect = function() {
@@ -8706,7 +8704,6 @@
         var _layout$elements, _layout$name;
         Object.assign(this.grid, _layout.grid);
         this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
-        this.blankGrid = this.elements.length === 0;
         this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
         this.hasLiveApp = _layout.app_loc !== void 0;
         return this;
@@ -8745,7 +8742,7 @@
       key: "elementDivs",
       get: function get() {
         var elementDivs = "";
-        if (this.blankGrid) {
+        if (this.elements.length === 0) {
           for (var row_i = 1; row_i <= this.grid.rows.length; row_i++) {
             for (var col_i = 1; col_i <= this.grid.cols.length; col_i++) {
               elementDivs += '<div class="element blank" style=\'grid-area:'.concat(row_i, "/").concat(col_i, "'></div>");
@@ -9039,13 +9036,17 @@
           _this3.remove();
           modal.remove();
         };
-        var actionButtons = [clickButton(".go", "Create app with this layout", function(event) {
-          closeGallery(event);
-          _this3.onGoFn(selectedLayout);
-        }), clickButton(".edit", "Edit this layout", function(event) {
+        var actionButtons = [];
+        if (selectedLayout.elements) {
+          actionButtons.push(clickButton(".go", "Create app with this layout", function(event) {
+            closeGallery(event);
+            _this3.onGoFn(selectedLayout);
+          }));
+        }
+        actionButtons.push(clickButton(".edit", "Edit this layout", function(event) {
           closeGallery(event);
           _this3.onEditFn(selectedLayout, false);
-        })];
+        }));
         if (selectedLayout.app_loc) {
           actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
             closeGallery(event);
