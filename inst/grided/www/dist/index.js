@@ -8683,21 +8683,8 @@
       value: function connectedCallback() {
         var _this2 = this;
         var scale = this.RenderSize / this.ShownSize;
-        var scaleUnits = function scaleUnits2(unit) {
-          if (unit.includes("fr") || unit.includes("auto"))
-            return unit;
-          return "calc(".concat(unit, "/ ").concat(scale, ")");
-        };
-        var buildTractDefinition = function buildTractDefinition2(tractSizing) {
-          if (!(tractSizing instanceof Array)) {
-            tractSizing = [tractSizing];
-          }
-          return tractSizing.map(function(x) {
-            return scaleUnits(x);
-          }).join(" ");
-        };
         var cornerRadius = "".concat(20 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        width: ".concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        padding: ").concat(30 / scale, "px;\n        border-radius: ").concat(cornerRadius, ";\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols), ";\n        gap: ").concat(scaleUnits(this.grid.gap), ";\n        background-color: white;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        width: ".concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        padding: ").concat(30 / scale, "px;\n        border-radius: ").concat(cornerRadius, ";\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows, scale), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols, scale), ";\n        gap: ").concat(scaleUnits(scale, this.grid.gap), ";\n        background-color: white;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
         var layoutDiv = this.shadowRoot.getElementById("layout");
         layoutDiv.addEventListener("click", function(event) {
           event.stopPropagation();
@@ -8765,6 +8752,19 @@
     }]);
     return GridPreview2;
   }(/* @__PURE__ */ _wrapNativeSuper5(HTMLElement));
+  function scaleUnits(scale, unit) {
+    if (unit.includes("fr") || unit.includes("auto"))
+      return unit;
+    return "calc(".concat(unit, "/ ").concat(scale, ")");
+  }
+  function buildTractDefinition(tractSizing, scale) {
+    if (!(tractSizing instanceof Array)) {
+      tractSizing = [tractSizing];
+    }
+    return tractSizing.map(function(x) {
+      return scaleUnits(scale, x);
+    }).join(" ");
+  }
   function gridPreview() {
     return new GridPreview();
   }

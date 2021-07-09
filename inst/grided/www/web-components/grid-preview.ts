@@ -27,20 +27,6 @@ export class GridPreview extends HTMLElement {
   connectedCallback() {
     const scale = this.RenderSize / this.ShownSize;
 
-    const scaleUnits = (unit: string) => {
-      // Dont calc with relative units ()
-      if (unit.includes("fr") || unit.includes("auto")) return unit;
-      return `calc(${unit}/ ${scale})`;
-    };
-
-    const buildTractDefinition = (tractSizing: string | string[]) => {
-      // If we have a single tract then json serialization will not keep it
-      // as an array and we need to convert it back to one.
-      if (!(tractSizing instanceof Array)) {
-        tractSizing = [tractSizing];
-      }
-      return tractSizing.map((x) => scaleUnits(x)).join(" ");
-    };
     const cornerRadius = `${20 / scale}px`;
     this.shadowRoot.innerHTML = `
     <style>
@@ -60,9 +46,9 @@ export class GridPreview extends HTMLElement {
         border-radius: ${cornerRadius};
         box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;
         display: grid;
-        grid-template-rows: ${buildTractDefinition(this.grid.rows)};
-        grid-template-columns: ${buildTractDefinition(this.grid.cols)};
-        gap: ${scaleUnits(this.grid.gap)};
+        grid-template-rows: ${buildTractDefinition(this.grid.rows, scale)};
+        grid-template-columns: ${buildTractDefinition(this.grid.cols, scale)};
+        gap: ${scaleUnits(scale, this.grid.gap)};
         background-color: white;
         overflow: scroll;
       }
@@ -170,6 +156,21 @@ export class GridPreview extends HTMLElement {
 
     return elementDivs;
   }
+}
+
+function scaleUnits(scale: number, unit: string) {
+  // Dont calc with relative units ()
+  if (unit.includes("fr") || unit.includes("auto")) return unit;
+  return `calc(${unit}/ ${scale})`;
+}
+
+function buildTractDefinition(tractSizing: string | string[], scale: number) {
+  // If we have a single tract then json serialization will not keep it
+  // as an array and we need to convert it back to one.
+  if (!(tractSizing instanceof Array)) {
+    tractSizing = [tractSizing];
+  }
+  return tractSizing.map((x) => scaleUnits(scale, x)).join(" ");
 }
 
 export function gridPreview() {
