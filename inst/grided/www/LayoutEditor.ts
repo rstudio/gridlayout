@@ -60,8 +60,6 @@ export type AppEntryType =
   | "edit-layout"
   | "edit-existing-app";
 
-export type AppMode = "Existing" | "New";
-
 export type FinishButtonSetup = {
   label: string;
   onDone: (layout: LayoutInfo) => void;
@@ -87,7 +85,6 @@ export class LayoutEditor {
   containerSelector: string;
   container: HTMLElement;
   gridStyles: CSSStyleDeclaration;
-  mode: AppMode;
   gridLayout: GridLayout;
   tractControls: {
     updatePositions: () => void;
@@ -154,7 +151,6 @@ export class LayoutEditor {
   }
 
   loadLayoutTemplate(opts: LayoutEditorSetup) {
-    this.mode = "New";
     this.container = blockEl("div#gridPage");
 
     this.gridLayout = new GridLayout(this.container);
@@ -202,7 +198,6 @@ export class LayoutEditor {
   }
 
   wrapExistingApp(opts: LayoutEditorSetup) {
-    this.mode = "Existing";
     // Check if we've already wrapped in grided and tagged the app container
     const alreadyWrappedApp = document.querySelector(
       ".wrapped-existing-app"
@@ -660,7 +655,10 @@ function fillGridCells(appState: LayoutEditor) {
     }
   }
 
-  if (appState.mode === "Existing") {
+  if (
+    appState.entryType === "layout-gallery-live" ||
+    appState.entryType === "edit-existing-app"
+  ) {
     setClass(appState.currentCells, "transparent");
   }
 
