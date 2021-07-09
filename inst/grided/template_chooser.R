@@ -50,7 +50,13 @@ layout_templates <- list(
      |80px |header   |header   |
      |1fr  |mainPlot |controls |
      |1fr  |mainPlot |subPlot  |",
-    app_loc = "focal-chart-side.R"
+    app_loc = "focal-chart-side.R",
+    ui_functions = list(
+      header = "app_header_panel",
+      mainPlot = "weight_trajectories_for_diet_panel",
+      controls = "chooser_dropdowns_panel",
+      subPlot = "weight_dist_by_diet_panel"
+    )
   ),
   gen_template_info(
     "Stack",
