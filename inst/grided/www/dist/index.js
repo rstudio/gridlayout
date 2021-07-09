@@ -7875,7 +7875,7 @@
     _createClass7(LayoutEditor2, [{
       key: "loadLayoutTemplate",
       value: function loadLayoutTemplate(opts) {
-        var _this2 = this;
+        var _opts$elements, _this2 = this;
         this.mode = "New";
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
@@ -7884,7 +7884,7 @@
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
         }));
-        opts.elements.forEach(function(elMsg) {
+        (_opts$elements = opts.elements) === null || _opts$elements === void 0 ? void 0 : _opts$elements.forEach(function(elMsg) {
           var start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
           _this2.addElement({
             id: elMsg.id,

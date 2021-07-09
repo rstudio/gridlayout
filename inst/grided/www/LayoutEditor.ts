@@ -163,7 +163,7 @@ export class LayoutEditor {
     // elements first
     this.updateGrid({ ...opts.grid, dontUpdateHistory: true });
 
-    opts.elements.forEach((elMsg: LayoutElement) => {
+    opts.elements?.forEach((elMsg: LayoutElement) => {
       const { start_row, end_row, start_col, end_col } = elMsg;
       // Add elements but dont update history as we do it
       this.addElement(
