@@ -43,7 +43,7 @@ export class LayoutGallery extends HTMLElement {
       #layouts {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         grid-gap: 1rem;
         justify-items: center;
       }
@@ -95,7 +95,7 @@ export class LayoutGallery extends HTMLElement {
       ...this.layouts.map((layout) =>
         gridPreview()
           .layout(layout)
-          .shownSize(100)
+          .shownSize(120)
           .onSelect(() => this.focusOnLayout(layout))
       )
     );
