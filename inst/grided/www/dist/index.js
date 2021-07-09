@@ -1486,7 +1486,7 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $33 = require_export();
+      var $34 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
       var getPrototypeOf2 = require_object_get_prototype_of();
       var setPrototypeOf2 = require_object_set_prototype_of();
@@ -1576,7 +1576,7 @@
               }
             }
           else
-            $33({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $34({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $33 = require_export();
+      var $34 = require_export();
       var exec = require_regexp_exec();
-      $33({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $34({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2416,7 +2416,7 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $33 = require_export();
+      var $34 = require_export();
       var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $33({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $34({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -3058,7 +3058,7 @@
 
   // node_modules/core-js/modules/es.symbol.js
   "use strict";
-  var $ = require_export();
+  var $2 = require_export();
   var global2 = require_global();
   var getBuiltIn = require_get_built_in();
   var IS_PURE = require_is_pure();
@@ -3259,13 +3259,13 @@
       }
     }
   }
-  $({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
+  $2({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
     Symbol: $Symbol
   });
   $forEach(objectKeys(WellKnownSymbolsStore), function(name) {
     defineWellKnownSymbol(name);
   });
-  $({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
+  $2({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
     "for": function(key) {
       var string = String(key);
       if (has(StringToSymbolRegistry, string))
@@ -3288,17 +3288,17 @@
       USE_SETTER = false;
     }
   });
-  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
+  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
     create: $create,
     defineProperty: $defineProperty,
     defineProperties: $defineProperties,
     getOwnPropertyDescriptor: $getOwnPropertyDescriptor
   });
-  $({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
+  $2({ target: "Object", stat: true, forced: !NATIVE_SYMBOL }, {
     getOwnPropertyNames: $getOwnPropertyNames,
     getOwnPropertySymbols: $getOwnPropertySymbols
   });
-  $({ target: "Object", stat: true, forced: fails(function() {
+  $2({ target: "Object", stat: true, forced: fails(function() {
     getOwnPropertySymbolsModule.f(1);
   }) }, {
     getOwnPropertySymbols: function getOwnPropertySymbols2(it) {
@@ -3310,7 +3310,7 @@
       var symbol = $Symbol();
       return $stringify([symbol]) != "[null]" || $stringify({ a: symbol }) != "{}" || $stringify(Object(symbol)) != "{}";
     });
-    $({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
+    $2({ target: "JSON", stat: true, forced: FORCED_JSON_STRINGIFY }, {
       stringify: function stringify2(it, replacer, space) {
         var args = [it];
         var index = 1;
@@ -3341,7 +3341,7 @@
 
   // node_modules/core-js/modules/es.symbol.description.js
   "use strict";
-  var $2 = require_export();
+  var $3 = require_export();
   var DESCRIPTORS3 = require_descriptors();
   var global3 = require_global();
   var has2 = require_has();
@@ -3375,7 +3375,7 @@
         return desc === "" ? void 0 : desc;
       }
     });
-    $2({ global: true, forced: true }, {
+    $3({ global: true, forced: true }, {
       Symbol: SymbolWrapper
     });
   }
@@ -3387,22 +3387,22 @@
   var regexp;
 
   // node_modules/core-js/modules/es.object.define-property.js
-  var $3 = require_export();
+  var $4 = require_export();
   var DESCRIPTORS4 = require_descriptors();
   var objectDefinePropertyModile = require_object_define_property();
-  $3({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
+  $4({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
     defineProperty: objectDefinePropertyModile.f
   });
 
   // node_modules/core-js/modules/es.object.keys.js
-  var $4 = require_export();
+  var $5 = require_export();
   var toObject2 = require_to_object();
   var nativeKeys = require_object_keys();
   var fails2 = require_fails();
   var FAILS_ON_PRIMITIVES = fails2(function() {
     nativeKeys(1);
   });
-  $4({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
+  $5({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
     keys: function keys(it) {
       return nativeKeys(toObject2(it));
     }
@@ -3410,18 +3410,18 @@
 
   // node_modules/core-js/modules/es.array.filter.js
   "use strict";
-  var $5 = require_export();
+  var $6 = require_export();
   var $filter = require_array_iteration().filter;
   var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("filter");
-  $5({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+  $6({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
     filter: function filter(callbackfn) {
       return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
-  var $6 = require_export();
+  var $7 = require_export();
   var fails3 = require_fails();
   var toIndexedObject2 = require_to_indexed_object();
   var nativeGetOwnPropertyDescriptor2 = require_object_get_own_property_descriptor().f;
@@ -3430,7 +3430,7 @@
     nativeGetOwnPropertyDescriptor2(1);
   });
   var FORCED = !DESCRIPTORS5 || FAILS_ON_PRIMITIVES2;
-  $6({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
+  $7({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
     getOwnPropertyDescriptor: function getOwnPropertyDescriptor2(it, key) {
       return nativeGetOwnPropertyDescriptor2(toIndexedObject2(it), key);
     }
@@ -3438,9 +3438,9 @@
 
   // node_modules/core-js/modules/es.array.for-each.js
   "use strict";
-  var $7 = require_export();
+  var $8 = require_export();
   var forEach = require_array_for_each();
-  $7({ target: "Array", proto: true, forced: [].forEach != forEach }, {
+  $8({ target: "Array", proto: true, forced: [].forEach != forEach }, {
     forEach: forEach
   });
 
@@ -3463,13 +3463,13 @@
   var CollectionPrototype;
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptors.js
-  var $8 = require_export();
+  var $9 = require_export();
   var DESCRIPTORS6 = require_descriptors();
   var ownKeys = require_own_keys();
   var toIndexedObject3 = require_to_indexed_object();
   var getOwnPropertyDescriptorModule2 = require_object_get_own_property_descriptor();
   var createProperty = require_create_property();
-  $8({ target: "Object", stat: true, sham: !DESCRIPTORS6 }, {
+  $9({ target: "Object", stat: true, sham: !DESCRIPTORS6 }, {
     getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
       var O = toIndexedObject3(object);
       var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule2.f;
@@ -3487,17 +3487,17 @@
   });
 
   // node_modules/core-js/modules/es.object.define-properties.js
-  var $9 = require_export();
+  var $10 = require_export();
   var DESCRIPTORS7 = require_descriptors();
   var defineProperties2 = require_object_define_properties();
-  $9({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
+  $10({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperties: defineProperties2
   });
 
   // node_modules/core-js/modules/es.array.is-array.js
-  var $10 = require_export();
+  var $11 = require_export();
   var isArray2 = require_is_array();
-  $10({ target: "Array", stat: true }, {
+  $11({ target: "Array", stat: true }, {
     isArray: isArray2
   });
 
@@ -3580,19 +3580,19 @@
   var METHOD_NAME;
 
   // node_modules/core-js/modules/es.array.from.js
-  var $11 = require_export();
+  var $12 = require_export();
   var from = require_array_from();
   var checkCorrectnessOfIteration = require_check_correctness_of_iteration();
   var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
     Array.from(iterable);
   });
-  $11({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
+  $12({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
     from: from
   });
 
   // node_modules/core-js/modules/es.array.slice.js
   "use strict";
-  var $12 = require_export();
+  var $13 = require_export();
   var isObject3 = require_is_object();
   var isArray3 = require_is_array();
   var toAbsoluteIndex = require_to_absolute_index();
@@ -3605,7 +3605,7 @@
   var SPECIES = wellKnownSymbol3("species");
   var nativeSlice = [].slice;
   var max = Math.max;
-  $12({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+  $13({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
     slice: function slice(start, end) {
       var O = toIndexedObject4(this);
       var length2 = toLength(O.length);
@@ -3635,7 +3635,7 @@
   });
 
   // node_modules/core-js/modules/es.object.freeze.js
-  var $13 = require_export();
+  var $14 = require_export();
   var FREEZING = require_freezing();
   var fails4 = require_fails();
   var isObject4 = require_is_object();
@@ -3644,7 +3644,7 @@
   var FAILS_ON_PRIMITIVES3 = fails4(function() {
     $freeze(1);
   });
-  $13({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
+  $14({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
     freeze: function freeze(it) {
       return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
     }
@@ -3652,14 +3652,14 @@
 
   // node_modules/core-js/modules/es.array.join.js
   "use strict";
-  var $14 = require_export();
+  var $15 = require_export();
   var IndexedObject = require_indexed_object();
   var toIndexedObject5 = require_to_indexed_object();
   var arrayMethodIsStrict = require_array_method_is_strict();
   var nativeJoin = [].join;
   var ES3_STRINGS = IndexedObject != Object;
   var STRICT_METHOD = arrayMethodIsStrict("join", ",");
-  $14({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+  $15({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
     join: function join(separator) {
       return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
     }
@@ -3779,11 +3779,11 @@
 
   // node_modules/core-js/modules/es.array.map.js
   "use strict";
-  var $15 = require_export();
+  var $16 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
-  $15({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  $16({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3872,7 +3872,7 @@
 
   // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $16 = require_export();
+  var $17 = require_export();
   var $find = require_array_iteration().find;
   var addToUnscopables = require_add_to_unscopables();
   var FIND = "find";
@@ -3881,7 +3881,7 @@
     Array(1)[FIND](function() {
       SKIPS_HOLES = false;
     });
-  $16({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $17({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
     find: function find(callbackfn) {
       return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3890,7 +3890,7 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $17 = require_export();
+  var $18 = require_export();
   var $findIndex = require_array_iteration().findIndex;
   var addToUnscopables2 = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
@@ -3899,7 +3899,7 @@
     Array(1)[FIND_INDEX](function() {
       SKIPS_HOLES2 = false;
     });
-  $17({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3908,7 +3908,7 @@
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
@@ -3921,7 +3921,7 @@
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $18({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $19({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3977,15 +3977,15 @@
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $19 = require_export();
+  var $20 = require_export();
   var assign = require_object_assign();
-  $19({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $20({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $20 = require_export();
+  var $21 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -4012,7 +4012,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $20({ target: "Array", proto: true, forced: FORCED2 }, {
+  $21({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -4039,7 +4039,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $21 = require_export();
+  var $22 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4053,7 +4053,7 @@
       } : handler, timeout);
     };
   };
-  $21({ global: true, bind: true, forced: MSIE }, {
+  $22({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
@@ -4100,14 +4100,14 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $22 = require_export();
+  var $23 = require_export();
   var $reduce = require_array_reduce().left;
   var arrayMethodIsStrict2 = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
   var STRICT_METHOD2 = arrayMethodIsStrict2("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $22({ target: "Array", proto: true, forced: !STRICT_METHOD2 || CHROME_BUG }, {
+  $23({ target: "Array", proto: true, forced: !STRICT_METHOD2 || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4120,13 +4120,13 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $23 = require_export();
+  var $24 = require_export();
   var $indexOf = require_array_includes().indexOf;
   var arrayMethodIsStrict3 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
   var STRICT_METHOD3 = arrayMethodIsStrict3("indexOf");
-  $23({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD3 }, {
+  $24({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD3 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4230,10 +4230,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $24 = require_export();
+  var $25 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $24({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $25({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -4722,10 +4722,10 @@
   var import_es_weak_map = __toModule(require_es_weak_map());
 
   // node_modules/core-js/modules/es.object.create.js
-  var $25 = require_export();
+  var $26 = require_export();
   var DESCRIPTORS8 = require_descriptors();
   var create2 = require_object_create();
-  $25({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
+  $26({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
     create: create2
   });
 
@@ -5364,9 +5364,9 @@
   };
 
   // node_modules/core-js/modules/es.function.bind.js
-  var $26 = require_export();
+  var $27 = require_export();
   var bind = require_function_bind();
-  $26({ target: "Function", proto: true }, {
+  $27({ target: "Function", proto: true }, {
     bind: bind
   });
 
@@ -5515,10 +5515,10 @@
 
   // node_modules/core-js/modules/es.array.includes.js
   "use strict";
-  var $27 = require_export();
+  var $28 = require_export();
   var $includes = require_array_includes().includes;
   var addToUnscopables3 = require_add_to_unscopables();
-  $27({ target: "Array", proto: true }, {
+  $28({ target: "Array", proto: true }, {
     includes: function includes(el) {
       return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5527,11 +5527,11 @@
 
   // node_modules/core-js/modules/es.string.includes.js
   "use strict";
-  var $28 = require_export();
+  var $29 = require_export();
   var notARegExp = require_not_a_regexp();
   var requireObjectCoercible4 = require_require_object_coercible();
   var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+  $29({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
     includes: function includes2(searchString) {
       return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -6349,14 +6349,14 @@
   var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
-  var $29 = require_export();
+  var $30 = require_export();
   var setPrototypeOf = require_object_set_prototype_of();
-  $29({ target: "Object", stat: true }, {
+  $30({ target: "Object", stat: true }, {
     setPrototypeOf: setPrototypeOf
   });
 
   // node_modules/core-js/modules/es.object.get-prototype-of.js
-  var $30 = require_export();
+  var $31 = require_export();
   var fails8 = require_fails();
   var toObject5 = require_to_object();
   var nativeGetPrototypeOf = require_object_get_prototype_of();
@@ -6364,14 +6364,14 @@
   var FAILS_ON_PRIMITIVES4 = fails8(function() {
     nativeGetPrototypeOf(1);
   });
-  $30({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
     getPrototypeOf: function getPrototypeOf(it) {
       return nativeGetPrototypeOf(toObject5(it));
     }
   });
 
   // node_modules/core-js/modules/es.reflect.construct.js
-  var $31 = require_export();
+  var $32 = require_export();
   var getBuiltIn2 = require_get_built_in();
   var aFunction = require_a_function();
   var anObject6 = require_an_object();
@@ -6391,7 +6391,7 @@
     });
   });
   var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
-  $31({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
     construct: function construct(Target, args) {
       aFunction(Target);
       anObject6(args);
@@ -7187,11 +7187,11 @@
 
   // node_modules/core-js/modules/es.array.every.js
   "use strict";
-  var $32 = require_export();
+  var $33 = require_export();
   var $every = require_array_iteration().every;
   var arrayMethodIsStrict4 = require_array_method_is_strict();
   var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $32({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
+  $33({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
     every: function every(callbackfn) {
       return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -7834,7 +7834,6 @@
   }
   var LayoutEditor = /* @__PURE__ */ function() {
     function LayoutEditor2(opts) {
-      var _this = this;
       _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
@@ -7857,13 +7856,7 @@
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
         this.wrapExistingApp(opts);
       } else if (this.entryType === "layout-gallery-live") {
-        setShinyInput("live_app_request", opts.layoutName, true);
-        new MutationObserver(function(mutationsList, observer) {
-          _this.wrapExistingApp(opts);
-          observer.disconnect();
-        }).observe(document.getElementById("app_dump"), {
-          childList: true
-        });
+        this.loadLayoutTemplate(opts);
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
@@ -7875,7 +7868,7 @@
     _createClass7(LayoutEditor2, [{
       key: "loadLayoutTemplate",
       value: function loadLayoutTemplate(opts) {
-        var _opts$elements, _this2 = this;
+        var _this = this, _opts$elements;
         this.mode = "New";
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
@@ -7884,17 +7877,27 @@
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
         }));
+        var attachUiToElement = function attachUiToElement2(id) {
+          var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(opts.ui_functions[id], '"]'));
+          _this.container.append(ui_for_element);
+          return ui_for_element;
+        };
         (_opts$elements = opts.elements) === null || _opts$elements === void 0 ? void 0 : _opts$elements.forEach(function(elMsg) {
-          var start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
-          _this2.addElement({
-            id: elMsg.id,
+          var id = elMsg.id, start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col;
+          var mirroredElement = opts.entryType === "layout-gallery-live" ? attachUiToElement(id) : null;
+          _this.addElement({
+            id: id,
             gridPos: {
               start_row: start_row,
               end_row: end_row,
               start_col: start_col,
               end_col: end_col
-            }
+            },
+            mirroredElement: mirroredElement
           }, false);
+          if (mirroredElement) {
+            $(mirroredElement).trigger("shown");
+          }
         });
         this.tractControls.updatePositions();
       }
@@ -7930,14 +7933,14 @@
     }, {
       key: "hookupGapSizeControls",
       value: function hookupGapSizeControls(initialGapSize) {
-        var _this3 = this;
+        var _this2 = this;
         this.gapSizeSetting = makeCssUnitInput({
           parentEl: makeEl(document.getElementById("gridedGapSizeControls"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
             innerHTML: '<span class = "input-label">Panel gap size</span>'
           }),
           selector: "#gapSizeChooser",
           onChange: function onChange(x) {
-            return _this3.updateGrid({
+            return _this2.updateGrid({
               gap: x
             });
           },
@@ -7989,7 +7992,7 @@
     }, {
       key: "addExistingElementsToApp",
       value: function addExistingElementsToApp() {
-        var _this4 = this;
+        var _this3 = this;
         var elementDefs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
         _toConsumableArray5(this.container.children).forEach(function(el) {
           if (el.id === "dragCanvas")
@@ -8001,7 +8004,7 @@
             el.remove();
             return;
           }
-          var gridElement = _this4.addElement({
+          var gridElement = _this3.addElement({
             id: el.id,
             gridPos: getPosOnGrid(el),
             mirroredElement: el
@@ -8017,13 +8020,13 @@
     }, {
       key: "removeElements",
       value: function removeElements(ids) {
-        var _this5 = this;
+        var _this4 = this;
         asArray(ids).forEach(function(elId) {
-          var entryIndex = _this5.elements.findIndex(function(el) {
+          var entryIndex = _this4.elements.findIndex(function(el) {
             return el.id === elId;
           });
-          _this5.elements[entryIndex].remove();
-          _this5.elements.splice(entryIndex, 1);
+          _this4.elements[entryIndex].remove();
+          _this4.elements.splice(entryIndex, 1);
         });
         this.sendUpdate();
       }
@@ -8082,13 +8085,13 @@
     }, {
       key: "setupDrag",
       value: function setupDrag(opts) {
-        var _this6 = this;
+        var _this5 = this;
         var dragFeedbackRect;
         var startRect;
         var startLoc;
         var editorEl = document.querySelector("#grided__editor");
         var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
-          var gridExtent = getDragExtentOnGrid(_this6, boundingRect);
+          var gridExtent = getDragExtentOnGrid(_this5, boundingRect);
           gridItem.position = gridExtent;
           return gridExtent;
         };
@@ -8101,8 +8104,8 @@
             top: event.offsetY,
             bottom: event.offsetY
           };
-          _this6.container.appendChild(opts.gridItem.el);
-          dragFeedbackRect = makeEl(_this6.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+          _this5.container.appendChild(opts.gridItem.el);
+          dragFeedbackRect = makeEl(_this5.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
           updateGridPos(opts.gridItem, startRect);

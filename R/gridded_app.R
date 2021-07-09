@@ -5,10 +5,25 @@ grided_app <- function(starting_layout = new_gridlayout(),
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
+  template_functions_loc <- system.file("layout-templates/live-app-template-functions.R", package = "gridlayout")
+  template_app_funcs <- local({
+    # Dump all the functions to the current (local) environment
+    source(template_functions_loc, local = TRUE, keep.source = TRUE)
+    # Wrap local env into a list so we can parse and dump function source to character vector
+    as.list.environment(rlang::current_env())
+  })
+
+  template_ui_els <- map_name_val(
+    template_app_funcs[str_detect(names(template_app_funcs), "_panel")],
+    function(function_name, func){
+      htmltools::tagAppendAttributes(func(), `data-grided-ui-name` = function_name)
+    }
+  )
+
   app <- shiny::shinyApp(
     ui = shiny::fluidPage(
       grided_resources(),
-      shiny::uiOutput('app_dump')
+      shiny::div(id = "app_dump", template_ui_els)
     ),
     server = function(input, output, session) {
       grided_server_code(
@@ -28,6 +43,9 @@ grided_app <- function(starting_layout = new_gridlayout(),
     shiny::runGadget(app, viewer = viewer)
   }
 }
+
+
+
 
 utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
 
@@ -118,22 +136,23 @@ grided_server_code <- function(input, output, session,
   }), input$build_live_app_template)
 
 
-  #---- Setup live-app template ----
+  #---- Startup live-app template ----
   shiny::bindEvent(shiny::observe({
 
     chosen_layout_app <- find_layout_template(starting_layout, input$live_app_request)
 
+    # browser()
     # Source app script that _should_ have the layout, ui, and server stored as
     # variables We wrap this sourcing in a local to avoid namespace collisions and
     # collect the results in a list
-    live_app_code <- local({
-      source(chosen_layout_app, local = TRUE)
-      list(ui = ui, server = server)
-    })
+    # live_app_code <- local({
+    #   source(chosen_layout_app, local = TRUE)
+    #   list(ui = ui, server = server)
+    # })
 
     # Send the UI code to the hidden renderOutput div and start server logic
-    output$app_dump <- shiny::renderUI({ live_app_code$ui })
-    live_app_code$server(input, output)
+    # output$app_dump <- shiny::renderUI({ live_app_code$ui })
+    # live_app_code$server(input, output)
   }), input$live_app_request)
 
 

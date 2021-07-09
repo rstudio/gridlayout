@@ -74,6 +74,7 @@ export type LayoutEditorSetup = {
   finishBtn?: FinishButtonSetup;
   onUpdate?: (opts: LayoutEditorSetup) => void;
   layoutName?: string;
+  ui_functions?: { [key: string]: string };
 };
 
 export class LayoutEditor {
@@ -121,16 +122,19 @@ export class LayoutEditor {
     } else if (this.entryType === "layout-gallery-live") {
       // If we've requested a live app from the layout gallery we need to wait
       // for it to be sent over by shiny and then wrap it with grided interface
-      setShinyInput("live_app_request", opts.layoutName, true);
+      // debugger;
+      this.loadLayoutTemplate(opts);
 
-      new MutationObserver((mutationsList, observer) => {
-        this.wrapExistingApp(opts);
-        // Turnoff observer so it doesnt get triggered again when we remove
-        // the elements inside the app dump div
-        observer.disconnect();
-      }).observe(document.getElementById("app_dump"), {
-        childList: true,
-      });
+      // setShinyInput("live_app_request", opts.layoutName, true);
+
+      // new MutationObserver((mutationsList, observer) => {
+      //   this.wrapExistingApp(opts);
+      //   // Turnoff observer so it doesnt get triggered again when we remove
+      //   // the elements inside the app dump div
+      //   observer.disconnect();
+      // }).observe(document.getElementById("app_dump"), {
+      //   childList: true,
+      // });
     } else {
       console.error(
         "Neither starting layout was provided nor is there an existing grid app"
@@ -163,16 +167,33 @@ export class LayoutEditor {
     // elements first
     this.updateGrid({ ...opts.grid, dontUpdateHistory: true });
 
+    const attachUiToElement = (id: string) => {
+      const ui_for_element = document.querySelector(
+        `[data-grided-ui-name="${opts.ui_functions[id]}"]`
+      );
+      this.container.append(ui_for_element);
+      return ui_for_element as HTMLElement;
+    };
     opts.elements?.forEach((elMsg: LayoutElement) => {
-      const { start_row, end_row, start_col, end_col } = elMsg;
+      const { id, start_row, end_row, start_col, end_col } = elMsg;
+
+      const mirroredElement =
+        opts.entryType === "layout-gallery-live" ? attachUiToElement(id) : null;
       // Add elements but dont update history as we do it
       this.addElement(
         {
-          id: elMsg.id,
+          id,
           gridPos: { start_row, end_row, start_col, end_col },
+          mirroredElement,
         },
         false
       );
+      if (mirroredElement) {
+        // Let's shiny know that this UI element is now active and should be
+        // updated
+        $(mirroredElement).trigger("shown");
+      }
+      // debugger;
     });
 
     // Layout usually shifts a bit after adding elements so run precautionary

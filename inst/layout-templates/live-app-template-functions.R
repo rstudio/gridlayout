@@ -10,7 +10,9 @@ about_chick_weights_panel <- function(){
   )
 }
 
-
+app_header_panel <- function(){
+  title_panel("Effects of diet on Chick growth")
+}
 
 chooser_dropdowns_panel <- function(){
   #' start-app-scope
