@@ -9,7 +9,6 @@ export class GridPreview extends HTMLElement {
   name: string;
   hasLiveApp: boolean;
   elements: LayoutElement[];
-  blankGrid: boolean;
   hoverAnimation: boolean;
   OnSelect: () => void;
 
@@ -19,7 +18,6 @@ export class GridPreview extends HTMLElement {
 
     this.grid = { rows: ["1fr"], cols: ["1fr"], gap: "1rem" };
     this.elements = [];
-    this.blankGrid = true;
     this.RenderSize = 1250;
     this.ShownSize = 250;
     this.OnSelect = () => console.log(`Selected ${this.name}`);
@@ -121,7 +119,6 @@ export class GridPreview extends HTMLElement {
   layout(layout: LayoutInfo) {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
-    this.blankGrid = this.elements.length === 0;
     this.name = layout.name ?? this.name;
     this.hasLiveApp = layout.app_loc !== undefined;
     return this;
@@ -155,7 +152,7 @@ export class GridPreview extends HTMLElement {
   get elementDivs() {
     let elementDivs = "";
 
-    if (this.blankGrid) {
+    if (this.elements.length === 0) {
       for (let row_i = 1; row_i <= this.grid.rows.length; row_i++) {
         for (let col_i = 1; col_i <= this.grid.cols.length; col_i++) {
           elementDivs += `<div class="element blank" style='grid-area:${row_i}/${col_i}'></div>`;
