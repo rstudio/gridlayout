@@ -8659,6 +8659,7 @@
       _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hasLiveApp", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "blankGrid", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
       _this.attachShadow({
@@ -8670,6 +8671,7 @@
         gap: "1rem"
       };
       _this.elements = [];
+      _this.blankGrid = true;
       _this.RenderSize = 1250;
       _this.ShownSize = 250;
       _this.OnSelect = function() {
@@ -8684,7 +8686,7 @@
         var _this2 = this;
         var scale = this.RenderSize / this.ShownSize;
         var cornerRadius = "".concat(20 / scale, "px");
-        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        width: ".concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        padding: ").concat(30 / scale, "px;\n        border-radius: ").concat(cornerRadius, ";\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows, scale), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols, scale), ";\n        gap: ").concat(scaleUnits(scale, this.grid.gap), ";\n        background-color: white;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        width: ".concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        padding: ").concat(30 / scale, "px;\n        border-radius: ").concat(cornerRadius, ";\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows, scale), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols, scale), ";\n        gap: ").concat(scaleUnits(scale, this.grid.gap), ";\n        background-color: white;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n      .element.blank {\n        border: 1px solid #e7e5e5;\n        background-color: white;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
         var layoutDiv = this.shadowRoot.getElementById("layout");
         layoutDiv.addEventListener("click", function(event) {
           event.stopPropagation();
@@ -8704,6 +8706,7 @@
         var _layout$elements, _layout$name;
         Object.assign(this.grid, _layout.grid);
         this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
+        this.blankGrid = this.elements.length === 0;
         this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
         this.hasLiveApp = _layout.app_loc !== void 0;
         return this;
@@ -8742,11 +8745,19 @@
       key: "elementDivs",
       get: function get() {
         var elementDivs = "";
-        this.elements.forEach(function(_ref) {
-          var start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col;
-          var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
-          elementDivs += '<div class="element" style=\'grid-area:'.concat(gridArea, "'></div>");
-        });
+        if (this.blankGrid) {
+          for (var row_i = 1; row_i <= this.grid.rows.length; row_i++) {
+            for (var col_i = 1; col_i <= this.grid.cols.length; col_i++) {
+              elementDivs += '<div class="element blank" style=\'grid-area:'.concat(row_i, "/").concat(col_i, "'></div>");
+            }
+          }
+        } else {
+          this.elements.forEach(function(_ref) {
+            var start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col;
+            var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
+            elementDivs += '<div class="element" style=\'grid-area:'.concat(gridArea, "'></div>");
+          });
+        }
         return elementDivs;
       }
     }]);

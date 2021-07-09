@@ -9,6 +9,7 @@ export class GridPreview extends HTMLElement {
   name: string;
   hasLiveApp: boolean;
   elements: LayoutElement[];
+  blankGrid: boolean;
   hoverAnimation: boolean;
   OnSelect: () => void;
 
@@ -18,6 +19,7 @@ export class GridPreview extends HTMLElement {
 
     this.grid = { rows: ["1fr"], cols: ["1fr"], gap: "1rem" };
     this.elements = [];
+    this.blankGrid = true;
     this.RenderSize = 1250;
     this.ShownSize = 250;
     this.OnSelect = () => console.log(`Selected ${this.name}`);
@@ -26,8 +28,8 @@ export class GridPreview extends HTMLElement {
 
   connectedCallback() {
     const scale = this.RenderSize / this.ShownSize;
-
     const cornerRadius = `${20 / scale}px`;
+
     this.shadowRoot.innerHTML = `
     <style>
       * { box-sizing: border-box; }
@@ -75,6 +77,10 @@ export class GridPreview extends HTMLElement {
         place-content: center;
         background-color: darksalmon;
       }
+      .element.blank {
+        border: 1px solid #e7e5e5;
+        background-color: white;
+      }
 
       #scroll-icon {
         position: absolute;
@@ -115,6 +121,7 @@ export class GridPreview extends HTMLElement {
   layout(layout: LayoutInfo) {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
+    this.blankGrid = this.elements.length === 0;
     this.name = layout.name ?? this.name;
     this.hasLiveApp = layout.app_loc !== undefined;
     return this;
@@ -147,12 +154,21 @@ export class GridPreview extends HTMLElement {
 
   get elementDivs() {
     let elementDivs = "";
-    this.elements.forEach(({ start_row, start_col, end_row, end_col }) => {
-      const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
-        "/"
-      );
-      elementDivs += `<div class="element" style='grid-area:${gridArea}'></div>`;
-    });
+
+    if (this.blankGrid) {
+      for (let row_i = 1; row_i <= this.grid.rows.length; row_i++) {
+        for (let col_i = 1; col_i <= this.grid.cols.length; col_i++) {
+          elementDivs += `<div class="element blank" style='grid-area:${row_i}/${col_i}'></div>`;
+        }
+      }
+    } else {
+      this.elements.forEach(({ start_row, start_col, end_row, end_col }) => {
+        const gridArea = [start_row, start_col, end_row + 1, end_col + 1].join(
+          "/"
+        );
+        elementDivs += `<div class="element" style='grid-area:${gridArea}'></div>`;
+      });
+    }
 
     return elementDivs;
   }
