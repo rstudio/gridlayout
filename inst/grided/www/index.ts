@@ -24,8 +24,6 @@ export type LayoutInfo = {
   name?: string;
   grid: LayoutState;
   elements: LayoutElement[];
-  // If live app code exists for layout it's sent as a character vector
-  app_loc?: string;
 };
 
 export type GalleryOptions = {

@@ -7,7 +7,6 @@ export class GridPreview extends HTMLElement {
   RenderSize: number;
   ShownSize: number;
   name: string;
-  hasLiveApp: boolean;
   elements: LayoutElement[];
   hoverAnimation: boolean;
   OnSelect: () => void;
@@ -120,7 +119,6 @@ export class GridPreview extends HTMLElement {
     Object.assign(this.grid, layout.grid);
     this.elements = layout.elements ?? [];
     this.name = layout.name ?? this.name;
-    this.hasLiveApp = layout.app_loc !== undefined;
     return this;
   }
 

@@ -8661,7 +8661,6 @@
       _defineProperty9(_assertThisInitialized5(_this), "RenderSize", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "ShownSize", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
-      _defineProperty9(_assertThisInitialized5(_this), "hasLiveApp", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
       _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
@@ -8709,7 +8708,6 @@
         Object.assign(this.grid, _layout.grid);
         this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
         this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
-        this.hasLiveApp = _layout.app_loc !== void 0;
         return this;
       }
     }, {
@@ -9051,12 +9049,10 @@
           closeGallery(event);
           _this3.onEditFn(selectedLayout, false);
         }));
-        if (selectedLayout.app_loc) {
-          actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
-            closeGallery(event);
-            _this3.onEditFn(selectedLayout, true);
-          }));
-        }
+        actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
+          closeGallery(event);
+          _this3.onEditFn(selectedLayout, true);
+        }));
         modal.addElement(createEl({
           selTxt: "div#footer",
           children: actionButtons
