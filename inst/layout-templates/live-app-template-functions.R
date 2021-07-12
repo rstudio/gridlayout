@@ -51,7 +51,7 @@ weight_trajectories_for_diet_panel <- function(){
 }
 
 geyser_histogram_panel <- function() {
-  shiny::plotOutput("distPlot", height = "100%")
+  shiny::plotOutput("distPlot")
 }
 geyser_histogram_server <- function(input, output) {
   output$distPlot <- shiny::renderPlot({
