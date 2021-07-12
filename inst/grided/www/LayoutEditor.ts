@@ -1084,7 +1084,13 @@ function drawElements(
     }
   );
 
-  if (!mirrorsExisting) {
+  // Presence of a ui function string means we're in a live-app template and this
+  // is a predefined element. If we're in a wrapped existing app then we just
+  // go by if it has a mirrored element
+  const elConnectedToUi =
+    ui_function ||
+    (appState.entryType === "edit-existing-app" && mirroredElement);
+  if (!elConnectedToUi) {
     // Turn of deleting if were editing an existing app
     // This means that if were in app editing mode and the user adds a new element
     // they can delete that new element but they can't delete the existing elements

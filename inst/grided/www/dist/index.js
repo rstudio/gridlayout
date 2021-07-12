@@ -8503,7 +8503,8 @@
         }
       });
     });
-    if (!mirrorsExisting) {
+    var elConnectedToUi = ui_function || appState.entryType === "edit-existing-app" && mirroredElement;
+    if (!elConnectedToUi) {
       makeEl(listEl, "button.remove-el", {
         innerHTML: trashcanIcon,
         eventListener: {
