@@ -127,8 +127,17 @@ export function setClass(
   elements: NodeListOf<HTMLElement> | HTMLElement[],
   className: string
 ) {
-  elements.forEach((el) => {
+  elements.forEach((el: HTMLElement) => {
     el.classList.add(className);
+  });
+}
+
+export function removeClass(
+  elements: NodeListOf<HTMLElement> | HTMLElement[],
+  className: string
+) {
+  elements.forEach((el: HTMLElement) => {
+    el.classList.remove(className);
   });
 }
 
