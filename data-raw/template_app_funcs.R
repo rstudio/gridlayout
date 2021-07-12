@@ -26,7 +26,8 @@ template_app_funcs <- local({
 
       list(
         body = str_trim(collapse_by_newline(trim_vec(lines, 1))),
-        app_scope_code = app_scope_lines
+        app_scope_code = app_scope_lines,
+        func = f
       )
     }
   )

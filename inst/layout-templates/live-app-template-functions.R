@@ -4,7 +4,7 @@
 about_chick_weights_panel <- function(){
   grid_panel(
     title = "About the ChickWeights dataset",
-    p("The body weights of the chicks were measured at birth and every second day thereafter until day 20.
+    shiny::p("The body weights of the chicks were measured at birth and every second day thereafter until day 20.
       They were also measured on day 21. There were four groups on chicks on different protein diets."),
     v_align = "center"
   )
@@ -21,7 +21,7 @@ geyser_header_panel = function() {
 geyser_bins_panel <- function() {
   grid_panel(
     title = "Settings",
-    sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+    shiny::sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
   )
 }
 
@@ -35,8 +35,8 @@ chooser_dropdowns_panel <- function(){
 
   grid_panel(
     title = "Filters",
-    selectInput("diet", label = "Diet", choices = levels(ChickWeight$Diet)),
-    selectInput("chick", label = "Highlighted Chick", choices = chicks_by_diet),
+    shiny::selectInput("diet", label = "Diet", choices = levels(ChickWeight$Diet)),
+    shiny::selectInput("chick", label = "Highlighted Chick", choices = chicks_by_diet),
     v_align = "center"
   )
 }
@@ -46,15 +46,15 @@ chooser_dropdowns_panel <- function(){
 weight_trajectories_for_diet_panel <- function(){
   grid_panel(
     title = "Weight trajectories",
-    plotOutput("chickPlot")
+    shiny::plotOutput("chickPlot")
   )
 }
 
 geyser_histogram_panel <- function() {
-  plotOutput("distPlot")
+  shiny::plotOutput("distPlot", height = "100%")
 }
 geyser_histogram_server <- function(input, output) {
-  output$distPlot <- renderPlot({
+  output$distPlot <- shiny::renderPlot({
     x <- faithful[, 2]
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
     hist(x, breaks = bins, col = "darkgray", border = "white")
@@ -62,7 +62,7 @@ geyser_histogram_server <- function(input, output) {
 }
 
 weight_trajectories_for_diet_server <- function(input, output) {
-  output$chickPlot <- renderPlot({
+  output$chickPlot <- shiny::renderPlot({
     # Filter to the current diet
     data_for_diet <- ChickWeight[ChickWeight$Diet == input$diet, ]
 
@@ -87,12 +87,12 @@ weight_trajectories_for_diet_server <- function(input, output) {
 weight_dist_by_diet_panel <- function(){
   grid_panel(
     title = "Weights by diet",
-    plotOutput("weightRanges")
+    shiny::plotOutput("weightRanges")
   )
 }
 
 weight_dist_by_diet_server <- function(input, output) {
-  output$weightRanges <- renderPlot({
+  output$weightRanges <- shiny::renderPlot({
     plot(
       x = ChickWeight$Diet, xlab = "Diet",
       y = ChickWeight$weight, ylab = "Weight (grams)",

@@ -131,19 +131,11 @@ layout_templates <- list(
 )
 
 
-template_functions_loc <- system.file("layout-templates/live-app-template-functions.R", package = "gridlayout")
-template_app_funcs <- local({
-  # Dump all the functions to the current (local) environment
-  source(template_functions_loc, local = TRUE, keep.source = TRUE)
-  # Wrap local env into a list so we can parse and dump function source to character vector
-  as.list.environment(rlang::current_env())
-})
-
 is_ui_func <- str_detect(names(template_app_funcs), "_panel")
 template_ui_els <- map_name_val(
   template_app_funcs[is_ui_func],
-  function(function_name, func){
-    htmltools::tagAppendAttributes(func(), `data-grided-ui-name` = function_name)
+  function(function_name, x){
+    htmltools::tagAppendAttributes(x$func(), `data-grided-ui-name` = function_name)
   }
 )
 
@@ -159,8 +151,8 @@ shinyApp(
   ),
   server = function(input, output, session) {
     grided_server_code(input, output, session, starting_layout = layout_templates, show_messages = TRUE)
-    for (server_func in template_app_funcs[!is_ui_func]) {
-      server_func(input, output)
+    for (x in template_app_funcs[!is_ui_func]) {
+      x$func(input, output)
     }
   }
 )

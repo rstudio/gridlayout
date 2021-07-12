@@ -5,25 +5,10 @@ grided_app <- function(starting_layout = new_gridlayout(),
   requireNamespace("miniUI", quietly = TRUE)
   requireNamespace("shiny", quietly = TRUE)
 
-  template_functions_loc <- system.file("layout-templates/live-app-template-functions.R", package = "gridlayout")
-  template_app_funcs <- local({
-    # Dump all the functions to the current (local) environment
-    source(template_functions_loc, local = TRUE, keep.source = TRUE)
-    # Wrap local env into a list so we can parse and dump function source to character vector
-    as.list.environment(rlang::current_env())
-  })
-
-  template_ui_els <- map_name_val(
-    template_app_funcs[str_detect(names(template_app_funcs), "_panel")],
-    function(function_name, func){
-      htmltools::tagAppendAttributes(func(), `data-grided-ui-name` = function_name)
-    }
-  )
 
   app <- shiny::shinyApp(
     ui = shiny::fluidPage(
-      grided_resources(),
-      shiny::div(id = "app_dump", template_ui_els)
+      grided_resources()
     ),
     server = function(input, output, session) {
       grided_server_code(
@@ -43,8 +28,6 @@ grided_app <- function(starting_layout = new_gridlayout(),
     shiny::runGadget(app, viewer = viewer)
   }
 }
-
-
 
 
 utils::globalVariables(c(".rs.invokeShinyWindowViewer"))
@@ -105,11 +88,11 @@ grided_server_code <- function(input, output, session,
   generate_app_template <- function(layout_info, is_live_app){
     desired_layout <- layout_info_to_gridlayout(layout_info)
 
-    app_template <- if (is_live_app) {
+      layout_def <- Filter(function(layout) layout$name == layout_info$name, starting_layout)[[1]]
+    app_template <- if (TRUE) {
       # If layout editor is in live app mode, then we will also receive the name
       # of the layout we're currently editing. We use this to get the live-app's
       # definition.
-      layout_def <- Filter(function(layout) layout$name == layout_info$name, starting_layout)[[1]]
       build_live_template_app(layout_def, final_layout = desired_layout)
     } else {
       to_app_template(desired_layout)
@@ -232,6 +215,7 @@ layout_info_to_gridlayout <- function(layout_info) {
 # This is all the UI related code that needs to be included for grided to wrap app
 grided_resources <- function() {
   shiny::tags$head(
+    gridlayout_css_dep(),
     shiny::includeScript(
       system.file("grided/www/dist/index.js", package = "gridlayout")
     ),
