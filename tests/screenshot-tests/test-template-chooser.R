@@ -4,7 +4,6 @@ test_that("Basic interaction with grided app", {
 
   app <- setup_chromote_session(layout_gallery(return_app_obj = TRUE))
   # app$b$view()
-  # app$b$Emulation$setScrollbarsHidden(hidden = FALSE, wait_ = FALSE)
   # app$b$parent$debug_messages(TRUE)
   on.exit({ app$p$kill() })
 
@@ -13,8 +12,8 @@ test_that("Basic interaction with grided app", {
     "template-landing-page.png"
   )
 
-  # Select second layout
-  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(2)").shadowRoot.querySelector("#layout").click()')
+  # Select third layout
+  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(3)").shadowRoot.querySelector("#layout").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),
     "second-layout-selected.png"
@@ -27,8 +26,8 @@ test_that("Basic interaction with grided app", {
     "back-to-start.png"
   )
 
-  # Select the third layout and go to edit mode
-  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(3)").shadowRoot.querySelector("#layout").click()')
+  # Select the fourth layout and go to edit mode
+  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(4)").shadowRoot.querySelector("#layout").click()')
   app$b$Runtime$evaluate('document.querySelector("focus-modal").shadowRoot.querySelector("button.edit").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),

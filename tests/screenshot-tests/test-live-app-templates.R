@@ -7,16 +7,15 @@ test_that("Populating an app layout template with a live app", {
 
   on.exit({ app$p$kill() })
 
-  # Select first layout
-  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(1)").shadowRoot.querySelector("#layout").click()')
-  # There should be a third "edit live layout button"
+  # Select second layout
+  app$b$Runtime$evaluate('document.querySelector("layout-gallery").shadowRoot.querySelector("grid-preview:nth-child(2)").shadowRoot.querySelector("#layout").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),
     "live-app-edit-options.png"
   )
 
   # Choose live edit mode
-  app$b$Runtime$evaluate('document.querySelector("focus-modal").shadowRoot.querySelector("button.edit-live").click()')
+  app$b$Runtime$evaluate('document.querySelector("focus-modal").shadowRoot.querySelector("button.edit").click()')
   expect_snapshot_file(
     app$screenshot(pause_length),
     "live-app-layout-editing.png"
