@@ -1,64 +1,53 @@
-build_live_template_app <- function(app_loc, updated_layout) {
+build_live_template_app <- function(layout_def, final_layout) {
 
-  app_lines <- readLines(con = app_loc)
-  if (notNull(updated_layout)) {
-    layout_pos <- find_layouts_in_file(app_lines)[[1]]
-
-    # Now break the app code into pre layout, and post layout, and sandwich the
-    # new layout between them
-
-    # Indices are squeezed by one to not include comments themselves
-    layout_start <- which(str_detect(app_lines, "#' start-layout")) - 1
-    layout_end <- which(str_detect(app_lines, "#' end-layout")) + 1
-
-    app_lines <- c(
-      app_lines[1:layout_start],
-      make_layout_call(updated_layout),
-      app_lines[layout_end:length(app_lines)]
-    )
-  }
-
-  # Remove the guiding comment lines and sourcing function
-  app_lines <- app_lines[!str_detect(app_lines, "^#\\'|^source|^library")]
-
-  # Make a single string so multiline regexes are easier to work with
-  app_script <- collapse_by_newline(app_lines)
+  # First generate the layout to ui panels code
 
   # These are lines that will get added to the top of the app script
   # They get built up from any "app-scope" code in the used functions
-  app_scope_code <- c(
+  app_scope_calls <- c(
     "library(shiny)",
     "library(gridlayout)\n"
   )
+  panel_calls <- c()
+  for (panel_id in names(layout_def$ui_functions)) {
+    func_id <- layout_def$ui_functions[[panel_id]]
+    template_func <- template_app_funcs[[func_id]]
+    panel_calls <- c(panel_calls, paste0("  ", panel_id, " = ", template_func$body))
 
-  for (function_name in names(template_app_funcs)) {
-
-    is_server_func <- str_detect(function_name, pattern = "_server", fixed = TRUE)
-    func_call_regex <- paste0(function_name, if (is_server_func) "(input, output)" else "()")
-
-    if (!str_detect(app_script, pattern = func_call_regex, fixed = TRUE)) {
-      next
-    }
-
-    app_script <- str_replace(
-      app_script,
-      pattern = func_call_regex,
-      replacement = template_app_funcs[[function_name]]$body,
-      fixed = TRUE
-    )
-
-    if (notNull(template_app_funcs[[function_name]]$app_scope_code)) {
-      app_scope_code <- c(app_scope_code, template_app_funcs[[function_name]]$app_scope_code)
+    if (notNull(template_func$app_scope_code)) {
+      app_scope_calls <- c(app_scope_calls, template_func$app_scope_code)
     }
   }
 
-  # Add library calls and and any app-scoped-code contained within the used functions
-  split_by_line(
-    paste0(
-    collapse_by_newline(app_scope_code),
-    "\n",
-    app_script
+  # Next splice that code into a grid_page call that uses layout
+  ui_code <- paste(
+    "ui <- grid_page(",
+    "  layout = app_layout,",
+    paste(panel_calls, collapse = ",\n"),
+    ")",
+    sep = "\n"
   )
+
+  # Generate the server code
+  server_calls <- c()
+  for (func_id in layout_def$server_functions) {
+    server_calls <- c(server_calls, template_app_funcs[[func_id]]$body)
+  }
+
+  server_code <- paste(
+    "server <- function(input, output, session) {",
+    paste0("  ", server_calls, collapse = "\n\n"),
+    "}",
+    sep = "\n"
+  )
+
+  paste(
+    collapse_by_newline(app_scope_calls),
+    make_layout_call(final_layout),
+    ui_code,
+    server_code,
+    "shinyApp(ui, server)",
+    sep = "\n\n"
   )
 }
 

@@ -108,9 +108,9 @@ grided_server_code <- function(input, output, session,
     app_template <- if (is_live_app) {
       # If layout editor is in live app mode, then we will also receive the name
       # of the layout we're currently editing. We use this to get the live-app's
-      # code.
-      layout_app <- find_layout_template(starting_layout, layout_info$name)
-      build_live_template_app(layout_app, updated_layout = desired_layout)
+      # definition.
+      layout_def <- Filter(function(layout) layout$name == layout_info$name, starting_layout)[[1]]
+      build_live_template_app(layout_def, final_layout = desired_layout)
     } else {
       to_app_template(desired_layout)
     }
