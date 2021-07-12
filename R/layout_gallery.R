@@ -4,61 +4,166 @@
 #'
 #' @return A shiny app object
 #' @export
-layout_gallery <- function(return_app_obj = FALSE){
-
+layout_gallery <- function(return_app_obj = FALSE) {
   layout_templates <- list(
+    gen_template_info(
+      "Blank-Slate",
+      "|2rem  |200px   |1fr    |
+     |150px |header  |header |
+     |1fr   |sidebar |plot   |",
+      empty = TRUE
+    ),
     gen_template_info(
       "Classic",
       "|2rem  |200px   |1fr    |
-       |150px |header  |header |
-       |1fr   |sidebar |plot   |",
-     app_loc = "classic.R"
+     |150px |header  |header |
+     |1fr   |sidebar |plot   |",
+      live_app = list(
+        ui = list(
+          header = "geyser_header_panel",
+          sidebar = "geyser_bins_panel",
+          plot = "geyser_histogram_panel"
+        ),
+        server = c("geyser_histogram_server")
+      )
     ),
     gen_template_info(
       "Four-Square",
       "|1rem |1fr |1fr |
-       |1fr  |A   |B   |
-       |1fr  |C   |D   |",
-     app_loc = "four-square.R"
+     |1fr  |A   |B   |
+     |1fr  |C   |D   |",
+      live_app = list(
+        ui = list(
+          A = "about_chick_weights_panel",
+          B = "chooser_dropdowns_panel",
+          C = "weight_dist_by_diet_panel",
+          D = "weight_trajectories_for_diet_panel"
+        ),
+        server = c(
+          "weight_trajectories_for_diet_server",
+          "weight_dist_by_diet_server"
+        )
+      )
     ),
     gen_template_info(
       "Focal Chart - Top",
       "|1rem |1fr       |1fr      |
-       |80px |header    |header   |
-       |2fr  |mainPlot  |mainPlot |
-       |1fr  |controls  |subPlot  |",
-     app_loc = "focal-chart-top.R"
+     |80px |header    |header   |
+     |2fr  |mainPlot  |mainPlot |
+     |1fr  |controls  |subPlot  |",
+      live_app = list(
+        ui = list(
+          header = "app_header_panel",
+          mainPlot = "weight_trajectories_for_diet_panel",
+          controls = "chooser_dropdowns_panel",
+          subPlot = "weight_dist_by_diet_panel"
+        ),
+        server = c(
+          "weight_trajectories_for_diet_server",
+          "weight_dist_by_diet_server"
+        )
+      )
     ),
     gen_template_info(
       "Focal Chart - Side",
       "|1rem |2fr      |1fr      |
-       |80px |header   |header   |
-       |1fr  |mainPlot |controls |
-       |1fr  |mainPlot |subPlot  |",
-     app_loc = "focal-chart-side.R"
+     |80px |header   |header   |
+     |1fr  |mainPlot |controls |
+     |1fr  |mainPlot |subPlot  |",
+      live_app = list(
+        ui = list(
+          header = "app_header_panel",
+          mainPlot = "weight_trajectories_for_diet_panel",
+          controls = "chooser_dropdowns_panel",
+          subPlot = "weight_dist_by_diet_panel"
+        ),
+        server = c(
+          "weight_trajectories_for_diet_server",
+          "weight_dist_by_diet_server"
+        )
+      )
     ),
     gen_template_info(
       "Stack",
       "|1rem |1fr      |
-       |80px |header   |
-       |1fr  |controls |
-       |1fr  |mainPlot |
-       |1fr  |subPlot  |",
-     app_loc = "stack.R"
+     |80px |header   |
+     |1fr  |controls |
+     |1fr  |mainPlot |
+     |1fr  |subPlot  |",
+      live_app = list(
+        ui = list(
+          header = "app_header_panel",
+          mainPlot = "weight_trajectories_for_diet_panel",
+          controls = "chooser_dropdowns_panel",
+          subPlot = "weight_dist_by_diet_panel"
+        ),
+        server = c(
+          "weight_trajectories_for_diet_server",
+          "weight_dist_by_diet_server"
+        )
+      )
     ),
     gen_template_info(
       "Scrolling-Stack",
       "|1rem  |1fr      |
-       |80px  |header   |
-       |400px |controls |
-       |400px |mainPlot |
-       |400px |subPlot  |
-       |400px |about    |",
-     app_loc = "scrolling-stack.R"
+     |80px  |header   |
+     |400px |controls |
+     |400px |mainPlot |
+     |400px |subPlot  |
+     |400px |about    |",
+      live_app = list(
+        ui = list(
+          header = "app_header_panel",
+          mainPlot = "weight_trajectories_for_diet_panel",
+          controls = "chooser_dropdowns_panel",
+          subPlot = "weight_dist_by_diet_panel",
+          about = "about_chick_weights_panel"
+        ),
+        server = c(
+          "weight_trajectories_for_diet_server",
+          "weight_dist_by_diet_server"
+        )
+      ),
     )
   )
 
-  grided_app(starting_layout = layout_templates, return_app_obj = return_app_obj)
+  is_ui_func <- str_detect(names(template_app_funcs), "_panel")
+
+  app <- shiny::shinyApp(
+    ui = shiny::fluidPage(
+      grided_resources(),
+      shiny::div(
+        id = "app_dump",
+        style = "display: none;",
+        map_name_val(
+          template_app_funcs[is_ui_func],
+          function(function_name, x) {
+            htmltools::tagAppendAttributes(x$func(), `data-grided-ui-name` = function_name)
+          }
+        )
+      )
+    ),
+    server = function(input, output, session) {
+      grided_server_code(
+        input, output, session,
+        layout_templates,
+        on_finish = on_finish,
+        finish_button_text = finish_button_text
+      )
+      # Run the template server code
+      for (x in template_app_funcs[!is_ui_func]) {
+        x$func(input, output)
+      }
+    }
+  )
+
+  if (return_app_obj) {
+    app
+  } else {
+    # Open gadget in the external viewer
+    viewer <- shiny::browserViewer(.rs.invokeShinyWindowExternal)
+    shiny::runGadget(app, viewer = viewer)
+  }
 }
 
 
@@ -84,7 +189,3 @@ gen_template_info <- function(name, layout_table, live_app = NULL, empty = FALSE
   if (empty) layout_info$elements <- NULL
   layout_info
 }
-
-
-
-
