@@ -117,7 +117,6 @@ export class LayoutEditor {
     } else if (this.entryType === "layout-gallery-live") {
       // If we've requested a live app from the layout gallery we need to wait
       // for it to be sent over by shiny and then wrap it with grided interface
-      // debugger;
       this.loadLayoutTemplate(opts);
     } else {
       console.error(
@@ -553,6 +552,7 @@ export class LayoutEditor {
   sendUpdate() {
     this.onUpdate({
       entryType: this.entryType,
+      liveApp: this.liveApp,
       ...this.currentLayout,
     });
   }
@@ -606,7 +606,7 @@ export class LayoutEditor {
       });
 
       if (this.liveApp) {
-        window.dispatchEvent(new Event("resize"));
+        triggerResize();
       }
     }
 
@@ -1075,6 +1075,7 @@ function drawElements(
         dragDir: handleType,
         onEnd: () => {
           appState.sendUpdate();
+          triggerResize();
         },
       });
     }
@@ -1137,4 +1138,8 @@ function showConflictPopup(conflictingElements: GridItem[]) {
   );
 
   modal.addToPage();
+}
+
+function triggerResize() {
+  window.dispatchEvent(new Event("resize"));
 }
