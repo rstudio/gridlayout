@@ -22,10 +22,12 @@ layout_templates <- list(
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
     app_loc = "classic.R",
-    ui_functions = list(
-      header = "geyser_header_panel",
-      sidebar = "geyser_bins_panel",
-      plot = "geyser_histogram_panel"
+    live_app = list(
+      ui = list(
+        header = "geyser_header_panel",
+        sidebar = "geyser_bins_panel",
+        plot = "geyser_histogram_panel"
+      )
     )
   ),
   gen_template_info(
@@ -34,11 +36,13 @@ layout_templates <- list(
      |1fr  |A   |B   |
      |1fr  |C   |D   |",
     app_loc = "four-square.R",
-    ui_functions = list(
-      A = "about_chick_weights_panel",
-      B = "chooser_dropdowns_panel",
-      C = "weight_dist_by_diet_panel",
-      D = "weight_trajectories_for_diet_panel"
+    live_app = list(
+      ui = list(
+        A = "about_chick_weights_panel",
+        B = "chooser_dropdowns_panel",
+        C = "weight_dist_by_diet_panel",
+        D = "weight_trajectories_for_diet_panel"
+      )
     )
   ),
   gen_template_info(
@@ -47,11 +51,17 @@ layout_templates <- list(
      |80px |header    |header   |
      |2fr  |mainPlot  |mainPlot |
      |1fr  |controls  |subPlot  |",
-    ui_functions = list(
-      header = "app_header_panel",
-      mainPlot = "weight_trajectories_for_diet_panel",
-      controls = "chooser_dropdowns_panel",
-      subPlot = "weight_dist_by_diet_panel"
+    live_app = list(
+      ui = list(
+        header = "app_header_panel",
+        mainPlot = "weight_trajectories_for_diet_panel",
+        controls = "chooser_dropdowns_panel",
+        subPlot = "weight_dist_by_diet_panel"
+      ),
+      server = c(
+        "weight_trajectories_for_diet_server",
+        "weight_dist_by_diet_server"
+      )
     ),
     app_loc = "focal-chart-top.R"
   ),
@@ -62,11 +72,13 @@ layout_templates <- list(
      |1fr  |mainPlot |controls |
      |1fr  |mainPlot |subPlot  |",
     app_loc = "focal-chart-side.R",
-    ui_functions = list(
-      header = "app_header_panel",
-      mainPlot = "weight_trajectories_for_diet_panel",
-      controls = "chooser_dropdowns_panel",
-      subPlot = "weight_dist_by_diet_panel"
+    live_app = list(
+      ui = list(
+        header = "app_header_panel",
+        mainPlot = "weight_trajectories_for_diet_panel",
+        controls = "chooser_dropdowns_panel",
+        subPlot = "weight_dist_by_diet_panel"
+      )
     )
   ),
   gen_template_info(
@@ -77,11 +89,13 @@ layout_templates <- list(
      |1fr  |mainPlot |
      |1fr  |subPlot  |",
     app_loc = "stack.R",
-    ui_functions = list(
-      header = "app_header_panel",
-      mainPlot = "weight_trajectories_for_diet_panel",
-      controls = "chooser_dropdowns_panel",
-      subPlot = "weight_dist_by_diet_panel"
+    live_app = list(
+      ui = list(
+        header = "app_header_panel",
+        mainPlot = "weight_trajectories_for_diet_panel",
+        controls = "chooser_dropdowns_panel",
+        subPlot = "weight_dist_by_diet_panel"
+      )
     )
   ),
   gen_template_info(
@@ -93,12 +107,14 @@ layout_templates <- list(
      |400px |subPlot  |
      |400px |about    |",
     app_loc = "scrolling-stack.R",
-    ui_functions = list(
-      header = "app_header_panel",
-      mainPlot = "weight_trajectories_for_diet_panel",
-      controls = "chooser_dropdowns_panel",
-      subPlot = "weight_dist_by_diet_panel",
-      about = "about_chick_weights_panel"
+    live_app = list(
+      ui = list(
+        header = "app_header_panel",
+        mainPlot = "weight_trajectories_for_diet_panel",
+        controls = "chooser_dropdowns_panel",
+        subPlot = "weight_dist_by_diet_panel",
+        about = "about_chick_weights_panel"
+      )
     ),
   )
 )

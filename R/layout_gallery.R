@@ -63,20 +63,24 @@ layout_gallery <- function(return_app_obj = FALSE){
 
 
 # Takes a layout definition and turns it into the info ingested by grided
-gen_template_info <- function(name, layout_table, ui_functions = NULL, app_loc = NULL, empty = FALSE) {
+gen_template_info <- function(name, layout_table, live_app = NULL, app_loc = NULL, empty = FALSE) {
   layout_info <- dump_all_info(new_gridlayout(layout_table))
   layout_info$name <- name
   layout_info$app_loc <- app_loc
 
-  if (notNull(ui_functions)) {
+  if (notNull(live_app$ui)) {
     for (i in seq_along(layout_info$elements)) {
-      ui_for_element <- ui_functions[[layout_info$elements[[i]]$id]]
+      ui_for_element <- live_app$ui[[layout_info$elements[[i]]$id]]
       if (is.null(ui_for_element)) {
         stop("Not all elements have mapping to UI functions")
       }
       layout_info$elements[[i]]$ui_function <- ui_for_element
     }
-    layout_info$ui_functions <- ui_functions
+    layout_info$ui_functions <- live_app$ui
+  }
+
+  if (notNull(live_app$server)) {
+    layout_info$server_functions <- live_app$server
   }
   if (empty) layout_info$elements <- NULL
   layout_info
