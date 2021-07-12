@@ -7174,22 +7174,22 @@
         offText: "Edit layout",
         onText: "Interact mode",
         onChange: toggleInteractionMode,
-        startOn: true
+        startOn: false
       }));
     }
     if (appState.entryType === "layout-gallery") {
       buttons.push(new ToggleSwitch({
-        offText: "Live App",
-        onText: "Simple Edit",
+        onText: "Live App",
+        offText: "Simple Edit",
         onChange: function onChange(isOn) {
           if (isOn) {
-            appState.disableLiveApp();
-          } else {
             appState.enableLiveApp();
+          } else {
+            appState.disableLiveApp();
           }
           appState.sendUpdate();
         },
-        startOn: !appState.liveApp
+        startOn: appState.liveApp
       }));
     }
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
@@ -7875,7 +7875,6 @@
   }
   var LayoutEditor = /* @__PURE__ */ function() {
     function LayoutEditor2(opts) {
-      var _opts$liveApp;
       _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
@@ -7891,7 +7890,7 @@
       _defineProperty8(this, "layoutName", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
-      this.liveApp = (_opts$liveApp = opts.liveApp) !== null && _opts$liveApp !== void 0 ? _opts$liveApp : true;
+      this.liveApp = opts.liveApp;
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
@@ -9204,7 +9203,8 @@
       startLayoutEditor(_objectSpread4(_objectSpread4({
         entryType: "layout-gallery"
       }, selectedLayout), {}, {
-        layoutName: selectedLayout.name
+        layoutName: selectedLayout.name,
+        liveApp: true
       }), true);
     }).selectLayout(opts.selected);
     return document.body.appendChild(gallery);
@@ -9239,13 +9239,16 @@
       });
     });
     addShinyListener("edit-layout", function(layoutInfo) {
-      startLayoutEditor(_objectSpread4({
+      startLayoutEditor(_objectSpread4(_objectSpread4({
         entryType: "edit-layout"
-      }, layoutInfo), true);
+      }, layoutInfo), {}, {
+        liveApp: false
+      }), true);
     });
     addShinyListener("edit-existing-app", function(layoutInfo) {
       startLayoutEditor({
-        entryType: "edit-existing-app"
+        entryType: "edit-existing-app",
+        liveApp: true
       }, true);
     });
     addShinyListener("show-code-popup", function(opts) {

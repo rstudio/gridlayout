@@ -35,7 +35,7 @@ export function setupGridedUI(
         offText: "Edit layout",
         onText: "Interact mode",
         onChange: toggleInteractionMode,
-        startOn: true,
+        startOn: false,
       })
     );
   }
@@ -43,17 +43,17 @@ export function setupGridedUI(
   if (appState.entryType === "layout-gallery") {
     buttons.push(
       new ToggleSwitch({
-        offText: "Live App",
-        onText: "Simple Edit",
+        onText: "Live App",
+        offText: "Simple Edit",
         onChange: (isOn: boolean) => {
           if (isOn) {
-            appState.disableLiveApp();
-          } else {
             appState.enableLiveApp();
+          } else {
+            appState.disableLiveApp();
           }
           appState.sendUpdate();
         },
-        startOn: !appState.liveApp,
+        startOn: appState.liveApp,
       })
     );
   }
