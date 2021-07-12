@@ -1,8 +1,7 @@
 # source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
-pause_length <- 1
+pause_length <- 1.5
 test_that("Basic interaction with grided app", {
-  # app <- background_shiny_app(here::here("inst/grided"))
   app <- setup_chromote_session(here::here("inst/grided"))
   # app$b$view()
   on.exit({ app$p$kill() })
