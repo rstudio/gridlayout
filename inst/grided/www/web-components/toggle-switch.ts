@@ -2,16 +2,19 @@ export class ToggleSwitch extends HTMLElement {
   offText: string;
   onText: string;
   onChange: (isOn: boolean) => void;
+  startOn: boolean;
   constructor(
     offText: string,
     onText: string,
-    onChange: (isOn: boolean) => void
+    onChange: (isOn: boolean) => void,
+    startOn: boolean
   ) {
     super();
     this.attachShadow({ mode: "open" });
     this.offText = offText;
     this.onText = onText;
     this.onChange = onChange;
+    this.startOn = startOn;
   }
 
   connectedCallback() {
@@ -99,11 +102,15 @@ export class ToggleSwitch extends HTMLElement {
     </div>
    `;
 
-    this.shadowRoot
-      .getElementById("switch-value")
-      .addEventListener("change", (event) =>
-        this.onChange((event.target as HTMLInputElement).checked)
-      );
+    const switchValue = this.shadowRoot.getElementById(
+      "switch-value"
+    ) as HTMLInputElement;
+
+    switchValue.checked = this.startOn;
+
+    switchValue.addEventListener("change", (event) =>
+      this.onChange((event.target as HTMLInputElement).checked)
+    );
   }
 }
 

@@ -31,18 +31,29 @@ export function setupGridedUI(
 
   if (gridIsFilled) {
     buttons.push(
-      new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode)
+      new ToggleSwitch(
+        "Edit layout",
+        "Interact mode",
+        toggleInteractionMode,
+        true
+      )
     );
   }
 
   buttons.push(
-    new ToggleSwitch("Live App", "Simple Edit", (isOn: boolean) => {
-      if (isOn) {
-        appState.disableLiveApp();
-      } else {
-        appState.enableLiveApp();
-      }
-    })
+    new ToggleSwitch(
+      "Live App",
+      "Simple Edit",
+      (isOn: boolean) => {
+        if (isOn) {
+          appState.disableLiveApp();
+        } else {
+          appState.enableLiveApp();
+        }
+        appState.sendUpdate();
+      },
+      !appState.liveApp
+    )
   );
 
   const settingsPanelEl = blockEl(

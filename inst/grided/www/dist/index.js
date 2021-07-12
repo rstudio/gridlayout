@@ -7093,19 +7093,21 @@
   var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
     _inherits2(ToggleSwitch2, _HTMLElement);
     var _super = _createSuper2(ToggleSwitch2);
-    function ToggleSwitch2(offText, onText, onChange) {
+    function ToggleSwitch2(offText, onText, onChange, startOn) {
       var _this;
       _classCallCheck4(this, ToggleSwitch2);
       _this = _super.call(this);
       _defineProperty5(_assertThisInitialized2(_this), "offText", void 0);
       _defineProperty5(_assertThisInitialized2(_this), "onText", void 0);
       _defineProperty5(_assertThisInitialized2(_this), "onChange", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "startOn", void 0);
       _this.attachShadow({
         mode: "open"
       });
       _this.offText = offText;
       _this.onText = onText;
       _this.onChange = onChange;
+      _this.startOn = startOn;
       return _this;
     }
     _createClass4(ToggleSwitch2, [{
@@ -7113,7 +7115,9 @@
       value: function connectedCallback() {
         var _this2 = this;
         this.shadowRoot.innerHTML = '\n    <style>\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 1px;\n        width: 180px;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      span {\n        font-size: 1rem;\n      }\n\n      #off-text {\n        text-align: end;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
-        this.shadowRoot.getElementById("switch-value").addEventListener("change", function(event) {
+        var switchValue = this.shadowRoot.getElementById("switch-value");
+        switchValue.checked = this.startOn;
+        switchValue.addEventListener("change", function(event) {
           return _this2.onChange(event.target.checked);
         });
       }
@@ -7166,7 +7170,7 @@
       return finishBtn.onDone(appState.currentLayout);
     })];
     if (gridIsFilled) {
-      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
+      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode, true));
     }
     buttons.push(new ToggleSwitch("Live App", "Simple Edit", function(isOn) {
       if (isOn) {
@@ -7174,7 +7178,8 @@
       } else {
         appState.enableLiveApp();
       }
-    }));
+      appState.sendUpdate();
+    }, !appState.liveApp));
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var addedElements = blockEl("div#added-elements.empty");
     new MutationObserver(function(mutationsList, observer) {
@@ -8184,7 +8189,8 @@
       key: "sendUpdate",
       value: function sendUpdate() {
         this.onUpdate(_objectSpread3({
-          entryType: this.entryType
+          entryType: this.entryType,
+          liveApp: this.liveApp
         }, this.currentLayout));
       }
     }, {
@@ -8227,7 +8233,7 @@
             el.fillIfInAutoRow();
           });
           if (this.liveApp) {
-            window.dispatchEvent(new Event("resize"));
+            triggerResize();
           }
         }
         this.tractControls.updatePositions();
@@ -8482,6 +8488,7 @@
         dragDir: handleType,
         onEnd: function onEnd() {
           appState.sendUpdate();
+          triggerResize();
         }
       });
     });
@@ -8517,6 +8524,9 @@
     }));
     modal.addToPage();
   }
+  function triggerResize() {
+    window.dispatchEvent(new Event("resize"));
+  }
 
   // stateTracking.ts
   var saveGalleryHistory = function saveGalleryHistory2(layouts, selected) {
@@ -8532,15 +8542,10 @@
     };
     window.history.pushState(stateDump, null, null);
   };
-  var saveEditorHistory = function saveEditorHistory2(_ref) {
-    var entryType = _ref.entryType, grid = _ref.grid, elements = _ref.elements;
+  var saveEditorHistory = function saveEditorHistory2(state) {
     var stateDump = {
       type: "layoutEdit",
-      data: {
-        entryType: entryType,
-        grid: grid,
-        elements: elements
-      }
+      data: state
     };
     window.history.pushState(stateDump, null, null);
   };
