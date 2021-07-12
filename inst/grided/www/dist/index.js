@@ -5919,8 +5919,9 @@
       _classCallCheck(this, GridItem2);
       _defineProperty2(this, "id", void 0);
       _defineProperty2(this, "el", void 0);
-      _defineProperty2(this, "mirroredEl", void 0);
-      _defineProperty2(this, "siblingEl", void 0);
+      _defineProperty2(this, "mirroredElement", void 0);
+      _defineProperty2(this, "ui_function", void 0);
+      _defineProperty2(this, "siblingElement", void 0);
       _defineProperty2(this, "parentLayout", void 0);
       Object.assign(this, opts);
     }
@@ -5932,7 +5933,7 @@
       set: function set(pos) {
         setElementInGrid(this.el, pos);
         if (this.hasMirrored) {
-          setElementInGrid(this.mirroredEl, pos);
+          setElementInGrid(this.mirroredElement, pos);
         }
         this.fillIfInAutoRow();
       }
@@ -5944,7 +5945,7 @@
     }, {
       key: "hasMirrored",
       get: function get() {
-        return typeof this.mirroredEl !== "undefined";
+        return typeof this.mirroredElement !== "undefined";
       }
     }, {
       key: "style",
@@ -5954,12 +5955,20 @@
     }, {
       key: "info",
       get: function get() {
-        var _this$mirroredEl, _this$mirroredEl$data;
+        var _this$mirroredElement, _this$mirroredElement2;
         return _objectSpread2(_objectSpread2({
           id: this.id
         }, this.position), {}, {
-          ui_function: this === null || this === void 0 ? void 0 : (_this$mirroredEl = this.mirroredEl) === null || _this$mirroredEl === void 0 ? void 0 : (_this$mirroredEl$data = _this$mirroredEl.dataset) === null || _this$mirroredEl$data === void 0 ? void 0 : _this$mirroredEl$data.gridedUiName
+          ui_function: this === null || this === void 0 ? void 0 : (_this$mirroredElement = this.mirroredElement) === null || _this$mirroredElement === void 0 ? void 0 : (_this$mirroredElement2 = _this$mirroredElement.dataset) === null || _this$mirroredElement2 === void 0 ? void 0 : _this$mirroredElement2.gridedUiName
         });
+      }
+    }, {
+      key: "addMirroredEl",
+      value: function addMirroredEl(mirroredEl) {
+        this.mirroredElement = mirroredEl;
+        var curr_pos = this.position;
+        this.position = curr_pos;
+        $(this.mirroredElement).trigger("shown");
       }
     }, {
       key: "fillIfInAutoRow",
@@ -5976,10 +5985,10 @@
       value: function remove() {
         this.el.remove();
         if (this.hasMirrored) {
-          this.mirroredEl.remove();
+          this.mirroredElement.remove();
         }
-        if (this.siblingEl) {
-          this.siblingEl.remove();
+        if (this.siblingElement) {
+          this.siblingElement.remove();
         }
       }
     }]);
@@ -7155,7 +7164,11 @@
       buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
     }
     buttons.push(new ToggleSwitch("Live App", "Simple Edit", function(isOn) {
-      console.log(isOn ? "Live app mode!" : "Simple edit");
+      if (isOn) {
+        appState.disableLiveApp();
+      } else {
+        appState.enableLiveApp();
+      }
     }));
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var addedElements = blockEl("div#added-elements.empty");
@@ -7873,7 +7886,7 @@
     _createClass7(LayoutEditor2, [{
       key: "loadLayoutTemplate",
       value: function loadLayoutTemplate(opts) {
-        var _this = this, _opts$elements;
+        var _opts$elements, _this = this;
         this.container = blockEl("div#gridPage");
         this.gridLayout = new GridLayout(this.container);
         setupGridedUI(this, opts.finishBtn);
@@ -7881,14 +7894,8 @@
         this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
           dontUpdateHistory: true
         }));
-        var attachUiToElement = function attachUiToElement2(uiFunctionName) {
-          var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(uiFunctionName, '"]'));
-          _this.container.append(ui_for_element);
-          return ui_for_element;
-        };
         (_opts$elements = opts.elements) === null || _opts$elements === void 0 ? void 0 : _opts$elements.forEach(function(elMsg) {
           var id = elMsg.id, start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col, _elMsg$ui_function = elMsg.ui_function, ui_function = _elMsg$ui_function === void 0 ? null : _elMsg$ui_function;
-          var mirroredElement = opts.entryType === "layout-gallery-live" ? attachUiToElement(ui_function) : null;
           _this.addElement({
             id: id,
             gridPos: {
@@ -7897,13 +7904,35 @@
               start_col: start_col,
               end_col: end_col
             },
-            mirroredElement: mirroredElement
+            ui_function: ui_function
           }, false);
-          if (mirroredElement) {
-            $(mirroredElement).trigger("shown");
-          }
         });
+        if (opts.entryType === "layout-gallery-live") {
+          this.enableLiveApp();
+        }
         this.tractControls.updatePositions();
+      }
+    }, {
+      key: "attachUiToElement",
+      value: function attachUiToElement(uiFunctionName) {
+        var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(uiFunctionName, '"]'));
+        this.container.append(ui_for_element);
+        return ui_for_element;
+      }
+    }, {
+      key: "enableLiveApp",
+      value: function enableLiveApp() {
+        var _this2 = this;
+        this.liveApp = true;
+        this.elements.forEach(function(el) {
+          el.addMirroredEl(_this2.attachUiToElement(el.ui_function));
+        });
+      }
+    }, {
+      key: "disableLiveApp",
+      value: function disableLiveApp() {
+        this.liveApp = false;
+        hideLiveAppUi();
       }
     }, {
       key: "wrapExistingApp",
@@ -7936,14 +7965,14 @@
     }, {
       key: "hookupGapSizeControls",
       value: function hookupGapSizeControls(initialGapSize) {
-        var _this2 = this;
+        var _this3 = this;
         this.gapSizeSetting = makeCssUnitInput({
           parentEl: makeEl(document.getElementById("gridedGapSizeControls"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
             innerHTML: '<span class = "input-label">Panel gap size</span>'
           }),
           selector: "#gapSizeChooser",
           onChange: function onChange(x) {
-            return _this2.updateGrid({
+            return _this3.updateGrid({
               gap: x
             });
           },
@@ -7981,12 +8010,7 @@
         if (elProps.mirroredElement) {
           elProps.id = elProps.id.replace(/^.+?__/g, "");
         }
-        var gridItem = drawElements(this, {
-          id: elProps.id,
-          mirroredEl: elProps.mirroredElement
-        });
-        gridItem.position = elProps.gridPos;
-        this.elements.push(gridItem);
+        var gridItem = drawElements(this, elProps);
         if (sendUpdate) {
           this.sendUpdate();
         }
@@ -7995,7 +8019,7 @@
     }, {
       key: "addExistingElementsToApp",
       value: function addExistingElementsToApp() {
-        var _this3 = this;
+        var _this4 = this;
         var elementDefs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
         _toConsumableArray5(this.container.children).forEach(function(el) {
           if (el.id === "dragCanvas")
@@ -8007,7 +8031,7 @@
             el.remove();
             return;
           }
-          var gridElement = _this3.addElement({
+          var gridElement = _this4.addElement({
             id: el.id,
             gridPos: getPosOnGrid(el),
             mirroredElement: el
@@ -8023,13 +8047,13 @@
     }, {
       key: "removeElements",
       value: function removeElements(ids) {
-        var _this4 = this;
+        var _this5 = this;
         asArray(ids).forEach(function(elId) {
-          var entryIndex = _this4.elements.findIndex(function(el) {
+          var entryIndex = _this5.elements.findIndex(function(el) {
             return el.id === elId;
           });
-          _this4.elements[entryIndex].remove();
-          _this4.elements.splice(entryIndex, 1);
+          _this5.elements[entryIndex].remove();
+          _this5.elements.splice(entryIndex, 1);
         });
         this.sendUpdate();
       }
@@ -8088,13 +8112,13 @@
     }, {
       key: "setupDrag",
       value: function setupDrag(opts) {
-        var _this5 = this;
+        var _this6 = this;
         var dragFeedbackRect;
         var startRect;
         var startLoc;
         var editorEl = document.querySelector("#grided__editor");
         var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
-          var gridExtent = getDragExtentOnGrid(_this5, boundingRect);
+          var gridExtent = getDragExtentOnGrid(_this6, boundingRect);
           gridItem.position = gridExtent;
           return gridExtent;
         };
@@ -8107,8 +8131,8 @@
             top: event.offsetY,
             bottom: event.offsetY
           };
-          _this5.container.appendChild(opts.gridItem.el);
-          dragFeedbackRect = makeEl(_this5.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+          _this6.container.appendChild(opts.gridItem.el);
+          dragFeedbackRect = makeEl(_this6.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
           updateGridPos(opts.gridItem, startRect);
@@ -8391,10 +8415,10 @@
       selectionBox.style.display = "none";
     }
   }
-  function drawElements(appState, elInfo) {
-    var id = elInfo.id, mirroredEl = elInfo.mirroredEl;
+  function drawElements(appState, elProps) {
+    var id = elProps.id, mirroredElement = elProps.mirroredElement, ui_function = elProps.ui_function;
     var elColor = appState.nextColor;
-    var mirrorsExisting = typeof mirroredEl !== "undefined";
+    var mirrorsExisting = typeof mirroredElement !== "undefined";
     var gridEl = appState.makeEl("div#".concat(id, ".el_").concat(id, ".added-element.").concat(addedElementStyles), {
       innerHTML: fillerText,
       styles: {
@@ -8424,8 +8448,9 @@
     var gridItem = new GridItem({
       id: id,
       el: gridEl,
-      mirroredEl: mirroredEl,
-      siblingEl: listEl,
+      mirroredElement: mirroredElement,
+      ui_function: ui_function,
+      siblingElement: listEl,
       parentLayout: appState.gridLayout
     });
     ["top-left", "bottom-right", "center"].forEach(function(handleType) {
@@ -8454,6 +8479,8 @@
         }
       });
     }
+    gridItem.position = elProps.gridPos;
+    appState.elements.push(gridItem);
     return gridItem;
   }
   function showConflictPopup(conflictingElements) {
@@ -9111,16 +9138,20 @@
     }
     return obj;
   }
+  function hideLiveAppUi() {
+    var appDumpDiv = document.getElementById("app_dump");
+    document.querySelectorAll("[data-grided-ui-name]").forEach(function(el) {
+      if (el.parentElement === appDumpDiv)
+        return;
+      console.log("Moving ".concat(el.dataset["gridedUiName"], " back to app dump"));
+      appDumpDiv.append(el);
+      $(el).trigger("hidden");
+    });
+  }
   var clearPage = function clearPage2() {
     var appDumpDiv = document.getElementById("app_dump");
     if (appDumpDiv) {
-      document.querySelectorAll("[data-grided-ui-name]").forEach(function(el) {
-        if (el.parentElement === appDumpDiv)
-          return;
-        console.log("Moving ".concat(el.dataset["gridedUiName"], " back to app dump"));
-        appDumpDiv.append(el);
-        $(el).trigger("hidden");
-      });
+      hideLiveAppUi();
       appDumpDiv.parentNode.removeChild(appDumpDiv);
     }
     document.body.innerHTML = "";

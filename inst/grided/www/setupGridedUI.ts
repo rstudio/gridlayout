@@ -37,7 +37,11 @@ export function setupGridedUI(
 
   buttons.push(
     new ToggleSwitch("Live App", "Simple Edit", (isOn: boolean) => {
-      console.log(isOn ? "Live app mode!" : "Simple edit");
+      if (isOn) {
+        appState.disableLiveApp();
+      } else {
+        appState.enableLiveApp();
+      }
     })
   );
 

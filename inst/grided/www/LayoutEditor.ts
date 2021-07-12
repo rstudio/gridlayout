@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { LayoutElement, LayoutInfo } from ".";
+import { hideLiveAppUi, LayoutElement, LayoutInfo } from ".";
 import { GridItem, GridPos } from "./GridItem";
 import { GridLayout, LayoutState, TractDir } from "./GridLayout";
 import {
@@ -152,14 +152,6 @@ export class LayoutEditor {
     // elements first
     this.updateGrid({ ...opts.grid, dontUpdateHistory: true });
 
-    const attachUiToElement = (uiFunctionName: string) => {
-      const ui_for_element = document.querySelector(
-        `[data-grided-ui-name="${uiFunctionName}"]`
-      );
-
-      this.container.append(ui_for_element);
-      return ui_for_element as HTMLElement;
-    };
     opts.elements?.forEach((elMsg: LayoutElement) => {
       const {
         id,
@@ -170,30 +162,44 @@ export class LayoutEditor {
         ui_function = null,
       } = elMsg;
 
-      const mirroredElement =
-        opts.entryType === "layout-gallery-live"
-          ? attachUiToElement(ui_function)
-          : null;
-
       // Add elements but dont update history as we do it
       this.addElement(
         {
           id,
           gridPos: { start_row, end_row, start_col, end_col },
-          mirroredElement,
+          ui_function,
         },
         false
       );
-      if (mirroredElement) {
-        // Let's shiny know that this UI element is now active and should be
-        // updated
-        $(mirroredElement).trigger("shown");
-      }
     });
 
+    if (opts.entryType === "layout-gallery-live") {
+      this.enableLiveApp();
+    }
     // Layout usually shifts a bit after adding elements so run precautionary
     // controls position update to make sure they're in right place.
     this.tractControls.updatePositions();
+  }
+
+  attachUiToElement(uiFunctionName: string) {
+    const ui_for_element = document.querySelector(
+      `[data-grided-ui-name="${uiFunctionName}"]`
+    );
+
+    this.container.append(ui_for_element);
+    return ui_for_element as HTMLElement;
+  }
+
+  enableLiveApp() {
+    this.liveApp = true;
+    this.elements.forEach((el) => {
+      el.addMirroredEl(this.attachUiToElement(el.ui_function));
+    });
+  }
+
+  disableLiveApp() {
+    this.liveApp = false;
+    hideLiveAppUi();
   }
 
   wrapExistingApp(opts: LayoutEditorSetup) {
@@ -302,6 +308,7 @@ export class LayoutEditor {
     elProps: {
       id: string;
       gridPos: GridPos;
+      ui_function?: string;
       mirroredElement?: HTMLElement;
     },
     sendUpdate: boolean = true
@@ -313,14 +320,7 @@ export class LayoutEditor {
       elProps.id = elProps.id.replace(/^.+?__/g, "");
     }
 
-    const gridItem = drawElements(this, {
-      id: elProps.id,
-      mirroredEl: elProps.mirroredElement,
-    });
-
-    gridItem.position = elProps.gridPos;
-
-    this.elements.push(gridItem);
+    const gridItem = drawElements(this, elProps);
 
     // Only update history if we're told to. This allows us to batch add
     // elements without polluting history
@@ -997,11 +997,16 @@ function elementNamingUi(appState: LayoutEditor, { gridPos, selectionBox }) {
 
 function drawElements(
   appState: LayoutEditor,
-  elInfo: { id: string; mirroredEl: HTMLElement }
+  elProps: {
+    id: string;
+    gridPos: GridPos;
+    ui_function?: string;
+    mirroredElement?: HTMLElement;
+  }
 ) {
-  const { id, mirroredEl } = elInfo;
+  const { id, mirroredElement, ui_function } = elProps;
   const elColor = appState.nextColor;
-  const mirrorsExisting = typeof mirroredEl !== "undefined";
+  const mirrorsExisting = typeof mirroredElement !== "undefined";
   const gridEl = appState.makeEl(
     `div#${id}.el_${id}.added-element.${addedElementStyles}`,
     {
@@ -1041,8 +1046,9 @@ function drawElements(
   const gridItem = new GridItem({
     id,
     el: gridEl,
-    mirroredEl,
-    siblingEl: listEl,
+    mirroredElement,
+    ui_function,
+    siblingElement: listEl,
     parentLayout: appState.gridLayout,
   });
 
@@ -1086,6 +1092,12 @@ function drawElements(
       },
     });
   }
+
+  // Position item properly
+  gridItem.position = elProps.gridPos;
+
+  // Place item into the elements list of app state
+  appState.elements.push(gridItem);
 
   return gridItem;
 }
