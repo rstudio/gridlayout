@@ -27,7 +27,8 @@ layout_templates <- list(
         header = "geyser_header_panel",
         sidebar = "geyser_bins_panel",
         plot = "geyser_histogram_panel"
-      )
+      ),
+      server = c("geyser_histogram_server")
     )
   ),
   gen_template_info(
@@ -42,6 +43,10 @@ layout_templates <- list(
         B = "chooser_dropdowns_panel",
         C = "weight_dist_by_diet_panel",
         D = "weight_trajectories_for_diet_panel"
+      ),
+      server = c(
+        "weight_trajectories_for_diet_server",
+        "weight_dist_by_diet_server"
       )
     )
   ),
@@ -78,6 +83,10 @@ layout_templates <- list(
         mainPlot = "weight_trajectories_for_diet_panel",
         controls = "chooser_dropdowns_panel",
         subPlot = "weight_dist_by_diet_panel"
+      ),
+      server = c(
+        "weight_trajectories_for_diet_server",
+        "weight_dist_by_diet_server"
       )
     )
   ),
@@ -95,6 +104,10 @@ layout_templates <- list(
         mainPlot = "weight_trajectories_for_diet_panel",
         controls = "chooser_dropdowns_panel",
         subPlot = "weight_dist_by_diet_panel"
+      ),
+      server = c(
+        "weight_trajectories_for_diet_server",
+        "weight_dist_by_diet_server"
       )
     )
   ),
@@ -114,6 +127,10 @@ layout_templates <- list(
         controls = "chooser_dropdowns_panel",
         subPlot = "weight_dist_by_diet_panel",
         about = "about_chick_weights_panel"
+      ),
+      server = c(
+        "weight_trajectories_for_diet_server",
+        "weight_dist_by_diet_server"
       )
     ),
   )
