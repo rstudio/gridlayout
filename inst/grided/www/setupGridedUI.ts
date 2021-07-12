@@ -35,6 +35,12 @@ export function setupGridedUI(
     );
   }
 
+  buttons.push(
+    new ToggleSwitch("Live App", "Simple Edit", (isOn: boolean) => {
+      console.log(isOn ? "Live app mode!" : "Simple edit");
+    })
+  );
+
   const settingsPanelEl = blockEl(
     "div#gridedGapSizeControls.settings.panel-body"
   );

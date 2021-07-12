@@ -7154,6 +7154,9 @@
     if (gridIsFilled) {
       buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode));
     }
+    buttons.push(new ToggleSwitch("Live App", "Simple Edit", function(isOn) {
+      console.log(isOn ? "Live app mode!" : "Simple edit");
+    }));
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var addedElements = blockEl("div#added-elements.empty");
     new MutationObserver(function(mutationsList, observer) {
@@ -7880,7 +7883,6 @@
         }));
         var attachUiToElement = function attachUiToElement2(uiFunctionName) {
           var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(uiFunctionName, '"]'));
-          console.log("Moving ".concat(uiFunctionName, " into app editor"));
           _this.container.append(ui_for_element);
           return ui_for_element;
         };
