@@ -121,17 +121,6 @@ export class LayoutEditor {
       // for it to be sent over by shiny and then wrap it with grided interface
       // debugger;
       this.loadLayoutTemplate(opts);
-
-      // setShinyInput("live_app_request", opts.layoutName, true);
-
-      // new MutationObserver((mutationsList, observer) => {
-      //   this.wrapExistingApp(opts);
-      //   // Turnoff observer so it doesnt get triggered again when we remove
-      //   // the elements inside the app dump div
-      //   observer.disconnect();
-      // }).observe(document.getElementById("app_dump"), {
-      //   childList: true,
-      // });
     } else {
       console.error(
         "Neither starting layout was provided nor is there an existing grid app"
@@ -168,8 +157,6 @@ export class LayoutEditor {
         `[data-grided-ui-name="${uiFunctionName}"]`
       );
 
-      console.log(`Moving ${uiFunctionName} into app editor`);
-
       this.container.append(ui_for_element);
       return ui_for_element as HTMLElement;
     };
@@ -202,7 +189,6 @@ export class LayoutEditor {
         // updated
         $(mirroredElement).trigger("shown");
       }
-      // debugger;
     });
 
     // Layout usually shifts a bit after adding elements so run precautionary
