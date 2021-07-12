@@ -13,15 +13,17 @@ export type GridPos = {
 export class GridItem {
   id: string;
   el: HTMLElement;
-  mirroredEl?: HTMLElement;
-  siblingEl?: HTMLElement;
+  mirroredElement?: HTMLElement;
+  ui_function?: string;
+  siblingElement?: HTMLElement;
   parentLayout: GridLayout;
 
   constructor(opts: {
     el: HTMLElement;
     id: string;
-    mirroredEl?: HTMLElement;
-    siblingEl?: HTMLElement;
+    mirroredElement?: HTMLElement;
+    ui_function?: string;
+    siblingElement?: HTMLElement;
     parentLayout: GridLayout;
   }) {
     Object.assign(this, opts);
@@ -30,7 +32,7 @@ export class GridItem {
   set position(pos: GridPos) {
     setElementInGrid(this.el, pos);
     if (this.hasMirrored) {
-      setElementInGrid(this.mirroredEl, pos);
+      setElementInGrid(this.mirroredElement, pos);
     }
     this.fillIfInAutoRow();
   }
@@ -44,7 +46,7 @@ export class GridItem {
   }
 
   get hasMirrored() {
-    return typeof this.mirroredEl !== "undefined";
+    return typeof this.mirroredElement !== "undefined";
   }
 
   get style() {
@@ -55,8 +57,16 @@ export class GridItem {
     return {
       id: this.id,
       ...this.position,
-      ui_function: this?.mirroredEl?.dataset?.gridedUiName,
+      ui_function: this?.mirroredElement?.dataset?.gridedUiName,
     };
+  }
+
+  addMirroredEl(mirroredEl: HTMLElement) {
+    this.mirroredElement = mirroredEl;
+    const curr_pos = this.position;
+    // Update the position so the mirrored element is properly placed
+    this.position = curr_pos;
+    $(this.mirroredElement).trigger("shown");
   }
 
   fillIfInAutoRow() {
@@ -74,10 +84,10 @@ export class GridItem {
   remove() {
     this.el.remove();
     if (this.hasMirrored) {
-      this.mirroredEl.remove();
+      this.mirroredElement.remove();
     }
-    if (this.siblingEl) {
-      this.siblingEl.remove();
+    if (this.siblingElement) {
+      this.siblingElement.remove();
     }
   }
 }
