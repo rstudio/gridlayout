@@ -16,16 +16,12 @@ export const saveGalleryHistory = (
   const stateDump: StateDump = { type: "layoutChooser", data: opts };
   window.history.pushState(stateDump, null, null);
 };
-export const saveEditorHistory = ({
-  entryType,
-  grid,
-  elements,
-}: LayoutEditorSetup) => {
+export const saveEditorHistory = (state: LayoutEditorSetup) => {
   // Strips out the non-serializable properties that are not important to
   // recreating state
   const stateDump: StateDump = {
     type: "layoutEdit",
-    data: { entryType, grid, elements },
+    data: state,
   };
   window.history.pushState(stateDump, null, null);
 };
