@@ -63,10 +63,9 @@ layout_gallery <- function(return_app_obj = FALSE){
 
 
 # Takes a layout definition and turns it into the info ingested by grided
-gen_template_info <- function(name, layout_table, live_app = NULL, app_loc = NULL, empty = FALSE) {
+gen_template_info <- function(name, layout_table, live_app = NULL, empty = FALSE) {
   layout_info <- dump_all_info(new_gridlayout(layout_table))
   layout_info$name <- name
-  layout_info$app_loc <- app_loc
 
   if (notNull(live_app$ui)) {
     for (i in seq_along(layout_info$elements)) {

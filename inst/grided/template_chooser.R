@@ -21,7 +21,6 @@ layout_templates <- list(
     "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-    app_loc = "classic.R",
     live_app = list(
       ui = list(
         header = "geyser_header_panel",
@@ -36,7 +35,6 @@ layout_templates <- list(
     "|1rem |1fr |1fr |
      |1fr  |A   |B   |
      |1fr  |C   |D   |",
-    app_loc = "four-square.R",
     live_app = list(
       ui = list(
         A = "about_chick_weights_panel",
@@ -67,8 +65,7 @@ layout_templates <- list(
         "weight_trajectories_for_diet_server",
         "weight_dist_by_diet_server"
       )
-    ),
-    app_loc = "focal-chart-top.R"
+    )
   ),
   gen_template_info(
     "Focal Chart - Side",
@@ -76,7 +73,6 @@ layout_templates <- list(
      |80px |header   |header   |
      |1fr  |mainPlot |controls |
      |1fr  |mainPlot |subPlot  |",
-    app_loc = "focal-chart-side.R",
     live_app = list(
       ui = list(
         header = "app_header_panel",
@@ -97,7 +93,6 @@ layout_templates <- list(
      |1fr  |controls |
      |1fr  |mainPlot |
      |1fr  |subPlot  |",
-    app_loc = "stack.R",
     live_app = list(
       ui = list(
         header = "app_header_panel",
@@ -119,7 +114,6 @@ layout_templates <- list(
      |400px |mainPlot |
      |400px |subPlot  |
      |400px |about    |",
-    app_loc = "scrolling-stack.R",
     live_app = list(
       ui = list(
         header = "app_header_panel",
