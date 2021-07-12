@@ -7114,7 +7114,7 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 1px;\n        width: 180px;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      span {\n        font-size: 1rem;\n      }\n\n      #off-text {\n        text-align: end;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        height: auto;\n      }\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 4px;\n        width: 100%;\n        height: auto;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      #off-text {\n        text-align: end;\n        justify-self: end;\n      }\n      #on-text {\n        justify-self: start;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
         var switchValue = this.shadowRoot.getElementById("switch-value");
         switchValue.checked = this.startOn;
         switchValue.addEventListener("change", function(event) {
@@ -7169,8 +7169,9 @@
     }), clickButton("#done", finishBtn.label, function() {
       return finishBtn.onDone(appState.currentLayout);
     })];
+    var toggles = [];
     if (gridIsFilled || appState.entryType === "layout-gallery") {
-      buttons.push(new ToggleSwitch({
+      toggles.push(new ToggleSwitch({
         offText: "Edit layout",
         onText: "Interact mode",
         onChange: toggleInteractionMode,
@@ -7178,7 +7179,7 @@
       }));
     }
     if (appState.entryType === "layout-gallery") {
-      buttons.push(new ToggleSwitch({
+      toggles.push(new ToggleSwitch({
         onText: "Live App",
         offText: "Simple Edit",
         onChange: function onChange(isOn) {
@@ -7192,7 +7193,7 @@
         startOn: appState.liveApp
       }));
     }
-    var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
+    var settingsPanelEl = blockEl.apply(void 0, ["div#gridedGapSizeControls.settings.panel-body"].concat(toggles));
     var addedElements = blockEl("div#added-elements.empty");
     new MutationObserver(function(mutationsList, observer) {
       if (addedElements.hasChildNodes()) {
@@ -7210,7 +7211,7 @@
     appState.container.style.display = "grid";
     appState.container.style.maxWidth = "100%";
     function toggleInteractionMode(interactIsOn) {
-      [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#grided__settings .panel-body"), gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
+      [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
         if (!el)
           return;
         if (interactIsOn) {

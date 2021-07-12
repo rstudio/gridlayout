@@ -29,8 +29,9 @@ export function setupGridedUI(
     ),
   ];
 
+  const toggles: ToggleSwitch[] = [];
   if (gridIsFilled || appState.entryType === "layout-gallery") {
-    buttons.push(
+    toggles.push(
       new ToggleSwitch({
         offText: "Edit layout",
         onText: "Interact mode",
@@ -41,7 +42,7 @@ export function setupGridedUI(
   }
 
   if (appState.entryType === "layout-gallery") {
-    buttons.push(
+    toggles.push(
       new ToggleSwitch({
         onText: "Live App",
         offText: "Simple Edit",
@@ -59,7 +60,8 @@ export function setupGridedUI(
   }
 
   const settingsPanelEl = blockEl(
-    "div#gridedGapSizeControls.settings.panel-body"
+    "div#gridedGapSizeControls.settings.panel-body",
+    ...toggles
   );
 
   // Initialize added elements with empty class because at this point it
@@ -153,7 +155,6 @@ export function setupGridedUI(
       ...appState.container.querySelectorAll(".added-element"),
       ...appState.container.querySelectorAll(".grid-cell"),
       ...gridedUi.querySelectorAll(".tract-controls"),
-      gridedUi.querySelector("#grided__settings .panel-body"),
       gridedUi.querySelector("#added-elements"),
       gridedUi.querySelector("#drag-canvas"),
     ].forEach(function (el: Element) {

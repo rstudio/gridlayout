@@ -20,23 +20,27 @@ export class ToggleSwitch extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = `
     <style>
+      :host {
+        height: auto;
+      }
       #container {
         display: inline-grid;
         grid-template-columns: 1fr auto 1fr;
-        grid-gap: 1px;
-        width: 180px;
+        grid-gap: 4px;
+        width: 100%;
+        height: auto;
         align-items: center;
         justify-items: center;
         padding-left: 4px;
         padding-right: 4px;
       }
 
-      span {
-        font-size: 1rem;
-      }
-
       #off-text {
         text-align: end;
+        justify-self: end;
+      }
+      #on-text {
+        justify-self: start;
       }
 
       label {
