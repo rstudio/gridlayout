@@ -31,20 +31,20 @@ export function setupGridedUI(
 
   if (gridIsFilled) {
     buttons.push(
-      new ToggleSwitch(
-        "Edit layout",
-        "Interact mode",
-        toggleInteractionMode,
-        true
-      )
+      new ToggleSwitch({
+        offText: "Edit layout",
+        onText: "Interact mode",
+        onChange: toggleInteractionMode,
+        startOn: true,
+      })
     );
   }
 
   buttons.push(
-    new ToggleSwitch(
-      "Live App",
-      "Simple Edit",
-      (isOn: boolean) => {
+    new ToggleSwitch({
+      offText: "Live App",
+      onText: "Simple Edit",
+      onChange: (isOn: boolean) => {
         if (isOn) {
           appState.disableLiveApp();
         } else {
@@ -52,8 +52,8 @@ export function setupGridedUI(
         }
         appState.sendUpdate();
       },
-      !appState.liveApp
-    )
+      startOn: !appState.liveApp,
+    })
   );
 
   const settingsPanelEl = blockEl(

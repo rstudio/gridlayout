@@ -3,18 +3,18 @@ export class ToggleSwitch extends HTMLElement {
   onText: string;
   onChange: (isOn: boolean) => void;
   startOn: boolean;
-  constructor(
-    offText: string,
-    onText: string,
-    onChange: (isOn: boolean) => void,
-    startOn: boolean
-  ) {
+  constructor(opts: {
+    offText: string;
+    onText: string;
+    onChange: (isOn: boolean) => void;
+    startOn: boolean;
+  }) {
     super();
     this.attachShadow({ mode: "open" });
-    this.offText = offText;
-    this.onText = onText;
-    this.onChange = onChange;
-    this.startOn = startOn;
+    this.offText = opts.offText;
+    this.onText = opts.onText;
+    this.onChange = opts.onChange;
+    this.startOn = opts.startOn;
   }
 
   connectedCallback() {

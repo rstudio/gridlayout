@@ -7093,7 +7093,7 @@
   var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
     _inherits2(ToggleSwitch2, _HTMLElement);
     var _super = _createSuper2(ToggleSwitch2);
-    function ToggleSwitch2(offText, onText, onChange, startOn) {
+    function ToggleSwitch2(opts) {
       var _this;
       _classCallCheck4(this, ToggleSwitch2);
       _this = _super.call(this);
@@ -7104,10 +7104,10 @@
       _this.attachShadow({
         mode: "open"
       });
-      _this.offText = offText;
-      _this.onText = onText;
-      _this.onChange = onChange;
-      _this.startOn = startOn;
+      _this.offText = opts.offText;
+      _this.onText = opts.onText;
+      _this.onChange = opts.onChange;
+      _this.startOn = opts.startOn;
       return _this;
     }
     _createClass4(ToggleSwitch2, [{
@@ -7170,16 +7170,26 @@
       return finishBtn.onDone(appState.currentLayout);
     })];
     if (gridIsFilled) {
-      buttons.push(new ToggleSwitch("Edit layout", "Interact mode", toggleInteractionMode, true));
+      buttons.push(new ToggleSwitch({
+        offText: "Edit layout",
+        onText: "Interact mode",
+        onChange: toggleInteractionMode,
+        startOn: true
+      }));
     }
-    buttons.push(new ToggleSwitch("Live App", "Simple Edit", function(isOn) {
-      if (isOn) {
-        appState.disableLiveApp();
-      } else {
-        appState.enableLiveApp();
-      }
-      appState.sendUpdate();
-    }, !appState.liveApp));
+    buttons.push(new ToggleSwitch({
+      offText: "Live App",
+      onText: "Simple Edit",
+      onChange: function onChange(isOn) {
+        if (isOn) {
+          appState.disableLiveApp();
+        } else {
+          appState.enableLiveApp();
+        }
+        appState.sendUpdate();
+      },
+      startOn: !appState.liveApp
+    }));
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var addedElements = blockEl("div#added-elements.empty");
     new MutationObserver(function(mutationsList, observer) {
@@ -9161,7 +9171,6 @@
     document.querySelectorAll("[data-grided-ui-name]").forEach(function(el) {
       if (el.parentElement === appDumpDiv)
         return;
-      console.log("Moving ".concat(el.dataset["gridedUiName"], " back to app dump"));
       appDumpDiv.append(el);
       $(el).trigger("hidden");
     });
@@ -9175,7 +9184,6 @@
     document.body.innerHTML = "";
     if (appDumpDiv) {
       document.body.append(appDumpDiv);
-      console.log("Re-adding app dump div");
     }
   };
   var startLayoutGallery = function startLayoutGallery2(opts) {
