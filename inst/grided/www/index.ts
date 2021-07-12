@@ -80,10 +80,10 @@ const startLayoutGallery = (
     .onGo((selectedLayout: LayoutInfo) => {
       setShinyInput("build_app_template", selectedLayout);
     })
-    .onEdit((selectedLayout: LayoutInfo, liveApp?: Boolean) => {
+    .onEdit((selectedLayout: LayoutInfo) => {
       startLayoutEditor(
         {
-          entryType: liveApp ? "layout-gallery-live" : "layout-gallery",
+          entryType: "layout-gallery",
           ...selectedLayout,
           layoutName: selectedLayout.name,
         },
@@ -104,28 +104,25 @@ const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
     clearPage();
   }
 
-  const gallery_app =
-    opts.entryType === "layout-gallery" ||
-    opts.entryType === "layout-gallery-live";
-
-  opts.finishBtn = gallery_app
-    ? {
-        label: "Create app",
-        onDone: (layout: LayoutInfo) => {
-          setShinyInput(
-            opts.entryType === "layout-gallery"
-              ? "build_app_template"
-              : "build_live_app_template",
-            layout
-          );
-        },
-      }
-    : {
-        label: "Update app layout",
-        onDone: (layout: LayoutInfo) => {
-          setShinyInput("update_layout", layout);
-        },
-      };
+  opts.finishBtn =
+    opts.entryType === "layout-gallery"
+      ? {
+          label: "Create app",
+          onDone: (layout: LayoutInfo) => {
+            setShinyInput(
+              opts.entryType === "layout-gallery"
+                ? "build_app_template"
+                : "build_live_app_template",
+              layout
+            );
+          },
+        }
+      : {
+          label: "Update app layout",
+          onDone: (layout: LayoutInfo) => {
+            setShinyInput("update_layout", layout);
+          },
+        };
 
   opts.onUpdate = (opts: LayoutEditorSetup) => {
     saveEditorHistory(opts);

@@ -177,13 +177,6 @@ export class LayoutGallery extends HTMLElement {
     actionButtons.push(
       clickButton(".edit", "Edit this layout", (event) => {
         closeGallery(event);
-        this.onEditFn(selectedLayout, false);
-      })
-    );
-
-    actionButtons.push(
-      clickButton(".edit-live", "Edit layout with live app", (event) => {
-        closeGallery(event);
         this.onEditFn(selectedLayout, true);
       })
     );

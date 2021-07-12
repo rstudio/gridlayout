@@ -24,6 +24,7 @@ import {
   DragType,
   fillerText,
   posRelativeToContainer,
+  removeClass,
   SelectionRect,
   setClass,
   updateRectWithDelta,
@@ -56,7 +57,6 @@ export type ElementInfo = {
 
 export type AppEntryType =
   | "layout-gallery"
-  | "layout-gallery-live"
   | "edit-layout"
   | "edit-existing-app";
 
@@ -72,6 +72,7 @@ export type LayoutEditorSetup = {
   finishBtn?: FinishButtonSetup;
   onUpdate?: (opts: LayoutEditorSetup) => void;
   layoutName?: string;
+  liveApp?: boolean;
   ui_functions?: { [key: string]: string };
 };
 
@@ -97,10 +98,7 @@ export class LayoutEditor {
   constructor(opts: LayoutEditorSetup) {
     this.entryType = opts.entryType;
     this.onUpdate = opts.onUpdate;
-
-    this.liveApp =
-      this.entryType === "edit-existing-app" ||
-      this.entryType === "layout-gallery-live";
+    this.liveApp = opts.liveApp ?? true;
 
     if (
       this.entryType === "layout-gallery" ||
@@ -173,7 +171,7 @@ export class LayoutEditor {
       );
     });
 
-    if (opts.entryType === "layout-gallery-live") {
+    if (this.liveApp) {
       this.enableLiveApp();
     }
     // Layout usually shifts a bit after adding elements so run precautionary
@@ -195,11 +193,13 @@ export class LayoutEditor {
     this.elements.forEach((el) => {
       el.addMirroredEl(this.attachUiToElement(el.ui_function));
     });
+    this.updateGridTransparency();
   }
 
   disableLiveApp() {
     this.liveApp = false;
     hideLiveAppUi();
+    this.updateGridTransparency();
   }
 
   wrapExistingApp(opts: LayoutEditorSetup) {
@@ -594,7 +594,7 @@ export class LayoutEditor {
     }
 
     if (newNumCells) {
-      fillGridCells(this);
+      this.fillGridCells();
       setupNewItemDrag(this);
     }
 
@@ -616,6 +616,38 @@ export class LayoutEditor {
       this.sendUpdate();
     }
   }
+
+  fillGridCells() {
+    this.currentCells.forEach((e) => e.remove());
+    this.currentCells = [];
+
+    for (let rowI = 1; rowI <= this.gridLayout.numRows; rowI++) {
+      for (let colI = 1; colI <= this.gridLayout.numCols; colI++) {
+        this.currentCells.push(
+          this.makeEl(`div.r${rowI}.c${colI}.grid-cell.${gridCellStyles}`, {
+            dataProps: { row: rowI, col: colI },
+            gridPos: {
+              start_row: rowI,
+              end_row: rowI,
+              start_col: colI,
+              end_col: colI,
+            },
+          })
+        );
+      }
+    }
+
+    this.updateGridTransparency();
+    this.tractControls = setupTractControls(this);
+  }
+
+  updateGridTransparency() {
+    if (this.liveApp) {
+      setClass(this.currentCells, "transparent");
+    } else {
+      removeClass(this.currentCells, "transparent");
+    }
+  }
 } // End of class declaration
 
 const gridCellStyles = css`
@@ -633,36 +665,6 @@ const gridCellStyles = css`
     border: 2px solid var(--light-gray);
   }
 `;
-
-function fillGridCells(appState: LayoutEditor) {
-  appState.currentCells.forEach((e) => e.remove());
-  appState.currentCells = [];
-
-  for (let rowI = 1; rowI <= appState.gridLayout.numRows; rowI++) {
-    for (let colI = 1; colI <= appState.gridLayout.numCols; colI++) {
-      appState.currentCells.push(
-        appState.makeEl(`div.r${rowI}.c${colI}.grid-cell.${gridCellStyles}`, {
-          dataProps: { row: rowI, col: colI },
-          gridPos: {
-            start_row: rowI,
-            end_row: rowI,
-            start_col: colI,
-            end_col: colI,
-          },
-        })
-      );
-    }
-  }
-
-  if (
-    appState.entryType === "layout-gallery-live" ||
-    appState.entryType === "edit-existing-app"
-  ) {
-    setClass(appState.currentCells, "transparent");
-  }
-
-  appState.tractControls = setupTractControls(appState);
-}
 
 const addedElementStyles = css`
   border-radius: var(--element-roundness);

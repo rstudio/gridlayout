@@ -5714,6 +5714,11 @@
       el.classList.add(className);
     });
   }
+  function removeClass(elements, className) {
+    elements.forEach(function(el) {
+      el.classList.remove(className);
+    });
+  }
   var fillerText = '\n<div class = "fillerText">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
   function posRelativeToContainer(container, childEl) {
     var pos = childEl.getBoundingClientRect();
@@ -7853,6 +7858,7 @@
   }
   var LayoutEditor = /* @__PURE__ */ function() {
     function LayoutEditor2(opts) {
+      var _opts$liveApp;
       _classCallCheck7(this, LayoutEditor2);
       _defineProperty8(this, "gapSizeSetting", void 0);
       _defineProperty8(this, "currentCells", []);
@@ -7868,7 +7874,7 @@
       _defineProperty8(this, "layoutName", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
-      this.liveApp = this.entryType === "edit-existing-app" || this.entryType === "layout-gallery-live";
+      this.liveApp = (_opts$liveApp = opts.liveApp) !== null && _opts$liveApp !== void 0 ? _opts$liveApp : true;
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
@@ -7907,7 +7913,7 @@
             ui_function: ui_function
           }, false);
         });
-        if (opts.entryType === "layout-gallery-live") {
+        if (this.liveApp) {
           this.enableLiveApp();
         }
         this.tractControls.updatePositions();
@@ -7927,12 +7933,14 @@
         this.elements.forEach(function(el) {
           el.addMirroredEl(_this2.attachUiToElement(el.ui_function));
         });
+        this.updateGridTransparency();
       }
     }, {
       key: "disableLiveApp",
       value: function disableLiveApp() {
         this.liveApp = false;
         hideLiveAppUi();
+        this.updateGridTransparency();
       }
     }, {
       key: "wrapExistingApp",
@@ -8211,7 +8219,7 @@
           this.gapSizeSetting.updateValue(opts.gap);
         }
         if (newNumCells) {
-          fillGridCells(this);
+          this.fillGridCells();
           setupNewItemDrag(this);
         }
         if (rowsAndColsUpdated) {
@@ -8227,36 +8235,45 @@
           this.sendUpdate();
         }
       }
+    }, {
+      key: "fillGridCells",
+      value: function fillGridCells() {
+        this.currentCells.forEach(function(e) {
+          return e.remove();
+        });
+        this.currentCells = [];
+        for (var rowI = 1; rowI <= this.gridLayout.numRows; rowI++) {
+          for (var colI = 1; colI <= this.gridLayout.numCols; colI++) {
+            this.currentCells.push(this.makeEl("div.r".concat(rowI, ".c").concat(colI, ".grid-cell.").concat(gridCellStyles), {
+              dataProps: {
+                row: rowI,
+                col: colI
+              },
+              gridPos: {
+                start_row: rowI,
+                end_row: rowI,
+                start_col: colI,
+                end_col: colI
+              }
+            }));
+          }
+        }
+        this.updateGridTransparency();
+        this.tractControls = setupTractControls(this);
+      }
+    }, {
+      key: "updateGridTransparency",
+      value: function updateGridTransparency() {
+        if (this.liveApp) {
+          setClass(this.currentCells, "transparent");
+        } else {
+          removeClass(this.currentCells, "transparent");
+        }
+      }
     }]);
     return LayoutEditor2;
   }();
   var gridCellStyles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral2(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
-  function fillGridCells(appState) {
-    appState.currentCells.forEach(function(e) {
-      return e.remove();
-    });
-    appState.currentCells = [];
-    for (var rowI = 1; rowI <= appState.gridLayout.numRows; rowI++) {
-      for (var colI = 1; colI <= appState.gridLayout.numCols; colI++) {
-        appState.currentCells.push(appState.makeEl("div.r".concat(rowI, ".c").concat(colI, ".grid-cell.").concat(gridCellStyles), {
-          dataProps: {
-            row: rowI,
-            col: colI
-          },
-          gridPos: {
-            start_row: rowI,
-            end_row: rowI,
-            start_col: colI,
-            end_col: colI
-          }
-        }));
-      }
-    }
-    if (appState.entryType === "layout-gallery-live" || appState.entryType === "edit-existing-app") {
-      setClass(appState.currentCells, "transparent");
-    }
-    appState.tractControls = setupTractControls(appState);
-  }
   var addedElementStyles = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .fillerText {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .fillerText {\n    display: block;\n  }\n"])));
   var draggerHandle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral2(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
   var currentSelBox = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral2(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
@@ -9076,10 +9093,6 @@
         }
         actionButtons.push(clickButton(".edit", "Edit this layout", function(event) {
           closeGallery(event);
-          _this3.onEditFn(selectedLayout, false);
-        }));
-        actionButtons.push(clickButton(".edit-live", "Edit layout with live app", function(event) {
-          closeGallery(event);
           _this3.onEditFn(selectedLayout, true);
         }));
         modal.addElement(createEl({
@@ -9172,9 +9185,9 @@
       saveGalleryHistory(opts.layouts);
     }).onGo(function(selectedLayout) {
       setShinyInput("build_app_template", selectedLayout);
-    }).onEdit(function(selectedLayout, liveApp) {
+    }).onEdit(function(selectedLayout) {
       startLayoutEditor(_objectSpread4(_objectSpread4({
-        entryType: liveApp ? "layout-gallery-live" : "layout-gallery"
+        entryType: "layout-gallery"
       }, selectedLayout), {}, {
         layoutName: selectedLayout.name
       }), true);
@@ -9188,8 +9201,7 @@
     if (opts.entryType !== "edit-existing-app") {
       clearPage();
     }
-    var gallery_app = opts.entryType === "layout-gallery" || opts.entryType === "layout-gallery-live";
-    opts.finishBtn = gallery_app ? {
+    opts.finishBtn = opts.entryType === "layout-gallery" ? {
       label: "Create app",
       onDone: function onDone(layout) {
         setShinyInput(opts.entryType === "layout-gallery" ? "build_app_template" : "build_live_app_template", layout);
