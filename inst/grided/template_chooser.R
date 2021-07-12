@@ -21,14 +21,25 @@ layout_templates <- list(
     "|2rem  |200px   |1fr    |
      |150px |header  |header |
      |1fr   |sidebar |plot   |",
-    app_loc = "classic.R"
+    app_loc = "classic.R",
+    ui_functions = list(
+      header = "geyser_header_panel",
+      sidebar = "geyser_bins_panel",
+      plot = "geyser_histogram_panel"
+    )
   ),
   gen_template_info(
     "Four-Square",
     "|1rem |1fr |1fr |
      |1fr  |A   |B   |
      |1fr  |C   |D   |",
-    app_loc = "four-square.R"
+    app_loc = "four-square.R",
+    ui_functions = list(
+      A = "about_chick_weights_panel",
+      B = "chooser_dropdowns_panel",
+      C = "weight_dist_by_diet_panel",
+      D = "weight_trajectories_for_diet_panel"
+    )
   ),
   gen_template_info(
     "Focal Chart - Top",
@@ -65,7 +76,13 @@ layout_templates <- list(
      |1fr  |controls |
      |1fr  |mainPlot |
      |1fr  |subPlot  |",
-    app_loc = "stack.R"
+    app_loc = "stack.R",
+    ui_functions = list(
+      header = "app_header_panel",
+      mainPlot = "weight_trajectories_for_diet_panel",
+      controls = "chooser_dropdowns_panel",
+      subPlot = "weight_dist_by_diet_panel"
+    )
   ),
   gen_template_info(
     "Scrolling-Stack",
@@ -75,7 +92,14 @@ layout_templates <- list(
      |400px |mainPlot |
      |400px |subPlot  |
      |400px |about    |",
-    app_loc = "scrolling-stack.R"
+    app_loc = "scrolling-stack.R",
+    ui_functions = list(
+      header = "app_header_panel",
+      mainPlot = "weight_trajectories_for_diet_panel",
+      controls = "chooser_dropdowns_panel",
+      subPlot = "weight_dist_by_diet_panel",
+      about = "about_chick_weights_panel"
+    ),
   )
 )
 

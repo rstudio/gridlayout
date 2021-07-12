@@ -10,8 +10,19 @@ about_chick_weights_panel <- function(){
   )
 }
 
-app_header_panel <- function(){
+app_header_panel <- function() {
   title_panel("Effects of diet on Chick growth")
+}
+
+geyser_header_panel = function() {
+  title_panel("This is my header")
+}
+
+geyser_bins_panel <- function() {
+  grid_panel(
+    title = "Settings",
+    sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+  )
 }
 
 chooser_dropdowns_panel <- function(){
@@ -37,6 +48,17 @@ weight_trajectories_for_diet_panel <- function(){
     title = "Weight trajectories",
     plotOutput("chickPlot")
   )
+}
+
+geyser_histogram_panel <- function() {
+  plotOutput("distPlot")
+}
+geyser_histogram_server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    x <- faithful[, 2]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(x, breaks = bins, col = "darkgray", border = "white")
+  })
 }
 
 weight_trajectories_for_diet_server <- function(input, output) {
