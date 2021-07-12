@@ -38,7 +38,6 @@ export function hideLiveAppUi() {
     .querySelectorAll("[data-grided-ui-name]")
     .forEach((el: HTMLElement) => {
       if (el.parentElement === appDumpDiv) return;
-      console.log(`Moving ${el.dataset["gridedUiName"]} back to app dump`);
       appDumpDiv.append(el);
       $(el).trigger("hidden");
     });
@@ -47,7 +46,6 @@ export function hideLiveAppUi() {
 const clearPage = () => {
   // We want to keep the div shiny uses to dump app UI in the app so we want to
   // take it out of the dom before erasing page contents, then add it back after
-
   const appDumpDiv = document.getElementById("app_dump");
   if (appDumpDiv) {
     hideLiveAppUi();
@@ -56,7 +54,6 @@ const clearPage = () => {
   document.body.innerHTML = ``;
   if (appDumpDiv) {
     document.body.append(appDumpDiv);
-    console.log("Re-adding app dump div");
   }
 };
 
