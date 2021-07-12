@@ -135,7 +135,8 @@ is_ui_func <- str_detect(names(template_app_funcs), "_panel")
 template_ui_els <- map_name_val(
   template_app_funcs[is_ui_func],
   function(function_name, x){
-    htmltools::tagAppendAttributes(x$func(), `data-grided-ui-name` = function_name)
+    ui_el <- grid_panel(x$func())
+    htmltools::tagAppendAttributes(ui_el, `data-grided-ui-name` = function_name)
   }
 )
 

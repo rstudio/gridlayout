@@ -138,7 +138,8 @@ layout_gallery <- function(return_app_obj = FALSE) {
         map_name_val(
           template_app_funcs[is_ui_func],
           function(function_name, x) {
-            htmltools::tagAppendAttributes(x$func(), `data-grided-ui-name` = function_name)
+            ui_el <- grid_panel(x$func())
+            htmltools::tagAppendAttributes(ui_el, `data-grided-ui-name` = function_name)
           }
         )
       )
