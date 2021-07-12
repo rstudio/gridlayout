@@ -83,7 +83,6 @@ const startLayoutGallery = (
           entryType: "layout-gallery",
           ...selectedLayout,
           layoutName: selectedLayout.name,
-          liveApp: true,
         },
         true
       );
@@ -139,13 +138,12 @@ window.onload = function () {
       {
         entryType: "edit-layout",
         ...layoutInfo,
-        liveApp: false,
       },
       true
     );
   });
   addShinyListener("edit-existing-app", (layoutInfo: LayoutInfo) => {
-    startLayoutEditor({ entryType: "edit-existing-app", liveApp: true }, true);
+    startLayoutEditor({ entryType: "edit-existing-app" }, true);
   });
 
   addShinyListener(

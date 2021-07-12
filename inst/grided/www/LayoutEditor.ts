@@ -72,7 +72,7 @@ export type LayoutEditorSetup = {
   finishBtn?: FinishButtonSetup;
   onUpdate?: (opts: LayoutEditorSetup) => void;
   layoutName?: string;
-  liveApp: boolean;
+  liveApp?: boolean;
   ui_functions?: { [key: string]: string };
 };
 
@@ -98,7 +98,10 @@ export class LayoutEditor {
   constructor(opts: LayoutEditorSetup) {
     this.entryType = opts.entryType;
     this.onUpdate = opts.onUpdate;
-    this.liveApp = opts.liveApp;
+    this.liveApp =
+      typeof opts.liveApp === "undefined"
+        ? opts.entryType !== "edit-layout"
+        : opts.liveApp;
 
     if (
       this.entryType === "layout-gallery" ||

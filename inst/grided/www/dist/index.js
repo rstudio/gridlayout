@@ -7890,7 +7890,7 @@
       _defineProperty8(this, "layoutName", void 0);
       this.entryType = opts.entryType;
       this.onUpdate = opts.onUpdate;
-      this.liveApp = opts.liveApp;
+      this.liveApp = typeof opts.liveApp === "undefined" ? opts.entryType !== "edit-layout" : opts.liveApp;
       if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
         this.loadLayoutTemplate(opts);
       } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
@@ -9203,8 +9203,7 @@
       startLayoutEditor(_objectSpread4(_objectSpread4({
         entryType: "layout-gallery"
       }, selectedLayout), {}, {
-        layoutName: selectedLayout.name,
-        liveApp: true
+        layoutName: selectedLayout.name
       }), true);
     }).selectLayout(opts.selected);
     return document.body.appendChild(gallery);
@@ -9239,16 +9238,13 @@
       });
     });
     addShinyListener("edit-layout", function(layoutInfo) {
-      startLayoutEditor(_objectSpread4(_objectSpread4({
+      startLayoutEditor(_objectSpread4({
         entryType: "edit-layout"
-      }, layoutInfo), {}, {
-        liveApp: false
-      }), true);
+      }, layoutInfo), true);
     });
     addShinyListener("edit-existing-app", function(layoutInfo) {
       startLayoutEditor({
-        entryType: "edit-existing-app",
-        liveApp: true
+        entryType: "edit-existing-app"
       }, true);
     });
     addShinyListener("show-code-popup", function(opts) {
