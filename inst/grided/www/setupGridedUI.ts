@@ -29,7 +29,7 @@ export function setupGridedUI(
     ),
   ];
 
-  if (gridIsFilled) {
+  if (gridIsFilled || appState.entryType === "layout-gallery") {
     buttons.push(
       new ToggleSwitch({
         offText: "Edit layout",
@@ -40,21 +40,23 @@ export function setupGridedUI(
     );
   }
 
-  buttons.push(
-    new ToggleSwitch({
-      offText: "Live App",
-      onText: "Simple Edit",
-      onChange: (isOn: boolean) => {
-        if (isOn) {
-          appState.disableLiveApp();
-        } else {
-          appState.enableLiveApp();
-        }
-        appState.sendUpdate();
-      },
-      startOn: !appState.liveApp,
-    })
-  );
+  if (appState.entryType === "layout-gallery") {
+    buttons.push(
+      new ToggleSwitch({
+        offText: "Live App",
+        onText: "Simple Edit",
+        onChange: (isOn: boolean) => {
+          if (isOn) {
+            appState.disableLiveApp();
+          } else {
+            appState.enableLiveApp();
+          }
+          appState.sendUpdate();
+        },
+        startOn: !appState.liveApp,
+      })
+    );
+  }
 
   const settingsPanelEl = blockEl(
     "div#gridedGapSizeControls.settings.panel-body"

@@ -7169,7 +7169,7 @@
     }), clickButton("#done", finishBtn.label, function() {
       return finishBtn.onDone(appState.currentLayout);
     })];
-    if (gridIsFilled) {
+    if (gridIsFilled || appState.entryType === "layout-gallery") {
       buttons.push(new ToggleSwitch({
         offText: "Edit layout",
         onText: "Interact mode",
@@ -7177,19 +7177,21 @@
         startOn: true
       }));
     }
-    buttons.push(new ToggleSwitch({
-      offText: "Live App",
-      onText: "Simple Edit",
-      onChange: function onChange(isOn) {
-        if (isOn) {
-          appState.disableLiveApp();
-        } else {
-          appState.enableLiveApp();
-        }
-        appState.sendUpdate();
-      },
-      startOn: !appState.liveApp
-    }));
+    if (appState.entryType === "layout-gallery") {
+      buttons.push(new ToggleSwitch({
+        offText: "Live App",
+        onText: "Simple Edit",
+        onChange: function onChange(isOn) {
+          if (isOn) {
+            appState.disableLiveApp();
+          } else {
+            appState.enableLiveApp();
+          }
+          appState.sendUpdate();
+        },
+        startOn: !appState.liveApp
+      }));
+    }
     var settingsPanelEl = blockEl("div#gridedGapSizeControls.settings.panel-body");
     var addedElements = blockEl("div#added-elements.empty");
     new MutationObserver(function(mutationsList, observer) {
