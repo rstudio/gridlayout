@@ -1,4 +1,3 @@
-skip_on_cran()
 skip_screenshots('demo-apps')
 
 test_that("geyser app", {

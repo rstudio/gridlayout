@@ -1,4 +1,3 @@
-skip_on_cran()
 skip_screenshots('live-app-templates')
 
 # source(here::here("tests/screenshot-tests/setupScreenshots.R"))

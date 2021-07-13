@@ -1,4 +1,3 @@
-skip_on_cran()
 skip_screenshots('with-remarker')
 
 test_that("Remarker with tabs", {
