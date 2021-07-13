@@ -783,10 +783,10 @@ const dragCanvasStyles = css`
   .drag-feedback-rect {
     pointer-events: none;
     position: absolute;
-    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
-      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),
-      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),
-      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);
+    background: linear-gradient(90deg, var(--gray) 50%, transparent 50%),
+      linear-gradient(90deg, var(--gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--gray) 50%, transparent 50%),
+      linear-gradient(0deg, var(--gray) 50%, transparent 50%);
     background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
     background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
     animation: border-dance 16s infinite linear;
