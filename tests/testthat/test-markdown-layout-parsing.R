@@ -34,7 +34,6 @@ test_that("Can put gap size in upper left", {
 })
 
 test_that("Doesn't matter if col sizes are given in table header or simply first row", {
-  my_layout <-
 
     expect_equal(
       new_gridlayout("
