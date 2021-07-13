@@ -39,17 +39,48 @@ export class AddOrRemoveButton extends HTMLElement {
   }
 
   connectedCallback() {
-    const firstButton = this.hasAttribute("is_first");
-    const buttonClass =
-      this.addOrRemove === "add"
-        ? this.rowOrCol === "row"
-          ? "add-row"
-          : "add-col"
-        : "remove";
+    const isFirst = this.hasAttribute("is_first");
+    const isAdd = this.addOrRemove === "add";
+    const isCol = this.rowOrCol === "col";
+
+    const buttonTitle = `${isAdd ? "Add a" : "Remove"} ${this.rowOrCol}`;
+    const buttonIcon = isAdd ? plusIcon : trashcanIcon;
+
+    const fixedDir = isCol ? "bottom" : "right";
+    const movedDir = isCol
+      ? isFirst
+        ? "left"
+        : "right"
+      : isFirst
+      ? "top"
+      : "bottom";
+
+    // The 60px offset makes sure button is in right place after accounting for the
+    // leading text identifying first column addition button
+    const offset = `calc(-1em - var(--grid-gap) / 2${
+      isFirst && isCol ? " - 60px" : ""
+    })`;
+
+    const addPositioning = `
+      #container {
+        position: absolute;
+        ${fixedDir}: 2px;
+        ${movedDir}: ${offset};
+        ${
+          isFirst
+            ? `display: grid;
+               grid-template-columns: 60px auto;
+               `
+            : ""
+        }
+      }
+    `;
     this.shadowRoot.innerHTML = `
     <style>
+    
+      ${isAdd ? addPositioning : ""}
+    
       button {
-        --incrementer-offset: calc(-1em - var(--grid-gap) / 2);
         font-size: 15px;
         height: 2em;
         width: 2em;
@@ -59,16 +90,6 @@ export class AddOrRemoveButton extends HTMLElement {
         padding: 0;
         color: var(--dark-gray, gray);
         transition: color 0.2s, background-color 0.2s;
-      }
-
-      .add-row, .add-col {position: absolute;}
-      .add-row {
-        ${firstButton ? "top" : "bottom"}: var(--incrementer-offset);
-        right: 2px;
-      }
-      .add-col {
-        ${firstButton ? "left" : "right"}: var(--incrementer-offset);
-        bottom: 2px;
       }
 
       button:hover {
@@ -81,13 +102,10 @@ export class AddOrRemoveButton extends HTMLElement {
         max-width: 100%;
       }
     </style>
-      <button 
-        class = ${buttonClass}
-        title = "${this.addOrRemove === "add" ? "Add a" : "Remove"} ${
-      this.rowOrCol
-    }">
-        ${this.addOrRemove === "add" ? plusIcon : trashcanIcon}
-      </button>
+    <div id='container' > 
+    ${isFirst ? `Add ${this.rowOrCol} ` : ""}
+    <button title = "${buttonTitle}"> ${buttonIcon}</button>
+      </div>
    `;
 
     this.shadowRoot.querySelector("button").addEventListener("click", () => {

@@ -6641,9 +6641,16 @@
       key: "connectedCallback",
       value: function connectedCallback() {
         var _this2 = this;
-        var firstButton = this.hasAttribute("is_first");
-        var buttonClass = this.addOrRemove === "add" ? this.rowOrCol === "row" ? "add-row" : "add-col" : "remove";
-        this.shadowRoot.innerHTML = "\n    <style>\n      button {\n        --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n        font-size: 15px;\n        height: 2em;\n        width: 2em;\n        border-radius: 50%;\n        background-color: rgba(255, 255, 255, 0);\n        border: 1px solid rgba(255, 255, 255, 0);\n        padding: 0;\n        color: var(--dark-gray, gray);\n        transition: color 0.2s, background-color 0.2s;\n      }\n\n      .add-row, .add-col {position: absolute;}\n      .add-row {\n        ".concat(firstButton ? "top" : "bottom", ": var(--incrementer-offset);\n        right: 2px;\n      }\n      .add-col {\n        ").concat(firstButton ? "left" : "right", ": var(--incrementer-offset);\n        bottom: 2px;\n      }\n\n      button:hover {\n        background-color: var(--dark-gray, gray);\n        color: white;\n      }\n\n      svg {\n        max-height: 100%;\n        max-width: 100%;\n      }\n    </style>\n      <button \n        class = ").concat(buttonClass, '\n        title = "').concat(this.addOrRemove === "add" ? "Add a" : "Remove", " ").concat(this.rowOrCol, '">\n        ').concat(this.addOrRemove === "add" ? plusIcon : trashcanIcon, "\n      </button>\n   ");
+        var isFirst = this.hasAttribute("is_first");
+        var isAdd = this.addOrRemove === "add";
+        var isCol = this.rowOrCol === "col";
+        var buttonTitle = "".concat(isAdd ? "Add a" : "Remove", " ").concat(this.rowOrCol);
+        var buttonIcon = isAdd ? plusIcon : trashcanIcon;
+        var fixedDir = isCol ? "bottom" : "right";
+        var movedDir = isCol ? isFirst ? "left" : "right" : isFirst ? "top" : "bottom";
+        var offset = "calc(-1em - var(--grid-gap) / 2".concat(isFirst && isCol ? " - 60px" : "", ")");
+        var addPositioning = "\n      #container {\n        position: absolute;\n        ".concat(fixedDir, ": 2px;\n        ").concat(movedDir, ": ").concat(offset, ";\n        ").concat(isFirst ? "display: grid;\n               grid-template-columns: 60px auto;\n               " : "", "\n      }\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n    \n      ".concat(isAdd ? addPositioning : "", "\n    \n      button {\n        font-size: 15px;\n        height: 2em;\n        width: 2em;\n        border-radius: 50%;\n        background-color: rgba(255, 255, 255, 0);\n        border: 1px solid rgba(255, 255, 255, 0);\n        padding: 0;\n        color: var(--dark-gray, gray);\n        transition: color 0.2s, background-color 0.2s;\n      }\n\n      button:hover {\n        background-color: var(--dark-gray, gray);\n        color: white;\n      }\n\n      svg {\n        max-height: 100%;\n        max-width: 100%;\n      }\n    </style>\n    <div id='container' > \n    ").concat(isFirst ? "Add ".concat(this.rowOrCol, " ") : "", '\n    <button title = "').concat(buttonTitle, '"> ').concat(buttonIcon, "</button>\n      </div>\n   ");
         this.shadowRoot.querySelector("button").addEventListener("click", function() {
           _this2._onPress();
         });
