@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_screenshots('demo-apps')
+
 test_that("geyser app", {
   expect_snapshot_file(
     test_demo_app("geyser/app.R"),

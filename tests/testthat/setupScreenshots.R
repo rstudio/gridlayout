@@ -1,5 +1,26 @@
 library(shiny)
 
+skip_screenshots <- function (base_path) {
+
+  test_that("1+1", {expect_equal(1,1)})
+
+  on_ci <- isTRUE(as.logical(Sys.getenv("CI")))
+
+  if (on_ci || interactive()) {
+    return(invisible(TRUE))
+  }
+  # Go through all snapshots defined in this file and announce them so they dont
+  # get deleted after being skipped
+  lapply(
+    dir(test_path(paste0("_snaps/", base_path))),
+    function(snapshot_file) {
+      announce_snapshot_file(name = snapshot_file)
+    }
+  )
+
+  skip(paste("Skip screenshot tests on Cmd-Shft-T"))
+}
+
 devtools::load_all(".")
 get_demo_app <- function(rel_path){
   system.file(paste0("demo_apps/", rel_path), package = "gridlayout")

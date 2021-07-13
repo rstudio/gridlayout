@@ -1,3 +1,5 @@
+skip_on_cran()
+skip_screenshots('w-interaction')
 # source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
 pause_length <- 1.5

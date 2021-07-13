@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_screenshots('template-chooser')
+
 # source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 pause_length <- 1
 test_that("Basic interaction with grided app", {

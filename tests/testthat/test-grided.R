@@ -1,3 +1,6 @@
+skip_on_cran()
+
+skip_screenshots('grided')
 
 test_that("grided default start", {
 
