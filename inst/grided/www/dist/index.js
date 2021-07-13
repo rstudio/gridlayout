@@ -1018,9 +1018,9 @@
     "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
       "use strict";
       var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict5 = require_array_method_is_strict();
-      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
-      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
+      var arrayMethodIsStrict6 = require_array_method_is_strict();
+      var STRICT_METHOD6 = arrayMethodIsStrict6("forEach");
+      module.exports = !STRICT_METHOD6 ? function forEach3(callbackfn) {
         return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
       } : [].forEach;
     }
@@ -1486,7 +1486,7 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $34 = require_export();
+      var $35 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
       var getPrototypeOf2 = require_object_get_prototype_of();
       var setPrototypeOf2 = require_object_set_prototype_of();
@@ -1576,7 +1576,7 @@
               }
             }
           else
-            $34({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $35({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $34 = require_export();
+      var $35 = require_export();
       var exec = require_regexp_exec();
-      $34({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $35({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2416,7 +2416,7 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $34 = require_export();
+      var $35 = require_export();
       var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $34({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $35({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -3777,13 +3777,25 @@
     ];
   }, UNSUPPORTED_Y);
 
-  // node_modules/core-js/modules/es.array.map.js
+  // node_modules/core-js/modules/es.array.some.js
   "use strict";
   var $16 = require_export();
+  var $some = require_array_iteration().some;
+  var arrayMethodIsStrict2 = require_array_method_is_strict();
+  var STRICT_METHOD2 = arrayMethodIsStrict2("some");
+  $16({ target: "Array", proto: true, forced: !STRICT_METHOD2 }, {
+    some: function some(callbackfn) {
+      return $some(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.map.js
+  "use strict";
+  var $17 = require_export();
   var $map = require_array_iteration().map;
   var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
   var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
-  $16({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+  $17({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
     map: function map(callbackfn) {
       return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3872,7 +3884,7 @@
 
   // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $17 = require_export();
+  var $18 = require_export();
   var $find = require_array_iteration().find;
   var addToUnscopables = require_add_to_unscopables();
   var FIND = "find";
@@ -3881,7 +3893,7 @@
     Array(1)[FIND](function() {
       SKIPS_HOLES = false;
     });
-  $17({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $18({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
     find: function find(callbackfn) {
       return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3890,7 +3902,7 @@
 
   // node_modules/core-js/modules/es.array.find-index.js
   "use strict";
-  var $18 = require_export();
+  var $19 = require_export();
   var $findIndex = require_array_iteration().findIndex;
   var addToUnscopables2 = require_add_to_unscopables();
   var FIND_INDEX = "findIndex";
@@ -3899,7 +3911,7 @@
     Array(1)[FIND_INDEX](function() {
       SKIPS_HOLES2 = false;
     });
-  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
+  $19({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -3908,7 +3920,7 @@
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $19 = require_export();
+  var $20 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
@@ -3921,7 +3933,7 @@
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $19({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
+  $20({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3977,15 +3989,15 @@
   });
 
   // node_modules/core-js/modules/es.object.assign.js
-  var $20 = require_export();
+  var $21 = require_export();
   var assign = require_object_assign();
-  $20({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $21({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $21 = require_export();
+  var $22 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -4012,7 +4024,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $21({ target: "Array", proto: true, forced: FORCED2 }, {
+  $22({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -4039,7 +4051,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $22 = require_export();
+  var $23 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -4053,7 +4065,7 @@
       } : handler, timeout);
     };
   };
-  $22({ global: true, bind: true, forced: MSIE }, {
+  $23({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
@@ -4100,14 +4112,14 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $23 = require_export();
+  var $24 = require_export();
   var $reduce = require_array_reduce().left;
-  var arrayMethodIsStrict2 = require_array_method_is_strict();
+  var arrayMethodIsStrict3 = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
-  var STRICT_METHOD2 = arrayMethodIsStrict2("reduce");
+  var STRICT_METHOD3 = arrayMethodIsStrict3("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $23({ target: "Array", proto: true, forced: !STRICT_METHOD2 || CHROME_BUG }, {
+  $24({ target: "Array", proto: true, forced: !STRICT_METHOD3 || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4120,13 +4132,13 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $24 = require_export();
+  var $25 = require_export();
   var $indexOf = require_array_includes().indexOf;
-  var arrayMethodIsStrict3 = require_array_method_is_strict();
+  var arrayMethodIsStrict4 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
-  var STRICT_METHOD3 = arrayMethodIsStrict3("indexOf");
-  $24({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD3 }, {
+  var STRICT_METHOD4 = arrayMethodIsStrict4("indexOf");
+  $25({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD4 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -4230,10 +4242,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $25 = require_export();
+  var $26 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $25({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $26({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -4722,10 +4734,10 @@
   var import_es_weak_map = __toModule(require_es_weak_map());
 
   // node_modules/core-js/modules/es.object.create.js
-  var $26 = require_export();
+  var $27 = require_export();
   var DESCRIPTORS8 = require_descriptors();
   var create2 = require_object_create();
-  $26({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
+  $27({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
     create: create2
   });
 
@@ -5364,9 +5376,9 @@
   };
 
   // node_modules/core-js/modules/es.function.bind.js
-  var $27 = require_export();
+  var $28 = require_export();
   var bind = require_function_bind();
-  $27({ target: "Function", proto: true }, {
+  $28({ target: "Function", proto: true }, {
     bind: bind
   });
 
@@ -5515,10 +5527,10 @@
 
   // node_modules/core-js/modules/es.array.includes.js
   "use strict";
-  var $28 = require_export();
+  var $29 = require_export();
   var $includes = require_array_includes().includes;
   var addToUnscopables3 = require_add_to_unscopables();
-  $28({ target: "Array", proto: true }, {
+  $29({ target: "Array", proto: true }, {
     includes: function includes(el) {
       return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5527,11 +5539,11 @@
 
   // node_modules/core-js/modules/es.string.includes.js
   "use strict";
-  var $29 = require_export();
+  var $30 = require_export();
   var notARegExp = require_not_a_regexp();
   var requireObjectCoercible4 = require_require_object_coercible();
   var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $29({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+  $30({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
     includes: function includes2(searchString) {
       return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -6366,14 +6378,14 @@
   var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
 
   // node_modules/core-js/modules/es.object.set-prototype-of.js
-  var $30 = require_export();
+  var $31 = require_export();
   var setPrototypeOf = require_object_set_prototype_of();
-  $30({ target: "Object", stat: true }, {
+  $31({ target: "Object", stat: true }, {
     setPrototypeOf: setPrototypeOf
   });
 
   // node_modules/core-js/modules/es.object.get-prototype-of.js
-  var $31 = require_export();
+  var $32 = require_export();
   var fails8 = require_fails();
   var toObject5 = require_to_object();
   var nativeGetPrototypeOf = require_object_get_prototype_of();
@@ -6381,14 +6393,14 @@
   var FAILS_ON_PRIMITIVES4 = fails8(function() {
     nativeGetPrototypeOf(1);
   });
-  $31({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+  $32({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
     getPrototypeOf: function getPrototypeOf(it) {
       return nativeGetPrototypeOf(toObject5(it));
     }
   });
 
   // node_modules/core-js/modules/es.reflect.construct.js
-  var $32 = require_export();
+  var $33 = require_export();
   var getBuiltIn2 = require_get_built_in();
   var aFunction = require_a_function();
   var anObject6 = require_an_object();
@@ -6408,7 +6420,7 @@
     });
   });
   var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
-  $32({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+  $33({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
     construct: function construct(Target, args) {
       aFunction(Target);
       anObject6(args);
@@ -6935,7 +6947,7 @@
   }
 
   // setupGridedUI.ts
-  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
 
   // utils-shiny.ts
   function setShinyInput(inputId, inputValue) {
@@ -6950,8 +6962,157 @@
     (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(eventId, callbackFunc);
   }
 
-  // web-components/toggle-switch.ts
-  var import_es_array_iterator10 = __toModule(require_es_array_iterator());
+  // setupGridedUI.ts
+  function _toConsumableArray3(arr) {
+    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
+  }
+  function _nonIterableSpread3() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray5(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray5(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray5(o, minLen);
+  }
+  function _iterableToArray3(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles3(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray5(arr);
+  }
+  function _arrayLikeToArray5(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function setupGridedUI(appState, finishBtn) {
+    var gridIsFilled = appState.container.hasChildNodes();
+    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
+      return setShinyInput("see_layout_code", appState.currentLayout, true);
+    }), clickButton("#done", finishBtn.label, function() {
+      return finishBtn.onDone(appState.currentLayout);
+    })];
+    var settingsPanelEl = blockEl("div.settings.content-for-panel");
+    var addedElements = blockEl("div#added-elements.empty");
+    new MutationObserver(function(mutationsList, observer) {
+      if (addedElements.hasChildNodes()) {
+        addedElements.classList.remove("empty");
+      } else {
+        addedElements.classList.add("empty");
+      }
+    }).observe(addedElements, {
+      childList: true
+    });
+    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.content-for-panel", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.content-for-panel", addedElements)), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
+    document.querySelector("body").appendChild(gridedUi);
+    appState.container.style.height = "100%";
+    appState.container.style.width = "100%";
+    appState.container.style.display = "grid";
+    appState.container.style.maxWidth = "100%";
+    if (gridIsFilled) {
+      appState.container.style.gap = "1rem";
+      appState.container.style.padding = "1rem";
+    }
+  }
+  function toggleInteractionMode(appState, interactIsOn) {
+    [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(document.querySelectorAll(".tract-controls")), [document.querySelector("#added-elements"), document.querySelector("#drag-canvas")]).forEach(function(el) {
+      if (!el)
+        return;
+      if (interactIsOn) {
+        el.classList.add("disabled");
+      } else {
+        el.classList.remove("disabled");
+      }
+    });
+  }
+
+  // node_modules/core-js/modules/es.array.every.js
+  "use strict";
+  var $34 = require_export();
+  var $every = require_array_iteration().every;
+  var arrayMethodIsStrict5 = require_array_method_is_strict();
+  var STRICT_METHOD5 = arrayMethodIsStrict5("every");
+  $34({ target: "Array", proto: true, forced: !STRICT_METHOD5 }, {
+    every: function every(callbackfn) {
+      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // utils-cssom.ts
+  var import_es_array_iterator11 = __toModule(require_es_array_iterator());
+  function _toConsumableArray4(arr) {
+    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
+  }
+  function _nonIterableSpread4() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray6(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray6(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray6(o, minLen);
+  }
+  function _iterableToArray4(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles4(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray6(arr);
+  }
+  function _arrayLikeToArray6(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
+    var definesRuleset = function definesRuleset2(selectorText2) {
+      return function(rule) {
+        return rule.selectorText === selectorText2;
+      };
+    };
+    var allRulesForSelector = _toConsumableArray4(document.styleSheets).filter(function(styleSheet) {
+      return _toConsumableArray4(styleSheet.rules).find(definesRuleset(selectorText));
+    }).map(function(x) {
+      return _toConsumableArray4(x.cssRules).find(definesRuleset(selectorText)).style;
+    });
+    return allRulesForSelector.find(function(rule) {
+      return targetProperties.every(function(x) {
+        return rule[x];
+      });
+    });
+  }
+
+  // web-components/focus-modal.ts
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
+
+  // web-components/copy-code.ts
+  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
   var import_es_map2 = __toModule(require_es_map());
   function _typeof4(obj) {
     "@babel/helpers - typeof";
@@ -7097,218 +7258,46 @@
     }
     return obj;
   }
-  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits2(ToggleSwitch2, _HTMLElement);
-    var _super = _createSuper2(ToggleSwitch2);
-    function ToggleSwitch2(opts) {
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(CopyCode2, _HTMLElement);
+    var _super = _createSuper2(CopyCode2);
+    function CopyCode2(code) {
+      var _code$match$length;
       var _this;
-      _classCallCheck4(this, ToggleSwitch2);
+      _classCallCheck4(this, CopyCode2);
       _this = _super.call(this);
-      _defineProperty5(_assertThisInitialized2(_this), "offText", void 0);
-      _defineProperty5(_assertThisInitialized2(_this), "onText", void 0);
-      _defineProperty5(_assertThisInitialized2(_this), "onChange", void 0);
-      _defineProperty5(_assertThisInitialized2(_this), "startOn", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "code", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "numOfLines", void 0);
+      _this.code = code;
+      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
       _this.attachShadow({
         mode: "open"
       });
-      _this.offText = opts.offText;
-      _this.onText = opts.onText;
-      _this.onChange = opts.onChange;
-      _this.startOn = opts.startOn;
       return _this;
     }
-    _createClass4(ToggleSwitch2, [{
+    _createClass4(CopyCode2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _this2 = this;
-        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        height: auto;\n      }\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 4px;\n        width: 100%;\n        height: auto;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      #off-text {\n        text-align: end;\n        justify-self: end;\n      }\n      #on-text {\n        justify-self: start;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        position: absolute;\n        cursor: pointer;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
-        var switchValue = this.shadowRoot.getElementById("switch-value");
-        switchValue.checked = this.startOn;
-        switchValue.addEventListener("change", function(event) {
-          return _this2.onChange(event.target.checked);
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
+        var codeEl = this.shadowRoot.getElementById("code");
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          codeEl.select();
+          document.execCommand("copy");
         });
       }
-    }]);
-    return ToggleSwitch2;
-  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
-  customElements.define("toggle-switch", ToggleSwitch);
-
-  // setupGridedUI.ts
-  function _toConsumableArray3(arr) {
-    return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
-  }
-  function _nonIterableSpread3() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _unsupportedIterableToArray5(o, minLen) {
-    if (!o)
-      return;
-    if (typeof o === "string")
-      return _arrayLikeToArray5(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor)
-      n = o.constructor.name;
-    if (n === "Map" || n === "Set")
-      return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray5(o, minLen);
-  }
-  function _iterableToArray3(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles3(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray5(arr);
-  }
-  function _arrayLikeToArray5(arr, len) {
-    if (len == null || len > arr.length)
-      len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-    return arr2;
-  }
-  function setupGridedUI(appState, finishBtn) {
-    var gridIsFilled = appState.container.hasChildNodes();
-    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
-      return setShinyInput("see_layout_code", appState.currentLayout, true);
-    }), clickButton("#done", finishBtn.label, function() {
-      return finishBtn.onDone(appState.currentLayout);
-    })];
-    var toggles = [];
-    if (gridIsFilled || appState.entryType === "layout-gallery") {
-      toggles.push(new ToggleSwitch({
-        offText: "Edit layout",
-        onText: "Interact mode",
-        onChange: toggleInteractionMode,
-        startOn: false
-      }));
-    }
-    if (appState.entryType === "layout-gallery") {
-      toggles.push(new ToggleSwitch({
-        onText: "Live App",
-        offText: "Simple Edit",
-        onChange: function onChange(isOn) {
-          if (isOn) {
-            appState.enableLiveApp();
-          } else {
-            appState.disableLiveApp();
-          }
-          appState.sendUpdate();
-        },
-        startOn: appState.liveApp
-      }));
-    }
-    var settingsPanelEl = blockEl.apply(void 0, ["div#gridedGapSizeControls.settings.panel-body"].concat(toggles));
-    var addedElements = blockEl("div#added-elements.empty");
-    new MutationObserver(function(mutationsList, observer) {
-      if (addedElements.hasChildNodes()) {
-        addedElements.classList.remove("empty");
-      } else {
-        addedElements.classList.add("empty");
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
       }
-    }).observe(addedElements, {
-      childList: true
-    });
-    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.panel-body", addedElements)), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
-    document.querySelector("body").appendChild(gridedUi);
-    appState.container.style.height = "100%";
-    appState.container.style.width = "100%";
-    appState.container.style.display = "grid";
-    appState.container.style.maxWidth = "100%";
-    function toggleInteractionMode(interactIsOn) {
-      [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(gridedUi.querySelectorAll(".tract-controls")), [gridedUi.querySelector("#added-elements"), gridedUi.querySelector("#drag-canvas")]).forEach(function(el) {
-        if (!el)
-          return;
-        if (interactIsOn) {
-          el.classList.add("disabled");
-        } else {
-          el.classList.remove("disabled");
-        }
-      });
-    }
-    if (gridIsFilled) {
-      appState.container.style.gap = "1rem";
-      appState.container.style.padding = "1rem";
-    }
-  }
-
-  // node_modules/core-js/modules/es.array.every.js
-  "use strict";
-  var $33 = require_export();
-  var $every = require_array_iteration().every;
-  var arrayMethodIsStrict4 = require_array_method_is_strict();
-  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $33({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
-    every: function every(callbackfn) {
-      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // utils-cssom.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
-  function _toConsumableArray4(arr) {
-    return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
-  }
-  function _nonIterableSpread4() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _unsupportedIterableToArray6(o, minLen) {
-    if (!o)
-      return;
-    if (typeof o === "string")
-      return _arrayLikeToArray6(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor)
-      n = o.constructor.name;
-    if (n === "Map" || n === "Set")
-      return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray6(o, minLen);
-  }
-  function _iterableToArray4(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
-      return Array.from(iter);
-  }
-  function _arrayWithoutHoles4(arr) {
-    if (Array.isArray(arr))
-      return _arrayLikeToArray6(arr);
-  }
-  function _arrayLikeToArray6(arr, len) {
-    if (len == null || len > arr.length)
-      len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-    return arr2;
-  }
-  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
-    var definesRuleset = function definesRuleset2(selectorText2) {
-      return function(rule) {
-        return rule.selectorText === selectorText2;
-      };
-    };
-    var allRulesForSelector = _toConsumableArray4(document.styleSheets).filter(function(styleSheet) {
-      return _toConsumableArray4(styleSheet.rules).find(definesRuleset(selectorText));
-    }).map(function(x) {
-      return _toConsumableArray4(x.cssRules).find(definesRuleset(selectorText)).style;
-    });
-    return allRulesForSelector.find(function(rule) {
-      return targetProperties.every(function(x) {
-        return rule[x];
-      });
-    });
+    }]);
+    return CopyCode2;
+  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  customElements.define("copy-code", CopyCode);
+  function copyCode(code) {
+    return new CopyCode(code);
   }
 
   // web-components/focus-modal.ts
-  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
-  var import_es_map4 = __toModule(require_es_map());
-
-  // web-components/copy-code.ts
-  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
-  var import_es_map3 = __toModule(require_es_map());
   function _typeof5(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -7453,46 +7442,107 @@
     }
     return obj;
   }
-  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits3(CopyCode2, _HTMLElement);
-    var _super = _createSuper3(CopyCode2);
-    function CopyCode2(code) {
-      var _code$match$length;
+  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(FocusModal2, _HTMLElement);
+    var _super = _createSuper3(FocusModal2);
+    function FocusModal2() {
       var _this;
-      _classCallCheck5(this, CopyCode2);
+      _classCallCheck5(this, FocusModal2);
       _this = _super.call(this);
-      _defineProperty6(_assertThisInitialized3(_this), "code", void 0);
-      _defineProperty6(_assertThisInitialized3(_this), "numOfLines", void 0);
-      _this.code = code;
-      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
+      _defineProperty6(_assertThisInitialized3(_this), "OnClose", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "Title", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "MaxWidth", "450px");
+      _defineProperty6(_assertThisInitialized3(_this), "Children", []);
+      _defineProperty6(_assertThisInitialized3(_this), "Description", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "hasRendered", false);
       _this.attachShadow({
         mode: "open"
       });
       return _this;
     }
-    _createClass5(CopyCode2, [{
-      key: "connectedCallback",
-      value: function connectedCallback() {
-        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
-        var codeEl = this.shadowRoot.getElementById("code");
-        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
-          codeEl.select();
-          document.execCommand("copy");
+    _createClass5(FocusModal2, [{
+      key: "setTitle",
+      value: function setTitle(title) {
+        this.Title = title;
+        return this;
+      }
+    }, {
+      key: "description",
+      value: function description(_description) {
+        this.Description = _description;
+        return this;
+      }
+    }, {
+      key: "maxWidth",
+      value: function maxWidth(width) {
+        this.MaxWidth = width;
+        return this;
+      }
+    }, {
+      key: "addElement",
+      value: function addElement(el) {
+        if (this.hasRendered) {
+          this.shadowRoot.getElementById("content").appendChild(el);
+          return this;
+        }
+        this.Children.push(el);
+        return this;
+      }
+    }, {
+      key: "onClose",
+      value: function onClose(callback) {
+        this.OnClose = callback;
+        return this;
+      }
+    }, {
+      key: "focusOn",
+      value: function focusOn(elId) {
+        this.shadowRoot.getElementById(elId).focus();
+        return this;
+      }
+    }, {
+      key: "setupCloseCallbacks",
+      value: function setupCloseCallbacks() {
+        var _this2 = this;
+        var exitFn = function exitFn2() {
+          var _this2$OnClose;
+          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
+          _this2.remove();
+        };
+        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
+        this.addEventListener("click", exitFn);
+        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
+          event.stopPropagation();
         });
       }
     }, {
-      key: "disconnectedCallback",
-      value: function disconnectedCallback() {
+      key: "addToPage",
+      value: function addToPage() {
+        document.body.appendChild(this);
+        this.hasRendered = true;
+        return this;
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
+        var content = this.shadowRoot.getElementById("content");
+        this.Children.forEach(function(el) {
+          content.appendChild(el);
+        });
+        this.setupCloseCallbacks();
       }
     }]);
-    return CopyCode2;
+    return FocusModal2;
   }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
-  customElements.define("copy-code", CopyCode);
-  function copyCode(code) {
-    return new CopyCode(code);
+  customElements.define("focus-modal", FocusModal);
+  function createFocusModal() {
+    return new FocusModal();
   }
 
-  // web-components/focus-modal.ts
+  // web-components/toggle-switch.ts
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
   function _typeof6(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -7637,103 +7687,59 @@
     }
     return obj;
   }
-  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
-    _inherits4(FocusModal2, _HTMLElement);
-    var _super = _createSuper4(FocusModal2);
-    function FocusModal2() {
+  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits4(ToggleSwitch2, _HTMLElement);
+    var _super = _createSuper4(ToggleSwitch2);
+    function ToggleSwitch2(opts) {
       var _this;
-      _classCallCheck6(this, FocusModal2);
+      _classCallCheck6(this, ToggleSwitch2);
       _this = _super.call(this);
-      _defineProperty7(_assertThisInitialized4(_this), "OnClose", void 0);
-      _defineProperty7(_assertThisInitialized4(_this), "Title", void 0);
-      _defineProperty7(_assertThisInitialized4(_this), "MaxWidth", "450px");
-      _defineProperty7(_assertThisInitialized4(_this), "Children", []);
-      _defineProperty7(_assertThisInitialized4(_this), "Description", void 0);
-      _defineProperty7(_assertThisInitialized4(_this), "hasRendered", false);
+      _defineProperty7(_assertThisInitialized4(_this), "offText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onChange", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "startOn", void 0);
       _this.attachShadow({
         mode: "open"
       });
+      _this.offText = opts.offText;
+      _this.onText = opts.onText;
+      _this.onChange = opts.onChange;
+      _this.startOn = opts.startOn;
       return _this;
     }
-    _createClass6(FocusModal2, [{
-      key: "setTitle",
-      value: function setTitle(title) {
-        this.Title = title;
-        return this;
-      }
-    }, {
-      key: "description",
-      value: function description(_description) {
-        this.Description = _description;
-        return this;
-      }
-    }, {
-      key: "maxWidth",
-      value: function maxWidth(width) {
-        this.MaxWidth = width;
-        return this;
-      }
-    }, {
-      key: "addElement",
-      value: function addElement(el) {
-        if (this.hasRendered) {
-          this.shadowRoot.getElementById("content").appendChild(el);
-          return this;
-        }
-        this.Children.push(el);
-        return this;
-      }
-    }, {
-      key: "onClose",
-      value: function onClose(callback) {
-        this.OnClose = callback;
-        return this;
-      }
-    }, {
-      key: "focusOn",
-      value: function focusOn(elId) {
-        this.shadowRoot.getElementById(elId).focus();
-        return this;
-      }
-    }, {
-      key: "setupCloseCallbacks",
-      value: function setupCloseCallbacks() {
-        var _this2 = this;
-        var exitFn = function exitFn2() {
-          var _this2$OnClose;
-          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
-          _this2.remove();
-        };
-        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
-        this.addEventListener("click", exitFn);
-        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
-          event.stopPropagation();
-        });
-      }
-    }, {
-      key: "addToPage",
-      value: function addToPage() {
-        document.body.appendChild(this);
-        this.hasRendered = true;
-        return this;
-      }
-    }, {
+    _createClass6(ToggleSwitch2, [{
       key: "connectedCallback",
       value: function connectedCallback() {
-        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
-        var content = this.shadowRoot.getElementById("content");
-        this.Children.forEach(function(el) {
-          content.appendChild(el);
+        var _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        height: auto;\n      }\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 4px;\n        width: 100%;\n        height: auto;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      .disabled {\n        opacity: 0.2;\n      }    \n\n      #off-text {\n        text-align: end;\n        justify-self: end;\n      }\n      #on-text {\n        justify-self: start;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        cursor: pointer;\n        position: absolute;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n      .disabled #slider {\n        cursor: not-allowed;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
+        var switchValue = this.shadowRoot.getElementById("switch-value");
+        switchValue.checked = this.startOn;
+        switchValue.addEventListener("change", function(event) {
+          return _this2.onChange(event.target.checked);
         });
-        this.setupCloseCallbacks();
+      }
+    }, {
+      key: "toggleEnabled",
+      value: function toggleEnabled(enable, msg) {
+        var container = this.shadowRoot.getElementById("container");
+        container.title = msg;
+        this.shadowRoot.getElementById("switch-value").disabled = !enable;
+        container.classList[enable ? "remove" : "add"]("disabled");
+      }
+    }, {
+      key: "disable",
+      value: function disable(msg) {
+        this.toggleEnabled(false, msg);
+      }
+    }, {
+      key: "enable",
+      value: function enable() {
+        this.toggleEnabled(true);
       }
     }]);
-    return FocusModal2;
+    return ToggleSwitch2;
   }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
-  customElements.define("focus-modal", FocusModal);
-  function createFocusModal() {
-    return new FocusModal();
-  }
+  customElements.define("toggle-switch", ToggleSwitch);
 
   // LayoutEditor.ts
   var _templateObject3;
@@ -7908,6 +7914,7 @@
       } else {
         console.error("Neither starting layout was provided nor is there an existing grid app");
       }
+      this.hookupModeToggles();
       this.layoutName = opts === null || opts === void 0 ? void 0 : opts.layoutName;
       if (this.entryType === "edit-layout" || this.entryType === "edit-existing-app") {
         setShinyInput("starting-layout", this.currentLayout, true);
@@ -7997,16 +8004,61 @@
         }));
       }
     }, {
+      key: "hookupModeToggles",
+      value: function hookupModeToggles() {
+        var _this3 = this;
+        var liveAppToggle;
+        var interactModeToggle;
+        var settingsPanel = document.querySelector("#grided__settings > .content-for-panel");
+        var hasLiveUi = this.elements.some(function(el) {
+          return Boolean(el.ui_function);
+        });
+        if (hasLiveUi) {
+          liveAppToggle = new ToggleSwitch({
+            onText: "Live App",
+            offText: "Simple Edit",
+            onChange: function onChange(isOn) {
+              if (isOn) {
+                _this3.enableLiveApp();
+                interactModeToggle.enable();
+              } else {
+                _this3.disableLiveApp();
+                interactModeToggle.disable("Switch to live app mode to enable interaction mode");
+              }
+              _this3.sendUpdate();
+            },
+            startOn: this.liveApp
+          });
+          settingsPanel.append(liveAppToggle);
+        }
+        if (this.entryType === "layout-gallery") {
+          interactModeToggle = new ToggleSwitch({
+            offText: "Edit layout",
+            onText: "Interact mode",
+            onChange: function onChange(interactIsOn) {
+              if (interactIsOn) {
+                liveAppToggle.disable("Switch to edit mode to turn off live preview");
+              } else {
+                liveAppToggle.enable();
+              }
+              toggleInteractionMode(_this3, interactIsOn);
+            },
+            startOn: false
+          });
+          settingsPanel.append(interactModeToggle);
+        }
+      }
+    }, {
       key: "hookupGapSizeControls",
       value: function hookupGapSizeControls(initialGapSize) {
-        var _this3 = this;
+        var _this4 = this;
         this.gapSizeSetting = makeCssUnitInput({
-          parentEl: makeEl(document.getElementById("gridedGapSizeControls"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
+          parentEl: makeEl(document.querySelector("#grided__settings > .content-for-panel"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
             innerHTML: '<span class = "input-label">Panel gap size</span>'
           }),
           selector: "#gapSizeChooser",
           onChange: function onChange(x) {
-            return _this3.updateGrid({
+            return _this4.updateGrid({
               gap: x
             });
           },
@@ -8053,7 +8105,7 @@
     }, {
       key: "addExistingElementsToApp",
       value: function addExistingElementsToApp() {
-        var _this4 = this;
+        var _this5 = this;
         var elementDefs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
         _toConsumableArray5(this.container.children).forEach(function(el) {
           if (el.id === "dragCanvas")
@@ -8065,7 +8117,7 @@
             el.remove();
             return;
           }
-          var gridElement = _this4.addElement({
+          var gridElement = _this5.addElement({
             id: el.id,
             gridPos: getPosOnGrid(el),
             mirroredElement: el
@@ -8081,13 +8133,13 @@
     }, {
       key: "removeElements",
       value: function removeElements(ids) {
-        var _this5 = this;
+        var _this6 = this;
         asArray(ids).forEach(function(elId) {
-          var entryIndex = _this5.elements.findIndex(function(el) {
+          var entryIndex = _this6.elements.findIndex(function(el) {
             return el.id === elId;
           });
-          _this5.elements[entryIndex].remove();
-          _this5.elements.splice(entryIndex, 1);
+          _this6.elements[entryIndex].remove();
+          _this6.elements.splice(entryIndex, 1);
         });
         this.sendUpdate();
       }
@@ -8146,13 +8198,13 @@
     }, {
       key: "setupDrag",
       value: function setupDrag(opts) {
-        var _this6 = this;
+        var _this7 = this;
         var dragFeedbackRect;
         var startRect;
         var startLoc;
         var editorEl = document.querySelector("#grided__editor");
         var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
-          var gridExtent = getDragExtentOnGrid(_this6, boundingRect);
+          var gridExtent = getDragExtentOnGrid(_this7, boundingRect);
           gridItem.position = gridExtent;
           return gridExtent;
         };
@@ -8165,8 +8217,8 @@
             top: event.offsetY,
             bottom: event.offsetY
           };
-          _this6.container.appendChild(opts.gridItem.el);
-          dragFeedbackRect = makeEl(_this6.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+          _this7.container.appendChild(opts.gridItem.el);
+          dragFeedbackRect = makeEl(_this7.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
             styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
           updateGridPos(opts.gridItem, startRect);

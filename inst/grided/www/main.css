@@ -70,7 +70,8 @@ body {
   margin-bottom: -5px;
 }
 
-.panel-body {
+.content-for-panel {
+  padding: 0.5rem;
   margin-top: calc(2 * var(--side-gaps));
 }
 
@@ -110,11 +111,13 @@ img {
   grid-area: settings;
 }
 
-#grided__settings .panel-body {
+#grided__settings .content-for-panel {
   position: relative;
   display: grid;
   justify-items: center;
-  gap: 0.75rem;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .settings-grid {

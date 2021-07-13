@@ -35,6 +35,10 @@ export class ToggleSwitch extends HTMLElement {
         padding-right: 4px;
       }
 
+      .disabled {
+        opacity: 0.2;
+      }    
+
       #off-text {
         text-align: end;
         justify-self: end;
@@ -57,8 +61,8 @@ export class ToggleSwitch extends HTMLElement {
       }
 
       #slider {
-        position: absolute;
         cursor: pointer;
+        position: absolute;
         top: 0;
         left: 0;
         right: 0;
@@ -67,6 +71,9 @@ export class ToggleSwitch extends HTMLElement {
         background-color: #ccc;
         -webkit-transition: .4s;
         transition: .4s;
+      }
+      .disabled #slider {
+        cursor: not-allowed;
       }
 
       #slider:before {
@@ -115,6 +122,23 @@ export class ToggleSwitch extends HTMLElement {
     switchValue.addEventListener("change", (event) =>
       this.onChange((event.target as HTMLInputElement).checked)
     );
+  }
+
+  toggleEnabled(enable: boolean, msg?: string) {
+    const container = this.shadowRoot.getElementById("container");
+    container.title = msg;
+    (this.shadowRoot.getElementById(
+      "switch-value"
+    ) as HTMLInputElement).disabled = !enable;
+
+    container.classList[enable ? "remove" : "add"]("disabled");
+  }
+
+  disable(msg: string) {
+    this.toggleEnabled(false, msg);
+  }
+  enable() {
+    this.toggleEnabled(true);
   }
 }
 

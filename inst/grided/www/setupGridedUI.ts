@@ -9,7 +9,6 @@ import {
   trashcanIcon,
 } from "./utils-icons";
 import { setShinyInput } from "./utils-shiny";
-import { ToggleSwitch } from "./web-components/toggle-switch";
 
 // Takes a grid element and wraps it in the grided ui. Also returns some useful
 // information such as if the element passed was empty and if not, the children
@@ -29,40 +28,7 @@ export function setupGridedUI(
     ),
   ];
 
-  const toggles: ToggleSwitch[] = [];
-  if (gridIsFilled || appState.entryType === "layout-gallery") {
-    toggles.push(
-      new ToggleSwitch({
-        offText: "Edit layout",
-        onText: "Interact mode",
-        onChange: toggleInteractionMode,
-        startOn: false,
-      })
-    );
-  }
-
-  if (appState.entryType === "layout-gallery") {
-    toggles.push(
-      new ToggleSwitch({
-        onText: "Live App",
-        offText: "Simple Edit",
-        onChange: (isOn: boolean) => {
-          if (isOn) {
-            appState.enableLiveApp();
-          } else {
-            appState.disableLiveApp();
-          }
-          appState.sendUpdate();
-        },
-        startOn: appState.liveApp,
-      })
-    );
-  }
-
-  const settingsPanelEl = blockEl(
-    "div#gridedGapSizeControls.settings.panel-body",
-    ...toggles
-  );
+  const settingsPanelEl = blockEl("div.settings.content-for-panel");
 
   // Initialize added elements with empty class because at this point it
   // always is empty
@@ -99,7 +65,7 @@ export function setupGridedUI(
       "div#grided__instructions",
       textEl("h3", `${instructionsIcon} Instructions`),
       textEl(
-        "div.panel-body",
+        "div.content-for-panel",
         `
       <strong>Add or remove a row/column:</strong>
       <ul> 
@@ -125,7 +91,7 @@ export function setupGridedUI(
     blockEl(
       "div#grided__elements",
       textEl("h3", `${elementsIcon} Added elements`),
-      blockEl("div.panel-body", addedElements)
+      blockEl("div.content-for-panel", addedElements)
     ),
     blockEl(
       "div#grided__editor",
@@ -150,26 +116,29 @@ export function setupGridedUI(
   // than it eventually is. I think it's worth it.
   appState.container.style.maxWidth = "100%";
 
-  function toggleInteractionMode(interactIsOn: boolean) {
-    [
-      ...appState.container.querySelectorAll(".added-element"),
-      ...appState.container.querySelectorAll(".grid-cell"),
-      ...gridedUi.querySelectorAll(".tract-controls"),
-      gridedUi.querySelector("#added-elements"),
-      gridedUi.querySelector("#drag-canvas"),
-    ].forEach(function (el: Element) {
-      if (!el) return; // Only try and enable or disable an element if it exists
-
-      if (interactIsOn) {
-        el.classList.add("disabled");
-      } else {
-        el.classList.remove("disabled");
-      }
-    });
-  }
-
   if (gridIsFilled) {
     appState.container.style.gap = "1rem";
     appState.container.style.padding = "1rem";
   }
+}
+
+export function toggleInteractionMode(
+  appState: LayoutEditor,
+  interactIsOn: boolean
+) {
+  [
+    ...appState.container.querySelectorAll(".added-element"),
+    ...appState.container.querySelectorAll(".grid-cell"),
+    ...document.querySelectorAll(".tract-controls"),
+    document.querySelector("#added-elements"),
+    document.querySelector("#drag-canvas"),
+  ].forEach(function (el: Element) {
+    if (!el) return; // Only try and enable or disable an element if it exists
+
+    if (interactIsOn) {
+      el.classList.add("disabled");
+    } else {
+      el.classList.remove("disabled");
+    }
+  });
 }

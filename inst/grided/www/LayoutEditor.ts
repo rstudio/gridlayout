@@ -8,7 +8,7 @@ import {
   makeCssUnitInput,
 } from "./make-cssUnitInput";
 import { blockEl, createEl, ElementOpts, makeEl } from "./make-elements";
-import { setupGridedUI } from "./setupGridedUI";
+import { setupGridedUI, toggleInteractionMode } from "./setupGridedUI";
 import { getStylesForSelectorWithTargets } from "./utils-cssom";
 import {
   boundingRectToCssPos,
@@ -32,6 +32,7 @@ import {
 } from "./utils-misc";
 import { setShinyInput } from "./utils-shiny";
 import { createFocusModal } from "./web-components/focus-modal";
+import { ToggleSwitch } from "./web-components/toggle-switch";
 
 export type GridUpdateOptions = {
   rows?: string[] | string;
@@ -126,6 +127,8 @@ export class LayoutEditor {
         "Neither starting layout was provided nor is there an existing grid app"
       );
     }
+
+    this.hookupModeToggles();
 
     this.layoutName = opts?.layoutName;
 
@@ -262,10 +265,59 @@ export class LayoutEditor {
     });
   }
 
+  hookupModeToggles() {
+    let liveAppToggle: ToggleSwitch;
+    let interactModeToggle: ToggleSwitch;
+    const settingsPanel = document.querySelector(
+      "#grided__settings > .content-for-panel"
+    );
+
+    const hasLiveUi = this.elements.some((el) => Boolean(el.ui_function));
+    if (hasLiveUi) {
+      liveAppToggle = new ToggleSwitch({
+        onText: "Live App",
+        offText: "Simple Edit",
+        onChange: (isOn: boolean) => {
+          if (isOn) {
+            this.enableLiveApp();
+            interactModeToggle.enable();
+          } else {
+            this.disableLiveApp();
+            interactModeToggle.disable(
+              "Switch to live app mode to enable interaction mode"
+            );
+          }
+          this.sendUpdate();
+        },
+        startOn: this.liveApp,
+      });
+      settingsPanel.append(liveAppToggle);
+    }
+
+    if (this.entryType === "layout-gallery") {
+      interactModeToggle = new ToggleSwitch({
+        offText: "Edit layout",
+        onText: "Interact mode",
+        onChange: (interactIsOn: boolean) => {
+          if (interactIsOn) {
+            liveAppToggle.disable(
+              "Switch to edit mode to turn off live preview"
+            );
+          } else {
+            liveAppToggle.enable();
+          }
+          toggleInteractionMode(this, interactIsOn);
+        },
+        startOn: false,
+      });
+      settingsPanel.append(interactModeToggle);
+    }
+  }
+
   hookupGapSizeControls(initialGapSize?: string) {
     this.gapSizeSetting = makeCssUnitInput({
       parentEl: makeEl(
-        document.getElementById("gridedGapSizeControls"),
+        document.querySelector("#grided__settings > .content-for-panel"),
         "div#gapSizeChooser.plusMinusInput.settings-grid",
         {
           innerHTML: `<span class = "input-label">Panel gap size</span>`,
