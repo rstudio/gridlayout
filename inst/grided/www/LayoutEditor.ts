@@ -193,6 +193,9 @@ export class LayoutEditor {
   enableLiveApp() {
     this.liveApp = true;
     this.elements.forEach((el) => {
+      // Elements that were added to an existing live template
+      // dont have a ui mapping so we should ignore them
+      if (typeof el.ui_function === "undefined") return;
       el.addMirroredEl(this.attachUiToElement(el.ui_function));
     });
     this.updateGridTransparency();

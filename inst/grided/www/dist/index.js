@@ -7955,6 +7955,8 @@
         var _this2 = this;
         this.liveApp = true;
         this.elements.forEach(function(el) {
+          if (typeof el.ui_function === "undefined")
+            return;
           el.addMirroredEl(_this2.attachUiToElement(el.ui_function));
         });
         this.updateGridTransparency();
