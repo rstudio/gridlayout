@@ -34,4 +34,3 @@ app <- shinyApp(
   }
 )
 app
-

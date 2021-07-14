@@ -3,7 +3,7 @@ Description: Finds a gridlayout markdown table in open document and opens intera
 Binding: grided_edit_existing_layout
 Interactive: true
 
-Name: New shiny app with gridlayout
-Description: Opens interactive gridlayout editor and returns new app.R script with desired layout
-Binding: grided_create_new_app
+Name: Gridlayout Gallery
+Description: Opens interactive app to view, select, and edit gridlayouts and generate ready-to-run app script with desired layout
+Binding: layout_gallery
 Interactive: true

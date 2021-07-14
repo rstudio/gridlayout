@@ -13,7 +13,7 @@ starting_layout <- md_to_gridlayout("
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
-|150px  |header  |header |
+|150px |header  |header |
 |1fr   |sidebar |plot   |")
 
 
@@ -28,7 +28,6 @@ shinyApp(
     )
   ),
   server = function(input, output, session) {
-
     grided_server_code(input, output, session, starting_layout)
   }
 )

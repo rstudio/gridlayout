@@ -58,8 +58,8 @@
   // node_modules/core-js/internals/descriptors.js
   var require_descriptors = __commonJS({
     "node_modules/core-js/internals/descriptors.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
         return Object.defineProperty({}, 1, { get: function() {
           return 7;
         } })[1] != 7;
@@ -108,10 +108,10 @@
   // node_modules/core-js/internals/indexed-object.js
   var require_indexed_object = __commonJS({
     "node_modules/core-js/internals/indexed-object.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var classof2 = require_classof_raw();
       var split = "".split;
-      module.exports = fails8(function() {
+      module.exports = fails10(function() {
         return !Object("z").propertyIsEnumerable(0);
       }) ? function(it) {
         return classof2(it) == "String" ? split.call(it, "") : Object(it);
@@ -153,16 +153,16 @@
   // node_modules/core-js/internals/to-primitive.js
   var require_to_primitive = __commonJS({
     "node_modules/core-js/internals/to-primitive.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(input, PREFERRED_STRING) {
-        if (!isObject6(input))
+        if (!isObject7(input))
           return input;
         var fn, val;
-        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject6(val = fn.call(input)))
+        if (PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
           return val;
-        if (typeof (fn = input.valueOf) == "function" && !isObject6(val = fn.call(input)))
+        if (typeof (fn = input.valueOf) == "function" && !isObject7(val = fn.call(input)))
           return val;
-        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject6(val = fn.call(input)))
+        if (!PREFERRED_STRING && typeof (fn = input.toString) == "function" && !isObject7(val = fn.call(input)))
           return val;
         throw TypeError("Can't convert object to primitive value");
       };
@@ -182,10 +182,10 @@
   // node_modules/core-js/internals/has.js
   var require_has = __commonJS({
     "node_modules/core-js/internals/has.js": function(exports, module) {
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var hasOwnProperty = {}.hasOwnProperty;
       module.exports = function hasOwn(it, key) {
-        return hasOwnProperty.call(toObject5(it), key);
+        return hasOwnProperty.call(toObject6(it), key);
       };
     }
   });
@@ -194,9 +194,9 @@
   var require_document_create_element = __commonJS({
     "node_modules/core-js/internals/document-create-element.js": function(exports, module) {
       var global8 = require_global();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var document2 = global8.document;
-      var EXISTS = isObject6(document2) && isObject6(document2.createElement);
+      var EXISTS = isObject7(document2) && isObject7(document2.createElement);
       module.exports = function(it) {
         return EXISTS ? document2.createElement(it) : {};
       };
@@ -207,9 +207,9 @@
   var require_ie8_dom_define = __commonJS({
     "node_modules/core-js/internals/ie8-dom-define.js": function(exports, module) {
       var DESCRIPTORS10 = require_descriptors();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var createElement = require_document_create_element();
-      module.exports = !DESCRIPTORS10 && !fails8(function() {
+      module.exports = !DESCRIPTORS10 && !fails10(function() {
         return Object.defineProperty(createElement("div"), "a", {
           get: function() {
             return 7;
@@ -247,9 +247,9 @@
   // node_modules/core-js/internals/an-object.js
   var require_an_object = __commonJS({
     "node_modules/core-js/internals/an-object.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(it) {
-        if (!isObject6(it)) {
+        if (!isObject7(it)) {
           throw TypeError(String(it) + " is not an object");
         }
         return it;
@@ -262,13 +262,13 @@
     "node_modules/core-js/internals/object-define-property.js": function(exports) {
       var DESCRIPTORS10 = require_descriptors();
       var IE8_DOM_DEFINE = require_ie8_dom_define();
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var toPrimitive3 = require_to_primitive();
       var $defineProperty2 = Object.defineProperty;
       exports.f = DESCRIPTORS10 ? $defineProperty2 : function defineProperty5(O, P, Attributes) {
-        anObject6(O);
+        anObject7(O);
         P = toPrimitive3(P, true);
-        anObject6(Attributes);
+        anObject7(Attributes);
         if (IE8_DOM_DEFINE)
           try {
             return $defineProperty2(O, P, Attributes);
@@ -406,7 +406,7 @@
     "node_modules/core-js/internals/internal-state.js": function(exports, module) {
       var NATIVE_WEAK_MAP = require_native_weak_map();
       var global8 = require_global();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var objectHas = require_has();
       var shared2 = require_shared_store();
@@ -423,7 +423,7 @@
       var getterFor = function(TYPE) {
         return function(it) {
           var state;
-          if (!isObject6(it) || (state = get(it)).type !== TYPE) {
+          if (!isObject7(it) || (state = get(it)).type !== TYPE) {
             throw TypeError("Incompatible receiver, " + TYPE + " required");
           }
           return state;
@@ -539,11 +539,11 @@
     "node_modules/core-js/internals/get-built-in.js": function(exports, module) {
       var path = require_path();
       var global8 = require_global();
-      var aFunction = function(variable) {
+      var aFunction2 = function(variable) {
         return typeof variable == "function" ? variable : void 0;
       };
       module.exports = function(namespace, method) {
-        return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
+        return arguments.length < 2 ? aFunction2(path[namespace]) || aFunction2(global8[namespace]) : path[namespace] && path[namespace][method] || global8[namespace] && global8[namespace][method];
       };
     }
   });
@@ -676,12 +676,12 @@
   // node_modules/core-js/internals/own-keys.js
   var require_own_keys = __commonJS({
     "node_modules/core-js/internals/own-keys.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
+      var getBuiltIn3 = require_get_built_in();
       var getOwnPropertyNamesModule2 = require_object_get_own_property_names();
       var getOwnPropertySymbolsModule2 = require_object_get_own_property_symbols();
-      var anObject6 = require_an_object();
-      module.exports = getBuiltIn2("Reflect", "ownKeys") || function ownKeys5(it) {
-        var keys2 = getOwnPropertyNamesModule2.f(anObject6(it));
+      var anObject7 = require_an_object();
+      module.exports = getBuiltIn3("Reflect", "ownKeys") || function ownKeys6(it) {
+        var keys2 = getOwnPropertyNamesModule2.f(anObject7(it));
         var getOwnPropertySymbols3 = getOwnPropertySymbolsModule2.f;
         return getOwnPropertySymbols3 ? keys2.concat(getOwnPropertySymbols3(it)) : keys2;
       };
@@ -692,11 +692,11 @@
   var require_copy_constructor_properties = __commonJS({
     "node_modules/core-js/internals/copy-constructor-properties.js": function(exports, module) {
       var has4 = require_has();
-      var ownKeys5 = require_own_keys();
+      var ownKeys6 = require_own_keys();
       var getOwnPropertyDescriptorModule3 = require_object_get_own_property_descriptor();
       var definePropertyModule2 = require_object_define_property();
       module.exports = function(target, source) {
-        var keys2 = ownKeys5(source);
+        var keys2 = ownKeys6(source);
         var defineProperty5 = definePropertyModule2.f;
         var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule3.f;
         for (var i = 0; i < keys2.length; i++) {
@@ -711,11 +711,11 @@
   // node_modules/core-js/internals/is-forced.js
   var require_is_forced = __commonJS({
     "node_modules/core-js/internals/is-forced.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var replacement = /#|\.prototype\./;
       var isForced2 = function(feature, detection) {
         var value = data[normalize(feature)];
-        return value == POLYFILL ? true : value == NATIVE ? false : typeof detection == "function" ? fails8(detection) : !!detection;
+        return value == POLYFILL ? true : value == NATIVE ? false : typeof detection == "function" ? fails10(detection) : !!detection;
       };
       var normalize = isForced2.normalize = function(string) {
         return String(string).replace(replacement, ".").toLowerCase();
@@ -741,7 +741,7 @@
         var TARGET = options.target;
         var GLOBAL = options.global;
         var STATIC = options.stat;
-        var FORCED3, target, key, targetProperty, sourceProperty, descriptor;
+        var FORCED4, target, key, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
           target = global8;
         } else if (STATIC) {
@@ -757,8 +757,8 @@
               targetProperty = descriptor && descriptor.value;
             } else
               targetProperty = target[key];
-            FORCED3 = isForced2(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
-            if (!FORCED3 && targetProperty !== void 0) {
+            FORCED4 = isForced2(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
+            if (!FORCED4 && targetProperty !== void 0) {
               if (typeof sourceProperty === typeof targetProperty)
                 continue;
               copyConstructorProperties2(sourceProperty, targetProperty);
@@ -787,9 +787,9 @@
   // node_modules/core-js/internals/function-bind-context.js
   var require_function_bind_context = __commonJS({
     "node_modules/core-js/internals/function-bind-context.js": function(exports, module) {
-      var aFunction = require_a_function();
+      var aFunction2 = require_a_function();
       module.exports = function(fn, that, length2) {
-        aFunction(fn);
+        aFunction2(fn);
         if (that === void 0)
           return fn;
         switch (length2) {
@@ -830,8 +830,8 @@
   // node_modules/core-js/internals/engine-user-agent.js
   var require_engine_user_agent = __commonJS({
     "node_modules/core-js/internals/engine-user-agent.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
-      module.exports = getBuiltIn2("navigator", "userAgent") || "";
+      var getBuiltIn3 = require_get_built_in();
+      module.exports = getBuiltIn3("navigator", "userAgent") || "";
     }
   });
 
@@ -864,8 +864,8 @@
   var require_native_symbol = __commonJS({
     "node_modules/core-js/internals/native-symbol.js": function(exports, module) {
       var V8_VERSION2 = require_engine_v8_version();
-      var fails8 = require_fails();
-      module.exports = !!Object.getOwnPropertySymbols && !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !!Object.getOwnPropertySymbols && !fails10(function() {
         return !String(Symbol()) || !Symbol.sham && V8_VERSION2 && V8_VERSION2 < 41;
       });
     }
@@ -907,7 +907,7 @@
   // node_modules/core-js/internals/array-species-create.js
   var require_array_species_create = __commonJS({
     "node_modules/core-js/internals/array-species-create.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var isArray5 = require_is_array();
       var wellKnownSymbol5 = require_well_known_symbol();
       var SPECIES2 = wellKnownSymbol5("species");
@@ -917,7 +917,7 @@
           C = originalArray.constructor;
           if (typeof C == "function" && (C === Array || isArray5(C.prototype)))
             C = void 0;
-          else if (isObject6(C)) {
+          else if (isObject7(C)) {
             C = C[SPECIES2];
             if (C === null)
               C = void 0;
@@ -931,9 +931,9 @@
   // node_modules/core-js/internals/array-iteration.js
   var require_array_iteration = __commonJS({
     "node_modules/core-js/internals/array-iteration.js": function(exports, module) {
-      var bind2 = require_function_bind_context();
+      var bind3 = require_function_bind_context();
       var IndexedObject2 = require_indexed_object();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var toLength7 = require_to_length();
       var arraySpeciesCreate3 = require_array_species_create();
       var push = [].push;
@@ -946,13 +946,13 @@
         var IS_FILTER_OUT = TYPE == 7;
         var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
         return function($this, callbackfn, that, specificCreate) {
-          var O = toObject5($this);
+          var O = toObject6($this);
           var self2 = IndexedObject2(O);
-          var boundFunction = bind2(callbackfn, that, 3);
+          var boundFunction = bind3(callbackfn, that, 3);
           var length2 = toLength7(self2.length);
           var index = 0;
-          var create4 = specificCreate || arraySpeciesCreate3;
-          var target = IS_MAP ? create4($this, length2) : IS_FILTER || IS_FILTER_OUT ? create4($this, 0) : void 0;
+          var create5 = specificCreate || arraySpeciesCreate3;
+          var target = IS_MAP ? create5($this, length2) : IS_FILTER || IS_FILTER_OUT ? create5($this, 0) : void 0;
           var value, result;
           for (; length2 > index; index++)
             if (NO_HOLES || index in self2) {
@@ -1001,10 +1001,10 @@
   var require_array_method_is_strict = __commonJS({
     "node_modules/core-js/internals/array-method-is-strict.js": function(exports, module) {
       "use strict";
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       module.exports = function(METHOD_NAME, argument) {
         var method = [][METHOD_NAME];
-        return !!method && fails8(function() {
+        return !!method && fails10(function() {
           method.call(null, argument || function() {
             throw 1;
           }, 1);
@@ -1018,9 +1018,9 @@
     "node_modules/core-js/internals/array-for-each.js": function(exports, module) {
       "use strict";
       var $forEach2 = require_array_iteration().forEach;
-      var arrayMethodIsStrict5 = require_array_method_is_strict();
-      var STRICT_METHOD5 = arrayMethodIsStrict5("forEach");
-      module.exports = !STRICT_METHOD5 ? function forEach3(callbackfn) {
+      var arrayMethodIsStrict6 = require_array_method_is_strict();
+      var STRICT_METHOD6 = arrayMethodIsStrict6("forEach");
+      module.exports = !STRICT_METHOD6 ? function forEach3(callbackfn) {
         return $forEach2(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
       } : [].forEach;
     }
@@ -1081,10 +1081,10 @@
     "node_modules/core-js/internals/object-define-properties.js": function(exports, module) {
       var DESCRIPTORS10 = require_descriptors();
       var definePropertyModule2 = require_object_define_property();
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var objectKeys2 = require_object_keys();
       module.exports = DESCRIPTORS10 ? Object.defineProperties : function defineProperties3(O, Properties) {
-        anObject6(O);
+        anObject7(O);
         var keys2 = objectKeys2(Properties);
         var length2 = keys2.length;
         var index = 0;
@@ -1099,15 +1099,15 @@
   // node_modules/core-js/internals/html.js
   var require_html = __commonJS({
     "node_modules/core-js/internals/html.js": function(exports, module) {
-      var getBuiltIn2 = require_get_built_in();
-      module.exports = getBuiltIn2("document", "documentElement");
+      var getBuiltIn3 = require_get_built_in();
+      module.exports = getBuiltIn3("document", "documentElement");
     }
   });
 
   // node_modules/core-js/internals/object-create.js
   var require_object_create = __commonJS({
     "node_modules/core-js/internals/object-create.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var defineProperties3 = require_object_define_properties();
       var enumBugKeys = require_enum_bug_keys();
       var hiddenKeys2 = require_hidden_keys();
@@ -1157,10 +1157,10 @@
         return NullProtoObject();
       };
       hiddenKeys2[IE_PROTO] = true;
-      module.exports = Object.create || function create4(O, Properties) {
+      module.exports = Object.create || function create5(O, Properties) {
         var result;
         if (O !== null) {
-          EmptyConstructor[PROTOTYPE2] = anObject6(O);
+          EmptyConstructor[PROTOTYPE2] = anObject7(O);
           result = new EmptyConstructor();
           EmptyConstructor[PROTOTYPE2] = null;
           result[IE_PROTO] = O;
@@ -1231,6 +1231,26 @@
     }
   });
 
+  // node_modules/core-js/internals/array-method-has-species-support.js
+  var require_array_method_has_species_support = __commonJS({
+    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
+      var fails10 = require_fails();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var V8_VERSION2 = require_engine_v8_version();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(METHOD_NAME) {
+        return V8_VERSION2 >= 51 || !fails10(function() {
+          var array = [];
+          var constructor = array.constructor = {};
+          constructor[SPECIES2] = function() {
+            return { foo: 1 };
+          };
+          return array[METHOD_NAME](Boolean).foo !== 1;
+        });
+      };
+    }
+  });
+
   // node_modules/core-js/internals/create-property.js
   var require_create_property = __commonJS({
     "node_modules/core-js/internals/create-property.js": function(exports, module) {
@@ -1245,93 +1265,6 @@
         else
           object[propertyKey] = value;
       };
-    }
-  });
-
-  // node_modules/core-js/internals/array-method-has-species-support.js
-  var require_array_method_has_species_support = __commonJS({
-    "node_modules/core-js/internals/array-method-has-species-support.js": function(exports, module) {
-      var fails8 = require_fails();
-      var wellKnownSymbol5 = require_well_known_symbol();
-      var V8_VERSION2 = require_engine_v8_version();
-      var SPECIES2 = wellKnownSymbol5("species");
-      module.exports = function(METHOD_NAME) {
-        return V8_VERSION2 >= 51 || !fails8(function() {
-          var array = [];
-          var constructor = array.constructor = {};
-          constructor[SPECIES2] = function() {
-            return { foo: 1 };
-          };
-          return array[METHOD_NAME](Boolean).foo !== 1;
-        });
-      };
-    }
-  });
-
-  // node_modules/core-js/internals/freezing.js
-  var require_freezing = __commonJS({
-    "node_modules/core-js/internals/freezing.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
-        return Object.isExtensible(Object.preventExtensions({}));
-      });
-    }
-  });
-
-  // node_modules/core-js/internals/internal-metadata.js
-  var require_internal_metadata = __commonJS({
-    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
-      var hiddenKeys2 = require_hidden_keys();
-      var isObject6 = require_is_object();
-      var has4 = require_has();
-      var defineProperty5 = require_object_define_property().f;
-      var uid2 = require_uid();
-      var FREEZING2 = require_freezing();
-      var METADATA = uid2("meta");
-      var id = 0;
-      var isExtensible = Object.isExtensible || function() {
-        return true;
-      };
-      var setMetadata = function(it) {
-        defineProperty5(it, METADATA, { value: {
-          objectID: "O" + ++id,
-          weakData: {}
-        } });
-      };
-      var fastKey = function(it, create4) {
-        if (!isObject6(it))
-          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return "F";
-          if (!create4)
-            return "E";
-          setMetadata(it);
-        }
-        return it[METADATA].objectID;
-      };
-      var getWeakData = function(it, create4) {
-        if (!has4(it, METADATA)) {
-          if (!isExtensible(it))
-            return true;
-          if (!create4)
-            return false;
-          setMetadata(it);
-        }
-        return it[METADATA].weakData;
-      };
-      var onFreeze2 = function(it) {
-        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
-          setMetadata(it);
-        return it;
-      };
-      var meta = module.exports = {
-        REQUIRED: false,
-        fastKey: fastKey,
-        getWeakData: getWeakData,
-        onFreeze: onFreeze2
-      };
-      hiddenKeys2[METADATA] = true;
     }
   });
 
@@ -1385,14 +1318,14 @@
   var require_add_to_unscopables = __commonJS({
     "node_modules/core-js/internals/add-to-unscopables.js": function(exports, module) {
       var wellKnownSymbol5 = require_well_known_symbol();
-      var create4 = require_object_create();
+      var create5 = require_object_create();
       var definePropertyModule2 = require_object_define_property();
       var UNSCOPABLES = wellKnownSymbol5("unscopables");
       var ArrayPrototype = Array.prototype;
       if (ArrayPrototype[UNSCOPABLES] == void 0) {
         definePropertyModule2.f(ArrayPrototype, UNSCOPABLES, {
           configurable: true,
-          value: create4(null)
+          value: create5(null)
         });
       }
       module.exports = function(key) {
@@ -1411,8 +1344,8 @@
   // node_modules/core-js/internals/correct-prototype-getter.js
   var require_correct_prototype_getter = __commonJS({
     "node_modules/core-js/internals/correct-prototype-getter.js": function(exports, module) {
-      var fails8 = require_fails();
-      module.exports = !fails8(function() {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
         function F() {
         }
         F.prototype.constructor = null;
@@ -1425,13 +1358,13 @@
   var require_object_get_prototype_of = __commonJS({
     "node_modules/core-js/internals/object-get-prototype-of.js": function(exports, module) {
       var has4 = require_has();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var sharedKey2 = require_shared_key();
-      var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+      var CORRECT_PROTOTYPE_GETTER2 = require_correct_prototype_getter();
       var IE_PROTO = sharedKey2("IE_PROTO");
       var ObjectPrototype2 = Object.prototype;
-      module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function(O) {
-        O = toObject5(O);
+      module.exports = CORRECT_PROTOTYPE_GETTER2 ? Object.getPrototypeOf : function(O) {
+        O = toObject6(O);
         if (has4(O, IE_PROTO))
           return O[IE_PROTO];
         if (typeof O.constructor == "function" && O instanceof O.constructor) {
@@ -1446,8 +1379,8 @@
   var require_iterators_core = __commonJS({
     "node_modules/core-js/internals/iterators-core.js": function(exports, module) {
       "use strict";
-      var fails8 = require_fails();
-      var getPrototypeOf = require_object_get_prototype_of();
+      var fails10 = require_fails();
+      var getPrototypeOf2 = require_object_get_prototype_of();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var has4 = require_has();
       var wellKnownSymbol5 = require_well_known_symbol();
@@ -1465,12 +1398,12 @@
         if (!("next" in arrayIterator))
           BUGGY_SAFARI_ITERATORS = true;
         else {
-          PrototypeOfArrayIteratorPrototype = getPrototypeOf(getPrototypeOf(arrayIterator));
+          PrototypeOfArrayIteratorPrototype = getPrototypeOf2(getPrototypeOf2(arrayIterator));
           if (PrototypeOfArrayIteratorPrototype !== Object.prototype)
             IteratorPrototype = PrototypeOfArrayIteratorPrototype;
         }
       }
-      var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == void 0 || fails8(function() {
+      var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == void 0 || fails10(function() {
         var test = {};
         return IteratorPrototype[ITERATOR2].call(test) !== test;
       });
@@ -1491,7 +1424,7 @@
     "node_modules/core-js/internals/create-iterator-constructor.js": function(exports, module) {
       "use strict";
       var IteratorPrototype = require_iterators_core().IteratorPrototype;
-      var create4 = require_object_create();
+      var create5 = require_object_create();
       var createPropertyDescriptor2 = require_create_property_descriptor();
       var setToStringTag2 = require_set_to_string_tag();
       var Iterators = require_iterators();
@@ -1500,7 +1433,7 @@
       };
       module.exports = function(IteratorConstructor, NAME2, next3) {
         var TO_STRING_TAG2 = NAME2 + " Iterator";
-        IteratorConstructor.prototype = create4(IteratorPrototype, { next: createPropertyDescriptor2(1, next3) });
+        IteratorConstructor.prototype = create5(IteratorPrototype, { next: createPropertyDescriptor2(1, next3) });
         setToStringTag2(IteratorConstructor, TO_STRING_TAG2, false, true);
         Iterators[TO_STRING_TAG2] = returnThis;
         return IteratorConstructor;
@@ -1511,9 +1444,9 @@
   // node_modules/core-js/internals/a-possible-prototype.js
   var require_a_possible_prototype = __commonJS({
     "node_modules/core-js/internals/a-possible-prototype.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       module.exports = function(it) {
-        if (!isObject6(it) && it !== null) {
+        if (!isObject7(it) && it !== null) {
           throw TypeError("Can't set " + String(it) + " as a prototype");
         }
         return it;
@@ -1524,7 +1457,7 @@
   // node_modules/core-js/internals/object-set-prototype-of.js
   var require_object_set_prototype_of = __commonJS({
     "node_modules/core-js/internals/object-set-prototype-of.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var aPossiblePrototype = require_a_possible_prototype();
       module.exports = Object.setPrototypeOf || ("__proto__" in {} ? function() {
         var CORRECT_SETTER = false;
@@ -1536,8 +1469,8 @@
           CORRECT_SETTER = test instanceof Array;
         } catch (error) {
         }
-        return function setPrototypeOf(O, proto) {
-          anObject6(O);
+        return function setPrototypeOf2(O, proto) {
+          anObject7(O);
           aPossiblePrototype(proto);
           if (CORRECT_SETTER)
             setter.call(O, proto);
@@ -1553,10 +1486,10 @@
   var require_define_iterator = __commonJS({
     "node_modules/core-js/internals/define-iterator.js": function(exports, module) {
       "use strict";
-      var $30 = require_export();
+      var $35 = require_export();
       var createIteratorConstructor = require_create_iterator_constructor();
-      var getPrototypeOf = require_object_get_prototype_of();
-      var setPrototypeOf = require_object_set_prototype_of();
+      var getPrototypeOf2 = require_object_get_prototype_of();
+      var setPrototypeOf2 = require_object_set_prototype_of();
       var setToStringTag2 = require_set_to_string_tag();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var redefine6 = require_redefine();
@@ -1573,7 +1506,7 @@
       var returnThis = function() {
         return this;
       };
-      module.exports = function(Iterable, NAME2, IteratorConstructor, next3, DEFAULT, IS_SET, FORCED3) {
+      module.exports = function(Iterable, NAME2, IteratorConstructor, next3, DEFAULT, IS_SET, FORCED4) {
         createIteratorConstructor(IteratorConstructor, NAME2, next3);
         var getIterationMethod = function(KIND) {
           if (KIND === DEFAULT && defaultIterator)
@@ -1606,11 +1539,11 @@
         var anyNativeIterator = NAME2 == "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
         var CurrentIteratorPrototype, methods, KEY;
         if (anyNativeIterator) {
-          CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
+          CurrentIteratorPrototype = getPrototypeOf2(anyNativeIterator.call(new Iterable()));
           if (IteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
-            if (!IS_PURE2 && getPrototypeOf(CurrentIteratorPrototype) !== IteratorPrototype) {
-              if (setPrototypeOf) {
-                setPrototypeOf(CurrentIteratorPrototype, IteratorPrototype);
+            if (!IS_PURE2 && getPrototypeOf2(CurrentIteratorPrototype) !== IteratorPrototype) {
+              if (setPrototypeOf2) {
+                setPrototypeOf2(CurrentIteratorPrototype, IteratorPrototype);
               } else if (typeof CurrentIteratorPrototype[ITERATOR2] != "function") {
                 createNonEnumerableProperty4(CurrentIteratorPrototype, ITERATOR2, returnThis);
               }
@@ -1626,7 +1559,7 @@
             return nativeIterator.call(this);
           };
         }
-        if ((!IS_PURE2 || FORCED3) && IterablePrototype[ITERATOR2] !== defaultIterator) {
+        if ((!IS_PURE2 || FORCED4) && IterablePrototype[ITERATOR2] !== defaultIterator) {
           createNonEnumerableProperty4(IterablePrototype, ITERATOR2, defaultIterator);
         }
         Iterators[NAME2] = defaultIterator;
@@ -1636,14 +1569,14 @@
             keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
             entries: getIterationMethod(ENTRIES)
           };
-          if (FORCED3)
+          if (FORCED4)
             for (KEY in methods) {
               if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
                 redefine6(IterablePrototype, KEY, methods[KEY]);
               }
             }
           else
-            $30({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+            $35({ target: NAME2, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
         }
         return methods;
       };
@@ -1718,11 +1651,11 @@
   // node_modules/core-js/internals/iterator-close.js
   var require_iterator_close = __commonJS({
     "node_modules/core-js/internals/iterator-close.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       module.exports = function(iterator) {
         var returnMethod = iterator["return"];
         if (returnMethod !== void 0) {
-          return anObject6(returnMethod.call(iterator)).value;
+          return anObject7(returnMethod.call(iterator)).value;
         }
       };
     }
@@ -1731,11 +1664,11 @@
   // node_modules/core-js/internals/call-with-safe-iteration-closing.js
   var require_call_with_safe_iteration_closing = __commonJS({
     "node_modules/core-js/internals/call-with-safe-iteration-closing.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var iteratorClose = require_iterator_close();
       module.exports = function(iterator, fn, value, ENTRIES) {
         try {
-          return ENTRIES ? fn(anObject6(value)[0], value[1]) : fn(value);
+          return ENTRIES ? fn(anObject7(value)[0], value[1]) : fn(value);
         } catch (error) {
           iteratorClose(iterator);
           throw error;
@@ -1775,15 +1708,15 @@
   var require_array_from = __commonJS({
     "node_modules/core-js/internals/array-from.js": function(exports, module) {
       "use strict";
-      var bind2 = require_function_bind_context();
-      var toObject5 = require_to_object();
+      var bind3 = require_function_bind_context();
+      var toObject6 = require_to_object();
       var callWithSafeIterationClosing = require_call_with_safe_iteration_closing();
       var isArrayIteratorMethod = require_is_array_iterator_method();
       var toLength7 = require_to_length();
       var createProperty5 = require_create_property();
       var getIteratorMethod = require_get_iterator_method();
       module.exports = function from3(arrayLike) {
-        var O = toObject5(arrayLike);
+        var O = toObject6(arrayLike);
         var C = typeof this == "function" ? this : Array;
         var argumentsLength = arguments.length;
         var mapfn = argumentsLength > 1 ? arguments[1] : void 0;
@@ -1792,7 +1725,7 @@
         var index = 0;
         var length2, result, step, iterator, next3, value;
         if (mapping)
-          mapfn = bind2(mapfn, argumentsLength > 2 ? arguments[2] : void 0, 2);
+          mapfn = bind3(mapfn, argumentsLength > 2 ? arguments[2] : void 0, 2);
         if (iteratorMethod != void 0 && !(C == Array && isArrayIteratorMethod(iteratorMethod))) {
           iterator = iteratorMethod.call(O);
           next3 = iterator.next;
@@ -1862,13 +1795,80 @@
     }
   });
 
+  // node_modules/core-js/internals/freezing.js
+  var require_freezing = __commonJS({
+    "node_modules/core-js/internals/freezing.js": function(exports, module) {
+      var fails10 = require_fails();
+      module.exports = !fails10(function() {
+        return Object.isExtensible(Object.preventExtensions({}));
+      });
+    }
+  });
+
+  // node_modules/core-js/internals/internal-metadata.js
+  var require_internal_metadata = __commonJS({
+    "node_modules/core-js/internals/internal-metadata.js": function(exports, module) {
+      var hiddenKeys2 = require_hidden_keys();
+      var isObject7 = require_is_object();
+      var has4 = require_has();
+      var defineProperty5 = require_object_define_property().f;
+      var uid2 = require_uid();
+      var FREEZING2 = require_freezing();
+      var METADATA = uid2("meta");
+      var id = 0;
+      var isExtensible = Object.isExtensible || function() {
+        return true;
+      };
+      var setMetadata = function(it) {
+        defineProperty5(it, METADATA, { value: {
+          objectID: "O" + ++id,
+          weakData: {}
+        } });
+      };
+      var fastKey = function(it, create5) {
+        if (!isObject7(it))
+          return typeof it == "symbol" ? it : (typeof it == "string" ? "S" : "P") + it;
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return "F";
+          if (!create5)
+            return "E";
+          setMetadata(it);
+        }
+        return it[METADATA].objectID;
+      };
+      var getWeakData = function(it, create5) {
+        if (!has4(it, METADATA)) {
+          if (!isExtensible(it))
+            return true;
+          if (!create5)
+            return false;
+          setMetadata(it);
+        }
+        return it[METADATA].weakData;
+      };
+      var onFreeze2 = function(it) {
+        if (FREEZING2 && meta.REQUIRED && isExtensible(it) && !has4(it, METADATA))
+          setMetadata(it);
+        return it;
+      };
+      var meta = module.exports = {
+        REQUIRED: false,
+        fastKey: fastKey,
+        getWeakData: getWeakData,
+        onFreeze: onFreeze2
+      };
+      hiddenKeys2[METADATA] = true;
+    }
+  });
+
   // node_modules/core-js/internals/regexp-flags.js
   var require_regexp_flags = __commonJS({
     "node_modules/core-js/internals/regexp-flags.js": function(exports, module) {
       "use strict";
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       module.exports = function() {
-        var that = anObject6(this);
+        var that = anObject7(this);
         var result = "";
         if (that.global)
           result += "g";
@@ -1891,16 +1891,16 @@
   var require_regexp_sticky_helpers = __commonJS({
     "node_modules/core-js/internals/regexp-sticky-helpers.js": function(exports) {
       "use strict";
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       function RE(s, f) {
         return RegExp(s, f);
       }
-      exports.UNSUPPORTED_Y = fails8(function() {
+      exports.UNSUPPORTED_Y = fails10(function() {
         var re = RE("a", "y");
         re.lastIndex = 2;
         return re.exec("abcd") != null;
       });
-      exports.BROKEN_CARET = fails8(function() {
+      exports.BROKEN_CARET = fails10(function() {
         var re = RE("^r", "gy");
         re.lastIndex = 2;
         return re.exec("str") != null;
@@ -1986,9 +1986,9 @@
   var require_es_regexp_exec = __commonJS({
     "node_modules/core-js/modules/es.regexp.exec.js": function() {
       "use strict";
-      var $30 = require_export();
+      var $35 = require_export();
       var exec = require_regexp_exec();
-      $30({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
+      $35({ target: "RegExp", proto: true, forced: /./.exec !== exec }, {
         exec: exec
       });
     }
@@ -2001,12 +2001,12 @@
       require_es_regexp_exec();
       var redefine6 = require_redefine();
       var regexpExec2 = require_regexp_exec();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var wellKnownSymbol5 = require_well_known_symbol();
       var createNonEnumerableProperty4 = require_create_non_enumerable_property();
       var SPECIES2 = wellKnownSymbol5("species");
       var RegExpPrototype2 = RegExp.prototype;
-      var REPLACE_SUPPORTS_NAMED_GROUPS = !fails8(function() {
+      var REPLACE_SUPPORTS_NAMED_GROUPS = !fails10(function() {
         var re = /./;
         re.exec = function() {
           var result = [];
@@ -2025,7 +2025,7 @@
         }
         return false;
       }();
-      var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = !fails8(function() {
+      var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = !fails10(function() {
         var re = /(?:)/;
         var originalExec = re.exec;
         re.exec = function() {
@@ -2036,14 +2036,14 @@
       });
       module.exports = function(KEY, length2, exec, sham) {
         var SYMBOL2 = wellKnownSymbol5(KEY);
-        var DELEGATES_TO_SYMBOL = !fails8(function() {
+        var DELEGATES_TO_SYMBOL = !fails10(function() {
           var O = {};
           O[SYMBOL2] = function() {
             return 7;
           };
           return ""[KEY](O) != 7;
         });
-        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails8(function() {
+        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails10(function() {
           var execCalled = false;
           var re = /a/;
           if (KEY === "split") {
@@ -2095,13 +2095,13 @@
   // node_modules/core-js/internals/is-regexp.js
   var require_is_regexp = __commonJS({
     "node_modules/core-js/internals/is-regexp.js": function(exports, module) {
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var classof2 = require_classof_raw();
       var wellKnownSymbol5 = require_well_known_symbol();
       var MATCH = wellKnownSymbol5("match");
       module.exports = function(it) {
         var isRegExp2;
-        return isObject6(it) && ((isRegExp2 = it[MATCH]) !== void 0 ? !!isRegExp2 : classof2(it) == "RegExp");
+        return isObject7(it) && ((isRegExp2 = it[MATCH]) !== void 0 ? !!isRegExp2 : classof2(it) == "RegExp");
       };
     }
   });
@@ -2109,14 +2109,14 @@
   // node_modules/core-js/internals/species-constructor.js
   var require_species_constructor = __commonJS({
     "node_modules/core-js/internals/species-constructor.js": function(exports, module) {
-      var anObject6 = require_an_object();
-      var aFunction = require_a_function();
+      var anObject7 = require_an_object();
+      var aFunction2 = require_a_function();
       var wellKnownSymbol5 = require_well_known_symbol();
       var SPECIES2 = wellKnownSymbol5("species");
       module.exports = function(O, defaultConstructor) {
-        var C = anObject6(O).constructor;
+        var C = anObject7(O).constructor;
         var S;
-        return C === void 0 || (S = anObject6(C)[SPECIES2]) == void 0 ? defaultConstructor : aFunction(S);
+        return C === void 0 || (S = anObject7(C)[SPECIES2]) == void 0 ? defaultConstructor : aFunction2(S);
       };
     }
   });
@@ -2157,7 +2157,7 @@
   // node_modules/core-js/internals/get-substitution.js
   var require_get_substitution = __commonJS({
     "node_modules/core-js/internals/get-substitution.js": function(exports, module) {
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var floor = Math.floor;
       var replace2 = "".replace;
       var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
@@ -2167,7 +2167,7 @@
         var m = captures.length;
         var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
         if (namedCaptures !== void 0) {
-          namedCaptures = toObject5(namedCaptures);
+          namedCaptures = toObject6(namedCaptures);
           symbols = SUBSTITUTION_SYMBOLS;
         }
         return replace2.call(replacement, symbols, function(match2, ch) {
@@ -2209,15 +2209,15 @@
     "node_modules/core-js/internals/object-assign.js": function(exports, module) {
       "use strict";
       var DESCRIPTORS10 = require_descriptors();
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var objectKeys2 = require_object_keys();
       var getOwnPropertySymbolsModule2 = require_object_get_own_property_symbols();
       var propertyIsEnumerableModule2 = require_object_property_is_enumerable();
-      var toObject5 = require_to_object();
+      var toObject6 = require_to_object();
       var IndexedObject2 = require_indexed_object();
       var $assign = Object.assign;
       var defineProperty5 = Object.defineProperty;
-      module.exports = !$assign || fails8(function() {
+      module.exports = !$assign || fails10(function() {
         if (DESCRIPTORS10 && $assign({ b: 1 }, $assign(defineProperty5({}, "a", {
           enumerable: true,
           get: function() {
@@ -2238,7 +2238,7 @@
         });
         return $assign({}, A)[symbol] != 7 || objectKeys2($assign({}, B)).join("") != alphabet;
       }) ? function assign2(target, source) {
-        var T = toObject5(target);
+        var T = toObject6(target);
         var argumentsLength = arguments.length;
         var index = 1;
         var getOwnPropertySymbols3 = getOwnPropertySymbolsModule2.f;
@@ -2263,14 +2263,14 @@
   // node_modules/core-js/internals/array-reduce.js
   var require_array_reduce = __commonJS({
     "node_modules/core-js/internals/array-reduce.js": function(exports, module) {
-      var aFunction = require_a_function();
-      var toObject5 = require_to_object();
+      var aFunction2 = require_a_function();
+      var toObject6 = require_to_object();
       var IndexedObject2 = require_indexed_object();
       var toLength7 = require_to_length();
       var createMethod = function(IS_RIGHT) {
         return function(that, callbackfn, argumentsLength, memo) {
-          aFunction(callbackfn);
-          var O = toObject5(that);
+          aFunction2(callbackfn);
+          var O = toObject6(that);
           var self2 = IndexedObject2(O);
           var length2 = toLength7(O.length);
           var index = IS_RIGHT ? length2 - 1 : 0;
@@ -2325,10 +2325,10 @@
   // node_modules/core-js/internals/iterate.js
   var require_iterate = __commonJS({
     "node_modules/core-js/internals/iterate.js": function(exports, module) {
-      var anObject6 = require_an_object();
+      var anObject7 = require_an_object();
       var isArrayIteratorMethod = require_is_array_iterator_method();
       var toLength7 = require_to_length();
-      var bind2 = require_function_bind_context();
+      var bind3 = require_function_bind_context();
       var getIteratorMethod = require_get_iterator_method();
       var iteratorClose = require_iterator_close();
       var Result = function(stopped, result) {
@@ -2340,7 +2340,7 @@
         var AS_ENTRIES = !!(options && options.AS_ENTRIES);
         var IS_ITERATOR = !!(options && options.IS_ITERATOR);
         var INTERRUPTED = !!(options && options.INTERRUPTED);
-        var fn = bind2(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
+        var fn = bind3(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
         var iterator, iterFn, index, length2, result, next3, step;
         var stop = function(condition) {
           if (iterator)
@@ -2349,7 +2349,7 @@
         };
         var callFn = function(value) {
           if (AS_ENTRIES) {
-            anObject6(value);
+            anObject7(value);
             return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
           }
           return INTERRUPTED ? fn(value, stop) : fn(value);
@@ -2401,12 +2401,12 @@
   // node_modules/core-js/internals/inherit-if-required.js
   var require_inherit_if_required = __commonJS({
     "node_modules/core-js/internals/inherit-if-required.js": function(exports, module) {
-      var isObject6 = require_is_object();
-      var setPrototypeOf = require_object_set_prototype_of();
+      var isObject7 = require_is_object();
+      var setPrototypeOf2 = require_object_set_prototype_of();
       module.exports = function($this, dummy, Wrapper) {
         var NewTarget, NewTargetPrototype;
-        if (setPrototypeOf && typeof (NewTarget = dummy.constructor) == "function" && NewTarget !== Wrapper && isObject6(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype)
-          setPrototypeOf($this, NewTargetPrototype);
+        if (setPrototypeOf2 && typeof (NewTarget = dummy.constructor) == "function" && NewTarget !== Wrapper && isObject7(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype)
+          setPrototypeOf2($this, NewTargetPrototype);
         return $this;
       };
     }
@@ -2416,15 +2416,15 @@
   var require_collection = __commonJS({
     "node_modules/core-js/internals/collection.js": function(exports, module) {
       "use strict";
-      var $30 = require_export();
+      var $35 = require_export();
       var global8 = require_global();
       var isForced2 = require_is_forced();
       var redefine6 = require_redefine();
       var InternalMetadataModule = require_internal_metadata();
       var iterate = require_iterate();
       var anInstance = require_an_instance();
-      var isObject6 = require_is_object();
-      var fails8 = require_fails();
+      var isObject7 = require_is_object();
+      var fails10 = require_fails();
       var checkCorrectnessOfIteration2 = require_check_correctness_of_iteration();
       var setToStringTag2 = require_set_to_string_tag();
       var inheritIfRequired2 = require_inherit_if_required();
@@ -2442,17 +2442,17 @@
             nativeMethod.call(this, value === 0 ? 0 : value);
             return this;
           } : KEY == "delete" ? function(key) {
-            return IS_WEAK && !isObject6(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
           } : KEY == "get" ? function get(key) {
-            return IS_WEAK && !isObject6(key) ? void 0 : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? void 0 : nativeMethod.call(this, key === 0 ? 0 : key);
           } : KEY == "has" ? function has4(key) {
-            return IS_WEAK && !isObject6(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
+            return IS_WEAK && !isObject7(key) ? false : nativeMethod.call(this, key === 0 ? 0 : key);
           } : function set(key, value) {
             nativeMethod.call(this, key === 0 ? 0 : key, value);
             return this;
           });
         };
-        var REPLACE = isForced2(CONSTRUCTOR_NAME, typeof NativeConstructor != "function" || !(IS_WEAK || NativePrototype.forEach && !fails8(function() {
+        var REPLACE = isForced2(CONSTRUCTOR_NAME, typeof NativeConstructor != "function" || !(IS_WEAK || NativePrototype.forEach && !fails10(function() {
           new NativeConstructor().entries().next();
         })));
         if (REPLACE) {
@@ -2461,13 +2461,13 @@
         } else if (isForced2(CONSTRUCTOR_NAME, true)) {
           var instance = new Constructor();
           var HASNT_CHAINING = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance;
-          var THROWS_ON_PRIMITIVES = fails8(function() {
+          var THROWS_ON_PRIMITIVES = fails10(function() {
             instance.has(1);
           });
           var ACCEPT_ITERABLES = checkCorrectnessOfIteration2(function(iterable) {
             new NativeConstructor(iterable);
           });
-          var BUGGY_ZERO = !IS_WEAK && fails8(function() {
+          var BUGGY_ZERO = !IS_WEAK && fails10(function() {
             var $instance = new NativeConstructor();
             var index = 5;
             while (index--)
@@ -2496,7 +2496,7 @@
             delete NativePrototype.clear;
         }
         exported[CONSTRUCTOR_NAME] = Constructor;
-        $30({ global: true, forced: Constructor != NativeConstructor }, exported);
+        $35({ global: true, forced: Constructor != NativeConstructor }, exported);
         setToStringTag2(Constructor, CONSTRUCTOR_NAME);
         if (!IS_WEAK)
           common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
@@ -2511,8 +2511,8 @@
       "use strict";
       var redefineAll = require_redefine_all();
       var getWeakData = require_internal_metadata().getWeakData;
-      var anObject6 = require_an_object();
-      var isObject6 = require_is_object();
+      var anObject7 = require_an_object();
+      var isObject7 = require_is_object();
       var anInstance = require_an_instance();
       var iterate = require_iterate();
       var ArrayIterationModule = require_array_iteration();
@@ -2574,7 +2574,7 @@
           var getInternalState3 = internalStateGetterFor(CONSTRUCTOR_NAME);
           var define = function(that, key, value) {
             var state = getInternalState3(that);
-            var data = getWeakData(anObject6(key), true);
+            var data = getWeakData(anObject7(key), true);
             if (data === true)
               uncaughtFrozenStore(state).set(key, value);
             else
@@ -2584,7 +2584,7 @@
           redefineAll(C.prototype, {
             "delete": function(key) {
               var state = getInternalState3(this);
-              if (!isObject6(key))
+              if (!isObject7(key))
                 return false;
               var data = getWeakData(key);
               if (data === true)
@@ -2593,7 +2593,7 @@
             },
             has: function has4(key) {
               var state = getInternalState3(this);
-              if (!isObject6(key))
+              if (!isObject7(key))
                 return false;
               var data = getWeakData(key);
               if (data === true)
@@ -2604,7 +2604,7 @@
           redefineAll(C.prototype, IS_MAP ? {
             get: function get(key) {
               var state = getInternalState3(this);
-              if (isObject6(key)) {
+              if (isObject7(key)) {
                 var data = getWeakData(key);
                 if (data === true)
                   return uncaughtFrozenStore(state).get(key);
@@ -2634,7 +2634,7 @@
       var InternalMetadataModule = require_internal_metadata();
       var collection = require_collection();
       var collectionWeak = require_collection_weak();
-      var isObject6 = require_is_object();
+      var isObject7 = require_is_object();
       var enforceIternalState = require_internal_state().enforce;
       var NATIVE_WEAK_MAP = require_native_weak_map();
       var IS_IE11 = !global8.ActiveXObject && "ActiveXObject" in global8;
@@ -2656,7 +2656,7 @@
         nativeSet = WeakMapPrototype.set;
         redefineAll(WeakMapPrototype, {
           "delete": function(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2665,7 +2665,7 @@
             return nativeDelete.call(this, key);
           },
           has: function has4(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2674,7 +2674,7 @@
             return nativeHas.call(this, key);
           },
           get: function get(key) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2683,7 +2683,7 @@
             return nativeGet.call(this, key);
           },
           set: function set(key, value) {
-            if (isObject6(key) && !isExtensible(key)) {
+            if (isObject7(key) && !isExtensible(key)) {
               var state = enforceIternalState(this);
               if (!state.frozen)
                 state.frozen = new InternalWeakMap();
@@ -2738,11 +2738,11 @@
   // node_modules/core-js/internals/string-trim-forced.js
   var require_string_trim_forced = __commonJS({
     "node_modules/core-js/internals/string-trim-forced.js": function(exports, module) {
-      var fails8 = require_fails();
+      var fails10 = require_fails();
       var whitespaces = require_whitespaces();
       var non = "\u200B\x85\u180E";
       module.exports = function(METHOD_NAME) {
-        return fails8(function() {
+        return fails10(function() {
           return !!whitespaces[METHOD_NAME]() || non[METHOD_NAME]() != non || whitespaces[METHOD_NAME].name !== METHOD_NAME;
         });
       };
@@ -2753,11 +2753,11 @@
   var require_function_bind = __commonJS({
     "node_modules/core-js/internals/function-bind.js": function(exports, module) {
       "use strict";
-      var aFunction = require_a_function();
-      var isObject6 = require_is_object();
+      var aFunction2 = require_a_function();
+      var isObject7 = require_is_object();
       var slice4 = [].slice;
       var factories = {};
-      var construct = function(C, argsLength, args) {
+      var construct2 = function(C, argsLength, args) {
         if (!(argsLength in factories)) {
           for (var list = [], i = 0; i < argsLength; i++)
             list[i] = "a[" + i + "]";
@@ -2765,14 +2765,14 @@
         }
         return factories[argsLength](C, args);
       };
-      module.exports = Function.bind || function bind2(that) {
-        var fn = aFunction(this);
+      module.exports = Function.bind || function bind3(that) {
+        var fn = aFunction2(this);
         var partArgs = slice4.call(arguments, 1);
         var boundFunction = function bound() {
           var args = partArgs.concat(slice4.call(arguments));
-          return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
+          return this instanceof boundFunction ? construct2(fn, args.length, args) : fn.apply(that, args);
         };
-        if (isObject6(fn.prototype))
+        if (isObject7(fn.prototype))
           boundFunction.prototype = fn.prototype;
         return boundFunction;
       };
@@ -2813,11 +2813,234 @@
     }
   });
 
+  // node_modules/core-js/internals/set-species.js
+  var require_set_species = __commonJS({
+    "node_modules/core-js/internals/set-species.js": function(exports, module) {
+      "use strict";
+      var getBuiltIn3 = require_get_built_in();
+      var definePropertyModule2 = require_object_define_property();
+      var wellKnownSymbol5 = require_well_known_symbol();
+      var DESCRIPTORS10 = require_descriptors();
+      var SPECIES2 = wellKnownSymbol5("species");
+      module.exports = function(CONSTRUCTOR_NAME) {
+        var Constructor = getBuiltIn3(CONSTRUCTOR_NAME);
+        var defineProperty5 = definePropertyModule2.f;
+        if (DESCRIPTORS10 && Constructor && !Constructor[SPECIES2]) {
+          defineProperty5(Constructor, SPECIES2, {
+            configurable: true,
+            get: function() {
+              return this;
+            }
+          });
+        }
+      };
+    }
+  });
+
+  // node_modules/core-js/internals/collection-strong.js
+  var require_collection_strong = __commonJS({
+    "node_modules/core-js/internals/collection-strong.js": function(exports, module) {
+      "use strict";
+      var defineProperty5 = require_object_define_property().f;
+      var create5 = require_object_create();
+      var redefineAll = require_redefine_all();
+      var bind3 = require_function_bind_context();
+      var anInstance = require_an_instance();
+      var iterate = require_iterate();
+      var defineIterator2 = require_define_iterator();
+      var setSpecies = require_set_species();
+      var DESCRIPTORS10 = require_descriptors();
+      var fastKey = require_internal_metadata().fastKey;
+      var InternalStateModule3 = require_internal_state();
+      var setInternalState3 = InternalStateModule3.set;
+      var internalStateGetterFor = InternalStateModule3.getterFor;
+      module.exports = {
+        getConstructor: function(wrapper, CONSTRUCTOR_NAME, IS_MAP, ADDER) {
+          var C = wrapper(function(that, iterable) {
+            anInstance(that, C, CONSTRUCTOR_NAME);
+            setInternalState3(that, {
+              type: CONSTRUCTOR_NAME,
+              index: create5(null),
+              first: void 0,
+              last: void 0,
+              size: 0
+            });
+            if (!DESCRIPTORS10)
+              that.size = 0;
+            if (iterable != void 0)
+              iterate(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
+          });
+          var getInternalState3 = internalStateGetterFor(CONSTRUCTOR_NAME);
+          var define = function(that, key, value) {
+            var state = getInternalState3(that);
+            var entry = getEntry(that, key);
+            var previous, index;
+            if (entry) {
+              entry.value = value;
+            } else {
+              state.last = entry = {
+                index: index = fastKey(key, true),
+                key: key,
+                value: value,
+                previous: previous = state.last,
+                next: void 0,
+                removed: false
+              };
+              if (!state.first)
+                state.first = entry;
+              if (previous)
+                previous.next = entry;
+              if (DESCRIPTORS10)
+                state.size++;
+              else
+                that.size++;
+              if (index !== "F")
+                state.index[index] = entry;
+            }
+            return that;
+          };
+          var getEntry = function(that, key) {
+            var state = getInternalState3(that);
+            var index = fastKey(key);
+            var entry;
+            if (index !== "F")
+              return state.index[index];
+            for (entry = state.first; entry; entry = entry.next) {
+              if (entry.key == key)
+                return entry;
+            }
+          };
+          redefineAll(C.prototype, {
+            clear: function clear() {
+              var that = this;
+              var state = getInternalState3(that);
+              var data = state.index;
+              var entry = state.first;
+              while (entry) {
+                entry.removed = true;
+                if (entry.previous)
+                  entry.previous = entry.previous.next = void 0;
+                delete data[entry.index];
+                entry = entry.next;
+              }
+              state.first = state.last = void 0;
+              if (DESCRIPTORS10)
+                state.size = 0;
+              else
+                that.size = 0;
+            },
+            "delete": function(key) {
+              var that = this;
+              var state = getInternalState3(that);
+              var entry = getEntry(that, key);
+              if (entry) {
+                var next3 = entry.next;
+                var prev2 = entry.previous;
+                delete state.index[entry.index];
+                entry.removed = true;
+                if (prev2)
+                  prev2.next = next3;
+                if (next3)
+                  next3.previous = prev2;
+                if (state.first == entry)
+                  state.first = next3;
+                if (state.last == entry)
+                  state.last = prev2;
+                if (DESCRIPTORS10)
+                  state.size--;
+                else
+                  that.size--;
+              }
+              return !!entry;
+            },
+            forEach: function forEach3(callbackfn) {
+              var state = getInternalState3(this);
+              var boundFunction = bind3(callbackfn, arguments.length > 1 ? arguments[1] : void 0, 3);
+              var entry;
+              while (entry = entry ? entry.next : state.first) {
+                boundFunction(entry.value, entry.key, this);
+                while (entry && entry.removed)
+                  entry = entry.previous;
+              }
+            },
+            has: function has4(key) {
+              return !!getEntry(this, key);
+            }
+          });
+          redefineAll(C.prototype, IS_MAP ? {
+            get: function get(key) {
+              var entry = getEntry(this, key);
+              return entry && entry.value;
+            },
+            set: function set(key, value) {
+              return define(this, key === 0 ? 0 : key, value);
+            }
+          } : {
+            add: function add(value) {
+              return define(this, value = value === 0 ? 0 : value, value);
+            }
+          });
+          if (DESCRIPTORS10)
+            defineProperty5(C.prototype, "size", {
+              get: function() {
+                return getInternalState3(this).size;
+              }
+            });
+          return C;
+        },
+        setStrong: function(C, CONSTRUCTOR_NAME, IS_MAP) {
+          var ITERATOR_NAME = CONSTRUCTOR_NAME + " Iterator";
+          var getInternalCollectionState = internalStateGetterFor(CONSTRUCTOR_NAME);
+          var getInternalIteratorState = internalStateGetterFor(ITERATOR_NAME);
+          defineIterator2(C, CONSTRUCTOR_NAME, function(iterated, kind) {
+            setInternalState3(this, {
+              type: ITERATOR_NAME,
+              target: iterated,
+              state: getInternalCollectionState(iterated),
+              kind: kind,
+              last: void 0
+            });
+          }, function() {
+            var state = getInternalIteratorState(this);
+            var kind = state.kind;
+            var entry = state.last;
+            while (entry && entry.removed)
+              entry = entry.previous;
+            if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
+              state.target = void 0;
+              return { value: void 0, done: true };
+            }
+            if (kind == "keys")
+              return { value: entry.key, done: false };
+            if (kind == "values")
+              return { value: entry.value, done: false };
+            return { value: [entry.key, entry.value], done: false };
+          }, IS_MAP ? "entries" : "values", !IS_MAP, true);
+          setSpecies(CONSTRUCTOR_NAME);
+        }
+      };
+    }
+  });
+
+  // node_modules/core-js/modules/es.map.js
+  var require_es_map = __commonJS({
+    "node_modules/core-js/modules/es.map.js": function(exports, module) {
+      "use strict";
+      var collection = require_collection();
+      var collectionStrong = require_collection_strong();
+      module.exports = collection("Map", function(init) {
+        return function Map2() {
+          return init(this, arguments.length ? arguments[0] : void 0);
+        };
+      }, collectionStrong);
+    }
+  });
+
   // node_modules/core-js/modules/es.array.for-each.js
   "use strict";
-  var $ = require_export();
+  var $2 = require_export();
   var forEach = require_array_for_each();
-  $({ target: "Array", proto: true, forced: [].forEach != forEach }, {
+  $2({ target: "Array", proto: true, forced: [].forEach != forEach }, {
     forEach: forEach
   });
 
@@ -2839,19 +3062,25 @@
   var Collection;
   var CollectionPrototype;
 
-  // node_modules/core-js/modules/es.object.keys.js
-  var $2 = require_export();
-  var toObject = require_to_object();
-  var nativeKeys = require_object_keys();
-  var fails = require_fails();
-  var FAILS_ON_PRIMITIVES = fails(function() {
-    nativeKeys(1);
-  });
-  $2({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
-    keys: function keys(it) {
-      return nativeKeys(toObject(it));
-    }
-  });
+  // node_modules/core-js/modules/es.function.name.js
+  var DESCRIPTORS = require_descriptors();
+  var defineProperty = require_object_define_property().f;
+  var FunctionPrototype = Function.prototype;
+  var FunctionPrototypeToString = FunctionPrototype.toString;
+  var nameRE = /^\s*function ([^ (]*)/;
+  var NAME = "name";
+  if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
+    defineProperty(FunctionPrototype, NAME, {
+      configurable: true,
+      get: function() {
+        try {
+          return FunctionPrototypeToString.call(this).match(nameRE)[1];
+        } catch (error) {
+          return "";
+        }
+      }
+    });
+  }
 
   // node_modules/core-js/modules/es.symbol.js
   "use strict";
@@ -2859,15 +3088,15 @@
   var global3 = require_global();
   var getBuiltIn = require_get_built_in();
   var IS_PURE = require_is_pure();
-  var DESCRIPTORS = require_descriptors();
+  var DESCRIPTORS2 = require_descriptors();
   var NATIVE_SYMBOL = require_native_symbol();
   var USE_SYMBOL_AS_UID = require_use_symbol_as_uid();
-  var fails2 = require_fails();
+  var fails = require_fails();
   var has = require_has();
   var isArray = require_is_array();
   var isObject = require_is_object();
   var anObject = require_an_object();
-  var toObject2 = require_to_object();
+  var toObject = require_to_object();
   var toIndexedObject = require_to_indexed_object();
   var toPrimitive = require_to_primitive();
   var createPropertyDescriptor = require_create_property_descriptor();
@@ -2911,7 +3140,7 @@
   var WellKnownSymbolsStore = shared("wks");
   var QObject = global3.QObject;
   var USE_SETTER = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-  var setSymbolDescriptor = DESCRIPTORS && fails2(function() {
+  var setSymbolDescriptor = DESCRIPTORS2 && fails(function() {
     return nativeObjectCreate(nativeDefineProperty({}, "a", {
       get: function() {
         return nativeDefineProperty(this, "a", { value: 7 }).a;
@@ -2933,7 +3162,7 @@
       tag: tag,
       description: description
     });
-    if (!DESCRIPTORS)
+    if (!DESCRIPTORS2)
       symbol.description = description;
     return symbol;
   };
@@ -2942,7 +3171,7 @@
   } : function(it) {
     return Object(it) instanceof $Symbol;
   };
-  var $defineProperty = function defineProperty(O, P, Attributes) {
+  var $defineProperty = function defineProperty2(O, P, Attributes) {
     if (O === ObjectPrototype)
       $defineProperty(ObjectPrototypeSymbols, P, Attributes);
     anObject(O);
@@ -2967,7 +3196,7 @@
     var properties = toIndexedObject(Properties);
     var keys2 = objectKeys(properties).concat($getOwnPropertySymbols(properties));
     $forEach(keys2, function(key) {
-      if (!DESCRIPTORS || $propertyIsEnumerable.call(properties, key))
+      if (!DESCRIPTORS2 || $propertyIsEnumerable.call(properties, key))
         $defineProperty(O, key, properties[key]);
     });
     return O;
@@ -3026,7 +3255,7 @@
           this[HIDDEN][tag] = false;
         setSymbolDescriptor(this, tag, createPropertyDescriptor(1, value));
       };
-      if (DESCRIPTORS && USE_SETTER)
+      if (DESCRIPTORS2 && USE_SETTER)
         setSymbolDescriptor(ObjectPrototype, tag, { configurable: true, set: setter });
       return wrap(tag, description);
     };
@@ -3044,7 +3273,7 @@
     wrappedWellKnownSymbolModule.f = function(name) {
       return wrap(wellKnownSymbol(name), name);
     };
-    if (DESCRIPTORS) {
+    if (DESCRIPTORS2) {
       nativeDefineProperty($Symbol[PROTOTYPE], "description", {
         configurable: true,
         get: function description() {
@@ -3085,7 +3314,7 @@
       USE_SETTER = false;
     }
   });
-  $3({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS }, {
+  $3({ target: "Object", stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS2 }, {
     create: $create,
     defineProperty: $defineProperty,
     defineProperties: $defineProperties,
@@ -3095,15 +3324,15 @@
     getOwnPropertyNames: $getOwnPropertyNames,
     getOwnPropertySymbols: $getOwnPropertySymbols
   });
-  $3({ target: "Object", stat: true, forced: fails2(function() {
+  $3({ target: "Object", stat: true, forced: fails(function() {
     getOwnPropertySymbolsModule.f(1);
   }) }, {
     getOwnPropertySymbols: function getOwnPropertySymbols2(it) {
-      return getOwnPropertySymbolsModule.f(toObject2(it));
+      return getOwnPropertySymbolsModule.f(toObject(it));
     }
   });
   if ($stringify) {
-    FORCED_JSON_STRINGIFY = !NATIVE_SYMBOL || fails2(function() {
+    FORCED_JSON_STRINGIFY = !NATIVE_SYMBOL || fails(function() {
       var symbol = $Symbol();
       return $stringify([symbol]) != "[null]" || $stringify({ a: symbol }) != "{}" || $stringify(Object(symbol)) != "{}";
     });
@@ -3136,30 +3365,111 @@
   setToStringTag($Symbol, SYMBOL);
   hiddenKeys[HIDDEN] = true;
 
-  // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+  // node_modules/core-js/modules/es.symbol.description.js
+  "use strict";
   var $4 = require_export();
+  var DESCRIPTORS3 = require_descriptors();
+  var global4 = require_global();
+  var has2 = require_has();
+  var isObject2 = require_is_object();
+  var defineProperty3 = require_object_define_property().f;
+  var copyConstructorProperties = require_copy_constructor_properties();
+  var NativeSymbol = global4.Symbol;
+  if (DESCRIPTORS3 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
+    EmptyStringDescriptionStore = {};
+    SymbolWrapper = function Symbol2() {
+      var description = arguments.length < 1 || arguments[0] === void 0 ? void 0 : String(arguments[0]);
+      var result = this instanceof SymbolWrapper ? new NativeSymbol(description) : description === void 0 ? NativeSymbol() : NativeSymbol(description);
+      if (description === "")
+        EmptyStringDescriptionStore[result] = true;
+      return result;
+    };
+    copyConstructorProperties(SymbolWrapper, NativeSymbol);
+    symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
+    symbolPrototype.constructor = SymbolWrapper;
+    symbolToString = symbolPrototype.toString;
+    native = String(NativeSymbol("test")) == "Symbol(test)";
+    regexp = /^Symbol\((.*)\)[^)]+$/;
+    defineProperty3(symbolPrototype, "description", {
+      configurable: true,
+      get: function description() {
+        var symbol = isObject2(this) ? this.valueOf() : this;
+        var string = symbolToString.call(symbol);
+        if (has2(EmptyStringDescriptionStore, symbol))
+          return "";
+        var desc = native ? string.slice(7, -1) : string.replace(regexp, "$1");
+        return desc === "" ? void 0 : desc;
+      }
+    });
+    $4({ global: true, forced: true }, {
+      Symbol: SymbolWrapper
+    });
+  }
+  var EmptyStringDescriptionStore;
+  var SymbolWrapper;
+  var symbolPrototype;
+  var symbolToString;
+  var native;
+  var regexp;
+
+  // node_modules/core-js/modules/es.object.define-property.js
+  var $5 = require_export();
+  var DESCRIPTORS4 = require_descriptors();
+  var objectDefinePropertyModile = require_object_define_property();
+  $5({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
+    defineProperty: objectDefinePropertyModile.f
+  });
+
+  // node_modules/core-js/modules/es.object.keys.js
+  var $6 = require_export();
+  var toObject2 = require_to_object();
+  var nativeKeys = require_object_keys();
+  var fails2 = require_fails();
+  var FAILS_ON_PRIMITIVES = fails2(function() {
+    nativeKeys(1);
+  });
+  $6({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES }, {
+    keys: function keys(it) {
+      return nativeKeys(toObject2(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.filter.js
+  "use strict";
+  var $7 = require_export();
+  var $filter = require_array_iteration().filter;
+  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("filter");
+  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+    filter: function filter(callbackfn) {
+      return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+  var $8 = require_export();
   var fails3 = require_fails();
   var toIndexedObject2 = require_to_indexed_object();
   var nativeGetOwnPropertyDescriptor2 = require_object_get_own_property_descriptor().f;
-  var DESCRIPTORS2 = require_descriptors();
+  var DESCRIPTORS5 = require_descriptors();
   var FAILS_ON_PRIMITIVES2 = fails3(function() {
     nativeGetOwnPropertyDescriptor2(1);
   });
-  var FORCED = !DESCRIPTORS2 || FAILS_ON_PRIMITIVES2;
-  $4({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS2 }, {
+  var FORCED = !DESCRIPTORS5 || FAILS_ON_PRIMITIVES2;
+  $8({ target: "Object", stat: true, forced: FORCED, sham: !DESCRIPTORS5 }, {
     getOwnPropertyDescriptor: function getOwnPropertyDescriptor2(it, key) {
       return nativeGetOwnPropertyDescriptor2(toIndexedObject2(it), key);
     }
   });
 
   // node_modules/core-js/modules/es.object.get-own-property-descriptors.js
-  var $5 = require_export();
-  var DESCRIPTORS3 = require_descriptors();
+  var $9 = require_export();
+  var DESCRIPTORS6 = require_descriptors();
   var ownKeys = require_own_keys();
   var toIndexedObject3 = require_to_indexed_object();
   var getOwnPropertyDescriptorModule2 = require_object_get_own_property_descriptor();
   var createProperty = require_create_property();
-  $5({ target: "Object", stat: true, sham: !DESCRIPTORS3 }, {
+  $9({ target: "Object", stat: true, sham: !DESCRIPTORS6 }, {
     getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
       var O = toIndexedObject3(object);
       var getOwnPropertyDescriptor4 = getOwnPropertyDescriptorModule2.f;
@@ -3177,126 +3487,19 @@
   });
 
   // node_modules/core-js/modules/es.object.define-properties.js
-  var $6 = require_export();
-  var DESCRIPTORS4 = require_descriptors();
+  var $10 = require_export();
+  var DESCRIPTORS7 = require_descriptors();
   var defineProperties2 = require_object_define_properties();
-  $6({ target: "Object", stat: true, forced: !DESCRIPTORS4, sham: !DESCRIPTORS4 }, {
+  $10({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
     defineProperties: defineProperties2
   });
 
-  // node_modules/core-js/modules/es.array.slice.js
-  "use strict";
-  var $7 = require_export();
-  var isObject2 = require_is_object();
-  var isArray2 = require_is_array();
-  var toAbsoluteIndex = require_to_absolute_index();
-  var toLength = require_to_length();
-  var toIndexedObject4 = require_to_indexed_object();
-  var createProperty2 = require_create_property();
-  var wellKnownSymbol2 = require_well_known_symbol();
-  var arrayMethodHasSpeciesSupport = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
-  var SPECIES = wellKnownSymbol2("species");
-  var nativeSlice = [].slice;
-  var max = Math.max;
-  $7({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-    slice: function slice(start, end) {
-      var O = toIndexedObject4(this);
-      var length2 = toLength(O.length);
-      var k = toAbsoluteIndex(start, length2);
-      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
-      var Constructor, result, n;
-      if (isArray2(O)) {
-        Constructor = O.constructor;
-        if (typeof Constructor == "function" && (Constructor === Array || isArray2(Constructor.prototype))) {
-          Constructor = void 0;
-        } else if (isObject2(Constructor)) {
-          Constructor = Constructor[SPECIES];
-          if (Constructor === null)
-            Constructor = void 0;
-        }
-        if (Constructor === Array || Constructor === void 0) {
-          return nativeSlice.call(O, k, fin);
-        }
-      }
-      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
-      for (n = 0; k < fin; k++, n++)
-        if (k in O)
-          createProperty2(result, n, O[k]);
-      result.length = n;
-      return result;
-    }
-  });
-
-  // node_modules/core-js/modules/es.object.freeze.js
-  var $8 = require_export();
-  var FREEZING = require_freezing();
-  var fails4 = require_fails();
-  var isObject3 = require_is_object();
-  var onFreeze = require_internal_metadata().onFreeze;
-  var $freeze = Object.freeze;
-  var FAILS_ON_PRIMITIVES3 = fails4(function() {
-    $freeze(1);
-  });
-  $8({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
-    freeze: function freeze(it) {
-      return $freeze && isObject3(it) ? $freeze(onFreeze(it)) : it;
-    }
-  });
-
   // node_modules/core-js/modules/es.array.is-array.js
-  var $9 = require_export();
-  var isArray3 = require_is_array();
-  $9({ target: "Array", stat: true }, {
-    isArray: isArray3
+  var $11 = require_export();
+  var isArray2 = require_is_array();
+  $11({ target: "Array", stat: true }, {
+    isArray: isArray2
   });
-
-  // node_modules/core-js/modules/es.symbol.description.js
-  "use strict";
-  var $10 = require_export();
-  var DESCRIPTORS5 = require_descriptors();
-  var global4 = require_global();
-  var has2 = require_has();
-  var isObject4 = require_is_object();
-  var defineProperty2 = require_object_define_property().f;
-  var copyConstructorProperties = require_copy_constructor_properties();
-  var NativeSymbol = global4.Symbol;
-  if (DESCRIPTORS5 && typeof NativeSymbol == "function" && (!("description" in NativeSymbol.prototype) || NativeSymbol().description !== void 0)) {
-    EmptyStringDescriptionStore = {};
-    SymbolWrapper = function Symbol2() {
-      var description = arguments.length < 1 || arguments[0] === void 0 ? void 0 : String(arguments[0]);
-      var result = this instanceof SymbolWrapper ? new NativeSymbol(description) : description === void 0 ? NativeSymbol() : NativeSymbol(description);
-      if (description === "")
-        EmptyStringDescriptionStore[result] = true;
-      return result;
-    };
-    copyConstructorProperties(SymbolWrapper, NativeSymbol);
-    symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
-    symbolPrototype.constructor = SymbolWrapper;
-    symbolToString = symbolPrototype.toString;
-    native = String(NativeSymbol("test")) == "Symbol(test)";
-    regexp = /^Symbol\((.*)\)[^)]+$/;
-    defineProperty2(symbolPrototype, "description", {
-      configurable: true,
-      get: function description() {
-        var symbol = isObject4(this) ? this.valueOf() : this;
-        var string = symbolToString.call(symbol);
-        if (has2(EmptyStringDescriptionStore, symbol))
-          return "";
-        var desc = native ? string.slice(7, -1) : string.replace(regexp, "$1");
-        return desc === "" ? void 0 : desc;
-      }
-    });
-    $10({ global: true, forced: true }, {
-      Symbol: SymbolWrapper
-    });
-  }
-  var EmptyStringDescriptionStore;
-  var SymbolWrapper;
-  var symbolPrototype;
-  var symbolToString;
-  var native;
-  var regexp;
 
   // node_modules/core-js/modules/es.object.to-string.js
   var TO_STRING_TAG_SUPPORT = require_to_string_tag_support();
@@ -3310,8 +3513,8 @@
   var defineWellKnownSymbol2 = require_define_well_known_symbol();
   defineWellKnownSymbol2("iterator");
 
-  // App_State.ts
-  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  // LayoutEditor.ts
+  var import_es_array_iterator15 = __toModule(require_es_array_iterator());
 
   // node_modules/core-js/modules/es.string.iterator.js
   "use strict";
@@ -3344,9 +3547,9 @@
   var DOMIterables2 = require_dom_iterables();
   var ArrayIteratorMethods = require_es_array_iterator();
   var createNonEnumerableProperty3 = require_create_non_enumerable_property();
-  var wellKnownSymbol3 = require_well_known_symbol();
-  var ITERATOR = wellKnownSymbol3("iterator");
-  var TO_STRING_TAG = wellKnownSymbol3("toStringTag");
+  var wellKnownSymbol2 = require_well_known_symbol();
+  var ITERATOR = wellKnownSymbol2("iterator");
+  var TO_STRING_TAG = wellKnownSymbol2("toStringTag");
   var ArrayValues = ArrayIteratorMethods.values;
   for (var COLLECTION_NAME in DOMIterables2) {
     Collection = global5[COLLECTION_NAME];
@@ -3377,37 +3580,92 @@
   var METHOD_NAME;
 
   // node_modules/core-js/modules/es.array.from.js
-  var $11 = require_export();
+  var $12 = require_export();
   var from = require_array_from();
   var checkCorrectnessOfIteration = require_check_correctness_of_iteration();
   var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function(iterable) {
     Array.from(iterable);
   });
-  $11({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
+  $12({ target: "Array", stat: true, forced: INCORRECT_ITERATION }, {
     from: from
   });
 
-  // node_modules/core-js/modules/es.function.name.js
-  var DESCRIPTORS6 = require_descriptors();
-  var defineProperty3 = require_object_define_property().f;
-  var FunctionPrototype = Function.prototype;
-  var FunctionPrototypeToString = FunctionPrototype.toString;
-  var nameRE = /^\s*function ([^ (]*)/;
-  var NAME = "name";
-  if (DESCRIPTORS6 && !(NAME in FunctionPrototype)) {
-    defineProperty3(FunctionPrototype, NAME, {
-      configurable: true,
-      get: function() {
-        try {
-          return FunctionPrototypeToString.call(this).match(nameRE)[1];
-        } catch (error) {
-          return "";
+  // node_modules/core-js/modules/es.array.slice.js
+  "use strict";
+  var $13 = require_export();
+  var isObject3 = require_is_object();
+  var isArray3 = require_is_array();
+  var toAbsoluteIndex = require_to_absolute_index();
+  var toLength = require_to_length();
+  var toIndexedObject4 = require_to_indexed_object();
+  var createProperty2 = require_create_property();
+  var wellKnownSymbol3 = require_well_known_symbol();
+  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("slice");
+  var SPECIES = wellKnownSymbol3("species");
+  var nativeSlice = [].slice;
+  var max = Math.max;
+  $13({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+    slice: function slice(start, end) {
+      var O = toIndexedObject4(this);
+      var length2 = toLength(O.length);
+      var k = toAbsoluteIndex(start, length2);
+      var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
+      var Constructor, result, n;
+      if (isArray3(O)) {
+        Constructor = O.constructor;
+        if (typeof Constructor == "function" && (Constructor === Array || isArray3(Constructor.prototype))) {
+          Constructor = void 0;
+        } else if (isObject3(Constructor)) {
+          Constructor = Constructor[SPECIES];
+          if (Constructor === null)
+            Constructor = void 0;
+        }
+        if (Constructor === Array || Constructor === void 0) {
+          return nativeSlice.call(O, k, fin);
         }
       }
-    });
-  }
+      result = new (Constructor === void 0 ? Array : Constructor)(max(fin - k, 0));
+      for (n = 0; k < fin; k++, n++)
+        if (k in O)
+          createProperty2(result, n, O[k]);
+      result.length = n;
+      return result;
+    }
+  });
 
-  // App_State.ts
+  // node_modules/core-js/modules/es.object.freeze.js
+  var $14 = require_export();
+  var FREEZING = require_freezing();
+  var fails4 = require_fails();
+  var isObject4 = require_is_object();
+  var onFreeze = require_internal_metadata().onFreeze;
+  var $freeze = Object.freeze;
+  var FAILS_ON_PRIMITIVES3 = fails4(function() {
+    $freeze(1);
+  });
+  $14({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES3, sham: !FREEZING }, {
+    freeze: function freeze(it) {
+      return $freeze && isObject4(it) ? $freeze(onFreeze(it)) : it;
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.join.js
+  "use strict";
+  var $15 = require_export();
+  var IndexedObject = require_indexed_object();
+  var toIndexedObject5 = require_to_indexed_object();
+  var arrayMethodIsStrict = require_array_method_is_strict();
+  var nativeJoin = [].join;
+  var ES3_STRINGS = IndexedObject != Object;
+  var STRICT_METHOD = arrayMethodIsStrict("join", ",");
+  $15({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+    join: function join(separator) {
+      return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
+    }
+  });
+
+  // LayoutEditor.ts
   var import_es_regexp_exec10 = __toModule(require_es_regexp_exec());
 
   // node_modules/core-js/modules/es.string.split.js
@@ -3519,6 +3777,30 @@
     ];
   }, UNSUPPORTED_Y);
 
+  // node_modules/core-js/modules/es.array.some.js
+  "use strict";
+  var $16 = require_export();
+  var $some = require_array_iteration().some;
+  var arrayMethodIsStrict2 = require_array_method_is_strict();
+  var STRICT_METHOD2 = arrayMethodIsStrict2("some");
+  $16({ target: "Array", proto: true, forced: !STRICT_METHOD2 }, {
+    some: function some(callbackfn) {
+      return $some(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // node_modules/core-js/modules/es.array.map.js
+  "use strict";
+  var $17 = require_export();
+  var $map = require_array_iteration().map;
+  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("map");
+  $17({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
+    map: function map(callbackfn) {
+      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
   // node_modules/core-js/modules/es.string.replace.js
   "use strict";
   var fixRegExpWellKnownSymbolLogic2 = require_fix_regexp_well_known_symbol_logic();
@@ -3600,40 +3882,58 @@
     ];
   });
 
-  // node_modules/core-js/modules/es.array.find-index.js
+  // node_modules/core-js/modules/es.array.find.js
   "use strict";
-  var $12 = require_export();
-  var $findIndex = require_array_iteration().findIndex;
+  var $18 = require_export();
+  var $find = require_array_iteration().find;
   var addToUnscopables = require_add_to_unscopables();
-  var FIND_INDEX = "findIndex";
+  var FIND = "find";
   var SKIPS_HOLES = true;
-  if (FIND_INDEX in [])
-    Array(1)[FIND_INDEX](function() {
+  if (FIND in [])
+    Array(1)[FIND](function() {
       SKIPS_HOLES = false;
     });
-  $12({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+  $18({ target: "Array", proto: true, forced: SKIPS_HOLES }, {
+    find: function find(callbackfn) {
+      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+  addToUnscopables(FIND);
+
+  // node_modules/core-js/modules/es.array.find-index.js
+  "use strict";
+  var $19 = require_export();
+  var $findIndex = require_array_iteration().findIndex;
+  var addToUnscopables2 = require_add_to_unscopables();
+  var FIND_INDEX = "findIndex";
+  var SKIPS_HOLES2 = true;
+  if (FIND_INDEX in [])
+    Array(1)[FIND_INDEX](function() {
+      SKIPS_HOLES2 = false;
+    });
+  $19({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
     findIndex: function findIndex(callbackfn) {
       return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
-  addToUnscopables(FIND_INDEX);
+  addToUnscopables2(FIND_INDEX);
 
   // node_modules/core-js/modules/es.array.splice.js
   "use strict";
-  var $13 = require_export();
+  var $20 = require_export();
   var toAbsoluteIndex2 = require_to_absolute_index();
   var toInteger2 = require_to_integer();
   var toLength4 = require_to_length();
   var toObject3 = require_to_object();
   var arraySpeciesCreate = require_array_species_create();
   var createProperty3 = require_create_property();
-  var arrayMethodHasSpeciesSupport2 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT2 = arrayMethodHasSpeciesSupport2("splice");
+  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport4("splice");
   var max3 = Math.max;
   var min3 = Math.min;
   var MAX_SAFE_INTEGER = 9007199254740991;
   var MAXIMUM_ALLOWED_LENGTH_EXCEEDED = "Maximum allowed length exceeded";
-  $13({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT2 }, {
+  $20({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
     splice: function splice(start, deleteCount) {
       var O = toObject3(this);
       var len = toLength4(O.length);
@@ -3688,28 +3988,16 @@
     }
   });
 
-  // node_modules/core-js/modules/es.array.filter.js
-  "use strict";
-  var $14 = require_export();
-  var $filter = require_array_iteration().filter;
-  var arrayMethodHasSpeciesSupport3 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT3 = arrayMethodHasSpeciesSupport3("filter");
-  $14({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT3 }, {
-    filter: function filter(callbackfn) {
-      return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
   // node_modules/core-js/modules/es.object.assign.js
-  var $15 = require_export();
+  var $21 = require_export();
   var assign = require_object_assign();
-  $15({ target: "Object", stat: true, forced: Object.assign !== assign }, {
+  $21({ target: "Object", stat: true, forced: Object.assign !== assign }, {
     assign: assign
   });
 
   // node_modules/core-js/modules/es.array.concat.js
   "use strict";
-  var $16 = require_export();
+  var $22 = require_export();
   var fails5 = require_fails();
   var isArray4 = require_is_array();
   var isObject5 = require_is_object();
@@ -3717,7 +4005,7 @@
   var toLength5 = require_to_length();
   var createProperty4 = require_create_property();
   var arraySpeciesCreate2 = require_array_species_create();
-  var arrayMethodHasSpeciesSupport4 = require_array_method_has_species_support();
+  var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
   var wellKnownSymbol4 = require_well_known_symbol();
   var V8_VERSION = require_engine_v8_version();
   var IS_CONCAT_SPREADABLE = wellKnownSymbol4("isConcatSpreadable");
@@ -3728,7 +4016,7 @@
     array[IS_CONCAT_SPREADABLE] = false;
     return array.concat()[0] !== array;
   });
-  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport4("concat");
+  var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport5("concat");
   var isConcatSpreadable = function(O) {
     if (!isObject5(O))
       return false;
@@ -3736,7 +4024,7 @@
     return spreadable !== void 0 ? !!spreadable : isArray4(O);
   };
   var FORCED2 = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-  $16({ target: "Array", proto: true, forced: FORCED2 }, {
+  $22({ target: "Array", proto: true, forced: FORCED2 }, {
     concat: function concat(arg) {
       var O = toObject4(this);
       var A = arraySpeciesCreate2(O, 0);
@@ -3763,7 +4051,7 @@
   });
 
   // node_modules/core-js/modules/web.timers.js
-  var $17 = require_export();
+  var $23 = require_export();
   var global6 = require_global();
   var userAgent = require_engine_user_agent();
   var slice2 = [].slice;
@@ -3777,28 +4065,10 @@
       } : handler, timeout);
     };
   };
-  $17({ global: true, bind: true, forced: MSIE }, {
+  $23({ global: true, bind: true, forced: MSIE }, {
     setTimeout: wrap2(global6.setTimeout),
     setInterval: wrap2(global6.setInterval)
   });
-
-  // node_modules/core-js/modules/es.array.find.js
-  "use strict";
-  var $18 = require_export();
-  var $find = require_array_iteration().find;
-  var addToUnscopables2 = require_add_to_unscopables();
-  var FIND = "find";
-  var SKIPS_HOLES2 = true;
-  if (FIND in [])
-    Array(1)[FIND](function() {
-      SKIPS_HOLES2 = false;
-    });
-  $18({ target: "Array", proto: true, forced: SKIPS_HOLES2 }, {
-    find: function find(callbackfn) {
-      return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-  addToUnscopables2(FIND);
 
   // node_modules/core-js/modules/es.string.match.js
   "use strict";
@@ -3842,25 +4112,17 @@
 
   // node_modules/core-js/modules/es.array.reduce.js
   "use strict";
-  var $19 = require_export();
+  var $24 = require_export();
   var $reduce = require_array_reduce().left;
-  var arrayMethodIsStrict = require_array_method_is_strict();
+  var arrayMethodIsStrict3 = require_array_method_is_strict();
   var CHROME_VERSION = require_engine_v8_version();
   var IS_NODE = require_engine_is_node();
-  var STRICT_METHOD = arrayMethodIsStrict("reduce");
+  var STRICT_METHOD3 = arrayMethodIsStrict3("reduce");
   var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-  $19({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+  $24({ target: "Array", proto: true, forced: !STRICT_METHOD3 || CHROME_BUG }, {
     reduce: function reduce(callbackfn) {
       return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : void 0);
     }
-  });
-
-  // node_modules/core-js/modules/es.object.define-property.js
-  var $20 = require_export();
-  var DESCRIPTORS7 = require_descriptors();
-  var objectDefinePropertyModile = require_object_define_property();
-  $20({ target: "Object", stat: true, forced: !DESCRIPTORS7, sham: !DESCRIPTORS7 }, {
-    defineProperty: objectDefinePropertyModile.f
   });
 
   // node_modules/@emotion/cache/dist/emotion-cache.browser.esm.js
@@ -3870,27 +4132,15 @@
 
   // node_modules/core-js/modules/es.array.index-of.js
   "use strict";
-  var $21 = require_export();
+  var $25 = require_export();
   var $indexOf = require_array_includes().indexOf;
-  var arrayMethodIsStrict2 = require_array_method_is_strict();
+  var arrayMethodIsStrict4 = require_array_method_is_strict();
   var nativeIndexOf = [].indexOf;
   var NEGATIVE_ZERO = !!nativeIndexOf && 1 / [1].indexOf(1, -0) < 0;
-  var STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-  $21({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+  var STRICT_METHOD4 = arrayMethodIsStrict4("indexOf");
+  $25({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD4 }, {
     indexOf: function indexOf(searchElement) {
       return NEGATIVE_ZERO ? nativeIndexOf.apply(this, arguments) || 0 : $indexOf(this, searchElement, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // node_modules/core-js/modules/es.array.map.js
-  "use strict";
-  var $22 = require_export();
-  var $map = require_array_iteration().map;
-  var arrayMethodHasSpeciesSupport5 = require_array_method_has_species_support();
-  var HAS_SPECIES_SUPPORT4 = arrayMethodHasSpeciesSupport5("map");
-  $22({ target: "Array", proto: true, forced: !HAS_SPECIES_SUPPORT4 }, {
-    map: function map(callbackfn) {
-      return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
     }
   });
 
@@ -3992,10 +4242,10 @@
 
   // node_modules/core-js/modules/es.string.trim.js
   "use strict";
-  var $23 = require_export();
+  var $26 = require_export();
   var $trim = require_string_trim().trim;
   var forcedStringTrimMethod = require_string_trim_forced();
-  $23({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
+  $26({ target: "String", proto: true, forced: forcedStringTrimMethod("trim") }, {
     trim: function trim() {
       return $trim(this);
     }
@@ -4003,23 +4253,6 @@
 
   // node_modules/stylis/src/Utility.js
   var import_es_regexp_exec = __toModule(require_es_regexp_exec());
-
-  // node_modules/core-js/modules/es.array.join.js
-  "use strict";
-  var $24 = require_export();
-  var IndexedObject = require_indexed_object();
-  var toIndexedObject5 = require_to_indexed_object();
-  var arrayMethodIsStrict3 = require_array_method_is_strict();
-  var nativeJoin = [].join;
-  var ES3_STRINGS = IndexedObject != Object;
-  var STRICT_METHOD3 = arrayMethodIsStrict3("join", ",");
-  $24({ target: "Array", proto: true, forced: ES3_STRINGS || !STRICT_METHOD3 }, {
-    join: function join(separator) {
-      return nativeJoin.call(toIndexedObject5(this), separator === void 0 ? "," : separator);
-    }
-  });
-
-  // node_modules/stylis/src/Utility.js
   var abs = Math.abs;
   var from2 = String.fromCharCode;
   function hash(value, length2) {
@@ -4501,10 +4734,10 @@
   var import_es_weak_map = __toModule(require_es_weak_map());
 
   // node_modules/core-js/modules/es.object.create.js
-  var $25 = require_export();
+  var $27 = require_export();
   var DESCRIPTORS8 = require_descriptors();
   var create2 = require_object_create();
-  $25({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
+  $27({ target: "Object", stat: true, sham: !DESCRIPTORS8 }, {
     create: create2
   });
 
@@ -4857,11 +5090,11 @@
   function _typeof(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof4(obj2) {
+      _typeof = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof = function _typeof4(obj2) {
+      _typeof = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5143,9 +5376,9 @@
   };
 
   // node_modules/core-js/modules/es.function.bind.js
-  var $26 = require_export();
+  var $28 = require_export();
   var bind = require_function_bind();
-  $26({ target: "Function", proto: true }, {
+  $28({ target: "Function", proto: true }, {
     bind: bind
   });
 
@@ -5154,11 +5387,11 @@
   function _typeof2(obj) {
     "@babel/helpers - typeof";
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof2 = function _typeof4(obj2) {
+      _typeof2 = function _typeof9(obj2) {
         return typeof obj2;
       };
     } else {
-      _typeof2 = function _typeof4(obj2) {
+      _typeof2 = function _typeof9(obj2) {
         return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       };
     }
@@ -5294,10 +5527,10 @@
 
   // node_modules/core-js/modules/es.array.includes.js
   "use strict";
-  var $27 = require_export();
+  var $29 = require_export();
   var $includes = require_array_includes().includes;
   var addToUnscopables3 = require_add_to_unscopables();
-  $27({ target: "Array", proto: true }, {
+  $29({ target: "Array", proto: true }, {
     includes: function includes(el) {
       return $includes(this, el, arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5306,11 +5539,11 @@
 
   // node_modules/core-js/modules/es.string.includes.js
   "use strict";
-  var $28 = require_export();
+  var $30 = require_export();
   var notARegExp = require_not_a_regexp();
   var requireObjectCoercible4 = require_require_object_coercible();
   var correctIsRegExpLogic = require_correct_is_regexp_logic();
-  $28({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
+  $30({ target: "String", proto: true, forced: !correctIsRegExpLogic("includes") }, {
     includes: function includes2(searchString) {
       return !!~String(requireObjectCoercible4(this)).indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : void 0);
     }
@@ -5419,29 +5652,23 @@
     if (Array.isArray(arr))
       return arr;
   }
-  function concat_nl() {
-    for (var _len = arguments.length, component_strings = new Array(_len), _key = 0; _key < _len; _key++) {
-      component_strings[_key] = arguments[_key];
-    }
-    return component_strings.join("\n");
-  }
-  function as_array(content) {
+  function asArray(content) {
     if (content instanceof Array) {
       return content;
     } else {
       return [content];
     }
   }
-  function compare_w_missing(compare_fn, maybe_a, b) {
-    return maybe_a ? compare_fn(maybe_a, b) : b;
+  function compareWithMissing(compareFn, maybeA, b) {
+    return maybeA ? compareFn(maybeA, b) : b;
   }
-  function min_w_missing(maybe_a, b) {
-    return compare_w_missing(Math.min, maybe_a, b);
+  function minWithMissing(maybeA, b) {
+    return compareWithMissing(Math.min, maybeA, b);
   }
-  function max_w_missing(maybe_a, b) {
-    return compare_w_missing(Math.max, maybe_a, b);
+  function maxWithMissing(maybeA, b) {
+    return compareWithMissing(Math.max, maybeA, b);
   }
-  function get_bounding_rect(el) {
+  function getBoundingRect(el) {
     if (el.offsetParent === null) {
       return null;
     }
@@ -5456,52 +5683,57 @@
       bottom: top + height
     };
   }
-  function boxes_overlap(box_a, box_b) {
-    var horizontal_overlap = intervals_overlap([box_a.left, box_a.right], [box_b.left, box_b.right]);
-    var vertical_overlap = intervals_overlap([box_a.top, box_a.bottom], [box_b.top, box_b.bottom]);
-    return horizontal_overlap && vertical_overlap;
-    function intervals_overlap(_ref, _ref2) {
-      var _ref3 = _slicedToArray(_ref, 2), a_start = _ref3[0], a_end = _ref3[1];
-      var _ref4 = _slicedToArray(_ref2, 2), b_start = _ref4[0], b_end = _ref4[1];
-      var a_contains_b_endpoint = a_start >= b_start && a_start <= b_end || a_end >= b_start && a_end <= b_end;
-      var b_covers_a = a_start <= b_start && a_end >= b_end;
-      return a_contains_b_endpoint || b_covers_a;
+  function boxesOverlap(boxA, boxB) {
+    var horizontalOverlap = intervalsOverlap([boxA.left, boxA.right], [boxB.left, boxB.right]);
+    var verticalOverlap = intervalsOverlap([boxA.top, boxA.bottom], [boxB.top, boxB.bottom]);
+    return horizontalOverlap && verticalOverlap;
+    function intervalsOverlap(_ref, _ref2) {
+      var _ref3 = _slicedToArray(_ref, 2), aStart = _ref3[0], aEnd = _ref3[1];
+      var _ref4 = _slicedToArray(_ref2, 2), bStart = _ref4[0], bEnd = _ref4[1];
+      var aContainsBsEndpoint = aStart >= bStart && aStart <= bEnd || aEnd >= bStart && aEnd <= bEnd;
+      var bCoversA = aStart <= bStart && aEnd >= bEnd;
+      return aContainsBsEndpoint || bCoversA;
     }
   }
-  function update_rect_with_delta(rect, delta, dir) {
-    var new_rect = _objectSpread({}, rect);
+  function updateRectWithDelta(rect, delta, dir) {
+    var newRect = _objectSpread({}, rect);
     if (dir === "top-left") {
-      new_rect.left = new_rect.left + delta.x;
-      new_rect.top = new_rect.top + delta.y;
+      newRect.left = newRect.left + delta.x;
+      newRect.top = newRect.top + delta.y;
     } else if (dir === "bottom-right") {
-      new_rect.right = new_rect.right + delta.x, new_rect.left;
-      new_rect.bottom = new_rect.bottom + delta.y, new_rect.top;
+      newRect.right = newRect.right + delta.x, newRect.left;
+      newRect.bottom = newRect.bottom + delta.y, newRect.top;
     } else {
-      new_rect.left += delta.x;
-      new_rect.top += delta.y;
-      new_rect.right += delta.x;
-      new_rect.bottom += delta.y;
+      newRect.left += delta.x;
+      newRect.top += delta.y;
+      newRect.right += delta.x;
+      newRect.bottom += delta.y;
     }
-    if (new_rect.left > new_rect.right) {
-      var left = new_rect.left, right = new_rect.right;
-      new_rect.right = left;
-      new_rect.left = right;
+    if (newRect.left > newRect.right) {
+      var left = newRect.left, right = newRect.right;
+      newRect.right = left;
+      newRect.left = right;
     }
-    if (new_rect.top > new_rect.bottom) {
-      var top = new_rect.top, bottom = new_rect.bottom;
-      new_rect.bottom = top;
-      new_rect.top = bottom;
+    if (newRect.top > newRect.bottom) {
+      var top = newRect.top, bottom = newRect.bottom;
+      newRect.bottom = top;
+      newRect.top = bottom;
     }
-    return new_rect;
+    return newRect;
   }
-  function set_class(elements, class_name) {
+  function setClass(elements, className) {
     elements.forEach(function(el) {
-      el.classList.add(class_name);
+      el.classList.add(className);
     });
   }
-  var filler_text = '\n<div class = "filler_text">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
-  function pos_relative_to_container(container, child_el) {
-    var pos = child_el.getBoundingClientRect();
+  function removeClass(elements, className) {
+    elements.forEach(function(el) {
+      el.classList.remove(className);
+    });
+  }
+  var fillerText = '\n<div class = "fillerText">\n  This filler text demonstrates how the height of an element spanning an "auto"\n  row is influenced by its content. While you\'re here...\n  Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \n  when an unknown printer took a galley of type and scrambled it to make a type \n  specimen book.\n</div>';
+  function posRelativeToContainer(container, childEl) {
+    var pos = childEl.getBoundingClientRect();
     return {
       top: pos.top - container.top,
       bottom: pos.bottom - container.bottom,
@@ -5548,71 +5780,71 @@
     }
     return arr2;
   }
-  function find_first_grid_node() {
-    var grid_node;
-    var current_node = document.body;
-    var node_queue = _toConsumableArray(current_node.children);
-    var num_checks = 0;
-    var check_max = 100;
-    while (typeof grid_node === "undefined" && node_queue.length > 0 && num_checks++ < check_max) {
-      current_node = node_queue.shift();
-      node_queue = [].concat(_toConsumableArray(node_queue), _toConsumableArray(current_node.children));
-      if (getComputedStyle(current_node).display === "grid") {
-        grid_node = current_node;
+  function findFirstGridNode() {
+    var gridNode;
+    var currentNode = document.body;
+    var nodeQueue = _toConsumableArray(currentNode.children);
+    var numChecks = 0;
+    var checkMax = 100;
+    while (typeof gridNode === "undefined" && nodeQueue.length > 0 && numChecks++ < checkMax) {
+      currentNode = nodeQueue.shift();
+      nodeQueue = [].concat(_toConsumableArray(nodeQueue), _toConsumableArray(currentNode.children));
+      if (getComputedStyle(currentNode).display === "grid") {
+        gridNode = currentNode;
       }
     }
-    if (typeof grid_node === "undefined" && num_checks < check_max) {
-      var _grid_node = document.createElement("div");
-      current_node.appendChild(_grid_node);
-    } else if (num_checks === check_max) {
+    if (typeof gridNode === "undefined" && numChecks < checkMax) {
+      var _gridNode = document.createElement("div");
+      currentNode.appendChild(_gridNode);
+    } else if (numChecks === checkMax) {
       alert("Could not find a grid-layout element to edit -- Sorry!");
     }
-    return grid_node;
+    gridNode.classList.add("wrapped-existing-app");
+    return gridNode;
   }
-  function set_element_in_grid(el, grid_bounds) {
-    if (grid_bounds.start_row) {
-      el.style.gridRowStart = grid_bounds.start_row.toString();
+  function setElementInGrid(el, gridBounds) {
+    if (gridBounds.start_row) {
+      el.style.gridRowStart = gridBounds.start_row.toString();
     }
-    if (grid_bounds.end_row) {
-      el.style.gridRowEnd = (grid_bounds.end_row + 1).toString();
+    if (gridBounds.end_row) {
+      el.style.gridRowEnd = (gridBounds.end_row + 1).toString();
     }
-    if (grid_bounds.start_col) {
-      el.style.gridColumnStart = grid_bounds.start_col.toString();
+    if (gridBounds.start_col) {
+      el.style.gridColumnStart = gridBounds.start_col.toString();
     }
-    if (grid_bounds.end_col) {
-      el.style.gridColumnEnd = (grid_bounds.end_col + 1).toString();
+    if (gridBounds.end_col) {
+      el.style.gridColumnEnd = (gridBounds.end_col + 1).toString();
     }
-    el.style.display = "block";
   }
-  function get_pos_on_grid(grid_el) {
-    var el_styles = getComputedStyle(grid_el);
+  function getPosOnGrid(gridEl) {
+    var elStyles = getComputedStyle(gridEl);
     return {
-      start_row: +el_styles.gridRowStart,
-      start_col: +el_styles.gridColumnStart,
-      end_row: +el_styles.gridRowEnd - 1,
-      end_col: +el_styles.gridColumnEnd - 1
+      start_row: +elStyles.gridRowStart,
+      start_col: +elStyles.gridColumnStart,
+      end_row: +elStyles.gridRowEnd - 1,
+      end_col: +elStyles.gridColumnEnd - 1
     };
   }
-  function get_drag_extent_on_grid(app_state, selection_rect) {
-    var sel_bounds = {
+  function getDragExtentOnGrid(appState, selectionRect) {
+    var selBounds = {
       start_col: null,
       end_col: null,
       start_row: null,
       end_row: null
     };
-    app_state.current_cells.forEach(function(el) {
-      if (boxes_overlap(get_bounding_rect(el), selection_rect)) {
-        var el_row = +el.dataset.row;
-        var el_col = +el.dataset.col;
-        sel_bounds.start_row = min_w_missing(sel_bounds.start_row, el_row);
-        sel_bounds.end_row = max_w_missing(sel_bounds.end_row, el_row);
-        sel_bounds.start_col = min_w_missing(sel_bounds.start_col, el_col);
-        sel_bounds.end_col = max_w_missing(sel_bounds.end_col, el_col);
+    appState.currentCells.forEach(function(el) {
+      if (boxesOverlap(getBoundingRect(el), selectionRect)) {
+        var elRow = +el.dataset.row;
+        var elCol = +el.dataset.col;
+        selBounds.start_row = minWithMissing(selBounds.start_row, elRow);
+        selBounds.end_row = maxWithMissing(selBounds.end_row, elRow);
+        selBounds.start_col = minWithMissing(selBounds.start_col, elCol);
+        selBounds.end_col = maxWithMissing(selBounds.end_col, elCol);
       }
     });
-    return sel_bounds;
+    return selBounds;
   }
-  function bounding_rect_to_css_pos(rect) {
+  function boundingRectToCssPos(rect) {
     return {
       left: "".concat(rect.left, "px"),
       top: "".concat(rect.top, "px"),
@@ -5620,34 +5852,55 @@
       height: "".concat(rect.bottom - rect.top, "px")
     };
   }
-  function get_gap_size(style) {
-    var gap_size_vec = (typeof style === "string" ? style : style.gap).split(" ");
-    return gap_size_vec[0];
+  function getGapSize(style) {
+    var gapSizeVec = (typeof style === "string" ? style : style.gap).split(" ");
+    return gapSizeVec[0];
   }
-  function grid_position_of_el(el) {
-    var grid_area = el.style.gridArea.split(" / ");
-    return {
-      start_row: +grid_area[0],
-      start_col: +grid_area[1],
-      end_row: +grid_area[2] - 1,
-      end_col: +grid_area[3] - 1
-    };
-  }
-  function make_start_end_for_dir(dir) {
+  function makeStartEndForDir(dir) {
     if (dir === "cols") {
       return {
-        start_id: "start_col",
-        end_id: "end_col"
+        startId: "start_col",
+        endId: "end_col"
       };
     } else {
       return {
-        start_id: "start_row",
-        end_id: "end_row"
+        startId: "start_row",
+        endId: "end_row"
       };
     }
   }
 
-  // Grid_Item.ts
+  // GridItem.ts
+  function ownKeys3(object, enumerableOnly) {
+    var keys2 = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) {
+        symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+      keys2.push.apply(keys2, symbols);
+    }
+    return keys2;
+  }
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys3(Object(source), true).forEach(function(key) {
+          _defineProperty2(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys3(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+    return target;
+  }
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -5678,36 +5931,38 @@
     }
     return obj;
   }
-  var Grid_Item = /* @__PURE__ */ function() {
-    function Grid_Item2(opts) {
-      _classCallCheck(this, Grid_Item2);
+  var GridItem = /* @__PURE__ */ function() {
+    function GridItem2(opts) {
+      _classCallCheck(this, GridItem2);
+      _defineProperty2(this, "id", void 0);
       _defineProperty2(this, "el", void 0);
-      _defineProperty2(this, "mirrored_el", void 0);
-      _defineProperty2(this, "sibling_el", void 0);
-      _defineProperty2(this, "parent_layout", void 0);
+      _defineProperty2(this, "mirroredElement", void 0);
+      _defineProperty2(this, "ui_function", void 0);
+      _defineProperty2(this, "siblingElement", void 0);
+      _defineProperty2(this, "parentLayout", void 0);
       Object.assign(this, opts);
     }
-    _createClass(Grid_Item2, [{
+    _createClass(GridItem2, [{
       key: "position",
       get: function get() {
-        return get_pos_on_grid(this.el);
+        return getPosOnGrid(this.el);
       },
       set: function set(pos) {
-        set_element_in_grid(this.el, pos);
-        if (this.has_mirrored) {
-          set_element_in_grid(this.mirrored_el, pos);
+        setElementInGrid(this.el, pos);
+        if (this.hasMirrored) {
+          setElementInGrid(this.mirroredElement, pos);
         }
-        this.fill_if_in_auto_row();
+        this.fillIfInAutoRow();
       }
     }, {
-      key: "bounding_rect",
+      key: "boundingRect",
       get: function get() {
-        return get_bounding_rect(this.el);
+        return getBoundingRect(this.el);
       }
     }, {
-      key: "has_mirrored",
+      key: "hasMirrored",
       get: function get() {
-        return typeof this.mirrored_el !== "undefined";
+        return typeof this.mirroredElement !== "undefined";
       }
     }, {
       key: "style",
@@ -5715,10 +5970,28 @@
         return this.el.style;
       }
     }, {
-      key: "fill_if_in_auto_row",
-      value: function fill_if_in_auto_row() {
-        var in_auto_row = this.parent_layout.item_row_sizes(this.position).includes("auto");
-        if (in_auto_row && !this.has_mirrored) {
+      key: "info",
+      get: function get() {
+        var _this$mirroredElement, _this$mirroredElement2;
+        return _objectSpread2(_objectSpread2({
+          id: this.id
+        }, this.position), {}, {
+          ui_function: this === null || this === void 0 ? void 0 : (_this$mirroredElement = this.mirroredElement) === null || _this$mirroredElement === void 0 ? void 0 : (_this$mirroredElement2 = _this$mirroredElement.dataset) === null || _this$mirroredElement2 === void 0 ? void 0 : _this$mirroredElement2.gridedUiName
+        });
+      }
+    }, {
+      key: "addMirroredEl",
+      value: function addMirroredEl(mirroredEl) {
+        this.mirroredElement = mirroredEl;
+        var curr_pos = this.position;
+        this.position = curr_pos;
+        $(this.mirroredElement).trigger("shown");
+      }
+    }, {
+      key: "fillIfInAutoRow",
+      value: function fillIfInAutoRow() {
+        var inAutoRow = this.parentLayout.itemRowSizes(this.position).includes("auto");
+        if (inAutoRow && !this.hasMirrored) {
           this.el.classList.add("in-auto-row");
         } else {
           this.el.classList.remove("in-auto-row");
@@ -5728,33 +6001,19 @@
       key: "remove",
       value: function remove() {
         this.el.remove();
-        if (this.has_mirrored) {
-          this.mirrored_el.remove();
+        if (this.hasMirrored) {
+          this.mirroredElement.remove();
         }
-        if (this.sibling_el) {
-          this.sibling_el.remove();
+        if (this.siblingElement) {
+          this.siblingElement.remove();
         }
       }
     }]);
-    return Grid_Item2;
+    return GridItem2;
   }();
 
-  // Grid_Layout.ts
+  // GridLayout.ts
   var import_es_regexp_exec6 = __toModule(require_es_regexp_exec());
-  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
-  function _typeof3(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof3 = function _typeof4(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof3 = function _typeof4(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof3(obj);
-  }
   function _classCallCheck2(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -5785,26 +6044,26 @@
     }
     return obj;
   }
-  var Grid_Layout = /* @__PURE__ */ function() {
-    function Grid_Layout2(container) {
-      _classCallCheck2(this, Grid_Layout2);
+  var GridLayout = /* @__PURE__ */ function() {
+    function GridLayout2(container) {
+      _classCallCheck2(this, GridLayout2);
       _defineProperty3(this, "styles", void 0);
       _defineProperty3(this, "container", void 0);
       this.container = container;
       this.styles = container.style;
     }
-    _createClass2(Grid_Layout2, [{
+    _createClass2(GridLayout2, [{
       key: "rows",
       get: function get() {
         return this.styles.gridTemplateRows.split(" ");
       },
-      set: function set(new_rows) {
-        if (typeof new_rows === "undefined")
+      set: function set(newRows) {
+        if (typeof newRows === "undefined")
           return;
-        this.styles.gridTemplateRows = new_rows.join(" ");
+        this.styles.gridTemplateRows = asArray(newRows).join(" ");
       }
     }, {
-      key: "num_rows",
+      key: "numRows",
       get: function get() {
         return this.rows.length;
       }
@@ -5813,27 +6072,27 @@
       get: function get() {
         return this.styles.gridTemplateColumns.split(" ");
       },
-      set: function set(new_cols) {
-        if (typeof new_cols === "undefined")
+      set: function set(newCols) {
+        if (typeof newCols === "undefined")
           return;
-        this.styles.gridTemplateColumns = new_cols.join(" ");
+        this.styles.gridTemplateColumns = asArray(newCols).join(" ");
       }
     }, {
-      key: "num_cols",
+      key: "numCols",
       get: function get() {
         return this.cols.length;
       }
     }, {
       key: "gap",
       get: function get() {
-        return get_gap_size(this.styles.gap);
+        return getGapSize(this.styles.gap);
       },
-      set: function set(new_gap) {
-        if (typeof new_gap === "undefined")
+      set: function set(newGap) {
+        if (typeof newGap === "undefined")
           return;
-        document.querySelector("body").style.setProperty("--grid-gap", new_gap);
-        this.styles.gap = new_gap;
-        this.styles.padding = new_gap;
+        document.querySelector("body").style.setProperty("--grid-gap", newGap);
+        this.styles.gap = newGap;
+        this.styles.padding = newGap;
       }
     }, {
       key: "attrs",
@@ -5845,36 +6104,35 @@
         };
       }
     }, {
-      key: "is_updated_val",
-      value: function is_updated_val(attr, values) {
+      key: "isUpdatedVal",
+      value: function isUpdatedVal(attr, values) {
         if (typeof values === "undefined")
           return false;
         if (attr === "gap") {
           return values !== this.gap;
-        } else if (_typeof3(values) === "object") {
-          return !equal_arrays(this[attr], values);
         }
+        return !equalArrays(this[attr], asArray(values));
       }
     }, {
-      key: "sizes_for_tract",
-      value: function sizes_for_tract(item_pos, dir) {
-        var _item_pos$, _item_pos$2;
-        var start_index = (_item_pos$ = item_pos["start_".concat(dir)]) !== null && _item_pos$ !== void 0 ? _item_pos$ : item_pos["end_".concat(dir)];
-        var end_index = (_item_pos$2 = item_pos["end_".concat(dir)]) !== null && _item_pos$2 !== void 0 ? _item_pos$2 : item_pos["start_".concat(dir)];
-        var tract_sizes = dir === "row" ? this.rows : this.cols;
-        return tract_sizes.filter(function(val, i) {
-          return i + 1 >= start_index && i + 1 <= end_index;
+      key: "sizesForTract",
+      value: function sizesForTract(itemPos, dir) {
+        var _itemPos$, _itemPos$2;
+        var startIndex = (_itemPos$ = itemPos["start_".concat(dir)]) !== null && _itemPos$ !== void 0 ? _itemPos$ : itemPos["end_".concat(dir)];
+        var endIndex = (_itemPos$2 = itemPos["end_".concat(dir)]) !== null && _itemPos$2 !== void 0 ? _itemPos$2 : itemPos["start_".concat(dir)];
+        var tractSizes = dir === "row" ? this.rows : this.cols;
+        return tractSizes.filter(function(val, i) {
+          return i + 1 >= startIndex && i + 1 <= endIndex;
         });
       }
     }, {
-      key: "item_row_sizes",
-      value: function item_row_sizes(item_pos) {
-        return this.sizes_for_tract(item_pos, "row");
+      key: "itemRowSizes",
+      value: function itemRowSizes(itemPos) {
+        return this.sizesForTract(itemPos, "row");
       }
     }]);
-    return Grid_Layout2;
+    return GridLayout2;
   }();
-  function equal_arrays(a, b) {
+  function equalArrays(a, b) {
     if (a.length !== b.length)
       return false;
     for (var i = 0; i < a.length; ++i) {
@@ -5884,7 +6142,7 @@
     return true;
   }
 
-  // make-css_unit_input.ts
+  // make-cssUnitInput.ts
   var import_es_array_iterator9 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec8 = __toModule(require_es_regexp_exec());
 
@@ -5968,30 +6226,8 @@
   var key;
 
   // make-elements.ts
-  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
   var import_es_regexp_exec7 = __toModule(require_es_regexp_exec());
-
-  // utils-icons.ts
-  var vertical_drag_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
-  var horizontal_drag_icon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
-  var trashcan_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
-  var se_arrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
-  var nw_arrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
-  var drag_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
-  var plus_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
-  var settings_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
-  var instructions_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
-  var elements_icon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
-  var browser_header_html = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
-
-  // make-elements.ts
-  var _templateObject;
-  function _taggedTemplateLiteral(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
+  var import_es_array_iterator7 = __toModule(require_es_array_iterator());
   function _toConsumableArray2(arr) {
     return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray3(arr) || _nonIterableSpread2();
   }
@@ -6027,37 +6263,33 @@
     }
     return arr2;
   }
-  function extract_id(sel_txt) {
-    var id_match = sel_txt.match(/#([^\.]+)/g);
-    return id_match ? id_match[0].replace("#", "") : null;
-  }
-  function extract_classes(sel_txt) {
-    var class_list = sel_txt.match(/\.([^\.#]+)/g);
-    return class_list ? _toConsumableArray2(class_list).map(function(c) {
+  function parseSelectorText(selTxt) {
+    var idMatch = selTxt.match(/#([^\.]+)/g);
+    var elId = idMatch ? idMatch[0].replace("#", "") : null;
+    var allClasses = selTxt.match(/\.([^\.#]+)/g);
+    var classList = allClasses ? _toConsumableArray2(allClasses).map(function(c) {
       return c.replace(".", "");
     }) : null;
-  }
-  function parse_selector_text(sel_txt) {
     return {
-      tag_type: sel_txt.match(/^([^#\.]+)+/g)[0],
-      el_id: extract_id(sel_txt),
-      class_list: extract_classes(sel_txt)
+      tagType: selTxt.match(/^([^#\.]+)+/g)[0],
+      elId: elId,
+      classList: classList
     };
   }
-  function make_el(parent, sel_txt) {
+  function makeEl(parent, selTxt) {
     var opts = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
-    var el = parent.querySelector(sel_txt);
+    var el = parent.querySelector(selTxt);
     if (!el) {
-      el = El({
-        sel_txt: sel_txt
+      el = createEl({
+        selTxt: selTxt
       });
       if (opts.props) {
         Object.assign(el, opts.props);
       }
       parent.appendChild(el);
     }
-    if (opts.event_listener) {
-      as_array(opts.event_listener).forEach(function(listener) {
+    if (opts.eventListener) {
+      asArray(opts.eventListener).forEach(function(listener) {
         return el["on" + listener.event] = listener.func;
       });
     }
@@ -6067,44 +6299,21 @@
     if (opts.innerHTML) {
       el.innerHTML = opts.innerHTML;
     }
-    if (opts.data_props) {
-      Object.assign(el.dataset, opts.data_props);
+    if (opts.dataProps) {
+      Object.assign(el.dataset, opts.dataProps);
     }
-    if (opts.grid_pos) {
-      set_element_in_grid(el, opts.grid_pos);
+    if (opts.gridPos) {
+      setElementInGrid(el, opts.gridPos);
     }
     return el;
   }
-  function remove_elements(els_to_remove) {
-    els_to_remove.forEach(function(e) {
-      return e.remove();
-    });
-  }
-  function Shadow_El(sel_txt) {
-    var shadow_holder = Block_El(sel_txt);
-    shadow_holder.attachShadow({
-      mode: "open"
-    });
-    var style_sheet = document.createElement("style");
-    shadow_holder.shadowRoot.appendChild(style_sheet);
-    for (var _len = arguments.length, children = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      children[_key - 1] = arguments[_key];
-    }
-    children.forEach(function(child_el) {
-      return shadow_holder.shadowRoot.appendChild(child_el);
-    });
-    return {
-      el: shadow_holder,
-      style_sheet: style_sheet
-    };
-  }
-  function El(opts) {
-    var _parse_selector_text = parse_selector_text(opts.sel_txt), tag_type = _parse_selector_text.tag_type, el_id = _parse_selector_text.el_id, class_list = _parse_selector_text.class_list;
-    var el = document.createElement(tag_type);
-    if (el_id)
-      el.id = el_id;
-    if (class_list) {
-      class_list.forEach(function(x) {
+  function createEl(opts) {
+    var _parseSelectorText = parseSelectorText(opts.selTxt), tagType = _parseSelectorText.tagType, elId = _parseSelectorText.elId, classList = _parseSelectorText.classList;
+    var el = document.createElement(tagType);
+    if (elId)
+      el.id = elId;
+    if (classList) {
+      classList.forEach(function(x) {
         return el.classList.add(x);
       });
     }
@@ -6112,55 +6321,275 @@
       el.innerHTML = opts.text;
     }
     if (opts.children) {
-      opts.children.forEach(function(child_el) {
-        return el.appendChild(child_el);
+      opts.children.forEach(function(childEl) {
+        return el.appendChild(childEl);
+      });
+    }
+    if (opts.styles) {
+      Object.assign(el.style, opts.styles);
+    }
+    if (opts.props) {
+      Object.assign(el, opts.props);
+    }
+    if (opts.eventListener) {
+      asArray(opts.eventListener).forEach(function(listener) {
+        return el["on" + listener.event] = listener.func;
       });
     }
     return el;
   }
-  function Block_El(sel_txt) {
+  function blockEl(selTxt) {
     for (var _len2 = arguments.length, children = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
       children[_key2 - 1] = arguments[_key2];
     }
-    return El({
-      sel_txt: sel_txt,
+    return createEl({
+      selTxt: selTxt,
       children: children
     });
   }
-  function Text_El(sel_txt, text) {
-    return El({
-      sel_txt: sel_txt,
+  function textEl(selTxt, text) {
+    return createEl({
+      selTxt: selTxt,
       text: text
     });
   }
-  var incrementer_button = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  font-size: 15px;\n  height: 2em;\n  width: 2em;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0);\n  border: 1px solid rgba(255, 255, 255, 0);\n  padding: 0;\n  color: var(--dark-gray, gray);\n  transition: color 0.2s, background-color 0.2s;\n\n  &.remove-col {\n    font-size: 12px;\n  }\n\n  &.add-row,\n  &.add-col {\n    /* This offset is enough to place the button on the outside of the row/column\n      spanning div and centered in the grid tract */\n    --incrementer-offset: calc(-1em - var(--grid-gap) / 2);\n    position: absolute;\n    right: 2px;\n    bottom: 2px;\n  }\n\n  &.add-row {\n    bottom: var(--incrementer-offset);\n  }\n  &.add-col {\n    right: var(--incrementer-offset);\n  }\n\n  &:hover {\n    background-color: var(--dark-gray);\n    color: white;\n  }\n\n  & > svg {\n    max-height: 100%;\n    max-width: 100%;\n  }\n"])));
-  function tract_add_or_remove_button(app_state, opts) {
-    var parent_el = opts.parent_el, add_or_remove = opts.add_or_remove, dir = opts.dir, tract_index = opts.tract_index, additional_styles = opts.additional_styles;
-    var dir_singular = dir === "rows" ? "row" : "col";
-    var label = add_or_remove === "add" ? "Add a ".concat(dir_singular) : "Remove ".concat(dir_singular);
-    var button = make_el(parent_el, "button.".concat(incrementer_button, ".").concat(add_or_remove, "-").concat(dir_singular, ".").concat(dir, "_").concat(tract_index), {
-      innerHTML: add_or_remove === "add" ? plus_icon : trashcan_icon,
-      styles: additional_styles,
-      event_listener: {
-        event: "click",
-        func: function func() {
-          if (add_or_remove === "add") {
-            app_state.add_tract(dir, tract_index);
-          } else {
-            app_state.remove_tract(dir, tract_index);
-          }
-        }
-      },
-      props: {
-        title: label
-      }
+  function clickButton(selector, label, onFinish) {
+    var button = textEl("button".concat(selector), label);
+    button.addEventListener("click", function(event) {
+      onFinish(event);
     });
     return button;
   }
 
-  // make-css_unit_input.ts
-  var _templateObject2;
-  var _templateObject22;
+  // utils-icons.ts
+  var verticalDragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M21 11H3V9H21V11M21 13H3V15H21V13Z" />\n</svg>';
+  var horizontalDragIcon = '<svg style="width:24px;height:24px;max-height:100%;" viewBox="0 0 24 24">\n<path fill="currentColor" d="M11 21H9V3H11V21M15 3H13V21H15V3Z" />\n</svg>';
+  var trashcanIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />\n</svg>';
+  var seArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M5,6.41L6.41,5L17,15.59V9H19V19H9V17H15.59L5,6.41Z" />\n</svg>';
+  var nwArrow = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,17.59L17.59,19L7,8.41V15H5V5H15V7H8.41L19,17.59Z" />\n</svg>';
+  var dragIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M22.67,12L18.18,16.5L15.67,14L17.65,12L15.67,10.04L18.18,7.53L22.67,12M12,1.33L16.47,5.82L13.96,8.33L12,6.35L10,8.33L7.5,5.82L12,1.33M12,22.67L7.53,18.18L10.04,15.67L12,17.65L14,15.67L16.5,18.18L12,22.67M1.33,12L5.82,7.5L8.33,10L6.35,12L8.33,13.96L5.82,16.47L1.33,12M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />\n</svg>';
+  var plusIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />\n</svg>';
+  var settingsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />\n</svg>';
+  var instructionsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" />\n</svg>';
+  var elementsIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z" />\n</svg>';
+  var clipboardIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>\n</svg>';
+  var closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/></svg>';
+  var updownIcon = '<svg style="width:24px;height:24px" viewBox="0 0 24 24">\n<path fill="currentColor" d="M17.45,17.55L12,23L6.55,17.55L7.96,16.14L11,19.17V4.83L7.96,7.86L6.55,6.45L12,1L17.45,6.45L16.04,7.86L13,4.83V19.17L16.04,16.14L17.45,17.55Z" />\n</svg>';
+  var browserHeaderHtml = '<div id="buttons-container">\n  <div></div>\n  <div></div>\n  <div></div>\n</div>\n<div id="url-box">\n  <span> www.myShinyApp.com </span>\n</div>';
+
+  // node_modules/core-js/modules/es.object.set-prototype-of.js
+  var $31 = require_export();
+  var setPrototypeOf = require_object_set_prototype_of();
+  $31({ target: "Object", stat: true }, {
+    setPrototypeOf: setPrototypeOf
+  });
+
+  // node_modules/core-js/modules/es.object.get-prototype-of.js
+  var $32 = require_export();
+  var fails8 = require_fails();
+  var toObject5 = require_to_object();
+  var nativeGetPrototypeOf = require_object_get_prototype_of();
+  var CORRECT_PROTOTYPE_GETTER = require_correct_prototype_getter();
+  var FAILS_ON_PRIMITIVES4 = fails8(function() {
+    nativeGetPrototypeOf(1);
+  });
+  $32({ target: "Object", stat: true, forced: FAILS_ON_PRIMITIVES4, sham: !CORRECT_PROTOTYPE_GETTER }, {
+    getPrototypeOf: function getPrototypeOf(it) {
+      return nativeGetPrototypeOf(toObject5(it));
+    }
+  });
+
+  // node_modules/core-js/modules/es.reflect.construct.js
+  var $33 = require_export();
+  var getBuiltIn2 = require_get_built_in();
+  var aFunction = require_a_function();
+  var anObject6 = require_an_object();
+  var isObject6 = require_is_object();
+  var create4 = require_object_create();
+  var bind2 = require_function_bind();
+  var fails9 = require_fails();
+  var nativeConstruct = getBuiltIn2("Reflect", "construct");
+  var NEW_TARGET_BUG = fails9(function() {
+    function F() {
+    }
+    return !(nativeConstruct(function() {
+    }, [], F) instanceof F);
+  });
+  var ARGS_BUG = !fails9(function() {
+    nativeConstruct(function() {
+    });
+  });
+  var FORCED3 = NEW_TARGET_BUG || ARGS_BUG;
+  $33({ target: "Reflect", stat: true, forced: FORCED3, sham: FORCED3 }, {
+    construct: function construct(Target, args) {
+      aFunction(Target);
+      anObject6(args);
+      var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
+      if (ARGS_BUG && !NEW_TARGET_BUG)
+        return nativeConstruct(Target, args, newTarget);
+      if (Target == newTarget) {
+        switch (args.length) {
+          case 0:
+            return new Target();
+          case 1:
+            return new Target(args[0]);
+          case 2:
+            return new Target(args[0], args[1]);
+          case 3:
+            return new Target(args[0], args[1], args[2]);
+          case 4:
+            return new Target(args[0], args[1], args[2], args[3]);
+        }
+        var $args = [null];
+        $args.push.apply($args, args);
+        return new (bind2.apply(Target, $args))();
+      }
+      var proto = newTarget.prototype;
+      var instance = create4(isObject6(proto) ? proto : Object.prototype);
+      var result = Function.apply.call(Target, instance, args);
+      return isObject6(result) ? result : instance;
+    }
+  });
+
+  // web-components/add-or-remove-button.ts
+  var import_es_array_iterator8 = __toModule(require_es_array_iterator());
+  var import_es_map = __toModule(require_es_map());
+  function _typeof3(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof3 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof3 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof3(obj);
+  }
+  function _classCallCheck3(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties3(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass3(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties3(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties3(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf(subClass, superClass);
+  }
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+  function _possibleConstructorReturn(self2, call) {
+    if (call && (_typeof3(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized(self2);
+  }
+  function _assertThisInitialized(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf(Wrapper, Class2);
+    };
+    return _wrapNativeSuper(Class);
+  }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf(o);
+  }
   function _defineProperty4(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
@@ -6169,6 +6598,83 @@
     }
     return obj;
   }
+  var AddOrRemoveButton = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits(AddOrRemoveButton2, _HTMLElement);
+    var _super = _createSuper(AddOrRemoveButton2);
+    function AddOrRemoveButton2() {
+      var _this;
+      _classCallCheck3(this, AddOrRemoveButton2);
+      _this = _super.call(this);
+      _defineProperty4(_assertThisInitialized(_this), "_onPress", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      return _this;
+    }
+    _createClass3(AddOrRemoveButton2, [{
+      key: "addOrRemove",
+      get: function get() {
+        return this.getAttribute("add_or_remove");
+      }
+    }, {
+      key: "setAddOrRemove",
+      value: function setAddOrRemove(newValue) {
+        this.setAttribute("add_or_remove", newValue);
+        return this;
+      }
+    }, {
+      key: "rowOrCol",
+      get: function get() {
+        return this.getAttribute("row_or_col");
+      }
+    }, {
+      key: "setRowOrCol",
+      value: function setRowOrCol(newValue) {
+        if (newValue === "rows")
+          newValue = "row";
+        if (newValue === "cols")
+          newValue = "col";
+        this.setAttribute("row_or_col", newValue);
+        return this;
+      }
+    }, {
+      key: "setFirst",
+      value: function setFirst() {
+        this.setAttribute("is_first", "");
+        return this;
+      }
+    }, {
+      key: "onPress",
+      value: function onPress(fn) {
+        this._onPress = fn;
+        return this;
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        var isFirst = this.hasAttribute("is_first");
+        var isAdd = this.addOrRemove === "add";
+        var isCol = this.rowOrCol === "col";
+        var buttonTitle = "".concat(isAdd ? "Add a" : "Remove", " ").concat(this.rowOrCol);
+        var buttonIcon = isAdd ? plusIcon : trashcanIcon;
+        var fixedDir = isCol ? "bottom" : "right";
+        var movedDir = isCol ? isFirst ? "left" : "right" : isFirst ? "top" : "bottom";
+        var offset = "calc(-1em - var(--grid-gap) / 2".concat(isFirst && isCol ? " - 60px" : "", ")");
+        var addPositioning = "\n      #container {\n        position: absolute;\n        ".concat(fixedDir, ": 2px;\n        ").concat(movedDir, ": ").concat(offset, ";\n        ").concat(isFirst ? "display: grid;\n               grid-template-columns: 60px auto;\n               " : "", "\n      }\n    ");
+        this.shadowRoot.innerHTML = "\n    <style>\n    \n      ".concat(isAdd ? addPositioning : "", "\n    \n      button {\n        font-size: 15px;\n        height: 2em;\n        width: 2em;\n        border-radius: 50%;\n        background-color: rgba(255, 255, 255, 0);\n        border: 1px solid rgba(255, 255, 255, 0);\n        padding: 0;\n        color: var(--dark-gray, gray);\n        transition: color 0.2s, background-color 0.2s;\n      }\n\n      button:hover {\n        background-color: var(--dark-gray, gray);\n        color: white;\n      }\n\n      svg {\n        max-height: 100%;\n        max-width: 100%;\n      }\n    </style>\n    <div id='container' > \n    ").concat(isFirst ? "Add ".concat(this.rowOrCol, " ") : "", '\n    <button title = "').concat(buttonTitle, '"> ').concat(buttonIcon, "</button>\n      </div>\n   ");
+        this.shadowRoot.querySelector("button").addEventListener("click", function() {
+          _this2._onPress();
+        });
+      }
+    }]);
+    return AddOrRemoveButton2;
+  }(/* @__PURE__ */ _wrapNativeSuper(HTMLElement));
+  customElements.define("add-or-remove-button", AddOrRemoveButton);
+
+  // make-cssUnitInput.ts
+  var _templateObject;
+  var _templateObject2;
   function _createForOfIteratorHelper(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -6229,34 +6735,34 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral2(strings, raw) {
+  function _taggedTemplateLiteral(strings, raw) {
     if (!raw) {
       raw = strings.slice(0);
     }
     return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
   }
-  var css_unit_input = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral2(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .value_input.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
-  var default_values = {
+  var cssUnitInput = css(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  display: grid;\n  grid-template-columns: repeat(2, 55px);\n  justify-content: center; /* Make sure to sit in middle of control */\n  grid-gap: 2px;\n  padding: 0.5rem;\n  pointer-events: none;\n  /* Prevents card styling when set to every child from spilling into input divs */\n  box-shadow: none !important;\n\n  &.cols-sizing {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  & > * {\n    pointer-events: all;\n  }\n\n  select,\n  input {\n    align-self: stretch;\n    justify-self: stretch;\n    height: 1.75rem;\n    font-size: 1.1rem;\n  }\n\n  .valueInput.disabled {\n    opacity: 0.15;\n    pointer-events: none;\n  }\n"])));
+  var defaultValues = {
     fr: "1",
     px: "100",
     rem: "2"
   };
-  function get_css_unit(css_size) {
-    return css_size.match(/(px|\%|rem|fr|auto)/g)[0] || "px";
+  function getCssUnit(cssSize) {
+    return cssSize.match(/(px|\%|rem|fr|auto)/g)[0] || "px";
   }
-  function get_css_value(css_size) {
-    var value = css_size.match(/^[\d|\.]*/g)[0];
+  function getCssValue(cssSize) {
+    var value = cssSize.match(/^[\d|\.]*/g)[0];
     return value === "" ? null : Number(value);
   }
-  function make_css_unit_input(_ref) {
-    var parent_el = _ref.parent_el, _ref$selector = _ref.selector, selector = _ref$selector === void 0 ? "" : _ref$selector, _ref$start_val = _ref.start_val, start_val = _ref$start_val === void 0 ? 1 : _ref$start_val, _ref$start_unit = _ref.start_unit, start_unit = _ref$start_unit === void 0 ? "fr" : _ref$start_unit, _ref$on_change = _ref.on_change, on_change = _ref$on_change === void 0 ? function(x) {
+  function makeCssUnitInput(_ref) {
+    var parentEl = _ref.parentEl, _ref$selector = _ref.selector, selector = _ref$selector === void 0 ? "" : _ref$selector, _ref$startVal = _ref.startVal, startVal = _ref$startVal === void 0 ? 1 : _ref$startVal, _ref$startUnit = _ref.startUnit, startUnit = _ref$startUnit === void 0 ? "fr" : _ref$startUnit, _ref$onChange = _ref.onChange, onChange = _ref$onChange === void 0 ? function(x) {
       return console.log("css unit change", x);
-    } : _ref$on_change, _ref$allowed_units = _ref.allowed_units, allowed_units = _ref$allowed_units === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowed_units, _ref$snap_to_defaults = _ref.snap_to_defaults, snap_to_defaults = _ref$snap_to_defaults === void 0 ? true : _ref$snap_to_defaults;
-    var current_unit = start_unit;
-    var form = make_el(parent_el, "form".concat(selector, ".").concat(css_unit_input), {
-      event_listener: [{
+    } : _ref$onChange, _ref$allowedUnits = _ref.allowedUnits, allowedUnits = _ref$allowedUnits === void 0 ? ["fr", "px", "rem", "auto"] : _ref$allowedUnits, _ref$snapToDefaults = _ref.snapToDefaults, snapToDefaults = _ref$snapToDefaults === void 0 ? true : _ref$snapToDefaults;
+    var currentUnit = startUnit;
+    var form = makeEl(parentEl, "form".concat(selector, ".").concat(cssUnitInput), {
+      eventListener: [{
         event: "change",
-        func: on_update
+        func: onUpdate
       }, {
         event: "submit",
         func: function func(e) {
@@ -6264,59 +6770,59 @@
         }
       }]
     });
-    var value_input = make_el(form, "input.value-input", {
+    var valueInput = makeEl(form, "input.value-input", {
       props: {
         type: "number",
         min: 0,
-        value: start_val,
+        value: startVal,
         step: 1,
         "aria-live": "polite"
       }
     });
-    var unit_selector = make_el(form, "select.unit-selector", {
+    var unitSelector = makeEl(form, "select.unit-selector", {
       props: {
         name: "units"
       }
     });
-    allowed_units.forEach(function(unit_type2) {
-      var unit_option = make_el(unit_selector, "option.".concat(unit_type2), {
+    allowedUnits.forEach(function(unitType2) {
+      var unitOption = makeEl(unitSelector, "option.".concat(unitType2), {
         props: {
-          value: unit_type2
+          value: unitType2
         },
-        innerHTML: unit_type2
+        innerHTML: unitType2
       });
-      if (unit_type2 === start_unit) {
-        unit_option.selected = true;
+      if (unitType2 === startUnit) {
+        unitOption.selected = true;
       }
     });
-    function unit_type() {
-      return unit_selector.value;
+    function unitType() {
+      return unitSelector.value;
     }
-    function num_units() {
-      return value_input.value;
+    function numUnits() {
+      return valueInput.value;
     }
-    function current_value() {
-      if (unit_type() === "auto")
+    function currentValue() {
+      if (unitType() === "auto")
         return "auto";
-      return "".concat(num_units()).concat(unit_type());
+      return "".concat(numUnits()).concat(unitType());
     }
-    function on_update() {
-      var val = current_value();
-      update_value(val);
-      on_change(val);
+    function onUpdate() {
+      var val = currentValue();
+      updateValue(val);
+      onChange(val);
     }
-    function update_value(new_value) {
-      var units = get_css_unit(new_value);
-      var count = get_css_value(new_value);
+    function updateValue(newValue) {
+      var units = getCssUnit(newValue);
+      var count = getCssValue(newValue);
       if (count === null && units === "auto") {
-        value_input.classList.add("disabled");
-        value_input.value = "";
+        valueInput.classList.add("disabled");
+        valueInput.value = "";
       } else {
-        value_input.classList.remove("disabled");
-        var using_old_units_default = value_input.value === default_values[current_unit] && snap_to_defaults;
-        value_input.value = count === null || using_old_units_default ? default_values[units] : count.toString();
+        valueInput.classList.remove("disabled");
+        var usingOldUnitsDefault = valueInput.value === defaultValues[currentUnit] && snapToDefaults;
+        valueInput.value = count === null || usingOldUnitsDefault ? defaultValues[units] : count.toString();
       }
-      var _iterator = _createForOfIteratorHelper(unit_selector.children), _step;
+      var _iterator = _createForOfIteratorHelper(unitSelector.children), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var opt = _step.value;
@@ -6327,250 +6833,136 @@
       } finally {
         _iterator.f();
       }
-      current_unit = units;
+      currentUnit = units;
     }
-    update_value("".concat(start_val).concat(start_unit));
+    updateValue("".concat(startVal).concat(startUnit));
     return {
       form: form,
-      current_value: current_value,
-      update_value: update_value
+      currentValue: currentValue,
+      updateValue: updateValue
     };
   }
-  var tract_controls = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled { display: none; }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  .remove-row,\n  .remove-col {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
-  function build_controls_for_dir(app_state, dir, editor_container) {
-    var target_class = dir === "rows" ? "c1" : "r1";
-    var dir_singular = dir === "rows" ? "row" : "col";
-    editor_container.querySelectorAll(".".concat(dir, "-controls")).forEach(function(el) {
+  var tractControls = css(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(['\n  display: grid;\n  gap: 0.25rem;\n  position: absolute;\n\n  &.disabled {\n    display: none;\n  }\n\n  &.cols-controls {\n    height: var(--editor-top-pad);\n    padding-bottom: 5px;\n    grid-template-areas:\n      ".        remove-tract  .       "\n      "cssInput cssInput    cssInput"\n      "dragger  dragger     dragger ";\n    grid-template-columns: repeat(3, 1fr);\n    justify-content: center;\n    justify-items: center;\n    align-content: end;\n  }\n\n  &.cols-controls .css-unit-input {\n    width: 90%;\n    grid-template-columns: repeat(auto-fit, 55px);\n  }\n\n  &.rows-controls {\n    width: var(--editor-left-pad);\n    padding-right: 0.5rem;\n    align-items: center;\n    grid-template-areas:\n      "remove-tract cssInput"\n      "remove-tract dragger ";\n    /* grid-template-columns: auto minmax(50px, 200px); */\n    justify-content: end;\n    align-content: center;\n  }\n\n  add-or-remove-button {\n    grid-area: remove-tract;\n  }\n\n  .unit-input {\n    padding: 0;\n    grid-area: cssInput;\n  }\n\n  .dragger {\n    display: none;\n    justify-content: center;\n    align-items: center;\n    cursor: grab;\n    border: 1px solid var(--dark-gray);\n    border-radius: 4px;\n    color: var(--off-black);\n    height: 15px;\n    grid-area: dragger;\n    position: relative; /* So the drag detector div can be sized correctly */\n  }\n  .dragger:active {\n    cursor: grabbing;\n  }\n\n  &.with-drag .dragger {\n    display: flex;\n    width: 100%;\n    max-width: 80px;\n    justify-self: center;\n  }\n\n  .drag-detector {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    top: 0;\n    left: 0;\n    background: steelblue;\n    opacity: 0;\n  }\n'])));
+  function buildControlsForDir(appState, dir, editorContainer) {
+    var targetClass = dir === "rows" ? "c1" : "r1";
+    var dirSingular = dir === "rows" ? "row" : "col";
+    editorContainer.querySelectorAll(".".concat(dir, "-controls")).forEach(function(el) {
       return el.remove();
     });
-    return app_state.current_cells.filter(function(el) {
-      return el.classList.contains(target_class);
+    return appState.currentCells.filter(function(el) {
+      return el.classList.contains(targetClass);
     }).map(function(el) {
-      var tract_index = +el.dataset[dir_singular];
-      var holder_el = make_el(editor_container, "div#controller_for_".concat(dir_singular, "_").concat(tract_index, ".tract-controls.").concat(tract_controls, ".").concat(dir, "-controls"));
-      if (tract_index === 1) {
-        tract_add_or_remove_button(app_state, {
-          parent_el: holder_el,
-          add_or_remove: "add",
-          dir: dir,
-          tract_index: 0,
-          additional_styles: _defineProperty4({}, dir === "rows" ? "top" : "left", "var(--incrementer-offset)")
-        });
+      var tractIndex = +el.dataset[dirSingular];
+      var holderEl = makeEl(editorContainer, "div#controller-for-".concat(dirSingular, "-").concat(tractIndex, ".tract-controls.").concat(tractControls, ".").concat(dir, "-controls"));
+      if (tractIndex === 1) {
+        holderEl.appendChild(new AddOrRemoveButton().setAddOrRemove("add").setRowOrCol(dirSingular).setFirst().onPress(function() {
+          appState.addTract(dir, 0);
+        }));
       }
-      tract_add_or_remove_button(app_state, {
-        parent_el: holder_el,
-        add_or_remove: "add",
-        dir: dir,
-        tract_index: tract_index
-      });
+      holderEl.appendChild(new AddOrRemoveButton().setAddOrRemove("add").setRowOrCol(dirSingular).onPress(function() {
+        appState.addTract(dir, tractIndex);
+      }));
       return {
-        matched_cell: el,
-        el: holder_el,
-        controller: make_grid_tract_control(holder_el, app_state, {
+        matchedCell: el,
+        el: holderEl,
+        controller: makeGridTractControl(holderEl, appState, {
           dir: dir,
-          size: app_state.grid_layout[dir][tract_index - 1],
-          tract_index: tract_index
+          size: appState.gridLayout[dir][tractIndex - 1],
+          tractIndex: tractIndex
         })
       };
     });
   }
-  function make_grid_tract_control(holder, app_state, opts) {
-    var size = opts.size, dir = opts.dir, tract_index = opts.tract_index;
-    var unit_input = make_css_unit_input({
-      parent_el: holder,
-      selector: ".unit-input.".concat(dir, "-sizing"),
-      start_val: get_css_value(size),
-      start_unit: get_css_unit(size),
-      on_change: function on_change(new_val) {
-        show_or_hide_dragger(new_val);
-        send_update();
-      }
-    });
-    function send_update() {
-      var to_shiny = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : true;
-      app_state.update_tract({
-        tract_index: tract_index,
+  function makeGridTractControl(holder, appState, opts) {
+    var size = opts.size, dir = opts.dir, tractIndex = opts.tractIndex;
+    function sendUpdate(_ref2) {
+      var isDragging = _ref2.isDragging;
+      appState.updateTract({
+        tractIndex: tractIndex,
         dir: dir,
-        new_value: unit_input.current_value(),
-        dont_send_to_shiny: !to_shiny
+        newValue: unitInput.currentValue(),
+        isDragging: isDragging
       });
     }
-    var value_input = unit_input.form.querySelector(".value-input");
-    var drag_dir = dir === "rows" ? "y" : "x";
-    var resizer = make_el(holder, "div.dragger", {
-      innerHTML: dir === "rows" ? vertical_drag_icon : horizontal_drag_icon
+    var unitInput = makeCssUnitInput({
+      parentEl: holder,
+      selector: ".unit-input.".concat(dir, "-sizing"),
+      startVal: getCssValue(size),
+      startUnit: getCssUnit(size),
+      onChange: function onChange(newVal) {
+        showOrHideDragger(newVal);
+        sendUpdate({
+          isDragging: false
+        });
+      }
     });
-    make_el(resizer, "div.drag-detector", {
+    var valueInput = unitInput.form.querySelector(".value-input");
+    var dragDir = dir === "rows" ? "y" : "x";
+    var resizer = makeEl(holder, "div.dragger", {
+      innerHTML: dir === "rows" ? verticalDragIcon : horizontalDragIcon
+    });
+    makeEl(resizer, "div.drag-detector", {
       props: {
         draggable: true
       },
-      event_listener: [{
+      eventListener: [{
         event: "dragstart",
         func: function func(event) {
-          this.dataset.baseline = value_input.value;
-          this.dataset.start = event[drag_dir];
+          this.dataset.baseline = valueInput.value;
+          this.dataset.start = event[dragDir];
         }
       }, {
         event: "drag",
         func: function func(event) {
-          var drag_pos = event[drag_dir];
-          if (drag_pos === 0)
+          var dragPos = event[dragDir];
+          if (dragPos === 0)
             return;
-          var new_value = Math.max(0, +this.dataset.baseline + (event[drag_dir] - this.dataset.start));
-          value_input.value = new_value.toString();
-          send_update(false);
+          var newValue = Math.max(0, +this.dataset.baseline + (event[dragDir] - this.dataset.start));
+          valueInput.value = newValue.toString();
+          sendUpdate({
+            isDragging: true
+          });
         }
       }, {
         event: "dragend",
         func: function func(event) {
-          send_update();
+          sendUpdate({
+            isDragging: false
+          });
         }
       }]
     });
-    tract_add_or_remove_button(app_state, {
-      parent_el: holder,
-      add_or_remove: "remove",
-      dir: dir,
-      tract_index: tract_index
-    });
-    function show_or_hide_dragger(curr_val) {
-      if (get_css_unit(curr_val) === "px") {
+    holder.appendChild(new AddOrRemoveButton().setAddOrRemove("remove").setRowOrCol(dir).onPress(function() {
+      appState.removeTract(dir, tractIndex);
+    }));
+    function showOrHideDragger(currVal) {
+      if (getCssUnit(currVal) === "px") {
         holder.classList.add("with-drag");
       } else {
         holder.classList.remove("with-drag");
       }
     }
-    show_or_hide_dragger(unit_input.current_value());
-    return unit_input;
+    showOrHideDragger(unitInput.currentValue());
+    return unitInput;
   }
 
-  // make-focused_modal.ts
-  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
-  var _templateObject3;
-  function _taggedTemplateLiteral3(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
-  var blurred_background = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral3(["\n  grid-column: 1 / -1;\n  grid-row: 2 / -1;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  /* slightly transparent fallback */\n  background-color: rgba(255, 255, 255, .8);\n  z-index: 990;\n\n  /* if backdrop-filter support: make transparent and blurred */\n  @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n    & {\n      background-color: rgba(255, 255, 255, .05);\n      -webkit-backdrop-filter: blur(4px);\n      backdrop-filter: blur(4px);\n    }\n  }\n\n  .focused_modal {\n    width: 95%;\n    max-width: 450px;\n    background: white;\n    z-index: 999;\n    padding: 1.5rem 2.2rem;\n  }\n  .modal_header {\n    padding-bottom: 1rem;\n  }\n"])));
-  function focused_modal(opts) {
-    var background = make_el(document.querySelector("#grided__holder"), "div.".concat(blurred_background), {
-      event_listener: opts.background_callbacks
-    });
-    var modal = make_el(background, "div.focused_modal", {
-      event_listener: opts.modal_callbacks
-    });
-    if (opts.header_text) {
-      make_el(modal, "div.modal_header", {
-        innerHTML: opts.header_text,
-        styles: {
-          paddingBottom: "1rem"
-        }
-      });
-    }
-    return {
-      background: background,
-      modal: modal,
-      remove: function remove() {
-        return background.remove();
-      }
-    };
-  }
-  function show_code(message, code_blocks) {
-    var code_modal = focused_modal({
-      header_text: "".concat(message),
-      modal_callbacks: {
-        event: "click",
-        func: function func(event) {
-          event.stopPropagation();
-        }
-      },
-      background_callbacks: {
-        event: "click",
-        func: close_modal
-      }
-    });
-    as_array(code_blocks).forEach(function(code_to_show) {
-      var num_of_lines = code_to_show.code.match(/\n/g).length;
-      var code_section = make_el(code_modal.modal, "div#".concat(code_to_show.type, ".code_chunk"), {
-        styles: {
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gridTemplateRows: "1fr, auto",
-          gap: "4px",
-          gridTemplateAreas: concat_nl('"code_type copy_btn"', '"code_text code_text"')
-        }
-      });
-      var code_text;
-      make_el(code_section, "strong", {
-        innerHTML: code_to_show.type,
-        styles: {
-          gridArea: "code_type"
-        }
-      });
-      make_el(code_section, "button#copy_code", {
-        innerHTML: "Copy to clipboard",
-        styles: {
-          gridArea: "copy_btn"
-        },
-        event_listener: {
-          event: "click",
-          func: function func() {
-            code_text.select();
-            document.execCommand("copy");
-          }
-        }
-      });
-      code_text = make_el(code_section, "textarea#code_for_layout", {
-        innerHTML: code_to_show.code,
-        props: {
-          rows: num_of_lines + 3
-        },
-        styles: {
-          width: "100%",
-          background: "#f3f2f2",
-          fontFamily: "monospace",
-          display: "block",
-          padding: "0.75rem",
-          marginBottom: "10px",
-          borderRadius: "5px",
-          gridArea: "code_text"
-        }
-      });
-    });
-    var action_buttons = make_el(code_modal.modal, "div#action_buttons", {
-      styles: {
-        display: "flex",
-        justifyContent: "space-around"
-      }
-    });
-    make_el(action_buttons, "button#close_code_model", {
-      innerHTML: "Close",
-      event_listener: {
-        event: "click",
-        func: close_modal
-      }
-    });
-    function close_modal() {
-      code_modal.remove();
-    }
-  }
-
-  // node_modules/core-js/modules/es.array.every.js
-  "use strict";
-  var $29 = require_export();
-  var $every = require_array_iteration().every;
-  var arrayMethodIsStrict4 = require_array_method_is_strict();
-  var STRICT_METHOD4 = arrayMethodIsStrict4("every");
-  $29({ target: "Array", proto: true, forced: !STRICT_METHOD4 }, {
-    every: function every(callbackfn) {
-      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
-    }
-  });
-
-  // utils-cssom.ts
+  // setupGridedUI.ts
   var import_es_array_iterator10 = __toModule(require_es_array_iterator());
+
+  // utils-shiny.ts
+  function setShinyInput(inputId, inputValue) {
+    var _window$Shiny, _window$Shiny$setInpu;
+    var isEvent = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+    (_window$Shiny = window.Shiny) === null || _window$Shiny === void 0 ? void 0 : (_window$Shiny$setInpu = _window$Shiny.setInputValue) === null || _window$Shiny$setInpu === void 0 ? void 0 : _window$Shiny$setInpu.call(_window$Shiny, inputId, inputValue, isEvent ? {
+      priority: "event"
+    } : {});
+  }
+  function addShinyListener(eventId, callbackFunc) {
+    var _window$Shiny2;
+    (_window$Shiny2 = window.Shiny) === null || _window$Shiny2 === void 0 ? void 0 : _window$Shiny2.addCustomMessageHandler(eventId, callbackFunc);
+  }
+
+  // setupGridedUI.ts
   function _toConsumableArray3(arr) {
     return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray5(arr) || _nonIterableSpread3();
   }
@@ -6606,121 +6998,61 @@
     }
     return arr2;
   }
-  function get_all_rules_for_selector(selector_text) {
-    var defines_ruleset = function defines_ruleset2(selector_text2) {
-      return function(rule) {
-        return rule.selectorText === selector_text2;
-      };
-    };
-    return _toConsumableArray3(document.styleSheets).filter(function(style_sheet) {
-      return _toConsumableArray3(style_sheet.rules).find(defines_ruleset(selector_text));
-    }).map(function(x) {
-      return _toConsumableArray3(x.cssRules).find(defines_ruleset(selector_text)).style;
-    });
-  }
-  function get_styles_for_selector_with_targets(selector_text, target_properties) {
-    var all_rules_for_selector = get_all_rules_for_selector(selector_text);
-    return all_rules_for_selector.find(function(rule) {
-      return target_properties.every(function(x) {
-        return rule[x];
-      });
-    });
-  }
-
-  // utils-shiny.ts
-  function ownKeys3(object, enumerableOnly) {
-    var keys2 = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) {
-        symbols = symbols.filter(function(sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      }
-      keys2.push.apply(keys2, symbols);
-    }
-    return keys2;
-  }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys3(Object(source), true).forEach(function(key) {
-          _defineProperty5(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+  function setupGridedUI(appState, finishBtn) {
+    var gridIsFilled = appState.container.hasChildNodes();
+    var buttons = [clickButton("#see-layout-code", "Code for layout", function() {
+      return setShinyInput("see_layout_code", appState.currentLayout, true);
+    }), clickButton("#done", finishBtn.label, function() {
+      return finishBtn.onDone(appState.currentLayout);
+    })];
+    var settingsPanelEl = blockEl("div.settings.content-for-panel");
+    var addedElements = blockEl("div#added-elements.empty");
+    new MutationObserver(function(mutationsList, observer) {
+      if (addedElements.hasChildNodes()) {
+        addedElements.classList.remove("empty");
       } else {
-        ownKeys3(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
+        addedElements.classList.add("empty");
       }
-    }
-    return target;
-  }
-  function _defineProperty5(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  function setShinyInput(input_id, input_value) {
-    var _Shiny$setInputValue;
-    var is_event = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    Shiny === null || Shiny === void 0 ? void 0 : (_Shiny$setInputValue = Shiny.setInputValue) === null || _Shiny$setInputValue === void 0 ? void 0 : _Shiny$setInputValue.call(Shiny, input_id, input_value, is_event ? {
-      priority: "event"
-    } : {});
-  }
-  function add_shiny_listener(event_id, callback_func) {
-    Shiny === null || Shiny === void 0 ? void 0 : Shiny.addCustomMessageHandler(event_id, callback_func);
-  }
-  function send_grid_sizing_to_shiny(grid_attrs) {
-    setShinyInput("grid_sizing", grid_attrs);
-  }
-  function send_elements_to_shiny(elements) {
-    var elements_by_id = {};
-    elements.forEach(function(el) {
-      elements_by_id[el.id] = _objectSpread2({
-        id: el.id
-      }, el.grid_pos);
+    }).observe(addedElements, {
+      childList: true
     });
-    setShinyInput("elements", elements_by_id);
+    var gridedUi = blockEl("div#grided__holder", blockEl("div#grided__header", textEl("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), blockEl.apply(void 0, ["div.code-btns"].concat(buttons))), blockEl("div#grided__settings", textEl("h3", "".concat(settingsIcon, " Settings")), settingsPanelEl), blockEl("div#grided__instructions", textEl("h3", "".concat(instructionsIcon, " Instructions")), textEl("div.content-for-panel", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plusIcon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcanIcon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcanIcon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), blockEl("div#grided__elements", textEl("h3", "".concat(elementsIcon, " Added elements")), blockEl("div.content-for-panel", addedElements)), blockEl("div#grided__editor", blockEl("div#editor-wrapper", textEl("div#editor-browser-header", browserHeaderHtml), blockEl("div#editor-app-window", appState.container))));
+    document.querySelector("body").appendChild(gridedUi);
+    appState.container.style.height = "100%";
+    appState.container.style.width = "100%";
+    appState.container.style.display = "grid";
+    appState.container.style.maxWidth = "100%";
+    if (gridIsFilled) {
+      appState.container.style.gap = "1rem";
+      appState.container.style.padding = "1rem";
+    }
+  }
+  function toggleInteractionMode(appState, interactIsOn) {
+    [].concat(_toConsumableArray3(appState.container.querySelectorAll(".added-element")), _toConsumableArray3(appState.container.querySelectorAll(".grid-cell")), _toConsumableArray3(document.querySelectorAll(".tract-controls")), [document.querySelector("#added-elements"), document.querySelector("#drag-canvas")]).forEach(function(el) {
+      if (!el)
+        return;
+      if (interactIsOn) {
+        el.classList.add("disabled");
+      } else {
+        el.classList.remove("disabled");
+      }
+    });
   }
 
-  // wrap_in_grided.ts
+  // node_modules/core-js/modules/es.array.every.js
+  "use strict";
+  var $34 = require_export();
+  var $every = require_array_iteration().every;
+  var arrayMethodIsStrict5 = require_array_method_is_strict();
+  var STRICT_METHOD5 = arrayMethodIsStrict5("every");
+  $34({ target: "Array", proto: true, forced: !STRICT_METHOD5 }, {
+    every: function every(callbackfn) {
+      return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : void 0);
+    }
+  });
+
+  // utils-cssom.ts
   var import_es_array_iterator11 = __toModule(require_es_array_iterator());
-
-  // make-toggle_switch.ts
-  function make_toggle_switch(off_text, on_text, on_change) {
-    var container = Block_El("div.toggle-switch");
-    make_el(container, "span.off-text", {
-      innerHTML: off_text
-    });
-    var label = make_el(container, "label.switch");
-    make_el(container, "span.on-text", {
-      innerHTML: on_text
-    });
-    make_el(label, "input", {
-      props: {
-        type: "checkbox"
-      },
-      event_listener: {
-        event: "change",
-        func: function func(event) {
-          on_change(event.target.checked);
-        }
-      }
-    });
-    make_el(label, "span.slider");
-    var _Shadow_El = Shadow_El("div.toggle-switch", container), el = _Shadow_El.el, style_sheet = _Shadow_El.style_sheet;
-    style_sheet.innerHTML = toggle_styles;
-    return el;
-  }
-  var toggle_styles = '\ndiv.toggle-switch {\n  display: inline-grid;\n  grid-template-columns: 1fr auto 1fr;\n  grid-gap: 3px;\n  width: 180px;\n  align-items: center;\n  justify-items: center;\n  padding-left: 4px;\n  padding-right: 4px;\n}\n\n.toggle-switch > span {\n  font-size: 1rem;\n}\n\n.toggle-switch > .off-text {\n  text-align: end;\n}\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border-radius: 34px;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: "";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  border-radius: 50%;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n';
-
-  // wrap_in_grided.ts
   function _toConsumableArray4(arr) {
     return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray6(arr) || _nonIterableSpread4();
   }
@@ -6756,75 +7088,665 @@
     }
     return arr2;
   }
-  function wrap_in_grided(app_state) {
-    var grid_is_filled = app_state.container.hasChildNodes();
-    var buttons = [action_button("get_code", "Get layout code"), action_button("update_code", "Update app")];
-    if (grid_is_filled) {
-      buttons.push(make_toggle_switch("Edit layout", "Interact mode", toggle_interaction_mode));
-    }
-    var settings_panel_el = Block_El("div.panel-body");
-    var gap_size_setting = make_css_unit_input({
-      parent_el: make_el(settings_panel_el, "div#gap_size_chooser.plus_minus_input.settings-grid", {
-        innerHTML: '<span class = "input-label">Panel gap size</span>'
-      }),
-      selector: "#gap_size_chooser",
-      on_change: function on_change(x) {
-        return app_state.update_grid({
-          gap: x
-        });
-      },
-      allowed_units: ["px", "rem"],
-      snap_to_defaults: false
-    });
-    var grided_ui = Block_El("div#grided__holder", Block_El("div#grided__header", Text_El("h2", "GridEd<sub>(itor)</sub>: Build a grid layout for your Shiny app"), Block_El.apply(void 0, ["div.code_btns"].concat(buttons))), Block_El("div#grided__settings", Text_El("h3", "".concat(settings_icon, " Settings")), settings_panel_el), Block_El("div#grided__instructions", Text_El("h3", "".concat(instructions_icon, " Instructions")), Text_El("div.panel-body", "\n      <strong>Add or remove a row/column:</strong>\n      <ul> \n        <li> Click the ".concat(plus_icon, " in gaps between rows and columns to add a row or column at that location </li>\n        <li> Click the ").concat(trashcan_icon, ' next to the row/column sizing controls to remove it</li>\n      </ul>\n      <strong>Add an element:</strong>\n      <ul>\n        <li>Click and drag over the grid to define a region</li>\n        <li>Enter id of element in popup</li>\n      </ul>\n      <strong>Edit an element:</strong>\n      <ul>\n        <li>Drag the upper left, middle, or bottom right corners of the element to reposition</li>\n      </ul>\n      <strong>Remove an element:</strong>\n      <ul>\n        <li>Find element entry in "Added elements" panel and click the ').concat(trashcan_icon, " icon</li>\n        <li>You can't remove elements are part of a running app</li>\n      </ul>"))), Block_El("div#grided__elements", Text_El("h3", "".concat(elements_icon, " Added elements")), Block_El("div.panel-body", Block_El("div#added_elements"))), Block_El("div#grided__editor", Block_El("div#editor-wrapper", Text_El("div#editor-browser-header", browser_header_html), Block_El("div#editor-app-window", app_state.container))));
-    document.querySelector("body").appendChild(grided_ui);
-    app_state.grid_styles.height = "100%";
-    app_state.grid_styles.width = "100%";
-    app_state.grid_styles.display = "grid";
-    app_state.grid_styles.maxWidth = "100%";
-    if (grid_is_filled) {
-      app_state.grid_styles.gap = "1rem";
-      app_state.grid_styles.padding = "1rem";
-    }
-    function toggle_interaction_mode(interact_is_on) {
-      [].concat(_toConsumableArray4(app_state.container.querySelectorAll(".added-element")), _toConsumableArray4(app_state.container.querySelectorAll(".grid-cell")), _toConsumableArray4(grided_ui.querySelectorAll(".tract-controls")), [grided_ui.querySelector("#grided__settings .panel-body"), grided_ui.querySelector("#added_elements"), grided_ui.querySelector("#drag_canvas")]).forEach(function(el) {
-        if (interact_is_on) {
-          el.classList.add("disabled");
-        } else {
-          el.classList.remove("disabled");
-        }
-      });
-    }
-    function action_button(id, label) {
-      var button_el = Text_El("button#".concat(id), label);
-      button_el.addEventListener("click", function(event) {
-        setShinyInput(id, 1, true);
-      });
-      return button_el;
-    }
-    _toConsumableArray4(app_state.container.children).forEach(function(el) {
-      var bbox = el.getBoundingClientRect();
-      if (bbox.width === 0 && bbox.height === 0)
-        return;
-      app_state.add_element({
-        id: el.id,
-        grid_pos: get_pos_on_grid(el),
-        mirrored_element: el
-      });
-    });
-    return {
-      gap_size_setting: gap_size_setting,
-      grid_is_filled: grid_is_filled
+  function getStylesForSelectorWithTargets(selectorText, targetProperties) {
+    var definesRuleset = function definesRuleset2(selectorText2) {
+      return function(rule) {
+        return rule.selectorText === selectorText2;
+      };
     };
+    var allRulesForSelector = _toConsumableArray4(document.styleSheets).filter(function(styleSheet) {
+      return _toConsumableArray4(styleSheet.rules).find(definesRuleset(selectorText));
+    }).map(function(x) {
+      return _toConsumableArray4(x.cssRules).find(definesRuleset(selectorText)).style;
+    });
+    return allRulesForSelector.find(function(rule) {
+      return targetProperties.every(function(x) {
+        return rule[x];
+      });
+    });
   }
 
-  // App_State.ts
-  var _templateObject4;
-  var _templateObject23;
+  // web-components/focus-modal.ts
+  var import_es_array_iterator13 = __toModule(require_es_array_iterator());
+  var import_es_map3 = __toModule(require_es_map());
+
+  // web-components/copy-code.ts
+  var import_es_regexp_exec9 = __toModule(require_es_regexp_exec());
+  var import_es_array_iterator12 = __toModule(require_es_array_iterator());
+  var import_es_map2 = __toModule(require_es_map());
+  function _typeof4(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof4 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof4 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof4(obj);
+  }
+  function _classCallCheck4(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties4(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass4(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties4(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties4(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits2(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf2(subClass, superClass);
+  }
+  function _createSuper2(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf2(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf2(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn2(this, result);
+    };
+  }
+  function _possibleConstructorReturn2(self2, call) {
+    if (call && (_typeof4(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized2(self2);
+  }
+  function _assertThisInitialized2(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper2(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper2 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction2(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct2(Class2, arguments, _getPrototypeOf2(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf2(Wrapper, Class2);
+    };
+    return _wrapNativeSuper2(Class);
+  }
+  function _construct2(Parent, args, Class) {
+    if (_isNativeReflectConstruct2()) {
+      _construct2 = Reflect.construct;
+    } else {
+      _construct2 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf2(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct2.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct2() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction2(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf2(o, p) {
+    _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf2(o, p);
+  }
+  function _getPrototypeOf2(o) {
+    _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf2(o);
+  }
+  function _defineProperty5(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var CopyCode = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits2(CopyCode2, _HTMLElement);
+    var _super = _createSuper2(CopyCode2);
+    function CopyCode2(code) {
+      var _code$match$length;
+      var _this;
+      _classCallCheck4(this, CopyCode2);
+      _this = _super.call(this);
+      _defineProperty5(_assertThisInitialized2(_this), "code", void 0);
+      _defineProperty5(_assertThisInitialized2(_this), "numOfLines", void 0);
+      _this.code = code;
+      _this.numOfLines = Math.min((_code$match$length = code.match(/\n/g).length) !== null && _code$match$length !== void 0 ? _code$match$length : 1, 25);
+      _this.attachShadow({
+        mode: "open"
+      });
+      return _this;
+    }
+    _createClass4(CopyCode2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.shadowRoot.innerHTML = '\n    <style>\n       * { box-sizing: border-box; }\n   \n       :host {\n         width: 100%;\n         display: grid;\n         grid-template-columns: repeat(2, 1fr);\n         grid-template-rows: 40px auto;\n         gap: 4px;\n         grid-template-areas:\n           "type      copy-btn"\n           "code-text code-text";\n       }\n       \n       textarea {\n         grid-area: code-text;\n         font-family: monospace;\n         width: 100%;\n       }\n       #type { \n         grid-area: type; \n         font-size: 1.5rem;\n         font-weight: bold;\n         place-self: center;\n        }\n       #copy { \n         grid-area: copy-btn; \n         justify-self: end;\n         align-self: center;\n         padding: 5px 8px;\n         display: inline-flex;\n         align-items: center;\n       }\n   \n       #copy > svg {\n         transform: scale(0.8);\n       }\n     </style>\n     <textarea id = \'code\' rows = '.concat(this.numOfLines + 1, ">").concat(this.code, "</textarea>\n     <div id = \"type\"> R </div>\n     <button id = 'copy'> ").concat(clipboardIcon, " Copy Code </button>\n   ");
+        var codeEl = this.shadowRoot.getElementById("code");
+        this.shadowRoot.getElementById("copy").addEventListener("click", function() {
+          codeEl.select();
+          document.execCommand("copy");
+        });
+      }
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+      }
+    }]);
+    return CopyCode2;
+  }(/* @__PURE__ */ _wrapNativeSuper2(HTMLElement));
+  customElements.define("copy-code", CopyCode);
+  function copyCode(code) {
+    return new CopyCode(code);
+  }
+
+  // web-components/focus-modal.ts
+  function _typeof5(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof5 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof5 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof5(obj);
+  }
+  function _classCallCheck5(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties5(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass5(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties5(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties5(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits3(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf3(subClass, superClass);
+  }
+  function _createSuper3(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf3(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf3(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn3(this, result);
+    };
+  }
+  function _possibleConstructorReturn3(self2, call) {
+    if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized3(self2);
+  }
+  function _assertThisInitialized3(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper3(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper3 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction3(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct3(Class2, arguments, _getPrototypeOf3(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf3(Wrapper, Class2);
+    };
+    return _wrapNativeSuper3(Class);
+  }
+  function _construct3(Parent, args, Class) {
+    if (_isNativeReflectConstruct3()) {
+      _construct3 = Reflect.construct;
+    } else {
+      _construct3 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf3(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct3.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct3() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction3(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf3(o, p) {
+    _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf3(o, p);
+  }
+  function _getPrototypeOf3(o) {
+    _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf3(o);
+  }
+  function _defineProperty6(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var FocusModal = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits3(FocusModal2, _HTMLElement);
+    var _super = _createSuper3(FocusModal2);
+    function FocusModal2() {
+      var _this;
+      _classCallCheck5(this, FocusModal2);
+      _this = _super.call(this);
+      _defineProperty6(_assertThisInitialized3(_this), "OnClose", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "Title", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "MaxWidth", "450px");
+      _defineProperty6(_assertThisInitialized3(_this), "Children", []);
+      _defineProperty6(_assertThisInitialized3(_this), "Description", void 0);
+      _defineProperty6(_assertThisInitialized3(_this), "hasRendered", false);
+      _this.attachShadow({
+        mode: "open"
+      });
+      return _this;
+    }
+    _createClass5(FocusModal2, [{
+      key: "setTitle",
+      value: function setTitle(title) {
+        this.Title = title;
+        return this;
+      }
+    }, {
+      key: "description",
+      value: function description(_description) {
+        this.Description = _description;
+        return this;
+      }
+    }, {
+      key: "maxWidth",
+      value: function maxWidth(width) {
+        this.MaxWidth = width;
+        return this;
+      }
+    }, {
+      key: "addElement",
+      value: function addElement(el) {
+        if (this.hasRendered) {
+          this.shadowRoot.getElementById("content").appendChild(el);
+          return this;
+        }
+        this.Children.push(el);
+        return this;
+      }
+    }, {
+      key: "onClose",
+      value: function onClose(callback) {
+        this.OnClose = callback;
+        return this;
+      }
+    }, {
+      key: "focusOn",
+      value: function focusOn(elId) {
+        this.shadowRoot.getElementById(elId).focus();
+        return this;
+      }
+    }, {
+      key: "setupCloseCallbacks",
+      value: function setupCloseCallbacks() {
+        var _this2 = this;
+        var exitFn = function exitFn2() {
+          var _this2$OnClose;
+          (_this2$OnClose = _this2.OnClose) === null || _this2$OnClose === void 0 ? void 0 : _this2$OnClose.call(_this2);
+          _this2.remove();
+        };
+        this.shadowRoot.getElementById("close").addEventListener("click", exitFn);
+        this.addEventListener("click", exitFn);
+        this.shadowRoot.getElementById("content").addEventListener("click", function(event) {
+          event.stopPropagation();
+        });
+      }
+    }, {
+      key: "addToPage",
+      value: function addToPage() {
+        document.body.appendChild(this);
+        this.hasRendered = true;
+        return this;
+      }
+    }, {
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        this.shadowRoot.innerHTML = "\n    <style>\n       :host {\n         position: absolute;\n         top: 0;\n         left: 0;\n         display: grid;\n         place-content: center;\n         outline: 1px solid red;\n         width: 100%;\n         height: 100vh;\n         background-color: rgba(255, 255, 255, .8);\n         z-index: 990;\n       }\n   \n       /* if backdrop-filter support: make transparent and blurred */\n       @supports ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {\n         :host {\n           background-color: rgba(255, 255, 255, .05);\n           -webkit-backdrop-filter: blur(4px);\n           backdrop-filter: blur(4px);\n         }\n       }\n   \n       #content {\n         border: 1px solid #bababa;\n         border-radius: 4px;\n         width: 95%;\n         min-width: 400px;\n         max-width: ".concat(this.MaxWidth, ';\n         background: white;\n         padding: 2rem 3rem;\n         position: relative;\n       }\n   \n       #footer {\n         padding-top: 1rem;\n         display: grid;\n         grid-template-columns: repeat(auto-fit, 150px);\n         justify-content: center;\n         gap: 2rem;\n       }\n       \n       #title {\n         margin: 0;\n       }\n   \n       copy-code {\n         margin-top: 0.5rem;\n         margin-bottom: 0.5rem;\n       }\n   \n       #close {\n         padding: 0;\n         display: inline-flex;\n         align-items: center;\n         position: absolute;\n         right: 4px;\n         top: 4px;\n       }\n   \n       .centered {\n         margin-left: auto;\n         margin-right: auto;\n       }\n     </style>\n     <div id="content">\n       ').concat(this.Title ? "<h2 id = 'title'> ".concat(this.Title, " </h2>") : "", "\n       <button id = 'close'> ").concat(closeIcon, " </button>\n       ").concat(this.Description ? '<div id = "description">'.concat(this.Description, "</div>") : "", "\n     </div>\n   ");
+        var content = this.shadowRoot.getElementById("content");
+        this.Children.forEach(function(el) {
+          content.appendChild(el);
+        });
+        this.setupCloseCallbacks();
+      }
+    }]);
+    return FocusModal2;
+  }(/* @__PURE__ */ _wrapNativeSuper3(HTMLElement));
+  customElements.define("focus-modal", FocusModal);
+  function createFocusModal() {
+    return new FocusModal();
+  }
+
+  // web-components/toggle-switch.ts
+  var import_es_array_iterator14 = __toModule(require_es_array_iterator());
+  var import_es_map4 = __toModule(require_es_map());
+  function _typeof6(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof6 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof6 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof6(obj);
+  }
+  function _classCallCheck6(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties6(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass6(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties6(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties6(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits4(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf4(subClass, superClass);
+  }
+  function _createSuper4(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct4();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf4(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf4(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn4(this, result);
+    };
+  }
+  function _possibleConstructorReturn4(self2, call) {
+    if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized4(self2);
+  }
+  function _assertThisInitialized4(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper4(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper4 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction4(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct4(Class2, arguments, _getPrototypeOf4(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf4(Wrapper, Class2);
+    };
+    return _wrapNativeSuper4(Class);
+  }
+  function _construct4(Parent, args, Class) {
+    if (_isNativeReflectConstruct4()) {
+      _construct4 = Reflect.construct;
+    } else {
+      _construct4 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf4(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct4.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct4() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction4(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf4(o, p) {
+    _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf4(o, p);
+  }
+  function _getPrototypeOf4(o) {
+    _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf4(o);
+  }
+  function _defineProperty7(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var ToggleSwitch = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits4(ToggleSwitch2, _HTMLElement);
+    var _super = _createSuper4(ToggleSwitch2);
+    function ToggleSwitch2(opts) {
+      var _this;
+      _classCallCheck6(this, ToggleSwitch2);
+      _this = _super.call(this);
+      _defineProperty7(_assertThisInitialized4(_this), "offText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onText", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "onChange", void 0);
+      _defineProperty7(_assertThisInitialized4(_this), "startOn", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.offText = opts.offText;
+      _this.onText = opts.onText;
+      _this.onChange = opts.onChange;
+      _this.startOn = opts.startOn;
+      return _this;
+    }
+    _createClass6(ToggleSwitch2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        height: auto;\n      }\n      #container {\n        display: inline-grid;\n        grid-template-columns: 1fr auto 1fr;\n        grid-gap: 4px;\n        width: 100%;\n        height: auto;\n        align-items: center;\n        justify-items: center;\n        padding-left: 4px;\n        padding-right: 4px;\n      }\n\n      .disabled {\n        opacity: 0.2;\n      }    \n\n      #off-text {\n        text-align: end;\n        justify-self: end;\n      }\n      #on-text {\n        justify-self: start;\n      }\n\n      label {\n        position: relative;\n        display: inline-block;\n        width: 60px;\n        height: 34px;\n      }\n\n      input {\n        opacity: 0;\n        width: 0;\n        height: 0;\n      }\n\n      #slider {\n        cursor: pointer;\n        position: absolute;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        border-radius: 34px;\n        background-color: #ccc;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n      .disabled #slider {\n        cursor: not-allowed;\n      }\n\n      #slider:before {\n        position: absolute;\n        content: "";\n        height: 26px;\n        width: 26px;\n        left: 4px;\n        bottom: 4px;\n        border-radius: 50%;\n        background-color: white;\n        -webkit-transition: .4s;\n        transition: .4s;\n      }\n\n      input:checked + #slider {\n        background-color: #2196F3;\n      }\n\n      input:focus + #slider {\n        box-shadow: 0 0 1px #2196F3;\n      }\n\n      input:checked + #slider:before {\n        -webkit-transform: translateX(26px);\n        -ms-transform: translateX(26px);\n        transform: translateX(26px);\n      }\n    </style>\n    <div id = "container">\n      <span id = "off-text">'.concat(this.offText, '</span>\n      <label id = "switch">\n        <input id = "switch-value" type = "checkbox"> </input>\n        <span id = "slider"> </span>\n      </label>\n      <span id = "on-text">').concat(this.onText, "</span>\n    </div>\n   ");
+        var switchValue = this.shadowRoot.getElementById("switch-value");
+        switchValue.checked = this.startOn;
+        switchValue.addEventListener("change", function(event) {
+          return _this2.onChange(event.target.checked);
+        });
+      }
+    }, {
+      key: "toggleEnabled",
+      value: function toggleEnabled(enable, msg) {
+        var container = this.shadowRoot.getElementById("container");
+        container.title = msg;
+        this.shadowRoot.getElementById("switch-value").disabled = !enable;
+        container.classList[enable ? "remove" : "add"]("disabled");
+      }
+    }, {
+      key: "disable",
+      value: function disable(msg) {
+        this.toggleEnabled(false, msg);
+      }
+    }, {
+      key: "enable",
+      value: function enable() {
+        this.toggleEnabled(true);
+      }
+    }]);
+    return ToggleSwitch2;
+  }(/* @__PURE__ */ _wrapNativeSuper4(HTMLElement));
+  customElements.define("toggle-switch", ToggleSwitch);
+
+  // LayoutEditor.ts
+  var _templateObject3;
+  var _templateObject22;
   var _templateObject32;
-  var _templateObject42;
+  var _templateObject4;
   var _templateObject5;
-  var _templateObject6;
   function _createForOfIteratorHelper2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (!it) {
@@ -6864,6 +7786,12 @@
       }
     } };
   }
+  function _taggedTemplateLiteral2(strings, raw) {
+    if (!raw) {
+      raw = strings.slice(0);
+    }
+    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
+  }
   function _toConsumableArray5(arr) {
     return _arrayWithoutHoles5(arr) || _iterableToArray5(arr) || _unsupportedIterableToArray7(arr) || _nonIterableSpread5();
   }
@@ -6899,12 +7827,6 @@
     }
     return arr2;
   }
-  function _taggedTemplateLiteral4(strings, raw) {
-    if (!raw) {
-      raw = strings.slice(0);
-    }
-    return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
-  }
   function ownKeys4(object, enumerableOnly) {
     var keys2 = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
@@ -6923,7 +7845,7 @@
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
         ownKeys4(Object(source), true).forEach(function(key) {
-          _defineProperty6(target, key, source[key]);
+          _defineProperty8(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -6935,12 +7857,12 @@
     }
     return target;
   }
-  function _classCallCheck3(instance, Constructor) {
+  function _classCallCheck7(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   }
-  function _defineProperties3(target, props) {
+  function _defineProperties7(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
@@ -6950,14 +7872,14 @@
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
-  function _createClass3(Constructor, protoProps, staticProps) {
+  function _createClass7(Constructor, protoProps, staticProps) {
     if (protoProps)
-      _defineProperties3(Constructor.prototype, protoProps);
+      _defineProperties7(Constructor.prototype, protoProps);
     if (staticProps)
-      _defineProperties3(Constructor, staticProps);
+      _defineProperties7(Constructor, staticProps);
     return Constructor;
   }
-  function _defineProperty6(obj, key, value) {
+  function _defineProperty8(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -6965,334 +7887,539 @@
     }
     return obj;
   }
-  var App_State = /* @__PURE__ */ function() {
-    function App_State2() {
-      var _find_first_grid_node;
-      _classCallCheck3(this, App_State2);
-      _defineProperty6(this, "gap_size_setting", void 0);
-      _defineProperty6(this, "current_cells", []);
-      _defineProperty6(this, "elements", []);
-      _defineProperty6(this, "container_selector", void 0);
-      _defineProperty6(this, "container", void 0);
-      _defineProperty6(this, "grid_styles", void 0);
-      _defineProperty6(this, "mode", void 0);
-      _defineProperty6(this, "grid_layout", void 0);
-      _defineProperty6(this, "tract_controls", void 0);
-      this.container = (_find_first_grid_node = find_first_grid_node()) !== null && _find_first_grid_node !== void 0 ? _find_first_grid_node : Block_El("div#grid_page");
-      this.grid_styles = this.container.style;
-      this.grid_layout = new Grid_Layout(this.container);
-      var _wrap_in_grided = wrap_in_grided(this), grid_is_filled = _wrap_in_grided.grid_is_filled, gap_size_setting = _wrap_in_grided.gap_size_setting;
-      this.gap_size_setting = gap_size_setting;
-      this.mode = grid_is_filled ? "Existing" : "New";
-      if (grid_is_filled) {
-        var current_grid_props = get_styles_for_selector_with_targets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
-        this.update_grid({
-          rows: current_grid_props.gridTemplateRows.split(" "),
-          cols: current_grid_props.gridTemplateColumns.split(" "),
-          gap: get_gap_size(current_grid_props.gap),
-          force: true
-        });
+  var LayoutEditor = /* @__PURE__ */ function() {
+    function LayoutEditor2(opts) {
+      _classCallCheck7(this, LayoutEditor2);
+      _defineProperty8(this, "gapSizeSetting", void 0);
+      _defineProperty8(this, "currentCells", []);
+      _defineProperty8(this, "elements", []);
+      _defineProperty8(this, "onUpdate", void 0);
+      _defineProperty8(this, "containerSelector", void 0);
+      _defineProperty8(this, "container", void 0);
+      _defineProperty8(this, "gridStyles", void 0);
+      _defineProperty8(this, "gridLayout", void 0);
+      _defineProperty8(this, "tractControls", void 0);
+      _defineProperty8(this, "entryType", void 0);
+      _defineProperty8(this, "liveApp", void 0);
+      _defineProperty8(this, "layoutName", void 0);
+      this.entryType = opts.entryType;
+      this.onUpdate = opts.onUpdate;
+      this.liveApp = typeof opts.liveApp === "undefined" ? opts.entryType !== "edit-layout" : opts.liveApp;
+      if (this.entryType === "layout-gallery" || this.entryType === "edit-layout") {
+        this.loadLayoutTemplate(opts);
+      } else if (this.entryType === "edit-existing-app" || Boolean(document.querySelector(".wrapped-existing-app"))) {
+        this.wrapExistingApp(opts);
+      } else if (this.entryType === "layout-gallery-live") {
+        this.loadLayoutTemplate(opts);
+      } else {
+        console.error("Neither starting layout was provided nor is there an existing grid app");
+      }
+      this.hookupModeToggles();
+      this.layoutName = opts === null || opts === void 0 ? void 0 : opts.layoutName;
+      if (this.entryType === "edit-layout" || this.entryType === "edit-existing-app") {
+        setShinyInput("starting-layout", this.currentLayout, true);
       }
     }
-    _createClass3(App_State2, [{
-      key: "next_color",
+    _createClass7(LayoutEditor2, [{
+      key: "loadLayoutTemplate",
+      value: function loadLayoutTemplate(opts) {
+        var _opts$elements, _this = this;
+        this.container = blockEl("div#gridPage");
+        this.gridLayout = new GridLayout(this.container);
+        setupGridedUI(this, opts.finishBtn);
+        this.hookupGapSizeControls(opts.grid.gap);
+        this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
+          dontUpdateHistory: true
+        }));
+        (_opts$elements = opts.elements) === null || _opts$elements === void 0 ? void 0 : _opts$elements.forEach(function(elMsg) {
+          var id = elMsg.id, start_row = elMsg.start_row, end_row = elMsg.end_row, start_col = elMsg.start_col, end_col = elMsg.end_col, _elMsg$ui_function = elMsg.ui_function, ui_function = _elMsg$ui_function === void 0 ? null : _elMsg$ui_function;
+          _this.addElement({
+            id: id,
+            gridPos: {
+              start_row: start_row,
+              end_row: end_row,
+              start_col: start_col,
+              end_col: end_col
+            },
+            ui_function: ui_function
+          }, false);
+        });
+        if (this.liveApp) {
+          this.enableLiveApp();
+        }
+        this.tractControls.updatePositions();
+      }
+    }, {
+      key: "attachUiToElement",
+      value: function attachUiToElement(uiFunctionName) {
+        var ui_for_element = document.querySelector('[data-grided-ui-name="'.concat(uiFunctionName, '"]'));
+        this.container.append(ui_for_element);
+        return ui_for_element;
+      }
+    }, {
+      key: "enableLiveApp",
+      value: function enableLiveApp() {
+        var _this2 = this;
+        this.liveApp = true;
+        this.elements.forEach(function(el) {
+          if (typeof el.ui_function === "undefined")
+            return;
+          el.addMirroredEl(_this2.attachUiToElement(el.ui_function));
+        });
+        this.updateGridTransparency();
+      }
+    }, {
+      key: "disableLiveApp",
+      value: function disableLiveApp() {
+        this.liveApp = false;
+        hideLiveAppUi();
+        this.updateGridTransparency();
+      }
+    }, {
+      key: "wrapExistingApp",
+      value: function wrapExistingApp(opts) {
+        var _opts$grid;
+        var alreadyWrappedApp = document.querySelector(".wrapped-existing-app");
+        this.container = alreadyWrappedApp !== null && alreadyWrappedApp !== void 0 ? alreadyWrappedApp : findFirstGridNode();
+        this.gridStyles = this.container.style;
+        this.gridLayout = new GridLayout(this.container);
+        if (alreadyWrappedApp) {
+          document.querySelectorAll([".grid-cell", ".added-element", ".tract-controls", ".dragSelectionBox", "#drag-canvas"].join(",")).forEach(function(el) {
+            return el === null || el === void 0 ? void 0 : el.remove();
+          });
+        } else {
+          setupGridedUI(this, opts.finishBtn);
+          var currentGridProps = getStylesForSelectorWithTargets("#".concat(this.container.id), ["gridTemplateColumns", "gridTemplateRows"]);
+          opts.grid = {
+            rows: currentGridProps.gridTemplateRows.split(" "),
+            cols: currentGridProps.gridTemplateColumns.split(" "),
+            gap: getGapSize(currentGridProps.gap)
+          };
+        }
+        this.addExistingElementsToApp(opts.elements);
+        this.hookupGapSizeControls((_opts$grid = opts.grid) === null || _opts$grid === void 0 ? void 0 : _opts$grid.gap);
+        this.updateGrid(_objectSpread3(_objectSpread3({}, opts.grid), {}, {
+          dontUpdateHistory: Boolean(alreadyWrappedApp),
+          force: true
+        }));
+      }
+    }, {
+      key: "hookupModeToggles",
+      value: function hookupModeToggles() {
+        var _this3 = this;
+        var liveAppToggle;
+        var interactModeToggle;
+        var settingsPanel = document.querySelector("#grided__settings > .content-for-panel");
+        var hasLiveUi = this.elements.some(function(el) {
+          return Boolean(el.ui_function);
+        });
+        if (hasLiveUi) {
+          liveAppToggle = new ToggleSwitch({
+            onText: "Live App",
+            offText: "Simple Edit",
+            onChange: function onChange(isOn) {
+              if (isOn) {
+                _this3.enableLiveApp();
+                interactModeToggle.enable();
+              } else {
+                _this3.disableLiveApp();
+                interactModeToggle.disable("Switch to live app mode to enable interaction mode");
+              }
+              _this3.sendUpdate();
+            },
+            startOn: this.liveApp
+          });
+          settingsPanel.append(liveAppToggle);
+        }
+        if (this.entryType === "layout-gallery") {
+          interactModeToggle = new ToggleSwitch({
+            offText: "Edit layout",
+            onText: "Interact mode",
+            onChange: function onChange(interactIsOn) {
+              if (interactIsOn) {
+                liveAppToggle.disable("Switch to edit mode to turn off live preview");
+              } else {
+                liveAppToggle.enable();
+              }
+              toggleInteractionMode(_this3, interactIsOn);
+            },
+            startOn: false
+          });
+          settingsPanel.append(interactModeToggle);
+        }
+      }
+    }, {
+      key: "hookupGapSizeControls",
+      value: function hookupGapSizeControls(initialGapSize) {
+        var _this4 = this;
+        this.gapSizeSetting = makeCssUnitInput({
+          parentEl: makeEl(document.querySelector("#grided__settings > .content-for-panel"), "div#gapSizeChooser.plusMinusInput.settings-grid", {
+            innerHTML: '<span class = "input-label">Panel gap size</span>'
+          }),
+          selector: "#gapSizeChooser",
+          onChange: function onChange(x) {
+            return _this4.updateGrid({
+              gap: x
+            });
+          },
+          allowedUnits: ["px", "rem"],
+          snapToDefaults: false
+        });
+        if (initialGapSize) {
+          this.gapSizeSetting.updateValue(initialGapSize);
+        }
+      }
+    }, {
+      key: "currentLayout",
+      get: function get() {
+        var layout = {
+          grid: this.gridLayout.attrs,
+          elements: this.elements.map(function(el) {
+            return el.info;
+          })
+        };
+        if (this.layoutName) {
+          layout.name = this.layoutName;
+        }
+        return layout;
+      }
+    }, {
+      key: "nextColor",
       get: function get() {
         var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#a65628", "#f781bf"];
         return colors[this.elements.length % colors.length];
       }
     }, {
-      key: "current_elements",
-      get: function get() {
-        this.elements.forEach(function(el) {
-          el.grid_pos = grid_position_of_el(el.grid_el);
-        });
-        return this.elements;
-      }
-    }, {
-      key: "add_element",
-      value: function add_element(el_props) {
-        if (el_props.mirrored_element) {
-          el_props.id = el_props.id.replace(/^.+?__/g, "");
+      key: "addElement",
+      value: function addElement(elProps) {
+        var sendUpdate = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+        if (elProps.mirroredElement) {
+          elProps.id = elProps.id.replace(/^.+?__/g, "");
         }
-        var grid_item = draw_elements(this, {
-          id: el_props.id,
-          mirrored_el: el_props.mirrored_element
-        });
-        grid_item.position = el_props.grid_pos;
-        var new_element_entry = _objectSpread3(_objectSpread3({}, el_props), {}, {
-          grid_el: grid_item.el,
-          list_el: grid_item.sibling_el,
-          grid_item: grid_item
-        });
-        this.elements.push(new_element_entry);
-        send_elements_to_shiny(this.current_elements);
+        var gridItem = drawElements(this, elProps);
+        if (sendUpdate) {
+          this.sendUpdate();
+        }
+        return gridItem;
       }
     }, {
-      key: "remove_elements",
-      value: function remove_elements2(ids) {
-        var _this = this;
-        as_array(ids).forEach(function(el_id) {
-          var entry_index = _this.elements.findIndex(function(el) {
-            return el.id === el_id;
-          });
-          _this.elements[entry_index].grid_item.remove();
-          _this.elements.splice(entry_index, 1);
-        });
-        send_elements_to_shiny(this.current_elements);
-      }
-    }, {
-      key: "add_tract",
-      value: function add_tract(dir, new_index) {
-        this.elements.forEach(function(el) {
-          var start_id = dir === "rows" ? "start_row" : "start_col";
-          var end_id = dir === "rows" ? "end_row" : "end_col";
-          var el_position = el.grid_item.position;
-          if (new_index >= el_position[end_id]) {
-          } else if (new_index < el_position[start_id]) {
-            el_position[start_id]++;
-            el_position[end_id]++;
-          } else {
-            el.grid_item[end_id] = el_position[end_id]++;
+      key: "addExistingElementsToApp",
+      value: function addExistingElementsToApp() {
+        var _this5 = this;
+        var elementDefs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
+        _toConsumableArray5(this.container.children).forEach(function(el) {
+          if (el.id === "dragCanvas")
+            return;
+          var bbox = el.getBoundingClientRect();
+          if (bbox.width === 0 && bbox.height === 0)
+            return;
+          if (el.classList.contains("grid-cell") || el.classList.contains("dragSelectionBox") || el.classList.contains("added-element") || el.id === "drag-canvas") {
+            el.remove();
+            return;
           }
-          el.grid_item.position = el_position;
+          var gridElement = _this5.addElement({
+            id: el.id,
+            gridPos: getPosOnGrid(el),
+            mirroredElement: el
+          }, false);
+          var existingElementDefinition = elementDefs.find(function(elDef) {
+            return elDef.id === gridElement.id;
+          });
+          if (existingElementDefinition) {
+            gridElement.position = existingElementDefinition;
+          }
         });
-        var tract_sizes = this.grid_layout[dir];
-        tract_sizes.splice(new_index, 0, "1fr");
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
       }
     }, {
-      key: "remove_tract",
-      value: function remove_tract(dir, index) {
-        var trouble_elements = this.elements.filter(function(el) {
-          var _make_start_end_for_d = make_start_end_for_dir(dir), start_id = _make_start_end_for_d.start_id, end_id = _make_start_end_for_d.end_id;
-          var el_position = el.grid_item.position;
-          return el_position[start_id] === el_position[end_id] && el_position[start_id] === index;
+      key: "removeElements",
+      value: function removeElements(ids) {
+        var _this6 = this;
+        asArray(ids).forEach(function(elId) {
+          var entryIndex = _this6.elements.findIndex(function(el) {
+            return el.id === elId;
+          });
+          _this6.elements[entryIndex].remove();
+          _this6.elements.splice(entryIndex, 1);
         });
-        if (trouble_elements.length > 0) {
-          show_conflict_popup(trouble_elements);
+        this.sendUpdate();
+      }
+    }, {
+      key: "addTract",
+      value: function addTract(dir, newIndex) {
+        this.elements.forEach(function(el) {
+          var startId = dir === "rows" ? "start_row" : "start_col";
+          var endId = dir === "rows" ? "end_row" : "end_col";
+          var elPosition = el.position;
+          if (newIndex >= elPosition[endId]) {
+          } else if (newIndex < elPosition[startId]) {
+            elPosition[startId]++;
+            elPosition[endId]++;
+          } else {
+            el[endId] = elPosition[endId]++;
+          }
+          el.position = elPosition;
+        });
+        var tractSizes = this.gridLayout[dir];
+        tractSizes.splice(newIndex, 0, "1fr");
+        this.updateGrid(_defineProperty8({}, dir, tractSizes));
+      }
+    }, {
+      key: "removeTract",
+      value: function removeTract(dir, index) {
+        var troubleElements = this.elements.filter(function(el) {
+          var _makeStartEndForDir = makeStartEndForDir(dir), startId = _makeStartEndForDir.startId, endId = _makeStartEndForDir.endId;
+          var elPosition = el.position;
+          return elPosition[startId] === elPosition[endId] && elPosition[startId] === index;
+        });
+        if (troubleElements.length > 0) {
+          showConflictPopup(troubleElements);
           return;
         }
         this.elements.forEach(function(el) {
-          var _make_start_end_for_d2 = make_start_end_for_dir(dir), start_id = _make_start_end_for_d2.start_id, end_id = _make_start_end_for_d2.end_id;
-          var el_position = el.grid_item.position;
-          if (el_position[start_id] > index) {
-            el_position[start_id]--;
+          var _makeStartEndForDir2 = makeStartEndForDir(dir), startId = _makeStartEndForDir2.startId, endId = _makeStartEndForDir2.endId;
+          var elPosition = el.position;
+          if (elPosition[startId] > index) {
+            elPosition[startId]--;
           }
-          if (el_position[end_id] >= index) {
-            el_position[end_id]--;
+          if (elPosition[endId] >= index) {
+            elPosition[endId]--;
           }
-          el.grid_item.position = el_position;
+          el.position = elPosition;
         });
-        var tract_sizes = this.grid_layout[dir];
-        tract_sizes.splice(index - 1, 1);
-        this.update_grid(_defineProperty6({}, dir, tract_sizes));
+        var tractSizes = this.gridLayout[dir];
+        tractSizes.splice(index - 1, 1);
+        this.updateGrid(_defineProperty8({}, dir, tractSizes));
       }
     }, {
-      key: "make_el",
-      value: function make_el2(sel_txt, opts) {
-        return make_el(this.container, sel_txt, opts);
+      key: "makeEl",
+      value: function makeEl2(selTxt, opts) {
+        return makeEl(this.container, selTxt, opts);
       }
     }, {
-      key: "setup_drag",
-      value: function setup_drag(opts) {
-        var _this2 = this;
-        var drag_feedback_rect;
-        var start_rect;
-        var start_loc;
-        var editor_el = document.querySelector("#grided__editor");
-        var update_grid_pos = function update_grid_pos2(grid_item, bounding_rect) {
-          var grid_extent = get_drag_extent_on_grid(_this2, bounding_rect);
-          grid_item.position = grid_extent;
-          return grid_extent;
+      key: "setupDrag",
+      value: function setupDrag(opts) {
+        var _this7 = this;
+        var dragFeedbackRect;
+        var startRect;
+        var startLoc;
+        var editorEl = document.querySelector("#grided__editor");
+        var updateGridPos = function updateGridPos2(gridItem, boundingRect) {
+          var gridExtent = getDragExtentOnGrid(_this7, boundingRect);
+          gridItem.position = gridExtent;
+          return gridExtent;
         };
-        opts.watching_element.onmousedown = function(event) {
-          var _opts$grid_item;
-          start_loc = event;
-          _this2.container.appendChild(opts.grid_item.el);
-          start_rect = ((_opts$grid_item = opts.grid_item) === null || _opts$grid_item === void 0 ? void 0 : _opts$grid_item.bounding_rect) || {
+        opts.watchingElement.onmousedown = function(event) {
+          var _opts$gridItem;
+          startLoc = event;
+          startRect = ((_opts$gridItem = opts.gridItem) === null || _opts$gridItem === void 0 ? void 0 : _opts$gridItem.boundingRect) || {
             left: event.offsetX,
             right: event.offsetX,
             top: event.offsetY,
             bottom: event.offsetY
           };
-          drag_feedback_rect = make_el(_this2.container.querySelector("#drag_canvas"), "div.drag-feedback-rect", {
-            styles: _objectSpread3({}, bounding_rect_to_css_pos(start_rect))
+          _this7.container.appendChild(opts.gridItem.el);
+          dragFeedbackRect = makeEl(_this7.container.querySelector("#dragCanvas"), "div.drag-feedback-rect", {
+            styles: _objectSpread3({}, boundingRectToCssPos(startRect))
           });
-          update_grid_pos(opts.grid_item, start_rect);
-          if (opts.on_start)
-            opts.on_start(start_loc);
-          editor_el.addEventListener("mousemove", drag);
-          editor_el.addEventListener("mouseup", drag_end);
+          updateGridPos(opts.gridItem, startRect);
+          if (opts.onStart)
+            opts.onStart(startLoc);
+          editorEl.addEventListener("mousemove", drag);
+          editorEl.addEventListener("mouseup", dragEnd);
         };
         function drag(event) {
-          var curr_loc = event;
-          if (curr_loc.x === 0 && curr_loc.y === 0)
+          var currLoc = event;
+          if (currLoc.x === 0 && currLoc.y === 0)
             return;
-          var new_rect = update_rect_with_delta(start_rect, {
-            x: curr_loc.x - start_loc.x,
-            y: curr_loc.y - start_loc.y
-          }, opts.drag_dir);
-          Object.assign(drag_feedback_rect.style, bounding_rect_to_css_pos(new_rect));
-          var grid_extent = update_grid_pos(opts.grid_item, new_rect);
-          if (opts.on_drag)
-            opts.on_drag({
-              xy: curr_loc,
-              grid: grid_extent
+          var newRect = updateRectWithDelta(startRect, {
+            x: currLoc.x - startLoc.x,
+            y: currLoc.y - startLoc.y
+          }, opts.dragDir);
+          Object.assign(dragFeedbackRect.style, boundingRectToCssPos(newRect));
+          var gridExtent = updateGridPos(opts.gridItem, newRect);
+          if (opts.onDrag)
+            opts.onDrag({
+              xy: currLoc,
+              grid: gridExtent
             });
         }
-        function drag_end(event) {
-          var _opts$grid_item2;
-          var end_loc = event;
-          drag_feedback_rect.remove();
-          start_rect = null;
-          start_loc = null;
-          if (opts.on_end)
-            opts.on_end({
-              xy: end_loc,
-              grid: ((_opts$grid_item2 = opts.grid_item) === null || _opts$grid_item2 === void 0 ? void 0 : _opts$grid_item2.position) || get_pos_on_grid(this.parentElement)
+        function dragEnd(event) {
+          var _opts$gridItem2;
+          var endLoc = event;
+          dragFeedbackRect.remove();
+          startRect = null;
+          startLoc = null;
+          if (opts.onEnd)
+            opts.onEnd({
+              xy: endLoc,
+              grid: ((_opts$gridItem2 = opts.gridItem) === null || _opts$gridItem2 === void 0 ? void 0 : _opts$gridItem2.position) || getPosOnGrid(this.parentElement)
             });
-          editor_el.removeEventListener("mousemove", drag);
-          editor_el.removeEventListener("mouseup", drag_end);
+          editorEl.removeEventListener("mousemove", drag);
+          editorEl.removeEventListener("mouseup", dragEnd);
         }
       }
     }, {
-      key: "update_tract",
-      value: function update_tract(opts) {
-        var _this$update_grid3;
-        var tract_index = opts.tract_index, dir = opts.dir, new_value = opts.new_value, _opts$dont_send_to_sh = opts.dont_send_to_shiny, dont_send_to_shiny = _opts$dont_send_to_sh === void 0 ? false : _opts$dont_send_to_sh;
-        var tract_values = this.grid_layout[dir];
-        tract_values[tract_index - 1] = new_value;
-        this.update_grid((_this$update_grid3 = {}, _defineProperty6(_this$update_grid3, dir, tract_values), _defineProperty6(_this$update_grid3, "dont_send_to_shiny", dont_send_to_shiny), _this$update_grid3));
+      key: "sendUpdate",
+      value: function sendUpdate() {
+        this.onUpdate(_objectSpread3({
+          entryType: this.entryType,
+          liveApp: this.liveApp
+        }, this.currentLayout));
       }
     }, {
-      key: "update_grid",
-      value: function update_grid(opts) {
+      key: "updateTract",
+      value: function updateTract(opts) {
+        var _this$updateGrid3;
+        var tractIndex = opts.tractIndex, dir = opts.dir, newValue = opts.newValue, isDragging = opts.isDragging;
+        var tractValues = this.gridLayout[dir];
+        tractValues[tractIndex - 1] = newValue;
+        this.updateGrid((_this$updateGrid3 = {}, _defineProperty8(_this$updateGrid3, dir, tractValues), _defineProperty8(_this$updateGrid3, "dontUpdateHistory", isDragging), _this$updateGrid3));
+      }
+    }, {
+      key: "updateGrid",
+      value: function updateGrid(opts) {
         var _opts$force, _opts$force2;
-        var new_num_cells = (_opts$force = opts.force) !== null && _opts$force !== void 0 ? _opts$force : false;
-        var rows_and_cols_updated = (_opts$force2 = opts.force) !== null && _opts$force2 !== void 0 ? _opts$force2 : false;
-        if (this.grid_layout.is_updated_val("rows", opts.rows)) {
-          if (this.grid_layout.num_rows !== opts.rows.length)
-            new_num_cells = true;
-          rows_and_cols_updated = true;
-          this.grid_layout.rows = opts.rows;
+        var newNumCells = (_opts$force = opts.force) !== null && _opts$force !== void 0 ? _opts$force : false;
+        var rowsAndColsUpdated = (_opts$force2 = opts.force) !== null && _opts$force2 !== void 0 ? _opts$force2 : false;
+        if (this.gridLayout.isUpdatedVal("rows", opts.rows)) {
+          if (this.gridLayout.numRows !== opts.rows.length)
+            newNumCells = true;
+          rowsAndColsUpdated = true;
+          this.gridLayout.rows = opts.rows;
         }
-        if (this.grid_layout.is_updated_val("cols", opts.cols)) {
-          if (this.grid_layout.num_cols !== opts.cols.length)
-            new_num_cells = true;
-          rows_and_cols_updated = true;
-          this.grid_layout.cols = opts.cols;
+        if (this.gridLayout.isUpdatedVal("cols", opts.cols)) {
+          if (this.gridLayout.numCols !== opts.cols.length)
+            newNumCells = true;
+          rowsAndColsUpdated = true;
+          this.gridLayout.cols = opts.cols;
         }
-        if (this.grid_layout.is_updated_val("gap", opts.gap)) {
-          this.grid_layout.gap = opts.gap;
-          this.gap_size_setting.update_value(opts.gap);
+        if (this.gridLayout.isUpdatedVal("gap", opts.gap)) {
+          this.gridLayout.gap = opts.gap;
+          this.gapSizeSetting.updateValue(opts.gap);
         }
-        if (new_num_cells) {
-          fill_grid_cells(this);
-          setup_new_item_drag(this);
+        if (newNumCells) {
+          this.fillGridCells();
+          setupNewItemDrag(this);
         }
-        if (rows_and_cols_updated) {
-          this.current_elements.forEach(function(el) {
-            el.grid_item.fill_if_in_auto_row();
+        if (rowsAndColsUpdated) {
+          this.elements.forEach(function(el) {
+            el.fillIfInAutoRow();
           });
+          if (this.liveApp) {
+            triggerResize();
+          }
         }
-        this.tract_controls.update_positions();
-        if (!opts.dont_send_to_shiny) {
-          send_grid_sizing_to_shiny(this.grid_layout.attrs);
+        this.tractControls.updatePositions();
+        if (!opts.dontUpdateHistory) {
+          this.sendUpdate();
+        }
+      }
+    }, {
+      key: "fillGridCells",
+      value: function fillGridCells() {
+        this.currentCells.forEach(function(e) {
+          return e.remove();
+        });
+        this.currentCells = [];
+        for (var rowI = 1; rowI <= this.gridLayout.numRows; rowI++) {
+          for (var colI = 1; colI <= this.gridLayout.numCols; colI++) {
+            this.currentCells.push(this.makeEl("div.r".concat(rowI, ".c").concat(colI, ".grid-cell.").concat(gridCellStyles), {
+              dataProps: {
+                row: rowI,
+                col: colI
+              },
+              gridPos: {
+                start_row: rowI,
+                end_row: rowI,
+                start_col: colI,
+                end_col: colI
+              }
+            }));
+          }
+        }
+        this.updateGridTransparency();
+        this.tractControls = setupTractControls(this);
+      }
+    }, {
+      key: "updateGridTransparency",
+      value: function updateGridTransparency() {
+        if (this.liveApp) {
+          setClass(this.currentCells, "transparent");
+        } else {
+          removeClass(this.currentCells, "transparent");
         }
       }
     }]);
-    return App_State2;
+    return LayoutEditor2;
   }();
-  var grid_cell_styles = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral4(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element_roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
-  function fill_grid_cells(app_state) {
-    remove_elements(app_state.current_cells);
-    app_state.current_cells = [];
-    for (var row_i = 1; row_i <= app_state.grid_layout.num_rows; row_i++) {
-      for (var col_i = 1; col_i <= app_state.grid_layout.num_cols; col_i++) {
-        app_state.current_cells.push(app_state.make_el("div.r".concat(row_i, ".c").concat(col_i, ".grid-cell.").concat(grid_cell_styles), {
-          data_props: {
-            row: row_i,
-            col: col_i
-          },
-          grid_pos: {
-            start_row: row_i,
-            end_row: row_i,
-            start_col: col_i,
-            end_col: col_i
-          }
-        }));
-      }
-    }
-    if (app_state.mode === "Existing") {
-      set_class(app_state.current_cells, "transparent");
-    }
-    app_state.tract_controls = setup_tract_controls(app_state);
-  }
-  var added_element_styles = css(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral4(["\n  border-radius: var(--element_roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .filler_text {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .filler_text {\n    display: block;\n  }\n"])));
-  var dragger_handle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral4(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element_roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element_roundness) 0;\n  }\n"])));
-  var current_sel_box = css(_templateObject42 || (_templateObject42 = _taggedTemplateLiteral4(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
-  var drag_canvas_styles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral4(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--dark-gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
-  function setup_new_item_drag(app_state) {
-    var current_selection_box = new Grid_Item({
-      el: app_state.make_el("div.drag_selection_box.".concat(added_element_styles, ".").concat(current_sel_box)),
-      parent_layout: app_state.grid_layout
+  var gridCellStyles = css(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral2(["\n  background: var(--off-white, grey);\n  border: 1px solid var(--gray, grey);\n  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;\n  border-radius: var(--element-roundness);\n\n  &.transparent {\n    background: none;\n  }\n\n  &.selected {\n    background: currentColor;\n    border: 2px solid var(--light-gray);\n  }\n"])));
+  var addedElementStyles = css(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral2(["\n  border-radius: var(--element-roundness);\n  border-width: 3px;\n  border-style: solid;\n  transition: border-width 0.2s ease-in-out;\n  background: none;\n  position: relative;\n\n  &.in-list {\n    height: 35px;\n    margin: 0 0 5px 0;\n    padding: 0.65rem 1rem;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n\n  .hovered {\n    border-width: 7px;\n  }\n\n  &.in-list.hovered {\n    /* Emphasize by making a bit bigger */\n    transform: scale(1.05);\n  }\n\n  /* This is filler text to make auto sizing work. It's invisible to the user\n     so it doesn't distract. Not sure if this is the best way to do it but I think\n     it's worth a go. \n  */\n  .fillerText {\n    color: rgba(128, 128, 128, 0.5);\n    user-select: none;\n    display: none;\n  }\n\n  &.in-auto-row .fillerText {\n    display: block;\n  }\n"])));
+  var draggerHandle = css(_templateObject32 || (_templateObject32 = _taggedTemplateLiteral2(["\n  --radius: 18px;\n  font-size: 12px;\n  position: absolute;\n  height: var(--radius);\n  width: var(--radius);\n  cursor: grab;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--off-white);\n  opacity: 0.5;\n\n  & > svg {\n    transform: scale(0.85);\n  }\n\n  &.top-left {\n    top: -2px;\n    left: -2px;\n    cursor: nw-resize;\n  }\n  &.bottom-right {\n    bottom: -2px;\n    right: -2px;\n    cursor: se-resize;\n  }\n\n  &.center {\n    top: calc(50% - var(--radius) / 2);\n    right: calc(50% - var(--radius) / 2);\n    border-radius: var(--element-roundness);\n    cursor: grab;\n  }\n  &.center:active {\n    cursor: grabbing;\n  }\n\n  i {\n    display: inline-block;\n  }\n\n  &.top-left i {\n    transform: rotate(315deg);\n  }\n  &.bottom-right i {\n    transform: rotate(135deg);\n  }\n\n  &.top-left,\n  &.bottom-right {\n    border-radius: var(--element-roundness) 0;\n  }\n"])));
+  var currentSelBox = css(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral2(["\n  border-style: dashed;\n  display: none;\n  pointer-events: none;\n"])));
+  var dragCanvasStyles = css(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral2(["\n  margin-left: calc(-1 * var(--grid-gap));\n  margin-top: calc(-1 * var(--grid-gap));\n  width: calc(100% + 2 * var(--grid-gap));\n  height: calc(100% + 2 * var(--grid-gap));\n  grid-row: 1/-1;\n  grid-column: 1/-1;\n  position: relative;\n\n  .drag-feedback-rect {\n    pointer-events: none;\n    position: absolute;\n    background: linear-gradient(90deg, var(--gray) 50%, transparent 50%),\n      linear-gradient(90deg, var(--gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--gray) 50%, transparent 50%),\n      linear-gradient(0deg, var(--gray) 50%, transparent 50%);\n    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;\n    background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;\n    animation: border-dance 16s infinite linear;\n  }\n\n  @keyframes border-dance {\n    0% {\n      background-position: 0 0, 100% 100%, 0 100%, 100% 0;\n    }\n    100% {\n      background-position: 100% 0, 0 100%, 0 0, 100% 100%;\n    }\n  }\n"])));
+  function setupNewItemDrag(appState) {
+    var currentSelectionBox = new GridItem({
+      id: "selection box",
+      el: appState.makeEl("div.dragSelectionBox.".concat(addedElementStyles, ".").concat(currentSelBox)),
+      parentLayout: appState.gridLayout
     });
-    var drag_canvas = app_state.make_el("div#drag_canvas.".concat(drag_canvas_styles));
-    app_state.setup_drag({
-      watching_element: drag_canvas,
-      grid_item: current_selection_box,
-      drag_dir: "bottom-right",
-      on_start: function on_start() {
-        current_selection_box.style.borderColor = app_state.next_color;
+    var dragCanvas = appState.makeEl("div#dragCanvas.".concat(dragCanvasStyles));
+    appState.setupDrag({
+      watchingElement: dragCanvas,
+      gridItem: currentSelectionBox,
+      dragDir: "bottom-right",
+      onStart: function onStart() {
+        currentSelectionBox.style.borderColor = appState.nextColor;
+        currentSelectionBox.style.display = "block";
       },
-      on_end: function on_end(_ref) {
+      onEnd: function onEnd(_ref) {
         var grid = _ref.grid;
-        element_naming_ui(app_state, {
-          grid_pos: grid,
-          selection_box: current_selection_box
+        elementNamingUi(appState, {
+          gridPos: grid,
+          selectionBox: currentSelectionBox
         });
       }
     });
-    [drag_canvas].concat(_toConsumableArray5(app_state.container.querySelectorAll(".added-element"))).forEach(function(el) {
-      return app_state.container.appendChild(el);
+    [dragCanvas].concat(_toConsumableArray5(appState.container.querySelectorAll(".added-element"))).forEach(function(el) {
+      return appState.container.appendChild(el);
     });
   }
-  function setup_tract_controls(app_state) {
-    var editor_container = document.querySelector("#grided__editor");
+  function setupTractControls(appState) {
+    var editorContainer = document.querySelector("#grided__editor");
     var controls = {
-      rows: build_controls_for_dir(app_state, "rows", editor_container),
-      cols: build_controls_for_dir(app_state, "cols", editor_container)
+      rows: buildControlsForDir(appState, "rows", editorContainer),
+      cols: buildControlsForDir(appState, "cols", editorContainer)
     };
-    update_positions();
-    editor_container.querySelector("#editor-app-window").onscroll = function() {
-      return update_positions(["rows"]);
+    updatePositions();
+    editorContainer.querySelector("#editor-app-window").onscroll = function() {
+      return updatePositions(["rows"]);
     };
-    var resize_timeout;
+    var resizeTimeout;
     window.addEventListener("resize", function() {
-      clearTimeout(resize_timeout);
-      resize_timeout = window.setTimeout(function() {
-        return update_positions();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(function() {
+        return updatePositions();
       }, 300);
     });
-    function update_positions() {
-      var which_dirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
-      var editor_pos = editor_container.getBoundingClientRect();
-      var wrapper_pos = pos_relative_to_container(editor_pos, editor_container.querySelector("#editor-wrapper"));
-      var _iterator = _createForOfIteratorHelper2(which_dirs), _step;
+    function updatePositions() {
+      var whichDirs = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ["rows", "cols"];
+      var editorPos = editorContainer.getBoundingClientRect();
+      var wrapperPos = posRelativeToContainer(editorPos, editorContainer.querySelector("#editor-wrapper"));
+      var _iterator = _createForOfIteratorHelper2(whichDirs), _step;
       try {
         var _loop = function _loop2() {
           var dir = _step.value;
           controls[dir].forEach(function(_ref2) {
-            var matched_cell = _ref2.matched_cell, el = _ref2.el;
-            var bounding_rect = pos_relative_to_container(editor_pos, matched_cell);
+            var matchedCell = _ref2.matchedCell, el = _ref2.el;
+            var boundingRect = posRelativeToContainer(editorPos, matchedCell);
             Object.assign(el.style, dir === "cols" ? {
-              left: "calc(".concat(bounding_rect.left, "px)"),
-              width: "calc(".concat(bounding_rect.width, "px)"),
-              top: "calc(".concat(wrapper_pos.top, "px - var(--editor-top-pad))")
+              left: "calc(".concat(boundingRect.left, "px)"),
+              width: "calc(".concat(boundingRect.width, "px)"),
+              top: "calc(".concat(wrapperPos.top, "px - var(--editor-top-pad))")
             } : {
-              top: "calc(".concat(bounding_rect.top, "px)"),
-              height: "calc(".concat(bounding_rect.height, "px)"),
-              left: "calc(".concat(bounding_rect.left, "px - var(--editor-left-pad) - ").concat(app_state.grid_layout.attrs.gap, " - 2px)")
+              top: "calc(".concat(boundingRect.top, "px)"),
+              height: "calc(".concat(boundingRect.height, "px)"),
+              left: "calc(".concat(boundingRect.left, "px - var(--editor-left-pad) - ").concat(appState.gridLayout.attrs.gap, " - 2px)")
             });
           });
         };
@@ -7306,80 +8433,65 @@
       }
     }
     return {
-      update_positions: update_positions
+      updatePositions: updatePositions
     };
   }
-  var name_form_styles = css(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral4(['\n  display: flex;\n  justify-content: space-evenly;\n  margin-top: 2rem;\n\n  input[type="text"] {\n    width: 50%;\n  }\n'])));
-  function element_naming_ui(app_state, _ref3) {
-    var grid_pos = _ref3.grid_pos, selection_box = _ref3.selection_box;
-    var modal_divs = focused_modal({
-      background_callbacks: {
-        event: "click",
-        func: reset_el_creation
+  function elementNamingUi(appState, _ref3) {
+    var gridPos = _ref3.gridPos, selectionBox = _ref3.selectionBox;
+    var nameForm = createEl({
+      selTxt: "form#nameForm.centered",
+      styles: {
+        width: "100%",
+        display: "grid",
+        gridTemplateColumns: "50% 100px",
+        gap: "1rem",
+        justifyContent: "center"
       },
-      modal_callbacks: {
-        event: "click",
-        func: function func(event) {
-          event.stopPropagation();
+      children: [createEl({
+        selTxt: "input#nameInput",
+        props: {
+          type: "text"
+        },
+        eventListener: {
+          event: "input",
+          func: hideWarningMsg
         }
-      }
-    });
-    var modal_div = modal_divs.modal;
-    make_el(modal_div, "div.instructions", {
-      innerHTML: "\n    <h2>Name your element:</h2>\n    <p>This name will be used to place items in your app.\n    For instance if you want to place a plot in this element,\n    this name will match the label of the plot output\n    </p>\n    "
-    });
-    var name_form = make_el(modal_div, "form#name_form.".concat(name_form_styles), {
-      event_listener: {
+      }), createEl({
+        selTxt: "input#nameSubmit",
+        props: {
+          type: "submit"
+        }
+      })],
+      eventListener: {
         event: "submit",
         func: function func(event) {
           event.preventDefault();
-          var id = this["name_input"].value.replace(/\s/g, "_");
-          var element_exists = !!app_state.current_elements.find(function(el) {
+          var id = this["nameInput"].value.replace(/\s/g, "_");
+          var elementExists = !!appState.elements.find(function(el) {
             return el.id === id;
           });
-          if (element_exists) {
-            warn_about_bad_id("You already have an element with the id ".concat(id, ", all ids need to be unique."));
+          if (elementExists) {
+            warnAboutBadId("You already have an element with the id ".concat(id, ", all ids need to be unique."));
             return;
           }
           if (id.match(/^[^a-zA-Z]/g)) {
-            warn_about_bad_id("Valid ids need to start with a character.");
+            warnAboutBadId("Valid ids need to start with a character.");
             return;
           }
-          app_state.add_element({
+          appState.addElement({
             id: id,
-            grid_pos: grid_pos
+            gridPos: gridPos
           });
-          reset_el_creation();
+          resetElCreation();
         }
       }
     });
-    make_el(name_form, "input#cancel_btn", {
-      props: {
-        type: "button",
-        value: "cancel"
-      },
-      event_listener: {
-        event: "click",
-        func: reset_el_creation
-      }
-    });
-    make_el(name_form, "input#name_input", {
-      props: {
-        type: "text"
-      },
-      event_listener: {
-        event: "input",
-        func: hide_warning_msg
-      }
-    }).focus();
-    make_el(name_form, "input#name_submit", {
-      props: {
-        type: "submit"
-      }
-    });
-    function warn_about_bad_id(msg) {
-      make_el(modal_div, "span#bad_id_msg", {
-        innerHTML: msg,
+    var modal = createFocusModal().setTitle("Name your element:").description("\n      This name will be used to place items in your app.\n      For instance if you want to place a plot in this element,\n      this name will match the label of the plot output\n    ").addElement(nameForm).onClose(resetElCreation).addToPage().focusOn("nameInput");
+    var warningMsg;
+    function warnAboutBadId(msg) {
+      warningMsg = createEl({
+        selTxt: "span#badIdMsg",
+        text: msg,
         styles: {
           color: "orangered",
           fontStyle: "italic",
@@ -7387,146 +8499,833 @@
           fontSize: "0.9rem"
         }
       });
+      modal.addElement(warningMsg);
     }
-    function hide_warning_msg() {
-      var warn_msg = modal_div.querySelector("span#bad_id_msg");
-      if (warn_msg) {
-        warn_msg.remove();
+    function hideWarningMsg() {
+      if (warningMsg) {
+        warningMsg.remove();
       }
     }
-    function reset_el_creation() {
-      modal_divs.remove();
-      selection_box.style.display = "none";
+    function resetElCreation() {
+      modal.remove();
+      selectionBox.style.display = "none";
     }
   }
-  function draw_elements(app_state, el_info) {
-    var id = el_info.id, mirrored_el = el_info.mirrored_el;
-    var el_color = app_state.next_color;
-    var mirrors_existing = typeof mirrored_el !== "undefined";
-    var grid_el = app_state.make_el("div#".concat(id, ".el_").concat(id, ".added-element.").concat(added_element_styles), {
-      innerHTML: filler_text,
+  function drawElements(appState, elProps) {
+    var id = elProps.id, mirroredElement = elProps.mirroredElement, ui_function = elProps.ui_function;
+    var elColor = appState.nextColor;
+    var mirrorsExisting = typeof mirroredElement !== "undefined";
+    var gridEl = appState.makeEl("div#".concat(id, ".el_").concat(id, ".added-element.").concat(addedElementStyles), {
+      innerHTML: fillerText,
       styles: {
-        borderColor: app_state.next_color,
+        borderColor: appState.nextColor,
         position: "relative"
       }
     });
-    var list_el = make_el(document.querySelector("#added_elements"), "div.el_".concat(id, ".added-element.").concat(added_element_styles, ".in-list"), {
+    var listEl = makeEl(document.querySelector("#added-elements"), "div.el_".concat(id, ".added-element.").concat(addedElementStyles, ".in-list"), {
       innerHTML: id,
       styles: {
-        borderColor: el_color
+        borderColor: elColor
       },
-      event_listener: [{
+      eventListener: [{
         event: "mouseover",
         func: function func() {
           this.classList.add("hovered");
-          grid_el.classList.add("hovered");
+          gridEl.classList.add("hovered");
         }
       }, {
         event: "mouseout",
         func: function func() {
           this.classList.remove("hovered");
-          grid_el.classList.remove("hovered");
+          gridEl.classList.remove("hovered");
         }
       }]
     });
-    var grid_item = new Grid_Item({
-      el: grid_el,
-      mirrored_el: mirrored_el,
-      sibling_el: list_el,
-      parent_layout: app_state.grid_layout
+    var gridItem = new GridItem({
+      id: id,
+      el: gridEl,
+      mirroredElement: mirroredElement,
+      ui_function: ui_function,
+      siblingElement: listEl,
+      parentLayout: appState.gridLayout
     });
-    ["top-left", "bottom-right", "center"].forEach(function(handle_type) {
-      app_state.setup_drag({
-        watching_element: make_el(grid_el, "div.dragger.visible.".concat(dragger_handle, ".").concat(handle_type), {
+    ["top-left", "bottom-right", "center"].forEach(function(handleType) {
+      appState.setupDrag({
+        watchingElement: makeEl(gridEl, "div.dragger.visible.".concat(draggerHandle, ".").concat(handleType), {
           styles: {
-            background: el_color
+            background: elColor
           },
-          innerHTML: handle_type === "center" ? drag_icon : handle_type === "bottom-right" ? se_arrow : nw_arrow
+          innerHTML: handleType === "center" ? dragIcon : handleType === "bottom-right" ? seArrow : nwArrow
         }),
-        grid_item: grid_item,
-        drag_dir: handle_type,
-        on_end: function on_end() {
-          send_elements_to_shiny(app_state.current_elements);
+        gridItem: gridItem,
+        dragDir: handleType,
+        onEnd: function onEnd() {
+          appState.sendUpdate();
+          triggerResize();
         }
       });
     });
-    if (!mirrors_existing) {
-      make_el(list_el, "button.remove_el", {
-        innerHTML: trashcan_icon,
-        event_listener: {
+    var elConnectedToUi = ui_function || appState.entryType === "edit-existing-app" && mirroredElement;
+    if (!elConnectedToUi) {
+      makeEl(listEl, "button.remove-el", {
+        innerHTML: trashcanIcon,
+        eventListener: {
           event: "click",
           func: function func() {
-            app_state.remove_elements(id);
+            appState.removeElements(id);
           }
         }
       });
     }
-    return grid_item;
+    gridItem.position = elProps.gridPos;
+    appState.elements.push(gridItem);
+    return gridItem;
   }
-  function show_conflict_popup(conflicting_elements) {
-    var conflicting_elements_list = conflicting_elements.reduce(function(id_list, el) {
-      return "\n    ".concat(id_list, "\n    <li> ").concat(el.id, " </li>\n    ");
+  function showConflictPopup(conflictingElements) {
+    var conflictingElementsList = conflictingElements.reduce(function(idList, el) {
+      return "\n    ".concat(idList, "\n    <li> <strong style='font-size: 1.65rem;'> ").concat(el.id, " </strong> </li>\n    ");
     }, "<ul>") + "</ul>";
-    var message_model = focused_modal({
-      header_text: "\n  <h2>Sorry! Can't make that update</h2> \n  <p> This is because it would result in the following elements being removed from your app:</p>\n  ".concat(conflicting_elements_list, "\n  <p> Either re-arrange these elements to not reside in the removed grid or column or remove them from your app before running grided.</p>\n  ")
-    });
-    make_el(message_model.modal, "button#accept_result", {
-      innerHTML: "Okay",
-      event_listener: {
+    var modal = createFocusModal().setTitle("Sorry! Can't make that update").description("<p> This is because it would result in the following elements \n    being removed from your app:</p>\n    ".concat(conflictingElementsList, "\n    <p> Either re-arrange these elements to not reside in the removed grid or \n    column or remove them from your app before running grided.</p>\n    "));
+    modal.addElement(createEl({
+      selTxt: "button#acceptResult",
+      text: "Okay",
+      eventListener: {
         event: "click",
         func: function func() {
-          message_model.remove();
+          modal.remove();
         }
       }
-    });
+    }));
+    modal.addToPage();
+  }
+  function triggerResize() {
+    window.dispatchEvent(new Event("resize"));
   }
 
-  // index.ts
-  var Shiny = window.Shiny;
-  var debug_messages = true;
-  window.onload = function() {
-    var app_state = new App_State();
-    add_shiny_listener("shiny-loaded", function(x) {
-      if (debug_messages)
-        console.log("connected to shiny");
-      x;
-      send_elements_to_shiny(app_state.current_elements);
-      send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
-    });
-    add_shiny_listener("finish-button-text", function(label_text) {
-      document.querySelector("button#update_code").innerHTML = label_text;
-    });
-    if (app_state.mode === "New") {
-      add_shiny_listener("update-grid", function(opts) {
-        return app_state.update_grid(opts);
-      });
-      add_shiny_listener("add-elements", function(elements_to_add) {
-        elements_to_add.forEach(function(el_msg) {
-          var start_row = el_msg.start_row, end_row = el_msg.end_row, start_col = el_msg.start_col, end_col = el_msg.end_col;
-          app_state.add_element({
-            id: el_msg.id,
-            grid_pos: {
-              start_row: start_row,
-              end_row: end_row,
-              start_col: start_col,
-              end_col: end_col
-            }
-          });
-        });
-      });
+  // stateTracking.ts
+  var saveGalleryHistory = function saveGalleryHistory2(layouts, selected) {
+    var opts = {
+      layouts: layouts
+    };
+    if (selected) {
+      opts.selected = selected;
     }
-    add_shiny_listener("code_modal", function(code_to_show) {
-      show_code("Paste the following code into your app to update the layout", {
-        type: "R",
-        code: code_to_show
+    var stateDump = {
+      type: "layoutChooser",
+      data: opts
+    };
+    window.history.pushState(stateDump, null, null);
+  };
+  var saveEditorHistory = function saveEditorHistory2(state) {
+    var stateDump = {
+      type: "layoutEdit",
+      data: state
+    };
+    window.history.pushState(stateDump, null, null);
+  };
+
+  // web-components/layout-gallery.ts
+  var import_es_array_iterator17 = __toModule(require_es_array_iterator());
+  var import_es_map6 = __toModule(require_es_map());
+
+  // web-components/grid-preview.ts
+  var import_es_array_iterator16 = __toModule(require_es_array_iterator());
+  var import_es_map5 = __toModule(require_es_map());
+  function _typeof7(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof7 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof7 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof7(obj);
+  }
+  function _classCallCheck8(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties8(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass8(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties8(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties8(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits5(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf5(subClass, superClass);
+  }
+  function _createSuper5(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct5();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf5(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf5(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn5(this, result);
+    };
+  }
+  function _possibleConstructorReturn5(self2, call) {
+    if (call && (_typeof7(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized5(self2);
+  }
+  function _assertThisInitialized5(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper5(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper5 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction5(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct5(Class2, arguments, _getPrototypeOf5(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf5(Wrapper, Class2);
+    };
+    return _wrapNativeSuper5(Class);
+  }
+  function _construct5(Parent, args, Class) {
+    if (_isNativeReflectConstruct5()) {
+      _construct5 = Reflect.construct;
+    } else {
+      _construct5 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf5(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct5.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct5() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction5(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf5(o, p) {
+    _setPrototypeOf5 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf5(o, p);
+  }
+  function _getPrototypeOf5(o) {
+    _getPrototypeOf5 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf5(o);
+  }
+  function _defineProperty9(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var GridPreview = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits5(GridPreview2, _HTMLElement);
+    var _super = _createSuper5(GridPreview2);
+    function GridPreview2() {
+      var _this;
+      _classCallCheck8(this, GridPreview2);
+      _this = _super.call(this);
+      _defineProperty9(_assertThisInitialized5(_this), "grid", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "RenderSize", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "ShownSize", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "name", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "elements", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "hoverAnimation", void 0);
+      _defineProperty9(_assertThisInitialized5(_this), "OnSelect", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.grid = {
+        rows: ["1fr"],
+        cols: ["1fr"],
+        gap: "1rem"
+      };
+      _this.elements = [];
+      _this.RenderSize = 1250;
+      _this.ShownSize = 250;
+      _this.OnSelect = function() {
+        return console.log("Selected ".concat(_this.name));
+      };
+      _this.hoverAnimation = true;
+      return _this;
+    }
+    _createClass8(GridPreview2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this2 = this;
+        var scale = this.RenderSize / this.ShownSize;
+        var cornerRadius = "".concat(20 / scale, "px");
+        this.shadowRoot.innerHTML = "\n    <style>\n      * { box-sizing: border-box; }\n\n      #window {\n        width: ".concat(this.ShownSize, "px;\n        height: ").concat(this.ShownSize, "px;\n        position: relative;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      #layout {\n        width: 100%;\n        height: 100%;\n        padding: ").concat(30 / scale, "px;\n        border-radius: ").concat(cornerRadius, ";\n        box-shadow: rgb(50 50 93 / 25%) 0px 2px 8px 1px;\n        display: grid;\n        grid-template-rows: ").concat(buildTractDefinition(this.grid.rows, scale), ";\n        grid-template-columns: ").concat(buildTractDefinition(this.grid.cols, scale), ";\n        gap: ").concat(scaleUnits(scale, this.grid.gap), ";\n        background-color: white;\n        overflow: scroll;\n      }\n      ").concat(this.hoverAnimation ? "\n          #layout:hover {\n            transition: transform 1s ease;\n            transform: rotate(1deg)  scale(1.05);\n            cursor: pointer;\n          }\n          @keyframes wiggle {\n            50%  { transform: rotate(1deg)  scale(1.05);  }\n            100%  { transform: rotate(-1deg) scale(1.05);  }\n          }" : "", "\n      .element {\n        width: 100%;\n        height: 100%;\n        border: 1px solid #bababa;\n        border-radius: ").concat(cornerRadius, ";\n        display: grid;\n        place-content: center;\n        background-color: darksalmon;\n      }\n      .element.blank {\n        border: 1px solid #e7e5e5;\n        background-color: white;\n      }\n\n      #scroll-icon {\n        position: absolute;\n        right: 6px;\n        top: 38px;\n        color: dimgrey;\n      }\n\n      #scroll-icon > svg {\n        filter: drop-shadow(0 0 0.5rem white);\n      }\n    </style>\n      ").concat(this.name ? "<h3> ".concat(this.name, " </h3>") : "", '\n\n      <div id="window">\n        <div id="layout"> ').concat(this.elementDivs, " </div>\n      </div>\n    ");
+        var layoutDiv = this.shadowRoot.getElementById("layout");
+        layoutDiv.addEventListener("click", function(event) {
+          event.stopPropagation();
+          _this2.OnSelect();
+        });
+        var canScroll = layoutDiv.scrollHeight > layoutDiv.clientHeight;
+        if (canScroll) {
+          var scrollIconDiv = document.createElement("div");
+          scrollIconDiv.innerHTML = updownIcon;
+          scrollIconDiv.id = "scroll-icon";
+          this.shadowRoot.getElementById("window").append(scrollIconDiv);
+        }
+      }
+    }, {
+      key: "layout",
+      value: function layout(_layout) {
+        var _layout$elements, _layout$name;
+        Object.assign(this.grid, _layout.grid);
+        this.elements = (_layout$elements = _layout.elements) !== null && _layout$elements !== void 0 ? _layout$elements : [];
+        this.name = (_layout$name = _layout.name) !== null && _layout$name !== void 0 ? _layout$name : this.name;
+        return this;
+      }
+    }, {
+      key: "renderSize",
+      value: function renderSize(newSize) {
+        this.RenderSize = newSize;
+        return this;
+      }
+    }, {
+      key: "shownSize",
+      value: function shownSize(newSize) {
+        this.ShownSize = newSize;
+        return this;
+      }
+    }, {
+      key: "onSelect",
+      value: function onSelect(_onSelect) {
+        this.OnSelect = _onSelect;
+        return this;
+      }
+    }, {
+      key: "hideName",
+      value: function hideName() {
+        this.name = null;
+        return this;
+      }
+    }, {
+      key: "turnoffAnimation",
+      value: function turnoffAnimation() {
+        this.hoverAnimation = false;
+        return this;
+      }
+    }, {
+      key: "elementDivs",
+      get: function get() {
+        var elementDivs = "";
+        if (this.elements.length === 0) {
+          for (var row_i = 1; row_i <= this.grid.rows.length; row_i++) {
+            for (var col_i = 1; col_i <= this.grid.cols.length; col_i++) {
+              elementDivs += '<div class="element blank" style=\'grid-area:'.concat(row_i, "/").concat(col_i, "'></div>");
+            }
+          }
+        } else {
+          this.elements.forEach(function(_ref) {
+            var start_row = _ref.start_row, start_col = _ref.start_col, end_row = _ref.end_row, end_col = _ref.end_col;
+            var gridArea = [start_row, start_col, end_row + 1, end_col + 1].join("/");
+            elementDivs += '<div class="element" style=\'grid-area:'.concat(gridArea, "'></div>");
+          });
+        }
+        return elementDivs;
+      }
+    }]);
+    return GridPreview2;
+  }(/* @__PURE__ */ _wrapNativeSuper5(HTMLElement));
+  function scaleUnits(scale, unit) {
+    if (unit.includes("fr") || unit.includes("auto"))
+      return unit;
+    return "calc(".concat(unit, "/ ").concat(scale, ")");
+  }
+  function buildTractDefinition(tractSizing, scale) {
+    if (!(tractSizing instanceof Array)) {
+      tractSizing = [tractSizing];
+    }
+    return tractSizing.map(function(x) {
+      return scaleUnits(scale, x);
+    }).join(" ");
+  }
+  function gridPreview() {
+    return new GridPreview();
+  }
+  customElements.define("grid-preview", GridPreview);
+
+  // web-components/layout-gallery.ts
+  function _typeof8(obj) {
+    "@babel/helpers - typeof";
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof8 = function _typeof9(obj2) {
+        return typeof obj2;
+      };
+    } else {
+      _typeof8 = function _typeof9(obj2) {
+        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+      };
+    }
+    return _typeof8(obj);
+  }
+  function _toConsumableArray6(arr) {
+    return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray8(arr) || _nonIterableSpread6();
+  }
+  function _nonIterableSpread6() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _unsupportedIterableToArray8(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray8(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray8(o, minLen);
+  }
+  function _iterableToArray6(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+      return Array.from(iter);
+  }
+  function _arrayWithoutHoles6(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray8(arr);
+  }
+  function _arrayLikeToArray8(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+  function _classCallCheck9(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties9(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass9(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties9(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties9(Constructor, staticProps);
+    return Constructor;
+  }
+  function _inherits6(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+    if (superClass)
+      _setPrototypeOf6(subClass, superClass);
+  }
+  function _createSuper6(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct6();
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf6(Derived), result;
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf6(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return _possibleConstructorReturn6(this, result);
+    };
+  }
+  function _possibleConstructorReturn6(self2, call) {
+    if (call && (_typeof8(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+    return _assertThisInitialized6(self2);
+  }
+  function _assertThisInitialized6(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
+  }
+  function _wrapNativeSuper6(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper6 = function _wrapNativeSuper7(Class2) {
+      if (Class2 === null || !_isNativeFunction6(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
+      }
+      function Wrapper() {
+        return _construct6(Class2, arguments, _getPrototypeOf6(this).constructor);
+      }
+      Wrapper.prototype = Object.create(Class2.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } });
+      return _setPrototypeOf6(Wrapper, Class2);
+    };
+    return _wrapNativeSuper6(Class);
+  }
+  function _construct6(Parent, args, Class) {
+    if (_isNativeReflectConstruct6()) {
+      _construct6 = Reflect.construct;
+    } else {
+      _construct6 = function _construct7(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf6(instance, Class2.prototype);
+        return instance;
+      };
+    }
+    return _construct6.apply(null, arguments);
+  }
+  function _isNativeReflectConstruct6() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _isNativeFunction6(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+  function _setPrototypeOf6(o, p) {
+    _setPrototypeOf6 = Object.setPrototypeOf || function _setPrototypeOf7(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf6(o, p);
+  }
+  function _getPrototypeOf6(o) {
+    _getPrototypeOf6 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf7(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf6(o);
+  }
+  function _defineProperty10(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  var LayoutGallery = /* @__PURE__ */ function(_HTMLElement) {
+    _inherits6(LayoutGallery2, _HTMLElement);
+    var _super = _createSuper6(LayoutGallery2);
+    function LayoutGallery2(layouts) {
+      var _this;
+      _classCallCheck9(this, LayoutGallery2);
+      _this = _super.call(this);
+      _defineProperty10(_assertThisInitialized6(_this), "layouts", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "preselectedLayoutName", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onEditFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onGoFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onCancelFn", void 0);
+      _defineProperty10(_assertThisInitialized6(_this), "onSelectFn", void 0);
+      _this.attachShadow({
+        mode: "open"
+      });
+      _this.layouts = layouts;
+      return _this;
+    }
+    _createClass9(LayoutGallery2, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this$shadowRoot$getE, _this2 = this;
+        this.shadowRoot.innerHTML = '\n    <style>\n      :host {\n        background-color: #edf2f7;\n        width: 100%;\n        height: 100vh;\n        display: block;\n        position: absolute;\n      }\n      \n      #container {\n        display: block;\n        max-width: 1000px;\n        margin-left: auto;\n        margin-right: auto;\n        padding-left: 1rem;\n        padding-right: 1rem;\n      }\n\n      #layouts {\n        width: 100%;\n        display: grid;\n        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));\n        grid-gap: 1rem;\n        justify-items: center;\n      }\n      #chooser-modal {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        right: 0;\n        left: 0;\n        display: grid;\n        grid-template-areas: \n          "main main"\n          "go   edit";\n        grid-template-columns: 1fr 1fr;\n        grid-template-rows: repeat(2, auto);\n        gap: 1rem;\n        justify-items: center;\n        align-content: center;\n        background-color: white;\n        opacity: 0.9;\n      }\n      \n      #chooser-modal > button {\n        width: 150px;\n      }\n      #chooser-modal > grid-preview {\n        grid-area: main;\n      }\n      #chooser-modal > .go {\n        grid-area: go;\n        justify-self: end;\n      }\n      #chooser-modal > .edit {\n        grid-area: edit;\n        justify-self: start;\n      }\n      #chooser-modal.hidden {\n        display: none;\n      }\n    </style>\n    <div id = "container">\n      <h2> Select the layout for your app: </h2>\n      <div id = "layouts"></div>\n      <div id = "chooser-modal" class = "hidden"> </div>\n    </div>\n    ';
+        (_this$shadowRoot$getE = this.shadowRoot.getElementById("layouts")).append.apply(_this$shadowRoot$getE, _toConsumableArray6(this.layouts.map(function(layout) {
+          return gridPreview().layout(layout).shownSize(120).onSelect(function() {
+            return _this2.focusOnLayout(layout);
+          });
+        })));
+        if (this.preselectedLayoutName) {
+          this.focusOnLayout(this.layouts.find(function(layout) {
+            return layout.name === _this2.preselectedLayoutName;
+          }), false);
+        }
+      }
+    }, {
+      key: "onEdit",
+      value: function onEdit(onEditFn) {
+        this.onEditFn = onEditFn;
+        return this;
+      }
+    }, {
+      key: "onGo",
+      value: function onGo(onGoFn) {
+        this.onGoFn = onGoFn;
+        return this;
+      }
+    }, {
+      key: "onCancel",
+      value: function onCancel(onCancelFn) {
+        this.onCancelFn = onCancelFn;
+        return this;
+      }
+    }, {
+      key: "selectLayout",
+      value: function selectLayout(name) {
+        if (name) {
+          this.preselectedLayoutName = name;
+        }
+        return this;
+      }
+    }, {
+      key: "onSelect",
+      value: function onSelect(fn) {
+        this.onSelectFn = fn;
+        return this;
+      }
+    }, {
+      key: "focusOnLayout",
+      value: function focusOnLayout(selectedLayout) {
+        var _this3 = this;
+        var fireOnSelect = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+        var modal = createFocusModal().setTitle(selectedLayout.name).maxWidth("95%").onClose(this.onCancelFn).addElement(gridPreview().layout(selectedLayout).shownSize(650).turnoffAnimation().hideName());
+        var closeGallery = function closeGallery2(event) {
+          event.stopPropagation();
+          _this3.remove();
+          modal.remove();
+        };
+        var actionButtons = [];
+        if (selectedLayout.elements) {
+          actionButtons.push(clickButton(".go", "Create app with this layout", function(event) {
+            closeGallery(event);
+            _this3.onGoFn(selectedLayout);
+          }));
+        }
+        actionButtons.push(clickButton(".edit", "Edit this layout", function(event) {
+          closeGallery(event);
+          _this3.onEditFn(selectedLayout, true);
+        }));
+        modal.addElement(createEl({
+          selTxt: "div#footer",
+          children: actionButtons
+        }));
+        modal.addToPage();
+        if (fireOnSelect) {
+          this.onSelectFn(selectedLayout.name);
+        }
+      }
+    }]);
+    return LayoutGallery2;
+  }(/* @__PURE__ */ _wrapNativeSuper6(HTMLElement));
+  function layoutGallery(layouts) {
+    return new LayoutGallery(layouts);
+  }
+  customElements.define("layout-gallery", LayoutGallery);
+
+  // index.ts
+  function ownKeys5(object, enumerableOnly) {
+    var keys2 = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) {
+        symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      }
+      keys2.push.apply(keys2, symbols);
+    }
+    return keys2;
+  }
+  function _objectSpread4(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys5(Object(source), true).forEach(function(key) {
+          _defineProperty11(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys5(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+    return target;
+  }
+  function _defineProperty11(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function hideLiveAppUi() {
+    var appDumpDiv = document.getElementById("app_dump");
+    document.querySelectorAll("[data-grided-ui-name]").forEach(function(el) {
+      if (el.parentElement === appDumpDiv)
+        return;
+      appDumpDiv.append(el);
+      $(el).trigger("hidden");
+    });
+  }
+  var clearPage = function clearPage2() {
+    var appDumpDiv = document.getElementById("app_dump");
+    if (appDumpDiv) {
+      hideLiveAppUi();
+      appDumpDiv.parentNode.removeChild(appDumpDiv);
+    }
+    document.body.innerHTML = "";
+    if (appDumpDiv) {
+      document.body.append(appDumpDiv);
+    }
+  };
+  var startLayoutGallery = function startLayoutGallery2(opts) {
+    var saveHistory = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : true;
+    clearPage();
+    if (saveHistory) {
+      saveGalleryHistory(opts.layouts);
+    }
+    var gallery = layoutGallery(opts.layouts).onSelect(function(selected) {
+      saveGalleryHistory(opts.layouts, selected);
+    }).onCancel(function() {
+      saveGalleryHistory(opts.layouts);
+    }).onGo(function(selectedLayout) {
+      setShinyInput("build_app_template", selectedLayout);
+    }).onEdit(function(selectedLayout) {
+      startLayoutEditor(_objectSpread4(_objectSpread4({
+        entryType: "layout-gallery"
+      }, selectedLayout), {}, {
+        layoutName: selectedLayout.name
+      }), true);
+    }).selectLayout(opts.selected);
+    return document.body.appendChild(gallery);
+  };
+  var startLayoutEditor = function startLayoutEditor2(opts, saveHistory) {
+    if (saveHistory) {
+      saveEditorHistory(opts);
+    }
+    if (opts.entryType !== "edit-existing-app") {
+      clearPage();
+    }
+    opts.finishBtn = opts.entryType === "layout-gallery" ? {
+      label: "Create app",
+      onDone: function onDone(layout) {
+        setShinyInput(opts.entryType === "layout-gallery" ? "build_app_template" : "build_live_app_template", layout);
+      }
+    } : {
+      label: "Update app layout",
+      onDone: function onDone(layout) {
+        setShinyInput("update_layout", layout);
+      }
+    };
+    opts.onUpdate = function(opts2) {
+      saveEditorHistory(opts2);
+    };
+    return new LayoutEditor(opts);
+  };
+  window.onload = function() {
+    addShinyListener("layout-gallery", function(layouts) {
+      startLayoutGallery({
+        layouts: layouts
       });
     });
-    add_shiny_listener("code_update_problem", function(code_to_show) {
-      show_code("Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.", {
-        type: "R",
-        code: code_to_show
-      });
+    addShinyListener("edit-layout", function(layoutInfo) {
+      startLayoutEditor(_objectSpread4({
+        entryType: "edit-layout"
+      }, layoutInfo), true);
+    });
+    addShinyListener("edit-existing-app", function(layoutInfo) {
+      startLayoutEditor({
+        entryType: "edit-existing-app"
+      }, true);
+    });
+    addShinyListener("show-code-popup", function(opts) {
+      createFocusModal().setTitle(opts.title).description(opts.description).addElement(copyCode(opts.code)).addToPage();
     });
   };
+  window.addEventListener("popstate", function(e) {
+    var state = e.state;
+    switch (state.type) {
+      case "layoutChooser":
+        startLayoutGallery(state.data, false);
+        break;
+      case "layoutEdit":
+        startLayoutEditor(state.data, false);
+        break;
+      default:
+        console.error("How did you get to that state?");
+    }
+  });
 })();
 //# sourceMappingURL=index.js.map

@@ -120,7 +120,7 @@ grid_container <- function(
   # The double underscore prefix is using the BEM style for css selectors
   id_prefix <- paste0(id, "__")
 
-  grid_elements <- map_w_names(
+  grid_elements <- map_name_val(
     elements,
     function(el_id, el) {
       grid_panel(

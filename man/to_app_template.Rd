@@ -4,10 +4,10 @@
 \alias{to_app_template}
 \title{Build Shiny app template based on a grid layout}
 \usage{
-to_app_template(layout)
+to_app_template(x)
 }
 \arguments{
-\item{layout}{Object of class \code{"gridlayout"}.}
+\item{x}{An object of class \code{gridlayout}}
 }
 \value{
 Character string of Shiny app that uses desired layout

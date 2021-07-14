@@ -1,5 +1,5 @@
-str_replace <- function(text, pattern, replacement){
-  sub(pattern = pattern, replacement = replacement, x = text, perl = TRUE)
+str_replace <- function(text, pattern, replacement, fixed = FALSE){
+  sub(pattern = pattern, replacement = replacement, x = text, perl = !fixed, fixed = fixed)
 }
 
 str_replace_all <- function(text, pattern, replacement, fixed = FALSE){
@@ -29,6 +29,11 @@ str_trim <- function(text, side = c("both", "left", "right")){
   text
 }
 
+trim_vec <- function(vec, n_start = 1, n_end = n_start) {
+  # Trim off n elements from beginning and end of a vector
+  vec[seq.int(from = n_start+1, to = length(vec) - n_end)]
+}
+
 str_detect <- function(text, pattern, fixed = FALSE){
   grepl(pattern = pattern, x = text, perl = !fixed, fixed = fixed)
 }
@@ -49,6 +54,14 @@ str_extract <- function(text, pattern){
 
 collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
 
+split_by_line <- function(text){
+  if (length(text) > 1 || !is.character(text)) stop("split_by_line() needs a single character element")
+  strsplit(text, split = "\n")[[1]]
+}
+
+collapse_by_newline <- function(text_vec){
+  paste(text_vec, collapse = "\n")
+}
 
 # Make text bold
 emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
@@ -56,17 +69,30 @@ italicize <- function(...) if(is_installed("crayon")) crayon::italic(...) else a
 invert_text <- function(...) if(is_installed("crayon")) crayon::inverse(...) else as.character(...)
 
 indent_text <- function(text, num_spaces = 2) {
-  lines <- strsplit(
-    text,
-    split = "\n"
-  )[[1]]
 
-  indent <- paste(rep(" ", times = num_spaces), collapse = "")
-  indented_lines <- map_chr(lines, function(line) paste(indent, line))
+  # If we have a single length vector, assume it needs to be split on new-lines
+  if (length(text) == 1) {
+    text <- strsplit(
+      text,
+      split = "\n"
+    )[[1]]
+  }
 
-  paste(indented_lines, collapse = "\n")
+  text <- if (num_spaces > 0) {
+    paste0(
+      paste(rep(" ", times = num_spaces), collapse = ""),
+      text
+    )
+  } else {
+    str_replace_all(
+      text,
+      pattern = paste0("^(\\s{1,", abs(num_spaces), "})"),
+      replacement = ""
+    )
+  }
+
+  paste(text, collapse = "\n")
 }
-
 
 # extract from a list of lists to whatever level is desired
 extract <- function(x, ...) {
@@ -85,7 +111,8 @@ extract_chr <- function(x, ...){
   as.character(extract(x, ...))
 }
 
-map_w_names <- function(x, fn){
+map_name_val <- function(x, fn){
+  # callback is function(name, val)
   Map(names(x), x, f = fn)
 }
 

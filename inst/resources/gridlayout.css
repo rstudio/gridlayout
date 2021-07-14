@@ -70,6 +70,12 @@
   overflow: var(--collapsed-panel-overflow);
 }
 
+/* Some content likes to stick around even if it's not supposed to.
+   This makes sure it hides when the panel is collapsed
+*/
+.collapsed > .panel-content > * {
+    display: none;
+}
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */

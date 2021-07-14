@@ -188,6 +188,9 @@ make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
 
 make_collapser_icon <- function(parent_id = "") {
   requireNamespace("fontawesome", quietly = TRUE)
+  # Clicking on the collapsing icon will update classes to initiate collapsing
+  # or expanding and also trigger a resize event so Shiny will know to update
+  # plots that may have gotten more space after collapsing etc.
   shiny::span(
     fontawesome::fa("chevron-up"),
     "onclick" = '
@@ -197,7 +200,9 @@ make_collapser_icon <- function(parent_id = "") {
       card_classes.remove("collapsed");
     } else {
       card_classes.add("collapsed");
-    }',
+    }
+    window.dispatchEvent(new Event("resize"));
+    ',
     class = "collapser-icon"
   )
 }

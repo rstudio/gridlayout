@@ -243,7 +243,7 @@ new_gridlayout_template <- function(
     # Is the layout def a single multi-line string containing the table? If it
     # is we need to split it by rows
     if (length(layout_def == 1L) && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
-      layout_def <- strsplit(layout_def, "\n")[[1]]
+      layout_def <- split_by_line(layout_def)
     }
     # MD table representation
     layout_info <- parse_md_table_layout(
@@ -291,7 +291,7 @@ new_gridlayout_template <- function(
   empty_grid <- length(elements) == 0
 
   # Validate row and column sizes.
-  sizes <- map_w_names(
+  sizes <- map_name_val(
     list(row = row_sizes, col = col_sizes),
     function(dir, sizes) {
       start_vals <- extract_dbl(elements, "start_" %+% dir)

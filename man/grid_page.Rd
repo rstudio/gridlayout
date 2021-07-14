@@ -9,7 +9,8 @@ grid_page(
   ...,
   use_bslib_card_styles = FALSE,
   theme = NULL,
-  flag_mismatches = TRUE
+  flag_mismatches = TRUE,
+  just_container = shiny::isRunning()
 )
 }
 \arguments{
@@ -22,7 +23,9 @@ be named. If a named argument doesn't match the layout's declared elements
 than an error will be thrown. This behavior can be overridden using the
 \code{flag_mismatches} argument. Any unnamed arguments are added to the page
 after the container. This can be used to do things like things to the
-\code{head} or \code{meta} sections of the page.}
+\code{head} or \code{meta} sections of the page. Note that the ids of
+\code{use_bslib_card_styles}, \code{theme}, \code{flag_mismatches}, and \code{just_container}
+are not allowed as they correspond to arguments to the function.}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
@@ -36,6 +39,12 @@ manually on each panel.}
 
 \item{flag_mismatches}{Should mismatches between the named arguments and
 layout elements trigger an error?}
+
+\item{just_container}{Should the app layout be given as a standalone output
+(like calling \code{\link[=grid_container]{grid_container()}})? Defaults to \code{\link[shiny:isRunning]{shiny::isRunning()}} so if
+app is produced in a \code{\link[shiny:renderUI]{shiny::renderUI()}} type call it knows not to try and
+recreate the whole page. Note that extra arguments and themes will be
+discarded when this is set to \code{TRUE}.}
 }
 \value{
 A UI definition that can be passed to the

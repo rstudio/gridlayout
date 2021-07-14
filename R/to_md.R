@@ -67,6 +67,13 @@ to_table <- function(
   # Empty cells get a dot
   layout_mat[layout_mat == ""] <- "."
 
+  # Format the cell ids to be right aligned so they are visually distinct from
+  # the (soon to be left-aligned) sizes
+  size_align <- function(x) format(x, justify = "left")
+  cell_align <- function(x) format(x, justify = if (md_mode) "centre" else "left")
+  layout_mat <- apply(layout_mat, FUN = cell_align, MARGIN = 2)
+  # Single row/col matrices get reverted to vectors here so force back to a matrix
+  layout_mat <- matrix(layout_mat, nrow = num_rows, ncol = num_cols)
   first_row <- c(if(include_gap_size) get_info(layout, "gap") else "", col_sizes)
 
   layout_mat <- rbind(
@@ -76,15 +83,15 @@ to_table <- function(
 
   # Build table string
   if(md_mode){
-    # Need empty rows for the header
+    # Need empty rows for the header division
     empty_row <- rep_len("", num_cols+1)
-    layout_mat <- rbind(empty_row,
+    layout_mat <- rbind(layout_mat[1,],
                         empty_row,
-                        layout_mat)
+                        layout_mat[-1,])
   }
 
   # Make all cells in a column equal width
-  layout_mat <- apply(layout_mat, FUN = format, MARGIN = 2)
+  layout_mat <- apply(layout_mat, FUN = size_align, MARGIN = 2)
   colnames(layout_mat) <- NULL
   rownames(layout_mat) <- NULL
 
@@ -92,12 +99,11 @@ to_table <- function(
   layout_mat[,1] <- sizes_decorator(layout_mat[,1])
 
   # and column sizes
-  col_sizes_i <- if(md_mode) 3 else 1
-  layout_mat[col_sizes_i ,] <- sizes_decorator(layout_mat[col_sizes_i, ])
+  layout_mat[1,] <- sizes_decorator(layout_mat[1,])
 
   # and elements
-  layout_mat[-(col_sizes_i:1),-1] <- apply(
-    layout_mat[-(col_sizes_i:1),-1, drop = FALSE],
+  layout_mat[-1,-1] <- apply(
+    layout_mat[-1,-1, drop = FALSE],
     FUN = elements_dectorator,
     MARGIN = 2
   )
@@ -105,7 +111,7 @@ to_table <- function(
   if(md_mode){
     # Add border bars
     layout_mat <- apply(layout_mat,
-                        FUN = function(x) paste0("|", paste(x, collapse=" |"), " |"),
+                        FUN = function(x) paste0("| ", paste(x, collapse=" | "), " |"),
                         MARGIN = 1)
     # Add header delimiting dashes to second row
     layout_mat[2] <- gsub(" ", "-", layout_mat[2])

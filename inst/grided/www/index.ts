@@ -1,91 +1,174 @@
 // JS entry point
-import { App_State, Grid_Update_Options } from "./App_State";
-import { show_code } from "./make-focused_modal";
+import { LayoutState } from "./GridLayout";
+import { LayoutEditor, LayoutEditorSetup } from "./LayoutEditor";
 import {
-  add_shiny_listener,
-  send_elements_to_shiny,
-  send_grid_sizing_to_shiny,
-} from "./utils-shiny";
+  saveEditorHistory,
+  saveGalleryHistory,
+  StateDump,
+} from "./stateTracking";
+import { addShinyListener, setShinyInput } from "./utils-shiny";
+import { copyCode } from "./web-components/copy-code";
+import { createFocusModal } from "./web-components/focus-modal";
+import { LayoutGallery, layoutGallery } from "./web-components/layout-gallery";
 
-export const Shiny = (window as any).Shiny;
+export type LayoutElement = {
+  id: string;
+  start_row: number;
+  end_row: number;
+  start_col: number;
+  end_col: number;
+  ui_function?: string;
+};
 
-const debug_messages = true;
+export type LayoutInfo = {
+  name?: string;
+  grid: LayoutState;
+  elements: LayoutElement[];
+};
+
+export type GalleryOptions = {
+  layouts: LayoutInfo[];
+  selected?: string;
+};
+
+export function hideLiveAppUi() {
+  const appDumpDiv = document.getElementById("app_dump");
+
+  document
+    .querySelectorAll("[data-grided-ui-name]")
+    .forEach((el: HTMLElement) => {
+      if (el.parentElement === appDumpDiv) return;
+      appDumpDiv.append(el);
+      $(el).trigger("hidden");
+    });
+}
+// Fresh start on page
+const clearPage = () => {
+  // We want to keep the div shiny uses to dump app UI in the app so we want to
+  // take it out of the dom before erasing page contents, then add it back after
+  const appDumpDiv = document.getElementById("app_dump");
+  if (appDumpDiv) {
+    hideLiveAppUi();
+    appDumpDiv.parentNode.removeChild(appDumpDiv);
+  }
+  document.body.innerHTML = ``;
+  if (appDumpDiv) {
+    document.body.append(appDumpDiv);
+  }
+};
+
+const startLayoutGallery = (
+  opts: GalleryOptions,
+  saveHistory: boolean = true
+) => {
+  clearPage();
+  if (saveHistory) {
+    // If we're coming from a history pop, then we want to make sure we dont
+    // push another thing to the state and break the forward button
+    saveGalleryHistory(opts.layouts);
+  }
+  const gallery: LayoutGallery = layoutGallery(opts.layouts)
+    .onSelect((selected: string) => {
+      saveGalleryHistory(opts.layouts, selected);
+    })
+    .onCancel(() => {
+      saveGalleryHistory(opts.layouts);
+    })
+    .onGo((selectedLayout: LayoutInfo) => {
+      setShinyInput("build_app_template", selectedLayout);
+    })
+    .onEdit((selectedLayout: LayoutInfo) => {
+      startLayoutEditor(
+        {
+          entryType: "layout-gallery",
+          ...selectedLayout,
+          layoutName: selectedLayout.name,
+        },
+        true
+      );
+    })
+    .selectLayout(opts.selected);
+  return document.body.appendChild(gallery);
+};
+
+const startLayoutEditor = (opts: LayoutEditorSetup, saveHistory: boolean) => {
+  if (saveHistory) {
+    saveEditorHistory(opts);
+  }
+
+  if (opts.entryType !== "edit-existing-app") {
+    // Wipe the whole page if we're not working with a full existing app
+    clearPage();
+  }
+
+  opts.finishBtn =
+    opts.entryType === "layout-gallery"
+      ? {
+          label: "Create app",
+          onDone: (layout: LayoutInfo) => {
+            setShinyInput(
+              opts.entryType === "layout-gallery"
+                ? "build_app_template"
+                : "build_live_app_template",
+              layout
+            );
+          },
+        }
+      : {
+          label: "Update app layout",
+          onDone: (layout: LayoutInfo) => {
+            setShinyInput("update_layout", layout);
+          },
+        };
+
+  opts.onUpdate = (opts: LayoutEditorSetup) => {
+    saveEditorHistory(opts);
+  };
+
+  return new LayoutEditor(opts);
+};
 
 window.onload = function () {
-  const app_state = new App_State();
-
-  add_shiny_listener("shiny-loaded", function (x) {
-    if (debug_messages) console.log("connected to shiny");
-    x; // this is needed to vscode doesn't flag arg as dead code and delete it
-    // Send elements to Shiny so app is aware of what it's working with
-    send_elements_to_shiny(app_state.current_elements);
-    send_grid_sizing_to_shiny(app_state.grid_layout.attrs);
+  // Add listeners for the three main entry-points
+  addShinyListener("layout-gallery", (layouts: LayoutInfo[]) => {
+    startLayoutGallery({ layouts });
   });
-
-  add_shiny_listener("finish-button-text", function (label_text: string) {
-    document.querySelector("button#update_code").innerHTML = label_text;
-  });
-
-  if (app_state.mode === "New") {
-    // Need to use arrow function here so method is run on out app_state object
-    // if we just passed app_state.update_grid as the callback its just the method
-    // without the object behind it,
-    add_shiny_listener("update-grid", (opts: Grid_Update_Options) =>
-      app_state.update_grid(opts)
-    );
-
-    type Shiny_Element_Msg = {
-      id: string;
-      start_col: number;
-      start_row: number;
-      end_col: number;
-      end_row: number;
-    };
-    add_shiny_listener("add-elements", function (
-      elements_to_add: Shiny_Element_Msg[]
-    ) {
-      elements_to_add.forEach((el_msg: Shiny_Element_Msg) => {
-        const { start_row, end_row, start_col, end_col } = el_msg;
-        app_state.add_element({
-          id: el_msg.id,
-          grid_pos: { start_row, end_row, start_col, end_col },
-        });
-      });
-    });
-  }
-  // else {
-  //   // If in pure-client-side mode we need to provide a default grid and also wireup the code button
-  //   update_grid(app_state, {
-  //     rows: ["1fr", "1fr"],
-  //     cols: ["1fr", "1fr"],
-  //     gap: "1rem",
-  //   });
-
-  //   document.getElementById("get_code").addEventListener("click", function () {
-  //     show_code(
-  //       "Place the following in your CSS:",
-  //       gen_code_for_layout(
-  //         app_state.current_elements,
-  //         app_state.container.style
-  //       )
-  //     );
-  //   });
-  // }
-
-  add_shiny_listener("code_modal", function (code_to_show) {
-    show_code("Paste the following code into your app to update the layout", {
-      type: "R",
-      code: code_to_show,
-    });
-  });
-
-  add_shiny_listener("code_update_problem", function (code_to_show) {
-    show_code(
-      "Sorry, Couldn't find your layout to update. Make sure it's in the foreground of RStudio. Here's the code to paste in case all else fails.",
+  addShinyListener("edit-layout", (layoutInfo: LayoutInfo) => {
+    startLayoutEditor(
       {
-        type: "R",
-        code: code_to_show,
-      }
+        entryType: "edit-layout",
+        ...layoutInfo,
+      },
+      true
     );
   });
-}; // End of the window.onload callback
+  addShinyListener("edit-existing-app", (layoutInfo: LayoutInfo) => {
+    startLayoutEditor({ entryType: "edit-existing-app" }, true);
+  });
+
+  addShinyListener(
+    "show-code-popup",
+    (opts: { title: string; description: string; code: string }) => {
+      createFocusModal()
+        .setTitle(opts.title)
+        .description(opts.description)
+        .addElement(copyCode(opts.code))
+        .addToPage();
+    }
+  );
+};
+
+window.addEventListener("popstate", function (e) {
+  const state = e.state as StateDump;
+
+  switch (state.type) {
+    case "layoutChooser":
+      startLayoutGallery(state.data as GalleryOptions, false);
+      break;
+    case "layoutEdit":
+      startLayoutEditor(state.data as LayoutEditorSetup, false);
+      break;
+    default:
+      console.error("How did you get to that state?");
+  }
+});
