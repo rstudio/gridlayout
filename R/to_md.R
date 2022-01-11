@@ -33,14 +33,8 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
   to_table(layout, include_gap_size = include_gap_size, md_mode = TRUE)
 }
 
-
-to_table <- function(
-  layout,
-  md_mode = FALSE,
-  include_gap_size = FALSE,
-  sizes_decorator = I,
-  elements_dectorator = I
-){
+#' @export
+to_matrix <- function(layout){
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell
@@ -66,6 +60,27 @@ to_table <- function(
   }
   # Empty cells get a dot
   layout_mat[layout_mat == ""] <- "."
+
+  layout_mat
+}
+
+
+to_table <- function(
+  layout,
+  md_mode = FALSE,
+  include_gap_size = FALSE,
+  sizes_decorator = I,
+  elements_dectorator = I
+){
+  # We need to take the row and column names and turn them into prefixing rows
+  # and columns so knitr can render to markdown properly with the grid gap in
+  # the upper left cell
+  col_sizes <- get_info(layout, "col_sizes")
+  num_cols <- length(col_sizes)
+  row_sizes <- get_info(layout, "row_sizes")
+  num_rows <- length(row_sizes)
+
+  layout_mat <- to_matrix(layout)
 
   # Format the cell ids to be right aligned so they are visually distinct from
   # the (soon to be left-aligned) sizes
