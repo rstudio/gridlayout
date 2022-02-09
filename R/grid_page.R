@@ -2,29 +2,19 @@
 #'
 #' This is the typical way to use `gridlayout` in your `Shiny` app. `grid_page`
 #' will make up the entire `ui` declaration of the app. Under the hood it uses
-#' [shiny::fluidPage()] and [grid_container]. Elements of the layout are
-#' declared as named parameters which will then be matched to the provided
-#' `layout`. For instance the contents of the header (as defined in `layout`)
-#' would be set with `header = title_panel("App Title")`.
+#' [shiny::fluidPage()] and [grid_container]. Elements are placed in the layout
+#' by wrapping in a `grid_panel()` with the `area` set to the area in the layout
+#' the element should be placed in.
 #'
-#' @inheritParams use_gridlayout_shiny
 #' @inheritParams grid_container
-#' @param ... Contents of each grid element.  Every grid element argument must
-#'   be named. If a named argument doesn't match the layout's declared elements
-#'   than an error will be thrown. This behavior can be overridden using the
-#'   `flag_mismatches` argument. Any unnamed arguments are added to the page
-#'   after the container. This can be used to do things like things to the
-#'   `head` or `meta` sections of the page. Note that the ids of
-#'   `use_bslib_card_styles`, `theme`, `flag_mismatches`, and `just_container`
-#'   are not allowed as they correspond to arguments to the function.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
 #' @param flag_mismatches Should mismatches between the named arguments and
 #'   layout elements trigger an error?
 #' @param just_container Should the app layout be given as a standalone output
-#'   (like calling [`grid_container()`])? Defaults to [`shiny::isRunning()`] so if
-#'   app is produced in a [`shiny::renderUI()`] type call it knows not to try and
-#'   recreate the whole page. Note that extra arguments and themes will be
+#'   (like calling [`grid_container()`])? Defaults to [`shiny::isRunning()`] so
+#'   if app is produced in a [`shiny::renderUI()`] type call it knows not to try
+#'   and recreate the whole page. Note that extra arguments and themes will be
 #'   discarded when this is set to `TRUE`.
 #'
 #' @return A UI definition that can be passed to the
@@ -40,21 +30,24 @@
 #' requireNamespace("bslib", quietly = TRUE)
 #'
 #' library(shiny)
-#' my_layout <- "
-#' |      |        |       |
-#' |------|--------|-------|
-#' |2rem  |200px   |1fr    |
-#' |150px |header  |header |
-#' |1fr   |sidebar |plot   |"
-#'
-#' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = grid_page(
-#'     layout = my_layout,
-#'     theme = bslib::bs_theme(),
-#'     header = title_panel("Old Faithful Geyser Data"),
-#'     sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-#'     plot = plotOutput("distPlot", height = "100%")
+#'     layout = "
+#'       |2rem |200px   |1fr    |
+#'       |90px |header  |header |
+#'       |1fr  |sidebar |plot   |",
+#'     grid_panel(
+#'       "header",
+#'       shiny::h2("My App Header")
+#'     ),
+#'     grid_panel(
+#'       "sidebar",
+#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100%")
+#'     ),
+#'     grid_panel(
+#'       "plot",
+#'       plotOutput("distPlot", height = "100%")
+#'     )
 #'   ),
 #'   server = function(input, output) {
 #'     output$distPlot <- renderPlot({
@@ -68,40 +61,25 @@
 grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE, just_container = shiny::isRunning()){
 
   requireNamespace("shiny", quietly = TRUE)
-  # Kinda silly to have a grid page without a layout
-  if(missing(layout)){
-    stop("Need a defined layout for page")
-  }
-
-  # Make sure we're working with a layout
-  layout <- as_gridlayout(layout)
-
-  # Named arguments represent grid panels elements. Unnamed ones are assumed to
-  # be extra tags that are appended after grid container.
-  arg_sections <- list(...)
-  named_args <- arg_sections[names(arg_sections) != ""]
-  unnamed_args <- arg_sections[names(arg_sections) == ""]
-
-  if (get_info(layout, "container_height") != "viewport") {
-    warning("Container height for layout is not set at default of viewport.",
-            "This is likely a mistake for grid_page()")
-  }
 
   container <- grid_container(
-    id = "grid_page",
+    id="grid_page",
     layout = layout,
-    elements = named_args,
+    ...,
     use_bslib_card_styles = use_bslib_card_styles,
     flag_mismatches = flag_mismatches
   )
+
+  if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
+    warning("Container height for layout is not set at default of viewport.",
+            "This is likely a mistake for grid_page()")
+  }
 
   if (just_container) return(container)
 
   shiny::fluidPage(
     theme = theme,
-    container,
-    #any extra args not matched to layout will get added after
-    unnamed_args
+    container
   )
 
 }
