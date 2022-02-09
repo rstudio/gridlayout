@@ -78,7 +78,15 @@ grid_container <- function(
 
   # Check to make sure we match all the names in the layout to all the names in
   # the passed arg_sections
+
+  # Kinda silly to have a grid page without a layout
+  if(missing(layout)){
+    stop("Need a defined layout for page")
+  }
+
+  # Make sure we're working with a layout
   layout <- as_gridlayout(layout)
+
   layout_ids <- get_element_ids(layout)
 
   # Build container div, append the styles to head and then return
