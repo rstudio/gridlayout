@@ -7,7 +7,7 @@
 #' things you can customize are settings a specific element to use a given card
 #' style, or to align the content of the card vertically or horizontally.
 #'
-#' @area Name of grid area, should match an area defined in the layout section
+#' @param area Name of grid area, should match an area defined in the layout section
 #'   of the wrapping `grid_page()` or `grid_container()`.
 #' @param ... Elements to include within the panel
 #' @param title Character string to go across top of panel with label. If left
