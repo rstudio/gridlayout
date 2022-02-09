@@ -80,49 +80,55 @@ to_css <- function(layout,
   )
 }
 
+toTemplateGridAreas <- function(layout){
+  # Get spacing right thanks for text.format building padding
+  layout_mat <- apply(to_matrix(layout), FUN = format, MARGIN = 2)
+
+  # Single row/col matrices get reverted to vectors here so force back to a matrix
+  layout_mat <- matrix(
+    layout_mat,
+    nrow = length(get_info(layout, "row_sizes")),
+    ncol = length(get_info(layout, "col_sizes"))
+  )
+
+  # Indent text so it's easier to read in the css
+  paste0(
+    "\n",
+    indent_text(
+      paste(
+        apply(layout_mat,
+              FUN = function(x) paste0("\"", paste(x, collapse = " "), "\""),
+              MARGIN = 1),
+        collapse="\n"
+      )
+    )
+  )
+}
 
 generate_layout_rules <- function(layout,
                                   container_query,
                                   selector_prefix,
                                   width_bounds = NULL) {
+
   main_container_styles <- build_css_rule(
     selector = container_query,
     prop_list = c(
       "display" = "grid",
       "grid-template-rows" = collapse_w_space(get_info(layout, "row_sizes")),
       "grid-template-columns" = collapse_w_space(get_info(layout, "col_sizes")),
+      "grid-template-areas" = toTemplateGridAreas(layout),
       "grid-gap" = get_info(layout, "gap"),
       "padding" = get_info(layout, "gap"),
       "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
 
-  # Build the mapping for each element to its grid area.
-  element_grid_areas <- paste(
-    sapply(
-      get_info(layout, "elements"),
-      function(el) {
-        build_css_rule(
-          selector = paste0(selector_prefix, el$id),
-          prop_list = c(
-            "grid-area" = paste(el$start_row, el$start_col, el$end_row + 1, el$end_col + 1, sep = " / "),
-            "--collapsible-visibility" = if (el$collapsible) "block" else "none",
-            "--collapsed-content-size" = if (el$collapsible) "0" else "1fr",
-            "--collapsed-panel-height" = if (el$collapsible) "min-content",
-            "--collapsed-panel-overflow" = if (el$collapsible) "hidden"
-          )
-        )
-      }
-    ),
-    collapse = "\n"
-  )
-
   element_styles <- paste(
     main_container_styles,
-    element_grid_areas,
     sep = "\n"
   )
 
+  # Aka is this a recursive call of this function for generating media query styles
   within_media_query <- notNull(width_bounds)
   media_query_open <- ""
   media_query_close <- ""
