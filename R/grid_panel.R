@@ -7,6 +7,8 @@
 #' things you can customize are settings a specific element to use a given card
 #' style, or to align the content of the card vertically or horizontally.
 #'
+#' @area Name of grid area, should match an area defined in the layout section
+#'   of the wrapping `grid_page()` or `grid_container()`.
 #' @param ... Elements to include within the panel
 #' @param title Character string to go across top of panel with label. If left
 #'   blank the card contents will take up entire space.
@@ -45,6 +47,7 @@
 #'
 #' # Simply a wrapper for shiny::div(...)
 #' grid_panel(
+#'   area="header",
 #'   shiny::h2("R"),
 #'   v_align = "center",
 #'   h_align = "center"
@@ -112,6 +115,7 @@
 #' }
 #'
 grid_panel <- function(
+  area,
   ...,
   v_align = NULL,
   h_align = NULL,
@@ -124,22 +128,6 @@ grid_panel <- function(
   panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
 ) {
   contents <- list(...)
-
-  already_grid_panel <- length(contents) == 1 && el_has_class(contents[[1]], "grid_panel")
-
-  if (already_grid_panel) {
-    # If element is already wrapped in a grid_panel, we just need to update
-    # the id
-    el <- contents[[1]]
-    el$attribs$id <- panel_id
-
-    # Preference for bootstrap card styling at page-level overwrites the card
-    # level This is so if the user just wants bootstrap styles they don't need
-    # to manually add them to all their grid_panel() calls because
-    # grid_container() auto wraps all elements in grid_panel.
-    el$attribs$class <- panel_class
-    return(el)
-  }
 
   panel_styles <- htmltools::css(
     display = if (notNull(h_align) || notNull(v_align)) "grid",
@@ -162,6 +150,7 @@ grid_panel <- function(
   shiny::div(
     id = panel_id,
     class = panel_class,
+    style= htmltools::css(`grid-area` = area),
     if (has_title) {
       shiny::div(
         class = "title-bar",
