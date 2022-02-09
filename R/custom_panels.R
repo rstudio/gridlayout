@@ -5,9 +5,10 @@
 #' the panel. Useful for titles (see [title_panel()]) or displaying text-based
 #' statistics.
 #'
+#' @inheritParams grid_panel
+#' @inheritDotParams grid_panel -h_align
 #' @param content Whatever you want the title to say. Typically just text but
 #'   any tag or tag-list is possible. All will get wrapped in an `h3` tag.
-#' @inheritDotParams grid_panel -h_align
 #' @param wrapping_tag What tag should the text be wrapped in. Takes either an
 #'   `htmltools` tag function or the string of a tag accessible via
 #'   `htmltools::tags[[wrapping_tag]]`.
@@ -28,22 +29,23 @@
 #' # Icons from `fontawesome` can be used:
 #'
 #' # Either with just the id
-#' text_panel("Here's my text", icon = "r-project")
+#' text_panel(area = "header", "Here's my text", icon = "r-project")
 #'
 #' # Or by directly passing the icon object if you want more customization
-#' text_panel("Here's my text", icon = fontawesome::fa("r-project", fill = "steelblue"))
+#' text_panel("header", "Here's my text", icon = fontawesome::fa("r-project", fill = "steelblue"))
 #'
 #' # You can also pass arbitrary image locations for the icon
-#' text_panel("Here's my text", icon = "https://cran.r-project.org/Rlogo.svg")
+#' text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg")
 #'
 #' # These images can have their size controlled
-#' text_panel("Here's my text", icon = "https://cran.r-project.org/Rlogo.svg", img_height = "20px")
+#' text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg", img_height = "20px")
 #'
 #' # You can adjust the horizontal alignment of your header with h_align
 #' text_panel("I'm in the middle", h_align = "center")
 #'
 #' @export
 text_panel <- function(
+  area,
   content = NULL,
   ...,
   h_align = "start",
@@ -71,6 +73,7 @@ text_panel <- function(
   }
 
   grid_panel(
+    area = area,
     wrapping_tag(
       htmltools::tagList(
         icon,
@@ -100,16 +103,17 @@ text_panel <- function(
 #' @examples
 #'
 #' # Simple app title
-#' title_panel("My App")
+#' title_panel(area = "header", "My App")
 #'
 #' # Centered title
-#' title_panel("My App (in the center)", h_align = "center")
+#' title_panel("header", "My App (in the center)", h_align = "center")
 #'
 #' # Can have a logo
-#' title_panel("My App", icon = "https://cran.r-project.org/Rlogo.svg")
+#' title_panel("footer", "My App", icon = "https://cran.r-project.org/Rlogo.svg")
 #'
 #' @export
 title_panel <- function(
+  area,
   title,
   windowTitle = title,
   h_align = "start",
@@ -122,6 +126,7 @@ title_panel <- function(
   }
 
   text_panel(
+    area = area,
     content = title,
     icon = icon,
     wrapping_tag = htmltools::h2,

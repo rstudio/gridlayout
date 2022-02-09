@@ -5,6 +5,7 @@
 \title{Make header panel}
 \usage{
 title_panel(
+  area,
   title,
   windowTitle = title,
   h_align = "start",
@@ -13,6 +14,9 @@ title_panel(
 )
 }
 \arguments{
+\item{area}{Name of grid area, should match an area defined in the layout section
+of the wrapping \code{grid_page()} or \code{grid_container()}.}
+
 \item{title}{An application title to display.}
 
 \item{windowTitle}{The title that should be displayed by the browser window.}
@@ -42,13 +46,13 @@ in tabs etc.. Modeled after \code{\link[shiny:titlePanel]{shiny::titlePanel()}}.
 \examples{
 
 # Simple app title
-title_panel("My App")
+title_panel(area = "header", "My App")
 
 # Centered title
-title_panel("My App (in the center)", h_align = "center")
+title_panel("header", "My App (in the center)", h_align = "center")
 
 # Can have a logo
-title_panel("My App", icon = "https://cran.r-project.org/Rlogo.svg")
+title_panel("footer", "My App", icon = "https://cran.r-project.org/Rlogo.svg")
 
 }
 \seealso{
