@@ -7,7 +7,7 @@
 grid_container(
   id = "grid-container",
   layout,
-  elements,
+  ...,
   use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE,
   check_for_nested_grids = TRUE
@@ -21,8 +21,8 @@ with \verb{grid-} to avoid namespace clashes)}
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{elements}{Named list of the UI definitions that will be used to fill
-all cells. Names must match those provided in \code{layout}.}
+\item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
+layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
