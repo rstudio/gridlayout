@@ -7,6 +7,7 @@
 vertical_stack_panel(
   area,
   ...,
+  item_alignment = "top",
   title = NULL,
   collapsible = TRUE,
   scrollable = FALSE,
@@ -18,6 +19,11 @@ vertical_stack_panel(
 of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{...}{Elements to include within the panel}
+
+\item{item_alignment}{How should the items within the panel be aligned.
+Defaults to stacking downward from the top. Options include \code{"top"},
+\code{"centered"}, \code{"bottom"}, or \code{"spread"} (items are distributed evenly among
+vertical space).}
 
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
@@ -35,7 +41,7 @@ the panel can be seen?}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with styles for
-verticall stacking applied.
+vertical stacking applied.
 }
 \description{
 Contain a series of ui elements with each vertically stacked on top of
