@@ -175,3 +175,19 @@ test_that("Can initialize a layout with the element_list argument instead of a m
 
 })
 
+
+
+
+test_that("Similar named grid areas don't overlap", {
+
+  my_layout <- md_to_gridlayout("
+  |10px  |120px |
+  |100px |test2 |
+  |1fr   |test  |")
+
+  # Previous versions used regexes that would place test wherever test2 was as well
+  expect_false(
+    get_info(my_layout, "elements")[[1]]$start_row ==
+    get_info(my_layout, "elements")[[2]]$start_row
+  )
+})

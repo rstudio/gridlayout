@@ -8,16 +8,7 @@ elements_from_mat <- function(layout_mat){
   lapply(
     element_ids,
     function(id){
-      # str_detect/grepl collapses the results back to a vector so we have to
-      # reassemble the matrix for the which to give us 2d coordinates
-      all_pos <- which(
-        matrix(
-          str_detect(layout_mat, id, fixed = TRUE),
-          nrow = n_row,
-          ncol = n_col
-        ),
-        arr.ind = TRUE
-      )
+      all_pos <- which( layout_mat == id, arr.ind = TRUE )
       list(
         id = id,
         start_row = min(all_pos[,"row"]),
