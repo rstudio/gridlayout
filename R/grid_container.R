@@ -63,9 +63,9 @@
 #' }
 #'
 grid_container <- function(
-  id = "grid-container",
   layout,
   ...,
+  id = NULL,
   use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE
 ) {
@@ -89,12 +89,29 @@ grid_container <- function(
     shiny::div(
       id = id,
       class = "grid-container",
+      `data-gridlayout-key` = unique_key,
       ...,
       use_gridlayout_shiny(
         layout,
-        container = id,
-        selector_prefix = paste0("#", id, "__")
+        container = unique_key
       )
     )
   )
 }
+
+
+# Generate a random 5-letter key for pairing grid containers with their css.
+# This is only used if an id is not provided for the container already
+gen_random_grid_key <- function(num_chars = 5){
+  paste(
+    sample(
+      letters,
+      5,
+      replace = TRUE
+    ),
+    collapse = ""
+  )
+}
+
+
+

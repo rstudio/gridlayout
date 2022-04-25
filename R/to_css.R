@@ -1,12 +1,14 @@
 #' Convert grid layout to css string
 #'
 #' @param layout Object of class `"gridlayout"`.
-#' @param container Id of the element for grid to be placed in. Default value to
-#'   apply grid styling to the whole app (aka the `body` element) for whole page
-#'   grids. If an simple name is passed it is assumed that it is an id: i.e. the
-#'   css id selector `#` is apended to the name. If container contains css
-#'   selector characters such as a dot, the selector will not be transformed
-#'   into an id automatically. E.g. `container = ".main-content"`.
+#' @param container_key The unique key used to identify the container to be
+#'   targeted for the layout. If left blank it will default to applying grid
+#'   styling to the whole app (aka the `body` element) for whole page grids. If
+#'   plain character string is given, then it is assumed to be a
+#'   `gridlayout-key` and the targeting is done using an attribute query for
+#'   `data-gridlayout-key`. If container contains css selector characters such as
+#'   a dot, the selector will not be transformed into an id automatically. E.g.
+#'   `container = ".main-content"`.
 #' @param is_card_styled Should each section of the grid be given a card style
 #'   to make it stand out? Options are `"grid_panel"`, where only elements with
 #'   `"grid_panel"` class will get card styling, `"all"` where all children of
@@ -35,15 +37,15 @@
 #' cat(to_css(grid_obj))
 #' @export
 to_css <- function(layout,
-                   container,
-                   is_card_styled = "grid_panel",
-                   selector_prefix = "#") {
-  container_query <- if (missing(container)) {
+                   container_key,
+                   is_card_styled = "grid_panel") {
+
+  container_query <- if (missing(container_key)) {
     "body"
   } else {
-    has_css_selector <- grepl("\\.|#|>|\\+", container)
+    has_css_selector <- grepl("\\.|#|>|\\+", container_key)
 
-    if (has_css_selector) container else paste0("#", container)
+    if (has_css_selector) container_key else paste0("div[data-gridlayout-key=\"", container_key, "\"]")
   }
 
   layout_rules <- generate_layout_rules(
