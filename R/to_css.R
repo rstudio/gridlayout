@@ -291,12 +291,21 @@ use_gridlayout_rmd <- function(container = ".main-container",
     code <- paste(options$code, collapse = "\n")
     if (options$eval) {
       layout <- md_to_gridlayout(code)
+      areas <- get_element_ids(layout)
+
       css_for_layout <- paste(
         "<style>",
         to_css(layout,
           container = container,
           is_card_styled = is_card_styled,
           selector_prefix = selector_prefix
+        ),
+        # Use ids to assign each section to proper area in layout
+        paste0(
+          "#", areas, " { ",
+          "grid-area: ", areas,
+          " }",
+          collapse = "\n"
         ),
         # Make sure all the elements have the proper padding they need
         build_css_rule(
