@@ -14,22 +14,20 @@ desired layout for your Shiny app.}
 \item{...}{
   Arguments passed on to \code{\link[=to_css]{to_css}}
   \describe{
-    \item{\code{container}}{Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the \code{body} element) for whole page
-grids. If an simple name is passed it is assumed that it is an id: i.e. the
-css id selector \verb{#} is apended to the name. If container contains css
-selector characters such as a dot, the selector will not be transformed
-into an id automatically. E.g. \code{container = ".main-content"}.}
+    \item{\code{container_key}}{The unique key used to identify the container to be
+targeted for the layout. If left blank it will default to applying grid
+styling to the whole app (aka the \code{body} element) for whole page grids. If
+plain character string is given, then it is assumed to be a
+\code{gridlayout-key} and the targeting is done using an attribute query for
+\code{data-gridlayout-key}. If container contains css selector characters such as
+a dot, the selector will not be transformed into an id automatically. E.g.
+\code{container = ".main-content"}.}
     \item{\code{is_card_styled}}{Should each section of the grid be given a card style
 to make it stand out? Options are \code{"grid_panel"}, where only elements with
 \code{"grid_panel"} class will get card styling, \code{"all"} where all children of
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
-    \item{\code{selector_prefix}}{CSS prefix used to target grid elements. This will
-change if you're integrating grid with a system that you don't want to use
-ids (the \code{"#"} prefix) with because they are not available or are used for
-other reasons.}
   }}
 }
 \value{
