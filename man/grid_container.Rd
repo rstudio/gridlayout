@@ -9,8 +9,7 @@ grid_container(
   layout,
   ...,
   use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE,
-  check_for_nested_grids = TRUE
+  flag_mismatches = TRUE
 )
 }
 \arguments{
@@ -34,12 +33,6 @@ manually on each panel.}
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}
-
-\item{check_for_nested_grids}{Should nested grids be detected and properly
-namespaced? It will only be set to false when you know that the container
-is itself a nested gridlayout. This setting should only be touched in
-advanced layout scenarios and typically you will want to use
-\code{\link[=nested_grid_panel]{nested_grid_panel()}} instead.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class

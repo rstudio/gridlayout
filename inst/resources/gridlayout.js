@@ -6,8 +6,6 @@ function watch_cards() {
 
       const el = entry.target;
 
-      console.log("Running resize observer", el);
-
       const content_height = getComputedStyle(el)
         .getPropertyValue("grid-template-rows")
         .split(" ")[1];
