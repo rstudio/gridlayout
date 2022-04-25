@@ -16,7 +16,8 @@ content_layout <- "
 |auto |icon     |bin_chooser |
 |1fr  |settings |plot        |"
 
-R_logo <- text_panel(icon = "r-project", h_align = "center")
+R_logo <- text_panel(area = "icon", icon = "r-project", h_align = "center")
+
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
@@ -26,7 +27,7 @@ app <- shinyApp(
     nested_grid_panel(
       area = "nestedA",
       layout = content_layout,
-      grid_panel("icon", R_logo),
+      R_logo,
       grid_panel(
         "bin_chooser",
         sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
@@ -35,7 +36,7 @@ app <- shinyApp(
       ),
       grid_panel(
         area = "plot",
-        plotOutput("distPlot")
+        plotOutput("distPlot", height="100%")
       ),
       vertical_stack_panel(
         area = "settings",
@@ -46,13 +47,13 @@ app <- shinyApp(
       area = 'nestedB',
       title = "Nested within a titled panel",
       layout = content_layout,
-      grid_panel("icon", R_logo),
+      R_logo,
       text_panel("bin_chooser", "Bin Chooser L1", h_align = "center"),
       text_panel("settings", "Settings L1", h_align = "center"),
       nested_grid_panel(
         "plot",
         layout = content_layout,
-        grid_panel("icon", R_logo),
+        R_logo,
         text_panel("bin_chooser", "Bin Chooser L2", h_align = "center"),
         text_panel("settings", "Settings L2", h_align = "center"),
         text_panel("plot", "Plot", h_align = "center")
