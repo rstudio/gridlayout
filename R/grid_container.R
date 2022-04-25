@@ -83,6 +83,20 @@ grid_container <- function(
 
   layout_ids <- get_element_ids(layout)
 
+  # In order to leave the id field open to users to do with as they please, we
+  # need to generate a unique key that can be used to find the grid. If the
+  # user has provided an id already, then we can use that. Otherwise we generate
+  # a random key sequence that we can use. The attribute data-gridlayout-key is
+  # used to properly sync up the css with the container
+  unique_key <- if (is.null(id)) gen_random_grid_key() else id
+
+  if (flag_mismatches){
+    check_for_area_mismatches(
+      provided_areas = get_provided_grid_areas(list(...)),
+      layout_areas = get_element_ids(layout)
+    )
+  }
+
   # Build container div, append the styles to head and then return
   shiny::tagList(
     gridlayout_css_dep(),
