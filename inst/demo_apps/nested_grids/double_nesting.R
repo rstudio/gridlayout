@@ -11,8 +11,9 @@ my_layout <- "
 
 depth <- 2
 
-emoji_panel <- function(emoji, level = 1){
+emoji_panel <- function(area, emoji){
   grid_panel(
+    area = area,
     div(
       style = htmltools::css(
         width = "100%", height = "100%",
@@ -26,25 +27,24 @@ emoji_panel <- function(emoji, level = 1){
 
 make_nested_panels <- function(level = 1) {
   nested_grid_panel(
+    area = "nested",
     layout = my_layout,
-    elements = list(
-      top =    emoji_panel("↓", level),
-      bottom = emoji_panel("↑", level),
-      left =   emoji_panel("→", level),
-      right =  emoji_panel("←", level),
-      nested = if(level < depth) make_nested_panels(level + 1) else emoji_panel("🐢", level)
-    )
+    emoji_panel("top", "↓"),
+    emoji_panel("bottom", "↑"),
+    emoji_panel("left", "→"),
+    emoji_panel("right", "←"),
+    if(level < depth) make_nested_panels(level + 1) else emoji_panel("nested", "🐢")
   )
 }
 
 shinyApp(
   ui = grid_page(
     layout = my_layout,
-    top =    emoji_panel("↓"),
-    bottom = emoji_panel("↑"),
-    left =   emoji_panel("→"),
-    right =  emoji_panel("←"),
-    nested = make_nested_panels()
+    emoji_panel("top", "↓"),
+    emoji_panel("bottom", "↑"),
+    emoji_panel("left", "→"),
+    emoji_panel("right", "←"),
+    make_nested_panels()
   ),
   server = function(input, output) {}
 )
