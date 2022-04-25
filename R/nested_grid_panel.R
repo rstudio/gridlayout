@@ -13,10 +13,10 @@
 nested_grid_panel <- function(
     area,
     layout,
+    ...,
     title = NULL,
     use_bslib_card_styles = FALSE,
-    flag_mismatches = TRUE,
-    ...
+    flag_mismatches = TRUE
 ){
 
   grid_panel(
