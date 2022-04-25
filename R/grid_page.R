@@ -63,7 +63,7 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
   requireNamespace("shiny", quietly = TRUE)
 
   container <- grid_container(
-    id="grid_page",
+    id = "grid_page",
     layout = layout,
     ...,
     use_bslib_card_styles = use_bslib_card_styles,
