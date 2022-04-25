@@ -5,6 +5,7 @@
 \title{Panel just containing text}
 \usage{
 text_panel(
+  area,
   content = NULL,
   ...,
   h_align = "start",
@@ -14,6 +15,9 @@ text_panel(
 )
 }
 \arguments{
+\item{area}{Name of grid area, should match an area defined in the layout section
+of the wrapping \code{grid_page()} or \code{grid_container()}.}
+
 \item{content}{Whatever you want the title to say. Typically just text but
 any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 
@@ -80,16 +84,16 @@ title_panel("This is my header")
 # Icons from `fontawesome` can be used:
 
 # Either with just the id
-text_panel("Here's my text", icon = "r-project")
+text_panel(area = "header", "Here's my text", icon = "r-project")
 
 # Or by directly passing the icon object if you want more customization
-text_panel("Here's my text", icon = fontawesome::fa("r-project", fill = "steelblue"))
+text_panel("header", "Here's my text", icon = fontawesome::fa("r-project", fill = "steelblue"))
 
 # You can also pass arbitrary image locations for the icon
-text_panel("Here's my text", icon = "https://cran.r-project.org/Rlogo.svg")
+text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg")
 
 # These images can have their size controlled
-text_panel("Here's my text", icon = "https://cran.r-project.org/Rlogo.svg", img_height = "20px")
+text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg", img_height = "20px")
 
 # You can adjust the horizontal alignment of your header with h_align
 text_panel("I'm in the middle", h_align = "center")

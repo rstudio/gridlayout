@@ -63,7 +63,7 @@ The first is the easiest: a markdown table wrapped in a character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
-follows:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
+follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "| header | header |
    | plota  | plotb  |" )
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
@@ -84,7 +84,7 @@ follows:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
 
 To avoid multi-line strings and the indentation trouble they can cause,
 you can also supply your table as a character vector where each element
-corresponds to a row in your table:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(c(
+corresponds to a row in your table:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(c(
   "| header | header |",
   "| plota  | plotb  |" ))
 }\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
@@ -122,7 +122,7 @@ This is a bit more verbose but allows for greater control. Here you can have
 overlapping elements etc.. Most of the time you will just want to use the
 markdown syntax
 
-The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout( list(
+The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout( list(
   list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
@@ -163,7 +163,7 @@ of the viewport. This is typically used to add a mobile view (or a desktop
 view if your app is mobile first.)
 
 To define an alternate layout you need to pass a list containing \code{layout}
-and \code{width_bounds} elements.\if{html}{\out{<div class="r">}}\preformatted{new_gridlayout(
+and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "|header |header |
    |plot_a |plot_b |",
   alternate_layouts = list(

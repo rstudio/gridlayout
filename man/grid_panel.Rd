@@ -5,6 +5,7 @@
 \title{Panel for grid page element}
 \usage{
 grid_panel(
+  area,
   ...,
   v_align = NULL,
   h_align = NULL,
@@ -18,6 +19,9 @@ grid_panel(
 )
 }
 \arguments{
+\item{area}{Name of grid area, should match an area defined in the layout section
+of the wrapping \code{grid_page()} or \code{grid_container()}.}
+
 \item{...}{Elements to include within the panel}
 
 \item{v_align, h_align}{Vertical and Horizontal alignment of content in panel.
@@ -68,6 +72,7 @@ style, or to align the content of the card vertically or horizontally.
 
 # Simply a wrapper for shiny::div(...)
 grid_panel(
+  area="header",
   shiny::h2("R"),
   v_align = "center",
   h_align = "center"
