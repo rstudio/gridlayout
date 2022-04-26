@@ -1,9 +1,0 @@
-Name: Edit existing layout
-Description: Finds a gridlayout markdown table in open document and opens interactive editor
-Binding: grided_edit_existing_layout
-Interactive: true
-
-Name: Gridlayout Gallery
-Description: Opens interactive app to view, select, and edit gridlayouts and generate ready-to-run app script with desired layout
-Binding: layout_gallery
-Interactive: true
