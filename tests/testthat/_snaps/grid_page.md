@@ -8,12 +8,12 @@
     Output
       <div class="container-fluid">
         <div id="grid_page" class="grid-container" data-gridlayout-key="grid_page">
-          <div class="grid_panel gridlayout-card" style="grid-area:header;">
+          <div class="grid_panel gridlayout-card" style="grid-area:header;" data-gridlayout-area="header">
             <div class="panel-content">
               <h2 id="header">This is my header content</h2>
             </div>
           </div>
-          <div class="grid_panel gridlayout-card" style="grid-area:footer;">
+          <div class="grid_panel gridlayout-card" style="grid-area:footer;" data-gridlayout-area="footer">
             <div class="panel-content">
               <div class="form-group shiny-input-container">
                 <label class="control-label" id="bins-label" for="bins">Number of bins:</label>
@@ -21,7 +21,7 @@
               </div>
             </div>
           </div>
-          <div class="grid_panel gridlayout-card" style="grid-area:plot;">
+          <div class="grid_panel gridlayout-card" style="grid-area:plot;" data-gridlayout-area="plot">
             <div class="panel-content">
               <div id="myPlot" class="shiny-plot-output" style="width:100%;height:400px;"></div>
             </div>
