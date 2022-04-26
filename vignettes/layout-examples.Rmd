@@ -27,7 +27,7 @@ layout_tables <- list(
   |80px  |header   |
   |1fr   |chickens |
   |1fr   |treePlot |
-  |1fr   |yarnPlot |",
+  |1fr   |stockTable |",
   scrolling_stack = "
   |      |           |
   |------|-----------|
@@ -35,14 +35,12 @@ layout_tables <- list(
   |80px  |header     |
   |400px |chickens   |
   |400px |treePlot   |
-  |400px |yarnPlot   |
   |400px |stockTable |",
   four_panel = "
   |     |           |         |
   |-----|-----------|---------|
   |1rem |1fr        |1fr      |
-  |80px |header     |header   |
-  |1fr  |chickens   |yarnPlot |
+  |1fr  |header   |chickens |
   |1fr  |stockTable |treePlot |",
   focal_chart_top = "
   |     |          |         |
@@ -50,14 +48,14 @@ layout_tables <- list(
   |1rem |1fr       |1fr      |
   |80px |header    |header   |
   |2fr  |chickens  |chickens |
-  |1fr  |treePlot  |yarnPlot |",
+  |1fr  |treePlot  |stockTable |",
   focal_chart_side = "
   |     |         |         |
   |-----|---------|---------|
   |1rem |2fr      |1fr      |
   |80px |header   |header   |
   |1fr  |chickens |treePlot |
-  |1fr  |chickens |yarnPlot |"
+  |1fr  |chickens |stockTable |"
 )
 
 
@@ -79,18 +77,29 @@ library(ggplot2)
 library(gt)
 library(dplyr)
 
+
 app_w_layout <- function(my_layout) {
   shinyApp(
     ui = grid_page(
       layout = my_layout,
-      header = title_panel("My gridlayout app"),
-      chickens = tabsetPanel(
-        tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
-        tabPanel("Fastest growing", gt_output("chickTable"))
+      title_panel("header", "My gridlayout app"),
+      grid_panel(
+        "chickens",
+        tabsetPanel(
+          tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
+          tabPanel("Fastest growing", gt_output("chickTable"))
+        )
       ),
-      treePlot = plotOutput("treePlot"),
-      yarnPlot = plotOutput("yarnPlot"),
-      stockTable = grid_panel(
+      grid_panel(
+        "treePlot",
+        plotOutput("treePlot", height = "100%")
+      ),
+      # grid_panel(
+      #   "yarnPlot",
+      #   plotOutput("yarnPlot", height = "100%")
+      # ),
+      grid_panel(
+         "stockTable",
         gt_output("stockTable"), scrollable = TRUE
       ),
       flag_mismatches = FALSE # Allows us to use layouts without some elements declared
@@ -235,14 +244,24 @@ The following code is the UI definition used for all the screenshots. The only t
 ```{r, eval = FALSE, echo = TRUE}
 ui <- grid_page(
   layout = my_layout,
-  header = title_panel("My gridlayout app"),
-  chickens = tabsetPanel(
-    tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
-    tabPanel("Fastest growing", gt_output("chickTable"))
+  title_panel("header", "My gridlayout app"),
+  grid_panel(
+    "chickens",
+    tabsetPanel(
+      tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
+      tabPanel("Fastest growing", gt_output("chickTable"))
+    )
   ),
-  treePlot = plotOutput("treePlot", height = "100%"),
-  yarnPlot = plotOutput("yarnPlot", height = "100%"),
-  stockTable = grid_panel(
+  grid_panel(
+    "treePlot",
+    plotOutput("treePlot", height = "100%")
+  ),
+  grid_panel(
+    "yarnPlot",
+    plotOutput("yarnPlot", height = "100%")
+  ),
+  grid_panel(
+    "stockTable",
     gt_output("stockTable"), scrollable = TRUE
   ),
   # Allows us to use layouts without some elements declared
