@@ -81,7 +81,6 @@ grid_container <- function(
   # Make sure we're working with a layout
   layout <- as_gridlayout(layout)
 
-  layout_ids <- get_element_ids(layout)
 
   # In order to leave the id field open to users to do with as they please, we
   # need to generate a unique key that can be used to find the grid. If the
@@ -93,7 +92,7 @@ grid_container <- function(
   if (flag_mismatches){
     check_for_area_mismatches(
       provided_areas = get_provided_grid_areas(list(...)),
-      layout_areas = get_element_ids(layout)
+      layout_areas =  get_element_ids(layout)
     )
   }
 
