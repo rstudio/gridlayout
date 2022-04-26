@@ -58,3 +58,17 @@ test_that("Height setting can be customized", {
   )
 
 })
+
+
+test_that("Panel collapsibility rules are added as needed", {
+
+  grid_obj <- new_gridlayout( "
+      |      |1fr     |
+      |80px  |header  |
+      |auto  |sidebar |
+      |400px |plot    |",
+    container_height = "viewport"
+  )
+
+  expect_snapshot(cat(to_css(grid_obj)))
+})

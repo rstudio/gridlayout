@@ -45,7 +45,12 @@ to_css <- function(layout,
   } else {
     has_css_selector <- grepl("\\.|#|>|\\+", container_key)
 
-    if (has_css_selector) container_key else paste0("div[data-gridlayout-key=\"", container_key, "\"]")
+    if (has_css_selector) {
+      container_key
+    }
+    else {
+      paste0("div[data-gridlayout-key=\"", container_key, "\"]")
+    }
   }
 
   layout_rules <- generate_layout_rules(
@@ -107,6 +112,33 @@ toTemplateGridAreas <- function(layout){
   )
 }
 
+# Currently the only item specific css pertains to enabling the collapsing of
+# the panel.
+generate_element_specific_css <- function(layout, container_query){
+
+  # Only need to supply styles for the items that can be collapsed
+  collapsible_items <- Filter(
+    function(item) item$collapsible,
+    get_info(layout, "elements")
+  )
+
+  vapply(
+    collapsible_items,
+    function(item) {
+      build_css_rule(
+        selector =  paste0(container_query, " > ", "div[data-gridlayout-area=\"", item$id ,"\"]"),
+        prop_list = c(
+          "--collapsible-visibility" = "block" ,
+          "--collapsed-content-size" = "0",
+          "--collapsed-panel-height" = "min-content",
+          "--collapsed-panel-overflow" = "hidden"
+        )
+      )
+    },
+    FUN.VALUE = character(1L)
+  )
+}
+
 generate_layout_rules <- function(layout,
                                   container_query,
                                   selector_prefix,
@@ -125,8 +157,11 @@ generate_layout_rules <- function(layout,
     )
   )
 
+  item_specific_rules <- generate_element_specific_css(layout, container_query)
+
   element_styles <- paste(
     main_container_styles,
+    item_specific_rules,
     sep = "\n"
   )
 
