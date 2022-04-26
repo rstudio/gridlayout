@@ -29,6 +29,7 @@ make_nested_panels <- function(level = 1) {
   nested_grid_panel(
     area = "nested",
     layout = my_layout,
+    id = paste0("level", level),
     emoji_panel("top", "↓"),
     emoji_panel("bottom", "↑"),
     emoji_panel("left", "→"),
