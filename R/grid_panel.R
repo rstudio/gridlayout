@@ -152,6 +152,7 @@ grid_panel <- function(
     id = panel_id,
     class = panel_class,
     style= htmltools::css(`grid-area` = area),
+    `data-gridlayout-area` = area,
     if (has_title) {
       shiny::div(
         class = "title-bar",
