@@ -1,45 +1,21 @@
-skip_screenshots('demo-apps')
 
-test_that("geyser app", {
-  expect_snapshot_file(
-    test_demo_app("geyser/app.R"),
-    "geyser-app.png"
-  )
-})
-
-test_that("Nested app", {
-  expect_snapshot_file(
-    test_demo_app('nested_grids/app.R'),
-    "nested-app.png"
-  )
-})
-
-test_that("RMarkdown", {
-  expect_snapshot_file(
-    test_demo_app('rmarkdown_demo/grid_markdown.Rmd'),
-    "rmarkdown-doc.png"
-  )
-})
-
-test_that("Alternate layouts -- mobile", {
-  expect_snapshot_file(
-    test_demo_app('alternate_layouts/app.R', vwidth = 500),
-    "alternate-layouts-mobile.png"
-  )
-})
+# File: tests/testthat/test-inst-apps.R
+library(shinytest2)
 
 
-test_that("Alternate layouts -- normal", {
-  expect_snapshot_file(
-    test_demo_app('alternate_layouts/app.R', vwidth = 1000),
-    "alternate-layouts-normal.png"
-  )
-})
+demo_apps <- c(
+  "alternate_layouts",
+  "nested_grids",
+  "recursive_nesting",
+  "scrolling_panels"
+)
 
-test_that("Alternate layouts -- wide", {
-  expect_snapshot_file(
-    test_demo_app('alternate_layouts/app.R', vwidth = 1800),
-    "alternate-layouts-wide.png"
-  )
-})
+for(demo_app in demo_apps) {
 
+  test_that(demo_app, {
+    # Don't run these tests on the CRAN build servers
+    skip_on_cran()
+    cat("\nTesting demo app: ", demo_app, "\n")
+    test_app( system.file(package = "gridlayout", paste0("demo_apps/", demo_app)))
+  })
+}
