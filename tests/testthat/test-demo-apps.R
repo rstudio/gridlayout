@@ -1,7 +1,7 @@
+# Don't run these tests on the CRAN build servers
+skip_on_cran()
 
-# File: tests/testthat/test-inst-apps.R
 library(shinytest2)
-
 
 demo_apps <- c(
   "alternate_layouts",
@@ -11,11 +11,15 @@ demo_apps <- c(
 )
 
 for(demo_app in demo_apps) {
-
-  test_that(demo_app, {
-    # Don't run these tests on the CRAN build servers
-    skip_on_cran()
-    cat("\nTesting demo app: ", demo_app, "\n")
-    test_app( system.file(package = "gridlayout", paste0("demo_apps/", demo_app)))
-  })
+  test_that(
+    paste("shinytest2 -", demo_app),
+    {
+      suppressPackageStartupMessages({
+        test_app(
+          system.file(package = "gridlayout", paste0("demo_apps/", demo_app)),
+          reporter = FailReporter
+        )
+      })
+    }
+  )
 }
