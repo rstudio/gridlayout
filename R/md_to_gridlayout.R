@@ -57,6 +57,7 @@
 #'     |plot   |table  |
 #'     |footer |footer |"
 #' )
+#'
 md_to_gridlayout <- function(layout_table, null_instead_of_error = FALSE, ...) {
   tryCatch(
     {

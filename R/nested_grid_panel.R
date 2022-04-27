@@ -1,4 +1,3 @@
-
 #' Grid panel with nested gridlayout
 #'
 #' Creates a panel for a layout with its own internal gridlayout
@@ -10,6 +9,34 @@
 #'
 #' @return A `grid_panel` with a nested layout within it
 #' @export
+#' if (interactive()) {
+#' library(gridlayout)
+#' library(shiny)
+#'
+#' # A centered text panel
+#' text_panel_c <- function(...) text_panel(..., h_align="center")
+#'
+#' my_layout <- "
+#' |A |B |
+#' |C |D |"
+#' shinyApp(
+#'   ui = grid_page(
+#'     layout = my_layout,
+#'     text_panel_c("A","A"),
+#'     text_panel_c("B","B"),
+#'     text_panel_c("C","C"),
+#'     nested_grid_panel(
+#'       "D",
+#'       layout = my_layout,
+#'       text_panel_c("A","A2"),
+#'       text_panel_c("B","B2"),
+#'       text_panel_c("C","C2"),
+#'       text_panel_c("D","D2")
+#'     )
+#'   ),
+#'   server = function(input, output) {}
+#' )
+#' }
 nested_grid_panel <- function(
     area,
     layout,

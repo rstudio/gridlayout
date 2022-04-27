@@ -31,24 +31,24 @@
 #' if (FALSE) {
 #' library(gridlayout)
 #' library(shiny)
-#' requireNamespace("bslib", quietly = TRUE)
-#' my_layout <- "
-#' |      |        |       |
-#' |------|--------|-------|
-#' |2rem  |200px   |1fr    |
-#' |150px |header  |header |
-#' |1fr   |sidebar |plot   |"
 #'
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = fluidPage(
 #'     grid_container(
-#'       id = "main_grid",
-#'       layout = my_layout,
-#'       elements = list(
-#'         header = title_panel("This is my header content"),
-#'         sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-#'         plot = plotOutput("distPlot", height = "100%")
+#'       layout = "
+#'         |2rem  |200px   |1fr    |
+#'         |85px  |header  |header |
+#'         |1fr   |sidebar |plot   |",
+#'       text_panel("header", "Geysers!"),
+#'       grid_panel(
+#'         "sidebar",
+#'         title = "Settings",
+#'         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+#'       ),
+#'       grid_panel(
+#'         "plot",
+#'         plotOutput("distPlot", height="100%")
 #'       )
 #'     )
 #'   ),
