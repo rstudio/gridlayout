@@ -94,7 +94,8 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
 
 md_table_to_array <- function(md_layout) {
   md_layout %>%
-    str_remove_all("\\||\\-") %>%
+    str_replace_all("\\||\\-", " ") %>%
+    # str_remove_all("\\||\\-") %>%
     strsplit("\\n") %>%
     .[[1]] %>%
     Filter(f = function(x) {!grepl(x, pattern = "^\\s*$")})
