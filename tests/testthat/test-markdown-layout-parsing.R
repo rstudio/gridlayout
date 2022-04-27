@@ -74,8 +74,7 @@ test_that("Nonsense will give a usefull error message", {
     new_gridlayout("## THis was an accidentally
     selected chunk of text
     that is not a table at all"
-    ),
-    "The provided text does not appear to be a markdown table.")
+    ))
 })
 
 

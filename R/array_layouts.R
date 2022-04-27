@@ -1,13 +1,30 @@
 
+layout_array_to_mat <- function(layout_array, default_gap_size = '10px'){
+  layout_mat <- cells_from_line(layout_array)
+
+  n_cols_by_row <- vapply(layout_mat, FUN = length, FUN.VALUE = numeric(1L))
+
+  if (n_cols_by_row[1] == n_cols_by_row[2] - 1){
+    # Column sizes but no gap
+    layout_mat[[1]] <- c(default_gap_size, layout_mat[[1]])
+  } else if (length(unique(n_cols_by_row)) > 1) {
+    stop("Layout is malformed")
+  }
+
+  layout_mat
+}
 
 layout_from_array <- function(layout_def, gap_size = '10px'){
 
-  no_sizes <- str_remove_all(
-    layout_def,
-    pattern = CSS_VALUE_REGEX
-  ) %>%
-    cells_from_line() %>%
-    Filter(f = function(line){length(line) > 0})
+  layout_clean <- layout_array_to_mat(layout_def, default_gap_size = gap_size)
+
+  no_sizes <- Filter(
+    f = function(line) length(line) > 0,
+    x = lapply(
+      layout_clean,
+      function(line) line[!has_css_value(line)]
+    )
+  )
 
   # ----- Get the dimensions ---------------------------------------------------
   n_rows <- length(no_sizes)
@@ -16,12 +33,9 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
     stop("Different amount of columns in rows. Check format of layout.")
   }
 
-  layout_clean <- cells_from_line(layout_def)
-
-  first_row <- layout_clean[[1]]
-
 
   # ----- Figure out column sizes ---------------------------------------------
+  first_row <- layout_clean[[1]]
   has_column_sizes <- all(has_css_value(first_row))
 
   column_sizes <- if (has_column_sizes) first_row else rep_len("1fr", n_cols)
@@ -58,7 +72,6 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
   }
 
   # ----- Get element positions ------------------------------------------------
-
   areas_flat <- do.call(c, no_sizes)
   element_ids <- unique(areas_flat)
   areas_matrix <- matrix(
@@ -94,7 +107,7 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
 
 md_table_to_array <- function(md_layout) {
   md_layout %>%
-    str_replace_all("\\||\\-", " ") %>%
+    str_replace_all("\\||\\-|:", " ") %>%
     # str_remove_all("\\||\\-") %>%
     strsplit("\\n") %>%
     .[[1]] %>%

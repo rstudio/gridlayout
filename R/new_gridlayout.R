@@ -230,6 +230,8 @@ new_gridlayout <- function(
   layout
 }
 
+default_gap_size <- "1rem"
+
 new_gridlayout_template <- function(
   layout_def = list(),
   col_sizes = NULL,
@@ -240,22 +242,33 @@ new_gridlayout_template <- function(
   elements <- list()
   # Figure out what type of layout definition we were passed
   if (is.character(layout_def)) {
-    # Is the layout def a single multi-line string containing the table? If it
-    # is we need to split it by rows
-    if (length(layout_def) == 1L && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
+    # # Is the layout def a single multi-line string containing the table? If it
+    # # is we need to split it by rows
+    # if (length(layout_def) == 1L && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
+    #   layout_def <- split_by_line(layout_def)
+    # }
+    # # MD table representation
+    # layout_info <- parse_md_table_layout(
+    #   layout_def,
+    #   col_sizes = col_sizes,
+    #   row_sizes = row_sizes,
+    #   gap = gap
+    # )
+    # elements <- layout_info$elements
+    # col_sizes <- layout_info$col_sizes
+    # row_sizes <- layout_info$row_sizes
+    # gap <- layout_info$gap
+
+    if (length(layout_def) > 1L) {
+      stop("Can't handle multi-line layouts, yet.")
       layout_def <- split_by_line(layout_def)
     }
-    # MD table representation
-    layout_info <- parse_md_table_layout(
-      layout_def,
-      col_sizes = col_sizes,
-      row_sizes = row_sizes,
-      gap = gap
-    )
+    layout_info <- layout_from_array(md_table_to_array(layout_def), gap_size = default_gap_size)
     elements <- layout_info$elements
-    col_sizes <- layout_info$col_sizes
-    row_sizes <- layout_info$row_sizes
-    gap <- layout_info$gap
+    col_sizes <- col_sizes %||% layout_info$column_sizes
+    row_sizes <- row_sizes %||% layout_info$row_sizes
+    gap <- gap %||% layout_info$gap_size
+
   } else if (class(layout_def) == "gridlayout") {
 
     # Use existing row and column heights unless they have been explicitly overridden
@@ -279,7 +292,7 @@ new_gridlayout_template <- function(
   }
 
   # Set defaults if unspecified
-  if (is.null(gap)) gap <- "1rem"
+  if (is.null(gap)) gap <- default_gap_size
 
   # If using default container_height and all the rows are definitely sized then
   # make container height auto. Otherwise use "viewport"
