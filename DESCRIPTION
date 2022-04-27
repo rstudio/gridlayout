@@ -9,7 +9,6 @@ Encoding: UTF-8
 Suggests: 
     testthat (>= 3.0.0),
     shiny,
-    miniUI,
     bslib,
     crayon,
     knitr,
