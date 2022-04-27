@@ -9,6 +9,8 @@
 #'
 #' @return A `grid_panel` with a nested layout within it
 #' @export
+#'
+#' @examples
 #' if (interactive()) {
 #' library(gridlayout)
 #' library(shiny)
