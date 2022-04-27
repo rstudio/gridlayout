@@ -11,7 +11,8 @@ text_panel(
   h_align = "start",
   img_height = "55px",
   icon = NULL,
-  wrapping_tag = "h2"
+  wrapping_tag = "h2",
+  is_title = FALSE
 )
 }
 \arguments{
@@ -70,6 +71,10 @@ desired.)}
 \item{wrapping_tag}{What tag should the text be wrapped in. Takes either an
 \code{htmltools} tag function or the string of a tag accessible via
 \code{htmltools::tags[[wrapping_tag]]}.}
+
+\item{is_title}{Should the text of this panel be passed on as the title of
+the page? This will make the text show up in the browser tab or when you
+bookmark the app etc..}
 }
 \description{
 Makes a grid_panel that contains just text that is vertically centered within
@@ -79,7 +84,7 @@ statistics.
 \examples{
 
 # Typically you'll just pass a character string to the function
-title_panel("This is my header")
+title_panel(area = "header", "This is my header")
 
 # Icons from `fontawesome` can be used:
 
@@ -97,5 +102,8 @@ text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.
 
 # You can adjust the horizontal alignment of your header with h_align
 text_panel("I'm in the middle", h_align = "center")
+
+# Commonly you may want to use the text panel text as the title of your app
+text_panel(area = "header", "My App Name", is_title = TRUE)
 
 }
