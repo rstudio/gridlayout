@@ -2,7 +2,6 @@
 
 layout_from_array <- function(layout_def, gap_size = '10px'){
 
-
   no_sizes <- str_remove_all(
     layout_def,
     pattern = CSS_VALUE_REGEX
@@ -58,11 +57,35 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
     stop("If supplying row sizes in layout, every row must be given a size.")
   }
 
+  # ----- Get element positions ------------------------------------------------
+
+  areas_flat <- do.call(c, no_sizes)
+  element_ids <- unique(areas_flat)
+  areas_matrix <- matrix(
+    areas_flat,
+    nrow = n_rows,
+    ncol = n_cols,
+    byrow = TRUE
+  )
+
+  elements <- lapply(
+    element_ids,
+    function(id){
+      all_pos <- which( areas_matrix == id, arr.ind = TRUE )
+      list(
+        id = id,
+        start_row = min(all_pos[,"row"]),
+        end_row = max(all_pos[,"row"]),
+        start_col = min(all_pos[,"col"]),
+        end_col = max(all_pos[,"col"])
+      )
+    }
+  )
 
 
   list(
     areas = no_sizes,
-    elements = unique(do.call(c, no_sizes)),
+    elements = elements,
     column_sizes = column_sizes,
     row_sizes = row_sizes,
     gap_size = gap_size
