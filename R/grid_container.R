@@ -128,3 +128,16 @@ gen_random_grid_key <- function(num_chars = 5){
 
 
 
+# handle dependency
+gridlayout_css_dep <- function() {
+  htmltools::htmlDependency(
+    name = "gridlayout_css",
+    package = "gridlayout",
+    src = "resources",
+    stylesheet = "gridlayout.css",
+    script = "gridlayout.js",
+    version = "1.0"
+  )
+}
+
+

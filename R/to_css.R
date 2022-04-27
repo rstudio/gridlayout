@@ -15,10 +15,6 @@
 #'   the grid container will get card styling (useful for RMarkdown or other
 #'   situations where you don't control child rendering) or `"none"` for no card
 #'   styling.
-#' @param selector_prefix CSS prefix used to target grid elements. This will
-#'   change if you're integrating grid with a system that you don't want to use
-#'   ids (the `"#"` prefix) with because they are not available or are used for
-#'   other reasons.
 #'
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
@@ -55,8 +51,7 @@ to_css <- function(layout,
 
   layout_rules <- generate_layout_rules(
     layout = layout,
-    container_query = container_query,
-    selector_prefix = selector_prefix
+    container_query = container_query
   )
 
   alternates <- get_info(layout, "alternates")
@@ -68,7 +63,6 @@ to_css <- function(layout,
           generate_layout_rules(
             layout = alt_layout$layout,
             container_query = container_query,
-            selector_prefix = selector_prefix,
             width_bounds = alt_layout$width_bounds
           )
         }
@@ -141,7 +135,6 @@ generate_element_specific_css <- function(layout, container_query){
 
 generate_layout_rules <- function(layout,
                                   container_query,
-                                  selector_prefix,
                                   width_bounds = NULL) {
 
   main_container_styles <- build_css_rule(
@@ -226,170 +219,3 @@ build_css_rule <- function(selector, prop_list) {
   )
 }
 
-#' Convert layout to css for Shiny
-#'
-#' This simply wraps the output of `to_css()` in a `style` tag and escapes HTML
-#' characters to simplify using in Shiny. Most of the time you'll want to use
-#' \code{\link{grid_page}} or \code{\link{grid_container}} instead of manually
-#' adding this css though.
-#'
-#' @seealso \code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
-#' @inheritParams grid_container
-#' @inheritDotParams to_css -layout
-#'
-#' @return Character string of css used to setup grid layout and place elements
-#'   (referenced by id) into correct locations
-#'
-#' @export
-#'
-#' @examples
-#' # Only run these examples in interactive R sessions
-#' if (interactive()) {
-#' library(shiny)
-#' my_layout <- "
-#' |      |        |         |
-#' |------|--------|---------|
-#' |2rem  |200px   |1fr      |
-#' |100px |header  |header   |
-#' |500px |sidebar |distPlot |"
-#'
-#' # The classic Geyser app with grid layout
-#' shinyApp(
-#'   ui = fluidPage(
-#'     use_gridlayout_shiny(my_layout, "#app-container"),
-#'     div(
-#'       id = "app-container",
-#'       div(
-#'         style = "grid-area: header;",
-#'         h2(id = "app-title", "Old Faithful Geyser Data")
-#'       ),
-#'       div(
-#'         style = "grid-area: sidebar;",
-#'         sliderInput("bins", "Number of bins:",
-#'                     min = 1, max = 50, value = 30
-#'         )
-#'       ),
-#'       div(
-#'         style = "grid-area:distPlot",
-#'         plotOutput("distPlot", height = "100%")
-#'       )
-#'     )
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = "darkgray", border = "white")
-#'     })
-#'   }
-#' )
-#'
-#' }
-use_gridlayout_shiny <- function(layout, ...) {
-  requireNamespace("htmltools", quietly = TRUE)
-  layout <- as_gridlayout(layout)
-  htmltools::tags$head(
-    htmltools::tags$style(
-      htmltools::HTML(to_css(layout, ...))
-    )
-  )
-}
-
-#' Enable gridlayout usage in RMarkdown documents
-#'
-#' Adds required hooks to RMarkdown to process `gridlayout` chunks and style
-#' document accordingly. Layout will be generated from a chunk identified with
-#' the syntax
-#' ````
-#' ```{gridlayout}
-#' <insert layout table here>
-#' ```
-#' ````
-#'
-#' See `vignette("using_with_rmd", package = "gridlayout")` for a more in-depth overview.
-#'
-#' @inheritParams to_css
-#'
-#' @return NULL
-#' @export
-#'
-use_gridlayout_rmd <- function(container = ".main-container",
-                               is_card_styled = "all",
-                               selector_prefix = "#") {
-  requireNamespace("knitr", quietly = TRUE)
-
-  accessory_css <- get_accessory_css("gridlayout.css")
-  if (is_card_styled == "all") {
-    # Make .grid_panel simply apply to every first-level div
-    accessory_css <- str_replace_all(
-      accessory_css,
-      ".grid_panel",
-      paste0(container, " > div"),
-      fixed = TRUE
-    )
-  }
-
-  knitr::knit_engines$set(gridlayout = function(options) {
-    code <- paste(options$code, collapse = "\n")
-    if (options$eval) {
-      layout <- md_to_gridlayout(code)
-      areas <- get_element_ids(layout)
-
-      css_for_layout <- paste(
-        "<style>",
-        to_css(layout,
-          container = container,
-          is_card_styled = is_card_styled,
-          selector_prefix = selector_prefix
-        ),
-        # Use ids to assign each section to proper area in layout
-        paste0(
-          "#", areas, " { ",
-          "grid-area: ", areas,
-          " }",
-          collapse = "\n"
-        ),
-        # Make sure all the elements have the proper padding they need
-        build_css_rule(
-          paste(container, "> div"),
-          prop_list = c(
-            padding = "var(--card-padding)"
-          )
-        ),
-        accessory_css,
-        # Makes tab panels work properly and gives utility classes for alignment
-        get_accessory_css("gridlayout_rmd_styles.css"),
-        "</style>",
-        sep = "\n"
-      )
-    }
-    options$results <- "asis"
-    options$echo <- FALSE
-    knitr::engine_output(
-      options,
-      code = options$code,
-      out = css_for_layout
-    )
-  })
-}
-
-# Dump css file to string for inlining while still keeping in a .css file for
-# easier editing
-get_accessory_css <- function(file) {
-  paste(
-    readLines(system.file(paste0("resources/", file), package = "gridlayout")),
-    collapse = "\n"
-  )
-}
-
-# handle dependency
-gridlayout_css_dep <- function() {
-  htmltools::htmlDependency(
-    name = "gridlayout_css",
-    package = "gridlayout",
-    src = "resources",
-    stylesheet = "gridlayout.css",
-    script = "gridlayout.js",
-    version = "1.0"
-  )
-}
