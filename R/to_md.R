@@ -33,8 +33,26 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
   to_table(layout, include_gap_size = include_gap_size, md_mode = TRUE)
 }
 
+#' Convert gridlayout to matrix format
+#' @param layout A gridlayout object (as created by `new_gridlayout()`)
+#'
+#' @returns A matrix of the layout with each grid cell and its item membership
+#'   corresponding to a cell in the matrix
+#'
 #' @export
+#'
+#' @examples
+#'
+#' layout <- md_to_gridlayout("
+#' |10px  |120px   |1fr    |1fr    |
+#'   |100px |header  |header |header |
+#'   |1fr   |sidebar |plot_a |plot_c |
+#'   |1fr   |sidebar |plot_b |plot_b |")
+#'
+#' to_matrix(layout)
+#'
 to_matrix <- function(layout){
+
   # We need to take the row and column names and turn them into prefixing rows
   # and columns so knitr can render to markdown properly with the grid gap in
   # the upper left cell

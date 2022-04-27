@@ -31,24 +31,24 @@
 #' if (FALSE) {
 #' library(gridlayout)
 #' library(shiny)
-#' requireNamespace("bslib", quietly = TRUE)
-#' my_layout <- "
-#' |      |        |       |
-#' |------|--------|-------|
-#' |2rem  |200px   |1fr    |
-#' |150px |header  |header |
-#' |1fr   |sidebar |plot   |"
 #'
 #' # The classic Geyser app with grid layout
 #' shinyApp(
 #'   ui = fluidPage(
 #'     grid_container(
-#'       id = "main_grid",
-#'       layout = my_layout,
-#'       elements = list(
-#'         header = title_panel("This is my header content"),
-#'         sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-#'         plot = plotOutput("distPlot", height = "100%")
+#'       layout = "
+#'         |2rem  |200px   |1fr    |
+#'         |85px  |header  |header |
+#'         |1fr   |sidebar |plot   |",
+#'       text_panel("header", "Geysers!"),
+#'       grid_panel(
+#'         "sidebar",
+#'         title = "Settings",
+#'         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+#'       ),
+#'       grid_panel(
+#'         "plot",
+#'         plotOutput("distPlot", height="100%")
 #'       )
 #'     )
 #'   ),
@@ -63,9 +63,9 @@
 #' }
 #'
 grid_container <- function(
-  id = "grid-container",
   layout,
   ...,
+  id = NULL,
   use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE
 ) {
@@ -81,7 +81,20 @@ grid_container <- function(
   # Make sure we're working with a layout
   layout <- as_gridlayout(layout)
 
-  layout_ids <- get_element_ids(layout)
+
+  # In order to leave the id field open to users to do with as they please, we
+  # need to generate a unique key that can be used to find the grid. If the
+  # user has provided an id already, then we can use that. Otherwise we generate
+  # a random key sequence that we can use. The attribute data-gridlayout-key is
+  # used to properly sync up the css with the container
+  unique_key <- if (is.null(id)) gen_random_grid_key() else id
+
+  if (flag_mismatches){
+    check_for_area_mismatches(
+      provided_areas = get_provided_grid_areas(list(...)),
+      layout_areas =  get_element_ids(layout)
+    )
+  }
 
   # Build container div, append the styles to head and then return
   shiny::tagList(
@@ -89,12 +102,42 @@ grid_container <- function(
     shiny::div(
       id = id,
       class = "grid-container",
+      `data-gridlayout-key` = unique_key,
       ...,
       use_gridlayout_shiny(
         layout,
-        container = id,
-        selector_prefix = paste0("#", id, "__")
+        container = unique_key
       )
     )
   )
 }
+
+
+# Generate a random 5-letter key for pairing grid containers with their css.
+# This is only used if an id is not provided for the container already
+gen_random_grid_key <- function(num_chars = 5){
+  paste(
+    sample(
+      letters,
+      5,
+      replace = TRUE
+    ),
+    collapse = ""
+  )
+}
+
+
+
+# handle dependency
+gridlayout_css_dep <- function() {
+  htmltools::htmlDependency(
+    name = "gridlayout_css",
+    package = "gridlayout",
+    src = "resources",
+    stylesheet = "gridlayout.css",
+    script = "gridlayout.js",
+    version = "1.0"
+  )
+}
+
+

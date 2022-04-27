@@ -8,7 +8,7 @@ my_layout <- new_gridlayout("
 |      |        |       |
 |------|--------|-------|
 |2rem  |200px   |1fr    |
-|80px  |header  |header |
+|85px  |header  |header |
 |1fr   |sidebar |plot   |")
 
 
@@ -18,12 +18,16 @@ app <- shinyApp(
     layout = my_layout,
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
-    header = title_panel("This is my header"),
-    sidebar = grid_panel(
+    title_panel("header", "This is my header"),
+    grid_panel(
+      "sidebar",
       title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    plot = plotOutput("distPlot")
+    grid_panel(
+      "plot",
+      plotOutput("distPlot", height="100%")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

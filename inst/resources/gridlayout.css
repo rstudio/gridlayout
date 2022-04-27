@@ -5,8 +5,9 @@
   display: grid;
   grid-template-areas: "title"
                        "content";
+  /* The content-height variable gets over-written to enable collapsible cards*/
   /* When there's no title the column will dissapear */
-  grid-template-rows: min-content minmax(0, 1fr);
+  grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
 }
 
   /* If we just use 1fr for the content, then it can
@@ -74,23 +75,16 @@
   border-radius: 0.5rem;
 }
 
-
 .grid_panel.collapsed  {
   /* If panel is not collapsible this css variable is defined as "block"
      which means that a panel that has been collapsed, and then resized
      to a scenario where it cant be collapsed, it will pop back
   */
-  grid-template-rows: min-content var(--collapsed-content-size, 0);
+  --content-height: var(--collapsed-content-size);
   height: var(--collapsed-panel-height);
   overflow: var(--collapsed-panel-overflow);
 }
 
-/* Some content likes to stick around even if it's not supposed to.
-   This makes sure it hides when the panel is collapsed
-*/
-.collapsed > .panel-content > * {
-    display: none;
-}
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */

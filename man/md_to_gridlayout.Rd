@@ -95,6 +95,7 @@ md_to_gridlayout(
     |plot   |table  |
     |footer |footer |"
 )
+
 }
 \seealso{
 \link{new_gridlayout}

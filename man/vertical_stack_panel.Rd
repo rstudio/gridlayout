@@ -53,7 +53,7 @@ eachother. Internally uses css flexbox to align items.
 vertical_stack_panel(
   area="header",
   shiny::h2("R"),
-  shiny::actionButton(),
+  shiny::actionButton("myButton", "Click Me")
 )
 
 }

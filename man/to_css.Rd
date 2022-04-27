@@ -4,17 +4,19 @@
 \alias{to_css}
 \title{Convert grid layout to css string}
 \usage{
-to_css(layout, container, is_card_styled = "grid_panel", selector_prefix = "#")
+to_css(layout, container_key, is_card_styled = "grid_panel")
 }
 \arguments{
 \item{layout}{Object of class \code{"gridlayout"}.}
 
-\item{container}{Id of the element for grid to be placed in. Default value to
-apply grid styling to the whole app (aka the \code{body} element) for whole page
-grids. If an simple name is passed it is assumed that it is an id: i.e. the
-css id selector \verb{#} is apended to the name. If container contains css
-selector characters such as a dot, the selector will not be transformed
-into an id automatically. E.g. \code{container = ".main-content"}.}
+\item{container_key}{The unique key used to identify the container to be
+targeted for the layout. If left blank it will default to applying grid
+styling to the whole app (aka the \code{body} element) for whole page grids. If
+plain character string is given, then it is assumed to be a
+\code{gridlayout-key} and the targeting is done using an attribute query for
+\code{data-gridlayout-key}. If container contains css selector characters such as
+a dot, the selector will not be transformed into an id automatically. E.g.
+\code{container = ".main-content"}.}
 
 \item{is_card_styled}{Should each section of the grid be given a card style
 to make it stand out? Options are \code{"grid_panel"}, where only elements with
@@ -22,11 +24,6 @@ to make it stand out? Options are \code{"grid_panel"}, where only elements with
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
-
-\item{selector_prefix}{CSS prefix used to target grid elements. This will
-change if you're integrating grid with a system that you don't want to use
-ids (the \code{"#"} prefix) with because they are not available or are used for
-other reasons.}
 }
 \value{
 Character string of css used to setup grid layout and place elements

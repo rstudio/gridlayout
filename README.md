@@ -8,15 +8,8 @@
 [![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
-A package to making building weblayouts using CSS-Grid easy.
-
-# Feature Goals
-
--   [ ] Can recreate anything `flexdashboard` can
--   [ ] Is easy to customize. E.g. a `gridlayoutExtra` package with new
-    `grid_panels` is easy to make.
--   [ ] Widget for creating new app template from pre-built templates
--   [ ] Gracefully fails on older browsers (at least within reason)
+A package to making building dashboard-style layouts in Shiny and
+RMarkdown easy using CSS-Grid.
 
 ## Installation
 
@@ -47,22 +40,22 @@ my_layout <- new_gridlayout("
 
 my_layout
 #> gridlayout of 5 elements: 
-#>          120px   1fr    1fr   
-#>    100px header  header header
-#>    1fr   sidebar plot_a plot_c
-#>    1fr   sidebar plot_b plot_b
+#>         120px   1fr    1fr   
+#>   100px header  header header
+#>   1fr   sidebar plot_a plot_c
+#>   1fr   sidebar plot_b plot_b
 #> Gap of 1rem. Total height of viewport.
 #> 
-#> Alternate layouts:   
-#>    
-#>    - Width < 500px 
-#>              1fr    
-#>       85px  header 
-#>       350px sidebar
-#>       350px plot_a 
-#>       350px plot_b 
-#>       350px plot_c 
-#>    Gap of 1rem. Total height of auto.
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr    
+#>     85px  header 
+#>     350px sidebar
+#>     350px plot_a 
+#>     350px plot_b 
+#>     350px plot_c 
+#>   Gap of 1rem. Total height of auto.
 ```
 
 You can also use the top left cell of your table to specify the gap
@@ -79,22 +72,22 @@ my_layout <- new_gridlayout("
 
 my_layout
 #> gridlayout of 5 elements: 
-#>          120px   1fr    1fr   
-#>    100px header  header header
-#>    1fr   sidebar plot_a plot_c
-#>    1fr   sidebar plot_b plot_b
+#>         120px   1fr    1fr   
+#>   100px header  header header
+#>   1fr   sidebar plot_a plot_c
+#>   1fr   sidebar plot_b plot_b
 #> Gap of 25px. Total height of viewport.
 #> 
-#> Alternate layouts:   
-#>    
-#>    - Width < 500px 
-#>              1fr    
-#>       85px  header 
-#>       350px sidebar
-#>       350px plot_a 
-#>       350px plot_b 
-#>       350px plot_c 
-#>    Gap of 1rem. Total height of auto.
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr    
+#>     85px  header 
+#>     350px sidebar
+#>     350px plot_a 
+#>     350px plot_b 
+#>     350px plot_c 
+#>   Gap of 1rem. Total height of auto.
 ```
 
 You can also programatically build your layout using `new_gridlayout`.
@@ -122,21 +115,21 @@ new_gridlayout(
   row_sizes = c("100px", "1fr", "1fr")
 )
 #> gridlayout of 4 elements: 
-#>          1fr    2fr   
-#>    100px header header
-#>    1fr   plot   table 
-#>    1fr   footer footer
+#>         1fr    2fr   
+#>   100px header header
+#>   1fr   plot   table 
+#>   1fr   footer footer
 #> Gap of 1rem. Total height of viewport.
 #> 
-#> Alternate layouts:   
-#>    
-#>    - Width < 500px 
-#>              1fr   
-#>       85px  header
-#>       350px plot  
-#>       350px table 
-#>       350px footer
-#>    Gap of 1rem. Total height of auto.
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr   
+#>     85px  header
+#>     350px plot  
+#>     350px table 
+#>     350px footer
+#>   Gap of 1rem. Total height of auto.
 ```
 
 ## Using in a shiny app
@@ -147,20 +140,24 @@ Once you’ve setup your layout you can use it in a Shiny app with the
 ``` r
 library(shiny)
 
-my_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|150px |header  |header |
-|1fr   |sidebar |plot   |"
-
 # The classic Geyser app with grid layout
 shinyApp(
   ui = grid_page(
-    layout = my_layout,
-    header = h2("Old Faithful Geyser Data"),
-    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-    plot = plotOutput("distPlot", height = "100%")
+    layout = "
+      |2rem  |200px   |1fr    |
+      |85px  |header  |header |
+      |1fr   |sidebar |plot   |",
+    text_panel("header", "Geysers!", is_title = TRUE),
+    grid_panel(
+      "sidebar",
+      title = "Settings",
+      sliderInput("bins","Number of bins:", 
+                  min = 1, max = 50, value = 30, width = "100%")
+    ),
+    grid_panel(
+      "plot",
+      plotOutput("distPlot", height="100%")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -186,15 +183,21 @@ to above can be created by replacing the UI definition with a
 ...
 shinyApp(
   ui = fluidPage(
-    theme = bslib::bs_theme(),
     grid_container(
-      id = "main_grid",
-      layout = my_layout,
-      container_height = "800px",
-      elements = list(
-        header = h2(id = "header", "This is my header content"),
-        sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-        plot = plotOutput("distPlot", height = "100%")
+      layout = "
+        |2rem  |200px   |1fr    |
+        |85px  |header  |header |
+        |1fr   |sidebar |plot   |",
+      text_panel("header", "Geysers!"),
+      grid_panel(
+        "sidebar",
+        title = "Settings",
+        sliderInput("bins", "Number of bins:", 
+                    min = 1, max = 50, value = 30, width = "100%")
+      ),
+      grid_panel(
+        "plot",
+        plotOutput("distPlot", height="100%")
       )
     )
   ),
@@ -255,224 +258,46 @@ table spec or to the CSS that generates the given grid.
 
 ``` r
 cat(to_md(my_layout))
-#> |      |        |       |       |
-#> |------|--------|-------|-------|
-#> |25px  |120px   |1fr    |1fr    |
-#> |100px |header  |header |header |
-#> |1fr   |sidebar |plot_a |plot_c |
-#> |1fr   |sidebar |plot_b |plot_b |
+#> | 25px  | 120px   | 1fr    | 1fr    |
+#> |-------|---------|--------|--------|
+#> | 100px | header  | header | header |
+#> | 1fr   | sidebar | plot_a | plot_c |
+#> | 1fr   | sidebar | plot_b | plot_b |
 ```
 
 ``` r
 cat(to_css(my_layout))
 #> 
-#> 
 #> body {
-#>    display:grid;
-#>    grid-template-rows:100px 1fr 1fr;
-#>    grid-template-columns:120px 1fr 1fr;
-#>    grid-gap:25px;
-#>    padding:25px;
-#>    height:100vh;
-#> }
-#> 
-#> #header {
-#>    grid-column-start:1;
-#>    grid-column-end:4;
-#>    grid-row-start:1;
-#>    grid-row-end:2;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #sidebar {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:2;
-#>    grid-row-end:4;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_a {
-#>    grid-column-start:2;
-#>    grid-column-end:3;
-#>    grid-row-start:2;
-#>    grid-row-end:3;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_b {
-#>    grid-column-start:2;
-#>    grid-column-end:4;
-#>    grid-row-start:3;
-#>    grid-row-end:4;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_c {
-#>    grid-column-start:3;
-#>    grid-column-end:4;
-#>    grid-row-start:2;
-#>    grid-row-end:3;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
+#>   display:grid;
+#>   grid-template-rows:100px 1fr 1fr;
+#>   grid-template-columns:120px 1fr 1fr;
+#>   grid-template-areas:
+#>     "header  header header"
+#>     "sidebar plot_a plot_c"
+#>     "sidebar plot_b plot_b";
+#>   grid-gap:25px;
+#>   padding:25px;
+#>   height:100vh;
 #> }
 #> 
 #> 
-#> 
-#> .grid_panel {
-#>   --card-padding: 0.8rem;
-#>   box-sizing: border-box;
-#>   overflow: hidden;
-#>   display: grid;
-#>   grid-template-areas: "title"
-#>                        "content";
-#>   /* When there's no title the column will dissapear */
-#>   grid-template-rows: min-content 1fr;
-#> }
-#> 
-#> .grid_panel .title-bar {
-#>   grid-area: title;
-#>   height: 100%;
-#>   width: 100%;
-#>   display: flex;
-#>   justify-content: start;
-#>   align-items: center;
-#>   border-bottom: 1px solid rgba(0,0,0,0.125);
-#>   padding: calc(var(--card-padding)/2) var(--card-padding);
-#> }
-#> .grid_panel .title-bar > h3 {
-#>   margin: 0;
-#>   height: 100%;
-#> }
-#> 
-#> .panel-content {
-#>   height: 100%;
-#>   width: 100%;
-#>   padding: var(--card-padding);
-#>   grid-area: content;
-#> }
-#> 
-#> .grid_panel .shiny-plot-output > img {
-#>   /* The way grid sizing works can throw off the plot sizing in shiny. This
-#>      is because the size of the parent grows to its largest child element.
-#>      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
-#>      these sizes by looking at the parent div's dimensions after a resize.
-#>      When the window has been made smaller, this means that the parent
-#>      element is spilling outside of its box because the plot image size is
-#>      still sitting at a fixed pixel width of the previous size. So when Shiny
-#>      queries the size of the parent it thinks that nothing has changed. By
-#>      setting a max width and height, we make sure the plot always gets shrunk
-#>      to at most the size of the grid element, thus allowing the resize observer
-#>      to work properly.
-#>   */
-#>   max-width: 100%;
-#>   max-height: 100%;
-#> }
-#> 
-#> /* Only set card styles if we're not using the bslib card component */
-#> .grid_panel:not(.card) {
-#>   box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-#>   border-radius: 0.5rem;
-#> }
-#> 
-#> 
-#> .grid_panel.collapsed  {
-#>   /* If panel is not collapsible this css variable is defined as "block"
-#>      which means that a panel that has been collapsed, and then resized
-#>      to a scenario where it cant be collapsed, it will pop back
-#>   */
-#>   grid-template-rows: min-content var(--collapsed-content-size, 0);
-#>   height: var(--collapsed-panel-height);
-#>   overflow: var(--collapsed-panel-overflow);
-#> }
-#> 
-#> 
-#> /* Make flip arrow point down when collapsed and
-#>    up when expanded to show result of clicking */
-#> .grid_panel .collapser-icon {
-#>   display: var(--collapsible-visibility, none);
-#> }
-#> .grid_panel .collapser-icon svg {
-#>   transition: transform 0.2s ease;
-#> }
-#> .grid_panel.collapsed .collapser-icon svg {
-#>   transform: scaleY(-1);
-#> }
-#> 
-#> /* Make everything line up nice and cleanly like it should in the middle */
-#> .text_panel {
-#>   margin: 0;
-#>   height: 100%;
-#>   display: flex;
-#>   align-items: center;
-#> }
-#> /* Everything should be inline so lining up works properly */
-#> .text_panel * {
-#>   display: inline;
-#> }
-#> /* Make sure logo isn't right up next to the text */
-#> .text_panel > * {
-#>   margin: 0 5px;
-#> }
-#> 
-#> /* Makes it so tabpanels work in gridpanels */
-#> .grid_panel .tabbable { height: 100% }
-#> .grid_panel .tabbable > .nav { height: 42px; }
-#> .grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
-#> .grid_panel .tabbable .tab-pane { height: 100%; }
 #> 
 #> @media (max-width:500px) {
-#> 
-#> body {
-#>    display:grid;
-#>    grid-template-rows:85px 350px 350px 350px 350px;
-#>    grid-template-columns:1fr;
-#>    grid-gap:1rem;
-#>    padding:1rem;
-#>    height:auto;
-#> }
-#> 
-#> #header {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:1;
-#>    grid-row-end:2;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #sidebar {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:2;
-#>    grid-row-end:3;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_a {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:3;
-#>    grid-row-end:4;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_b {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:4;
-#>    grid-row-end:5;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> #plot_c {
-#>    grid-column-start:1;
-#>    grid-column-end:2;
-#>    grid-row-start:5;
-#>    grid-row-end:6;
-#>    --collapsible-visibility:none;
-#>    --collapsed-content-size:1fr;
-#> }
-#> 
+#>   body {
+#>     display:grid;
+#>     grid-template-rows:85px 350px 350px 350px 350px;
+#>     grid-template-columns:1fr;
+#>     grid-template-areas:
+#>       "header "
+#>       "sidebar"
+#>       "plot_a "
+#>       "plot_b "
+#>       "plot_c ";
+#>     grid-gap:1rem;
+#>     padding:1rem;
+#>     height:auto;
+#>   }
 #> }
 ```
 

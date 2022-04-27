@@ -20,14 +20,8 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
-A package to making building weblayouts using CSS-Grid easy.
+A package to making building dashboard-style layouts in Shiny and RMarkdown easy using CSS-Grid.
 
-# Feature Goals
-
-- [ ] Can recreate anything `flexdashboard` can
-- [ ] Is easy to customize. E.g. a `gridlayoutExtra` package with new `grid_panels` is easy to make.
-- [ ] Widget for creating new app template from pre-built templates
-- [ ] Gracefully fails on older browsers (at least within reason)
 
 ## Installation
 
@@ -102,20 +96,24 @@ Once you've setup your layout you can use it in a Shiny app with the `grid_page(
 ```{r, eval = FALSE}
 library(shiny)
 
-my_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|150px |header  |header |
-|1fr   |sidebar |plot   |"
-
 # The classic Geyser app with grid layout
 shinyApp(
   ui = grid_page(
-    layout = my_layout,
-    header = h2("Old Faithful Geyser Data"),
-    sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-    plot = plotOutput("distPlot", height = "100%")
+    layout = "
+      |2rem  |200px   |1fr    |
+      |85px  |header  |header |
+      |1fr   |sidebar |plot   |",
+    text_panel("header", "Geysers!", is_title = TRUE),
+    grid_panel(
+      "sidebar",
+      title = "Settings",
+      sliderInput("bins","Number of bins:", 
+                  min = 1, max = 50, value = 30, width = "100%")
+    ),
+    grid_panel(
+      "plot",
+      plotOutput("distPlot", height="100%")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -140,15 +138,21 @@ _Screenshot of grided geyser app running_
 ...
 shinyApp(
   ui = fluidPage(
-    theme = bslib::bs_theme(),
     grid_container(
-      id = "main_grid",
-      layout = my_layout,
-      container_height = "800px",
-      elements = list(
-        header = h2(id = "header", "This is my header content"),
-        sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-        plot = plotOutput("distPlot", height = "100%")
+      layout = "
+        |2rem  |200px   |1fr    |
+        |85px  |header  |header |
+        |1fr   |sidebar |plot   |",
+      text_panel("header", "Geysers!"),
+      grid_panel(
+        "sidebar",
+        title = "Settings",
+        sliderInput("bins", "Number of bins:", 
+                    min = 1, max = 50, value = 30, width = "100%")
+      ),
+      grid_panel(
+        "plot",
+        plotOutput("distPlot", height="100%")
       )
     )
   ),

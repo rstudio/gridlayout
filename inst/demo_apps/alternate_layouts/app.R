@@ -43,13 +43,20 @@ app <- shinyApp(
     layout = my_layout,
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
-    header = title_panel("Geysers!"),
-    sidebar = grid_panel(
+    title_panel(
+      area = "header",
+      "Geysers!"
+    ),
+    grid_panel(
+      area = "sidebar",
       title = "Settings",
       v_align = "center",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    plot = plotOutput("distPlot")
+    grid_panel(
+      area = "plot",
+      plotOutput("distPlot", height = "100%")
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

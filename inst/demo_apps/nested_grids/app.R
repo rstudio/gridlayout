@@ -1,3 +1,5 @@
+# Demonstrating the ability to nest grid layouts within other gridlayouts
+
 library(gridlayout)
 library(shiny)
 
@@ -13,42 +15,47 @@ content_layout <- "
 |auto |icon     |bin_chooser |
 |1fr  |settings |plot        |"
 
-R_logo <- text_panel(icon = "r-project", h_align = "center")
+R_logo <- text_panel(area = "icon", icon = "r-project", h_align = "center")
+
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    header = title_panel("Nested grids"),
-    nestedA = nested_grid_panel(
+    title_panel("header", "Nested grids"),
+    nested_grid_panel(
+      area = "nestedA",
       layout = content_layout,
-      elements = list(
-        icon = R_logo,
-        bin_chooser = grid_panel(
-          sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
-          h_align = "center",
-          v_align = "center"
-        ),
-        settings = textOutput('current_bin_num'),
-        plot = plotOutput("distPlot")
+      R_logo,
+      grid_panel(
+        "bin_chooser",
+        sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
+        h_align = "center",
+        v_align = "center"
+      ),
+      grid_panel(
+        area = "plot",
+        plotOutput("distPlot", height="100%")
+      ),
+      vertical_stack_panel(
+        area = "settings",
+        textOutput('current_bin_num')
       )
     ),
-    nestedB = nested_grid_panel(
+    nested_grid_panel(
+      area = 'nestedB',
       title = "Nested within a titled panel",
       layout = content_layout,
-      elements = list(
-        icon = R_logo,
-        bin_chooser = text_panel("Bin Chooser L1", h_align = "center"),
-        settings = text_panel("Settings L1", h_align = "center"),
-        plot = nested_grid_panel(
-          layout = content_layout,
-          elements = list(
-            icon = R_logo,
-            bin_chooser = text_panel("Bin Chooser L2", h_align = "center"),
-            settings = text_panel("Settings L2", h_align = "center"),
-            plot =text_panel("Plot", h_align = "center")
-          )
-        )
+      R_logo,
+      text_panel("bin_chooser", "Bin Chooser L1", h_align = "center"),
+      text_panel("settings", "Settings L1", h_align = "center"),
+      nested_grid_panel(
+        "plot",
+        layout = content_layout,
+        R_logo,
+        text_panel("bin_chooser", "Bin Chooser L2", h_align = "center"),
+        text_panel("settings", "Settings L2", h_align = "center"),
+        text_panel("plot", "Plot", h_align = "center")
       )
     )
   ),

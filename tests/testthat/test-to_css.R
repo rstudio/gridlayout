@@ -23,7 +23,7 @@ test_that("Can change body target", {
   app_css <- to_css(grid_obj, "app_container")
 
   expect_true(
-    str_detect(app_css, "#app_container", fixed = TRUE)
+    str_detect(app_css, "data-gridlayout-key=\"app_container\"", fixed = TRUE)
   )
 })
 
@@ -39,7 +39,6 @@ test_that("Height setting can be customized", {
     |1fr   |sidebar |plot_b |plot_b |",
     container_height = "viewport"
   )
-
 
   expect_true(
     str_detect(
@@ -58,4 +57,18 @@ test_that("Height setting can be customized", {
     )
   )
 
+})
+
+
+test_that("Panel collapsibility rules are added as needed", {
+
+  grid_obj <- new_gridlayout( "
+      |      |1fr     |
+      |80px  |header  |
+      |auto  |sidebar |
+      |400px |plot    |",
+    container_height = "viewport"
+  )
+
+  expect_snapshot(cat(to_css(grid_obj)))
 })

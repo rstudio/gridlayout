@@ -5,23 +5,23 @@
 \title{Build gridlayout container for specified layout}
 \usage{
 grid_container(
-  id = "grid-container",
   layout,
   ...,
+  id = NULL,
   use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE
 )
 }
 \arguments{
-\item{id}{ID unique to this container (note that the HTML will be prefixed
-with \verb{grid-} to avoid namespace clashes)}
-
 \item{layout}{Either a markdown table representation (see
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
 \item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
+
+\item{id}{ID unique to this container (note that the HTML will be prefixed
+with \verb{grid-} to avoid namespace clashes)}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will
@@ -47,24 +47,24 @@ directly but can be used to create nested grids
 if (FALSE) {
 library(gridlayout)
 library(shiny)
-requireNamespace("bslib", quietly = TRUE)
-my_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|150px |header  |header |
-|1fr   |sidebar |plot   |"
 
 # The classic Geyser app with grid layout
 shinyApp(
   ui = fluidPage(
     grid_container(
-      id = "main_grid",
-      layout = my_layout,
-      elements = list(
-        header = title_panel("This is my header content"),
-        sidebar = sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-        plot = plotOutput("distPlot", height = "100\%")
+      layout = "
+        |2rem  |200px   |1fr    |
+        |85px  |header  |header |
+        |1fr   |sidebar |plot   |",
+      text_panel("header", "Geysers!"),
+      grid_panel(
+        "sidebar",
+        title = "Settings",
+        sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
+      ),
+      grid_panel(
+        "plot",
+        plotOutput("distPlot", height="100\%")
       )
     )
   ),

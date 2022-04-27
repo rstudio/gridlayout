@@ -9,12 +9,20 @@ test_that("Works when it should", {
     |1fr   |header  |
     |1fr   |plot    |
     |1fr   |footer  |",
-    header = shiny::h2(id = "header", "This is my header content"),
-    footer = shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30),
-    plot = shiny::plotOutput("myPlot")
+      grid_panel(
+        "header",
+        shiny::h2(id = "header", "This is my header content")
+      ),
+      grid_panel(
+        "footer",
+        shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
+      ),
+      grid_panel(
+        "plot",
+        shiny::plotOutput("myPlot")
+      )
     )
   )
-
 })
 
 test_that("Warns about mismatches between layout and passed elements", {
@@ -28,19 +36,24 @@ test_that("Warns about mismatches between layout and passed elements", {
 
   err_msg <- expect_error(
     grid_container(
-      "main_grid",
       layout = layout_wo_footer,
-      elements = list(
-        header = shiny::h2("This is my header content"),
-        plot = shiny::plotOutput("myPlot"),
-        footer = shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
+      grid_panel(
+        "header",
+        shiny::h2(id = "header", "This is my header content")
+      ),
+      grid_panel(
+        "footer",
+        shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
+      ),
+      grid_panel(
+        "plot",
+        shiny::plotOutput("myPlot")
       )
     )
   )
 
   expect_snapshot(err_msg$message)
 })
-
 
 test_that("Warns about both at the same time to help people debug easier", {
 
@@ -53,11 +66,18 @@ test_that("Warns about both at the same time to help people debug easier", {
     |1fr   |header  |
     |1fr   |plot    |
     |1fr   |footer  |",
-    elements = list(
-      header = shiny::h2("This is my header content"),
-      footer2 = shiny::h2("This is a footer"),
-      plot = shiny::plotOutput("myPlot")
-    )
+      grid_panel(
+        "header",
+        shiny::h2(id = "header", "This is my header content")
+      ),
+      grid_panel(
+        "footer2",
+        shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
+      ),
+      grid_panel(
+        "plot",
+        shiny::plotOutput("myPlot")
+      )
     )
   )
 
