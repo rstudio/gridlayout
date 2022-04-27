@@ -24,11 +24,6 @@ to make it stand out? Options are \code{"grid_panel"}, where only elements with
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}
-
-\item{selector_prefix}{CSS prefix used to target grid elements. This will
-change if you're integrating grid with a system that you don't want to use
-ids (the \code{"#"} prefix) with because they are not available or are used for
-other reasons.}
 }
 \value{
 Character string of css used to setup grid layout and place elements

@@ -92,13 +92,26 @@ title_panel(area = "header", "This is my header")
 text_panel(area = "header", "Here's my text", icon = "r-project")
 
 # Or by directly passing the icon object if you want more customization
-text_panel("header", "Here's my text", icon = fontawesome::fa("r-project", fill = "steelblue"))
+text_panel(
+  "header",
+  "Here's my text",
+  icon = fontawesome::fa("r-project", fill = "steelblue")
+)
 
 # You can also pass arbitrary image locations for the icon
-text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg")
+text_panel(
+  "header",
+  "Here's my text",
+  icon = "https://cran.r-project.org/Rlogo.svg"
+)
 
 # These images can have their size controlled
-text_panel("header", "Here's my text", icon = "https://cran.r-project.org/Rlogo.svg", img_height = "20px")
+text_panel(
+  "header",
+  "Here's my text",
+  icon = "https://cran.r-project.org/Rlogo.svg",
+  img_height = "20px"
+)
 
 # You can adjust the horizontal alignment of your header with h_align
 text_panel("I'm in the middle", h_align = "center")
