@@ -2,28 +2,35 @@
 layout_array_to_mat <- function(layout_array, default_gap_size = '10px'){
   layout_mat <- cells_from_line(layout_array)
 
-  n_cols_by_row <- vapply(layout_mat, FUN = length, FUN.VALUE = numeric(1L))
-
-  if (n_cols_by_row[1] == n_cols_by_row[2] - 1){
-    # Column sizes but no gap
-    layout_mat[[1]] <- c(default_gap_size, layout_mat[[1]])
-  } else if (length(unique(n_cols_by_row)) > 1) {
-    stop("Layout is malformed")
+  if (length(layout_mat) > 1) {
+    n_cols_first_row <- length(layout_mat[[1]])
+    n_cols_second_row <- length(layout_mat[[2]])
+    if (n_cols_first_row == n_cols_second_row - 1) {
+      # Column sizes but no gap
+      layout_mat[[1]] <- c(default_gap_size, layout_mat[[1]])
+    } else if (n_cols_first_row < n_cols_second_row - 1) {
+      stop("If supplying column sizes in layout, every column must be given a size.")
+    }
   }
 
   layout_mat
 }
 
-layout_from_array <- function(layout_def, gap_size = '10px'){
 
-  layout_clean <- layout_array_to_mat(layout_def, default_gap_size = gap_size)
+layout_from_array <- function(layout_array, gap_size = "10px"){
+  layout_clean <- layout_array_to_mat(layout_array, default_gap_size = gap_size)
+  parse_layout(layout_clean, gap_size = gap_size)
+}
+
+parse_layout <- function(layout_def, gap_size = '10px'){
+  layout_clean <- layout_def
 
   no_sizes <- Filter(
-    f = function(line) length(line) > 0,
     x = lapply(
       layout_clean,
-      function(line) line[!has_css_value(line)]
-    )
+      function(line) line[!(has_css_value(line) | line == "")]
+    ),
+    f = function(line) length(line) > 0
   )
 
   # ----- Get the dimensions ---------------------------------------------------
@@ -36,20 +43,32 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
 
   # ----- Figure out column sizes ---------------------------------------------
   first_row <- layout_clean[[1]]
-  has_column_sizes <- all(has_css_value(first_row))
 
-  column_sizes <- if (has_column_sizes) first_row else rep_len("1fr", n_cols)
+  has_gap_size_cell <- length(first_row) == n_cols + 1
 
-  has_gap_size <- length(column_sizes) > n_cols
+  column_size_cells <- if (has_gap_size_cell) {
+    first_row[-1]
+  } else {
+    first_row
+  }
 
-  if (has_gap_size) {
-    gap_size <- column_sizes[1]
-    column_sizes <- column_sizes[-1]
+  column_sizes <- if (all(has_css_value(column_size_cells))) {
+    column_size_cells
+  } else {
+    rep_len("1fr", n_cols)
   }
 
   # If not enough column sizes were given here, then the layout is malformed
   if (length(column_sizes) != n_cols) {
     stop("If supplying column sizes in layout, every column must be given a size.")
+  }
+
+  gap_size_cell <- first_row[1]
+
+  first_row_is_sizes <- all(has_css_value(first_row) | first_row == "")
+
+  if (has_gap_size_cell & first_row_is_sizes &  has_css_value(gap_size_cell)) {
+    gap_size <- gap_size_cell
   }
 
 
@@ -106,12 +125,30 @@ layout_from_array <- function(layout_def, gap_size = '10px'){
 }
 
 md_table_to_array <- function(md_layout) {
-  md_layout %>%
-    str_replace_all("\\||\\-|:", " ") %>%
-    # str_remove_all("\\||\\-") %>%
-    strsplit("\\n") %>%
-    .[[1]] %>%
-    Filter(f = function(x) {!grepl(x, pattern = "^\\s*$")})
+
+    # Split into rows
+  by_rows <- strsplit(md_layout, "\\n")[[1]] %>% str_trim()
+  by_rows <- by_rows[by_rows != ""]
+
+  is_valid_md_table <- all(
+    grepl(
+      x = by_rows,
+      pattern = "^\\s*\\|.*\\|\\s*$",
+      perl = TRUE
+    )
+  )
+  if (!is_valid_md_table){
+    stop("Layout table is malformed. Check syntax.")
+  }
+
+  by_rows %>%
+    # Remove any decorative header lines: e.g. "|---:|"
+    Filter(f = function(x) !grepl(x, pattern = "^[\\s\\|\\-|:]+$", perl = TRUE)) %>%
+    # Remove leading pipes
+    str_remove_all("^\\|\\s*") %>%
+    # Split into cells on internal pipes
+    strsplit("\\s*\\|\\s*") %>%
+    Filter(f = function(x) {length(x) > 0})
 }
 
 CSS_VALUE_REGEX <- "([1-9]\\d*)(\\.\\d+)?(px|rem|fr)|auto"

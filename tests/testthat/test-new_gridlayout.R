@@ -138,22 +138,22 @@ test_that("Gets mad if your row and column sizes don't match matrix dimensions",
 
 })
 
-
-test_that("Can use a character vector to avoid multiline strings", {
-
-  expect_equal(
-    new_gridlayout(
-      c(
-        "| header | header |",
-        "| plota  | plotb  |"
-      )
-    ),
-    new_gridlayout(
-      "| header | header |
-       | plota  | plotb  |"
-    )
-  )
-})
+#
+# test_that("Can use a character vector to avoid multiline strings", {
+#
+#   expect_equal(
+#     new_gridlayout(
+#       c(
+#         "| header | header |",
+#         "| plota  | plotb  |"
+#       )
+#     ),
+#     new_gridlayout(
+#       "| header | header |
+#        | plota  | plotb  |"
+#     )
+#   )
+# })
 
 test_that("Can initialize a layout with the element_list argument instead of a md table", {
   elements_w_overlap <- list(

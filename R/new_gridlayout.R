@@ -263,7 +263,8 @@ new_gridlayout_template <- function(
       stop("Can't handle multi-line layouts, yet.")
       layout_def <- split_by_line(layout_def)
     }
-    layout_info <- layout_from_array(md_table_to_array(layout_def), gap_size = default_gap_size)
+
+    layout_info <- parse_layout(md_table_to_array(layout_def), gap_size = default_gap_size)
     elements <- layout_info$elements
     col_sizes <- col_sizes %||% layout_info$column_sizes
     row_sizes <- row_sizes %||% layout_info$row_sizes
