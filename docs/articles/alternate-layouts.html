@@ -28,6 +28,8 @@
 </script><!-- javascript assets for rmarkdown --><script src="../ace-1.2.3/ace.js" type="text/javascript" charset="utf-8"></script><script src="../holder-2.9.0/holder.min.js" type="text/javascript" charset="utf-8"></script><script src="../snippets/snippets.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -56,6 +58,24 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
 <li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
+    </li>
+    <li>
+      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
+    </li>
+  </ul>
+</li>
+        <li>
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
@@ -77,7 +97,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="https://github.com/rstudio/gridlayout">
+  <a href="https://github.com/rstudio/gridlayout" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,7 +112,7 @@
 
       
 
-      </header><script src="alternate-layouts_files/header-attrs-2.7.1/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Alternate Layouts</h1>
@@ -107,9 +127,9 @@
     
 <p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
 <p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range.</p>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
 <p>Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="st">"
@@ -134,40 +154,40 @@
 
 <span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
   <span class="va">main_layout</span>,
-  alternate_layouts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  alternate_layouts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       layout <span class="op">=</span> <span class="va">mobile_layout</span>,
-      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
+      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
     <span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       layout <span class="op">=</span> <span class="va">big_screen_layout</span>,
-      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">1600</span><span class="op">)</span>
+      width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">1600</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="op">)</span>
-<span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##          200px   1fr   </span>
-<span class="co">##    100px header  header</span>
-<span class="co">##    1fr   sidebar plot  </span>
-<span class="co">## Gap of 2rem. Total height of viewport.</span>
+<span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
+<span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span>
+<span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span>
+<span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span>
+<span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
 <span class="co">## </span>
-<span class="co">## Alternate layouts:   </span>
-<span class="co">##    </span>
-<span class="co">##    - Width &lt; 600px </span>
-<span class="co">##              1fr    </span>
-<span class="co">##       100px header </span>
-<span class="co">##       250px sidebar</span>
-<span class="co">##       400px plot   </span>
-<span class="co">##    Gap of 2rem. Total height of auto.   </span>
-<span class="co">##    </span>
-<span class="co">##    - Width &gt; 1600px </span>
-<span class="co">##            250px  250px   1fr </span>
-<span class="co">##       1fr header sidebar plot</span>
-<span class="co">##    Gap of 2rem. Total height of viewport.</span></code></pre></div>
+<span class="co">## Alternate layouts:  </span>
+<span class="co">##   </span>
+<span class="co">##   - Width &lt; 600px </span>
+<span class="co">##      <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr    </span></span>
+<span class="co">##     <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span></span>
+<span class="co">##     <span style="font-style: italic;">250px</span> <span style="font-weight: bold;">sidebar</span></span>
+<span class="co">##     <span style="font-style: italic;">400px</span> <span style="font-weight: bold;">plot   </span></span>
+<span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.  </span>
+<span class="co">##   </span>
+<span class="co">##   - Width &gt; 1600px </span>
+<span class="co">##      <span style="font-style: italic;">   </span> <span style="font-style: italic;">250px </span> <span style="font-style: italic;">250px  </span> <span style="font-style: italic;">1fr </span></span>
+<span class="co">##     <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot</span></span>
+<span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></code></pre></div>
 </div>
-<div id="syntax" class="section level2">
-<h2 class="hasAnchor">
-<a href="#syntax" class="anchor"></a>Syntax</h2>
+<div class="section level3">
+<h3 id="syntax">Syntax<a class="anchor" aria-label="anchor" href="#syntax"></a>
+</h3>
 <p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts containing:</p>
 <ul>
 <li>A <code>layout</code> table (or existing <code>gridlayout</code> object)</li>
@@ -176,55 +196,55 @@
 <li>An optional <code>container_height</code>. Typically <code>gridlayout</code> is smart enough to figure this one out for you, however.</li>
 </ul>
 </div>
-<div id="output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#output" class="anchor"></a>Output</h2>
+<div class="section level3">
+<h3 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
+</h3>
 <p>The following are screenshots of the exact same app at different screen sizes using the layouts above.</p>
-<div id="screen-width-2000px" class="section level3">
-<h3 class="hasAnchor">
-<a href="#screen-width-2000px" class="anchor"></a>Screen width = 2000px</h3>
+<div class="section level4">
+<h4 id="screen-width-2000px">Screen width = 2000px<a class="anchor" aria-label="anchor" href="#screen-width-2000px"></a>
+</h4>
 <p><img src="alternate-layouts_w2000_h1000.png" width="100%"></p>
 </div>
-<div id="screen-width-1000px" class="section level3">
-<h3 class="hasAnchor">
-<a href="#screen-width-1000px" class="anchor"></a>Screen width = 1000px</h3>
+<div class="section level4">
+<h4 id="screen-width-1000px">Screen width = 1000px<a class="anchor" aria-label="anchor" href="#screen-width-1000px"></a>
+</h4>
 <p><img src="alternate-layouts_w1000_h1000.png" width="100%"></p>
 </div>
-<div id="screen-width-500px" class="section level3">
-<h3 class="hasAnchor">
-<a href="#screen-width-500px" class="anchor"></a>Screen width = 500px</h3>
+<div class="section level4">
+<h4 id="screen-width-500px">Screen width = 500px<a class="anchor" aria-label="anchor" href="#screen-width-500px"></a>
+</h4>
 <p><img src="alternate-layouts_w500_h1000.png" width="500px"></p>
 </div>
 </div>
-<div id="in-action" class="section level2">
-<h2 class="hasAnchor">
-<a href="#in-action" class="anchor"></a>In-action</h2>
+<div class="section level3">
+<h3 id="in-action">In-action<a class="anchor" aria-label="anchor" href="#in-action"></a>
+</h3>
 <p><img src="alternate-layouts_resizing.gif" style="max-width: 100%;"></p>
 </div>
-<div id="default-mobile-layout" class="section level1">
-<h1 class="hasAnchor">
-<a href="#default-mobile-layout" class="anchor"></a>Default mobile layout</h1>
+<div class="section level2">
+<h2 id="default-mobile-layout">Default mobile layout<a class="anchor" aria-label="anchor" href="#default-mobile-layout"></a>
+</h2>
 <p>If no alternate layouts are specified, a mobile layout is automatically generated by simply stacking all the panels in your app at <code>300px</code> in height.</p>
-<pre><code>## gridlayout of 3 elements: 
-##          200px   1fr   
-##    100px header  header
-##    1fr   sidebar plot  
-## Gap of 2rem. Total height of viewport.
-## 
-## Alternate layouts:   
-##    
-##    - Width &lt; 500px 
-##              1fr    
-##       85px  header 
-##       350px sidebar
-##       350px plot   
-##    Gap of 1rem. Total height of auto.</code></pre>
+<pre><code><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
+<span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span>
+<span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span>
+<span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span>
+<span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="co">## </span>
+<span class="co">## Alternate layouts:  </span>
+<span class="co">##   </span>
+<span class="co">##   - Width &lt; 500px </span>
+<span class="co">##      <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr    </span></span>
+<span class="co">##     <span style="font-style: italic;">85px </span> <span style="font-weight: bold;">header </span></span>
+<span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">sidebar</span></span>
+<span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot   </span></span>
+<span class="co">##   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span></code></pre>
 <p>If you don’t want this (say you’re targeting mobile by default already) you can set <code>alternate_layouts</code> to <code>NULL</code>.</p>
-<pre><code>## gridlayout of 3 elements: 
-##          200px   1fr   
-##    100px header  header
-##    1fr   sidebar plot  
-## Gap of 2rem. Total height of viewport.</code></pre>
+<pre><code><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
+<span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span>
+<span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span>
+<span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span>
+<span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></code></pre>
 </div>
   </div>
 
@@ -239,14 +259,12 @@
 
 
       <footer><div class="tidyverse">
-  <p>gridlayout is built for <strong>R Markdown</strong>, an ecosystem of packages for creating computational documents in R. Learn more at <a href="https://rmarkdown.rstudio.com">rmarkdown.rstudio.com</a>.</p>
+  <p>gridlayout is built for <strong>R Markdown</strong>, an ecosystem of packages for creating computational documents in R. Learn more at <a href="https://rmarkdown.rstudio.com" class="external-link">rmarkdown.rstudio.com</a>.</p>
 </div>
 
 <div class="author">
-  <p>
-    Developed by Nick Strayer.
-    Site built with <a href="https://pkgdown.r-lib.org">pkgdown</a>.
-  </p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -254,6 +272,8 @@
 
   
 
+
+  
 
   </body>
 </html>
