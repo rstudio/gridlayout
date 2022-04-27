@@ -6,7 +6,6 @@ Authors@R: c(person("Nick", "Strayer", role = c("aut", "cre"), email = "nick.str
 Description: Makes it easy to layout your Shiny app or other R-derived HTML documents using CSS grid.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Suggests: 
     testthat (>= 3.0.0),
     shiny,
