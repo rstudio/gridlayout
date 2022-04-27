@@ -22,7 +22,7 @@
 #' vertical_stack_panel(
 #'   area="header",
 #'   shiny::h2("R"),
-#'   shiny::actionButton(),
+#'   shiny::actionButton("myButton", "Click Me")
 #' )
 #'
 vertical_stack_panel <- function(
