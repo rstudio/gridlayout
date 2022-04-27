@@ -16,4 +16,4 @@
 ^Meta$
 ^\.github$
 ^data-raw$
-^inst\/demo_apps\/\w+\/tests.+$
+^inst\/demo_apps\/\w+\/tests/testthat/_snaps
