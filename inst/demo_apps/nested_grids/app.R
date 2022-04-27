@@ -1,5 +1,4 @@
 # Demonstrating the ability to nest grid layouts within other gridlayouts
-# Not working properly with the flat syntax
 
 library(gridlayout)
 library(shiny)
