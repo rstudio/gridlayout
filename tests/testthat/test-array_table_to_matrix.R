@@ -238,19 +238,30 @@ test_that("Errows with inconsistant numbers of columns", {
   )
 })
 
+test_that("Partially defined row sizes are possible", {
+  expect_equal(
+    array_table_to_matrix(
+      c(
+        "      1fr     2fr  ",
+        "100px header  header",
+        "      plota   plotb ",
+        "2rem  footer  footer "
+      )
+    ),
+    matrix(
+      c(
+        "",      "1fr",     "2fr",
+        "100px", "header",  "header",
+        "",      "plota",   "plotb",
+        "2rem",  "footer",  "footer"
+      ),
+      nrow = 4,
+      byrow = TRUE
+    )
+  )
+})
+
 test_that("Errows with ommited sizes", {
-  # expect_error(
-  #   array_table_to_matrix(
-  #     c(
-  #       "      1fr     2fr  ",
-  #       "100px header  header",
-  #       "      plota   plotb ",
-  #       "3rem  footer  footer "
-  #     )
-  #   ),
-  #   "If supplying row sizes in layout, every row must be given a size.",
-  #   fixed = TRUE
-  # )
 
   expect_error(
     array_table_to_matrix(
@@ -265,22 +276,3 @@ test_that("Errows with ommited sizes", {
     fixed = TRUE
   )
 })
-
-array_table <- c(
-  "      1fr     2fr  ",
-  "100px header  header",
-  "      plota   plotb ",
-  "3rem  footer  footer "
-)
-array_table <- c(
-  "1fr     2fr  ",
-  "header  header",
-  "plota   plotb ",
-  "footer  footer "
-)
-
-array_table <- c(
-  "100px header  header",
-  "1fr   plota   plotb ",
-  "2rem  footer  footer "
-)
