@@ -309,8 +309,8 @@ new_gridlayout_template <- function(
   sizes <- map_name_val(
     list(row = row_sizes, col = col_sizes),
     function(dir, sizes) {
-      start_vals <- extract_dbl(elements, "start_" %+% dir)
-      end_vals <- extract_dbl(elements, "end_" %+% dir)
+      start_vals <- extract_dbl(elements, paste0("start_", dir))
+      end_vals <- extract_dbl(elements, paste0("end_", dir))
       auto_sizing <- is.null(sizes)
 
       if (!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
