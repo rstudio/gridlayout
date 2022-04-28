@@ -176,7 +176,7 @@ new_gridlayout <- function(
     layout_def = layout_def,
     col_sizes = col_sizes,
     row_sizes = row_sizes,
-    gap = gap,
+    gap_size = gap,
     container_height = container_height
   )
 
@@ -191,8 +191,9 @@ new_gridlayout <- function(
     class = "gridlayout"
   )
 
-  # Dont make an alternate layout if the user has specifically told us not to or
-  # we have an empty grid (like is used in grided initialization)
+
+  # Don't make an alternate layout if the user has specifically told us not to
+  # or we have an empty grid (like is used in grided initialization)
   if (is.null(alternate_layouts) || length(elements) == 0) return(layout)
 
   if (identical(alternate_layouts, "auto")) {
@@ -213,7 +214,7 @@ new_gridlayout <- function(
     for (alternate in alternate_layouts) {
       if (is.null(alternate$layout)) {
         stop(
-          "Altnernate layouts need to be provided as a list with ",
+          "Alternate layouts need to be provided as a list with ",
           "a layout element along with width bounds."
         )
       }
@@ -230,52 +231,45 @@ new_gridlayout <- function(
   layout
 }
 
+default_row_size_fixed <- 'auto'
+default_row_size_relative <- '1fr'
+default_col_size <- "1fr"
 default_gap_size <- "1rem"
 
 new_gridlayout_template <- function(
   layout_def = list(),
   col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  gap_size = NULL,
   container_height = NULL
 ) {
+
   elements <- list()
+
   # Figure out what type of layout definition we were passed
   if (is.character(layout_def)) {
-    # # Is the layout def a single multi-line string containing the table? If it
-    # # is we need to split it by rows
-    # if (length(layout_def) == 1L && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
-    #   layout_def <- split_by_line(layout_def)
-    # }
-    # # MD table representation
-    # layout_info <- parse_md_table_layout(
-    #   layout_def,
-    #   col_sizes = col_sizes,
-    #   row_sizes = row_sizes,
-    #   gap = gap
-    # )
-    # elements <- layout_info$elements
-    # col_sizes <- layout_info$col_sizes
-    # row_sizes <- layout_info$row_sizes
-    # gap <- layout_info$gap
 
-    if (length(layout_def) > 1L) {
+    layout_matrix <- if ("matrix" %in% class(layout_def)) {
+      layout_def
+    } else if (length(layout_def) == 1L) {
+      md_table_to_matrix(layout_def)
+    } else {
       stop("Can't handle multi-line layouts, yet.")
-      layout_def <- split_by_line(layout_def)
     }
 
-    layout_info <- parse_layout(md_table_to_array(layout_def), gap_size = default_gap_size)
+    layout_info <- parse_layout_matrix(layout_matrix)
+
     elements <- layout_info$elements
     col_sizes <- col_sizes %||% layout_info$column_sizes
     row_sizes <- row_sizes %||% layout_info$row_sizes
-    gap <- gap %||% layout_info$gap_size
+    gap_size <- gap_size %||% layout_info$gap_size
 
   } else if (class(layout_def) == "gridlayout") {
 
     # Use existing row and column heights unless they have been explicitly overridden
     col_sizes <- col_sizes %||% get_info(layout_def, "col_sizes")
     row_sizes <- row_sizes %||% get_info(layout_def, "row_sizes")
-    gap <- gap %||% get_info(layout_def, "gap")
+    gap_size <- gap_size %||% get_info(layout_def, "gap")
     container_height <- container_height %||% get_info(layout_def, "container_height")
     elements <- get_elements(layout_def)
 
@@ -293,14 +287,21 @@ new_gridlayout_template <- function(
   }
 
   # Set defaults if unspecified
-  if (is.null(gap)) gap <- default_gap_size
+  if (is.null(gap_size)) gap_size <- default_gap_size
 
   # If using default container_height and all the rows are definitely sized then
   # make container height auto. Otherwise use "viewport"
   if (is.null(container_height)) {
-    all_definite_row_sizes <- notNull(row_sizes) && all(!str_detect(row_sizes, "fr"))
-    container_height <- if (all_definite_row_sizes) "auto" else "viewport"
+    any_relative_row_sizes <- any(str_detect(row_sizes, "fr"))
+    no_specified_sizes <- all(row_sizes == DEFAULT_SIZE_CHAR)
+    container_height <- if (any_relative_row_sizes | no_specified_sizes) "viewport" else "auto";
   }
+
+
+  # Fill in the default values if they're missing
+  row_sizes <- replace_default_with_value(row_sizes, if(container_height == "viewport") default_row_size_relative else default_row_size_fixed)
+  col_sizes <- replace_default_with_value(col_sizes, default_col_size)
+  gap_size <- replace_default_with_value(gap_size, default_gap_size)
 
   empty_grid <- length(elements) == 0
 
@@ -377,7 +378,7 @@ new_gridlayout_template <- function(
       row_sizes = sizes$row,
       col_sizes = sizes$col,
       container_height = container_height,
-      gap = gap
+      gap = gap_size
     ),
     class = "gridlayout_template"
   )

@@ -1,9 +1,5 @@
-parse_layout_matrix <- function(
-    layout_matrix,
-    default_row_size,
-    default_col_size,
-    default_gap_size
-){
+DEFAULT_SIZE_CHAR <- "."
+parse_layout_matrix <- function(layout_matrix){
 
   # Missing column sizes
   if (!all_css_or_empty(layout_matrix[1,])) {
@@ -26,9 +22,9 @@ parse_layout_matrix <- function(
   n_cols <- ncol(layout_matrix) - 1L
 
   # Fill in the empty or missing sizes with defaults
-  column_sizes <- fill_missing_w_default(layout_matrix[1,-1], default_col_size)
-  row_sizes <- fill_missing_w_default(layout_matrix[-1,1], default_row_size)
-  gap_size <- fill_missing_w_default(layout_matrix[1,1], default_gap_size)
+  column_sizes <- fill_missing_w_default(layout_matrix[1,-1])
+  row_sizes <- fill_missing_w_default(layout_matrix[-1,1])
+  gap_size <- fill_missing_w_default(layout_matrix[1,1])
 
   # Strip away sizes to get the main layout matrix
   items_matrix <- matrix(
@@ -36,7 +32,6 @@ parse_layout_matrix <- function(
     nrow = n_rows,
     ncol = n_cols
   )
-
 
   item_ids <- unique(as.vector(items_matrix))
 
@@ -61,11 +56,19 @@ parse_layout_matrix <- function(
     row_sizes = row_sizes,
     gap_size = gap_size
   )
-
 }
 
 
-fill_missing_w_default <- function(vec, default_val){
-  vec[vec == ""] <- default_val
+replace_x_with_y<- function(vec, x, y){
+  vec[vec == x] <- y
   vec
+}
+
+
+fill_missing_w_default <- function(vec){
+  replace_x_with_y(vec, x = "", y = DEFAULT_SIZE_CHAR)
+}
+
+replace_default_with_value <- function(vec, val) {
+  replace_x_with_y(vec, x = DEFAULT_SIZE_CHAR, y = val)
 }
