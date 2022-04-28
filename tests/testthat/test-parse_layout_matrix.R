@@ -1,7 +1,3 @@
-default_row_size <- "1.1fr"
-default_col_size <- "2fr"
-default_gap_size <- "13px"
-
 test_that("Fully defined sizes", {
 
   parsed <- parse_layout_matrix(
@@ -14,10 +10,7 @@ test_that("Fully defined sizes", {
       ),
       nrow = 4,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
@@ -47,10 +40,7 @@ test_that("Missing gap size", {
       ),
       nrow = 4,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
@@ -63,7 +53,7 @@ test_that("Missing gap size", {
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 
@@ -77,15 +67,12 @@ test_that("No column sizes", {
       ),
       nrow = 3,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
     parsed$column_sizes,
-    c(default_col_size, default_col_size)
+    c(DEFAULT_SIZE_CHAR, DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$row_sizes,
@@ -93,7 +80,7 @@ test_that("No column sizes", {
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 
@@ -108,10 +95,7 @@ test_that("No row sizes", {
       ),
       nrow = 4,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
@@ -120,11 +104,11 @@ test_that("No row sizes", {
   )
   expect_equal(
     parsed$row_sizes,
-    c(default_row_size, default_row_size, default_row_size)
+    c(DEFAULT_SIZE_CHAR, DEFAULT_SIZE_CHAR, DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 
@@ -139,23 +123,20 @@ test_that("Single column - no-sizes", {
       ),
       nrow = 2,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
     parsed$column_sizes,
-    c(default_col_size)
+    c(DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$row_sizes,
-    c(default_row_size, default_row_size)
+    c(DEFAULT_SIZE_CHAR, DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 
@@ -168,10 +149,7 @@ test_that("Single column - all-sizes", {
         "1fr",  "plotb"),
       nrow = 3,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
@@ -197,23 +175,20 @@ test_that("Single row - no-sizes", {
       ),
       nrow = 1,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
     parsed$column_sizes,
-    c(default_col_size, default_col_size)
+    c(DEFAULT_SIZE_CHAR, DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$row_sizes,
-    c(default_row_size)
+    c(DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 
@@ -229,23 +204,20 @@ test_that("Partially defined sizes", {
       ),
       nrow = 4,
       byrow = TRUE
-    ),
-    default_row_size,
-    default_col_size,
-    default_gap_size
+    )
   )
 
   expect_equal(
     parsed$column_sizes,
-    c("1fr", default_col_size)
+    c("1fr", DEFAULT_SIZE_CHAR)
   )
   expect_equal(
     parsed$row_sizes,
-    c("100px", default_row_size, "2rem")
+    c("100px", DEFAULT_SIZE_CHAR, "2rem")
   )
   expect_equal(
     parsed$gap_size,
-    default_gap_size
+    DEFAULT_SIZE_CHAR
   )
 })
 

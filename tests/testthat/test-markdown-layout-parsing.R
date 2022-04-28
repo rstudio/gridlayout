@@ -17,7 +17,7 @@ test_that("Basic table works", {
                c("100px", "1fr", "1fr"))
 
   expect_equal(get_info(my_layout, "gap"),
-               "1rem")
+               default_gap_size)
 })
 
 test_that("Can put gap size in upper left", {
@@ -121,7 +121,7 @@ test_that("Markdown parsing -- Gap and row sizes", {
 test_that("Markdown parsing -- Only gap size", {
   expect_snapshot(
     new_gridlayout("
-|2rem  |        |       |
+|3rem  |        |       |
 |      |header  |header |
 |      |sidebar |plot   |"
     )
