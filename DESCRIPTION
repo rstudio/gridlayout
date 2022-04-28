@@ -26,6 +26,7 @@ RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Imports: 
+    magrittr,
     htmltools
 Depends: 
     R (>= 2.10)
