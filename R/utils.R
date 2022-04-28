@@ -122,7 +122,7 @@ hasName <- function(x, name) {
 }
 
 `%||%` <- function(val, alt) {
-  if (is.null(val) || is.na(val)) alt else val
+  if (all(is.null(val)) || all(is.na(val))) alt else val
 }
 
 # Taken from the shiny source
