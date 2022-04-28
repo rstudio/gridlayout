@@ -1,4 +1,5 @@
 DEFAULT_SIZE_CHAR <- "."
+
 parse_layout_matrix <- function(layout_matrix){
 
   # Missing column sizes
@@ -71,4 +72,9 @@ fill_missing_w_default <- function(vec){
 
 replace_default_with_value <- function(vec, val) {
   replace_x_with_y(vec, x = DEFAULT_SIZE_CHAR, y = val)
+}
+
+
+all_css_or_empty <- function(vals) {
+  all(is_css_unit(vals) | vals == "")
 }
