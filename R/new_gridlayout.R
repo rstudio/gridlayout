@@ -24,15 +24,6 @@
 #'     | plota  | plotb  |" )
 #'  ```
 #'
-#'  To avoid multi-line strings and the indentation trouble they can cause,
-#'  you can also supply your table as a character vector where each element
-#'  corresponds to a row in your table:
-#'
-#'  ```{r}
-#'  new_gridlayout(c(
-#'    "| header | header |",
-#'    "| plota  | plotb  |" ))
-#'  ```
 #'
 #'  _An important caveat of this style is it is not currently able to be detected
 #'  using the "edit current layout" grided addin._
@@ -275,9 +266,15 @@ new_gridlayout_template <- function(
 
     # Get rid of existing alternate layouts
   } else if (is.list(layout_def)) {
-    # If an existing layout is passed its sizes can and container size etc can
-    # be modified
+    # Plain elements list is passed
     elements <- layout_def
+
+    # Fill in sizes if they werent passed as args
+    num_cols <- max(extract_dbl(elements, "start_col"))
+    col_sizes <- col_sizes %||% rep_len(default_col_size, num_cols)
+    num_rows <- max(extract_dbl(elements, "start_row"))
+    row_sizes <- row_sizes %||% rep_len(default_row_size_relative, num_cols)
+
   } else {
     stop(
       "Unknown layout definition type. ",
