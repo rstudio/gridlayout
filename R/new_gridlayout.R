@@ -10,9 +10,23 @@
 #'  There are three current ways to declare layouts (aka inputs to
 #'  `layout_def`).
 #'
+#'  ## Array tables
+#'
+#'  The easiest and cleanest way to declare your layout is to use an array where
+#'  each row is an element and each column is separated by spaces. This allows
+#'  you to easily visually align your layouts that look good even if your code
+#'  is re-formated.
+#'
+#'  ```{r}
+#'  new_gridlayout(
+#'   c("header header",
+#'     "plota  plotb")
+#'  )
+#'  ```
+#'
 #'  ## Markdown tables
 #'
-#'  The first is the easiest: a markdown table wrapped in a character string. In
+#'  You can also use a markdown table wrapped in a single character string. In
 #'  this format you define a grid using the table and then place your grid
 #'  "elements" within that grid using their grid id. So for a 2x2 layout with a
 #'  header along the top and two plots side-by-side the layout would look as
