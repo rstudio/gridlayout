@@ -4,18 +4,14 @@ library(gridlayout)
 library(shiny)
 requireNamespace("bslib", quietly = TRUE)
 
-my_layout <- new_gridlayout("
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
-|85px  |header  |header |
-|1fr   |sidebar |plot   |")
-
-
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
-    layout = my_layout,
+    layout = c(
+      "2rem 200px   1fr",
+      "85px header  header",
+      "1fr  sidebar plot"
+    ),
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
     title_panel("header", "This is my header"),
