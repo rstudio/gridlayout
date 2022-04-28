@@ -245,7 +245,7 @@ new_gridlayout_template <- function(
     } else if (length(layout_def) == 1L) {
       md_table_to_matrix(layout_def)
     } else {
-      stop("Can't handle multi-line layouts, yet.")
+      array_table_to_matrix(layout_def)
     }
 
     layout_info <- parse_layout_matrix(layout_matrix)
