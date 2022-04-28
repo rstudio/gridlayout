@@ -31,7 +31,12 @@ parse_layout_matrix <- function(
   gap_size <- fill_missing_w_default(layout_matrix[1,1], default_gap_size)
 
   # Strip away sizes to get the main layout matrix
-  items_matrix <- layout_matrix[-1,-1]
+  items_matrix <- matrix(
+    layout_matrix[-1,-1],
+    nrow = n_rows,
+    ncol = n_cols
+  )
+
 
   item_ids <- unique(as.vector(items_matrix))
 

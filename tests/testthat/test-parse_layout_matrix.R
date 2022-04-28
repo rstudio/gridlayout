@@ -188,6 +188,35 @@ test_that("Single column - all-sizes", {
   )
 })
 
+
+test_that("Single row - no-sizes", {
+  parsed <- parse_layout_matrix(
+    matrix(
+      c(
+        "plota","plotb"
+      ),
+      nrow = 1,
+      byrow = TRUE
+    ),
+    default_row_size,
+    default_col_size,
+    default_gap_size
+  )
+
+  expect_equal(
+    parsed$column_sizes,
+    c(default_col_size, default_col_size)
+  )
+  expect_equal(
+    parsed$row_sizes,
+    c(default_row_size)
+  )
+  expect_equal(
+    parsed$gap_size,
+    default_gap_size
+  )
+})
+
 test_that("Partially defined sizes", {
 
   parsed <- parse_layout_matrix(
