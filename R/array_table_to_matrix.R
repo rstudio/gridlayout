@@ -81,16 +81,3 @@ array_table_to_matrix <- function(array_table) {
 
 }
 
-flatten <- function(x) { do.call(what = c, args = x)}
-
-get_num_cols_by_row <- function(nested_array){
-  vapply(
-    nested_array,
-    FUN = length,
-    FUN.VALUE = numeric(1L)
-  )
-}
-
-split_on_space <- function(x){
-  strsplit(str_trim(x), split = "\\s+")
-}
