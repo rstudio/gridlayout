@@ -1,12 +1,10 @@
 .grid_panel {
   --card-padding: 0.8rem;
   --card-corner-radius: 0.5rem;
-  --card-box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-  /* --card-box-shadow: unset; */
+  --card-box-shadow: unset;
   --card-outline-color: rgb(175, 174, 174);
   --card-outline-width: 1px;
-  /* --card-outline: var(--card-outline-width) solid var(--card-outline-color); */
-  --card-outline: none;
+  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
 
   box-sizing: border-box;
   overflow: hidden;
