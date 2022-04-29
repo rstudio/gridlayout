@@ -28,7 +28,7 @@
              1fr     1fr   
         80px header  header
         1fr  sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -37,7 +37,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 2rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 # Markdown parsing -- Only col sizes
 
@@ -48,7 +48,7 @@
             200px   1fr   
         1fr header  header
         1fr sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -57,7 +57,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 2rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 # Markdown parsing -- Gap and row sizes
 
@@ -151,7 +151,7 @@
             1fr     1fr   
         1fr header  header
         1fr sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -160,5 +160,5 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 2rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 

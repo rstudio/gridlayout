@@ -9,7 +9,7 @@
         200px header header
         1fr   plota  plotb 
         2fr   .      .     
-      Gap of 2rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -18,7 +18,7 @@
           85px  header
           350px plota 
           350px plotb 
-        Gap of 2rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 ---
 
@@ -30,7 +30,7 @@
             200px  1fr    2fr
         1fr header header .  
         1fr plota  plotb  .  
-      Gap of 2rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -39,5 +39,5 @@
           85px  header
           350px plota 
           350px plotb 
-        Gap of 2rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 

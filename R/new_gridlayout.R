@@ -239,7 +239,7 @@ new_gridlayout <- function(
 default_row_size_fixed <- 'auto'
 default_row_size_relative <- '1fr'
 default_col_size <- "1fr"
-default_gap_size <- "2rem"
+default_gap_size <- "12px"
 
 new_gridlayout_template <- function(
   layout_def = list(),
