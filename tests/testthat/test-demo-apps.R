@@ -10,16 +10,13 @@ demo_apps <- c(
   "scrolling_panels"
 )
 
-for(demo_app in demo_apps) {
-  test_that(
-    paste("shinytest2 -", demo_app),
-    {
-      suppressPackageStartupMessages({
-        test_app(
-          system.file(package = "gridlayout", paste0("demo_apps/", demo_app)),
-          reporter = FailReporter
-        )
-      })
-    }
-  )
+for (demo_app in demo_apps) {
+  tryCatch({
+    suppressPackageStartupMessages({
+      test_app(
+        system.file(package = "gridlayout", paste0("demo_apps/", demo_app))
+      )
+    })
+  })
 }
+
