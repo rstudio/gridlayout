@@ -82,12 +82,13 @@ grid_container <- function(
   }
 
   # Make sure we're working with a layout
-  layout <- new_gridlayout(
+  layout <- if (is_gridlayout(layout) ) layout else new_gridlayout(
     layout_def = layout,
     row_sizes = row_sizes,
     col_sizes = col_sizes,
     gap  = gap_size
   )
+
 
   # In order to leave the id field open to users to do with as they please, we
   # need to generate a unique key that can be used to find the grid. If the
