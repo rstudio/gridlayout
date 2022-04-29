@@ -8,10 +8,12 @@ requireNamespace("bslib", quietly = TRUE)
 app <- shinyApp(
   ui = grid_page(
     layout = c(
-      "2rem 200px   1fr",
-      "85px header  header",
-      "1fr  sidebar plot"
+      "header  header",
+      "sidebar plot"
     ),
+    row_sizes = c("85px", "1fr"),
+    col_sizes = c("200px", "1fr"),
+    gap_size = "2rem",
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
     title_panel("header", "This is my header"),
