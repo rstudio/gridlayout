@@ -5,6 +5,7 @@
 #'
 #' @param id ID unique to this container (note that the HTML will be prefixed
 #'   with `grid-` to avoid namespace clashes)
+#' @inheritParams new_gridlayout
 #' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.

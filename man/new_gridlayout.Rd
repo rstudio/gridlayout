@@ -6,8 +6,8 @@
 \usage{
 new_gridlayout(
   layout_def = list(),
-  col_sizes = NULL,
   row_sizes = NULL,
+  col_sizes = NULL,
   gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
@@ -18,11 +18,16 @@ new_gridlayout(
 \code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
 layout.}
 
-\item{col_sizes}{A character vector of valid css sizes for the width of each
-column in your grid as given by \code{layout_mat}. If a single value is passed,
-it will be repeated for all columns.}
+\item{row_sizes}{A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.}
 
-\item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
+\item{col_sizes}{Same as \code{row_sizes}, but for column widths}
+
+\item{gap_size}{Valid css sizing for gap to be left between each element in your
+grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
+provided in the main layout table.}
 
 \item{container_height}{Valid css unit determining how tall the containing
 element should be for this layout. Defaults to \code{"viewport"} (full page
@@ -41,11 +46,6 @@ when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_lay
 alternate layouts are given a single-column layout will be automatically
 applied for mobile screens (viewports less than 600px wide). Set to \code{NULL}
 to avoid this.}
-
-\item{gap}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;}
 }
 \value{
 Object of class \code{"gridlayout"}

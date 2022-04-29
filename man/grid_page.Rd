@@ -7,6 +7,9 @@
 grid_page(
   layout,
   ...,
+  row_sizes = NULL,
+  col_sizes = NULL,
+  gap_size = NULL,
   use_bslib_card_styles = FALSE,
   theme = NULL,
   flag_mismatches = TRUE,
@@ -20,6 +23,17 @@ desired layout for your Shiny app.}
 
 \item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
+
+\item{row_sizes}{A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.}
+
+\item{col_sizes}{Same as \code{row_sizes}, but for column widths}
+
+\item{gap_size}{Valid css sizing for gap to be left between each element in your
+grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
+provided in the main layout table.}
 
 \item{use_bslib_card_styles}{Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will

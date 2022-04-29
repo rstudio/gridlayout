@@ -110,14 +110,14 @@
 #' @param layout_def Either a list of elements with the `id`, `start_row`,
 #'  `end_row`, `start_col`, and `end_col` format, or a markdown table defining a
 #'  layout.
-#' @param col_sizes A character vector of valid css sizes for the width of each
-#'  column in your grid as given by `layout_mat`. If a single value is passed,
-#'  it will be repeated for all columns.
-#' @param row_sizes Same as `col_sizes`, but for row heights.
-#' @param gap Valid css sizing for gap to be left between each element in your
-#'  grid. Defaults to `"1rem"`. This is a relative unit that scales with the
-#'  base text size of a page. E.g. setting font-size: 16px on the body element
-#'  of a page means 1rem = 16px;
+#' @param row_sizes A character vector of valid css sizes for the height of each
+#'  row in your grid as given by the main layout definition. If a single value
+#'  is passed, it will be repeated for all columns. If sizes are provided both
+#'  here and in the main layout then these sizes will be the ones used.
+#' @param col_sizes Same as `row_sizes`, but for column widths
+#' @param gap_size Valid css sizing for gap to be left between each element in your
+#'  grid. Like `row_sizes` and `col_sizes`, this will win-out over a gap size
+#'  provided in the main layout table.
 #' @param container_height Valid css unit determining how tall the containing
 #'  element should be for this layout. Defaults to `"viewport"` (full page
 #'  height: equivalent to the CSS value of `100vh`) if any relative units (e.g.
@@ -170,8 +170,8 @@
 #'
 new_gridlayout <- function(
   layout_def = list(),
-  col_sizes = NULL,
   row_sizes = NULL,
+  col_sizes = NULL,
   gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
