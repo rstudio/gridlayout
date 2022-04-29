@@ -48,9 +48,6 @@ array_table_with_gap_args <- make_grid_container(
 )
 
 
-test_that("Output is as expected for simple grid", {
-  expect_snapshot(md_table)
-})
 
 test_that("Different methods of defining the same layout return the same thing", {
 
