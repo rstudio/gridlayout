@@ -86,7 +86,7 @@ grid_container <- function(
     layout_def = layout,
     row_sizes = row_sizes,
     col_sizes = col_sizes,
-    gap  = gap_size
+    gap_size  = gap_size
   )
 
 
