@@ -36,6 +36,8 @@ parse_layout_matrix <- function(layout_matrix){
 
   item_ids <- unique(as.vector(items_matrix))
 
+  validate_item_ids(item_ids)
+
   elements <- lapply(
     item_ids,
     function(id){
@@ -59,3 +61,19 @@ parse_layout_matrix <- function(layout_matrix){
   )
 }
 
+VALID_ITEM_ID_REGEX = "^[a-zA-Z]+\\w*|\\.$"
+validate_item_ids <- function(item_ids){
+
+  is_valid_item_id <- str_detect(item_ids, pattern = VALID_ITEM_ID_REGEX)
+
+  if (all(is_valid_item_id)) { return(TRUE) }
+
+  bad_ids <- item_ids[!is_valid_item_id]
+
+  stop(
+    "Layout has the following invalid item ids in it:\n",
+    list_in_quotes(bad_ids), "\n",
+    "Only simple words and (non-starting) numbers are allowed.",
+    call. = FALSE
+  )
+}
