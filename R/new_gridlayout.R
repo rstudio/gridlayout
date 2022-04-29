@@ -269,7 +269,7 @@ new_gridlayout_template <- function(
     row_sizes <- row_sizes %||% layout_info$row_sizes
     gap_size <- gap_size %||% layout_info$gap_size
 
-  } else if (class(layout_def) == "gridlayout") {
+  } else if (is_gridlayout(layout_def)) {
 
     # Use existing row and column heights unless they have been explicitly overridden
     col_sizes <- col_sizes %||% get_info(layout_def, "col_sizes")
@@ -396,9 +396,13 @@ new_gridlayout_template <- function(
 }
 
 
+is_gridlayout <- function(layout) {
+  inherits(layout, "gridlayout")
+}
+
 as_gridlayout <- function(x){
   if (is.character(x)) return(new_gridlayout(x))
-  if (inherits(x, "gridlayout")) return(x)
+  if (is_gridlayout(x)) return(x)
 
   stop("Cant coerce a variable of class ", class(x), " to gridlayout")
 }
