@@ -67,7 +67,10 @@ grid_container <- function(
   ...,
   id = NULL,
   use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE
+  flag_mismatches = TRUE,
+  row_sizes = NULL,
+  col_sizes = NULL,
+  gap_size = NULL
 ) {
 
   # Check to make sure we match all the names in the layout to all the names in
@@ -79,8 +82,12 @@ grid_container <- function(
   }
 
   # Make sure we're working with a layout
-  layout <- as_gridlayout(layout)
-
+  layout <- new_gridlayout(
+    layout_def = layout,
+    row_sizes = row_sizes,
+    col_sizes = col_sizes,
+    gap  = gap_size
+  )
 
   # In order to leave the id field open to users to do with as they please, we
   # need to generate a unique key that can be used to find the grid. If the
