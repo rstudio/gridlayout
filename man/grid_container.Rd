@@ -9,7 +9,10 @@ grid_container(
   ...,
   id = NULL,
   use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE
+  flag_mismatches = TRUE,
+  row_sizes = NULL,
+  col_sizes = NULL,
+  gap_size = NULL
 )
 }
 \arguments{

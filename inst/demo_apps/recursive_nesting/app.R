@@ -27,7 +27,7 @@ make_nested_panels <- function(level = 0) {
       ),
       row_sizes = c("1fr", "5fr", "1fr"),
       col_sizes = c("1fr", "5fr", "1fr"),
-      gap = "30px"
+      gap_size = "30px"
     ),
     emoji_panel("top", "↓"),
     emoji_panel("bottom", "↑"),

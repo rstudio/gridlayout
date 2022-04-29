@@ -7,7 +7,7 @@ test_that("Basic setup with all options filled works", {
     ",
     col_sizes = c("1fr", "2fr"),
     row_sizes = c("100px", "1fr"),
-    gap = "2rem"
+    gap_size = "2rem"
   )
 
   expect_s3_class(my_layout, "gridlayout")
@@ -18,7 +18,7 @@ test_that("Basic setup with all options filled works", {
   expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr"))
 
-  expect_equal(get_info(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap_size"),
                "2rem")
 })
 
@@ -40,7 +40,7 @@ test_that("Sizing defaults work", {
   expect_equal(get_info(my_layout, "row_sizes"),
                c(default_row_size_relative, default_row_size_relative))
 
-  expect_equal(get_info(my_layout, "gap"), default_gap_size)
+  expect_equal(get_info(my_layout, "gap_size"), default_gap_size)
 })
 
 test_that("Default row sizes react properly to auto-height container", {

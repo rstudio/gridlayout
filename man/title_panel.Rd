@@ -14,8 +14,8 @@ title_panel(
 )
 }
 \arguments{
-\item{area}{Name of grid area, should match an area defined in the layout section
-of the wrapping \code{grid_page()} or \code{grid_container()}.}
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{title}{An application title to display.}
 

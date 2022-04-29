@@ -16,7 +16,7 @@ test_that("Basic table works", {
   expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr", "1fr"))
 
-  expect_equal(get_info(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap_size"),
                default_gap_size)
 })
 
@@ -29,7 +29,7 @@ test_that("Can put gap size in upper left", {
       |1fr   |sidebar |plot_b |plot_b |"
   )
 
-  expect_equal(get_info(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap_size"),
                "2rem")
 })
 

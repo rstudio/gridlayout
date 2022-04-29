@@ -134,7 +134,7 @@ build_mobile_alternate_layout <- function(layout) {
 
   # Now make the single column full width and leave gap as same as main
   items_matrix <- rbind(
-    c(get_info(layout, "gap"), '1fr'),
+    c(get_info(layout, "gap_size"), '1fr'),
     items_matrix
   )
 

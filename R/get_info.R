@@ -32,7 +32,7 @@ dump_all_info <- function(x) {
     grid = list(
       rows =  get_info(x, "row_sizes"),
       cols = get_info(x, "col_sizes"),
-      gap = get_info(x, "gap")
+      gap = get_info(x, "gap_size")
     ),
     elements = get_elements(x)
   )

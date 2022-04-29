@@ -26,10 +26,6 @@ layout.}
 column in your grid as given by \code{layout_mat}. If a single value is passed,
 it will be repeated for all columns.}
     \item{\code{row_sizes}}{Same as \code{col_sizes}, but for row heights.}
-    \item{\code{gap}}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;}
     \item{\code{container_height}}{Valid css unit determining how tall the containing
 element should be for this layout. Defaults to \code{"viewport"} (full page
 height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.

@@ -7,7 +7,7 @@ test_that("Alternate layouts can be added for different sized screens", {
       | plota  | plotb  |",
     col_sizes = c("1fr", "2fr"),
     row_sizes = c("100px", "1fr"),
-    gap = "2rem"
+    gap_size = "2rem"
   )
 
   mobile_layout <- new_gridlayout(
@@ -17,7 +17,7 @@ test_that("Alternate layouts can be added for different sized screens", {
       |plotb |",
     col_sizes = c("1fr"),
     row_sizes = c("100px", "400px", "500px"),
-    gap = "2rem"
+    gap_size = "2rem"
   )
 
   main_w_alternate <- add_alternate_layout(

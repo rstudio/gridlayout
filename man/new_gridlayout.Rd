@@ -8,7 +8,7 @@ new_gridlayout(
   layout_def = list(),
   col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
 )
@@ -23,11 +23,6 @@ column in your grid as given by \code{layout_mat}. If a single value is passed,
 it will be repeated for all columns.}
 
 \item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
-
-\item{gap}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;}
 
 \item{container_height}{Valid css unit determining how tall the containing
 element should be for this layout. Defaults to \code{"viewport"} (full page
@@ -46,6 +41,11 @@ when your page appears. See \code{\link[=add_alternate_layout]{add_alternate_lay
 alternate layouts are given a single-column layout will be automatically
 applied for mobile screens (viewports less than 600px wide). Set to \code{NULL}
 to avoid this.}
+
+\item{gap}{Valid css sizing for gap to be left between each element in your
+grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
+base text size of a page. E.g. setting font-size: 16px on the body element
+of a page means 1rem = 16px;}
 }
 \value{
 Object of class \code{"gridlayout"}
@@ -70,7 +70,7 @@ is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_grid
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plota  plotb 
-## Gap of 2rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -79,7 +79,7 @@ is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_grid
 ##     85px  header
 ##     350px plota 
 ##     350px plotb 
-##   Gap of 2rem. Total height of auto.
+##   Gap of 12px. Total height of auto.
 }
 }
 
@@ -96,7 +96,7 @@ follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plota  plotb 
-## Gap of 2rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -105,7 +105,7 @@ follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
 ##     85px  header
 ##     350px plota 
 ##     350px plotb 
-##   Gap of 2rem. Total height of auto.
+##   Gap of 12px. Total height of auto.
 }
 
 \emph{An important caveat of this style is it is not currently able to be detected
@@ -136,7 +136,7 @@ The same layout as declared above can be accomplished with the following:\if{htm
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
-## Gap of 2rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -145,7 +145,7 @@ The same layout as declared above can be accomplished with the following:\if{htm
 ##     85px  header
 ##     350px plot_a
 ##     350px plot_b
-##   Gap of 2rem. Total height of auto.
+##   Gap of 12px. Total height of auto.
 }
 }
 
@@ -183,7 +183,7 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
-## Gap of 2rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -192,7 +192,7 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
 ##     1fr header
 ##     1fr plot_a
 ##     1fr plot_b
-##   Gap of 2rem. Total height of viewport.
+##   Gap of 12px. Total height of viewport.
 }
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.
@@ -227,7 +227,7 @@ new_gridlayout(
       | plota  | plotb  |",
   col_sizes = c("1fr", "2fr"),
   row_sizes = c("100px", "1fr"),
-  gap = "2rem"
+  gap_size = "2rem"
 )
 
 }

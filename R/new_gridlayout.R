@@ -165,14 +165,14 @@
 #'       | plota  | plotb  |",
 #'   col_sizes = c("1fr", "2fr"),
 #'   row_sizes = c("100px", "1fr"),
-#'   gap = "2rem"
+#'   gap_size = "2rem"
 #' )
 #'
 new_gridlayout <- function(
   layout_def = list(),
   col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
 ) {
@@ -181,7 +181,7 @@ new_gridlayout <- function(
     layout_def = layout_def,
     col_sizes = col_sizes,
     row_sizes = row_sizes,
-    gap_size = gap,
+    gap_size = gap_size,
     container_height = container_height
   )
 
@@ -274,11 +274,10 @@ new_gridlayout_template <- function(
     # Use existing row and column heights unless they have been explicitly overridden
     col_sizes <- col_sizes %||% get_info(layout_def, "col_sizes")
     row_sizes <- row_sizes %||% get_info(layout_def, "row_sizes")
-    gap_size <- gap_size %||% get_info(layout_def, "gap")
+    gap_size <- gap_size %||% get_info(layout_def, "gap_size")
     container_height <- container_height %||% get_info(layout_def, "container_height")
     elements <- get_elements(layout_def)
 
-    # Get rid of existing alternate layouts
   } else if (is.list(layout_def)) {
     # Plain elements list is passed
     elements <- layout_def
@@ -389,7 +388,7 @@ new_gridlayout_template <- function(
       row_sizes = sizes$row,
       col_sizes = sizes$col,
       container_height = container_height,
-      gap = gap_size
+      gap_size = gap_size
     ),
     class = "gridlayout_template"
   )
@@ -424,7 +423,7 @@ format.gridlayout_template <- function(
 
   paste(
     indent_text(table_text),
-    "\nGap of ", italicize(get_info(x, "gap")), ".",
+    "\nGap of ", italicize(get_info(x, "gap_size")), ".",
     " Total height of ", italicize(get_info(x, "container_height")),".",
     sep = ""
   )
