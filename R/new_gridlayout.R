@@ -256,7 +256,7 @@ new_gridlayout_template <- function(
 
     layout_matrix <- if ("matrix" %in% class(layout_def)) {
       layout_def
-    } else if (length(layout_def) == 1L) {
+    } else if (is_md_table(layout_def)) {
       md_table_to_matrix(layout_def)
     } else {
       array_table_to_matrix(layout_def)
@@ -397,6 +397,13 @@ new_gridlayout_template <- function(
 
 is_gridlayout <- function(layout) {
   inherits(layout, "gridlayout")
+}
+
+# A markdown table is a single element character vector with pipes deliniating
+# the cells. If we don't check for the pipes we can't distinguish between a
+# single row array layout and and md table layout
+is_md_table <- function(layout_def){
+  length(layout_def) == 1L && str_detect(layout_def, "\\|")
 }
 
 as_gridlayout <- function(x){

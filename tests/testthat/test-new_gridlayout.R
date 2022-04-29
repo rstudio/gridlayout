@@ -151,6 +151,28 @@ test_that("Can use a character vector to avoid multiline strings", {
   )
 })
 
+test_that("Can distinguish between a single row array-based layout and a markdown table layout", {
+
+  parsed <- new_gridlayout(
+    c("A B")
+  )
+
+  expect_equal(
+    get_info(parsed, "col_sizes"),
+    c(default_col_size, default_col_size)
+  )
+  expect_equal(
+    get_info(parsed, "row_sizes"),
+    c(default_row_size_relative)
+  )
+  expect_equal(
+    get_info(parsed, "gap_size"),
+    c(default_gap_size)
+  )
+
+
+})
+
 test_that("Can initialize a layout with the element_list argument instead of a md table", {
   elements_w_overlap <- list(
     list(id = "header",  start_row = 1, end_row = 1, start_col = 1, end_col = 3),
