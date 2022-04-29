@@ -4,14 +4,12 @@ library(gridlayout)
 library(shiny)
 
 my_layout <- "
-|     |        |        |
-|-----|--------|--------|
-|1rem |1fr     |1fr     |
+|20px |1fr     |1fr     |
 |auto |header  |header  |
 |1fr  |nestedA |nestedB |"
 
 content_layout <- "
-|     |auto     |1fr         |
+|20px |auto     |1fr         |
 |auto |icon     |bin_chooser |
 |1fr  |settings |plot        |"
 
