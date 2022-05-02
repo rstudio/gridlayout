@@ -21,7 +21,7 @@ app <- shinyApp(
     layout = my_layout,
     theme = bslib::bs_theme(),
     grid_panel_text("header", "Nested grids", is_title = TRUE),
-    nested_grid_panel(
+    grid_panel_nested(
       area = "nestedA",
       layout = content_layout,
       R_logo,
@@ -40,14 +40,14 @@ app <- shinyApp(
         textOutput('current_bin_num')
       )
     ),
-    nested_grid_panel(
+    grid_panel_nested(
       area = 'nestedB',
       title = "Nested within a titled panel",
       layout = content_layout,
       R_logo,
       grid_panel_text("bin_chooser", "Bin Chooser L1", h_align = "center"),
       grid_panel_text("settings", "Settings L1", h_align = "center"),
-      nested_grid_panel(
+      grid_panel_nested(
         "plot",
         layout = content_layout,
         R_logo,

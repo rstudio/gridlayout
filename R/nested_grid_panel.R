@@ -27,7 +27,7 @@
 #'     grid_panel_text_c("A","A"),
 #'     grid_panel_text_c("B","B"),
 #'     grid_panel_text_c("C","C"),
-#'     nested_grid_panel(
+#'     grid_panel_nested(
 #'       "D",
 #'       layout = my_layout,
 #'       grid_panel_text_c("A","A2"),
@@ -39,7 +39,7 @@
 #'   server = function(input, output) {}
 #' )
 #' }
-nested_grid_panel <- function(
+grid_panel_nested <- function(
     area,
     layout,
     ...,

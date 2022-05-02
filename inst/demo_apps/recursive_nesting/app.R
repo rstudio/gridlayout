@@ -16,7 +16,7 @@ make_nested_panels <- function(level = 0) {
 
   is_nested <- level > 0
 
-  container_fn <- if (is_nested) nested_grid_panel else grid_page
+  container_fn <- if (is_nested) grid_panel_nested else grid_page
 
   container_fn(
     layout = new_gridlayout(
