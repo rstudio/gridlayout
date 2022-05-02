@@ -118,15 +118,16 @@ style, or to align the content of the card vertically or horizontally.</p>
   collapsible <span class="op">=</span> <span class="cn">TRUE</span>,
   scrollable <span class="op">=</span> <span class="cn">FALSE</span>,
   panel_id <span class="op">=</span> <span class="cn">NULL</span>,
-  panel_class <span class="op">=</span> <span class="fu">make_panel_classes</span><span class="op">(</span><span class="va">use_card_styles</span>, <span class="va">use_bslib_card_styles</span><span class="op">)</span>
+  panel_class <span class="op">=</span> <span class="fu">make_panel_classes</span><span class="op">(</span><span class="va">use_card_styles</span>, <span class="va">use_bslib_card_styles</span><span class="op">)</span>,
+  padding <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>area</dt>
-<dd><p>Name of grid area, should match an area defined in the layout section
-of the wrapping <code><a href="grid_page.html">grid_page()</a></code> or <code><a href="grid_container.html">grid_container()</a></code>.</p></dd>
+<dd><p>Name of grid area, should match an area defined in the layout
+section of the wrapping <code><a href="grid_page.html">grid_page()</a></code> or <code><a href="grid_container.html">grid_container()</a></code>.</p></dd>
 <dt>...</dt>
 <dd><p>Elements to include within the panel</p></dd>
 <dt>v_align, h_align</dt>
@@ -162,6 +163,9 @@ the panel can be seen?</p></dd>
 <dd><p>Class(es) of <code>grid_panel</code> div. Like <code>panel_id</code> this is
 typically automatically generated and should only be touched in advanced
 usage.</p></dd>
+<dt>padding</dt>
+<dd><p>A valid css size that overrides the default of how much
+spacing is around the card contents</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -169,7 +173,7 @@ usage.</p></dd>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="title_panel.html">title_panel</a></p></div>
+    <div class="dont-index"><p><a href="grid_panel_text.html">grid_panel_text</a></p></div>
     </div>
 
     <div id="ref-examples">

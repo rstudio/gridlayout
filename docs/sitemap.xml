@@ -52,6 +52,15 @@
     <loc>/reference/grid_panel.html</loc>
   </url>
   <url>
+    <loc>/reference/grid_panel_nested.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_panel_stack.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_panel_text.html</loc>
+  </url>
+  <url>
     <loc>/reference/grided_create_new_app.html</loc>
   </url>
   <url>
@@ -70,6 +79,9 @@
     <loc>/reference/new_gridlayout.html</loc>
   </url>
   <url>
+    <loc>/reference/pipe.html</loc>
+  </url>
+  <url>
     <loc>/reference/run_with_grided.html</loc>
   </url>
   <url>
@@ -83,6 +95,9 @@
   </url>
   <url>
     <loc>/reference/to_css.html</loc>
+  </url>
+  <url>
+    <loc>/reference/to_matrix.html</loc>
   </url>
   <url>
     <loc>/reference/to_md.html</loc>
