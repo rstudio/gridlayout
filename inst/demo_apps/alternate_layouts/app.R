@@ -50,10 +50,7 @@ app <- shinyApp(
       v_align = "center",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_panel(
-      "plot",
-      plotOutput("distPlot", height = "100%")
-    )
+    grid_panel_plot("plot", "distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
