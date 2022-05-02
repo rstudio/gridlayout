@@ -7,7 +7,7 @@ test_that("Basic setup with all options filled works", {
     ",
     col_sizes = c("1fr", "2fr"),
     row_sizes = c("100px", "1fr"),
-    gap = "2rem"
+    gap_size = "2rem"
   )
 
   expect_s3_class(my_layout, "gridlayout")
@@ -18,13 +18,10 @@ test_that("Basic setup with all options filled works", {
   expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr"))
 
-  expect_equal(get_info(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap_size"),
                "2rem")
 })
 
-test_that("Works with no values at all", {
-  expect_snapshot(new_gridlayout())
-})
 
 test_that("Sizing defaults work", {
 
@@ -38,13 +35,12 @@ test_that("Sizing defaults work", {
   expect_s3_class(my_layout, "gridlayout")
 
   expect_equal(get_info(my_layout, "col_sizes"),
-               c("1fr", "1fr"))
+               c(default_col_size, default_col_size))
 
   expect_equal(get_info(my_layout, "row_sizes"),
-               c("1fr", "1fr"))
+               c(default_row_size_relative, default_row_size_relative))
 
-  expect_equal(get_info(my_layout, "gap"),
-               "1rem")
+  expect_equal(get_info(my_layout, "gap_size"), default_gap_size)
 })
 
 test_that("Default row sizes react properly to auto-height container", {
@@ -144,8 +140,8 @@ test_that("Can use a character vector to avoid multiline strings", {
   expect_equal(
     new_gridlayout(
       c(
-        "| header | header |",
-        "| plota  | plotb  |"
+        "header header",
+        "plota  plotb"
       )
     ),
     new_gridlayout(
@@ -153,6 +149,28 @@ test_that("Can use a character vector to avoid multiline strings", {
        | plota  | plotb  |"
     )
   )
+})
+
+test_that("Can distinguish between a single row array-based layout and a markdown table layout", {
+
+  parsed <- new_gridlayout(
+    c("A B")
+  )
+
+  expect_equal(
+    get_info(parsed, "col_sizes"),
+    c(default_col_size, default_col_size)
+  )
+  expect_equal(
+    get_info(parsed, "row_sizes"),
+    c(default_row_size_relative)
+  )
+  expect_equal(
+    get_info(parsed, "gap_size"),
+    c(default_gap_size)
+  )
+
+
 })
 
 test_that("Can initialize a layout with the element_list argument instead of a md table", {

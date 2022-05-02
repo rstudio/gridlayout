@@ -1,55 +1,59 @@
 .grid_panel {
   --card-padding: 0.8rem;
+  --card-corner-radius: 0.5rem;
+  --card-box-shadow: unset;
+  --card-outline-color: rgb(175, 174, 174);
+  --card-outline-width: 1px;
+  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
+
   box-sizing: border-box;
   overflow: hidden;
   display: grid;
-  grid-template-areas: "title"
-                       "content";
+  grid-template-areas:
+    "title"
+    "content";
   /* The content-height variable gets over-written to enable collapsible cards*/
   /* When there's no title the column will dissapear */
   grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
 }
 
-  /* If we just use 1fr for the content, then it can
-     sometimes overflow and cause the cell to be larger
-     than it should. Not totally sure why but this
-     css-tricks article contained the solution:
-     https://css-tricks.com/preventing-a-grid-blowout/ */
+/* Only set card styles if we're not using the bslib card component */
+.grid_panel:not(.card) {
+  box-shadow: var(--card-box-shadow);
+  border-radius: var(--card-corner-radius);
+  outline: var(--card-outline);
+}
+
+/* If we just use 1fr for the content, then it can
+sometimes overflow and cause the cell to be larger
+than it should. Not totally sure why but this
+css-tricks article contained the solution:
+https://css-tricks.com/preventing-a-grid-blowout/ */
 .grid_panel * {
   min-width: 0;
 }
 
+/* --- Optional Title Bar ----------------------------------- */
 .grid_panel .title-bar {
   grid-area: title;
   display: flex;
   justify-content: start;
   align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.125);
-  padding: calc(var(--card-padding)/2) var(--card-padding);
+  border-bottom: 1px solid var(--card-outline-color);
+  padding: calc(var(--card-padding) / 2) var(--card-padding);
 }
+
 .grid_panel .title-bar > h3 {
   margin: 0;
   height: 100%;
 }
 
+/* --- Panel Content ---------------------------------------- */
+/* This is the div that actually holds the children of the panel */
+
 .panel-content {
-  margin: var(--card-padding);
+  padding: var(--card-padding);
   grid-area: content;
-  flex-direction: column;
-}
-
-.grid_panel.vertical_stack .panel-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/*
-  Add a margin to the bottom of each element except the last. This essentially
-  replicates the gap property but has better browser support
-*/
-.grid_panel.vertical_stack .panel-content > *:not(:last-child) {
-  margin-bottom: var(--item-gap, 1rem);
 }
 
 .grid_panel .shiny-plot-output > img {
@@ -69,13 +73,10 @@
   max-height: 100%;
 }
 
-/* Only set card styles if we're not using the bslib card component */
-.grid_panel:not(.card) {
-  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-  border-radius: 0.5rem;
-}
+/* --- Collapsing ------------------------------------------ */
+/* Panels that can be collapsed control their size with a toggle switch */
 
-.grid_panel.collapsed  {
+.grid_panel.collapsed {
   /* If panel is not collapsible this css variable is defined as "block"
      which means that a panel that has been collapsed, and then resized
      to a scenario where it cant be collapsed, it will pop back
@@ -84,7 +85,6 @@
   height: var(--collapsed-panel-height);
   overflow: var(--collapsed-panel-overflow);
 }
-
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */
@@ -97,6 +97,27 @@
 .grid_panel.collapsed .collapser-icon svg {
   transform: scaleY(-1);
 }
+
+/* --- Vertical Stack Panels -------------------------------- */
+/* These are panels that have a column-flex layout for nicely stacking a bunch
+of children on top of eachother */
+.grid_panel.vertical_stack .panel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*
+  Add a margin to the bottom of each element except the last. This essentially
+  replicates the gap property but has better browser support
+*/
+.grid_panel.vertical_stack .panel-content > *:not(:last-child) {
+  margin-bottom: var(--item-gap, 1rem);
+}
+
+/* --- Text Panels -------------------------------- */
+/* A special panel that simply holds some text (and optional icon) that can be
+aligned easily */
 
 /* Make everything line up nice and cleanly like it should in the middle */
 .text_panel {
@@ -114,8 +135,17 @@
   margin: 0 5px;
 }
 
+/* --- Tabset Panel work -------------------------------- */
 /* Makes it so tabpanels work in gridpanels */
-.grid_panel .tabbable { height: 100% }
-.grid_panel .tabbable > .nav { height: 42px; }
-.grid_panel .tabbable .tab-content { height: calc(100% - 42px); }
-.grid_panel .tabbable .tab-pane { height: 100%; }
+.grid_panel .tabbable {
+  height: 100%;
+}
+.grid_panel .tabbable > .nav {
+  height: 42px;
+}
+.grid_panel .tabbable .tab-content {
+  height: calc(100% - 42px);
+}
+.grid_panel .tabbable .tab-pane {
+  height: 100%;
+}

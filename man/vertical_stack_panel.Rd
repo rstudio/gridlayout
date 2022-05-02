@@ -15,8 +15,8 @@ vertical_stack_panel(
 )
 }
 \arguments{
-\item{area}{Name of grid area, should match an area defined in the layout section
-of the wrapping \code{grid_page()} or \code{grid_container()}.}
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{...}{Elements to include within the panel}
 

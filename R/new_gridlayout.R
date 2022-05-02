@@ -10,9 +10,23 @@
 #'  There are three current ways to declare layouts (aka inputs to
 #'  `layout_def`).
 #'
+#'  ## Array tables
+#'
+#'  The easiest and cleanest way to declare your layout is to use an array where
+#'  each row is an element and each column is separated by spaces. This allows
+#'  you to easily visually align your layouts that look good even if your code
+#'  is re-formated.
+#'
+#'  ```{r}
+#'  new_gridlayout(
+#'   c("header header",
+#'     "plota  plotb")
+#'  )
+#'  ```
+#'
 #'  ## Markdown tables
 #'
-#'  The first is the easiest: a markdown table wrapped in a character string. In
+#'  You can also use a markdown table wrapped in a single character string. In
 #'  this format you define a grid using the table and then place your grid
 #'  "elements" within that grid using their grid id. So for a 2x2 layout with a
 #'  header along the top and two plots side-by-side the layout would look as
@@ -24,15 +38,6 @@
 #'     | plota  | plotb  |" )
 #'  ```
 #'
-#'  To avoid multi-line strings and the indentation trouble they can cause,
-#'  you can also supply your table as a character vector where each element
-#'  corresponds to a row in your table:
-#'
-#'  ```{r}
-#'  new_gridlayout(c(
-#'    "| header | header |",
-#'    "| plota  | plotb  |" ))
-#'  ```
 #'
 #'  _An important caveat of this style is it is not currently able to be detected
 #'  using the "edit current layout" grided addin._
@@ -105,14 +110,14 @@
 #' @param layout_def Either a list of elements with the `id`, `start_row`,
 #'  `end_row`, `start_col`, and `end_col` format, or a markdown table defining a
 #'  layout.
-#' @param col_sizes A character vector of valid css sizes for the width of each
-#'  column in your grid as given by `layout_mat`. If a single value is passed,
-#'  it will be repeated for all columns.
-#' @param row_sizes Same as `col_sizes`, but for row heights.
-#' @param gap Valid css sizing for gap to be left between each element in your
-#'  grid. Defaults to `"1rem"`. This is a relative unit that scales with the
-#'  base text size of a page. E.g. setting font-size: 16px on the body element
-#'  of a page means 1rem = 16px;
+#' @param row_sizes A character vector of valid css sizes for the height of each
+#'  row in your grid as given by the main layout definition. If a single value
+#'  is passed, it will be repeated for all columns. If sizes are provided both
+#'  here and in the main layout then these sizes will be the ones used.
+#' @param col_sizes Same as `row_sizes`, but for column widths
+#' @param gap_size Valid css sizing for gap to be left between each element in your
+#'  grid. Like `row_sizes` and `col_sizes`, this will win-out over a gap size
+#'  provided in the main layout table.
 #' @param container_height Valid css unit determining how tall the containing
 #'  element should be for this layout. Defaults to `"viewport"` (full page
 #'  height: equivalent to the CSS value of `100vh`) if any relative units (e.g.
@@ -160,14 +165,14 @@
 #'       | plota  | plotb  |",
 #'   col_sizes = c("1fr", "2fr"),
 #'   row_sizes = c("100px", "1fr"),
-#'   gap = "2rem"
+#'   gap_size = "2rem"
 #' )
 #'
 new_gridlayout <- function(
   layout_def = list(),
-  col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  col_sizes = NULL,
+  gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
 ) {
@@ -176,7 +181,7 @@ new_gridlayout <- function(
     layout_def = layout_def,
     col_sizes = col_sizes,
     row_sizes = row_sizes,
-    gap = gap,
+    gap_size = gap_size,
     container_height = container_height
   )
 
@@ -191,8 +196,9 @@ new_gridlayout <- function(
     class = "gridlayout"
   )
 
-  # Dont make an alternate layout if the user has specifically told us not to or
-  # we have an empty grid (like is used in grided initialization)
+
+  # Don't make an alternate layout if the user has specifically told us not to
+  # or we have an empty grid (like is used in grided initialization)
   if (is.null(alternate_layouts) || length(elements) == 0) return(layout)
 
   if (identical(alternate_layouts, "auto")) {
@@ -213,7 +219,7 @@ new_gridlayout <- function(
     for (alternate in alternate_layouts) {
       if (is.null(alternate$layout)) {
         stop(
-          "Altnernate layouts need to be provided as a list with ",
+          "Alternate layouts need to be provided as a list with ",
           "a layout element along with width bounds."
         )
       }
@@ -230,46 +236,58 @@ new_gridlayout <- function(
   layout
 }
 
+default_row_size_fixed <- 'auto'
+default_row_size_relative <- '1fr'
+default_col_size <- "1fr"
+default_gap_size <- "12px"
+
 new_gridlayout_template <- function(
   layout_def = list(),
   col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  gap_size = NULL,
   container_height = NULL
 ) {
+
   elements <- list()
+
   # Figure out what type of layout definition we were passed
   if (is.character(layout_def)) {
-    # Is the layout def a single multi-line string containing the table? If it
-    # is we need to split it by rows
-    if (length(layout_def) == 1L && str_detect(layout_def, pattern = "\n", fixed = TRUE)) {
-      layout_def <- split_by_line(layout_def)
+
+    layout_matrix <- if ("matrix" %in% class(layout_def)) {
+      layout_def
+    } else if (is_md_table(layout_def)) {
+      md_table_to_matrix(layout_def)
+    } else {
+      array_table_to_matrix(layout_def)
     }
-    # MD table representation
-    layout_info <- parse_md_table_layout(
-      layout_def,
-      col_sizes = col_sizes,
-      row_sizes = row_sizes,
-      gap = gap
-    )
+
+    layout_info <- parse_layout_matrix(layout_matrix)
+
     elements <- layout_info$elements
-    col_sizes <- layout_info$col_sizes
-    row_sizes <- layout_info$row_sizes
-    gap <- layout_info$gap
-  } else if (class(layout_def) == "gridlayout") {
+    col_sizes <- col_sizes %||% layout_info$column_sizes
+    row_sizes <- row_sizes %||% layout_info$row_sizes
+    gap_size <- gap_size %||% layout_info$gap_size
+
+  } else if (is_gridlayout(layout_def)) {
 
     # Use existing row and column heights unless they have been explicitly overridden
     col_sizes <- col_sizes %||% get_info(layout_def, "col_sizes")
     row_sizes <- row_sizes %||% get_info(layout_def, "row_sizes")
-    gap <- gap %||% get_info(layout_def, "gap")
+    gap_size <- gap_size %||% get_info(layout_def, "gap_size")
     container_height <- container_height %||% get_info(layout_def, "container_height")
     elements <- get_elements(layout_def)
 
-    # Get rid of existing alternate layouts
   } else if (is.list(layout_def)) {
-    # If an existing layout is passed its sizes can and container size etc can
-    # be modified
+    # Plain elements list is passed
     elements <- layout_def
+
+    # Fill in sizes if they werent passed as args
+    num_cols <- max(extract_dbl(elements, "start_col"))
+    col_sizes <- col_sizes %||% rep_len(default_col_size, num_cols)
+    num_rows <- max(extract_dbl(elements, "start_row"))
+    row_sizes <- row_sizes %||% rep_len(default_row_size_relative, num_cols)
+
   } else {
     stop(
       "Unknown layout definition type. ",
@@ -279,14 +297,21 @@ new_gridlayout_template <- function(
   }
 
   # Set defaults if unspecified
-  if (is.null(gap)) gap <- "1rem"
+  if (is.null(gap_size)) gap_size <- default_gap_size
 
   # If using default container_height and all the rows are definitely sized then
   # make container height auto. Otherwise use "viewport"
   if (is.null(container_height)) {
-    all_definite_row_sizes <- notNull(row_sizes) && all(!str_detect(row_sizes, "fr"))
-    container_height <- if (all_definite_row_sizes) "auto" else "viewport"
+    any_relative_row_sizes <- any(str_detect(row_sizes, "fr"))
+    no_specified_sizes <- all(row_sizes == DEFAULT_SIZE_CHAR)
+    container_height <- if (any_relative_row_sizes | no_specified_sizes) "viewport" else "auto";
   }
+
+
+  # Fill in the default values if they're missing
+  row_sizes <- replace_default_with_value(row_sizes, if(container_height == "viewport") default_row_size_relative else default_row_size_fixed)
+  col_sizes <- replace_default_with_value(col_sizes, default_col_size)
+  gap_size <- replace_default_with_value(gap_size, default_gap_size)
 
   empty_grid <- length(elements) == 0
 
@@ -294,8 +319,8 @@ new_gridlayout_template <- function(
   sizes <- map_name_val(
     list(row = row_sizes, col = col_sizes),
     function(dir, sizes) {
-      start_vals <- extract_dbl(elements, "start_" %+% dir)
-      end_vals <- extract_dbl(elements, "end_" %+% dir)
+      start_vals <- extract_dbl(elements, paste0("start_", dir))
+      end_vals <- extract_dbl(elements, paste0("end_", dir))
       auto_sizing <- is.null(sizes)
 
       if (!is.atomic(sizes)) stop(dir, " sizes need to be an simple (atomic) character vector.")
@@ -363,16 +388,27 @@ new_gridlayout_template <- function(
       row_sizes = sizes$row,
       col_sizes = sizes$col,
       container_height = container_height,
-      gap = gap
+      gap_size = gap_size
     ),
     class = "gridlayout_template"
   )
 }
 
 
+is_gridlayout <- function(layout) {
+  inherits(layout, "gridlayout")
+}
+
+# A markdown table is a single element character vector with pipes deliniating
+# the cells. If we don't check for the pipes we can't distinguish between a
+# single row array layout and and md table layout
+is_md_table <- function(layout_def){
+  length(layout_def) == 1L && str_detect(layout_def, "\\|")
+}
+
 as_gridlayout <- function(x){
   if (is.character(x)) return(new_gridlayout(x))
-  if (inherits(x, "gridlayout")) return(x)
+  if (is_gridlayout(x)) return(x)
 
   stop("Cant coerce a variable of class ", class(x), " to gridlayout")
 }
@@ -394,7 +430,7 @@ format.gridlayout_template <- function(
 
   paste(
     indent_text(table_text),
-    "\nGap of ", italicize(get_info(x, "gap")), ".",
+    "\nGap of ", italicize(get_info(x, "gap_size")), ".",
     " Total height of ", italicize(get_info(x, "container_height")),".",
     sep = ""
   )

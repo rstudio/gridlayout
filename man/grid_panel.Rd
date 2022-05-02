@@ -15,12 +15,13 @@ grid_panel(
   collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
-  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
+  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles),
+  padding = NULL
 )
 }
 \arguments{
-\item{area}{Name of grid area, should match an area defined in the layout section
-of the wrapping \code{grid_page()} or \code{grid_container()}.}
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{...}{Elements to include within the panel}
 
@@ -56,6 +57,9 @@ the panel can be seen?}
 \item{panel_class}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
 typically automatically generated and should only be touched in advanced
 usage.}
+
+\item{padding}{A valid css size that overrides the default of how much
+spacing is around the card contents}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with \code{class = "grid_panel"} and vertical/horizontal alignment css applied.

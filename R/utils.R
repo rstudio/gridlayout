@@ -10,29 +10,17 @@ str_remove_all <- function(text, pattern){
   str_replace_all(text, pattern = pattern, replacement = "")
 }
 
-trim_leading <- function(text){
-  str_remove_all(text, pattern = "^\\s+")
-}
-
-trim_trailing <- function(text){
-  str_remove_all(text, pattern = "\\s+$")
-}
-
 str_trim <- function(text, side = c("both", "left", "right")){
   side <- match.arg(side, choices = c("both", "left", "right"))
   if(side == "both" | side == "left"){
-    text <- trim_leading(text)
+    text <-  str_remove_all(text, pattern = "^\\s+")
   }
   if(side == "both" | side == "right"){
-    text <- trim_trailing(text)
+    text <- str_remove_all(text, pattern = "\\s+$")
   }
   text
 }
 
-trim_vec <- function(vec, n_start = 1, n_end = n_start) {
-  # Trim off n elements from beginning and end of a vector
-  vec[seq.int(from = n_start+1, to = length(vec) - n_end)]
-}
 
 str_detect <- function(text, pattern, fixed = FALSE){
   grepl(pattern = pattern, x = text, perl = !fixed, fixed = fixed)
@@ -49,19 +37,8 @@ str_extract <- function(text, pattern){
   )
 }
 
-# String concatenation
-`%+%` <- function (lhs, rhs) paste0(lhs, rhs)
 
 collapse_w_space <- function(vec) { paste(vec, collapse = " ") }
-
-split_by_line <- function(text){
-  if (length(text) > 1 || !is.character(text)) stop("split_by_line() needs a single character element")
-  strsplit(text, split = "\n")[[1]]
-}
-
-collapse_by_newline <- function(text_vec){
-  paste(text_vec, collapse = "\n")
-}
 
 # Make text bold
 emph <- function(...) if(is_installed("crayon")) crayon::bold(...) else as.character(...)
@@ -116,17 +93,11 @@ map_name_val <- function(x, fn){
   Map(names(x), x, f = fn)
 }
 
-map_chr <- function(x, fn) {
-  vapply(X = x, FUN = fn, FUN.VALUE = character(1))
-}
 
 list_in_quotes <- function(name_ids){
   paste0("\"", name_ids, "\"", collapse = ", ")
 }
 
-arg_list_exprs <- function(...){
-  as.list(substitute(...()))
-}
 
 lag <- function(x, n = 1L, default = NA){
   new_vec <- c(rep(default, times = n), x)
@@ -138,36 +109,12 @@ lead <- function(x, n = 1L, default = NA){
   new_vec[seq(from = n + 1, to = length(x) + n)]
 }
 
-# Uses a default value if supplied argument is missing. Also checks to make sure
-# that the supplied argument fits some desired check
-validate_argument <- function(x, default = NULL, check_fn, check_fail_msg, using_default_msg){
-  if(missing(x)){
-    # If argument is missing, give if the default value with an optional message
-    # alerting the user the default value was used
-    if(!missing(using_default_msg)) message(using_default_msg)
-    default
-  } else {
-    # If argument is supplied, run the checking function on it to make sure it's
-    # valid before letting it through
-    if(!missing(check_fn) && !check_fn(x)) stop(check_fail_msg)
-    x
-  }
-}
-
-is_atomic_val <- function(x){
-  is.atomic(x) & (length(x) == 1)
-}
-
 notNull <- function(x) {
   !is.null(x)
 }
 
-notNA <- function(x) {
-  !is.na(x)
-}
-
 doesExist <- function(x) {
-  notNull(x) && notNA(x)
+  notNull(x) && !is.na(x)
 }
 
 hasName <- function(x, name) {
@@ -175,19 +122,12 @@ hasName <- function(x, name) {
 }
 
 `%||%` <- function(val, alt) {
-  if (is.null(val) || is.na(val)) alt else val
-}
-
-
-valid_css_unit_regex <- "^(auto|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|fr|ch|pt|pc|px|vh|vw|vmin|vmax))$"
-
-is_css_unit <- function(x){
-  grepl(pattern = valid_css_unit_regex, x)
+  if (all(is.null(val)) || all(is.na(val))) alt else val
 }
 
 # Taken from the shiny source
-validCssUnit <- function(x)
-{
+valid_css_unit_regex <- "^(auto|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|fr|ch|pt|pc|px|vh|vw|vmin|vmax))$"
+validCssUnit <- function(x) {
   # We use this alias for 100vh to make things a bit less confusing for users
   # who may not get that "vh" stands for viewheight etc.
   if (identical(x, "viewport")) {
@@ -200,7 +140,7 @@ validCssUnit <- function(x)
   if (is.character(x) && nchar(x) > 0 && gsub("\\d*", "", x) ==
       "")
     x <- as.numeric(x)
-  if (is.character(x) && !is_css_unit(x)) {
+  if (is.character(x) && !grepl(pattern = valid_css_unit_regex, x)) {
     stop("\"", x, "\" is not a valid CSS unit (e.g., \"100%\", \"400px\", \"auto\")")
   }
   else if (is.numeric(x)) {
@@ -231,20 +171,10 @@ unpixelify <- function(px_val) {
 }
 
 
-is_char_string <- function(x) {
-  is.character(x) && length(x) == 1L
-}
-
 is_installed <- function(package, version = NULL) {
   installed <- nzchar(system.file(package = package))
   if (is.null(version)) {
     return(installed)
   }
   installed && isTRUE(utils::packageVersion(package) >= version)
-}
-
-in_rstudio <- function(){
-  # If we have access to the rstudio api we can enable editor manipulation.
-  # Otherwise we should hide the update button to not confuse the user.
-  requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()
 }

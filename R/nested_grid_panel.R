@@ -52,6 +52,7 @@ nested_grid_panel <- function(
   grid_panel(
     area = area,
     title = title,
+    padding = "0",
     grid_container(
       layout = new_gridlayout(layout, container_height = "100%"),
       use_bslib_card_styles = use_bslib_card_styles,

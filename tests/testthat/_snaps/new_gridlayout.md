@@ -1,14 +1,3 @@
-# Works with no values at all
-
-    Code
-      new_gridlayout()
-    Output
-      gridlayout of 0 elements: 
-            1fr 1fr
-        1fr .   .  
-        1fr .   .  
-      Gap of 1rem. Total height of viewport.
-
 # Handles an explicit missing row provided with dots
 
     Code
@@ -20,7 +9,7 @@
         200px header header
         1fr   plota  plotb 
         2fr   .      .     
-      Gap of 1rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -29,7 +18,7 @@
           85px  header
           350px plota 
           350px plotb 
-        Gap of 1rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 ---
 
@@ -41,7 +30,7 @@
             200px  1fr    2fr
         1fr header header .  
         1fr plota  plotb  .  
-      Gap of 1rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -50,5 +39,5 @@
           85px  header
           350px plota 
           350px plotb 
-        Gap of 1rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 

@@ -118,29 +118,29 @@ layouts_have_same_elements <- function(layout_a, layout_b){
 
 build_mobile_alternate_layout <- function(layout) {
   element_ids <- get_element_ids(layout)
-  mobile_rows <- vapply(
+
+  items_matrix <- matrix(
     element_ids,
-    function(id) {
-      # Be smart about headers but everything else is 350px
-      if (id == "header") "85px" else "350px"
-    },
-    FUN.VALUE = character(1)
+    ncol = 1L
   )
 
+
+
+  # Fill in the row sizes trying to be smart about headers
+  items_matrix <- cbind(
+    ifelse(element_ids == "header", "85px", "350px"),
+    items_matrix
+  )
+
+  # Now make the single column full width and leave gap as same as main
+  items_matrix <- rbind(
+    c(get_info(layout, "gap_size"), '1fr'),
+    items_matrix
+  )
+
+
   mobile_layout <- new_gridlayout_template(
-    layout_def = lapply(
-      seq_along(element_ids),
-      function(i) {
-        list(
-          id = element_ids[[i]],
-          start_row = i,
-          end_row = i,
-          start_col = 1,
-          end_col = 1
-        )
-      }
-    ),
-    row_sizes = mobile_rows
+    layout_def = items_matrix
   )
 
   alternate <- list(

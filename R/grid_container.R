@@ -5,6 +5,7 @@
 #'
 #' @param id ID unique to this container (note that the HTML will be prefixed
 #'   with `grid-` to avoid namespace clashes)
+#' @inheritParams new_gridlayout
 #' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.
@@ -67,7 +68,10 @@ grid_container <- function(
   ...,
   id = NULL,
   use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE
+  flag_mismatches = TRUE,
+  row_sizes = NULL,
+  col_sizes = NULL,
+  gap_size = NULL
 ) {
 
   # Check to make sure we match all the names in the layout to all the names in
@@ -79,7 +83,12 @@ grid_container <- function(
   }
 
   # Make sure we're working with a layout
-  layout <- as_gridlayout(layout)
+  layout <- if (is_gridlayout(layout) ) layout else new_gridlayout(
+    layout_def = layout,
+    row_sizes = row_sizes,
+    col_sizes = col_sizes,
+    gap_size  = gap_size
+  )
 
 
   # In order to leave the id field open to users to do with as they please, we

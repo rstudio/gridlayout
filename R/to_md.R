@@ -107,7 +107,7 @@ to_table <- function(
   layout_mat <- apply(layout_mat, FUN = cell_align, MARGIN = 2)
   # Single row/col matrices get reverted to vectors here so force back to a matrix
   layout_mat <- matrix(layout_mat, nrow = num_rows, ncol = num_cols)
-  first_row <- c(if(include_gap_size) get_info(layout, "gap") else "", col_sizes)
+  first_row <- c(if(include_gap_size) get_info(layout, "gap_size") else "", col_sizes)
 
   layout_mat <- rbind(
     first_row,

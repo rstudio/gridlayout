@@ -7,8 +7,8 @@
 #' things you can customize are settings a specific element to use a given card
 #' style, or to align the content of the card vertically or horizontally.
 #'
-#' @param area Name of grid area, should match an area defined in the layout section
-#'   of the wrapping `grid_page()` or `grid_container()`.
+#' @param area Name of grid area, should match an area defined in the layout
+#'   section of the wrapping `grid_page()` or `grid_container()`.
 #' @param ... Elements to include within the panel
 #' @param title Character string to go across top of panel with label. If left
 #'   blank the card contents will take up entire space.
@@ -36,6 +36,8 @@
 #' @param panel_class Class(es) of `grid_panel` div. Like `panel_id` this is
 #'   typically automatically generated and should only be touched in advanced
 #'   usage.
+#' @param padding A valid css size that overrides the default of how much
+#'   spacing is around the card contents
 #'
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
@@ -97,7 +99,8 @@ grid_panel <- function(
   collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
-  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles)
+  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles),
+  padding = NULL
 ) {
   contents <- list(...)
 
@@ -105,7 +108,8 @@ grid_panel <- function(
     display = if (notNull(h_align) || notNull(v_align)) "grid",
     `justify-content` = if (notNull(h_align)) validate_alignment(h_align),
     `align-content` = if (notNull(v_align)) validate_alignment(v_align),
-    overflow = if (scrollable) "scroll"
+    overflow = if (scrollable) "scroll",
+    `--card-padding` = if(notNull(padding)) padding
   )
 
   has_title <- notNull(title)

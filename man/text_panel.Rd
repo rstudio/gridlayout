@@ -16,8 +16,8 @@ text_panel(
 )
 }
 \arguments{
-\item{area}{Name of grid area, should match an area defined in the layout section
-of the wrapping \code{grid_page()} or \code{grid_container()}.}
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{content}{Whatever you want the title to say. Typically just text but
 any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
@@ -50,6 +50,8 @@ mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justif
     \item{\code{panel_class}}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
 typically automatically generated and should only be touched in advanced
 usage.}
+    \item{\code{padding}}{A valid css size that overrides the default of how much
+spacing is around the card contents}
   }}
 
 \item{h_align}{Vertical and Horizontal alignment of content in panel.

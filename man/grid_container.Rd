@@ -9,7 +9,10 @@ grid_container(
   ...,
   id = NULL,
   use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE
+  flag_mismatches = TRUE,
+  row_sizes = NULL,
+  col_sizes = NULL,
+  gap_size = NULL
 )
 }
 \arguments{
@@ -33,6 +36,17 @@ manually on each panel.}
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}
+
+\item{row_sizes}{A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.}
+
+\item{col_sizes}{Same as \code{row_sizes}, but for column widths}
+
+\item{gap_size}{Valid css sizing for gap to be left between each element in your
+grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
+provided in the main layout table.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class

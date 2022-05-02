@@ -16,8 +16,8 @@ test_that("Basic table works", {
   expect_equal(get_info(my_layout, "row_sizes"),
                c("100px", "1fr", "1fr"))
 
-  expect_equal(get_info(my_layout, "gap"),
-               "1rem")
+  expect_equal(get_info(my_layout, "gap_size"),
+               default_gap_size)
 })
 
 test_that("Can put gap size in upper left", {
@@ -29,7 +29,7 @@ test_that("Can put gap size in upper left", {
       |1fr   |sidebar |plot_b |plot_b |"
   )
 
-  expect_equal(get_info(my_layout, "gap"),
+  expect_equal(get_info(my_layout, "gap_size"),
                "2rem")
 })
 
@@ -74,8 +74,7 @@ test_that("Nonsense will give a usefull error message", {
     new_gridlayout("## THis was an accidentally
     selected chunk of text
     that is not a table at all"
-    ),
-    "The provided text does not appear to be a markdown table.")
+    ))
 })
 
 
@@ -122,7 +121,7 @@ test_that("Markdown parsing -- Gap and row sizes", {
 test_that("Markdown parsing -- Only gap size", {
   expect_snapshot(
     new_gridlayout("
-|2rem  |        |       |
+|3rem  |        |       |
 |      |header  |header |
 |      |sidebar |plot   |"
     )

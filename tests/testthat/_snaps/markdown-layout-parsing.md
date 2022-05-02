@@ -17,7 +17,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 2rem. Total height of auto.
 
 # Markdown parsing -- Only row sizes
 
@@ -28,7 +28,7 @@
              1fr     1fr   
         80px header  header
         1fr  sidebar plot  
-      Gap of 1rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -37,7 +37,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 # Markdown parsing -- Only col sizes
 
@@ -48,7 +48,7 @@
             200px   1fr   
         1fr header  header
         1fr sidebar plot  
-      Gap of 1rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -57,7 +57,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 
 # Markdown parsing -- Gap and row sizes
 
@@ -78,19 +78,19 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 2rem. Total height of auto.
 
 # Markdown parsing -- Only gap size
 
     Code
       new_gridlayout(
-        "\n|2rem  |        |       |\n|      |header  |header |\n|      |sidebar |plot   |")
+        "\n|3rem  |        |       |\n|      |header  |header |\n|      |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
             1fr     1fr   
         1fr header  header
         1fr sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 3rem. Total height of viewport.
       
       Alternate layouts:  
         
@@ -99,7 +99,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 3rem. Total height of auto.
 
 # Markdown parsing -- Single column
 
@@ -121,7 +121,7 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 2rem. Total height of auto.
 
 # Markdown parsing -- Single row
 
@@ -140,7 +140,7 @@
                  1fr    
           85px  header 
           350px sidebar
-        Gap of 1rem. Total height of auto.
+        Gap of 2rem. Total height of auto.
 
 # Markdown parsing -- No sizes
 
@@ -151,7 +151,7 @@
             1fr     1fr   
         1fr header  header
         1fr sidebar plot  
-      Gap of 1rem. Total height of viewport.
+      Gap of 12px. Total height of viewport.
       
       Alternate layouts:  
         
@@ -160,5 +160,5 @@
           85px  header 
           350px sidebar
           350px plot   
-        Gap of 1rem. Total height of auto.
+        Gap of 12px. Total height of auto.
 

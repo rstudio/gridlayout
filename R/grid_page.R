@@ -58,7 +58,17 @@
 #'   }
 #' )
 #' }
-grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, flag_mismatches = TRUE, just_container = shiny::isRunning()){
+grid_page <- function(
+    layout,
+    ...,
+    row_sizes = NULL,
+    col_sizes = NULL,
+    gap_size = NULL,
+    use_bslib_card_styles = FALSE,
+    theme = NULL,
+    flag_mismatches = TRUE,
+    just_container = shiny::isRunning()
+  ){
 
   requireNamespace("shiny", quietly = TRUE)
 
@@ -67,7 +77,10 @@ grid_page <- function(layout, ..., use_bslib_card_styles = FALSE, theme = NULL, 
     layout = layout,
     ...,
     use_bslib_card_styles = use_bslib_card_styles,
-    flag_mismatches = flag_mismatches
+    flag_mismatches = flag_mismatches,
+    row_sizes = row_sizes,
+    col_sizes = col_sizes,
+    gap_size = gap_size
   )
 
   if (get_info(as_gridlayout(layout), "container_height") != "viewport") {

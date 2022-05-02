@@ -1,51 +1,44 @@
 library(gridlayout)
 library(shiny)
 library(fontawesome)
-my_layout <- "
-|     |     |       |       |
-|-----|-----|-------|-------|
-|10px |1fr  |5fr    |1fr    |
-|1fr  |top  |top    |right  |
-|5fr  |left |nested |right  |
-|1fr  |left |bottom |bottom |"
 
-depth <- 2
+max_depth <- 2
 
 emoji_panel <- function(area, emoji){
-  grid_panel(
+  text_panel(
     area = area,
-    div(
-      style = htmltools::css(
-        width = "100%", height = "100%",
-        display = "grid",
-        "font-size" = "2rem",
-        "place-content" = "center"),
-      emoji
-    )
+    h_align = 'center',
+    content = emoji
   )
 }
 
-make_nested_panels <- function(level = 1) {
-  nested_grid_panel(
-    area = "nested",
-    layout = my_layout,
-    id = paste0("level", level),
+make_nested_panels <- function(level = 0) {
+
+  is_nested <- level > 0
+
+  container_fn <- if (is_nested) nested_grid_panel else grid_page
+
+  container_fn(
+    layout = new_gridlayout(
+      c(
+        "top  top    right",
+        "left nested right",
+        "left bottom bottom"
+      ),
+      row_sizes = c("1fr", "5fr", "1fr"),
+      col_sizes = c("1fr", "5fr", "1fr"),
+      gap_size = "30px"
+    ),
     emoji_panel("top", "↓"),
     emoji_panel("bottom", "↑"),
     emoji_panel("left", "→"),
     emoji_panel("right", "←"),
-    if(level < depth) make_nested_panels(level + 1) else emoji_panel("nested", "🐢")
+    if(level < max_depth) make_nested_panels(level + 1) else emoji_panel("nested", "🐢"),
+    area = if(is_nested) "nested"
   )
 }
 
 shinyApp(
-  ui = grid_page(
-    layout = my_layout,
-    emoji_panel("top", "↓"),
-    emoji_panel("bottom", "↑"),
-    emoji_panel("left", "→"),
-    emoji_panel("right", "←"),
-    make_nested_panels()
-  ),
+  ui = make_nested_panels(),
   server = function(input, output) {}
 )

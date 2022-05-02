@@ -4,7 +4,7 @@
       make_nested_panels()
     Output
       <div class="grid_panel gridlayout-card" style="grid-area:nested;" data-gridlayout-area="nested">
-        <div class="panel-content">
+        <div style="--card-padding:0;" class="panel-content">
           <div id="level1" class="grid-container" data-gridlayout-key="level1">
             <div class="grid_panel gridlayout-card" style="grid-area:top;" data-gridlayout-area="top">
               <div class="panel-content">
@@ -27,7 +27,7 @@
               </div>
             </div>
             <div class="grid_panel gridlayout-card" style="grid-area:nested;" data-gridlayout-area="nested">
-              <div class="panel-content">
+              <div style="--card-padding:0;" class="panel-content">
                 <div id="level2" class="grid-container" data-gridlayout-key="level2">
                   <div class="grid_panel gridlayout-card" style="grid-area:top;" data-gridlayout-area="top">
                     <div class="panel-content">

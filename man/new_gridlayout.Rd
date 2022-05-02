@@ -6,9 +6,9 @@
 \usage{
 new_gridlayout(
   layout_def = list(),
-  col_sizes = NULL,
   row_sizes = NULL,
-  gap = NULL,
+  col_sizes = NULL,
+  gap_size = NULL,
   container_height = NULL,
   alternate_layouts = "auto"
 )
@@ -18,16 +18,16 @@ new_gridlayout(
 \code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
 layout.}
 
-\item{col_sizes}{A character vector of valid css sizes for the width of each
-column in your grid as given by \code{layout_mat}. If a single value is passed,
-it will be repeated for all columns.}
+\item{row_sizes}{A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.}
 
-\item{row_sizes}{Same as \code{col_sizes}, but for row heights.}
+\item{col_sizes}{Same as \code{row_sizes}, but for column widths}
 
-\item{gap}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;}
+\item{gap_size}{Valid css sizing for gap to be left between each element in your
+grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
+provided in the main layout table.}
 
 \item{container_height}{Valid css unit determining how tall the containing
 element should be for this layout. Defaults to \code{"viewport"} (full page
@@ -57,9 +57,35 @@ layout.
 \section{Declaring your layout}{
 There are three current ways to declare layouts (aka inputs to
 \code{layout_def}).
+\subsection{Array tables}{
+
+The easiest and cleanest way to declare your layout is to use an array where
+each row is an element and each column is separated by spaces. This allows
+you to easily visually align your layouts that look good even if your code
+is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
+ c("header header",
+   "plota  plotb")
+)
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plota  plotb 
+## Gap of 12px. Total height of viewport.
+## 
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plota 
+##     350px plotb 
+##   Gap of 12px. Total height of auto.
+}
+}
+
 \subsection{Markdown tables}{
 
-The first is the easiest: a markdown table wrapped in a character string. In
+You can also use a markdown table wrapped in a single character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
@@ -70,7 +96,7 @@ follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plota  plotb 
-## Gap of 1rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -79,28 +105,7 @@ follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
 ##     85px  header
 ##     350px plota 
 ##     350px plotb 
-##   Gap of 1rem. Total height of auto.
-}
-
-To avoid multi-line strings and the indentation trouble they can cause,
-you can also supply your table as a character vector where each element
-corresponds to a row in your table:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(c(
-  "| header | header |",
-  "| plota  | plotb  |" ))
-}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
-##       1fr    1fr   
-##   1fr header header
-##   1fr plota  plotb 
-## Gap of 1rem. Total height of viewport.
-## 
-## Alternate layouts:  
-##   
-##   - Width < 500px 
-##            1fr   
-##     85px  header
-##     350px plota 
-##     350px plotb 
-##   Gap of 1rem. Total height of auto.
+##   Gap of 12px. Total height of auto.
 }
 
 \emph{An important caveat of this style is it is not currently able to be detected
@@ -131,7 +136,7 @@ The same layout as declared above can be accomplished with the following:\if{htm
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
-## Gap of 1rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -140,7 +145,7 @@ The same layout as declared above can be accomplished with the following:\if{htm
 ##     85px  header
 ##     350px plot_a
 ##     350px plot_b
-##   Gap of 1rem. Total height of auto.
+##   Gap of 12px. Total height of auto.
 }
 }
 
@@ -178,7 +183,7 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
-## Gap of 1rem. Total height of viewport.
+## Gap of 12px. Total height of viewport.
 ## 
 ## Alternate layouts:  
 ##   
@@ -187,7 +192,7 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
 ##     1fr header
 ##     1fr plot_a
 ##     1fr plot_b
-##   Gap of 1rem. Total height of viewport.
+##   Gap of 12px. Total height of viewport.
 }
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.
@@ -222,7 +227,7 @@ new_gridlayout(
       | plota  | plotb  |",
   col_sizes = c("1fr", "2fr"),
   row_sizes = c("100px", "1fr"),
-  gap = "2rem"
+  gap_size = "2rem"
 )
 
 }

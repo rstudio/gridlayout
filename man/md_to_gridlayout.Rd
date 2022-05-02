@@ -22,14 +22,14 @@ table can be parsed instead of relying on it being parsable.}
     \item{\code{layout_def}}{Either a list of elements with the \code{id}, \code{start_row},
 \code{end_row}, \code{start_col}, and \code{end_col} format, or a markdown table defining a
 layout.}
-    \item{\code{col_sizes}}{A character vector of valid css sizes for the width of each
-column in your grid as given by \code{layout_mat}. If a single value is passed,
-it will be repeated for all columns.}
-    \item{\code{row_sizes}}{Same as \code{col_sizes}, but for row heights.}
-    \item{\code{gap}}{Valid css sizing for gap to be left between each element in your
-grid. Defaults to \code{"1rem"}. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;}
+    \item{\code{row_sizes}}{A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.}
+    \item{\code{col_sizes}}{Same as \code{row_sizes}, but for column widths}
+    \item{\code{gap_size}}{Valid css sizing for gap to be left between each element in your
+grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
+provided in the main layout table.}
     \item{\code{container_height}}{Valid css unit determining how tall the containing
 element should be for this layout. Defaults to \code{"viewport"} (full page
 height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
