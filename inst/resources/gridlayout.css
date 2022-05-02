@@ -120,18 +120,18 @@ of children on top of eachother */
 aligned easily */
 
 /* Make everything line up nice and cleanly like it should in the middle */
-.text_panel {
+.grid_panel_text {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
 }
 /* Everything should be inline so lining up works properly */
-.text_panel * {
+.grid_panel_text * {
   display: inline;
 }
 /* Make sure logo isn't right up next to the text */
-.text_panel > * {
+.grid_panel_text > * {
   margin: 0 5px;
 }
 

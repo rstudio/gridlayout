@@ -5,7 +5,7 @@ library(fontawesome)
 max_depth <- 2
 
 emoji_panel <- function(area, emoji){
-  text_panel(
+  grid_panel_text(
     area = area,
     h_align = 'center',
     content = emoji

@@ -42,7 +42,7 @@
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
 #'
-#' @seealso [text_panel]
+#' @seealso [grid_panel_text]
 #' @export
 #'
 #' @examples

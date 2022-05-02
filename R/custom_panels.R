@@ -26,29 +26,29 @@
 #' @examples
 #'
 #' # Typically you'll just pass a character string to the function
-#' text_panel(area = "header", "This is my header")
+#' grid_panel_text(area = "header", "This is my header")
 #'
 #' # Icons from `fontawesome` can be used:
 #'
 #' # Either with just the id
-#' text_panel(area = "header", "Here's my text", icon = "r-project")
+#' grid_panel_text(area = "header", "Here's my text", icon = "r-project")
 #'
 #' # Or by directly passing the icon object if you want more customization
-#' text_panel(
+#' grid_panel_text(
 #'   "header",
 #'   "Here's my text",
 #'   icon = fontawesome::fa("r-project", fill = "steelblue")
 #' )
 #'
 #' # You can also pass arbitrary image locations for the icon
-#' text_panel(
+#' grid_panel_text(
 #'   "header",
 #'   "Here's my text",
 #'   icon = "https://cran.r-project.org/Rlogo.svg"
 #' )
 #'
 #' # These images can have their size controlled
-#' text_panel(
+#' grid_panel_text(
 #'   "header",
 #'   "Here's my text",
 #'   icon = "https://cran.r-project.org/Rlogo.svg",
@@ -56,13 +56,13 @@
 #' )
 #'
 #' # You can adjust the horizontal alignment of your header with h_align
-#' text_panel("I'm in the middle", h_align = "center")
+#' grid_panel_text("I'm in the middle", h_align = "center")
 #'
 #' # Commonly you may want to use the text panel text as the title of your app
-#' text_panel(area = "header", "My App Name", is_title = TRUE)
+#' grid_panel_text(area = "header", "My App Name", is_title = TRUE)
 #'
 #' @export
-text_panel <- function(
+grid_panel_text <- function(
   area,
   content = NULL,
   ...,
@@ -98,7 +98,7 @@ text_panel <- function(
         icon,
         content
       ),
-      class = "text_panel"
+      class = "grid_panel_text"
     ),
     v_align = "center",
     h_align = h_align,

@@ -13,14 +13,14 @@ content_layout <- "
 |auto |icon     |bin_chooser |
 |1fr  |settings |plot        |"
 
-R_logo <- text_panel(area = "icon", icon = "r-project", h_align = "center")
+R_logo <- grid_panel_text(area = "icon", icon = "r-project", h_align = "center")
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    text_panel("header", "Nested grids", is_title = TRUE),
+    grid_panel_text("header", "Nested grids", is_title = TRUE),
     nested_grid_panel(
       area = "nestedA",
       layout = content_layout,
@@ -45,15 +45,15 @@ app <- shinyApp(
       title = "Nested within a titled panel",
       layout = content_layout,
       R_logo,
-      text_panel("bin_chooser", "Bin Chooser L1", h_align = "center"),
-      text_panel("settings", "Settings L1", h_align = "center"),
+      grid_panel_text("bin_chooser", "Bin Chooser L1", h_align = "center"),
+      grid_panel_text("settings", "Settings L1", h_align = "center"),
       nested_grid_panel(
         "plot",
         layout = content_layout,
         R_logo,
-        text_panel("bin_chooser", "Bin Chooser L2", h_align = "center"),
-        text_panel("settings", "Settings L2", h_align = "center"),
-        text_panel("plot", "Plot", h_align = "center")
+        grid_panel_text("bin_chooser", "Bin Chooser L2", h_align = "center"),
+        grid_panel_text("settings", "Settings L2", h_align = "center"),
+        grid_panel_text("plot", "Plot", h_align = "center")
       )
     )
   ),

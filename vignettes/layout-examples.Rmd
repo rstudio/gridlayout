@@ -82,7 +82,7 @@ app_w_layout <- function(my_layout) {
   shinyApp(
     ui = grid_page(
       layout = my_layout,
-      text_panel("header", "My gridlayout app"),
+      grid_panel_text("header", "My gridlayout app"),
       grid_panel(
         "chickens",
         tabsetPanel(
@@ -244,7 +244,7 @@ The following code is the UI definition used for all the screenshots. The only t
 ```{r, eval = FALSE, echo = TRUE}
 ui <- grid_page(
   layout = my_layout,
-  text_panel("header", "My gridlayout app"),
+  grid_panel_text("header", "My gridlayout app"),
   grid_panel(
     "chickens",
     tabsetPanel(
