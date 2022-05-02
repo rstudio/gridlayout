@@ -35,7 +35,7 @@ app <- shinyApp(
         area = "plot",
         plotOutput("distPlot", height="100%")
       ),
-      vertical_stack_panel(
+      grid_panel_stack(
         area = "settings",
         textOutput('current_bin_num')
       )
