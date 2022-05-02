@@ -17,9 +17,9 @@ shinyApp(
       |80px  |header     |
       |400px |chickPlot  |
       |200px |stockTable |"),
-    title_panel(area="header", "Scrollable panels"),
+    text_panel("header", "Scrollable panels", is_title = TRUE),
     grid_panel(
-      area="chickPlot",
+      "chickPlot",
       plotOutput("chickPlot", height = "600px"),
       scrollable = TRUE
     ),

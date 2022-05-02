@@ -80,13 +80,12 @@ bookmark the app etc..}
 }
 \description{
 Makes a grid_panel that contains just text that is vertically centered within
-the panel. Useful for titles (see \code{\link[=title_panel]{title_panel()}}) or displaying text-based
-statistics.
+the panel. Useful for app titles or displaying text-based statistics.
 }
 \examples{
 
 # Typically you'll just pass a character string to the function
-title_panel(area = "header", "This is my header")
+text_panel(area = "header", "This is my header")
 
 # Icons from `fontawesome` can be used:
 

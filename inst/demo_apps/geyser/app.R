@@ -16,7 +16,7 @@ app <- shinyApp(
     gap_size = "2rem",
     theme = bslib::bs_theme(),
     use_bslib_card_styles = TRUE,
-    title_panel("header", "This is my header"),
+    text_panel("header", "This is my header", is_title = TRUE),
     grid_panel(
       "sidebar",
       title = "Settings",

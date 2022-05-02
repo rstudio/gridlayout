@@ -2,8 +2,7 @@
 #' Panel just containing text
 #'
 #' Makes a grid_panel that contains just text that is vertically centered within
-#' the panel. Useful for titles (see [title_panel()]) or displaying text-based
-#' statistics.
+#' the panel. Useful for app titles or displaying text-based statistics.
 #'
 #' @inheritParams grid_panel
 #' @inheritDotParams grid_panel -h_align
@@ -27,7 +26,7 @@
 #' @examples
 #'
 #' # Typically you'll just pass a character string to the function
-#' title_panel(area = "header", "This is my header")
+#' text_panel(area = "header", "This is my header")
 #'
 #' # Icons from `fontawesome` can be used:
 #'
@@ -105,54 +104,5 @@ text_panel <- function(
     h_align = h_align,
     ...,
     if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
-  )
-}
-
-#' Make header panel
-#'
-#' This is just a helper function that wraps your content in a vertically
-#' centered header (`h2`) tag via the [text_panel()] function. Also adds the
-#' apps content to the `title` metatag of your webpage so it shows up properly
-#' in tabs etc.. Modeled after [shiny::titlePanel()].
-#'
-#' @param title An application title to display.
-#' @param windowTitle The title that should be displayed by the browser window.
-#' @inheritParams text_panel
-#'
-#' @seealso [text_panel]
-#'
-#' @examples
-#'
-#' # Simple app title
-#' title_panel(area = "header", "My App")
-#'
-#' # Centered title
-#' title_panel("header", "My App (in the center)", h_align = "center")
-#'
-#' # Can have a logo
-#' title_panel("footer", "My App", icon = "https://cran.r-project.org/Rlogo.svg")
-#'
-#' @export
-title_panel <- function(
-  area,
-  title,
-  windowTitle = title,
-  h_align = "start",
-  img_height = "55px",
-  icon = NULL
-) {
-
-  if (!is.character(windowTitle)) {
-    stop("Title needs to be a plain character")
-  }
-
-  text_panel(
-    area = area,
-    content = title,
-    icon = icon,
-    wrapping_tag = htmltools::h2,
-    h_align = h_align,
-    img_height = img_height,
-    htmltools::tags$head(htmltools::tags$title(windowTitle))
   )
 }

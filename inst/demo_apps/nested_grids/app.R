@@ -20,7 +20,7 @@ app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    title_panel("header", "Nested grids"),
+    text_panel("header", "Nested grids", is_title = TRUE),
     nested_grid_panel(
       area = "nestedA",
       layout = content_layout,

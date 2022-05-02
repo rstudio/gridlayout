@@ -117,5 +117,5 @@ shinyApp(
 
 }
 \seealso{
-\link{title_panel}
+\link{text_panel}
 }
