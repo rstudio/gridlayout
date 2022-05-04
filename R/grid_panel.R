@@ -115,15 +115,6 @@ grid_panel <- function(
   has_title <- notNull(title)
   use_collapser <- collapsible && has_title
 
-  # Go through and make sure plots that don't have custom sizes are set to fill their panels
-  panel_content <-  shiny::div(contents, style = panel_styles, class = "panel-content")
-  # panel_content <- htmltools::tagQuery(
-  #   shiny::div(contents, style = panel_styles, class = "panel-content")
-  # )$
-  #   find(".shiny-plot-output")$
-  #   each(update_default_sized_plots)$
-  #   allTags()
-
   shiny::div(
     id = panel_id,
     class = panel_class,
