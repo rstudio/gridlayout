@@ -128,7 +128,7 @@ grid_panel <- function(
         style = if (use_collapser) "justify-content: space-between;"
       )
     },
-    panel_content
+    shiny::div(contents, style = panel_styles, class = "panel-content")
   )
 }
 
