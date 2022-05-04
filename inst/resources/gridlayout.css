@@ -5,7 +5,9 @@
   --card-outline-color: rgb(175, 174, 174);
   --card-outline-width: 1px;
   --card-outline: var(--card-outline-width) solid var(--card-outline-color);
+  --card-background: unset;
 
+  background-color: var(--card-background);
   box-sizing: border-box;
   overflow: hidden;
   display: grid;
