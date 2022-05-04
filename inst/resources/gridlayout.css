@@ -33,6 +33,7 @@ css-tricks article contained the solution:
 https://css-tricks.com/preventing-a-grid-blowout/ */
 .grid_panel * {
   min-width: 0;
+  min-height:0;
 }
 
 /* --- Optional Title Bar ----------------------------------- */

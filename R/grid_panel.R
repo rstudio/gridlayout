@@ -106,8 +106,8 @@ grid_panel <- function(
 
   panel_styles <- htmltools::css(
     display = if (notNull(h_align) || notNull(v_align)) "grid",
-    `justify-content` = if (notNull(h_align)) validate_alignment(h_align),
-    `align-content` = if (notNull(v_align)) validate_alignment(v_align),
+    `justify-items` = if (notNull(h_align)) validate_alignment(h_align),
+    `align-items` = if (notNull(v_align)) validate_alignment(v_align),
     overflow = if (scrollable) "scroll",
     `--card-padding` = if(notNull(padding)) padding
   )
