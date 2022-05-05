@@ -132,6 +132,8 @@ grid_panel <- function(
   )
 }
 
+
+
 # Build the class list for the panel based on the desired card styles
 make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
   card_styling_class <- if (use_bslib_card_styles) {
@@ -173,6 +175,10 @@ validate_alignment <- function(arg_val) {
 
   if (!arg_val %in% align_options) {
     stop("Alignment argument must be one of ", paste(align_options, collapse = ", "))
+  }
+
+  if (arg_val == "spread") {
+    return ("space-evenly")
   }
 
   arg_val
