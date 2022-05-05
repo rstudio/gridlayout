@@ -5,7 +5,9 @@
   --card-outline-color: rgb(175, 174, 174);
   --card-outline-width: 1px;
   --card-outline: var(--card-outline-width) solid var(--card-outline-color);
+  --card-background: unset;
 
+  background-color: var(--card-background);
   box-sizing: border-box;
   overflow: hidden;
   display: grid;
@@ -31,6 +33,7 @@ css-tricks article contained the solution:
 https://css-tricks.com/preventing-a-grid-blowout/ */
 .grid_panel * {
   min-width: 0;
+  min-height:0;
 }
 
 /* --- Optional Title Bar ----------------------------------- */
@@ -120,18 +123,18 @@ of children on top of eachother */
 aligned easily */
 
 /* Make everything line up nice and cleanly like it should in the middle */
-.text_panel {
+.grid_panel_text {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
 }
 /* Everything should be inline so lining up works properly */
-.text_panel * {
+.grid_panel_text * {
   display: inline;
 }
 /* Make sure logo isn't right up next to the text */
-.text_panel > * {
+.grid_panel_text > * {
   margin: 0 5px;
 }
 

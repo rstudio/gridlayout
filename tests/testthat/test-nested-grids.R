@@ -26,7 +26,7 @@ test_that("Can handle recursive nesting", {
   }
 
   make_nested_panels <- function(level = 1) {
-    nested_grid_panel(
+    grid_panel_nested(
       area = "nested",
       layout = my_layout,
       id = paste0("level", level),

@@ -121,19 +121,19 @@ table can be parsed instead of relying on it being parsable.</p></dd>
 <code>end_row</code>, <code>start_col</code>, and <code>end_col</code> format, or a markdown table defining a
 layout.</p></dd>
 
-    <dt><code>col_sizes</code></dt>
-<dd><p>A character vector of valid css sizes for the width of each
-column in your grid as given by <code>layout_mat</code>. If a single value is passed,
-it will be repeated for all columns.</p></dd>
-
     <dt><code>row_sizes</code></dt>
-<dd><p>Same as <code>col_sizes</code>, but for row heights.</p></dd>
+<dd><p>A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.</p></dd>
 
-    <dt><code>gap</code></dt>
+    <dt><code>col_sizes</code></dt>
+<dd><p>Same as <code>row_sizes</code>, but for column widths</p></dd>
+
+    <dt><code>gap_size</code></dt>
 <dd><p>Valid css sizing for gap to be left between each element in your
-grid. Defaults to <code>"1rem"</code>. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;</p></dd>
+grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
+provided in the main layout table.</p></dd>
 
     <dt><code>container_height</code></dt>
 <dd><p>Valid css unit determining how tall the containing
@@ -183,7 +183,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot_a</span> <span style="font-weight: bold;">plot_c</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot_b</span> <span style="font-weight: bold;">plot_b</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -194,7 +194,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot_a </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot_b </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot_c </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Can specify gap size in upper left cell</span></span>
@@ -221,7 +221,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot  </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">footer</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">table </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Don't need to follow full md table with</span></span>
 <span class="r-in"><span class="co"># header row if not desired</span></span>
@@ -247,7 +247,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot  </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">footer</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">table </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Can omit sizing as well if desired</span></span>
 <span class="r-in"><span class="fu">md_to_gridlayout</span><span class="op">(</span></span>
@@ -261,7 +261,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -271,7 +271,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot  </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">footer</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">table </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

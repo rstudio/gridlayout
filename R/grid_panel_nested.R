@@ -16,7 +16,7 @@
 #' library(shiny)
 #'
 #' # A centered text panel
-#' text_panel_c <- function(...) text_panel(..., h_align="center")
+#' grid_panel_text_c <- function(...) grid_panel_text(..., h_align="center")
 #'
 #' my_layout <- "
 #' |A |B |
@@ -24,22 +24,22 @@
 #' shinyApp(
 #'   ui = grid_page(
 #'     layout = my_layout,
-#'     text_panel_c("A","A"),
-#'     text_panel_c("B","B"),
-#'     text_panel_c("C","C"),
-#'     nested_grid_panel(
+#'     grid_panel_text_c("A","A"),
+#'     grid_panel_text_c("B","B"),
+#'     grid_panel_text_c("C","C"),
+#'     grid_panel_nested(
 #'       "D",
 #'       layout = my_layout,
-#'       text_panel_c("A","A2"),
-#'       text_panel_c("B","B2"),
-#'       text_panel_c("C","C2"),
-#'       text_panel_c("D","D2")
+#'       grid_panel_text_c("A","A2"),
+#'       grid_panel_text_c("B","B2"),
+#'       grid_panel_text_c("C","C2"),
+#'       grid_panel_text_c("D","D2")
 #'     )
 #'   ),
 #'   server = function(input, output) {}
 #' )
 #' }
-nested_grid_panel <- function(
+grid_panel_nested <- function(
     area,
     layout,
     ...,

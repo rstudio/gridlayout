@@ -19,13 +19,13 @@
 #' @examples
 #'
 #' # Simply a wrapper for shiny::div(...)
-#' vertical_stack_panel(
+#' grid_panel_stack(
 #'   area="header",
 #'   shiny::h2("R"),
 #'   shiny::actionButton("myButton", "Click Me")
 #' )
 #'
-vertical_stack_panel <- function(
+grid_panel_stack <- function(
     area,
     ...,
     item_alignment = "top",

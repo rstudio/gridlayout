@@ -117,5 +117,5 @@ shinyApp(
 
 }
 \seealso{
-\link{text_panel}
+\link{grid_panel_text}
 }

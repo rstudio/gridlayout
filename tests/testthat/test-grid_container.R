@@ -3,7 +3,7 @@ make_grid_container <- function(...){
     grid_container(
       ...,
       id = "my_grid",
-      text_panel("header", "This is my header content"),
+      grid_panel_text("header", "This is my header content"),
       grid_panel(
         "plot",
         shiny::plotOutput("myPlot")

@@ -108,6 +108,9 @@ the element should be placed in.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">grid_page</span><span class="op">(</span>
   <span class="va">layout</span>,
   <span class="va">...</span>,
+  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,
+  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,
+  gap_size <span class="op">=</span> <span class="cn">NULL</span>,
   use_bslib_card_styles <span class="op">=</span> <span class="cn">FALSE</span>,
   theme <span class="op">=</span> <span class="cn">NULL</span>,
   flag_mismatches <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -124,6 +127,17 @@ desired layout for your Shiny app.</p></dd>
 <dt>...</dt>
 <dd><p><code><a href="grid_panel.html">grid_panel()</a></code> (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in <code>layout</code>.</p></dd>
+<dt>row_sizes</dt>
+<dd><p>A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.</p></dd>
+<dt>col_sizes</dt>
+<dd><p>Same as <code>row_sizes</code>, but for column widths</p></dd>
+<dt>gap_size</dt>
+<dd><p>Valid css sizing for gap to be left between each element in your
+grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
+provided in the main layout table.</p></dd>
 <dt>use_bslib_card_styles</dt>
 <dd><p>Should the elements within the grid be given the
 current bootstrap theme's card styling? Note that this setting will

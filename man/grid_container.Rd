@@ -70,7 +70,7 @@ shinyApp(
         |2rem  |200px   |1fr    |
         |85px  |header  |header |
         |1fr   |sidebar |plot   |",
-      text_panel("header", "Geysers!"),
+      grid_panel_text("header", "Geysers!"),
       grid_panel(
         "sidebar",
         title = "Settings",

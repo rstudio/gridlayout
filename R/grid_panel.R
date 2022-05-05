@@ -42,7 +42,7 @@
 #' @return Elements from `...` wrapped in a `shiny::div()` with `class =
 #'   "grid_panel"` and vertical/horizontal alignment css applied.
 #'
-#' @seealso [text_panel]
+#' @seealso [grid_panel_text]
 #' @export
 #'
 #' @examples
@@ -106,23 +106,14 @@ grid_panel <- function(
 
   panel_styles <- htmltools::css(
     display = if (notNull(h_align) || notNull(v_align)) "grid",
-    `justify-content` = if (notNull(h_align)) validate_alignment(h_align),
-    `align-content` = if (notNull(v_align)) validate_alignment(v_align),
+    `justify-items` = if (notNull(h_align)) validate_alignment(h_align),
+    `align-items` = if (notNull(v_align)) validate_alignment(v_align),
     overflow = if (scrollable) "scroll",
     `--card-padding` = if(notNull(padding)) padding
   )
 
   has_title <- notNull(title)
   use_collapser <- collapsible && has_title
-
-  # Go through and make sure plots that don't have custom sizes are set to fill their panels
-  panel_content <-  shiny::div(contents, style = panel_styles, class = "panel-content")
-  # panel_content <- htmltools::tagQuery(
-  #   shiny::div(contents, style = panel_styles, class = "panel-content")
-  # )$
-  #   find(".shiny-plot-output")$
-  #   each(update_default_sized_plots)$
-  #   allTags()
 
   shiny::div(
     id = panel_id,
@@ -137,9 +128,11 @@ grid_panel <- function(
         style = if (use_collapser) "justify-content: space-between;"
       )
     },
-    panel_content
+    shiny::div(contents, style = panel_styles, class = "panel-content")
   )
 }
+
+
 
 # Build the class list for the panel based on the desired card styles
 make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
@@ -182,6 +175,10 @@ validate_alignment <- function(arg_val) {
 
   if (!arg_val %in% align_options) {
     stop("Alignment argument must be one of ", paste(align_options, collapse = ", "))
+  }
+
+  if (arg_val == "spread") {
+    return ("space-evenly")
   }
 
   arg_val

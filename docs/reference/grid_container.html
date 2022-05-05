@@ -104,7 +104,10 @@ directly but can be used to create nested grids</p>
   <span class="va">...</span>,
   id <span class="op">=</span> <span class="cn">NULL</span>,
   use_bslib_card_styles <span class="op">=</span> <span class="cn">FALSE</span>,
-  flag_mismatches <span class="op">=</span> <span class="cn">TRUE</span>
+  flag_mismatches <span class="op">=</span> <span class="cn">TRUE</span>,
+  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,
+  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,
+  gap_size <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -131,6 +134,17 @@ manually on each panel.</p></dd>
 <dd><p>Should a mismatch between supplied <code>elements</code> ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.</p></dd>
+<dt>row_sizes</dt>
+<dd><p>A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.</p></dd>
+<dt>col_sizes</dt>
+<dd><p>Same as <code>row_sizes</code>, but for column widths</p></dd>
+<dt>gap_size</dt>
+<dd><p>Valid css sizing for gap to be left between each element in your
+grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
+provided in the main layout table.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -157,7 +171,7 @@ dynamically set your layout and sometimes omit panels.</p></dd>
 <span class="r-in">        |2rem  |200px   |1fr    |</span>
 <span class="r-in">        |85px  |header  |header |</span>
 <span class="r-in">        |1fr   |sidebar |plot   |"</span>,</span>
-<span class="r-in">      <span class="fu"><a href="text_panel.html">text_panel</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span><span class="op">)</span>,</span>
+<span class="r-in">      <span class="fu"><a href="grid_panel_text.html">grid_panel_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span><span class="op">)</span>,</span>
 <span class="r-in">      <span class="fu"><a href="grid_panel.html">grid_panel</a></span><span class="op">(</span></span>
 <span class="r-in">        <span class="st">"sidebar"</span>,</span>
 <span class="r-in">        title <span class="op">=</span> <span class="st">"Settings"</span>,</span>

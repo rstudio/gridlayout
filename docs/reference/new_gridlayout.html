@@ -101,9 +101,9 @@ layout.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_gridlayout</span><span class="op">(</span>
   layout_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,
   row_sizes <span class="op">=</span> <span class="cn">NULL</span>,
-  gap <span class="op">=</span> <span class="cn">NULL</span>,
+  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,
+  gap_size <span class="op">=</span> <span class="cn">NULL</span>,
   container_height <span class="op">=</span> <span class="cn">NULL</span>,
   alternate_layouts <span class="op">=</span> <span class="st">"auto"</span>
 <span class="op">)</span></code></pre></div>
@@ -115,17 +115,17 @@ layout.</p>
 <dd><p>Either a list of elements with the <code>id</code>, <code>start_row</code>,
 <code>end_row</code>, <code>start_col</code>, and <code>end_col</code> format, or a markdown table defining a
 layout.</p></dd>
-<dt>col_sizes</dt>
-<dd><p>A character vector of valid css sizes for the width of each
-column in your grid as given by <code>layout_mat</code>. If a single value is passed,
-it will be repeated for all columns.</p></dd>
 <dt>row_sizes</dt>
-<dd><p>Same as <code>col_sizes</code>, but for row heights.</p></dd>
-<dt>gap</dt>
+<dd><p>A character vector of valid css sizes for the height of each
+row in your grid as given by the main layout definition. If a single value
+is passed, it will be repeated for all columns. If sizes are provided both
+here and in the main layout then these sizes will be the ones used.</p></dd>
+<dt>col_sizes</dt>
+<dd><p>Same as <code>row_sizes</code>, but for column widths</p></dd>
+<dt>gap_size</dt>
 <dd><p>Valid css sizing for gap to be left between each element in your
-grid. Defaults to <code>"1rem"</code>. This is a relative unit that scales with the
-base text size of a page. E.g. setting font-size: 16px on the body element
-of a page means 1rem = 16px;</p></dd>
+grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
+provided in the main layout table.</p></dd>
 <dt>container_height</dt>
 <dd><p>Valid css unit determining how tall the containing
 element should be for this layout. Defaults to <code>"viewport"</code> (full page
@@ -153,10 +153,37 @@ to avoid this.</p></dd>
     <h2>Declaring your layout</h2>
     <p>There are three current ways to declare layouts (aka inputs to
 <code>layout_def</code>).</p><div class="section">
+<h3 id="array-tables">Array tables<a class="anchor" aria-label="anchor" href="#array-tables"></a></h3>
+
+
+<p>The easiest and cleanest way to declare your layout is to use an array where
+each row is an element and each column is separated by spaces. This allows
+you to easily visually align your layouts that look good even if your code
+is re-formated.</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
+ <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"header header"</span>,
+   <span class="st">"plota  plotb"</span><span class="op">)</span>
+<span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
+<span class="co">##       1fr    1fr   </span>
+<span class="co">##   1fr header header</span>
+<span class="co">##   1fr plota  plotb </span>
+<span class="co">## Gap of 12px. Total height of viewport.</span>
+<span class="co">## </span>
+<span class="co">## Alternate layouts:  </span>
+<span class="co">##   </span>
+<span class="co">##   - Width &lt; 500px </span>
+<span class="co">##            1fr   </span>
+<span class="co">##     85px  header</span>
+<span class="co">##     350px plota </span>
+<span class="co">##     350px plotb </span>
+<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
+
+</div>
+
+<div class="section">
 <h3 id="markdown-tables">Markdown tables<a class="anchor" aria-label="anchor" href="#markdown-tables"></a></h3>
 
 
-<p>The first is the easiest: a markdown table wrapped in a character string. In
+<p>You can also use a markdown table wrapped in a single character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
@@ -166,7 +193,7 @@ follows:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../re
 <span class="co">##       1fr    1fr   </span>
 <span class="co">##   1fr header header</span>
 <span class="co">##   1fr plota  plotb </span>
-<span class="co">## Gap of 1rem. Total height of viewport.</span>
+<span class="co">## Gap of 12px. Total height of viewport.</span>
 <span class="co">## </span>
 <span class="co">## Alternate layouts:  </span>
 <span class="co">##   </span>
@@ -175,26 +202,7 @@ follows:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../re
 <span class="co">##     85px  header</span>
 <span class="co">##     350px plota </span>
 <span class="co">##     350px plotb </span>
-<span class="co">##   Gap of 1rem. Total height of auto.</span></code></pre></div>
-
-<p>To avoid multi-line strings and the indentation trouble they can cause,
-you can also supply your table as a character vector where each element
-corresponds to a row in your table:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  <span class="st">"| header | header |"</span>,
-  <span class="st">"| plota  | plotb  |"</span> <span class="op">)</span><span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##       1fr    1fr   </span>
-<span class="co">##   1fr header header</span>
-<span class="co">##   1fr plota  plotb </span>
-<span class="co">## Gap of 1rem. Total height of viewport.</span>
-<span class="co">## </span>
-<span class="co">## Alternate layouts:  </span>
-<span class="co">##   </span>
-<span class="co">##   - Width &lt; 500px </span>
-<span class="co">##            1fr   </span>
-<span class="co">##     85px  header</span>
-<span class="co">##     350px plota </span>
-<span class="co">##     350px plotb </span>
-<span class="co">##   Gap of 1rem. Total height of auto.</span></code></pre></div>
+<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
 
 <p><em>An important caveat of this style is it is not currently able to be detected
 using the "edit current layout" grided addin.</em></p>
@@ -220,7 +228,7 @@ markdown syntax</p>
 <span class="co">##       1fr    1fr   </span>
 <span class="co">##   1fr header header</span>
 <span class="co">##   1fr plot_a plot_b</span>
-<span class="co">## Gap of 1rem. Total height of viewport.</span>
+<span class="co">## Gap of 12px. Total height of viewport.</span>
 <span class="co">## </span>
 <span class="co">## Alternate layouts:  </span>
 <span class="co">##   </span>
@@ -229,7 +237,7 @@ markdown syntax</p>
 <span class="co">##     85px  header</span>
 <span class="co">##     350px plot_a</span>
 <span class="co">##     350px plot_b</span>
-<span class="co">##   Gap of 1rem. Total height of auto.</span></code></pre></div>
+<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
 
 </div>
 
@@ -267,7 +275,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="co">##       1fr    1fr   </span>
 <span class="co">##   1fr header header</span>
 <span class="co">##   1fr plot_a plot_b</span>
-<span class="co">## Gap of 1rem. Total height of viewport.</span>
+<span class="co">## Gap of 12px. Total height of viewport.</span>
 <span class="co">## </span>
 <span class="co">## Alternate layouts:  </span>
 <span class="co">##   </span>
@@ -276,7 +284,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="co">##     1fr header</span>
 <span class="co">##     1fr plot_a</span>
 <span class="co">##     1fr plot_b</span>
-<span class="co">##   Gap of 1rem. Total height of viewport.</span></code></pre></div>
+<span class="co">##   Gap of 12px. Total height of viewport.</span></code></pre></div>
 
 <p>Multiple layouts can also be added. Simply enclose them as a list of lists.</p>
 <p>See <code><a href="../articles/alternate-layouts.html">vignette("alternate-layouts", package = "gridlayout")</a></code> for a more in-depth overview.</p>
@@ -307,7 +315,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -317,7 +325,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot  </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Can also use a matrix for more visually intuitive laying out</span></span>
 <span class="r-in"><span class="fu">new_gridlayout</span><span class="op">(</span></span>
@@ -326,7 +334,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-in">      | plota  | plotb  |"</span>,</span>
 <span class="r-in">  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,</span>
 <span class="r-in">  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">  gap <span class="op">=</span> <span class="st">"2rem"</span></span>
+<span class="r-in">  gap_size <span class="op">=</span> <span class="st">"2rem"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">2fr   </span></span>
@@ -341,7 +349,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">85px </span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plota </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plotb </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">1rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
