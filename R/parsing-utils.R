@@ -1,4 +1,4 @@
-CSS_VALUE_REGEX <- "([1-9]\\d*)(\\.\\d+)?(px|rem|fr)|auto"
+CSS_VALUE_REGEX <- "([0-9]\\d*)(\\.\\d+)?(px|rem|fr)|auto"
 has_css_value <- function(x) grepl(x, pattern = CSS_VALUE_REGEX, perl = TRUE)
 
 
