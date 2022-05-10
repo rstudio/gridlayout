@@ -31,7 +31,7 @@ sometimes overflow and cause the cell to be larger
 than it should. Not totally sure why but this
 css-tricks article contained the solution:
 https://css-tricks.com/preventing-a-grid-blowout/ */
-.grid_panel * {
+.grid-container * {
   min-width: 0;
   min-height:0;
 }
@@ -59,7 +59,7 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   grid-area: content;
 }
 
-.grid_panel .shiny-plot-output > img {
+.grid-container .shiny-plot-output {
   /* The way grid sizing works can throw off the plot sizing in shiny. This
      is because the size of the parent grows to its largest child element.
      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
