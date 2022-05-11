@@ -11,7 +11,6 @@ theme <- bs_theme() |>
   bs_add_rules(
     rules = list(
       ".grid-container { background-color: $gray-200; }",
-      ".padded { padding: 8px; }",
       ".sidebar {
          background-color: $secondary;
          color: $gray-100;
@@ -19,7 +18,8 @@ theme <- bs_theme() |>
       ".header {
          background-color: $primary;
          color: $gray-100;
-      }"
+      }",
+      ".padded { padding: 8px; }"
     )
   )
 
