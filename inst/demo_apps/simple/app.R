@@ -6,34 +6,19 @@ library(gridlayout)
 library(shiny)
 library(bslib)
 
-# The minimal adornment of a tag to be grid-aware and always able to be classed
-panel <-  function(area, ..., tag = tags$div, class = "my-card"){
-  p <- tag(...)
-  p$attribs$style <- paste0(p$attribs$style, "grid-area:", area, ";")
-  tagAppendAttributes(p, class = paste(class, "my-panel"))
-}
 
 theme <- bs_theme() |>
   bs_add_rules(
     rules = list(
-      ".grid-container {
-         --undo-gap: calc(-1* var(--grid-gap));
-         background-color: $gray-200;
-      }",
-      ".my-panel { margin: 0; }",
+      ".grid-container { background-color: $gray-200; }",
       ".padded { padding: 8px; }",
-      ".my-card { background-color: $white; }",
-      ".left-sidebar {
+      ".sidebar {
          background-color: $secondary;
          color: $gray-100;
-         margin: var(--undo-gap);
-         margin-right: 0;
       }",
       ".header {
          background-color: $primary;
          color: $gray-100;
-         margin: var(--undo-gap);
-         margin-bottom: 0;
       }"
     )
   )
@@ -50,11 +35,11 @@ shinyApp(
     gap_size = "15px",
     flag_mismatches = FALSE, # Needed to avoid validation errors
     theme = theme,
-    panel("header", "This is my header!", tag = h1, class = "header padded"),
+    panel("header", "This is my header!", tag = h1, class = "header padded pos-header"),
     panel(
       "sidebar",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
-      class = "left-sidebar padded"
+      class = "sidebar padded pos-left-sidebar"
     ),
     panel(
       "A",
@@ -62,11 +47,46 @@ shinyApp(
       height = "100%",
       tag = plotOutput
     ),
-    panel("B"),
-    panel("C"),
-    panel("D")
+    panel_card(
+      "B",
+      card_heading("Featured"),
+      card_body(
+        tags$p("This shows whatever.")
+      ),
+      plotOutput("plot", height = 200),
+      card_body(
+        tags$p("I hope you like this plot I made for you.")
+      ),
+      card_footer("Footer")
+    ),
+    panel_card(
+      "C",
+      "plot2",
+      card_header = card_header("This is my plot"),
+      card_fn = card_plot
+    ),
+    panel_card(
+      "D",
+      card_header("This is my list"),
+      card_list(
+        card_list_item("The first item"),
+        card_list_item("The second item"),
+        card_list_item(actionButton("button", "A button")),
+        card_list_item(actionLink("link", "A link")),
+      ),
+    ),
+    tags$style(HTML(".card-body > :last-child { margin-bottom: 0; }")),
+    tags$style(HTML(".card-body > .shiny-plot-output:last-child img { border-radius: ???; }"))
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
+    output$plot <- renderPlot({
+      plot(cars)
+      title("A plot")
+    })
+    output$plot2 <- renderPlot({
+      plot(cars)
+      title("A plot")
+    })
     output$distPlot <- renderPlot({
       x    <- faithful[, 2]
       bins <- seq(min(x), max(x), length.out = input$bins + 1)
