@@ -7,7 +7,7 @@
           max = 50, value = 30)), grid_panel("plot", shiny::plotOutput("myPlot")))
     Output
       <div class="container-fluid">
-        <div id="grid_page" class="grid-container" data-gridlayout-key="grid_page">
+        <div id="gridlayout-grid-page-container" class="grid-container" data-gridlayout-key="gridlayout-grid-page-container">
           <div class="grid_panel gridlayout-card" style="grid-area:header;" data-gridlayout-area="header">
             <div class="panel-content">
               <h2 id="header">This is my header content</h2>

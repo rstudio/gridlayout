@@ -1,9 +1,14 @@
 /* --- General item sizing  ----------------------------------- */
 
-/* There's padding added to the sides of a fluid page, this just gets rid of it
-   to give full control of padding to the grid-container
+/*
+  This makes sure the grid page container takes up the full width of the page,
+  regardless of any inline padding on its parent element. We're doing this on
+  the grid-container so we're not tied to whatever wrapper we happen to use to
+  put around it
 */
-.container-fluid { padding: 0px; }
+#gridlayout-grid-page-container {
+  margin-inline: calc(50% - 50vw);
+}
 
 .grid-container > * {
   box-sizing: border-box;
