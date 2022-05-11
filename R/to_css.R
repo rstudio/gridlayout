@@ -144,8 +144,9 @@ generate_layout_rules <- function(layout,
       "grid-template-rows" = collapse_w_space(get_info(layout, "row_sizes")),
       "grid-template-columns" = collapse_w_space(get_info(layout, "col_sizes")),
       "grid-template-areas" = toTemplateGridAreas(layout),
-      "grid-gap" = get_info(layout, "gap_size"),
-      "padding" = get_info(layout, "gap_size"),
+      "--grid-gap" = get_info(layout, "gap_size"),
+      "grid-gap" = "var(--grid-gap)",
+      "padding" = "var(--grid-gap)",
       "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
