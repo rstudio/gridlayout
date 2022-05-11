@@ -16,27 +16,24 @@ panel <-  function(area, ..., tag = tags$div, class = "my-card"){
 theme <- bs_theme() |>
   bs_add_rules(
     rules = list(
-      ".my-panel {
-         margin: 0;
-         --pad: 8px;
+      ".grid-container {
          --undo-gap: calc(-1* var(--grid-gap));
+         background-color: $gray-200;
       }",
-      ".padded { padding: var(--pad); }",
-      ".my-card { background-color: white; }",
+      ".my-panel { margin: 0; }",
+      ".padded { padding: 8px; }",
+      ".my-card { background-color: $white; }",
       ".left-sidebar {
-        margin: var(--undo-gap);
-        margin-right: 0;
-        background-color: $gray-400;
+         background-color: $secondary;
+         color: $gray-100;
+         margin: var(--undo-gap);
+         margin-right: 0;
       }",
       ".header {
-        margin: var(--undo-gap);
-        margin-bottom: 0;
-        background-color: $primary;
-        color: $gray-100;
-      }",
-      ".container-fluid {
-        padding: 0px;
-        background-color: $gray-200;
+         background-color: $primary;
+         color: $gray-100;
+         margin: var(--undo-gap);
+         margin-bottom: 0;
       }"
     )
   )
