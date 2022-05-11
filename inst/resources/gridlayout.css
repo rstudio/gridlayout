@@ -10,10 +10,40 @@
   margin-inline: calc(50% - 50vw);
 }
 
+
+.grid-container {
+  --undo-gap: calc(-1* var(--grid-gap));
+}
+
 .grid-container > * {
   box-sizing: border-box;
-  /* outline: 2px solid green !important; */
+  margin: 0;
 }
+
+/*
+  Utility classes to position items on any edge with no gaps
+*/
+.pos-left-sidebar {
+  margin-block: var(--undo-gap);
+  margin-left: var(--undo-gap);
+}
+
+.pos-right-sidebar {
+  margin-block: var(--undo-gap);
+  margin-right: var(--undo-gap);
+}
+
+.pos-header {
+  margin-inline: var(--undo-gap);
+  margin-top: var(--undo-gap);
+}
+
+.pos-footer {
+  margin-inline: var(--undo-gap);
+  margin-bottom: var(--undo-gap);
+}
+
+
 
 /* If we just use 1fr for the content, then it can
 sometimes overflow and cause the cell to be larger
