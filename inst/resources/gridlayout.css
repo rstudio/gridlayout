@@ -1,3 +1,39 @@
+/* --- General item sizing  ----------------------------------- */
+
+.grid-container > * {
+  box-sizing: border-box;
+  /* outline: 2px solid green !important; */
+}
+
+/* If we just use 1fr for the content, then it can
+sometimes overflow and cause the cell to be larger
+than it should. Not totally sure why but this
+css-tricks article contained the solution:
+https://css-tricks.com/preventing-a-grid-blowout/ */
+.grid-container * {
+  min-width: 0;
+  min-height: 0;
+}
+
+.grid-container .shiny-plot-output {
+  /* The way grid sizing works can throw off the plot sizing in shiny. This
+     is because the size of the parent grows to its largest child element.
+     Shiny's plot output uses fixed pixel sizing. Shiny tries to update
+     these sizes by looking at the parent div's dimensions after a resize.
+     When the window has been made smaller, this means that the parent
+     element is spilling outside of its box because the plot image size is
+     still sitting at a fixed pixel width of the previous size. So when Shiny
+     queries the size of the parent it thinks that nothing has changed. By
+     setting a max width and height, we make sure the plot always gets shrunk
+     to at most the size of the grid element, thus allowing the resize observer
+     to work properly.
+  */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* --- Grid Panels ------------------------------------------- */
+
 .grid_panel {
   --card-padding: 0.8rem;
   --card-corner-radius: 0.5rem;
@@ -26,16 +62,6 @@
   outline: var(--card-outline);
 }
 
-/* If we just use 1fr for the content, then it can
-sometimes overflow and cause the cell to be larger
-than it should. Not totally sure why but this
-css-tricks article contained the solution:
-https://css-tricks.com/preventing-a-grid-blowout/ */
-.grid-container * {
-  min-width: 0;
-  min-height:0;
-}
-
 /* --- Optional Title Bar ----------------------------------- */
 .grid_panel .title-bar {
   grid-area: title;
@@ -57,23 +83,6 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
 .panel-content {
   padding: var(--card-padding);
   grid-area: content;
-}
-
-.grid-container .shiny-plot-output {
-  /* The way grid sizing works can throw off the plot sizing in shiny. This
-     is because the size of the parent grows to its largest child element.
-     Shiny's plot output uses fixed pixel sizing. Shiny tries to update
-     these sizes by looking at the parent div's dimensions after a resize.
-     When the window has been made smaller, this means that the parent
-     element is spilling outside of its box because the plot image size is
-     still sitting at a fixed pixel width of the previous size. So when Shiny
-     queries the size of the parent it thinks that nothing has changed. By
-     setting a max width and height, we make sure the plot always gets shrunk
-     to at most the size of the grid element, thus allowing the resize observer
-     to work properly.
-  */
-  max-width: 100%;
-  max-height: 100%;
 }
 
 /* --- Collapsing ------------------------------------------ */
