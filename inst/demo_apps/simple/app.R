@@ -7,35 +7,32 @@ library(shiny)
 library(bslib)
 
 # The minimal adornment of a tag to be grid-aware and always able to be classed
-panel <-  function(area, ..., tag = tags$div, additional_class = "my-card"){
+panel <-  function(area, ..., tag = tags$div, class = "my-card"){
   p <- tag(...)
   p$attribs$style <- paste0(p$attribs$style, "grid-area:", area, ";")
-  tagAppendAttributes(p, class = paste(additional_class, "my-panel"))
+  tagAppendAttributes(p, class = paste(class, "my-panel"))
 }
 
 theme <- bs_theme() |>
   bs_add_rules(
     rules = list(
       ".my-panel {
-        --panel-gap: 12px;
-        --pad: 8px;
-        margin: var(--panel-gap);
-        padding: var(--pad);
+         margin: 0;
+         --pad: 8px;
+         --undo-gap: calc(-1* var(--grid-gap));
       }",
+      ".padded { padding: var(--pad); }",
       ".my-card { background-color: white; }",
       ".left-sidebar {
-        --panel-gap: 0;
+        margin: var(--undo-gap);
+        margin-right: 0;
         background-color: $gray-400;
       }",
       ".header {
-        --panel-gap: 0;
+        margin: var(--undo-gap);
+        margin-bottom: 0;
         background-color: $primary;
         color: $gray-100;
-      }",
-      "#distPlot {
-        --pad: 0;
-        max-width: calc(100%  - 2*var(--panel-gap));
-        max-height: calc(100% - 2*var(--panel-gap));
       }",
       ".container-fluid {
         padding: 0px;
@@ -53,20 +50,20 @@ shinyApp(
     ),
     row_sizes = c("auto", "1fr", "1fr"),
     col_sizes = c("200px", "1fr", "1fr"),
-    gap_size = "0px",
+    gap_size = "15px",
     flag_mismatches = FALSE, # Needed to avoid validation errors
     theme = theme,
-    panel("header", "This is my header!", tag = h1, additional_class = "header"),
+    panel("header", "This is my header!", tag = h1, class = "header padded"),
     panel(
       "sidebar",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
-      additional_class = "left-sidebar"
+      class = "left-sidebar padded"
     ),
     panel(
       "A",
       outputId = "distPlot",
       height = "100%",
-      tag = shiny::plotOutput
+      tag = plotOutput
     ),
     panel("B"),
     panel("C"),
