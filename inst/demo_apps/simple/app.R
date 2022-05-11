@@ -33,7 +33,6 @@ shinyApp(
     row_sizes = c("auto", "1fr", "1fr"),
     col_sizes = c("200px", "1fr", "1fr"),
     gap_size = "15px",
-    flag_mismatches = FALSE, # Needed to avoid validation errors
     theme = theme,
     panel("header", "This is my header!", tag = h1, class = "header padded pos-header"),
     panel(

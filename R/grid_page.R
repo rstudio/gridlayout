@@ -66,7 +66,7 @@ grid_page <- function(
     gap_size = NULL,
     use_bslib_card_styles = FALSE,
     theme = NULL,
-    flag_mismatches = TRUE,
+    flag_mismatches = FALSE,
     just_container = shiny::isRunning()
   ){
 
