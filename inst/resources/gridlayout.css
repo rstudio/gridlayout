@@ -15,7 +15,7 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   min-height: 0;
 }
 
-.grid-container .shiny-plot-output {
+.grid-container .shiny-plot-output > img {
   /* The way grid sizing works can throw off the plot sizing in shiny. This
      is because the size of the parent grows to its largest child element.
      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
