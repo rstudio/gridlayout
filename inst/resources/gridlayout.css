@@ -1,5 +1,10 @@
 /* --- General item sizing  ----------------------------------- */
 
+/* There's padding added to the sides of a fluid page, this just gets rid of it
+   to give full control of padding to the grid-container
+*/
+.container-fluid { padding: 0px; }
+
 .grid-container > * {
   box-sizing: border-box;
   /* outline: 2px solid green !important; */
