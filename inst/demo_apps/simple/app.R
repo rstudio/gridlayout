@@ -4,18 +4,33 @@
 # pak::pkg_install('rstudio/gridlayout')
 library(gridlayout)
 library(shiny)
+# pak::pkg_install('rstudio/bslib@joe/feature/cards')
 library(bslib)
 
+
+panel_card <- function(..., card_fn = bslib::card){
+  panel(..., tag = card_fn)
+}
+
+panel_header <- function(..., tag = tags$h1){
+  p <- panel(..., tag = tag)
+  tagAppendAttributes(p, class = "padded pos-header")
+}
+
+panel_sidebar <- function(...){
+  p <- panel(...)
+  tagAppendAttributes(p, class = "padded pos-left-sidebar")
+}
 
 theme <- bs_theme() |>
   bs_add_rules(
     rules = list(
       ".grid-container { background-color: $gray-200; }",
-      ".sidebar {
+      ".app-sidebar {
          background-color: $secondary;
          color: $gray-100;
       }",
-      ".header {
+      ".app-header {
          background-color: $primary;
          color: $gray-100;
       }",
@@ -34,11 +49,11 @@ shinyApp(
     col_sizes = c("200px", "1fr", "1fr"),
     gap_size = "15px",
     theme = theme,
-    panel("header", "This is my header!", tag = h1, class = "header padded pos-header"),
-    panel(
+    panel_header("header", "This is my new header!", class = "app-header"),
+    panel_sidebar(
       "sidebar",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
-      class = "sidebar padded pos-left-sidebar"
+      class = "app-sidebar"
     ),
     panel(
       "A",
@@ -60,9 +75,8 @@ shinyApp(
     ),
     panel_card(
       "C",
-      "plot2",
-      card_header = card_header("This is my plot"),
-      card_fn = card_plot
+      card_plot("plot2"),
+      card_header("This is my plot")
     ),
     panel_card(
       "D",
@@ -93,7 +107,3 @@ shinyApp(
     })
   }
 )
-
-
-
-
