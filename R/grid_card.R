@@ -10,7 +10,7 @@
 #' @return
 #' @export
 grid_card <- function(area, ...){
-  grid_element(area = area, ..., tag = bslib::card)
+  grid_place(area = area, bslib::card(...))
 }
 
 

@@ -12,8 +12,31 @@
 #' @return
 #' @export
 #'
-grid_element <-  function(area, ..., tag = tags$div, class = ""){
-  p <- tag(...)
-  p$attribs$style <- paste0(p$attribs$style, "grid-area:", area, ";")
-  tagAppendAttributes(p, class = paste(class, "my-panel"))
+grid_element <- function(area, ..., tag = htmltools::tags$div, class = ""){
+  htmltools::tagAppendAttributes(
+    grid_place(area = area, element = tag(...)),
+    class = class
+  )
 }
+
+
+#' Place an item on the grid
+#'
+#' @inheritParams grid_element
+#' @param element Element (html tag) to be placed.
+#'
+#' @return The `element` with a `grid-area` property added to its styles
+#' @export
+#'
+#' @examples
+#'
+#' grid_place("header", htmltools::tags$h1("I am a header"))
+#'
+grid_place <- function(area, element) {
+  if (!inherits(element, "shiny.tag")) {
+    stop("element needs to be a valid tag object")
+  }
+  element$attribs$style <- paste0(element$attribs$style, "grid-area:", area, ";")
+  element
+}
+
