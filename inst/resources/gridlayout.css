@@ -24,8 +24,10 @@
 
 .grid-header {
   padding: var(--card-padding, 8px);
-  background-color: var(--grid-header-bg-color);
+  background-color: var(--grid-header-bg-color, WhiteSmoke);
   color: var(--grid-header-fg-color);
+  display: flex;
+  align-items: center;
 }
 
 .grid-sidebar {
