@@ -4,7 +4,7 @@
 \alias{grid_element}
 \title{Simple grid panel}
 \usage{
-grid_element(area, ..., tag = tags$div, class = "")
+grid_element(area, ..., tag = htmltools::tags$div, class = "")
 }
 \arguments{
 \item{area}{Area of grid corresponding to the wrapping grid containers grid
