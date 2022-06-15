@@ -1,24 +1,21 @@
 # The geyser app... but in grid!
 library(gridlayout)
 library(shiny)
+library(bslib)
 
 main_layout <- "
-|      |        |       |
-|------|--------|-------|
-|2rem  |200px   |1fr    |
+|10px  |200px   |1fr    |
 |70px  |header  |header |
 |1fr   |sidebar |plot   |"
 
 mobile_layout <- "
-|----- |--------|
-|2rem  |1fr     |
+|10px  |1fr     |
 |100px |header  |
 |250px |sidebar |
 |400px |plot    |"
 
 big_screen_layout <- "
-|-----|-------|--------|-----|
-|2rem |250px  | 250px  |1fr  |
+|10px |250px  | 250px  |1fr  |
 |1fr  |header |sidebar |plot |
 "
 
@@ -41,16 +38,14 @@ my_layout <- new_gridlayout(
 app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
-    theme = bslib::bs_theme(),
-    use_bslib_card_styles = TRUE,
-    grid_panel_text("header", "Geysers!"),
-    grid_panel(
+    theme = bs_theme(),
+    grid_card("header", "Geysers!"),
+    grid_card(
       "sidebar",
-      title = "Settings",
-      v_align = "center",
+      card_header("Settings"),
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_panel_plot("plot", "distPlot")
+    grid_plot("plot", "distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

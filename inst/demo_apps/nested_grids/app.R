@@ -2,6 +2,7 @@
 
 library(gridlayout)
 library(shiny)
+library(bslib)
 
 my_layout <- "
 |20px |1fr     |1fr     |
@@ -13,30 +14,25 @@ content_layout <- "
 |auto |icon     |bin_chooser |
 |1fr  |settings |plot        |"
 
-R_logo <- grid_panel_text(area = "icon", icon = "r-project", h_align = "center")
+R_logo <- grid_card(area = "icon", fontawesome::fa("r-project"))
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    grid_panel_text("header", "Nested grids", is_title = TRUE),
+    grid_place("header", tags$h1("Nested Grids")),
     grid_panel_nested(
       area = "nestedA",
       layout = content_layout,
       R_logo,
-      grid_panel(
+      grid_card(
         "bin_chooser",
-        sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30),
-        h_align = "center",
-        v_align = "center"
+        sliderInput("bins", label = "Number of bins", min = 1, max = 50, value = 30)
       ),
-      grid_panel(
-        area = "plot",
-        plotOutput("distPlot", height="100%")
-      ),
-      grid_panel_stack(
-        area = "settings",
+      grid_plot("plot", "distPlot"),
+      grid_card(
+        "settings",
         textOutput('current_bin_num')
       )
     ),
@@ -45,15 +41,15 @@ app <- shinyApp(
       title = "Nested within a titled panel",
       layout = content_layout,
       R_logo,
-      grid_panel_text("bin_chooser", "Bin Chooser L1", h_align = "center"),
-      grid_panel_text("settings", "Settings L1", h_align = "center"),
+      grid_card("bin_chooser", "Bin Chooser L1"),
+      grid_card("settings", "Settings L1"),
       grid_panel_nested(
         "plot",
         layout = content_layout,
         R_logo,
-        grid_panel_text("bin_chooser", "Bin Chooser L2", h_align = "center"),
-        grid_panel_text("settings", "Settings L2", h_align = "center"),
-        grid_panel_text("plot", "Plot", h_align = "center")
+        grid_card("bin_chooser", "Bin Chooser L2"),
+        grid_card("settings", "Settings L2"),
+        grid_card("plot", "Plot")
       )
     )
   ),
