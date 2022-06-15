@@ -2,30 +2,26 @@
 
 library(gridlayout)
 library(shiny)
-requireNamespace("bslib", quietly = TRUE)
+library(bslib)
 
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
     layout = c(
       "header  header",
-      "sidebar plot"
+      "sidebar distPlot"
     ),
-    row_sizes = c("85px", "1fr"),
+    row_sizes = c("50px", "1fr"),
     col_sizes = c("200px", "1fr"),
-    gap_size = "2rem",
+    gap_size = "10px",
     theme = bslib::bs_theme(),
-    use_bslib_card_styles = TRUE,
-    grid_panel_text("header", "This is my header", is_title = TRUE),
-    grid_panel(
+    grid_header("header", "This is my header"),
+    grid_card(
       "sidebar",
-      title = "Settings",
+      card_header("Settings"),
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_panel(
-      "plot",
-      plotOutput("distPlot", height="100%")
-    )
+    grid_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
