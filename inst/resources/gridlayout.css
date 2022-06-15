@@ -20,6 +20,20 @@
   margin: 0;
 }
 
+
+
+.grid-header {
+  padding: var(--card-padding, 8px);
+  background-color: var(--grid-header-bg-color);
+  color: var(--grid-header-fg-color);
+}
+
+.grid-sidebar {
+  padding: var(--card-padding, 8px);
+  background-color: var(--grid-sidebar-bg-color);
+  color: var(--grid-sidebar-fg-color);
+}
+
 /*
   Utility classes to position items on any edge with no gaps
 */
