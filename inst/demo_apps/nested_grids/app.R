@@ -10,7 +10,7 @@ drawHist <- function(nbins, color) {
   hist(x, breaks = bins, col = color, border = 'white')
 }
 # The classic Geyser app with grid layout
-app <- shinyApp(
+shinyApp(
   ui = grid_page(
     layout = c(
       "header  header",
@@ -55,4 +55,3 @@ app <- shinyApp(
     })
   }
 )
-app
