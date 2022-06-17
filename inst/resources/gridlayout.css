@@ -8,6 +8,43 @@
 */
 #gridlayout-grid-page-container {
   margin-inline: calc(50% - 50vw);
+  display: grid;
+  grid-template-areas:
+    "header   header header"
+    "lsidebar body   rsidebar"
+    "footer   footer footer";
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+}
+
+
+#gridlayout-grid-page-container > .grid-container {
+  grid-area: body;
+}
+
+#gridlayout-grid-page-container > .grid-page-header {
+  grid-area: header;
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+.grid-page-header > * {
+  margin-block: 0;
+}
+
+#gridlayout-grid-page-container > .grid-page-sidebar-left {
+  width: 250px;
+  grid-area: lsidebar;
+}
+#gridlayout-grid-page-container > .grid-page-sidebar-right {
+  width: 250px;
+  grid-area: rsidebar;
+}
+
+.grid-page-header,
+.grid-page-sidebar-left,
+.grid-page-sidebar-right {
+  padding: 10px;
 }
 
 
@@ -19,7 +56,6 @@
   box-sizing: border-box;
   margin: 0;
 }
-
 
 
 .grid-header {
@@ -37,8 +73,21 @@
 }
 
 /*
+.grid-container > div[data-grid-area="sidebar"] {
+  margin-block: var(--undo-gap);
+  margin-left: var(--undo-gap);
+}
+
+.grid-container > div[data-grid-area="header"] {
+  margin-inline: var(--undo-gap);
+  margin-top: var(--undo-gap);
+}
+*/
+
+/*
   Utility classes to position items on any edge with no gaps
 */
+/*
 .pos-left-sidebar {
   margin-block: var(--undo-gap);
   margin-left: var(--undo-gap);
@@ -58,7 +107,7 @@
   margin-inline: var(--undo-gap);
   margin-bottom: var(--undo-gap);
 }
-
+*/
 
 
 /* If we just use 1fr for the content, then it can

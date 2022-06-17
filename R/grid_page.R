@@ -65,23 +65,44 @@ grid_page <- function(
     col_sizes = NULL,
     gap_size = NULL,
     use_bslib_card_styles = FALSE,
-    theme = NULL,
+    theme = bslib::bs_theme(),
     flag_mismatches = FALSE,
     just_container = shiny::isRunning()
-  ){
+){
+
+  dot_args <- list(...)
+
+  body_elements <- Filter(
+    f = function(x) !(is_grid_page_header(x) || is_grid_page_sidebar(x)),
+    dot_args
+  )
+
+  header <-  Filter(
+    f = function(x) is_grid_page_header(x),
+    dot_args
+  )
+
+  sidebar <- Filter(
+    f = function(x) is_grid_page_sidebar(x),
+    dot_args
+  )
 
   requireNamespace("shiny", quietly = TRUE)
 
-  container <- grid_container(
-    id = "gridlayout-grid-page-container",
-    layout = layout,
-    ...,
-    use_bslib_card_styles = use_bslib_card_styles,
-    flag_mismatches = flag_mismatches,
-    row_sizes = row_sizes,
-    col_sizes = col_sizes,
-    gap_size = gap_size
+  container_args <- c(
+    list(
+      layout = layout,
+      use_bslib_card_styles = use_bslib_card_styles,
+      flag_mismatches = flag_mismatches,
+      row_sizes = row_sizes,
+      col_sizes = col_sizes,
+      gap_size = gap_size
+    ),
+    body_elements
   )
+
+  container <- do.call(grid_container, container_args)
+
 
   if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
     warning("Container height for layout is not set at default of viewport.",
@@ -92,7 +113,47 @@ grid_page <- function(
 
   shiny::fluidPage(
     theme = theme,
-    container
+    div(
+      id = "gridlayout-grid-page-container",
+      header,
+      sidebar,
+      container
+    )
   )
 
+}
+
+
+grid_page_header <- function(..., bgColor="primary", bgGradient = FALSE, height = NULL) {
+
+  update_el(
+    htmltools::tags$div(...),
+    classes = c(
+      "grid-page-header",
+      make_bg_class(bgColor, bgGradient)
+    ),
+    styles = list(height = height)
+  )
+}
+
+is_grid_page_header <- function(x){
+  has_class(x, "grid-page-header")
+}
+
+grid_page_sidebar <- function(..., side = "left", bgColor="light", bgGradient = FALSE, width = NULL) {
+
+  update_el(
+    htmltools::tags$div(...),
+    classes = c(
+      make_bg_class(bgColor, bgGradient),
+      paste0("grid-page-sidebar-", side)
+    ),
+    styles = list(
+      width = width
+    )
+  )
+}
+
+is_grid_page_sidebar <- function(x) {
+  has_class(x, "grid-page-sidebar")
 }
