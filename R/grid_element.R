@@ -36,7 +36,12 @@ grid_place <- function(area, element) {
   if (!inherits(element, "shiny.tag")) {
     stop("element needs to be a valid tag object")
   }
-  element$attribs$style <- paste0(element$attribs$style, "grid-area:", area, ";")
-  element
-}
 
+  htmltools::tagAppendAttributes(
+    add_styles(
+      element,
+      "grid-area" = area
+    ),
+    "data-grid-area" = area,
+  )
+}
