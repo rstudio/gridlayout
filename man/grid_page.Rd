@@ -11,7 +11,7 @@ grid_page(
   col_sizes = NULL,
   gap_size = NULL,
   use_bslib_card_styles = FALSE,
-  theme = NULL,
+  theme = bslib::bs_theme(),
   flag_mismatches = FALSE,
   just_container = shiny::isRunning()
 )
