@@ -5,34 +5,18 @@ library(gridlayout)
 library(shiny)
 library(bslib)
 
-theme <- bs_theme() |>
-  bs_add_rules(
-    rules = list(
-      ".grid-container {
-          background-color: $gray-200;
-          --grid-header-bg-color: #{$primary};
-          --grid-header-fg-color: #{$gray-100};
-          --grid-sidebar-bg-color: #{$secondary};
-          --grid-sidebar-fg-color: #{$gray-100};
-        }"
-    )
-  )
-
 shinyApp(
   ui = grid_page(
     layout = c(
-      "header  header header",
-      "sidebar A      B ",
-      "sidebar C      D "
+      "A B",
+      "C D"
     ),
-    row_sizes = c("auto", "1fr", "1fr"),
-    col_sizes = c("200px", "1fr", "1fr"),
-    gap_size = "15px",
-    theme = theme,
-    grid_header("header", "This is my new header!"),
-    grid_sidebar(
-      "sidebar",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+    gap_size = "10px",
+    grid_page_header("This is my new header!", bgColor="success", bgGradient = TRUE),
+    grid_page_sidebar(
+      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
+      bgColor = "info",
+      bgGradient = TRUE
     ),
     grid_card(
       "A",
