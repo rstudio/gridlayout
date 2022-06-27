@@ -90,28 +90,17 @@ grid_card_text <- function(
   if (is.character(wrapping_tag)) {
     wrapping_tag <- htmltools::tags[[wrapping_tag]]
   }
-  grid_element(
+
+  grid_place(
     area = area,
+    wrapping_tag(
     htmltools::tagList(
       icon,
       content
     ),
-    class = "card grid_panel_text",
-    tag = wrapping_tag
+    class = "card grid_panel_text"
+
+    )
   )
-  # make_card(
-  #   wrapping_tag(
-  #     htmltools::tagList(
-  #       icon,
-  #       content
-  #     ),
-  #     class = "grid_panel_text"
-  #   )
-  # )
-  # grid_card(
-  #   area = area,
-  #  ,
-  #   ...,
-  #   if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
-  # )
+
 }
