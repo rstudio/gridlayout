@@ -11,11 +11,10 @@ grid_panel(
   h_align = NULL,
   title = NULL,
   use_card_styles = TRUE,
-  use_bslib_card_styles = FALSE,
   collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
-  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles),
+  panel_class = "grid_panel card",
   padding = NULL
 )
 }
@@ -37,10 +36,6 @@ blank the card contents will take up entire space.}
 
 \item{use_card_styles}{Should the element contained in panel be made to look
 like an enclosed card?}
-
-\item{use_bslib_card_styles}{Should the card styles from bslib be used
-instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
-will override \code{use_card_style}.}
 
 \item{collapsible}{Should the card be able to be collapsed (\code{TRUE} or
 \code{FALSE})? Gridlayout will only show collapser if the layout allows it

@@ -4,15 +4,7 @@
 \alias{grid_nested}
 \title{Grid panel with nested gridlayout}
 \usage{
-grid_nested(
-  area,
-  layout,
-  ...,
-  id = NULL,
-  title = NULL,
-  use_bslib_card_styles = FALSE,
-  flag_mismatches = TRUE
-)
+grid_nested(area, layout, ..., id = NULL, title = NULL, flag_mismatches = TRUE)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
@@ -30,10 +22,6 @@ with \verb{grid-} to avoid namespace clashes)}
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
 
-\item{use_bslib_card_styles}{Should the card styles from bslib be used
-instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
-will override \code{use_card_style}.}
-
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}
@@ -46,32 +34,32 @@ Creates a panel for a layout with its own internal gridlayout
 }
 \examples{
 if (interactive()) {
-library(gridlayout)
-library(shiny)
+  library(gridlayout)
+  library(shiny)
 
-# A centered text panel
-grid_panel_text_c <- function(...) grid_panel_text(..., h_align="center")
+  # A centered text panel
+  grid_panel_text_c <- function(...) grid_panel_text(..., h_align = "center")
 
-my_layout <- "
+  my_layout <- "
 |A |B |
 |C |D |"
-shinyApp(
-  ui = grid_page(
-    layout = my_layout,
-    grid_panel_text_c("A","A"),
-    grid_panel_text_c("B","B"),
-    grid_panel_text_c("C","C"),
-    grid_panel_nested(
-      "D",
+  shinyApp(
+    ui = grid_page(
       layout = my_layout,
-      grid_panel_text_c("A","A2"),
-      grid_panel_text_c("B","B2"),
-      grid_panel_text_c("C","C2"),
-      grid_panel_text_c("D","D2")
-    )
-  ),
-  server = function(input, output) {}
-)
+      grid_panel_text_c("A", "A"),
+      grid_panel_text_c("B", "B"),
+      grid_panel_text_c("C", "C"),
+      grid_panel_nested(
+        "D",
+        layout = my_layout,
+        grid_panel_text_c("A", "A2"),
+        grid_panel_text_c("B", "B2"),
+        grid_panel_text_c("C", "C2"),
+        grid_panel_text_c("D", "D2")
+      )
+    ),
+    server = function(input, output) {}
+  )
 }
 }
 \seealso{

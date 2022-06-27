@@ -4,36 +4,42 @@
 \alias{grid_card}
 \title{Grid Card}
 \usage{
-grid_card(area, ...)
+grid_card(area, ..., scrollable = FALSE, has_border = TRUE)
 }
 \arguments{
-\item{area}{Area of grid corresponding to the wrapping grid containers grid
-definition}
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{...}{
-  Arguments passed on to \code{\link[bslib:card]{bslib::card}}
+  Arguments passed on to \code{\link[=grid_panel_stack]{grid_panel_stack}}
   \describe{
-    \item{\code{class}}{Additional CSS classes to include on the card div.}
-    \item{\code{width}}{Any valid \link[htmltools:validateCssUnit]{CSS unit}; for
-example, \code{height="100\%"}.}
-    \item{\code{height}}{Any valid \link[htmltools:validateCssUnit]{CSS unit}; for
-example, \code{height="100\%"}.}
-    \item{\code{autowrap}}{The Bootstrap card is designed to contain only a few specific
-types of elements: \code{div.card-header}, \code{div.card-body}, etc. If \code{autowrap}
-is \code{TRUE}, any unnamed arguments to \code{card()} are checked to see if they are
-known card items (like \code{\link[bslib:card_body]{card_header()}}, \code{\link[=card_plot]{card_plot()}}, etc.) and if not,
-they are automatically wrapped in \code{\link[bslib:card_body]{card_body()}}. If \code{autowrap} is \code{FALSE},
-then all unnamed arguments are nested directly within the card element with
-no further processing.}
+    \item{\code{item_gap}}{How much space should there be between consecutive items?}
+    \item{\code{item_alignment}}{How should the items within the panel be aligned.
+Defaults to stacking downward from the top. Options include \code{"top"},
+\code{"centered"}, \code{"bottom"}, or \code{"spread"} (items are distributed evenly among
+vertical space).}
+    \item{\code{title}}{Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.}
+    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
+\code{FALSE})? Gridlayout will only show collapser if the layout allows it
+(panel is entirely positioned within "auto" sized rows, and has a title).
+Setting this to \code{FALSE} will mean collapsibility of the panel will never be
+enabled, regardless of layout.}
   }}
+
+\item{scrollable}{Should scroll-bars be added so content that is larger than
+the panel can be seen?}
+
+\item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
+to turn off.}
 }
 \value{
 
 }
 \description{
-A wrapper around \link[bslib:card]{bslib::card} to enable placing on a grid layout using the
-area parameter.
+The standard element for placing elements on the grid in a simple card
+container
 }
 \seealso{
-\code{\link[bslib:card]{bslib::card()}}
+\link{grid_panel_stack}
 }

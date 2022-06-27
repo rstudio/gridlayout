@@ -29,9 +29,6 @@ any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 blank the card contents will take up entire space.}
     \item{\code{use_card_styles}}{Should the element contained in panel be made to look
 like an enclosed card?}
-    \item{\code{use_bslib_card_styles}}{Should the card styles from bslib be used
-instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
-will override \code{use_card_style}.}
     \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
 \code{FALSE})? Gridlayout will only show collapser if the layout allows it
 (panel is entirely positioned within "auto" sized rows, and has a title).

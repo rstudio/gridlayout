@@ -4,7 +4,7 @@
 \alias{grid_plot}
 \title{Grid Plot Output}
 \usage{
-grid_plot(area, outputId = area, ...)
+grid_plot(area, outputId = area, ..., has_border = TRUE)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
@@ -14,18 +14,16 @@ section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 generating plot. If left unset this will use the same value as the \code{area}
 argument.}
 
-\item{...}{
-  Arguments passed on to \code{\link[bslib:card_body]{bslib::card_plot_output}}
-  \describe{
-    \item{\code{stretch}}{Set to \code{TRUE} if this \code{card_body} is eager to use any extra
-vertical space is available in the card.}
-  }}
+\item{...}{Elements to include within the panel}
+
+\item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
+to turn off.}
 }
 \value{
 A grid panel filled with plot output
 }
 \description{
 A simple plot-on-the-grid function. For more control - such as adding headers
-or footers - you should use \code{\link[=grid_card]{grid_card()}} and \code{\link[bslib:card_body]{bslib::card_plot_output()}}
+or footers - you should use \code{\link[=grid_card]{grid_card()}} and \code{\link[=card_plot_output]{card_plot_output()}}
 directly.
 }

@@ -8,7 +8,6 @@ grid_container(
   layout,
   ...,
   id = NULL,
-  use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE,
   row_sizes = NULL,
   col_sizes = NULL,
@@ -25,13 +24,6 @@ layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
-
-\item{use_bslib_card_styles}{Should the elements within the grid be given the
-current bootstrap theme's card styling? Note that this setting will
-override card styling for elements built with \link{grid_panel}. This is so you
-don't have to manually change styles for each card. If you want a mixture
-of card styles, then you'll need to leave this as \code{FALSE} and set styles
-manually on each panel.}
 
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to

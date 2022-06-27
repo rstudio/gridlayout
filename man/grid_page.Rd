@@ -10,7 +10,6 @@ grid_page(
   row_sizes = NULL,
   col_sizes = NULL,
   gap_size = NULL,
-  use_bslib_card_styles = FALSE,
   theme = bslib::bs_theme(),
   flag_mismatches = FALSE,
   just_container = shiny::isRunning()
@@ -34,13 +33,6 @@ here and in the main layout then these sizes will be the ones used.}
 \item{gap_size}{Valid css sizing for gap to be left between each element in your
 grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
 provided in the main layout table.}
-
-\item{use_bslib_card_styles}{Should the elements within the grid be given the
-current bootstrap theme's card styling? Note that this setting will
-override card styling for elements built with \link{grid_panel}. This is so you
-don't have to manually change styles for each card. If you want a mixture
-of card styles, then you'll need to leave this as \code{FALSE} and set styles
-manually on each panel.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}

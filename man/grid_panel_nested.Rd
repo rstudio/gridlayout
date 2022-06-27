@@ -10,7 +10,6 @@ grid_panel_nested(
   ...,
   id = NULL,
   title = NULL,
-  use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE
 )
 }
@@ -29,10 +28,6 @@ with \verb{grid-} to avoid namespace clashes)}
 
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
-
-\item{use_bslib_card_styles}{Should the card styles from bslib be used
-instead of default \code{gridlayout} card styles? If this is set to \code{TRUE} it
-will override \code{use_card_style}.}
 
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
