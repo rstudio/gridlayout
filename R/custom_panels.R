@@ -91,7 +91,7 @@ grid_panel_text <- function(
     wrapping_tag <- htmltools::tags[[wrapping_tag]]
   }
 
-  grid_panel(
+  grid_card(
     area = area,
     wrapping_tag(
       htmltools::tagList(
@@ -100,8 +100,6 @@ grid_panel_text <- function(
       ),
       class = "grid_panel_text"
     ),
-    v_align = "center",
-    h_align = h_align,
     ...,
     if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
   )
