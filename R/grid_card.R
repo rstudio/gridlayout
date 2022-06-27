@@ -31,32 +31,7 @@ grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
 }
 
 
-#' Grid Plot Output
-#'
-#' A simple plot-on-the-grid function. For more control - such as adding headers
-#' or footers - you should use [`grid_card()`] and [`card_plot_output()`]
-#' directly.
-#'
-#'
-#' @inheritParams grid_card
-#' @param outputId Output id of the plot output. Used to link to server code
-#'   generating plot. If left unset this will use the same value as the `area`
-#'   argument.
-#'
-#' @return A grid panel filled with plot output
-#' @export
-#'
-#'
-grid_plot <- function(area,
-                      outputId = area,
-                      ...,
-                      has_border = TRUE) {
-  grid_card(
-    area = area,
-    card_plot_output(outputId = outputId, ...),
-    has_border = has_border
-  )
-}
+
 
 
 card_plot_output <- function(outputId,

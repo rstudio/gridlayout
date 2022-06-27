@@ -8,10 +8,6 @@
 #' @param outputId Output id of the plot output. Used to link to server code
 #'   generating plot. If left unset this will use the same value as the `area`
 #'   argument.
-#' @param width Optional width parameter. Defaults to filling entire width of
-#'   grid panel
-#' @param height Optional height parameter. Defaults to filling entire height of
-#'   grid panel
 #' @inheritDotParams shiny::plotOutput
 #'
 #' @return A grid panel filled with plot output
@@ -47,20 +43,14 @@
 #'
 #' }
 #'
-grid_panel_plot <- function(
-    area,
-    outputId = area,
-    width = "100%",
-    height = "100%",
-    ...
-) {
-  grid_panel(
+grid_plot <- function(area,
+                      outputId = area,
+                      ...,
+                      has_border = TRUE) {
+  grid_card(
     area = area,
-    shiny::plotOutput(
-      outputId = outputId,
-      width = width,
-      height = height,
-      ...
-    )
+    card_plot_output(outputId = outputId, ...),
+    has_border = has_border
   )
 }
+
