@@ -3,14 +3,15 @@
 #' A wrapper around [bslib::card] to enable placing on a grid layout using the
 #' area parameter.
 #'
-#' @inheritParams grid_element
-#' @inheritDotParams bslib::card
+#' @inheritParams grid_panel_stack
+#' @inheritDotParams grid_panel_stack
 #'
-#' @seealso [bslib::card()]
+#' @seealso [grid_panel_stack]
 #' @return
 #' @export
 grid_card <- function(area, ...){
-  grid_place(area = area, bslib::card(...))
+  grid_panel_stack(area=area,...)
+  # grid_place(area = area, bslib::card(...))
 }
 
 
@@ -111,6 +112,32 @@ grid_nested <- function(
 
 }
 
+
+card_plot_output <- function(outputId,
+                             click = NULL,
+                             dblclick = NULL,
+                             hover = NULL,
+                             brush = NULL,
+                             height = NULL,
+                             stretch = TRUE,
+                             ...
+) {
+  plot_div <- shiny::plotOutput(outputId, height = NULL, click = click, dblclick = dblclick, hover = hover,
+                         brush = brush)
+
+  # TODO: card-img-* needs to go on the <img> itself, not the containing <div>
+  htmltools::tagAppendAttributes(plot_div,
+                        style = htmltools::css(
+                          flex = if (stretch) "1 1",
+                          `-webkit-flex` = if (stretch) "1 1",
+                          # May be NULL
+                          `flex-basis` = htmltools::validateCssUnit(height),
+                          `-webkit-flex-basis` = htmltools::validateCssUnit(height),
+                        ),
+                        !!!rlang::list2(...)
+    )
+
+}
 
 
 

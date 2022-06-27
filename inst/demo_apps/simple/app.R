@@ -9,7 +9,7 @@ shinyApp(
   ui = grid_page(
     layout = c(
       "A B",
-      "C D"
+      "C C"
     ),
     gap_size = "10px",
     grid_page_header("This is my new header!", bgColor="success", bgGradient = TRUE),
@@ -20,28 +20,18 @@ shinyApp(
     ),
     grid_card(
       "A",
-      card_heading("Simple Plot"),
+      title="Simple Plot",
       card_plot_output("distPlot")
     ),
     grid_card(
       "B",
-      card_heading("Featured"),
-      card_body(
-        tags$p("This shows whatever.")
-      ),
-      card_plot_output("plot", height = 200),
-      card_body(
-        tags$p("I hope you like this plot I made for you.")
-      ),
-      card_footer("Footer")
+      title = "Featured",
+      tags$p("This shows whatever."),
+      card_plot_output("plot", height = 200)
     ),
     grid_plot(
       "C",
       outputId = "plot2"
-    ),
-    grid_card(
-      "D",
-      card_header("This is my list"),
     )
   ),
   server = function(input, output, session) {
