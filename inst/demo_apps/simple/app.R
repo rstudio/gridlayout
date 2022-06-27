@@ -33,7 +33,7 @@ shinyApp(
     grid_plot(
       "C",
       outputId = "plot2",
-      border = FALSE
+      has_border = FALSE
     )
   ),
   server = function(input, output, session) {
