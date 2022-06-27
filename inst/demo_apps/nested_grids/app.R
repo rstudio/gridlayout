@@ -13,7 +13,7 @@ ui <- grid_page(
   col_sizes = c("250px", "1fr"),
   gap_size = "10px",
   theme = bslib::bs_theme(),
-  grid_header("header", "This is my header"),
+  grid_card_text("header", "This is my header"),
   grid_card(
     "sidebar",
     title = "Settings",

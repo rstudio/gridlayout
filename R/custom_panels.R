@@ -90,17 +90,30 @@ grid_panel_text <- function(
   if (is.character(wrapping_tag)) {
     wrapping_tag <- htmltools::tags[[wrapping_tag]]
   }
-
-  grid_card(
+  grid_element(
     area = area,
-    wrapping_tag(
-      htmltools::tagList(
-        icon,
-        content
-      ),
-      class = "grid_panel_text"
+    htmltools::tagList(
+      icon,
+      content
     ),
-    ...,
-    if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
+    class = "card grid_panel_text",
+    tag = wrapping_tag
   )
+  # make_card(
+  #   wrapping_tag(
+  #     htmltools::tagList(
+  #       icon,
+  #       content
+  #     ),
+  #     class = "grid_panel_text"
+  #   )
+  # )
+  # grid_card(
+  #   area = area,
+  #  ,
+  #   ...,
+  #   if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
+  # )
 }
+
+grid_card_text <- grid_panel_text
