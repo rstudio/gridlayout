@@ -62,7 +62,7 @@
 #' grid_panel_text(area = "header", "My App Name", is_title = TRUE)
 #'
 #' @export
-grid_panel_text <- function(
+grid_card_text <- function(
   area,
   content = NULL,
   ...,
@@ -115,5 +115,3 @@ grid_panel_text <- function(
   #   if (is_title) htmltools::tags$head(htmltools::tags$title(content)) else {NULL}
   # )
 }
-
-grid_card_text <- grid_panel_text
