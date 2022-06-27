@@ -4,7 +4,6 @@
 library(gridlayout)
 library(shiny)
 
-
 my_layout <- new_gridlayout(
   "
   |     |200px   |1fr    |
@@ -20,20 +19,18 @@ my_layout <- new_gridlayout(
   )
 )
 
-
 # The classic Geyser app with grid layout
 app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bslib::bs_theme(),
-    use_bslib_card_styles = TRUE,
-    grid_panel_text("header", "This is my header", is_title = TRUE),
-    grid_panel(
+    grid_card_text("header", "This is my header", is_title = TRUE),
+    grid_card(
       area = "sidebar",
       title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_panel(
+    grid_card(
       area = "plot",
       title = "Geysers!",
       plotOutput("distPlot", height = "100%")

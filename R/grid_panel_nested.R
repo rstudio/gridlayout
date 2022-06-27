@@ -45,7 +45,6 @@ grid_panel_nested <- function(
     ...,
     id = NULL,
     title = NULL,
-    use_bslib_card_styles = FALSE,
     flag_mismatches = TRUE
 ){
 
@@ -55,7 +54,6 @@ grid_panel_nested <- function(
     padding = "0",
     grid_container(
       layout = new_gridlayout(layout, container_height = "100%"),
-      use_bslib_card_styles = use_bslib_card_styles,
       flag_mismatches = flag_mismatches,
       id = id,
       ...

@@ -14,9 +14,6 @@
 #'   blank the card contents will take up entire space.
 #' @param use_card_styles Should the element contained in panel be made to look
 #'   like an enclosed card?
-#' @param use_bslib_card_styles Should the card styles from bslib be used
-#'   instead of default `gridlayout` card styles? If this is set to `TRUE` it
-#'   will override `use_card_style`.
 #' @param collapsible Should the card be able to be collapsed (`TRUE` or
 #'   `FALSE`)? Gridlayout will only show collapser if the layout allows it
 #'   (panel is entirely positioned within "auto" sized rows, and has a title).
@@ -95,11 +92,10 @@ grid_panel <- function(
   h_align = NULL,
   title = NULL,
   use_card_styles = TRUE,
-  use_bslib_card_styles = FALSE,
   collapsible = TRUE,
   scrollable = FALSE,
   panel_id = NULL,
-  panel_class = make_panel_classes(use_card_styles, use_bslib_card_styles),
+  panel_class = "grid_panel card",
   padding = NULL
 ) {
   contents <- list(...)
@@ -132,19 +128,6 @@ grid_panel <- function(
   )
 }
 
-
-
-# Build the class list for the panel based on the desired card styles
-make_panel_classes <- function(use_card_styles, use_bslib_card_styles) {
-  card_styling_class <- if (use_bslib_card_styles) {
-    "card"
-  } else if (use_card_styles) {
-    "gridlayout-card"
-  } else {
-    ""
-  }
-  paste("grid_panel", card_styling_class)
-}
 
 make_collapser_icon <- function(parent_id = "") {
   requireNamespace("fontawesome", quietly = TRUE)

@@ -96,14 +96,12 @@ grid_nested <- function(area,
                         ...,
                         id = NULL,
                         title = NULL,
-                        use_bslib_card_styles = FALSE,
                         flag_mismatches = TRUE) {
 
 
 
   nested_grid <- grid_container(
     layout = new_gridlayout(layout, container_height = "100%"),
-    use_bslib_card_styles = use_bslib_card_styles,
     flag_mismatches = flag_mismatches,
     id = id,
     ...

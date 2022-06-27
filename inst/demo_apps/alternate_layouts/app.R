@@ -39,10 +39,10 @@ app <- shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bs_theme(),
-    grid_card("header", "Geysers!"),
+    grid_card_text("header", "Geysers!"),
     grid_card(
       "sidebar",
-      card_header("Settings"),
+      title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
     grid_plot("plot", "distPlot")

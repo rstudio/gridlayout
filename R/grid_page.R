@@ -64,7 +64,6 @@ grid_page <- function(
     row_sizes = NULL,
     col_sizes = NULL,
     gap_size = NULL,
-    use_bslib_card_styles = FALSE,
     theme = bslib::bs_theme(),
     flag_mismatches = FALSE,
     just_container = shiny::isRunning()
@@ -92,7 +91,6 @@ grid_page <- function(
   container_args <- c(
     list(
       layout = layout,
-      use_bslib_card_styles = use_bslib_card_styles,
       flag_mismatches = flag_mismatches,
       row_sizes = row_sizes,
       col_sizes = col_sizes,
