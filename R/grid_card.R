@@ -4,14 +4,21 @@
 #' area parameter.
 #'
 #' @inheritParams grid_panel_stack
+#' @inheritParams grid_panel
 #' @inheritDotParams grid_panel_stack
 #'
 #' @seealso [grid_panel_stack]
 #' @return
 #' @export
-grid_card <- function(area, ...) {
+grid_card <- function(area, ..., scrollable = FALSE) {
   card <- grid_panel_stack(area = area, ...)
-  add_class(card, "card")
+  update_el(
+    card,
+    classes = "card",
+    styles = list(
+      overflow = if (scrollable) "scroll"
+    )
+  )
   # grid_place(area = area, bslib::card(...))
 }
 
