@@ -34,31 +34,7 @@ grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
 
 
 
-card_plot_output <- function(outputId,
-                             click = NULL,
-                             dblclick = NULL,
-                             hover = NULL,
-                             brush = NULL,
-                             height = NULL,
-                             stretch = TRUE,
-                             ...) {
-  plot_div <- shiny::plotOutput(outputId,
-                                height = NULL, click = click, dblclick = dblclick, hover = hover,
-                                brush = brush
-  )
 
-  # TODO: card-img-* needs to go on the <img> itself, not the containing <div>
-  htmltools::tagAppendAttributes(plot_div,
-                                 style = htmltools::css(
-                                   flex = if (stretch) "1 1",
-                                   `-webkit-flex` = if (stretch) "1 1",
-                                   # May be NULL
-                                   `flex-basis` = htmltools::validateCssUnit(height),
-                                   `-webkit-flex-basis` = htmltools::validateCssUnit(height),
-                                 ),
-                                 !!!rlang::list2(...)
-  )
-}
 
 
 
