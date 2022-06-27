@@ -55,20 +55,6 @@
   margin: 0;
 }
 
-.grid-header {
-  padding: var(--card-padding, 8px);
-  background-color: var(--grid-header-bg-color, WhiteSmoke);
-  color: var(--grid-header-fg-color);
-  display: flex;
-  align-items: center;
-}
-
-.grid-sidebar {
-  padding: var(--card-padding, 8px);
-  background-color: var(--grid-sidebar-bg-color);
-  color: var(--grid-sidebar-fg-color);
-}
-
 /* If we just use 1fr for the content, then it can
 sometimes overflow and cause the cell to be larger
 than it should. Not totally sure why but this
