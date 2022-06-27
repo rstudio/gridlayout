@@ -12,7 +12,7 @@ add_class <- function(el, class) {
   tagAppendAttributes(el, class = paste(class, collapse = " "))
 }
 
-update_el <- function(el, classes, styles) {
+update_el <- function(el, classes = list(), styles = list()) {
   # browser()
   el <- tagAppendAttributes(el, class = paste(classes, collapse = " "))
 
