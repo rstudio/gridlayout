@@ -377,10 +377,12 @@ pre code {
     "header  header"
     "sidebar main  "
     "footer  footer";
-  grid-gap:2rem;
-  padding:2rem;
+  --grid-gap:2rem;
+  grid-gap:var(--grid-gap);
+  padding:var(--grid-gap);
   height:100vh;
 }
+
 
 
 @media (max-width:500px) {
@@ -393,8 +395,9 @@ pre code {
       "sidebar"
       "footer "
       "main   ";
-    grid-gap:1rem;
-    padding:1rem;
+    --grid-gap:2rem;
+    grid-gap:var(--grid-gap);
+    padding:var(--grid-gap);
     height:auto;
   }
 }
@@ -407,60 +410,80 @@ pre code {
 .main-container > div {
   padding:var(--card-padding);
 }
-.main-container > div {
-  --card-padding: 0.8rem;
+/* --- General item sizing  ----------------------------------- */
+
+/*
+  This makes sure the grid page container takes up the full width of the page,
+  regardless of any inline padding on its parent element. We're doing this on
+  the grid-container so we're not tied to whatever wrapper we happen to use to
+  put around it
+*/
+#gridlayout-grid-page-container {
+  margin-inline: calc(50% - 50vw);
+}
+
+
+.grid-container {
+  --undo-gap: calc(-1* var(--grid-gap));
+}
+
+.grid-container > * {
   box-sizing: border-box;
-  overflow: hidden;
-  display: grid;
-  grid-template-areas: "title"
-                       "content";
-  /* When there's no title the column will dissapear */
-  grid-template-rows: min-content minmax(0, 1fr);
-}
-
-  /* If we just use 1fr for the content, then it can
-     sometimes overflow and cause the cell to be larger
-     than it should. Not totally sure why but this
-     css-tricks article contained the solution:
-     https://css-tricks.com/preventing-a-grid-blowout/ */
-.main-container > div * {
-  min-width: 0;
-}
-
-.main-container > div .title-bar {
-  grid-area: title;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.125);
-  padding: calc(var(--card-padding)/2) var(--card-padding);
-}
-.main-container > div .title-bar > h3 {
   margin: 0;
-  height: 100%;
 }
 
-.panel-content {
-  margin: var(--card-padding);
-  grid-area: content;
-  flex-direction: column;
-}
 
-.main-container > div.vertical_stack .panel-content {
+
+.grid-header {
+  padding: var(--card-padding, 8px);
+  background-color: var(--grid-header-bg-color, WhiteSmoke);
+  color: var(--grid-header-fg-color);
   display: flex;
-  flex-direction: column;
   align-items: center;
+}
+
+.grid-sidebar {
+  padding: var(--card-padding, 8px);
+  background-color: var(--grid-sidebar-bg-color);
+  color: var(--grid-sidebar-fg-color);
 }
 
 /*
-  Add a margin to the bottom of each element except the last. This essentially
-  replicates the gap property but has better browser support
+  Utility classes to position items on any edge with no gaps
 */
-.main-container > div.vertical_stack .panel-content > *:not(:last-child) {
-  margin-bottom: var(--item-gap, 1rem);
+.pos-left-sidebar {
+  margin-block: var(--undo-gap);
+  margin-left: var(--undo-gap);
 }
 
-.main-container > div .shiny-plot-output > img {
+.pos-right-sidebar {
+  margin-block: var(--undo-gap);
+  margin-right: var(--undo-gap);
+}
+
+.pos-header {
+  margin-inline: var(--undo-gap);
+  margin-top: var(--undo-gap);
+}
+
+.pos-footer {
+  margin-inline: var(--undo-gap);
+  margin-bottom: var(--undo-gap);
+}
+
+
+
+/* If we just use 1fr for the content, then it can
+sometimes overflow and cause the cell to be larger
+than it should. Not totally sure why but this
+css-tricks article contained the solution:
+https://css-tricks.com/preventing-a-grid-blowout/ */
+.grid-container * {
+  min-width: 0;
+  min-height: 0;
+}
+
+.grid-container .shiny-plot-output > img {
   /* The way grid sizing works can throw off the plot sizing in shiny. This
      is because the size of the parent grows to its largest child element.
      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
@@ -477,28 +500,70 @@ pre code {
   max-height: 100%;
 }
 
-/* Only set card styles if we're not using the bslib card component */
-.main-container > div:not(.card) {
-  box-shadow: 0 0 0.5rem rgb(0 0 0 / 35%);
-  border-radius: 0.5rem;
+/* --- Grid Panels ------------------------------------------- */
+
+.main-container > div {
+  --card-padding: 0.8rem;
+  --card-corner-radius: 0.5rem;
+  --card-box-shadow: unset;
+  --card-outline-color: rgb(175, 174, 174);
+  --card-outline-width: 1px;
+  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
+  --card-background: unset;
+
+  background-color: var(--card-background);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    "title"
+    "content";
+  /* The content-height variable gets over-written to enable collapsible cards*/
+  /* When there's no title the column will dissapear */
+  grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
 }
 
+/* Only set card styles if we're not using the bslib card component */
+.main-container > div:not(.card) {
+  box-shadow: var(--card-box-shadow);
+  border-radius: var(--card-corner-radius);
+  outline: var(--card-outline);
+}
 
-.main-container > div.collapsed  {
+/* --- Optional Title Bar ----------------------------------- */
+.main-container > div .title-bar {
+  grid-area: title;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  border-bottom: 1px solid var(--card-outline-color);
+  padding: calc(var(--card-padding) / 2) var(--card-padding);
+}
+
+.main-container > div .title-bar > h3 {
+  margin: 0;
+  height: 100%;
+}
+
+/* --- Panel Content ---------------------------------------- */
+/* This is the div that actually holds the children of the panel */
+
+.panel-content {
+  padding: var(--card-padding);
+  grid-area: content;
+}
+
+/* --- Collapsing ------------------------------------------ */
+/* Panels that can be collapsed control their size with a toggle switch */
+
+.main-container > div.collapsed {
   /* If panel is not collapsible this css variable is defined as "block"
      which means that a panel that has been collapsed, and then resized
      to a scenario where it cant be collapsed, it will pop back
   */
-  grid-template-rows: min-content var(--collapsed-content-size, 0);
+  --content-height: var(--collapsed-content-size);
   height: var(--collapsed-panel-height);
   overflow: var(--collapsed-panel-overflow);
-}
-
-/* Some content likes to stick around even if it's not supposed to.
-   This makes sure it hides when the panel is collapsed
-*/
-.collapsed > .panel-content > * {
-    display: none;
 }
 
 /* Make flip arrow point down when collapsed and
@@ -513,27 +578,57 @@ pre code {
   transform: scaleY(-1);
 }
 
+/* --- Vertical Stack Panels -------------------------------- */
+/* These are panels that have a column-flex layout for nicely stacking a bunch
+of children on top of eachother */
+.main-container > div.vertical_stack .panel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*
+  Add a margin to the bottom of each element except the last. This essentially
+  replicates the gap property but has better browser support
+*/
+.main-container > div.vertical_stack .panel-content > *:not(:last-child) {
+  margin-bottom: var(--item-gap, 1rem);
+}
+
+/* --- Text Panels -------------------------------- */
+/* A special panel that simply holds some text (and optional icon) that can be
+aligned easily */
+
 /* Make everything line up nice and cleanly like it should in the middle */
-.text_panel {
+.main-container > div_text {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
 }
 /* Everything should be inline so lining up works properly */
-.text_panel * {
+.main-container > div_text * {
   display: inline;
 }
 /* Make sure logo isn't right up next to the text */
-.text_panel > * {
+.main-container > div_text > * {
   margin: 0 5px;
 }
 
+/* --- Tabset Panel work -------------------------------- */
 /* Makes it so tabpanels work in gridpanels */
-.main-container > div .tabbable { height: 100% }
-.main-container > div .tabbable > .nav { height: 42px; }
-.main-container > div .tabbable .tab-content { height: calc(100% - 42px); }
-.main-container > div .tabbable .tab-pane { height: 100%; }
+.main-container > div .tabbable {
+  height: 100%;
+}
+.main-container > div .tabbable > .nav {
+  height: 42px;
+}
+.main-container > div .tabbable .tab-content {
+  height: calc(100% - 42px);
+}
+.main-container > div .tabbable .tab-pane {
+  height: 100%;
+}
 .section.no-header > h1:first-child {
   display: none;
 }
