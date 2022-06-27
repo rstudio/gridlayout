@@ -17,7 +17,6 @@
   grid-template-rows: auto 1fr auto;
 }
 
-
 #gridlayout-grid-page-container > .grid-container {
   grid-area: body;
 }
@@ -47,16 +46,14 @@
   padding: 10px;
 }
 
-
 .grid-container {
-  --undo-gap: calc(-1* var(--grid-gap));
+  --undo-gap: calc(-1 * var(--grid-gap));
 }
 
 .grid-container > * {
   box-sizing: border-box;
   margin: 0;
 }
-
 
 .grid-header {
   padding: var(--card-padding, 8px);
@@ -71,44 +68,6 @@
   background-color: var(--grid-sidebar-bg-color);
   color: var(--grid-sidebar-fg-color);
 }
-
-/*
-.grid-container > div[data-grid-area="sidebar"] {
-  margin-block: var(--undo-gap);
-  margin-left: var(--undo-gap);
-}
-
-.grid-container > div[data-grid-area="header"] {
-  margin-inline: var(--undo-gap);
-  margin-top: var(--undo-gap);
-}
-*/
-
-/*
-  Utility classes to position items on any edge with no gaps
-*/
-/*
-.pos-left-sidebar {
-  margin-block: var(--undo-gap);
-  margin-left: var(--undo-gap);
-}
-
-.pos-right-sidebar {
-  margin-block: var(--undo-gap);
-  margin-right: var(--undo-gap);
-}
-
-.pos-header {
-  margin-inline: var(--undo-gap);
-  margin-top: var(--undo-gap);
-}
-
-.pos-footer {
-  margin-inline: var(--undo-gap);
-  margin-bottom: var(--undo-gap);
-}
-*/
-
 
 /* If we just use 1fr for the content, then it can
 sometimes overflow and cause the cell to be larger
@@ -141,15 +100,7 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
 
 .grid_panel {
   --card-padding: 0.8rem;
-  --card-corner-radius: 0.5rem;
-  --card-box-shadow: unset;
-  --card-outline-color: rgb(175, 174, 174);
-  --card-outline-width: 1px;
-  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
-  --card-background: unset;
 
-  background-color: var(--card-background);
-  box-sizing: border-box;
   overflow: hidden;
   display: grid;
   grid-template-areas:
@@ -160,26 +111,12 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
 }
 
-/* Only set card styles if we're not using the bslib card component */
-.grid_panel:not(.card) {
-  box-shadow: var(--card-box-shadow);
-  border-radius: var(--card-corner-radius);
-  outline: var(--card-outline);
-}
-
 /* --- Optional Title Bar ----------------------------------- */
-.grid_panel .title-bar {
+.grid_panel .card-header {
   grid-area: title;
   display: flex;
   justify-content: start;
   align-items: center;
-  border-bottom: 1px solid var(--card-outline-color);
-  padding: calc(var(--card-padding) / 2) var(--card-padding);
-}
-
-.grid_panel .title-bar > h3 {
-  margin: 0;
-  height: 100%;
 }
 
 /* --- Panel Content ---------------------------------------- */

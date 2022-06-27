@@ -18,7 +18,7 @@ app <- shinyApp(
     grid_header("header", "This is my header"),
     grid_card(
       "sidebar",
-      card_header("Settings"),
+      title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
     grid_plot("distPlot")

@@ -9,8 +9,9 @@
 #' @seealso [grid_panel_stack]
 #' @return
 #' @export
-grid_card <- function(area, ...){
-  grid_panel_stack(area=area,...)
+grid_card <- function(area, ...) {
+  card <- grid_panel_stack(area = area, ...)
+  add_class(card, "card")
   # grid_place(area = area, bslib::card(...))
 }
 
@@ -32,11 +33,9 @@ grid_card <- function(area, ...){
 #' @export
 #'
 #'
-grid_plot <- function(
-    area,
-    outputId = area,
-    ...
-) {
+grid_plot <- function(area,
+                      outputId = area,
+                      ...) {
   grid_card(
     area = area,
     card_plot_output(outputId = outputId, ...)
@@ -58,58 +57,70 @@ grid_plot <- function(
 #'
 #' @examples
 #' if (interactive()) {
-#' library(gridlayout)
-#' library(shiny)
+#'   library(gridlayout)
+#'   library(shiny)
 #'
-#' # A centered text panel
-#' grid_panel_text_c <- function(...) grid_panel_text(..., h_align="center")
+#'   # A centered text panel
+#'   grid_panel_text_c <- function(...) grid_panel_text(..., h_align = "center")
 #'
-#' my_layout <- "
+#'   my_layout <- "
 #' |A |B |
 #' |C |D |"
-#' shinyApp(
-#'   ui = grid_page(
-#'     layout = my_layout,
-#'     grid_panel_text_c("A","A"),
-#'     grid_panel_text_c("B","B"),
-#'     grid_panel_text_c("C","C"),
-#'     grid_panel_nested(
-#'       "D",
+#'   shinyApp(
+#'     ui = grid_page(
 #'       layout = my_layout,
-#'       grid_panel_text_c("A","A2"),
-#'       grid_panel_text_c("B","B2"),
-#'       grid_panel_text_c("C","C2"),
-#'       grid_panel_text_c("D","D2")
-#'     )
-#'   ),
-#'   server = function(input, output) {}
-#' )
+#'       grid_panel_text_c("A", "A"),
+#'       grid_panel_text_c("B", "B"),
+#'       grid_panel_text_c("C", "C"),
+#'       grid_panel_nested(
+#'         "D",
+#'         layout = my_layout,
+#'         grid_panel_text_c("A", "A2"),
+#'         grid_panel_text_c("B", "B2"),
+#'         grid_panel_text_c("C", "C2"),
+#'         grid_panel_text_c("D", "D2")
+#'       )
+#'     ),
+#'     server = function(input, output) {}
+#'   )
 #' }
-grid_nested <- function(
-    area,
-    layout,
-    ...,
-    id = NULL,
-    title = NULL,
-    use_bslib_card_styles = FALSE,
-    flag_mismatches = TRUE
-){
+grid_nested <- function(area,
+                        layout,
+                        ...,
+                        id = NULL,
+                        title = NULL,
+                        use_bslib_card_styles = FALSE,
+                        flag_mismatches = TRUE) {
 
-  grid_card(
-    area = area,
-    if (!is.null(title)) bslib::card_header(title),
-    bslib::card_body(
-      grid_container(
-        layout = new_gridlayout(layout, container_height = "100%"),
-        use_bslib_card_styles = use_bslib_card_styles,
-        flag_mismatches = flag_mismatches,
-        id = id,
-        ...
-      ),
-      stretch = TRUE
+
+
+  nested_grid <- grid_container(
+    layout = new_gridlayout(layout, container_height = "100%"),
+    use_bslib_card_styles = use_bslib_card_styles,
+    flag_mismatches = flag_mismatches,
+    id = id,
+    ...
+  )
+
+  htmltools::div(
+    class = "card",
+    if (!is.null(title)) {
+      card_header(title)
+    },
+    htmltools::tags$div(
+      class = "card-body",
+      nested_grid
     )
   )
 
+  # grid_card(
+  #   area = area,
+  #   title = title,
+  #   htmltools::tags$div(
+  #     class = "card-body",
+  #     nested_grid
+  #   )
+  # )
 }
 
 
@@ -120,24 +131,21 @@ card_plot_output <- function(outputId,
                              brush = NULL,
                              height = NULL,
                              stretch = TRUE,
-                             ...
-) {
-  plot_div <- shiny::plotOutput(outputId, height = NULL, click = click, dblclick = dblclick, hover = hover,
-                         brush = brush)
+                             ...) {
+  plot_div <- shiny::plotOutput(outputId,
+    height = NULL, click = click, dblclick = dblclick, hover = hover,
+    brush = brush
+  )
 
   # TODO: card-img-* needs to go on the <img> itself, not the containing <div>
   htmltools::tagAppendAttributes(plot_div,
-                        style = htmltools::css(
-                          flex = if (stretch) "1 1",
-                          `-webkit-flex` = if (stretch) "1 1",
-                          # May be NULL
-                          `flex-basis` = htmltools::validateCssUnit(height),
-                          `-webkit-flex-basis` = htmltools::validateCssUnit(height),
-                        ),
-                        !!!rlang::list2(...)
-    )
-
+    style = htmltools::css(
+      flex = if (stretch) "1 1",
+      `-webkit-flex` = if (stretch) "1 1",
+      # May be NULL
+      `flex-basis` = htmltools::validateCssUnit(height),
+      `-webkit-flex-basis` = htmltools::validateCssUnit(height),
+    ),
+    !!!rlang::list2(...)
+  )
 }
-
-
-

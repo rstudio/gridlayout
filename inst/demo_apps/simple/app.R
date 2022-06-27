@@ -1,6 +1,7 @@
 # Experiment with how little we can do but still get layout
 
 # pak::pkg_install('rstudio/bslib@joe/feature/cards')
+# pak::pkg_install('rstudio/bslib')
 library(gridlayout)
 library(shiny)
 library(bslib)

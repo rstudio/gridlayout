@@ -63,16 +63,23 @@ grid_panel_stack <- function(
     class = paste("grid_panel", "vertical_stack"),
     style= htmltools::css(`grid-area` = area),
     if (has_title) {
-      shiny::div(
-        class = "title-bar",
-        shiny::h3(title),
-        if (use_collapser) make_collapser_icon(),
-        style = if (use_collapser) "justify-content: space-between;"
-      )
+      card_header(title,use_collapser)
     },
     panel_content
   )
 }
+
+card_header <- function(contents, use_collapser = FALSE){
+
+  shiny::div(
+    class = "card-header",
+    contents,
+    if (use_collapser) make_collapser_icon(),
+    style = if (use_collapser) "justify-content: space-between;"
+  )
+
+}
+
 
 alignment_mapping <- list(
   "top" = "flex-start",
