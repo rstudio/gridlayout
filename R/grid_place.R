@@ -21,6 +21,6 @@ grid_place <- function(area, element) {
       element,
       "grid-area" = area
     ),
-    "data-grid-area" = area,
+    "data-gridlayout-area" = area,
   )
 }
