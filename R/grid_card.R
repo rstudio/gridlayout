@@ -6,20 +6,28 @@
 #' @inheritParams grid_panel_stack
 #' @inheritParams grid_panel
 #' @inheritDotParams grid_panel_stack
+#' @param border Should the card be surrounded by a border? Set to `FALSE` to
+#'   turn off.
 #'
 #' @seealso [grid_panel_stack]
 #' @return
 #' @export
-grid_card <- function(area, ..., scrollable = FALSE) {
+grid_card <- function(area, ..., scrollable = FALSE, border = TRUE) {
+
   card <- grid_panel_stack(area = area, ...)
+  # Waiting for the bslib card elements to be merged in
+  # card <- grid_place(area = area, bslib::card(...))
+
   update_el(
     card,
     classes = "card",
     styles = list(
-      overflow = if (scrollable) "scroll"
+      overflow = if (scrollable) "scroll",
+      # We use transparent here so that removing the border doesn't confusingly
+      # change the size of the card
+      border = if(identical(border, FALSE) ) "transparent"
     )
   )
-  # grid_place(area = area, bslib::card(...))
 }
 
 
@@ -30,7 +38,7 @@ grid_card <- function(area, ..., scrollable = FALSE) {
 #' directly.
 #'
 #'
-#' @inheritParams grid_panel
+#' @inheritParams grid_card
 #' @param outputId Output id of the plot output. Used to link to server code
 #'   generating plot. If left unset this will use the same value as the `area`
 #'   argument.
@@ -42,10 +50,12 @@ grid_card <- function(area, ..., scrollable = FALSE) {
 #'
 grid_plot <- function(area,
                       outputId = area,
-                      ...) {
+                      ...,
+                      border = TRUE) {
   grid_card(
     area = area,
-    card_plot_output(outputId = outputId, ...)
+    card_plot_output(outputId = outputId, ...),
+    border = border
   )
 }
 
