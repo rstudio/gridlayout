@@ -94,7 +94,11 @@ grid_page <- function(
       flag_mismatches = flag_mismatches,
       row_sizes = row_sizes,
       col_sizes = col_sizes,
-      gap_size = gap_size
+      gap_size = gap_size,
+      # This is used to prevent a randomly generated grid container id data
+      # attribute which stabilizes tests and makes it easier to target with
+      # custom css
+      id = "gridlayout-grid-page-container"
     ),
     body_elements
   )
@@ -112,7 +116,7 @@ grid_page <- function(
   shiny::fluidPage(
     theme = theme,
     div(
-      id = "gridlayout-grid-page-container",
+      id = "gridlayout-grid-page",
       header,
       sidebar,
       container

@@ -3,7 +3,7 @@
     Code
       make_nested_panels()
     Output
-      <div class="card no-pad" style="grid-area:nested;" data-grid-area="nested">
+      <div class="card no-pad" style="grid-area:nested;" data-gridlayout-area="nested">
         <div class="card-body">
           <div id="level1" class="grid-container" data-gridlayout-key="level1">
             <div class="grid_panel card" style="grid-area:top;" data-gridlayout-area="top">
@@ -26,7 +26,7 @@
                 <div style="width:100%;height:100%;display:grid;font-size:2rem;place-content:center;">←</div>
               </div>
             </div>
-            <div class="card no-pad" style="grid-area:nested;" data-grid-area="nested">
+            <div class="card no-pad" style="grid-area:nested;" data-gridlayout-area="nested">
               <div class="card-body">
                 <div id="level2" class="grid-container" data-gridlayout-key="level2">
                   <div class="grid_panel card" style="grid-area:top;" data-gridlayout-area="top">

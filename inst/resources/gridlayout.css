@@ -6,7 +6,7 @@
   the grid-container so we're not tied to whatever wrapper we happen to use to
   put around it
 */
-#gridlayout-grid-page-container {
+#gridlayout-grid-page {
   margin-inline: calc(50% - 50vw);
   display: grid;
   grid-template-areas:
@@ -17,11 +17,11 @@
   grid-template-rows: auto 1fr auto;
 }
 
-#gridlayout-grid-page-container > .grid-container {
+#gridlayout-grid-page > .grid-container {
   grid-area: body;
 }
 
-#gridlayout-grid-page-container > .grid-page-header {
+#gridlayout-grid-page > .grid-page-header {
   grid-area: header;
   font-size: 1.5rem;
   padding: 5px;
@@ -31,11 +31,11 @@
   margin-block: 0;
 }
 
-#gridlayout-grid-page-container > .grid-page-sidebar-left {
+#gridlayout-grid-page > .grid-page-sidebar-left {
   width: 250px;
   grid-area: lsidebar;
 }
-#gridlayout-grid-page-container > .grid-page-sidebar-right {
+#gridlayout-grid-page > .grid-page-sidebar-right {
   width: 250px;
   grid-area: rsidebar;
 }
