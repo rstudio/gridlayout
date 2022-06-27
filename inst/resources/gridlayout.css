@@ -96,6 +96,12 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   max-height: 100%;
 }
 
+/* Add ability to turn off padding of the body of card for things like nested
+grids where the padding is already provided by the child element */
+.grid-container div.card.no-pad .card-body {
+  padding: 0;
+}
+
 /* --- Grid Panels ------------------------------------------- */
 
 .grid_panel {
