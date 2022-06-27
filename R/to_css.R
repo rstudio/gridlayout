@@ -122,7 +122,7 @@ generate_element_specific_css <- function(layout, container_query){
       build_css_rule(
         selector =  paste0(container_query, " > ", "div[data-gridlayout-area=\"", item$id ,"\"]"),
         prop_list = c(
-          "--collapsible-visibility" = "block" ,
+          "--collapsible-visibility" = "block",
           "--collapsed-content-size" = "0",
           "--collapsed-panel-height" = "min-content",
           "--collapsed-panel-overflow" = "hidden"

@@ -48,7 +48,6 @@ grid_panel_stack <- function(
   )
 
   has_title <- notNull(title)
-  use_collapser <- collapsible && has_title
 
   # Go through and make sure plots that don't have custom sizes are set to fill their panels
   panel_content <- htmltools::tagQuery(
@@ -59,17 +58,19 @@ grid_panel_stack <- function(
     allTags()
 
 
-  shiny::div(
-    class = paste("grid_panel", "vertical_stack"),
-    style= htmltools::css(`grid-area` = area),
-    if (has_title) {
-      card_header(title,use_collapser)
-    },
-    panel_content
+  grid_place(
+    area = area,
+    shiny::div(
+      class = paste("grid_panel", "vertical_stack"),
+      if (has_title) {
+        card_header(title, use_collapser = collapsible && has_title)
+      },
+      panel_content
+    )
   )
 }
 
-card_header <- function(contents, use_collapser = FALSE){
+card_header <- function(contents, use_collapser = FALSE) {
 
   shiny::div(
     class = "card-header",
