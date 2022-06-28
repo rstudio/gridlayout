@@ -20,6 +20,7 @@
 #'
 #' @seealso [grid_card_text]
 #' @return
+#' @export
 grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px") {
   card <- update_el(
     flex_stack(..., scrollable = scrollable, collapsible = collapsible, title = title, item_gap = item_gap),
