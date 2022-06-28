@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_md.R
 \name{to_md}
 \alias{to_md}
-\title{Convert layout to markdown table}
+\title{Convert \code{gridlayout} to markdown table}
 \usage{
 to_md(layout, include_gap_size = TRUE)
 }
@@ -17,7 +17,7 @@ Markdown table that defines the grid layout. This can be used with
 the function \code{grid_layout_from_md()} to build grid layouts.
 }
 \description{
-Convert layout to markdown table
+Convert \code{gridlayout} to markdown table
 }
 \examples{
 

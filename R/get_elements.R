@@ -1,6 +1,6 @@
-#' Get elements and positions out of a grid layout
+#' Get elements and positions out of a `gridlayout` object
 #'
-#' @param layout Object of class `"gridlayout"`.
+#' @param layout Object of class `"gridlayout"`
 #'
 #' @return List of all unique elements in the layout and their `id`,
 #'   `{start,end}_row`, and `{start,end}_col`. Positions are indexed starting at
@@ -35,7 +35,7 @@ get_elements.gridlayout <- function(layout){
   get_info(layout, "elements")
 }
 
-#' Get ids of element in layout
+#' Get ids of element in `gridlayout` object
 #'
 #' @param x Object of class `"gridlayout"`.
 #'

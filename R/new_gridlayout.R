@@ -1,4 +1,4 @@
-#' Construct a gridlayout object
+#' Construct a `gridlayout` object
 #'
 #' @description
 #'

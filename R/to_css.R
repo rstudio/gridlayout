@@ -1,4 +1,4 @@
-#' Convert grid layout to css string
+#' Generate dynamic css for a given `gridlayout`
 #'
 #' @param layout Object of class `"gridlayout"`.
 #' @param container_key The unique key used to identify the container to be
@@ -193,9 +193,9 @@ generate_layout_rules <- function(layout,
 #' @return A concatenated string of property values to be used inside a css
 #'   selector. If the `prop_list` is empty, an empty string (`""`) is returned
 #'   to avoid placing empty css rules on the webpage.
-#' 
+#'
 #' @keywords internal
-#' 
+#'
 build_css_rule <- function(selector, prop_list) {
   # Empty css rules are best avoided
   if (length(prop_list) == 0) {

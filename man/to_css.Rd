@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_css.R
 \name{to_css}
 \alias{to_css}
-\title{Convert grid layout to css string}
+\title{Generate dynamic css for a given \code{gridlayout}}
 \usage{
 to_css(layout, container_key)
 }
@@ -23,7 +23,7 @@ Character string of css used to setup grid layout and place elements
 (referenced by id) into correct locations
 }
 \description{
-Convert grid layout to css string
+Generate dynamic css for a given \code{gridlayout}
 }
 \examples{
 

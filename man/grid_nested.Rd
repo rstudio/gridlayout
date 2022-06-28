@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_nested.R
 \name{grid_nested}
 \alias{grid_nested}
-\title{Grid-positioned card with gridlayout positioned content}
+\title{Grid-positioned card with \code{gridlayout} positioned content}
 \usage{
 grid_nested(area, layout, ..., id = NULL, title = NULL, flag_mismatches = TRUE)
 }

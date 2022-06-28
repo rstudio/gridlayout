@@ -1,4 +1,4 @@
-#' Grid-positioned card with gridlayout positioned content
+#' Grid-positioned card with `gridlayout` positioned content
 #'
 #' Creates a panel for a layout with its own internal gridlayout
 #'

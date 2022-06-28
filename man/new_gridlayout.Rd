@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_gridlayout.R
 \name{new_gridlayout}
 \alias{new_gridlayout}
-\title{Construct a gridlayout object}
+\title{Construct a \code{gridlayout} object}
 \usage{
 new_gridlayout(
   layout_def = list(),

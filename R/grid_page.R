@@ -1,4 +1,4 @@
-#' Use gridlayout for entire app layout
+#' Use `gridlayout` for entire app layout
 #'
 #' This is the typical way to use `gridlayout` in your `Shiny` app. `grid_page`
 #' will make up the entire `ui` declaration of the app. Under the hood it uses

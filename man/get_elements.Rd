@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_elements.R
 \name{get_elements}
 \alias{get_elements}
-\title{Get elements and positions out of a grid layout}
+\title{Get elements and positions out of a \code{gridlayout} object}
 \usage{
 get_elements(layout)
 }
 \arguments{
-\item{layout}{Object of class \code{"gridlayout"}.}
+\item{layout}{Object of class \code{"gridlayout"}}
 }
 \value{
 List of all unique elements in the layout and their \code{id},
@@ -15,7 +15,7 @@ List of all unique elements in the layout and their \code{id},
 1
 }
 \description{
-Get elements and positions out of a grid layout
+Get elements and positions out of a \code{gridlayout} object
 }
 \examples{
 grid_obj <- md_to_gridlayout(

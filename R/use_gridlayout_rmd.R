@@ -1,4 +1,4 @@
-#' Enable gridlayout usage in RMarkdown documents
+#' Enable `gridlayout` usage in RMarkdown documents
 #'
 #' Adds required hooks to RMarkdown to process `gridlayout` chunks and style
 #' document accordingly. Layout will be generated from a chunk identified with

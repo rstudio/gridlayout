@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_page.R
 \name{grid_page}
 \alias{grid_page}
-\title{Use gridlayout for entire app layout}
+\title{Use \code{gridlayout} for entire app layout}
 \usage{
 grid_page(
   layout,

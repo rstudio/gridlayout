@@ -1,4 +1,4 @@
-#' Convert layout to markdown table
+#' Convert `gridlayout` to markdown table
 #'
 #' @param layout Object of class `"gridlayout"`.
 #' @param include_gap_size Should the gap size for the layout be added in
@@ -33,7 +33,7 @@ to_md.gridlayout <- function(layout, include_gap_size = TRUE){
   to_table(layout, include_gap_size = include_gap_size, md_mode = TRUE)
 }
 
-#' Convert gridlayout to matrix format
+#' Convert `gridlayout` to matrix format
 #' @param layout A gridlayout object (as created by `new_gridlayout()`)
 #'
 #' @returns A matrix of the layout with each grid cell and its item membership

@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_gridlayout_rmd.R
 \name{use_gridlayout_rmd}
 \alias{use_gridlayout_rmd}
-\title{Enable gridlayout usage in RMarkdown documents}
+\title{Enable \code{gridlayout} usage in RMarkdown documents}
 \usage{
 use_gridlayout_rmd(container_query = ".main-container", selector_prefix = "#")
 }
