@@ -17,10 +17,36 @@ The \code{element} updated with a \code{gridlayout-area} data-attribute and the
 \code{grid-area} property added to its styles
 }
 \description{
-Place any \code{shiny.tag} element on the grid
+Allows you to place any item directly on the grid without having to wrap it
+in \code{grid_card()} or other containers. This is done by adding a css property
+and data-attribute to the tag object.
 }
 \examples{
+if (FALSE) {
+  library(gridlayout)
+  library(shiny)
+  library(bslib)
 
-grid_place("header", htmltools::tags$h1("I am a header"))
+  shinyApp(
+    ui = grid_page(
+      layout = c("A B B"),
+      grid_place(
+        "A",
+        sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
+      ),
+      grid_place(
+        "B",
+        plotOutput("distPlot", height = "100\%")
+      )
+    ),
+    server = function(input, output, session) {
+      output$distPlot <- renderPlot({
+        x    <- faithful[, 2]
+        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+      })
+    }
+  )
 
+}
 }

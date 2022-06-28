@@ -58,30 +58,26 @@ by wrapping in a \code{grid_card()} with the \code{area} set to the area in the 
 the element should be placed in.
 }
 \examples{
-# Only run these examples in interactive R sessions
 if (FALSE) {
-requireNamespace("shiny", quietly = TRUE)
-requireNamespace("bslib", quietly = TRUE)
-
+library(gridlayout)
 library(shiny)
+library(bslib)
+
 shinyApp(
   ui = grid_page(
-    layout = "
-      |2rem |200px   |1fr    |
-      |90px |header  |header |
-      |1fr  |sidebar |plot   |",
-    grid_card(
-      "header",
-      shiny::h2("My App Header")
+    layout = c(
+      "header  header",
+      "sidebar distPlot"
     ),
+    row_sizes = c("50px", "1fr"),
+    col_sizes = c("200px", "1fr"),
+    grid_card_text("header", "This is my header"),
     grid_card(
       "sidebar",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100\%")
+      title = "Settings",
+      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
     ),
-    grid_card(
-      "plot",
-      plotOutput("distPlot", height = "100\%")
-    )
+    grid_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

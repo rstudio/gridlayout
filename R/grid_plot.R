@@ -12,39 +12,11 @@
 #' @inheritDotParams card_plot_output
 #'
 #' @return A grid panel filled with plot output
-#' @export
 #'
 #' @seealso [card_plot_output]
-#' @examples
+#' @example man/examples/simple_app.R
 #'
-#' if (interactive()) {
-#'
-#' shinyApp(
-#'   ui = grid_page(
-#'     layout = c(
-#'       "15px 200px   1fr",
-#'       "85px header  header",
-#'       "1fr  sidebar distPlot"
-#'     ),
-#'     grid_card_text("header", "This is my header", is_title = TRUE),
-#'     grid_card(
-#'       "sidebar",
-#'       title = "Settings",
-#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
-#'     ),
-#'     grid_card_plot("distPlot")
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x    <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#'     })
-#'   }
-#' )
-#'
-#' }
-#'
+#' @export
 grid_plot <- function(area,
                       outputId = area,
                       ...,
@@ -62,15 +34,16 @@ grid_plot <- function(area,
 #' Plot output with smart sizing for use inside a `grid_card`
 #'
 #' A card-aware wrapper of `shiny::plotOutput` that has smart defaults for
-#' sizing
+#' sizing. Allows you to place content around a plot within a card.
 #'
 #' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
 #' @param stretch Set to `TRUE` if this `card_body` is eager to use any extra
 #'   vertical space is available in the card.
 #'
-#' @export
 #' @seealso [grid_plot]
+#' @example man/examples/card_plot_output_app.R
+#' @export
 card_plot_output <- function(outputId,
                              click = NULL,
                              dblclick = NULL,

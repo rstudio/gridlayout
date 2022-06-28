@@ -66,6 +66,8 @@
 #' # Commonly you may want to use the text panel text as the title of your app
 #' grid_card_text(area = "header", "My App Name", is_title = TRUE)
 #'
+#' @example man/examples/simple_app.R
+#'
 #' @export
 grid_card_text <- function(
   area,

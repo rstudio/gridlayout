@@ -23,41 +23,8 @@
 #'
 #' @seealso [grid_container]
 #'
-#' @examples
-#' # Only run these examples in interactive R sessions
-#' if (FALSE) {
-#' requireNamespace("shiny", quietly = TRUE)
-#' requireNamespace("bslib", quietly = TRUE)
+#' @example man/examples/simple_app.R
 #'
-#' library(shiny)
-#' shinyApp(
-#'   ui = grid_page(
-#'     layout = "
-#'       |2rem |200px   |1fr    |
-#'       |90px |header  |header |
-#'       |1fr  |sidebar |plot   |",
-#'     grid_card(
-#'       "header",
-#'       shiny::h2("My App Header")
-#'     ),
-#'     grid_card(
-#'       "sidebar",
-#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100%")
-#'     ),
-#'     grid_card(
-#'       "plot",
-#'       plotOutput("distPlot", height = "100%")
-#'     )
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x    <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#'     })
-#'   }
-#' )
-#' }
 grid_page <- function(
     layout,
     ...,

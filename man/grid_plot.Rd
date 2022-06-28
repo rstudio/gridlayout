@@ -72,23 +72,26 @@ sizing defaults. For more control look at combining \code{grid_card()} with
 \code{card_plot_output()}
 }
 \examples{
-
-if (interactive()) {
+if (FALSE) {
+library(gridlayout)
+library(shiny)
+library(bslib)
 
 shinyApp(
   ui = grid_page(
     layout = c(
-      "15px 200px   1fr",
-      "85px header  header",
-      "1fr  sidebar distPlot"
+      "header  header",
+      "sidebar distPlot"
     ),
-    grid_card_text("header", "This is my header", is_title = TRUE),
+    row_sizes = c("50px", "1fr"),
+    col_sizes = c("200px", "1fr"),
+    grid_card_text("header", "This is my header"),
     grid_card(
       "sidebar",
       title = "Settings",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
+      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
     ),
-    grid_card_plot("distPlot")
+    grid_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -98,9 +101,7 @@ shinyApp(
     })
   }
 )
-
 }
-
 }
 \seealso{
 \link{card_plot_output}

@@ -8,43 +8,17 @@ library(bslib)
 
 shinyApp(
   ui = grid_page(
-    layout = c(
-      "A B",
-      "C C"
-    ),
-    gap_size = "10px",
-    grid_page_header("This is my new header!", bgColor="success", bgGradient = TRUE),
-    grid_page_sidebar(
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%"),
-      bgColor = "info",
-      bgGradient = TRUE
-    ),
-    grid_card(
+    layout = c("A B B"),
+    grid_place(
       "A",
-      title="Simple Plot",
-      card_plot_output("distPlot")
+      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_card(
+    grid_place(
       "B",
-      title = "Featured",
-      tags$p("This shows whatever."),
-      card_plot_output("plot", height = 200)
-    ),
-    grid_plot(
-      "C",
-      outputId = "plot2",
-      has_border = FALSE
+      plotOutput("distPlot", height = "100%")
     )
   ),
   server = function(input, output, session) {
-    output$plot <- renderPlot({
-      plot(cars)
-      title("A plot")
-    })
-    output$plot2 <- renderPlot({
-      plot(cars)
-      title("A plot")
-    })
     output$distPlot <- renderPlot({
       x    <- faithful[, 2]
       bins <- seq(min(x), max(x), length.out = input$bins + 1)

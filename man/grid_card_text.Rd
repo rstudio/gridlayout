@@ -35,7 +35,7 @@ enabled, regardless of layout.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
     \item{\code{class}}{Additional CSS classes to include on the card div.}
-    \item{\code{item_gap}}{How much space should there be between consecutive items?}
+    \item{\code{item_gap}}{How much vertical space should there be between children of card?}
     \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}
   }}
@@ -104,4 +104,34 @@ grid_card_text(
 # Commonly you may want to use the text panel text as the title of your app
 grid_card_text(area = "header", "My App Name", is_title = TRUE)
 
+if (FALSE) {
+library(gridlayout)
+library(shiny)
+library(bslib)
+
+shinyApp(
+  ui = grid_page(
+    layout = c(
+      "header  header",
+      "sidebar distPlot"
+    ),
+    row_sizes = c("50px", "1fr"),
+    col_sizes = c("200px", "1fr"),
+    grid_card_text("header", "This is my header"),
+    grid_card(
+      "sidebar",
+      title = "Settings",
+      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+    ),
+    grid_plot("distPlot")
+  ),
+  server = function(input, output) {
+    output$distPlot <- renderPlot({
+      x    <- faithful[, 2]
+      bins <- seq(min(x), max(x), length.out = input$bins + 1)
+      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    })
+  }
+)
+}
 }

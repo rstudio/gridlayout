@@ -1,5 +1,4 @@
-# The geyser app... but in grid!
-
+if (FALSE) {
 library(gridlayout)
 library(shiny)
 library(bslib)
@@ -28,3 +27,4 @@ shinyApp(
     })
   }
 )
+}

@@ -34,33 +34,54 @@ A \code{grid_card} with a nested layout within it
 Creates a panel for a layout with its own internal gridlayout
 }
 \examples{
-if (interactive()) {
-  library(gridlayout)
-  library(shiny)
+# Demonstrating the ability to nest grid layouts within other gridlayouts
+library(gridlayout)
+library(shiny)
+library(bslib)
 
-  # A centered text panel
-  grid_card_text_c <- function(...) grid_card_text(...)
-
-  my_layout <- "
-|A |B |
-|C |D |"
-  shinyApp(
-    ui = grid_page(
-      layout = my_layout,
-      grid_card_text_c("A", "A"),
-      grid_card_text_c("B", "B"),
-      grid_card_text_c("C", "C"),
-      grid_card_nested(
-        "D",
-        layout = my_layout,
-        grid_card_text_c("A", "A2"),
-        grid_card_text_c("B", "B2"),
-        grid_card_text_c("C", "C2"),
-        grid_card_text_c("D", "D2")
-      )
+ui <- grid_page(
+  layout = c(
+    "header  header",
+    "sidebar plots"
+  ),
+  row_sizes = c("50px", "1fr"),
+  col_sizes = c("250px", "1fr"),
+  grid_card_text("header", "This is my header"),
+  grid_card(
+    "sidebar",
+    title = "Settings",
+    sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+  ),
+  grid_nested(
+    "plots",
+    title = "Plots - in technicolor",
+    layout = c(
+      "distPlot distPlot distPlot",
+      "redPlot  bluePlot greenPlot"
     ),
-    server = function(input, output) {}
+    grid_plot("distPlot"),
+    grid_plot("redPlot"),
+    grid_plot("bluePlot"),
+    grid_plot("greenPlot")
   )
+)
+
+
+drawHist <- function(nbins, color) {
+  x <- faithful[, 2]
+  bins <- seq(min(x), max(x), length.out = nbins + 1)
+  hist(x, breaks = bins, col = color, border = "white")
+}
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot(drawHist(input$bins, "darkgray"))
+  output$redPlot <- renderPlot(drawHist(input$bins, "orangered"))
+  output$bluePlot <- renderPlot(drawHist(input$bins, "steelblue"))
+  output$greenPlot <- renderPlot(drawHist(input$bins, "forestgreen"))
+}
+
+if(FALSE){
+  shinyApp(ui, server)
 }
 }
 \seealso{

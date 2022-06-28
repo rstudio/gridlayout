@@ -17,11 +17,13 @@
 #' @param scrollable Should scroll-bars be added so content that is larger than
 #'   the panel can be seen?
 #' @param class Additional CSS classes to include on the card div.
-#' @param item_gap How much space should there be between consecutive items?
+#' @param item_gap How much vertical space should there be between children of card?
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
-#' @seealso [grid_card_text]
+#' @seealso [grid_card_text, grid_plot, grid_place, card_plot_output]
+#'
+#' @example man/examples/simple_app.R
 #' @export
 grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px", class = NULL) {
   card <- update_el(
