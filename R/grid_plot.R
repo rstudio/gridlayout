@@ -63,6 +63,7 @@ grid_plot <- function(area,
 #' A card-aware wrapper of `shiny::plotOutput` that has smart defaults for
 #' sizing
 #'
+#' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
 #' @param class Additional CSS classes to include on the card div.
 #' @param stretch Set to `TRUE` if this `card_body` is eager to use any extra
