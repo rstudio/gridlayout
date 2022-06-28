@@ -115,7 +115,7 @@ grid_page <- function(
 
   shiny::fluidPage(
     theme = theme,
-    div(
+    htmltools::tags$div(
       id = "gridlayout-grid-page",
       header,
       sidebar,
