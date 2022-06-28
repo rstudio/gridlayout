@@ -25,6 +25,8 @@ any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 \item{...}{
   Arguments passed on to \code{\link[=grid_card]{grid_card}}
   \describe{
+    \item{\code{title}}{Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.}
     \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than

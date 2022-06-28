@@ -19,6 +19,9 @@ desired layout for your Shiny app.}
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
 
+\item{title}{Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.}
+
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}

@@ -32,10 +32,6 @@
 #' @param padding A valid css size that overrides the default of how much
 #'   spacing is around the card contents
 #' @param item_gap How much space should there be between consecutive items?
-#' @param item_alignment How should the items within the panel be aligned.
-#'   Defaults to stacking downward from the top. Options include `"top"`,
-#'   `"centered"`, `"bottom"`, or `"spread"` (items are distributed evenly among
-#'   vertical space).
 #'
 #' @return Elements from `...` wrapped in a `shiny::div()` with styles for
 #'   vertical stacking applied.
@@ -53,9 +49,7 @@
 #' )
 #'
 flex_stack <- function(
-    area,
     ...,
-    item_alignment = "top",
     title = NULL,
     collapsible = TRUE,
     scrollable = FALSE,
@@ -64,28 +58,18 @@ flex_stack <- function(
 
   contents <- list(...)
 
-  if (!item_alignment %in% names(alignment_mapping)) {
-    stop("Alignment argument must be one of ", paste(names(alignment_mapping), collapse = ", "))
-  }
-
-  panel_styles <- htmltools::css(
-    `--item-gap` = item_gap,
-    `justify-content` = alignment_mapping[[item_alignment]]
-  )
-
   has_title <- notNull(title)
 
-  grid_place(
-    area = area,
-    shiny::div(
-      class = paste("grid_card", "vertical_stack"),
-      `data-scrollable` = scrollable,
-      if (has_title) {
-        card_header(title, use_collapser = collapsible && has_title)
-      },
-      shiny::div(contents, style = panel_styles, class = "panel-content")
-    )
+  shiny::div(
+    class = paste("grid_card", "vertical_stack"),
+    style = htmltools::css(`--item-gap` = item_gap),
+    `data-scrollable` = scrollable,
+    if (has_title) {
+      card_header(title, use_collapser = collapsible && has_title)
+    },
+    shiny::div(contents, class = "panel-content")
   )
+
 }
 
 card_header <- function(contents, use_collapser = FALSE) {
@@ -98,12 +82,3 @@ card_header <- function(contents, use_collapser = FALSE) {
   )
 
 }
-
-
-alignment_mapping <- list(
-  "top" = "flex-start",
-  "center" = "center",
-  "bottom" = "flex-end",
-  "spread" = "space-evenly"
-)
-

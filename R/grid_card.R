@@ -5,6 +5,8 @@
 #'
 #' @inheritParams flex_stack
 #' @inheritParams grid_card
+#' @param title Character string to go across top of panel with label. If left
+#'   blank the card contents will take up entire space.
 #' @inheritDotParams flex_stack
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
@@ -12,14 +14,10 @@
 #' @seealso [flex_stack]
 #' @return
 #' @export
-grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
+grid_card <- function(area, ..., title = NULL, scrollable = FALSE, has_border = TRUE) {
 
-  card <- flex_stack(area = area, ..., scrollable = scrollable)
-  # Waiting for the bslib card elements to be merged in
-  # card <- grid_place(area = area, bslib::card(...))
-
-  update_el(
-    card,
+  card <- update_el(
+    flex_stack(..., scrollable = scrollable, title = title),
     classes = "card",
     styles = list(
       # We use transparent here so that removing the border doesn't confusingly
@@ -27,6 +25,11 @@ grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
       border = if (identical(has_border, FALSE)) "transparent"
     )
   )
+
+  # Waiting for the bslib card elements to be merged in
+  # card <- grid_place(area = area, bslib::card(...))
+  grid_place(area = area, card)
+
 }
 
 

@@ -4,7 +4,7 @@
 \alias{grid_card}
 \title{Grid Card}
 \usage{
-grid_card(area, ..., scrollable = FALSE, has_border = TRUE)
+grid_card(area, ..., title = NULL, scrollable = FALSE, has_border = TRUE)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
@@ -13,19 +13,16 @@ section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 \item{...}{
   Arguments passed on to \code{\link[=flex_stack]{flex_stack}}
   \describe{
-    \item{\code{title}}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
     \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
 \code{FALSE})? Gridlayout will only show collapser if the layout allows it
 (panel is entirely positioned within "auto" sized rows, and has a title).
 Setting this to \code{FALSE} will mean collapsibility of the panel will never be
 enabled, regardless of layout.}
     \item{\code{item_gap}}{How much space should there be between consecutive items?}
-    \item{\code{item_alignment}}{How should the items within the panel be aligned.
-Defaults to stacking downward from the top. Options include \code{"top"},
-\code{"centered"}, \code{"bottom"}, or \code{"spread"} (items are distributed evenly among
-vertical space).}
   }}
+
+\item{title}{Character string to go across top of panel with label. If left
+blank the card contents will take up entire space.}
 
 \item{scrollable}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
