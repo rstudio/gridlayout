@@ -4,19 +4,9 @@
 \alias{flex_stack}
 \title{Grid panel with vertically stacked elements}
 \usage{
-flex_stack(
-  area,
-  ...,
-  title = NULL,
-  collapsible = TRUE,
-  scrollable = FALSE,
-  item_gap = "10px"
-)
+flex_stack(..., title, collapsible, scrollable, item_gap = "10px")
 }
 \arguments{
-\item{area}{Name of grid area, should match an area defined in the layout
-section of the wrapping \code{grid_page()} or \code{grid_container()}.}
-
 \item{...}{Elements to include within the panel}
 
 \item{title}{Character string to go across top of panel with label. If left
@@ -32,6 +22,9 @@ enabled, regardless of layout.}
 the panel can be seen?}
 
 \item{item_gap}{How much space should there be between consecutive items?}
+
+\item{area}{Name of grid area, should match an area defined in the layout
+section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{use_card_styles}{Should the element contained in panel be made to look
 like an enclosed card?}

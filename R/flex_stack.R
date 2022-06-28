@@ -50,9 +50,9 @@
 #'
 flex_stack <- function(
     ...,
-    title = NULL,
-    collapsible = TRUE,
-    scrollable = FALSE,
+    title,
+    collapsible,
+    scrollable,
     item_gap = "10px"
 ){
 
@@ -61,7 +61,7 @@ flex_stack <- function(
   has_title <- notNull(title)
 
   shiny::div(
-    class = paste("grid_card", "vertical_stack"),
+    class = "grid_card vertical_stack",
     style = htmltools::css(`--item-gap` = item_gap),
     `data-scrollable` = scrollable,
     if (has_title) {

@@ -27,10 +27,16 @@ any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
   \describe{
     \item{\code{title}}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
-    \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
-to turn off.}
+    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
+\code{FALSE})? Gridlayout will only show collapser if the layout allows it
+(panel is entirely positioned within "auto" sized rows, and has a title).
+Setting this to \code{FALSE} will mean collapsibility of the panel will never be
+enabled, regardless of layout.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
+    \item{\code{item_gap}}{How much space should there be between consecutive items?}
+    \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
+to turn off.}
   }}
 
 \item{img_height}{If the passed icon is a path to an image, how tall should

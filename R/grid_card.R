@@ -7,17 +7,22 @@
 #' @inheritParams grid_card
 #' @param title Character string to go across top of panel with label. If left
 #'   blank the card contents will take up entire space.
-#' @inheritDotParams flex_stack
+#' @param collapsible Should the card be able to be collapsed (`TRUE` or
+#'   `FALSE`)? Gridlayout will only show collapser if the layout allows it
+#'   (panel is entirely positioned within "auto" sized rows, and has a title).
+#'   Setting this to `FALSE` will mean collapsibility of the panel will never be
+#'   enabled, regardless of layout.
+#' @param scrollable Should scroll-bars be added so content that is larger than
+#'   the panel can be seen?
+#' @param item_gap How much space should there be between consecutive items?
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
-#' @seealso [flex_stack]
+#' @seealso [grid_card_text]
 #' @return
-#' @export
-grid_card <- function(area, ..., title = NULL, scrollable = FALSE, has_border = TRUE) {
-
+grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px") {
   card <- update_el(
-    flex_stack(..., scrollable = scrollable, title = title),
+    flex_stack(..., scrollable = scrollable, collapsible = collapsible, title = title, item_gap = item_gap),
     classes = "card",
     styles = list(
       # We use transparent here so that removing the border doesn't confusingly
@@ -29,7 +34,6 @@ grid_card <- function(area, ..., title = NULL, scrollable = FALSE, has_border = 
   # Waiting for the bslib card elements to be merged in
   # card <- grid_place(area = area, bslib::card(...))
   grid_place(area = area, card)
-
 }
 
 
@@ -53,4 +57,3 @@ make_collapser_icon <- function(parent_id = "") {
     class = "collapser-icon"
   )
 }
-

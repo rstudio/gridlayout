@@ -4,22 +4,21 @@
 \alias{grid_card}
 \title{Grid Card}
 \usage{
-grid_card(area, ..., title = NULL, scrollable = FALSE, has_border = TRUE)
+grid_card(
+  area,
+  ...,
+  title = NULL,
+  scrollable = FALSE,
+  collapsible = TRUE,
+  has_border = TRUE,
+  item_gap = "10px"
+)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
 section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=flex_stack]{flex_stack}}
-  \describe{
-    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
-\code{FALSE})? Gridlayout will only show collapser if the layout allows it
-(panel is entirely positioned within "auto" sized rows, and has a title).
-Setting this to \code{FALSE} will mean collapsibility of the panel will never be
-enabled, regardless of layout.}
-    \item{\code{item_gap}}{How much space should there be between consecutive items?}
-  }}
+\item{...}{Elements to include within the panel}
 
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
@@ -27,8 +26,16 @@ blank the card contents will take up entire space.}
 \item{scrollable}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
 
+\item{collapsible}{Should the card be able to be collapsed (\code{TRUE} or
+\code{FALSE})? Gridlayout will only show collapser if the layout allows it
+(panel is entirely positioned within "auto" sized rows, and has a title).
+Setting this to \code{FALSE} will mean collapsibility of the panel will never be
+enabled, regardless of layout.}
+
 \item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}
+
+\item{item_gap}{How much space should there be between consecutive items?}
 }
 \value{
 
@@ -38,5 +45,5 @@ The standard element for placing elements on the grid in a simple card
 container
 }
 \seealso{
-\link{flex_stack}
+\link{grid_card_text}
 }
