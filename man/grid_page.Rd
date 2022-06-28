@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_page.R
 \name{grid_page}
 \alias{grid_page}
-\title{Setup gridlayout UI for shiny app}
+\title{Use gridlayout for entire app layout}
 \usage{
 grid_page(
   layout,

@@ -28,3 +28,4 @@ make_bg_class("warning")
 make_bg_class("primary", TRUE)
 
 }
+\keyword{internal}

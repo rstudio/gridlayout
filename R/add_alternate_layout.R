@@ -16,6 +16,9 @@
 #'   `"auto"` to allow mobile user's to scroll. Beware though, you will want to
 #'   absolutely size any plot outputs in these cases.
 #'
+#'
+#' @keywords internal
+#'
 add_alternate_layout <- function(
   layout,
   alternate_layout,

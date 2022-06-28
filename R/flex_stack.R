@@ -19,6 +19,7 @@
 #' @return Elements from `...` wrapped in a `shiny::div()` with styles for
 #'   vertical stacking applied.
 #'
+#' @keywords internal
 #' @seealso [grid_card]
 #'
 flex_stack <- function(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_container.R
 \name{grid_container}
 \alias{grid_container}
-\title{Build gridlayout container for specified layout}
+\title{Create a gridlayout container for placement in other elements}
 \usage{
 grid_container(
   layout,

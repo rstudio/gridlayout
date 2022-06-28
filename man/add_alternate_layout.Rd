@@ -32,3 +32,4 @@ Adds a layout that will be triggered based upon the size of the viewport.
 This is typically used to add a mobile view (or a desktop view if your app is
 mobile first.)
 }
+\keyword{internal}

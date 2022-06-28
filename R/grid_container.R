@@ -1,4 +1,4 @@
-#' Build gridlayout container for specified layout
+#' Create a gridlayout container for placement in other elements
 #'
 #' Builds a gridlayout within a div of specified id. Not typically called
 #' directly but can be used to create nested grids

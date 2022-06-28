@@ -13,7 +13,7 @@
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
 #'
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' # Only run these examples in interactive R sessions

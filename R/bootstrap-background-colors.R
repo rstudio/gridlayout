@@ -24,7 +24,8 @@ bslib_bg_colors <- c(
 #'
 #' @return A string containing the bootstrap class name to apply the requested
 #'   background color
-#' @export
+#'
+#' @keywords internal
 #'
 #' @examples
 #'
