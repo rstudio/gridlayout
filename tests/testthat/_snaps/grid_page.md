@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div id="gridlayout-grid-page">
           <div id="gridlayout-grid-page-container" class="grid-container" data-gridlayout-key="gridlayout-grid-page-container">
-            <div class="grid_card vertical_stack card" data-gridlayout-area="header" style="grid-area:header;">
+            <div class="grid_card vertical_stack card" data-gridlayout-area="header" data-scrollable="FALSE" style="grid-area:header;">
               <div style="--item-gap:10px;justify-content:flex-start;" class="panel-content">
                 <h2 id="header">This is my header content</h2>
               </div>
             </div>
-            <div class="grid_card vertical_stack card" data-gridlayout-area="footer" style="grid-area:footer;">
+            <div class="grid_card vertical_stack card" data-gridlayout-area="footer" data-scrollable="FALSE" style="grid-area:footer;">
               <div style="--item-gap:10px;justify-content:flex-start;" class="panel-content">
                 <div class="form-group shiny-input-container">
                   <label class="control-label" id="bins-label" for="bins">Number of bins:</label>
@@ -22,7 +22,7 @@
                 </div>
               </div>
             </div>
-            <div class="grid_card vertical_stack card" data-gridlayout-area="plot" style="grid-area:plot;">
+            <div class="grid_card vertical_stack card" data-gridlayout-area="plot" data-scrollable="FALSE" style="grid-area:plot;">
               <div style="--item-gap:10px;justify-content:flex-start;" class="panel-content">
                 <div id="myPlot" class="shiny-plot-output" style="width:100%;height:400px;"></div>
               </div>

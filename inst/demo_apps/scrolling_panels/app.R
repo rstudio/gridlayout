@@ -11,8 +11,6 @@ library(glue)
 shinyApp(
   ui = grid_page(
     layout = new_gridlayout("
-      |      |           |
-      |------|-----------|
       |1rem  |1fr        |
       |80px  |header     |
       |400px |chickPlot  |

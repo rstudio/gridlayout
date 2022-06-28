@@ -14,7 +14,7 @@
 #' @export
 grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
 
-  card <- flex_stack(area = area, ...)
+  card <- flex_stack(area = area, ..., scrollable = scrollable)
   # Waiting for the bslib card elements to be merged in
   # card <- grid_place(area = area, bslib::card(...))
 
@@ -22,7 +22,6 @@ grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
     card,
     classes = "card",
     styles = list(
-      overflow = if (scrollable) "scroll",
       # We use transparent here so that removing the border doesn't confusingly
       # change the size of the card
       border = if (identical(has_border, FALSE)) "transparent"

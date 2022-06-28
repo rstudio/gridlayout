@@ -69,7 +69,6 @@ flex_stack <- function(
   }
 
   panel_styles <- htmltools::css(
-    overflow = if (scrollable) "scroll",
     `--item-gap` = item_gap,
     `justify-content` = alignment_mapping[[item_alignment]]
   )
@@ -80,6 +79,7 @@ flex_stack <- function(
     area = area,
     shiny::div(
       class = paste("grid_card", "vertical_stack"),
+      `data-scrollable` = scrollable,
       if (has_title) {
         card_header(title, use_collapser = collapsible && has_title)
       },

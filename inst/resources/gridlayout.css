@@ -65,6 +65,21 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   min-height: 0;
 }
 
+/* Scrollable cards: 
+If the user has allowed scrollable cards then we need to set
+the overflow accordingly. 
+*/
+div[data-scrollable="TRUE"] .panel-content {
+  overflow: scroll;
+}
+
+/* Since we're in the world of flex, the height value is entirely ignored so in
+order to keep the plots sized how we expect them to, we need to not let flex do
+it's shrink magic on them */
+div[data-scrollable="TRUE"] .shiny-plot-output {
+  flex-shrink: 0;
+}
+
 .grid-container .shiny-plot-output > img {
   /* The way grid sizing works can throw off the plot sizing in shiny. This
      is because the size of the parent grows to its largest child element.
