@@ -17,20 +17,14 @@ knitr::opts_chunk$set(
 
 ```{r, eval = FALSE, echo = FALSE}
 # Generate screenshots for this vignette
-source(here::here("tests/screenshot-tests/setupScreenshots.R"))
+source(here::here("inst/demo_apps/setupScreenshots.R"))
 
 
-lapply(
-  c("base", "only_grid_card"),
-  function(mode){
-    screenshot_demo_app(
-      app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown_options.Rmd'),
-      screenshot_name = paste0("use_gridlayout_rmd_", mode, ".png"),
-      screenshot_root = "vignettes",
-      rmd_params = list(mode = mode),
-      vwidth = 1100
-    )
-  }
+screenshot_demo_app(
+  app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown.Rmd'),
+  screenshot_name = "use_gridlayout_rmd.png",
+  screenshot_root = "vignettes",
+  vwidth = 1100
 )
 
 ```
@@ -47,9 +41,9 @@ By placing the function `use_gridlayout_rmd` in the `setup` chunk of an Rmd you 
 The following shows how you can customize the appearance of the elements of your layout using "card styles" and custom css. 
 
 
-# Starting point
+# The markdown code
 
-All the screenshots below will assume an `.Rmd` that looks like this
+The screenshot below is based on an `.Rmd` that looks like this
 
 ````
 ## Main
@@ -64,7 +58,7 @@ All the screenshots below will assume an `.Rmd` that looks like this
 ```
 
 
-## Sidebar {.grid_card}
+## Sidebar 
 
 Here is some content for the sidebar
 
@@ -74,9 +68,9 @@ Anything you want could go in the footer.
 ````
 
 
-## Default settings
+## Result
 
-The default settings will give every element a card-like styling. 
+
 ```{r, eval = FALSE}
 use_gridlayout_rmd()
 ```
@@ -86,20 +80,5 @@ use_gridlayout_rmd()
 knitr::include_graphics("use_gridlayout_rmd_base.png")
 ```
 
-
-## Targeting specific elements for card styling
-
-By adjusting the argument `is_card_styled` you can customize what gets these card styles. For instance, here we give the card styles to elements with the `grid_card` class.
-
-Note that in the `.Rmd` above that only the sidebar had the class of `grid_card` added to it using the syntax `{.grid_card}`.
-
-```{r, eval = FALSE}
-use_gridlayout_rmd(is_card_styled = "grid_card")
-```
-
-
-```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("use_gridlayout_rmd_only_grid_card.png")
-```
 
 

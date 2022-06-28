@@ -418,60 +418,54 @@ pre code {
   the grid-container so we're not tied to whatever wrapper we happen to use to
   put around it
 */
-#gridlayout-grid-page-container {
+#gridlayout-grid-page {
   margin-inline: calc(50% - 50vw);
+  display: grid;
+  grid-template-areas:
+    "header   header header"
+    "lsidebar body   rsidebar"
+    "footer   footer footer";
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
 }
 
+#gridlayout-grid-page > .grid-container {
+  grid-area: body;
+}
+
+#gridlayout-grid-page > .grid-page-header {
+  grid-area: header;
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+.grid-page-header > * {
+  margin-block: 0;
+}
+
+#gridlayout-grid-page > .grid-page-sidebar-left {
+  width: 250px;
+  grid-area: lsidebar;
+}
+#gridlayout-grid-page > .grid-page-sidebar-right {
+  width: 250px;
+  grid-area: rsidebar;
+}
+
+.grid-page-header,
+.grid-page-sidebar-left,
+.grid-page-sidebar-right {
+  padding: 10px;
+}
 
 .grid-container {
-  --undo-gap: calc(-1* var(--grid-gap));
+  --undo-gap: calc(-1 * var(--grid-gap));
 }
 
 .grid-container > * {
   box-sizing: border-box;
   margin: 0;
 }
-
-
-
-.grid-header {
-  padding: var(--card-padding, 8px);
-  background-color: var(--grid-header-bg-color, WhiteSmoke);
-  color: var(--grid-header-fg-color);
-  display: flex;
-  align-items: center;
-}
-
-.grid-sidebar {
-  padding: var(--card-padding, 8px);
-  background-color: var(--grid-sidebar-bg-color);
-  color: var(--grid-sidebar-fg-color);
-}
-
-/*
-  Utility classes to position items on any edge with no gaps
-*/
-.pos-left-sidebar {
-  margin-block: var(--undo-gap);
-  margin-left: var(--undo-gap);
-}
-
-.pos-right-sidebar {
-  margin-block: var(--undo-gap);
-  margin-right: var(--undo-gap);
-}
-
-.pos-header {
-  margin-inline: var(--undo-gap);
-  margin-top: var(--undo-gap);
-}
-
-.pos-footer {
-  margin-inline: var(--undo-gap);
-  margin-bottom: var(--undo-gap);
-}
-
-
 
 /* If we just use 1fr for the content, then it can
 sometimes overflow and cause the cell to be larger
@@ -481,6 +475,21 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
 .grid-container * {
   min-width: 0;
   min-height: 0;
+}
+
+/* Scrollable cards: 
+If the user has allowed scrollable cards then we need to set
+the overflow accordingly. 
+*/
+div[data-scrollable="TRUE"] .panel-content {
+  overflow: scroll;
+}
+
+/* Since we're in the world of flex, the height value is entirely ignored so in
+order to keep the plots sized how we expect them to, we need to not let flex do
+it's shrink magic on them */
+div[data-scrollable="TRUE"] .shiny-plot-output {
+  flex-shrink: 0;
 }
 
 .grid-container .shiny-plot-output > img {
@@ -500,19 +509,17 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   max-height: 100%;
 }
 
+/* Add ability to turn off padding of the body of card for things like nested
+grids where the padding is already provided by the child element */
+.grid-container div.card.no-pad .card-body {
+  padding: 0;
+}
+
 /* --- Grid Panels ------------------------------------------- */
 
 .main-container > div {
   --card-padding: 0.8rem;
-  --card-corner-radius: 0.5rem;
-  --card-box-shadow: unset;
-  --card-outline-color: rgb(175, 174, 174);
-  --card-outline-width: 1px;
-  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
-  --card-background: unset;
 
-  background-color: var(--card-background);
-  box-sizing: border-box;
   overflow: hidden;
   display: grid;
   grid-template-areas:
@@ -523,26 +530,12 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
 }
 
-/* Only set card styles if we're not using the bslib card component */
-.main-container > div:not(.card) {
-  box-shadow: var(--card-box-shadow);
-  border-radius: var(--card-corner-radius);
-  outline: var(--card-outline);
-}
-
 /* --- Optional Title Bar ----------------------------------- */
-.main-container > div .title-bar {
+.main-container > div .card-header {
   grid-area: title;
   display: flex;
   justify-content: start;
   align-items: center;
-  border-bottom: 1px solid var(--card-outline-color);
-  padding: calc(var(--card-padding) / 2) var(--card-padding);
-}
-
-.main-container > div .title-bar > h3 {
-  margin: 0;
-  height: 100%;
 }
 
 /* --- Panel Content ---------------------------------------- */
@@ -605,6 +598,7 @@ aligned easily */
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 /* Everything should be inline so lining up works properly */
 .main-container > div_text * {
@@ -651,12 +645,12 @@ aligned easily */
 .section.h_end    { justify-items: end; }
 </style>
 </div>
-<div id="sidebar" class="section level2 grid_panel">
-<h2 class="grid_panel">Sidebar</h2>
+<div id="sidebar" class="section level2 card">
+<h2 class="card">Sidebar</h2>
 <p>Here is some content for the sidebar</p>
 </div>
-<div id="footer" class="section level2">
-<h2>Footer</h2>
+<div id="footer" class="section level2 card">
+<h2 class="card">Footer</h2>
 <p>Anything you want could go in the footer.</p>
 </div>
 

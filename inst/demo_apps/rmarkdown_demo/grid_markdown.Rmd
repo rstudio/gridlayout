@@ -13,7 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 use_gridlayout_rmd()
 ```
 
+
+
 # main {.no-header}
+
+Main content!
 
 ```{gridlayout}
 |      |        |         |
