@@ -66,8 +66,6 @@ because of how height is computed with HTML/CSS.}
 vertical space is available in the card.}
 
 \item{...}{Named arguments become attributes on the div containing the plot.}
-
-\item{class}{Additional CSS classes to include on the card div.}
 }
 \description{
 A card-aware wrapper of \code{shiny::plotOutput} that has smart defaults for

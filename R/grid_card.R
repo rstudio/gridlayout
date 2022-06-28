@@ -16,17 +16,17 @@
 #'   enabled, regardless of layout.
 #' @param scrollable Should scroll-bars be added so content that is larger than
 #'   the panel can be seen?
+#' @param class Additional CSS classes to include on the card div.
 #' @param item_gap How much space should there be between consecutive items?
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
 #' @seealso [grid_card_text]
-#' @return
 #' @export
-grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px") {
+grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px", class = NULL) {
   card <- update_el(
     flex_stack(..., scrollable = scrollable, collapsible = collapsible, title = title, item_gap = item_gap),
-    classes = "card",
+    classes = c("card", class),
     styles = list(
       # We use transparent here so that removing the border doesn't confusingly
       # change the size of the card

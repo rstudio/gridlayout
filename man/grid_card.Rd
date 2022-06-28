@@ -11,7 +11,8 @@ grid_card(
   scrollable = FALSE,
   collapsible = TRUE,
   has_border = TRUE,
-  item_gap = "10px"
+  item_gap = "10px",
+  class = NULL
 )
 }
 \arguments{
@@ -37,9 +38,8 @@ enabled, regardless of layout.}
 to turn off.}
 
 \item{item_gap}{How much space should there be between consecutive items?}
-}
-\value{
 
+\item{class}{Additional CSS classes to include on the card div.}
 }
 \description{
 The standard element for placing elements on the grid in a simple card

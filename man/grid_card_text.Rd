@@ -34,6 +34,7 @@ Setting this to \code{FALSE} will mean collapsibility of the panel will never be
 enabled, regardless of layout.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
+    \item{\code{class}}{Additional CSS classes to include on the card div.}
     \item{\code{item_gap}}{How much space should there be between consecutive items?}
     \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}

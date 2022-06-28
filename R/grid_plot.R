@@ -65,7 +65,6 @@ grid_plot <- function(area,
 #'
 #' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
-#' @param class Additional CSS classes to include on the card div.
 #' @param stretch Set to `TRUE` if this `card_body` is eager to use any extra
 #'   vertical space is available in the card.
 #'
