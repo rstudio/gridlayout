@@ -12,7 +12,7 @@ test_that("Can handle recursive nesting", {
   depth <- 2
 
   emoji_panel <- function(area, emoji){
-    grid_panel(
+    grid_card(
       area = area,
       htmltools::div(
         style = htmltools::css(
