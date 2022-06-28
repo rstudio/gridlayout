@@ -38,6 +38,26 @@ enabled, regardless of layout.}
 the panel can be seen?}
 
 \item{item_gap}{How much space should there be between consecutive items?}
+
+\item{use_card_styles}{Should the element contained in panel be made to look
+like an enclosed card?}
+
+\item{v_align, h_align}{Vertical and Horizontal alignment of content in panel.
+Options include \verb{"center", "start", "end", "stretch"}. These are a direct
+mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
+(=\code{h_align}) and
+\href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
+(= \code{v_align}).}
+
+\item{panel_id}{ID of \code{grid_panel} div. Usually this is automatically set by
+\code{grid_page()} or \code{grid_container()}.}
+
+\item{panel_class}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
+typically automatically generated and should only be touched in advanced
+usage.}
+
+\item{padding}{A valid css size that overrides the default of how much
+spacing is around the card contents}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with styles for
