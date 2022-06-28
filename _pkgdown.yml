@@ -55,10 +55,10 @@ reference:
       Functions for creating, editing, or generating content with `gridlayout` objects. For advanced use-cases.
   - contents:
       - new_gridlayout
-      - to_md
-      - to_matrix
       - md_to_gridlayout
       - get_elements
       - get_element_ids
+      - to_md
+      - to_matrix
       - to_css
 
