@@ -4,7 +4,7 @@ make_grid_container <- function(...){
       ...,
       id = "my_grid",
       grid_card_text("header", "This is my header content"),
-      grid_panel(
+      grid_card(
         "plot",
         shiny::plotOutput("myPlot")
       )

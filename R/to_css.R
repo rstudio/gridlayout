@@ -10,8 +10,8 @@
 #'   a dot, the selector will not be transformed into an id automatically. E.g.
 #'   `container = ".main-content"`.
 #' @param is_card_styled Should each section of the grid be given a card style
-#'   to make it stand out? Options are `"grid_panel"`, where only elements with
-#'   `"grid_panel"` class will get card styling, `"all"` where all children of
+#'   to make it stand out? Options are `"grid_card"`, where only elements with
+#'   `"grid_card"` class will get card styling, `"all"` where all children of
 #'   the grid container will get card styling (useful for RMarkdown or other
 #'   situations where you don't control child rendering) or `"none"` for no card
 #'   styling.
@@ -34,7 +34,7 @@
 #' @export
 to_css <- function(layout,
                    container_key,
-                   is_card_styled = "grid_panel") {
+                   is_card_styled = "grid_card") {
 
   container_query <- if (missing(container_key)) {
     "body"

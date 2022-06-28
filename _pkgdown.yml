@@ -7,7 +7,6 @@ development:
 home:
   strip_header: false
 
-
 navbar:
   title: ~
   type: default
@@ -35,27 +34,27 @@ navbar:
 destination: docs
 
 reference:
-- title: "Layouts"
-  desc: >
-    Functions relating to creating and using gridlayout objects
-- contents:
-  - new_gridlayout
-  - grid_page
-  - grid_container
-  - starts_with("use_gridlayout")
-- title: "Grid Panels"
-  desc: >
-    Functions that wrap content to be placed in the grid.
-- contents:
-  - starts_with("grid_panel")
-- title: "Helper functions"
-  desc: >
-    Various functions for inspecting layouts or the content they create. For advanced use-cases.
-- contents:
-  - to_md
-  - to_matrix
-  - md_to_gridlayout
-  - get_elements
-  - get_element_ids
-  - to_css
-  - build_css_rule
+  - title: "Layouts"
+    desc: >
+      Functions relating to creating and using gridlayout objects
+  - contents:
+      - new_gridlayout
+      - grid_page
+      - grid_container
+      - starts_with("use_gridlayout")
+  - title: "Grid Panels"
+    desc: >
+      Functions that wrap content to be placed in the grid.
+  - contents:
+      - starts_with("grid_card")
+  - title: "Helper functions"
+    desc: >
+      Various functions for inspecting layouts or the content they create. For advanced use-cases.
+  - contents:
+      - to_md
+      - to_matrix
+      - md_to_gridlayout
+      - get_elements
+      - get_element_ids
+      - to_css
+      - build_css_rule

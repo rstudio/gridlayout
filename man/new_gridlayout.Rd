@@ -66,177 +66,20 @@ is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_grid
  c("header header",
    "plota  plotb")
 )
-}\if{html}{\out{</div>}}\preformatted{## $element_ids
-## [1] "header" "plota"  "plotb" 
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plota  plotb 
+## Gap of 12px. Total height of viewport.
 ## 
-## $layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 2
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plota"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plotb"
-## 
-## $elements[[3]]$start_row
-## [1] 2
-## 
-## $elements[[3]]$end_row
-## [1] 2
-## 
-## $elements[[3]]$start_col
-## [1] 2
-## 
-## $elements[[3]]$end_col
-## [1] 2
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "1fr" "1fr"
-## 
-## $col_sizes
-## [1] "1fr" "1fr"
-## 
-## $container_height
-## [1] "viewport"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates
-## $alternates[[1]]
-## $alternates[[1]]$layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 1
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plota"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plotb"
-## 
-## $elements[[3]]$start_row
-## [1] 3
-## 
-## $elements[[3]]$end_row
-## [1] 3
-## 
-## $elements[[3]]$start_col
-## [1] 1
-## 
-## $elements[[3]]$end_col
-## [1] 1
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "85px"  "350px" "350px"
-## 
-## $col_sizes
-## [1] "1fr"
-## 
-## $container_height
-## [1] "auto"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates[[1]]$width_bounds
-##     max 
-## "500px" 
-## 
-## attr(,"auto_mobile_layout")
-## [1] TRUE
-## 
-## 
-## attr(,"class")
-## [1] "gridlayout"
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plota 
+##     350px plotb 
+##   Gap of 12px. Total height of auto.
 }
 }
 
@@ -249,177 +92,20 @@ header along the top and two plots side-by-side the layout would look as
 follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "| header | header |
    | plota  | plotb  |" )
-}\if{html}{\out{</div>}}\preformatted{## $element_ids
-## [1] "header" "plota"  "plotb" 
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plota  plotb 
+## Gap of 12px. Total height of viewport.
 ## 
-## $layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 2
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plota"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plotb"
-## 
-## $elements[[3]]$start_row
-## [1] 2
-## 
-## $elements[[3]]$end_row
-## [1] 2
-## 
-## $elements[[3]]$start_col
-## [1] 2
-## 
-## $elements[[3]]$end_col
-## [1] 2
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "1fr" "1fr"
-## 
-## $col_sizes
-## [1] "1fr" "1fr"
-## 
-## $container_height
-## [1] "viewport"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates
-## $alternates[[1]]
-## $alternates[[1]]$layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 1
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plota"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plotb"
-## 
-## $elements[[3]]$start_row
-## [1] 3
-## 
-## $elements[[3]]$end_row
-## [1] 3
-## 
-## $elements[[3]]$start_col
-## [1] 1
-## 
-## $elements[[3]]$end_col
-## [1] 1
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "85px"  "350px" "350px"
-## 
-## $col_sizes
-## [1] "1fr"
-## 
-## $container_height
-## [1] "auto"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates[[1]]$width_bounds
-##     max 
-## "500px" 
-## 
-## attr(,"auto_mobile_layout")
-## [1] TRUE
-## 
-## 
-## attr(,"class")
-## [1] "gridlayout"
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plota 
+##     350px plotb 
+##   Gap of 12px. Total height of auto.
 }
 
 \emph{An important caveat of this style is it is not currently able to be detected
@@ -446,177 +132,20 @@ The same layout as declared above can be accomplished with the following:\if{htm
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
 ) )
-}\if{html}{\out{</div>}}\preformatted{## $element_ids
-## [1] "header" "plot_a" "plot_b"
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plot_a plot_b
+## Gap of 12px. Total height of viewport.
 ## 
-## $layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 2
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plot_a"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plot_b"
-## 
-## $elements[[3]]$start_row
-## [1] 2
-## 
-## $elements[[3]]$end_row
-## [1] 2
-## 
-## $elements[[3]]$start_col
-## [1] 2
-## 
-## $elements[[3]]$end_col
-## [1] 2
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "1fr" "1fr"
-## 
-## $col_sizes
-## [1] "1fr" "1fr"
-## 
-## $container_height
-## [1] "viewport"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates
-## $alternates[[1]]
-## $alternates[[1]]$layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 1
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plot_a"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plot_b"
-## 
-## $elements[[3]]$start_row
-## [1] 3
-## 
-## $elements[[3]]$end_row
-## [1] 3
-## 
-## $elements[[3]]$start_col
-## [1] 1
-## 
-## $elements[[3]]$end_col
-## [1] 1
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "85px"  "350px" "350px"
-## 
-## $col_sizes
-## [1] "1fr"
-## 
-## $container_height
-## [1] "auto"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates[[1]]$width_bounds
-##     max 
-## "500px" 
-## 
-## attr(,"auto_mobile_layout")
-## [1] TRUE
-## 
-## 
-## attr(,"class")
-## [1] "gridlayout"
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##            1fr   
+##     85px  header
+##     350px plot_a
+##     350px plot_b
+##   Gap of 12px. Total height of auto.
 }
 }
 
@@ -650,175 +179,20 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
     width_bounds = c(max = 500)
   )
 )
-}\if{html}{\out{</div>}}\preformatted{## $element_ids
-## [1] "header" "plot_a" "plot_b"
+}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+##       1fr    1fr   
+##   1fr header header
+##   1fr plot_a plot_b
+## Gap of 12px. Total height of viewport.
 ## 
-## $layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 2
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plot_a"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plot_b"
-## 
-## $elements[[3]]$start_row
-## [1] 2
-## 
-## $elements[[3]]$end_row
-## [1] 2
-## 
-## $elements[[3]]$start_col
-## [1] 2
-## 
-## $elements[[3]]$end_col
-## [1] 2
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "1fr" "1fr"
-## 
-## $col_sizes
-## [1] "1fr" "1fr"
-## 
-## $container_height
-## [1] "viewport"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates
-## $alternates[[1]]
-## $alternates[[1]]$layout
-## $elements
-## $elements[[1]]
-## $elements[[1]]$id
-## [1] "header"
-## 
-## $elements[[1]]$start_row
-## [1] 1
-## 
-## $elements[[1]]$end_row
-## [1] 1
-## 
-## $elements[[1]]$start_col
-## [1] 1
-## 
-## $elements[[1]]$end_col
-## [1] 1
-## 
-## $elements[[1]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[2]]
-## $elements[[2]]$id
-## [1] "plot_a"
-## 
-## $elements[[2]]$start_row
-## [1] 2
-## 
-## $elements[[2]]$end_row
-## [1] 2
-## 
-## $elements[[2]]$start_col
-## [1] 1
-## 
-## $elements[[2]]$end_col
-## [1] 1
-## 
-## $elements[[2]]$collapsible
-## [1] FALSE
-## 
-## 
-## $elements[[3]]
-## $elements[[3]]$id
-## [1] "plot_b"
-## 
-## $elements[[3]]$start_row
-## [1] 3
-## 
-## $elements[[3]]$end_row
-## [1] 3
-## 
-## $elements[[3]]$start_col
-## [1] 1
-## 
-## $elements[[3]]$end_col
-## [1] 1
-## 
-## $elements[[3]]$collapsible
-## [1] FALSE
-## 
-## 
-## 
-## $row_sizes
-## [1] "1fr" "1fr" "1fr"
-## 
-## $col_sizes
-## [1] "1fr"
-## 
-## $container_height
-## [1] "viewport"
-## 
-## $gap_size
-## [1] "12px"
-## 
-## attr(,"class")
-## [1] "gridlayout_template"
-## 
-## $alternates[[1]]$width_bounds
-##     max 
-## "500px" 
-## 
-## 
-## 
-## attr(,"class")
-## [1] "gridlayout"
+## Alternate layouts:  
+##   
+##   - Width < 500px 
+##          1fr   
+##     1fr header
+##     1fr plot_a
+##     1fr plot_b
+##   Gap of 12px. Total height of viewport.
 }
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.

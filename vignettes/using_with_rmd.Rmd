@@ -21,7 +21,7 @@ source(here::here("tests/screenshot-tests/setupScreenshots.R"))
 
 
 lapply(
-  c("base", "only_grid_panel"),
+  c("base", "only_grid_card"),
   function(mode){
     screenshot_demo_app(
       app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown_options.Rmd'),
@@ -64,7 +64,7 @@ All the screenshots below will assume an `.Rmd` that looks like this
 ```
 
 
-## Sidebar {.grid_panel}
+## Sidebar {.grid_card}
 
 Here is some content for the sidebar
 
@@ -89,17 +89,17 @@ knitr::include_graphics("use_gridlayout_rmd_base.png")
 
 ## Targeting specific elements for card styling
 
-By adjusting the argument `is_card_styled` you can customize what gets these card styles. For instance, here we give the card styles to elements with the `grid_panel` class.
+By adjusting the argument `is_card_styled` you can customize what gets these card styles. For instance, here we give the card styles to elements with the `grid_card` class.
 
-Note that in the `.Rmd` above that only the sidebar had the class of `grid_panel` added to it using the syntax `{.grid_panel}`.
+Note that in the `.Rmd` above that only the sidebar had the class of `grid_card` added to it using the syntax `{.grid_card}`.
 
 ```{r, eval = FALSE}
-use_gridlayout_rmd(is_card_styled = "grid_panel")
+use_gridlayout_rmd(is_card_styled = "grid_card")
 ```
 
 
 ```{r, echo = FALSE, message=FALSE}
-knitr::include_graphics("use_gridlayout_rmd_only_grid_panel.png")
+knitr::include_graphics("use_gridlayout_rmd_only_grid_card.png")
 ```
 
 

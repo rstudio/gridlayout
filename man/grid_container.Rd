@@ -19,7 +19,7 @@ grid_container(
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
+\item{...}{\code{grid_card()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{id}{ID unique to this container (note that the HTML will be prefixed
@@ -62,13 +62,13 @@ shinyApp(
         |2rem  |200px   |1fr    |
         |85px  |header  |header |
         |1fr   |sidebar |plot   |",
-      grid_panel_text("header", "Geysers!"),
-      grid_panel(
+      grid_card_text("header", "Geysers!"),
+      grid_card(
         "sidebar",
         title = "Settings",
         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
       ),
-      grid_panel(
+      grid_card(
         "plot",
         plotOutput("distPlot", height="100\%")
       )
@@ -86,5 +86,5 @@ shinyApp(
 
 }
 \seealso{
-\link{grid_page}, \link{grid_panel}
+\link{grid_page}, \link{grid_card}
 }

@@ -3,7 +3,7 @@
 #' This is the typical way to use `gridlayout` in your `Shiny` app. `grid_page`
 #' will make up the entire `ui` declaration of the app. Under the hood it uses
 #' [shiny::fluidPage()] and [grid_container]. Elements are placed in the layout
-#' by wrapping in a `grid_panel()` with the `area` set to the area in the layout
+#' by wrapping in a `grid_card()` with the `area` set to the area in the layout
 #' the element should be placed in.
 #'
 #' @inheritParams grid_container
@@ -36,15 +36,15 @@
 #'       |2rem |200px   |1fr    |
 #'       |90px |header  |header |
 #'       |1fr  |sidebar |plot   |",
-#'     grid_panel(
+#'     grid_card(
 #'       "header",
 #'       shiny::h2("My App Header")
 #'     ),
-#'     grid_panel(
+#'     grid_card(
 #'       "sidebar",
 #'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100%")
 #'     ),
-#'     grid_panel(
+#'     grid_card(
 #'       "plot",
 #'       plotOutput("distPlot", height = "100%")
 #'     )

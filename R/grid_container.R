@@ -9,7 +9,7 @@
 #' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.
-#' @param ... `grid_panel()` (or similar) arguments that will fill the grid
+#' @param ... `grid_card()` (or similar) arguments that will fill the grid
 #'   layout. Note the areas should match the those provided in `layout`.
 #' @param flag_mismatches Should a mismatch between supplied `elements` ui
 #'   definitions and layout trigger a warning? In advanced cases you may want to
@@ -18,7 +18,7 @@
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
 #'
-#' @seealso [grid_page], [grid_panel]
+#' @seealso [grid_page], [grid_card]
 #' @export
 #'
 #' @examples
@@ -35,13 +35,13 @@
 #'         |2rem  |200px   |1fr    |
 #'         |85px  |header  |header |
 #'         |1fr   |sidebar |plot   |",
-#'       grid_panel_text("header", "Geysers!"),
-#'       grid_panel(
+#'       grid_card_text("header", "Geysers!"),
+#'       grid_card(
 #'         "sidebar",
 #'         title = "Settings",
 #'         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
 #'       ),
-#'       grid_panel(
+#'       grid_card(
 #'         "plot",
 #'         plotOutput("distPlot", height="100%")
 #'       )

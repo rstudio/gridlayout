@@ -20,6 +20,9 @@ argument.}
     \item{\code{stretch}}{Set to \code{TRUE} if this \code{card_body} is eager to use any extra
 vertical space is available in the card.}
   }}
+
+\item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
+to turn off.}
 }
 \value{
 A grid panel filled with plot output
@@ -39,13 +42,13 @@ shinyApp(
       "85px header  header",
       "1fr  sidebar distPlot"
     ),
-    grid_panel_text("header", "This is my header", is_title = TRUE),
-    grid_panel(
+    grid_card_text("header", "This is my header", is_title = TRUE),
+    grid_card(
       "sidebar",
       title = "Settings",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
     ),
-    grid_panel_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

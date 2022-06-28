@@ -82,23 +82,23 @@ app_w_layout <- function(my_layout) {
   shinyApp(
     ui = grid_page(
       layout = my_layout,
-      grid_panel_text("header", "My gridlayout app"),
-      grid_panel(
+      grid_card_text("header", "My gridlayout app"),
+      grid_card(
         "chickens",
         tabsetPanel(
           tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
           tabPanel("Fastest growing", gt_output("chickTable"))
         )
       ),
-      grid_panel(
+      grid_card(
         "treePlot",
         plotOutput("treePlot", height = "100%")
       ),
-      # grid_panel(
+      # grid_card(
       #   "yarnPlot",
       #   plotOutput("yarnPlot", height = "100%")
       # ),
-      grid_panel(
+      grid_card(
          "stockTable",
         gt_output("stockTable"), scrollable = TRUE
       ),
@@ -244,23 +244,23 @@ The following code is the UI definition used for all the screenshots. The only t
 ```{r, eval = FALSE, echo = TRUE}
 ui <- grid_page(
   layout = my_layout,
-  grid_panel_text("header", "My gridlayout app"),
-  grid_panel(
+  grid_card_text("header", "My gridlayout app"),
+  grid_card(
     "chickens",
     tabsetPanel(
       tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
       tabPanel("Fastest growing", gt_output("chickTable"))
     )
   ),
-  grid_panel(
+  grid_card(
     "treePlot",
     plotOutput("treePlot", height = "100%")
   ),
-  grid_panel(
+  grid_card(
     "yarnPlot",
     plotOutput("yarnPlot", height = "100%")
   ),
-  grid_panel(
+  grid_card(
     "stockTable",
     gt_output("stockTable"), scrollable = TRUE
   ),

@@ -11,7 +11,7 @@ grid_card(area, ..., scrollable = FALSE, has_border = TRUE)
 section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=grid_panel_stack]{grid_panel_stack}}
+  Arguments passed on to \code{\link[=grid_card_stack]{grid_card_stack}}
   \describe{
     \item{\code{title}}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
@@ -41,5 +41,5 @@ The standard element for placing elements on the grid in a simple card
 container
 }
 \seealso{
-\link{grid_panel_stack}
+\link{grid_card_stack}
 }

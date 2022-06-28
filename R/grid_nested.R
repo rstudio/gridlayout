@@ -2,12 +2,12 @@
 #'
 #' Creates a panel for a layout with its own internal gridlayout
 #'
-#' @inheritParams grid_panel
+#' @inheritParams grid_card
 #' @inheritParams grid_container
 #'
-#' @seealso [grid_panel], [grid_container]
+#' @seealso [grid_card], [grid_container]
 #'
-#' @return A `grid_panel` with a nested layout within it
+#' @return A `grid_card` with a nested layout within it
 #' @export
 #'
 #' @examples
@@ -16,7 +16,7 @@
 #'   library(shiny)
 #'
 #'   # A centered text panel
-#'   grid_panel_text_c <- function(...) grid_panel_text(..., h_align = "center")
+#'   grid_card_text_c <- function(...) grid_card_text(...)
 #'
 #'   my_layout <- "
 #' |A |B |
@@ -24,16 +24,16 @@
 #'   shinyApp(
 #'     ui = grid_page(
 #'       layout = my_layout,
-#'       grid_panel_text_c("A", "A"),
-#'       grid_panel_text_c("B", "B"),
-#'       grid_panel_text_c("C", "C"),
-#'       grid_panel_nested(
+#'       grid_card_text_c("A", "A"),
+#'       grid_card_text_c("B", "B"),
+#'       grid_card_text_c("C", "C"),
+#'       grid_card_nested(
 #'         "D",
 #'         layout = my_layout,
-#'         grid_panel_text_c("A", "A2"),
-#'         grid_panel_text_c("B", "B2"),
-#'         grid_panel_text_c("C", "C2"),
-#'         grid_panel_text_c("D", "D2")
+#'         grid_card_text_c("A", "A2"),
+#'         grid_card_text_c("B", "B2"),
+#'         grid_card_text_c("C", "C2"),
+#'         grid_card_text_c("D", "D2")
 #'       )
 #'     ),
 #'     server = function(input, output) {}

@@ -4,7 +4,7 @@
 #' sizing defaults.
 #'
 #'
-#' @inheritParams grid_panel
+#' @inheritParams grid_card
 #' @param outputId Output id of the plot output. Used to link to server code
 #'   generating plot. If left unset this will use the same value as the `area`
 #'   argument.
@@ -25,13 +25,13 @@
 #'       "85px header  header",
 #'       "1fr  sidebar distPlot"
 #'     ),
-#'     grid_panel_text("header", "This is my header", is_title = TRUE),
-#'     grid_panel(
+#'     grid_card_text("header", "This is my header", is_title = TRUE),
+#'     grid_card(
 #'       "sidebar",
 #'       title = "Settings",
 #'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
 #'     ),
-#'     grid_panel_plot("distPlot")
+#'     grid_card_plot("distPlot")
 #'   ),
 #'   server = function(input, output) {
 #'     output$distPlot <- renderPlot({

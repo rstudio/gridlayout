@@ -16,8 +16,8 @@ container. This is typically left at the default of \code{'.main-container'} as
 that's the parent of each section in the standard rmd template.}
 
 \item{is_card_styled}{Should each section of the grid be given a card style
-to make it stand out? Options are \code{"grid_panel"}, where only elements with
-\code{"grid_panel"} class will get card styling, \code{"all"} where all children of
+to make it stand out? Options are \code{"grid_card"}, where only elements with
+\code{"grid_card"} class will get card styling, \code{"all"} where all children of
 the grid container will get card styling (useful for RMarkdown or other
 situations where you don't control child rendering) or \code{"none"} for no card
 styling.}

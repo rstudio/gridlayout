@@ -90,7 +90,7 @@ grids where the padding is already provided by the child element */
 
 /* --- Grid Panels ------------------------------------------- */
 
-.grid_panel {
+.grid_card {
   --card-padding: 0.8rem;
 
   overflow: hidden;
@@ -104,7 +104,7 @@ grids where the padding is already provided by the child element */
 }
 
 /* --- Optional Title Bar ----------------------------------- */
-.grid_panel .card-header {
+.grid_card .card-header {
   grid-area: title;
   display: flex;
   justify-content: start;
@@ -122,7 +122,7 @@ grids where the padding is already provided by the child element */
 /* --- Collapsing ------------------------------------------ */
 /* Panels that can be collapsed control their size with a toggle switch */
 
-.grid_panel.collapsed {
+.grid_card.collapsed {
   /* If panel is not collapsible this css variable is defined as "block"
      which means that a panel that has been collapsed, and then resized
      to a scenario where it cant be collapsed, it will pop back
@@ -134,20 +134,20 @@ grids where the padding is already provided by the child element */
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */
-.grid_panel .collapser-icon {
+.grid_card .collapser-icon {
   display: var(--collapsible-visibility, none);
 }
-.grid_panel .collapser-icon svg {
+.grid_card .collapser-icon svg {
   transition: transform 0.2s ease;
 }
-.grid_panel.collapsed .collapser-icon svg {
+.grid_card.collapsed .collapser-icon svg {
   transform: scaleY(-1);
 }
 
 /* --- Vertical Stack Panels -------------------------------- */
 /* These are panels that have a column-flex layout for nicely stacking a bunch
 of children on top of eachother */
-.grid_panel.vertical_stack .panel-content {
+.grid_card.vertical_stack .panel-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -157,7 +157,7 @@ of children on top of eachother */
   Add a margin to the bottom of each element except the last. This essentially
   replicates the gap property but has better browser support
 */
-.grid_panel.vertical_stack .panel-content > *:not(:last-child) {
+.grid_card.vertical_stack .panel-content > *:not(:last-child) {
   margin-bottom: var(--item-gap, 1rem);
 }
 
@@ -166,7 +166,7 @@ of children on top of eachother */
 aligned easily */
 
 /* Make everything line up nice and cleanly like it should in the middle */
-.grid_panel_text {
+.grid_card_text {
   margin: 0;
   height: 100%;
   display: flex;
@@ -174,25 +174,25 @@ aligned easily */
   justify-content: center;
 }
 /* Everything should be inline so lining up works properly */
-.grid_panel_text * {
+.grid_card_text * {
   display: inline;
 }
 /* Make sure logo isn't right up next to the text */
-.grid_panel_text > * {
+.grid_card_text > * {
   margin: 0 5px;
 }
 
 /* --- Tabset Panel work -------------------------------- */
 /* Makes it so tabpanels work in gridpanels */
-.grid_panel .tabbable {
+.grid_card .tabbable {
   height: 100%;
 }
-.grid_panel .tabbable > .nav {
+.grid_card .tabbable > .nav {
   height: 42px;
 }
-.grid_panel .tabbable .tab-content {
+.grid_card .tabbable .tab-content {
   height: calc(100% - 42px);
 }
-.grid_panel .tabbable .tab-pane {
+.grid_card .tabbable .tab-pane {
   height: 100%;
 }

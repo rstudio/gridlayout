@@ -20,7 +20,7 @@ grid_page(
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
+\item{...}{\code{grid_card()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{row_sizes}{A character vector of valid css sizes for the height of each
@@ -54,7 +54,7 @@ A UI definition that can be passed to the
 This is the typical way to use \code{gridlayout} in your \code{Shiny} app. \code{grid_page}
 will make up the entire \code{ui} declaration of the app. Under the hood it uses
 \code{\link[shiny:fluidPage]{shiny::fluidPage()}} and \link{grid_container}. Elements are placed in the layout
-by wrapping in a \code{grid_panel()} with the \code{area} set to the area in the layout
+by wrapping in a \code{grid_card()} with the \code{area} set to the area in the layout
 the element should be placed in.
 }
 \examples{
@@ -70,15 +70,15 @@ shinyApp(
       |2rem |200px   |1fr    |
       |90px |header  |header |
       |1fr  |sidebar |plot   |",
-    grid_panel(
+    grid_card(
       "header",
       shiny::h2("My App Header")
     ),
-    grid_panel(
+    grid_card(
       "sidebar",
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100\%")
     ),
-    grid_panel(
+    grid_card(
       "plot",
       plotOutput("distPlot", height = "100\%")
     )

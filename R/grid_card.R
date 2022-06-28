@@ -3,18 +3,18 @@
 #' The standard element for placing elements on the grid in a simple card
 #' container
 #'
-#' @inheritParams grid_panel_stack
-#' @inheritParams grid_panel
-#' @inheritDotParams grid_panel_stack
+#' @inheritParams grid_card_stack
+#' @inheritParams grid_card
+#' @inheritDotParams grid_card_stack
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
-#' @seealso [grid_panel_stack]
+#' @seealso [grid_card_stack]
 #' @return
 #' @export
 grid_card <- function(area, ..., scrollable = FALSE, has_border = TRUE) {
 
-  card <- grid_panel_stack(area = area, ...)
+  card <- grid_card_stack(area = area, ...)
   # Waiting for the bslib card elements to be merged in
   # card <- grid_place(area = area, bslib::card(...))
 

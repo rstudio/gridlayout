@@ -26,10 +26,10 @@ use_gridlayout_rmd <- function(container_query = ".main-container",
 
   accessory_css <- get_accessory_css("gridlayout.css")
   if (is_card_styled == "all") {
-    # Make .grid_panel simply apply to every first-level div
+    # Make .grid_card simply apply to every first-level div
     accessory_css <- str_replace_all(
       accessory_css,
-      ".grid_panel",
+      ".grid_card",
       paste0(container_query, " > div"),
       fixed = TRUE
     )

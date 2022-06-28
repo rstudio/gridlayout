@@ -24,9 +24,9 @@
 #'    (=`h_align`) and
 #'   [`align-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
 #'    (= `v_align`).
-#' @param panel_id ID of `grid_panel` div. Usually this is automatically set by
+#' @param panel_id ID of `grid_card` div. Usually this is automatically set by
 #'   `grid_page()` or `grid_container()`.
-#' @param panel_class Class(es) of `grid_panel` div. Like `panel_id` this is
+#' @param panel_class Class(es) of `grid_card` div. Like `panel_id` this is
 #'   typically automatically generated and should only be touched in advanced
 #'   usage.
 #' @param padding A valid css size that overrides the default of how much
@@ -40,19 +40,19 @@
 #' @return Elements from `...` wrapped in a `shiny::div()` with styles for
 #'   vertical stacking applied.
 #'
-#' @seealso [grid_panel]
+#' @seealso [grid_card]
 #' @export
 #'
 #' @examples
 #'
 #' # Simply a wrapper for shiny::div(...)
-#' grid_panel_stack(
+#' grid_card_stack(
 #'   area="header",
 #'   shiny::h2("R"),
 #'   shiny::actionButton("myButton", "Click Me")
 #' )
 #'
-grid_panel_stack <- function(
+grid_card_stack <- function(
     area,
     ...,
     item_alignment = "top",
@@ -76,23 +76,14 @@ grid_panel_stack <- function(
 
   has_title <- notNull(title)
 
-  # Go through and make sure plots that don't have custom sizes are set to fill their panels
-  panel_content <- htmltools::tagQuery(
-    shiny::div(contents, style = panel_styles, class = "panel-content")
-  )$
-    find(".shiny-plot-output")$
-    each(update_default_sized_plots)$
-    allTags()
-
-
   grid_place(
     area = area,
     shiny::div(
-      class = paste("grid_panel", "vertical_stack"),
+      class = paste("grid_card", "vertical_stack"),
       if (has_title) {
         card_header(title, use_collapser = collapsible && has_title)
       },
-      panel_content
+      shiny::div(contents, style = panel_styles, class = "panel-content")
     )
   )
 }

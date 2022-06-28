@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 switch(
   params$mode,
   base = use_gridlayout_rmd(),
-  only_grid_panel = use_gridlayout_rmd(is_card_styled = "grid_panel"),
+  only_grid_card = use_gridlayout_rmd(is_card_styled = "grid_card"),
   stop("That's not an optional mode!")
 )
 
@@ -33,7 +33,7 @@ switch(
 ```
 
 
-## Sidebar {.grid_panel}
+## Sidebar {.grid_card}
 
 Here is some content for the sidebar
 

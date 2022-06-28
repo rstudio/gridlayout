@@ -19,15 +19,12 @@ desired layout for your Shiny app.}
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
 
-\item{title}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
-
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}
 }
 \value{
-A \code{grid_panel} with a nested layout within it
+A \code{grid_card} with a nested layout within it
 }
 \description{
 Creates a panel for a layout with its own internal gridlayout
@@ -38,7 +35,7 @@ if (interactive()) {
   library(shiny)
 
   # A centered text panel
-  grid_panel_text_c <- function(...) grid_panel_text(..., h_align = "center")
+  grid_card_text_c <- function(...) grid_card_text(...)
 
   my_layout <- "
 |A |B |
@@ -46,16 +43,16 @@ if (interactive()) {
   shinyApp(
     ui = grid_page(
       layout = my_layout,
-      grid_panel_text_c("A", "A"),
-      grid_panel_text_c("B", "B"),
-      grid_panel_text_c("C", "C"),
-      grid_panel_nested(
+      grid_card_text_c("A", "A"),
+      grid_card_text_c("B", "B"),
+      grid_card_text_c("C", "C"),
+      grid_card_nested(
         "D",
         layout = my_layout,
-        grid_panel_text_c("A", "A2"),
-        grid_panel_text_c("B", "B2"),
-        grid_panel_text_c("C", "C2"),
-        grid_panel_text_c("D", "D2")
+        grid_card_text_c("A", "A2"),
+        grid_card_text_c("B", "B2"),
+        grid_card_text_c("C", "C2"),
+        grid_card_text_c("D", "D2")
       )
     ),
     server = function(input, output) {}
@@ -63,5 +60,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\link{grid_panel}, \link{grid_container}
+\link{grid_card}, \link{grid_container}
 }

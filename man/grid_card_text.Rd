@@ -23,40 +23,13 @@ section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=grid_panel]{grid_panel}}
+  Arguments passed on to \code{\link[=grid_card]{grid_card}}
   \describe{
-    \item{\code{title}}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
-    \item{\code{use_card_styles}}{Should the element contained in panel be made to look
-like an enclosed card?}
-    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
-\code{FALSE})? Gridlayout will only show collapser if the layout allows it
-(panel is entirely positioned within "auto" sized rows, and has a title).
-Setting this to \code{FALSE} will mean collapsibility of the panel will never be
-enabled, regardless of layout.}
+    \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
+to turn off.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
-    \item{\code{v_align}}{Vertical and Horizontal alignment of content in panel.
-Options include \verb{"center", "start", "end", "stretch"}. These are a direct
-mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
-(=\code{h_align}) and
-\href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
-(= \code{v_align}).}
-    \item{\code{panel_id}}{ID of \code{grid_panel} div. Usually this is automatically set by
-\code{grid_page()} or \code{grid_container()}.}
-    \item{\code{panel_class}}{Class(es) of \code{grid_panel} div. Like \code{panel_id} this is
-typically automatically generated and should only be touched in advanced
-usage.}
-    \item{\code{padding}}{A valid css size that overrides the default of how much
-spacing is around the card contents}
   }}
-
-\item{h_align}{Vertical and Horizontal alignment of content in panel.
-Options include \verb{"center", "start", "end", "stretch"}. These are a direct
-mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
-(=\code{h_align}) and
-\href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
-(= \code{v_align}).}
 
 \item{img_height}{If the passed icon is a path to an image, how tall should
 that image be rendered (preserves aspect ratio.)}
@@ -76,45 +49,43 @@ the page? This will make the text show up in the browser tab or when you
 bookmark the app etc..}
 }
 \description{
-Makes a grid_panel that contains just text that is vertically centered within
+Makes a grid_card that contains just text that is vertically centered within
 the panel. Useful for app titles or displaying text-based statistics.
 }
 \examples{
 
 # Typically you'll just pass a character string to the function
-grid_panel_text(area = "header", "This is my header")
+grid_card_text(area = "header", "This is my header")
 
 # Icons from `fontawesome` can be used:
 
 # Either with just the id
-grid_panel_text(area = "header", "Here's my text", icon = "r-project")
+grid_card_text(area = "header", "Here's my text", icon = "r-project")
 
 # Or by directly passing the icon object if you want more customization
-grid_panel_text(
+grid_card_text(
   "header",
   "Here's my text",
   icon = fontawesome::fa("r-project", fill = "steelblue")
 )
 
 # You can also pass arbitrary image locations for the icon
-grid_panel_text(
+grid_card_text(
   "header",
   "Here's my text",
   icon = "https://cran.r-project.org/Rlogo.svg"
 )
 
 # These images can have their size controlled
-grid_panel_text(
+grid_card_text(
   "header",
   "Here's my text",
   icon = "https://cran.r-project.org/Rlogo.svg",
   img_height = "20px"
 )
 
-# You can adjust the horizontal alignment of your header with h_align
-grid_panel_text("I'm in the middle", h_align = "center")
 
 # Commonly you may want to use the text panel text as the title of your app
-grid_panel_text(area = "header", "My App Name", is_title = TRUE)
+grid_card_text(area = "header", "My App Name", is_title = TRUE)
 
 }

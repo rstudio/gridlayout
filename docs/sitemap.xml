@@ -49,16 +49,16 @@
     <loc>/reference/grid_page.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_panel.html</loc>
+    <loc>/reference/grid_card.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_panel_nested.html</loc>
+    <loc>/reference/grid_card_nested.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_panel_stack.html</loc>
+    <loc>/reference/grid_card_stack.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_panel_text.html</loc>
+    <loc>/reference/grid_card_text.html</loc>
   </url>
   <url>
     <loc>/reference/grided_create_new_app.html</loc>
@@ -73,7 +73,7 @@
     <loc>/reference/md_to_gridlayout.html</loc>
   </url>
   <url>
-    <loc>/reference/nested_grid_panel.html</loc>
+    <loc>/reference/nested_grid_card.html</loc>
   </url>
   <url>
     <loc>/reference/new_gridlayout.html</loc>
