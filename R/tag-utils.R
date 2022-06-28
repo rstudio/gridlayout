@@ -9,12 +9,12 @@ add_styles <- function(el, ...) {
 }
 
 add_class <- function(el, class) {
-  tagAppendAttributes(el, class = paste(class, collapse = " "))
+  htmltools::tagAppendAttributes(el, class = paste(class, collapse = " "))
 }
 
 update_el <- function(el, classes = list(), styles = list()) {
   # browser()
-  el <- tagAppendAttributes(el, class = paste(classes, collapse = " "))
+  el <- htmltools::tagAppendAttributes(el, class = paste(classes, collapse = " "))
 
   el$attribs$style <- paste0(
     el$attribs$style,
