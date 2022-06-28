@@ -34,32 +34,31 @@ navbar:
 destination: docs
 
 reference:
-  - title: "Layouts"
+  - title: Layouts
     desc: >
-      Setup container for a gridlayout app
+      Setup `gridlayout` containers
   - contents:
       - grid_page
       - grid_container
       - use_gridlayout_rmd
-  - title: "Content containers"
+  - title: Content containers
     desc: >
-      Functions that wrap content to be placed in the grid.
+      Place content on the grid.
   - contents:
       - starts_with("grid_card")
       - grid_plot
       - grid_nested
       - card_plot_output
-  - title: "Helper functions"
+      - grid_place
+  - title: Working with gridlayout objects
     desc: >
-      Various functions for inspecting layouts or the content they create. For advanced use-cases.
+      Functions for creating, editing, or generating content with `gridlayout` objects. For advanced use-cases.
   - contents:
       - new_gridlayout
-      - grid_place
       - to_md
       - to_matrix
       - md_to_gridlayout
       - get_elements
       - get_element_ids
       - to_css
-      - build_css_rule
 
