@@ -1,4 +1,4 @@
-#' Grid Card
+#' Grid-positioned card element
 #'
 #' The standard element for placing elements on the grid in a simple card
 #' container

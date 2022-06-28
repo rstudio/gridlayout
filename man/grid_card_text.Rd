@@ -2,7 +2,7 @@
 % Please edit documentation in R/custom_panels.R
 \name{grid_card_text}
 \alias{grid_card_text}
-\title{Panel just containing text}
+\title{Grid-positioned card with only text}
 \usage{
 grid_card_text(
   area,

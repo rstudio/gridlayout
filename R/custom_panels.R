@@ -1,5 +1,5 @@
 
-#' Panel just containing text
+#' Grid-positioned card with only text
 #'
 #' Makes a grid_card that contains just text that is vertically centered within
 #' the panel. Useful for app titles or displaying text-based statistics.

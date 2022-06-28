@@ -1,10 +1,11 @@
-#' Place an item on the grid
+#' Place any `shiny.tag` element on the grid
 #'
 #' @param area Area of grid corresponding to the wrapping grid containers grid
 #'   definition
 #' @param element Element (html tag) to be placed.
 #'
-#' @return The `element` with a `grid-area` property added to its styles
+#' @return The `element` updated with a `gridlayout-area` data-attribute and the
+#'   `grid-area` property added to its styles
 #' @export
 #'
 #' @examples

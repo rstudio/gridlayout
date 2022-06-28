@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_card.R
 \name{grid_card}
 \alias{grid_card}
-\title{Grid Card}
+\title{Grid-positioned card element}
 \usage{
 grid_card(
   area,

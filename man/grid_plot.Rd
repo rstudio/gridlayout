@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_plot.R
 \name{grid_plot}
 \alias{grid_plot}
-\title{Grid Panel Plot Output}
+\title{Grid-positioned plot output}
 \usage{
 grid_plot(area, outputId = area, ..., has_border = TRUE)
 }
@@ -68,7 +68,8 @@ A grid panel filled with plot output
 }
 \description{
 A light wrapper for \code{shiny::plotOutput()} that uses gridlayout-friendly
-sizing defaults.
+sizing defaults. For more control look at combining \code{grid_card()} with
+\code{card_plot_output()}
 }
 \examples{
 

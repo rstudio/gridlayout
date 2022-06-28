@@ -1,7 +1,8 @@
-#' Grid Panel Plot Output
+#' Grid-positioned plot output
 #'
 #' A light wrapper for `shiny::plotOutput()` that uses gridlayout-friendly
-#' sizing defaults.
+#' sizing defaults. For more control look at combining `grid_card()` with
+#' `card_plot_output()`
 #'
 #'
 #' @inheritParams grid_card
@@ -58,7 +59,7 @@ grid_plot <- function(area,
 # This will eventually get replaced with the bslib version and right now is just
 # a rough copy-paste job
 
-#' Card-container plot output
+#' Plot output with smart sizing for use inside a `grid_card`
 #'
 #' A card-aware wrapper of `shiny::plotOutput` that has smart defaults for
 #' sizing

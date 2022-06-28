@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_place.R
 \name{grid_place}
 \alias{grid_place}
-\title{Place an item on the grid}
+\title{Place any \code{shiny.tag} element on the grid}
 \usage{
 grid_place(area, element)
 }
@@ -13,10 +13,11 @@ definition}
 \item{element}{Element (html tag) to be placed.}
 }
 \value{
-The \code{element} with a \code{grid-area} property added to its styles
+The \code{element} updated with a \code{gridlayout-area} data-attribute and the
+\code{grid-area} property added to its styles
 }
 \description{
-Place an item on the grid
+Place any \code{shiny.tag} element on the grid
 }
 \examples{
 
