@@ -46,13 +46,13 @@
 #' @examples
 #'
 #' # Simply a wrapper for shiny::div(...)
-#' grid_card_stack(
+#' flex_stack(
 #'   area="header",
 #'   shiny::h2("R"),
 #'   shiny::actionButton("myButton", "Click Me")
 #' )
 #'
-grid_card_stack <- function(
+flex_stack <- function(
     area,
     ...,
     item_alignment = "top",
