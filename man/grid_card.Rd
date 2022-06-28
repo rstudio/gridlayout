@@ -18,7 +18,8 @@ grid_card(
 \item{area}{Name of grid area, should match an area defined in the layout
 section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
-\item{...}{Elements to include within the panel}
+\item{...}{Arguments (typically children) passed to the \code{htmltools::div()}
+that contain the card's contents}
 
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}

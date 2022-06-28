@@ -3,8 +3,10 @@
 #' The standard element for placing elements on the grid in a simple card
 #' container
 #'
-#' @inheritParams flex_stack
-#' @inheritParams grid_card
+#' @param area Name of grid area, should match an area defined in the layout
+#'   section of the wrapping `grid_page()` or `grid_container()`.
+#' @param ... Arguments (typically children) passed to the `htmltools::div()`
+#'   that contain the card's contents
 #' @param title Character string to go across top of panel with label. If left
 #'   blank the card contents will take up entire space.
 #' @param collapsible Should the card be able to be collapsed (`TRUE` or

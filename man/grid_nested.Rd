@@ -14,7 +14,8 @@ section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{Elements to include within the panel}
+\item{...}{Arguments (typically children) passed to the \code{htmltools::div()}
+that contain the card's contents}
 
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}

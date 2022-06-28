@@ -39,6 +39,13 @@ the panel can be seen?}
 to turn off.}
   }}
 
+\item{h_align}{Horizontal alignment of text.
+Options include \verb{"center", "start", "end", "stretch"}. These are a direct
+mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
+(=\code{h_align}) and
+\href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
+(= \code{v_align}).}
+
 \item{img_height}{If the passed icon is a path to an image, how tall should
 that image be rendered (preserves aspect ratio.)}
 

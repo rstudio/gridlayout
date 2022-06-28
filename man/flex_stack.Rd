@@ -2,12 +2,13 @@
 % Please edit documentation in R/flex_stack.R
 \name{flex_stack}
 \alias{flex_stack}
-\title{Grid panel with vertically stacked elements}
+\title{Div with vertically stacked elements}
 \usage{
 flex_stack(..., title, collapsible, scrollable, item_gap = "10px")
 }
 \arguments{
-\item{...}{Elements to include within the panel}
+\item{...}{Arguments (typically children) passed to the \code{htmltools::div()}
+that contain the card's contents}
 
 \item{title}{Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.}
@@ -22,29 +23,6 @@ enabled, regardless of layout.}
 the panel can be seen?}
 
 \item{item_gap}{How much space should there be between consecutive items?}
-
-\item{area}{Name of grid area, should match an area defined in the layout
-section of the wrapping \code{grid_page()} or \code{grid_container()}.}
-
-\item{use_card_styles}{Should the element contained in panel be made to look
-like an enclosed card?}
-
-\item{v_align, h_align}{Vertical and Horizontal alignment of content in panel.
-Options include \verb{"center", "start", "end", "stretch"}. These are a direct
-mapping to the the \href{https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items}{css-spec for \code{justify-items}}
-(=\code{h_align}) and
-\href{https://developer.mozilla.org/en-US/docs/Web/CSS/align-items}{\code{align-items}}
-(= \code{v_align}).}
-
-\item{panel_id}{ID of \code{grid_card} div. Usually this is automatically set by
-\code{grid_page()} or \code{grid_container()}.}
-
-\item{panel_class}{Class(es) of \code{grid_card} div. Like \code{panel_id} this is
-typically automatically generated and should only be touched in advanced
-usage.}
-
-\item{padding}{A valid css size that overrides the default of how much
-spacing is around the card contents}
 }
 \value{
 Elements from \code{...} wrapped in a \code{shiny::div()} with styles for
@@ -53,16 +31,6 @@ vertical stacking applied.
 \description{
 Contain a series of ui elements with each vertically stacked on top of
 eachother. Internally uses css flexbox to align items.
-}
-\examples{
-
-# Simply a wrapper for shiny::div(...)
-flex_stack(
-  area="header",
-  shiny::h2("R"),
-  shiny::actionButton("myButton", "Click Me")
-)
-
 }
 \seealso{
 \link{grid_card}

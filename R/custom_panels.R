@@ -5,7 +5,7 @@
 #' the panel. Useful for app titles or displaying text-based statistics.
 #'
 #' @inheritParams grid_card
-#' @inheritDotParams grid_card 
+#' @inheritDotParams grid_card
 #' @param content Whatever you want the title to say. Typically just text but
 #'   any tag or tag-list is possible. All will get wrapped in an `h3` tag.
 #' @param wrapping_tag What tag should the text be wrapped in. Takes either an
@@ -16,6 +16,13 @@
 #'   (i.e. that works with `fontawesome::fa(icon)]`, or `fontawesome` icons as
 #'   returned by [fontawesome::fa()] (if customization of icon style is
 #'   desired.)
+#' @param h_align Horizontal alignment of text.
+#'   Options include `"center", "start", "end", "stretch"`. These are a direct
+#'   mapping to the the [css-spec for
+#'   `justify-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items)
+#'    (=`h_align`) and
+#'   [`align-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
+#'    (= `v_align`).
 #' @param is_title Should the text of this panel be passed on as the title of
 #'   the page? This will make the text show up in the browser tab or when you
 #'   bookmark the app etc..
