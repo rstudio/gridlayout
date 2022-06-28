@@ -7,7 +7,6 @@
 #' See `vignette("using_with_rmd", package = "gridlayout")` for a more in-depth
 #' overview.
 #'
-#' @inheritParams to_css
 #' @param container_query The CSS selector used to access the main grid
 #'   container. This is typically left at the default of `'.main-container'` as
 #'   that's the parent of each section in the standard rmd template.
@@ -20,20 +19,11 @@
 #' @export
 #'
 use_gridlayout_rmd <- function(container_query = ".main-container",
-                               is_card_styled = "all",
                                selector_prefix = "#") {
   requireNamespace("knitr", quietly = TRUE)
 
   accessory_css <- get_accessory_css("gridlayout.css")
-  if (is_card_styled == "all") {
-    # Make .grid_card simply apply to every first-level div
-    accessory_css <- str_replace_all(
-      accessory_css,
-      ".grid_card",
-      paste0(container_query, " > div"),
-      fixed = TRUE
-    )
-  }
+
 
   knitr::knit_engines$set(gridlayout = function(options) {
     code <- paste(options$code, collapse = "\n")
@@ -43,10 +33,7 @@ use_gridlayout_rmd <- function(container_query = ".main-container",
 
       css_for_layout <- paste(
         "<style>",
-        to_css(layout,
-               container_key = container_query,
-               is_card_styled = is_card_styled
-        ),
+        to_css(layout, container_key = container_query),
         # Use ids to assign each section to proper area in layout
         paste0(
           selector_prefix, areas, " { ",

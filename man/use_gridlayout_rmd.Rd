@@ -4,23 +4,12 @@
 \alias{use_gridlayout_rmd}
 \title{Enable gridlayout usage in RMarkdown documents}
 \usage{
-use_gridlayout_rmd(
-  container_query = ".main-container",
-  is_card_styled = "all",
-  selector_prefix = "#"
-)
+use_gridlayout_rmd(container_query = ".main-container", selector_prefix = "#")
 }
 \arguments{
 \item{container_query}{The CSS selector used to access the main grid
 container. This is typically left at the default of \code{'.main-container'} as
 that's the parent of each section in the standard rmd template.}
-
-\item{is_card_styled}{Should each section of the grid be given a card style
-to make it stand out? Options are \code{"grid_card"}, where only elements with
-\code{"grid_card"} class will get card styling, \code{"all"} where all children of
-the grid container will get card styling (useful for RMarkdown or other
-situations where you don't control child rendering) or \code{"none"} for no card
-styling.}
 
 \item{selector_prefix}{CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
