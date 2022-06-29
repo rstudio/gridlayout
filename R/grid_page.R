@@ -11,11 +11,6 @@
 #'   \code{\link[shiny]{fluidPage}}.
 #' @param flag_mismatches Should mismatches between the named arguments and
 #'   layout elements trigger an error?
-#' @param just_container Should the app layout be given as a standalone output
-#'   (like calling [`grid_container()`])? Defaults to [`shiny::isRunning()`] so
-#'   if app is produced in a [`shiny::renderUI()`] type call it knows not to try
-#'   and recreate the whole page. Note that extra arguments and themes will be
-#'   discarded when this is set to `TRUE`.
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
@@ -25,17 +20,13 @@
 #'
 #' @example man/examples/simple_app.R
 #'
-grid_page <- function(
-    layout,
-    ...,
-    row_sizes = NULL,
-    col_sizes = NULL,
-    gap_size = NULL,
-    theme = bslib::bs_theme(),
-    flag_mismatches = FALSE,
-    just_container = shiny::isRunning()
-){
-
+grid_page <- function(layout,
+                      ...,
+                      row_sizes = NULL,
+                      col_sizes = NULL,
+                      gap_size = NULL,
+                      theme = bslib::bs_theme(version = 5),
+                      flag_mismatches = FALSE) {
   dot_args <- list(...)
 
   body_elements <- Filter(
@@ -43,7 +34,7 @@ grid_page <- function(
     dot_args
   )
 
-  header <-  Filter(
+  header <- Filter(
     f = function(x) is_grid_page_header(x),
     dot_args
   )
@@ -52,8 +43,6 @@ grid_page <- function(
     f = function(x) is_grid_page_sidebar(x),
     dot_args
   )
-
-  requireNamespace("shiny", quietly = TRUE)
 
   container_args <- c(
     list(
@@ -72,13 +61,12 @@ grid_page <- function(
 
   container <- do.call(grid_container, container_args)
 
-
   if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
-    warning("Container height for layout is not set at default of viewport.",
-            "This is likely a mistake for grid_page()")
+    warning(
+      "Container height for layout is not set at default of viewport.",
+      "This is likely a mistake for grid_page()"
+    )
   }
-
-  if (just_container) return(container)
 
   shiny::fluidPage(
     theme = theme,
@@ -89,12 +77,10 @@ grid_page <- function(
       container
     )
   )
-
 }
 
 
-grid_page_header <- function(..., bgColor="primary", bgGradient = FALSE, height = NULL) {
-
+grid_page_header <- function(..., bgColor = "primary", bgGradient = FALSE, height = NULL) {
   update_el(
     htmltools::tags$div(...),
     classes = c(
@@ -105,12 +91,11 @@ grid_page_header <- function(..., bgColor="primary", bgGradient = FALSE, height 
   )
 }
 
-is_grid_page_header <- function(x){
+is_grid_page_header <- function(x) {
   has_class(x, "grid-page-header")
 }
 
-grid_page_sidebar <- function(..., side = "left", bgColor="light", bgGradient = FALSE, width = NULL) {
-
+grid_page_sidebar <- function(..., side = "left", bgColor = "light", bgGradient = FALSE, width = NULL) {
   update_el(
     htmltools::tags$div(...),
     classes = c(

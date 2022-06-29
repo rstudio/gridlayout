@@ -10,9 +10,8 @@ grid_page(
   row_sizes = NULL,
   col_sizes = NULL,
   gap_size = NULL,
-  theme = bslib::bs_theme(),
-  flag_mismatches = FALSE,
-  just_container = shiny::isRunning()
+  theme = bslib::bs_theme(version = 5),
+  flag_mismatches = FALSE
 )
 }
 \arguments{
@@ -39,12 +38,6 @@ provided in the main layout table.}
 
 \item{flag_mismatches}{Should mismatches between the named arguments and
 layout elements trigger an error?}
-
-\item{just_container}{Should the app layout be given as a standalone output
-(like calling \code{\link[=grid_container]{grid_container()}})? Defaults to \code{\link[shiny:isRunning]{shiny::isRunning()}} so
-if app is produced in a \code{\link[shiny:renderUI]{shiny::renderUI()}} type call it knows not to try
-and recreate the whole page. Note that extra arguments and themes will be
-discarded when this is set to \code{TRUE}.}
 }
 \value{
 A UI definition that can be passed to the
