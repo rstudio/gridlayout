@@ -103,7 +103,7 @@ the panel. Useful for app titles or displaying text-based statistics.</p>
   <span class="va">area</span>,
   content <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>,
-  h_align <span class="op">=</span> <span class="st">"start"</span>,
+  alignment <span class="op">=</span> <span class="st">"start"</span>,
   img_height <span class="op">=</span> <span class="st">"55px"</span>,
   icon <span class="op">=</span> <span class="cn">NULL</span>,
   wrapping_tag <span class="op">=</span> <span class="st">"h2"</span>,
@@ -147,13 +147,9 @@ to turn off.</p></dd>
 
   
 </dl></dd>
-<dt>h_align</dt>
-<dd><p>Horizontal alignment of text.
-Options include <code>"center", "start", "end", "stretch"</code>. These are a direct
-mapping to the the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items" class="external-link">css-spec for <code>justify-items</code></a>
-(=<code>h_align</code>) and
-<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items" class="external-link"><code>align-items</code></a>
-(= <code>v_align</code>).</p></dd>
+<dt>alignment</dt>
+<dd><p>Horizontal alignment of text. Typical options include
+<code>start", "center", "end"</code>. For full list of options, see the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items" class="external-link">css-spec for <code>align-items</code>.</a></p></dd>
 <dt>img_height</dt>
 <dd><p>If the passed icon is a path to an image, how tall should
 that image be rendered (preserves aspect ratio.)</p></dd>
@@ -178,16 +174,20 @@ bookmark the app etc..</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="co"># Typically you'll just pass a character string to the function</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;This is my header&lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;This is my header&lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Icons from `fontawesome` can be used:</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Either with just the id</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"Here's my text"</span>, icon <span class="op">=</span> <span class="st">"r-project"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Here's my text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Or by directly passing the icon object if you want more customization</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
@@ -195,10 +195,12 @@ bookmark the app etc..</p></dd>
 <span class="r-in">  <span class="st">"Here's my text"</span>,</span>
 <span class="r-in">  icon <span class="op">=</span> <span class="fu">fontawesome</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fontawesome/man/fa.html" class="external-link">fa</a></span><span class="op">(</span><span class="st">"r-project"</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:steelblue;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Here's my text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:steelblue;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># You can also pass arbitrary image locations for the icon</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
@@ -206,10 +208,12 @@ bookmark the app etc..</p></dd>
 <span class="r-in">  <span class="st">"Here's my text"</span>,</span>
 <span class="r-in">  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;img src="https://cran.r-project.org/Rlogo.svg" height="55px"/&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Here's my text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;img src="https://cran.r-project.org/Rlogo.svg" height="55px"/&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># These images can have their size controlled</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
@@ -218,15 +222,19 @@ bookmark the app etc..</p></dd>
 <span class="r-in">  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span>,</span>
 <span class="r-in">  img_height <span class="op">=</span> <span class="st">"20px"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;img src="https://cran.r-project.org/Rlogo.svg" height="20px"/&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Here's my text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;img src="https://cran.r-project.org/Rlogo.svg" height="20px"/&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Commonly you may want to use the text panel text as the title of your app</span></span>
 <span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"My App Name"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;h2 class="card grid_card_text" style="grid-area:header;" data-gridlayout-area="header"&gt;My App Name&lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;My App Name&lt;/h2&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span>
@@ -247,7 +255,7 @@ bookmark the app etc..</p></dd>
 <span class="r-in">      title <span class="op">=</span> <span class="st">"Settings"</span>,</span>
 <span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="grid_plot.html">grid_plot</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
+<span class="r-in">    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
