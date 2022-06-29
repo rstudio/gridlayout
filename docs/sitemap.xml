@@ -37,28 +37,52 @@
     <loc>/reference/build_css_rule.html</loc>
   </url>
   <url>
+    <loc>/reference/card_plot_output.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flex_stack.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_element_ids.html</loc>
   </url>
   <url>
     <loc>/reference/get_elements.html</loc>
   </url>
   <url>
+    <loc>/reference/grid_card.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_card_text.html</loc>
+  </url>
+  <url>
     <loc>/reference/grid_container.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_nested.html</loc>
   </url>
   <url>
     <loc>/reference/grid_page.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_card.html</loc>
+    <loc>/reference/grid_panel.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_card_nested.html</loc>
+    <loc>/reference/grid_panel_nested.html</loc>
   </url>
   <url>
-    <loc>/reference/flex_stack.html</loc>
+    <loc>/reference/grid_panel_plot.html</loc>
   </url>
   <url>
-    <loc>/reference/grid_card_text.html</loc>
+    <loc>/reference/grid_panel_stack.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_panel_text.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_place.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grid_plot.html</loc>
   </url>
   <url>
     <loc>/reference/grided_create_new_app.html</loc>
@@ -70,10 +94,13 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/make_bg_class.html</loc>
+  </url>
+  <url>
     <loc>/reference/md_to_gridlayout.html</loc>
   </url>
   <url>
-    <loc>/reference/nested_grid_card.html</loc>
+    <loc>/reference/nested_grid_panel.html</loc>
   </url>
   <url>
     <loc>/reference/new_gridlayout.html</loc>

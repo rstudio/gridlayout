@@ -125,12 +125,24 @@
 
     
     
-<p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
-<p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range.</p>
+<p>Your app is likely to be viewed in different scenarios on different
+devices. This means it’s important to make sure it looks good in all of
+those scenarios. A nice grid layout with lots of side-by-side panels
+won’t work too well if your viewer is looking at it on a small phone
+screen.</p>
+<p>To account for these situations <code>gridlayout</code> allows you to
+specify “alternate” layouts for your app. These are distinct layout’s
+that determine how your app looks on different screen sizes. Most of the
+time this is going to be used for making a layout for the afformentioned
+phone scenario, but they can be defined for any page width range.</p>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
-<p>Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
+<p>Here we define a basic layout for an app with a header on top, a
+sidebar on the side, and a plot. We also define a layout for mobile that
+is a stack of all of those things, placing what was the “sidebar” now
+just below the header. There’s also a super-wide-screen layout. Perhaps
+for an ultrawide monitor that places all the items side by side.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="st">"
 |      |        |       |
@@ -188,18 +200,32 @@
 <div class="section level3">
 <h3 id="syntax">Syntax<a class="anchor" aria-label="anchor" href="#syntax"></a>
 </h3>
-<p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts containing:</p>
+<p>The alternate layouts are provided via the
+<code>alternate_layouts</code> argument in
+<code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts
+containing:</p>
 <ul>
-<li>A <code>layout</code> table (or existing <code>gridlayout</code> object)</li>
+<li>A <code>layout</code> table (or existing <code>gridlayout</code>
+object)</li>
 <li>
-<code>width_bounds</code> that the layout should occur for. For instance, out <code>mobile_layout</code> is active when the viewing device’s screen is narrower than <code>600</code> pixels and our <code>big_screen_layout</code> is active when the screen is larger than <code>1600</code> pixels. You can also set upper and lower bounds in case you wanted to have intermediate layouts (perhaps a tablet layout for between <code>600</code> and <code>1000</code> pixels in width.)</li>
-<li>An optional <code>container_height</code>. Typically <code>gridlayout</code> is smart enough to figure this one out for you, however.</li>
+<code>width_bounds</code> that the layout should occur for. For
+instance, out <code>mobile_layout</code> is active when the viewing
+device’s screen is narrower than <code>600</code> pixels and our
+<code>big_screen_layout</code> is active when the screen is larger than
+<code>1600</code> pixels. You can also set upper and lower bounds in
+case you wanted to have intermediate layouts (perhaps a tablet layout
+for between <code>600</code> and <code>1000</code> pixels in
+width.)</li>
+<li>An optional <code>container_height</code>. Typically
+<code>gridlayout</code> is smart enough to figure this one out for you,
+however.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
 </h3>
-<p>The following are screenshots of the exact same app at different screen sizes using the layouts above.</p>
+<p>The following are screenshots of the exact same app at different
+screen sizes using the layouts above.</p>
 <div class="section level4">
 <h4 id="screen-width-2000px">Screen width = 2000px<a class="anchor" aria-label="anchor" href="#screen-width-2000px"></a>
 </h4>
@@ -224,7 +250,9 @@
 <div class="section level2">
 <h2 id="default-mobile-layout">Default mobile layout<a class="anchor" aria-label="anchor" href="#default-mobile-layout"></a>
 </h2>
-<p>If no alternate layouts are specified, a mobile layout is automatically generated by simply stacking all the panels in your app at <code>300px</code> in height.</p>
+<p>If no alternate layouts are specified, a mobile layout is
+automatically generated by simply stacking all the panels in your app at
+<code>300px</code> in height.</p>
 <pre><code><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
 <span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span>
 <span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span>
@@ -239,7 +267,9 @@
 <span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">sidebar</span></span>
 <span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot   </span></span>
 <span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span></code></pre>
-<p>If you don’t want this (say you’re targeting mobile by default already) you can set <code>alternate_layouts</code> to <code>NULL</code>.</p>
+<p>If you don’t want this (say you’re targeting mobile by default
+already) you can set <code>alternate_layouts</code> to
+<code>NULL</code>.</p>
 <pre><code><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
 <span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span>
 <span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span>

@@ -89,7 +89,7 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Enable gridlayout usage in RMarkdown documents</h1>
+    <h1>Enable <code>gridlayout</code> usage in RMarkdown documents</h1>
     
     <div class="hidden name"><code>use_gridlayout_rmd.Rd</code></div>
     </div>
@@ -101,11 +101,7 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>
-  container_query <span class="op">=</span> <span class="st">".main-container"</span>,
-  is_card_styled <span class="op">=</span> <span class="st">"all"</span>,
-  selector_prefix <span class="op">=</span> <span class="st">"#"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>container_query <span class="op">=</span> <span class="st">".main-container"</span>, selector_prefix <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -114,13 +110,6 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
 <dd><p>The CSS selector used to access the main grid
 container. This is typically left at the default of <code>'.main-container'</code> as
 that's the parent of each section in the standard rmd template.</p></dd>
-<dt>is_card_styled</dt>
-<dd><p>Should each section of the grid be given a card style
-to make it stand out? Options are <code>"grid_panel"</code>, where only elements with
-<code>"grid_panel"</code> class will get card styling, <code>"all"</code> where all children of
-the grid container will get card styling (useful for RMarkdown or other
-situations where you don't control child rendering) or <code>"none"</code> for no card
-styling.</p></dd>
 <dt>selector_prefix</dt>
 <dd><p>CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use

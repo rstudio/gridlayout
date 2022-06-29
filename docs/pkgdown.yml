@@ -1,9 +1,9 @@
-pandoc: 2.16.2
+pandoc: 2.17.1.1
 pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   alternate-layouts: alternate-layouts.html
   layout-examples: layout-examples.html
   using_with_rmd: using_with_rmd.html
-last_built: 2022-05-02T15:35Z
+last_built: 2022-06-29T13:26Z
 

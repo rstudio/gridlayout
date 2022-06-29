@@ -128,40 +128,51 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The gridlayout package lets you quickly define a grid-based layout that can drastically alter the appearance of an app without changing the ui markup at all. The following are all screenshots from the same app with different layout definitions.</p>
-<p>This list is inspired by the <a href="https://rmarkdown.rstudio.com/flexdashboard/layouts.html" class="external-link">flexdashboard layouts vignette</a>.</p>
+<p>The gridlayout package lets you quickly define a grid-based layout
+that can drastically alter the appearance of an app without changing the
+ui markup at all. The following are all screenshots from the same app
+with different layout definitions.</p>
+<p>This list is inspired by the <a href="https://rmarkdown.rstudio.com/flexdashboard/layouts.html" class="external-link">flexdashboard
+layouts vignette</a>.</p>
 <div class="section level3">
 <h3 id="app-ui-code">App UI code:<a class="anchor" aria-label="anchor" href="#app-ui-code"></a>
 </h3>
-<p>The following code is the UI definition used for all the screenshots. The only thing that changes is the layout definition.</p>
+<p>The following code is the UI definition used for all the screenshots.
+The only thing that changes is the layout definition.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
   layout <span class="op">=</span> <span class="va">my_layout</span>,
-  <span class="fu"><a href="../reference/grid_panel_text.html">grid_panel_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,
-  <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
     <span class="st">"chickens"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span>
       <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
       <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>,
-  <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
     <span class="st">"treePlot"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
   <span class="op">)</span>,
-  <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
     <span class="st">"yarnPlot"</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
   <span class="op">)</span>,
-  <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
     <span class="st">"stockTable"</span>,
     <span class="fu">gt_output</span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>,
   <span class="co"># Allows us to use layouts without some elements declared</span>
   flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> 
 <span class="op">)</span></code></pre></div>
-<p>The only slightly wonky thing here is the setting of <code>flag_mismatches</code> to <code>FALSE</code>. This just disables the checks that makes sure elements declared in layout match those in the <code>ui</code> definition. Here we sometimes don’t include the <code>stockTable</code> element in our layout.</p>
-<p>While it’s not important, for the demo’s here, the whole app code is provided at <a href="#full-app-code">the end of this document</a> if you want to copy each layout and try yourself.</p>
+<p>The only slightly wonky thing here is the setting of
+<code>flag_mismatches</code> to <code>FALSE</code>. This just disables
+the checks that makes sure elements declared in layout match those in
+the <code>ui</code> definition. Here we sometimes don’t include the
+<code>stockTable</code> element in our layout.</p>
+<p>While it’s not important, for the demo’s here, the whole app code is
+provided at <a href="#full-app-code">the end of this document</a> if you
+want to copy each layout and try yourself.</p>
 </div>
 <div class="section level3">
 <h3 id="basic-stack">Basic stack<a class="anchor" aria-label="anchor" href="#basic-stack"></a>
@@ -179,7 +190,8 @@
 <div class="section level3">
 <h3 id="scrolling-stack">Scrolling stack<a class="anchor" aria-label="anchor" href="#scrolling-stack"></a>
 </h3>
-<p><em>Note the use of all definite sizes (e.g. no <code>fr</code> or <code>auto</code> units) for row heights.</em></p>
+<p><em>Note the use of all definite sizes (e.g. no <code>fr</code> or
+<code>auto</code> units) for row heights.</em></p>
 <pre><code><span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"
   |      |           |
   |------|-----------|
@@ -229,7 +241,9 @@
 <div class="section level2">
 <h2 id="full-app-code">Full app code<a class="anchor" aria-label="anchor" href="#full-app-code"></a>
 </h2>
-<p>The following is the function used to generate the apps shown above. Simply pass your layout of interest as an argument (or unwrap from the function entirely.)</p>
+<p>The following is the function used to generate the apps shown above.
+Simply pass your layout of interest as an argument (or unwrap from the
+function entirely.)</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
@@ -242,23 +256,23 @@
   <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>
     ui <span class="op">=</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span>
       layout <span class="op">=</span> <span class="va">my_layout</span>,
-      <span class="fu"><a href="../reference/grid_panel_text.html">grid_panel_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,
-      <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+      <span class="fu"><a href="../reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,
+      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
         <span class="st">"chickens"</span>,
         <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span>
           <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,
           <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>
         <span class="op">)</span>
       <span class="op">)</span>,
-      <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
         <span class="st">"treePlot"</span>,
         <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
       <span class="op">)</span>,
-      <span class="co"># grid_panel(</span>
+      <span class="co"># grid_card(</span>
       <span class="co">#   "yarnPlot",</span>
       <span class="co">#   plotOutput("yarnPlot", height = "100%")</span>
       <span class="co"># ),</span>
-      <span class="fu"><a href="../reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span>
          <span class="st">"stockTable"</span>,
         <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span>
       <span class="op">)</span>,

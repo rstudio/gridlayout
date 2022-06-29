@@ -122,6 +122,8 @@
 <div class="page-header"><h1 id="gridlayout">gridlayout<a class="anchor" aria-label="anchor" href="#gridlayout"></a>
 </h1></div>
 <!-- badges: start -->
+
+<!-- badges: end -->
 <p>A package to making building dashboard-style layouts in Shiny and RMarkdown easy using CSS-Grid.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -148,22 +150,22 @@
 <span class="op">)</span>
 
 <span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout of 5 elements: </span>
-<span class="co">#&gt;         120px   1fr    1fr   </span>
+<span class="co">#&gt; gridlayout of 5 elements:</span>
+<span class="co">#&gt;         120px   1fr    1fr</span>
 <span class="co">#&gt;   100px header  header header</span>
 <span class="co">#&gt;   1fr   sidebar plot_a plot_c</span>
 <span class="co">#&gt;   1fr   sidebar plot_b plot_b</span>
 <span class="co">#&gt; Gap of 1rem. Total height of viewport.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Alternate layouts:  </span>
-<span class="co">#&gt;   </span>
-<span class="co">#&gt;   - Width &lt; 500px </span>
-<span class="co">#&gt;            1fr    </span>
-<span class="co">#&gt;     85px  header </span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt; Alternate layouts:</span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;   - Width &lt; 500px</span>
+<span class="co">#&gt;            1fr</span>
+<span class="co">#&gt;     85px  header</span>
 <span class="co">#&gt;     350px sidebar</span>
-<span class="co">#&gt;     350px plot_a </span>
-<span class="co">#&gt;     350px plot_b </span>
-<span class="co">#&gt;     350px plot_c </span>
+<span class="co">#&gt;     350px plot_a</span>
+<span class="co">#&gt;     350px plot_b</span>
+<span class="co">#&gt;     350px plot_c</span>
 <span class="co">#&gt;   Gap of 1rem. Total height of auto.</span></code></pre></div>
 <p>You can also use the top left cell of your table to specify the gap size.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -176,22 +178,22 @@
 <span class="op">)</span>
 
 <span class="va">my_layout</span>
-<span class="co">#&gt; gridlayout of 5 elements: </span>
-<span class="co">#&gt;         120px   1fr    1fr   </span>
+<span class="co">#&gt; gridlayout of 5 elements:</span>
+<span class="co">#&gt;         120px   1fr    1fr</span>
 <span class="co">#&gt;   100px header  header header</span>
 <span class="co">#&gt;   1fr   sidebar plot_a plot_c</span>
 <span class="co">#&gt;   1fr   sidebar plot_b plot_b</span>
 <span class="co">#&gt; Gap of 25px. Total height of viewport.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Alternate layouts:  </span>
-<span class="co">#&gt;   </span>
-<span class="co">#&gt;   - Width &lt; 500px </span>
-<span class="co">#&gt;            1fr    </span>
-<span class="co">#&gt;     85px  header </span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt; Alternate layouts:</span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;   - Width &lt; 500px</span>
+<span class="co">#&gt;            1fr</span>
+<span class="co">#&gt;     85px  header</span>
 <span class="co">#&gt;     350px sidebar</span>
-<span class="co">#&gt;     350px plot_a </span>
-<span class="co">#&gt;     350px plot_b </span>
-<span class="co">#&gt;     350px plot_c </span>
+<span class="co">#&gt;     350px plot_a</span>
+<span class="co">#&gt;     350px plot_b</span>
+<span class="co">#&gt;     350px plot_c</span>
 <span class="co">#&gt;   Gap of 1rem. Total height of auto.</span></code></pre></div>
 <p>You can also programatically build your layout using <code>new_gridlayout</code>. Here you simply pass a list of the elements that make up your layout along with column and row sizes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -214,20 +216,20 @@
   col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,
   row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span>, <span class="st">"1fr"</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; gridlayout of 4 elements: </span>
-<span class="co">#&gt;         1fr    2fr   </span>
+<span class="co">#&gt; gridlayout of 4 elements:</span>
+<span class="co">#&gt;         1fr    2fr</span>
 <span class="co">#&gt;   100px header header</span>
-<span class="co">#&gt;   1fr   plot   table </span>
+<span class="co">#&gt;   1fr   plot   table</span>
 <span class="co">#&gt;   1fr   footer footer</span>
 <span class="co">#&gt; Gap of 1rem. Total height of viewport.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Alternate layouts:  </span>
-<span class="co">#&gt;   </span>
-<span class="co">#&gt;   - Width &lt; 500px </span>
-<span class="co">#&gt;            1fr   </span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt; Alternate layouts:</span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;   - Width &lt; 500px</span>
+<span class="co">#&gt;            1fr</span>
 <span class="co">#&gt;     85px  header</span>
-<span class="co">#&gt;     350px plot  </span>
-<span class="co">#&gt;     350px table </span>
+<span class="co">#&gt;     350px plot</span>
+<span class="co">#&gt;     350px table</span>
 <span class="co">#&gt;     350px footer</span>
 <span class="co">#&gt;   Gap of 1rem. Total height of auto.</span></code></pre></div>
 </div>
@@ -245,14 +247,14 @@
       |2rem  |200px   |1fr    |
       |85px  |header  |header |
       |1fr   |sidebar |plot   |"</span>,
-    <span class="fu"><a href="reference/grid_panel_text.html">grid_panel_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    <span class="fu"><a href="reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+    <span class="fu"><a href="reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span>
       <span class="st">"sidebar"</span>,
       title <span class="op">=</span> <span class="st">"Settings"</span>,
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, 
+      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>,
                   min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
     <span class="op">)</span>,
-    <span class="fu"><a href="reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+    <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span>
       <span class="st">"plot"</span>,
       <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height<span class="op">=</span><span class="st">"100%"</span><span class="op">)</span>
     <span class="op">)</span>
@@ -276,14 +278,14 @@
         |2rem  |200px   |1fr    |
         |85px  |header  |header |
         |1fr   |sidebar |plot   |"</span>,
-      <span class="fu"><a href="reference/grid_panel_text.html">grid_panel_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span><span class="op">)</span>,
-      <span class="fu"><a href="reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+      <span class="fu"><a href="reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span><span class="op">)</span>,
+      <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span>
         <span class="st">"sidebar"</span>,
         title <span class="op">=</span> <span class="st">"Settings"</span>,
-        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, 
+        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>,
                     min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
       <span class="op">)</span>,
-      <span class="fu"><a href="reference/grid_panel.html">grid_panel</a></span><span class="op">(</span>
+      <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span>
         <span class="st">"plot"</span>,
         <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height<span class="op">=</span><span class="st">"100%"</span><span class="op">)</span>
       <span class="op">)</span>
@@ -343,7 +345,7 @@
 <span class="co">#&gt; | 1fr   | sidebar | plot_b | plot_b |</span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="reference/to_css.html">to_css</a></span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; body {</span>
 <span class="co">#&gt;   display:grid;</span>
 <span class="co">#&gt;   grid-template-rows:100px 1fr 1fr;</span>
@@ -356,9 +358,9 @@
 <span class="co">#&gt;   padding:25px;</span>
 <span class="co">#&gt;   height:100vh;</span>
 <span class="co">#&gt; }</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; @media (max-width:500px) {</span>
 <span class="co">#&gt;   body {</span>
 <span class="co">#&gt;     display:grid;</span>
@@ -381,39 +383,39 @@
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [[1]]$id</span>
 <span class="co">#&gt; [1] "header"</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[1]]$start_row</span>
 <span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[1]]$end_row</span>
 <span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[1]]$start_col</span>
 <span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[1]]$end_col</span>
 <span class="co">#&gt; [1] 3</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[1]]$collapsible</span>
 <span class="co">#&gt; [1] FALSE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt; [[2]]$id</span>
 <span class="co">#&gt; [1] "sidebar"</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]$start_row</span>
 <span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]$end_row</span>
 <span class="co">#&gt; [1] 3</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]$start_col</span>
 <span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]$end_col</span>
 <span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt;</span>
 <span class="co">#&gt; [[2]]$collapsible</span>
 <span class="co">#&gt; [1] FALSE</span></code></pre></div>
 </div>
