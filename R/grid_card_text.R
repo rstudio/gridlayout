@@ -16,13 +16,10 @@
 #'   (i.e. that works with `fontawesome::fa(icon)]`, or `fontawesome` icons as
 #'   returned by [fontawesome::fa()] (if customization of icon style is
 #'   desired.)
-#' @param h_align Horizontal alignment of text.
-#'   Options include `"center", "start", "end", "stretch"`. These are a direct
-#'   mapping to the the [css-spec for
-#'   `justify-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items)
-#'    (=`h_align`) and
-#'   [`align-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
-#'    (= `v_align`).
+#' @param alignment Horizontal alignment of text. Typical options include
+#'   `start", "center", "end"`. For full list of options, see the [css-spec for
+#'   `align-items`.](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
+#'
 #' @param is_title Should the text of this panel be passed on as the title of
 #'   the page? This will make the text show up in the browser tab or when you
 #'   bookmark the app etc..
@@ -69,16 +66,14 @@
 #' @example man/examples/simple_app.R
 #'
 #' @export
-grid_card_text <- function(
-  area,
-  content = NULL,
-  ...,
-  h_align = "start",
-  img_height = "55px",
-  icon = NULL,
-  wrapping_tag = 'h2',
-  is_title = FALSE
-) {
+grid_card_text <- function(area,
+                           content = NULL,
+                           ...,
+                           alignment = "start",
+                           img_height = "55px",
+                           icon = NULL,
+                           wrapping_tag = "h2",
+                           is_title = FALSE) {
   if (notNull(icon)) {
     if (str_detect(icon, "\\.png|\\.jpg|\\.jpeg|\\.svg")) {
       icon <- shiny::img(src = icon, height = htmltools::validateCssUnit(img_height))
@@ -100,14 +95,17 @@ grid_card_text <- function(
 
   grid_place(
     area = area,
-    wrapping_tag(
-    htmltools::tagList(
-      icon,
-      content
-    ),
-    class = "card grid_card_text"
-
+    htmltools::tags$div(
+      class = "card grid_card_text",
+      style = htmltools::css(
+        `align-items` = alignment
+      ),
+      wrapping_tag(
+        htmltools::tagList(
+          icon,
+          content
+        )
+      )
     )
   )
-
 }

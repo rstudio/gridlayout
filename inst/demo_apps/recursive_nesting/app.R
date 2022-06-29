@@ -7,7 +7,8 @@ max_depth <- 2
 emoji_panel <- function(area, emoji){
   grid_card_text(
     area = area,
-    content = emoji
+    content = emoji,
+    alignment = "center"
   )
 }
 
