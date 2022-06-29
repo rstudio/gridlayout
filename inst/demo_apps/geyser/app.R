@@ -12,7 +12,7 @@ shinyApp(
     ),
     row_sizes = c("50px", "1fr"),
     col_sizes = c("200px", "1fr"),
-    grid_card_text("header", "This is my header"),
+    grid_card_text("header", "This is my header", is_title = TRUE),
     grid_card(
       "sidebar",
       title = "Settings",

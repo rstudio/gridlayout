@@ -105,7 +105,8 @@ grid_card_text <- function(area,
           icon,
           content
         )
-      )
+      ),
+      if (is_title) htmltools::tags$head(htmltools::tags$title(content))
     )
   )
 }
