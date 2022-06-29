@@ -46,7 +46,7 @@ reference:
       Place content on the grid.
   - contents:
       - starts_with("grid_card")
-      - grid_plot
+      - grid_card_plot
       - grid_nested
       - card_plot_output
       - grid_place
@@ -61,4 +61,3 @@ reference:
       - to_md
       - to_matrix
       - to_css
-

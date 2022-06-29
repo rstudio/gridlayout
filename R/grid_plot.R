@@ -17,7 +17,7 @@
 #' @example man/examples/simple_app.R
 #'
 #' @export
-grid_plot <- function(area,
+grid_card_plot <- function(area,
                       outputId = area,
                       ...,
                       has_border = TRUE) {
@@ -41,7 +41,7 @@ grid_plot <- function(area,
 #' @param stretch Set to `TRUE` if this `card_body` is eager to use any extra
 #'   vertical space is available in the card.
 #'
-#' @seealso [grid_plot]
+#' @seealso [grid_card_plot]
 #' @example man/examples/card_plot_output_app.R
 #' @export
 card_plot_output <- function(outputId,

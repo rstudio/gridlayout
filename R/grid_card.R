@@ -21,7 +21,7 @@
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
-#' @seealso [grid_card_text, grid_plot, grid_place, card_plot_output]
+#' @seealso [grid_card_text, grid_card_plot, grid_place, card_plot_output]
 #'
 #' @example man/examples/simple_app.R
 #' @export

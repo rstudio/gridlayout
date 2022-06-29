@@ -104,5 +104,5 @@ if (FALSE) {
 }
 }
 \seealso{
-\link{grid_plot}
+\link{grid_card_plot}
 }

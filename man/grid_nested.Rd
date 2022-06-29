@@ -59,10 +59,10 @@ ui <- grid_page(
       "distPlot distPlot distPlot",
       "redPlot  bluePlot greenPlot"
     ),
-    grid_plot("distPlot"),
-    grid_plot("redPlot"),
-    grid_plot("bluePlot"),
-    grid_plot("greenPlot")
+    grid_card_plot("distPlot"),
+    grid_card_plot("redPlot"),
+    grid_card_plot("bluePlot"),
+    grid_card_plot("greenPlot")
   )
 )
 

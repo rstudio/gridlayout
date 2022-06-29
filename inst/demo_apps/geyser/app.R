@@ -18,7 +18,7 @@ shinyApp(
       title = "Settings",
       sliderInput("bins","Number of bins:", 1, 50, 30, width = "100%")
     ),
-    grid_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
