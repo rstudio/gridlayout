@@ -201,6 +201,7 @@ aligned easily */
 /* Makes it so tabpanels work in gridpanels */
 .grid_card .tabbable {
   height: 100%;
+  width: 100%;
 }
 .grid_card .tabbable > .nav {
   height: 42px;
