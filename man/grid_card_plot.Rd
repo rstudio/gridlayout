@@ -17,6 +17,9 @@ argument.}
 \item{...}{
   Arguments passed on to \code{\link[=card_plot_output]{card_plot_output}}
   \describe{
+    \item{\code{height}}{height in valid css units (see \code{\link[htmltools:validateCssUnit]{htmltools::validateCssUnit()}}
+for more details.) Most use-cases will leave this unset and the plot will
+fill the card as best it can.}
     \item{\code{stretch}}{Set to \code{TRUE} if this \code{card_body} is eager to use any extra
 vertical space is available in the card.}
     \item{\code{click}}{This can be \code{NULL} (the default), a string, or an object
@@ -30,13 +33,13 @@ position.}
 double-click events.}
     \item{\code{hover}}{Similar to the \code{click} argument, this can be \code{NULL}
 (the default), a string, or an object created by the
-\code{\link[shiny:clickOpts]{hoverOpts()}} function. If you use a value like
+\code{\link[shiny:hoverOpts]{hoverOpts()}} function. If you use a value like
 \code{"plot_hover"} (or equivalently, \code{hoverOpts(id="plot_hover")}),
 the plot will send coordinates to the server pauses on the plot, and the
 value will be accessible via \code{input$plot_hover}. The value will be a
 named list with \code{x} and \code{y} elements indicating the mouse
 position. To control the hover time or hover delay type, you must use
-\code{\link[shiny:clickOpts]{hoverOpts()}}.}
+\code{\link[shiny:hoverOpts]{hoverOpts()}}.}
     \item{\code{brush}}{Similar to the \code{click} argument, this can be \code{NULL}
 (the default), a string, or an object created by the
 \code{\link[shiny:brushOpts]{brushOpts()}} function. If you use a value like
@@ -51,13 +54,6 @@ behavior, use \code{\link[shiny:brushOpts]{brushOpts()}}. Multiple
 \code{imageOutput}/\code{plotOutput} calls may share the same \code{id}
 value; brushing one image or plot will cause any other brushes with the
 same \code{id} to disappear.}
-    \item{\code{height}}{Image width/height. Must be a valid CSS unit (like
-\code{"100\%"}, \code{"400px"}, \code{"auto"}) or a number, which will be
-coerced to a string and have \code{"px"} appended. These two arguments are
-ignored when \code{inline = TRUE}, in which case the width/height of a plot
-must be specified in \code{renderPlot()}. Note that, for height, using
-\code{"auto"} or \code{"100\%"} generally will not work as expected,
-because of how height is computed with HTML/CSS.}
   }}
 
 \item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}

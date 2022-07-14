@@ -29,9 +29,9 @@ bslib_bg_colors <- c(
 #'
 #' @examples
 #'
-#' make_bg_class("warning")
+#' gridlayout:::make_bg_class("warning")
 #' # A gradient can be applied as well
-#' make_bg_class("primary", TRUE)
+#' gridlayout:::make_bg_class("primary", TRUE)
 #'
 make_bg_class <- function(bgColor = NULL, bgGradient = FALSE) {
 

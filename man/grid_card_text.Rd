@@ -35,7 +35,8 @@ enabled, regardless of layout.}
     \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
 the panel can be seen?}
     \item{\code{class}}{Additional CSS classes to include on the card div.}
-    \item{\code{item_gap}}{How much vertical space should there be between children of card?}
+    \item{\code{item_gap}}{How much vertical space should there be between children of
+card?}
     \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}
   }}

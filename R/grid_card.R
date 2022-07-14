@@ -17,11 +17,15 @@
 #' @param scrollable Should scroll-bars be added so content that is larger than
 #'   the panel can be seen?
 #' @param class Additional CSS classes to include on the card div.
-#' @param item_gap How much vertical space should there be between children of card?
+#' @param item_gap How much vertical space should there be between children of
+#'   card?
 #' @param has_border Should the card be surrounded by a border? Set to `FALSE`
 #'   to turn off.
 #'
-#' @seealso [grid_card_text, grid_card_plot, grid_place, card_plot_output]
+#' @seealso [grid_card_text()] for a card with just text content,
+#'   [grid_card_plot()] for a card with just plot content, [grid_place()] to
+#'   place any tag onto the grid without needing to wrap in a card, and
+#'   [card_plot_output()] for including a smart-sized plot within a card.
 #'
 #' @example man/examples/simple_app.R
 #' @export

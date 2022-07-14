@@ -24,11 +24,12 @@ Suggests:
 Remotes:
     rstudio/bslib/blob/joe/feature/cards
 Config/testthat/edition: 3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Imports: 
     magrittr,
-    htmltools
+    htmltools,
+    rlang
 Depends: 
     R (>= 2.10)

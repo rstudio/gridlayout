@@ -38,10 +38,14 @@ grid_card_plot <- function(area,
 #'
 #' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
+#' @param height height in valid css units (see [htmltools::validateCssUnit()]
+#'   for more details.) Most use-cases will leave this unset and the plot will
+#'   fill the card as best it can.
 #' @param stretch Set to `TRUE` if this `card_body` is eager to use any extra
 #'   vertical space is available in the card.
 #'
-#' @seealso [grid_card_plot]
+#' @seealso [grid_card_plot()] for a simpler way of placing just a plot on the
+#'   grid
 #' @example man/examples/card_plot_output_app.R
 #' @export
 card_plot_output <- function(outputId,
@@ -53,7 +57,7 @@ card_plot_output <- function(outputId,
                              stretch = TRUE,
                              ...) {
   plot_div <- shiny::plotOutput(outputId,
-                                height = NULL, click = click, dblclick = dblclick, hover = hover,
+                                height = height, click = click, dblclick = dblclick, hover = hover,
                                 brush = brush
   )
 

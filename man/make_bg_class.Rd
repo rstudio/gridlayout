@@ -23,9 +23,9 @@ Info on possible colors from the \href{https://getbootstrap.com/docs/5.0/utiliti
 }
 \examples{
 
-make_bg_class("warning")
+gridlayout:::make_bg_class("warning")
 # A gradient can be applied as well
-make_bg_class("primary", TRUE)
+gridlayout:::make_bg_class("primary", TRUE)
 
 }
 \keyword{internal}

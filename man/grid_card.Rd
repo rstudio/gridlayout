@@ -37,7 +37,8 @@ enabled, regardless of layout.}
 \item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
 to turn off.}
 
-\item{item_gap}{How much vertical space should there be between children of card?}
+\item{item_gap}{How much vertical space should there be between children of
+card?}
 
 \item{class}{Additional CSS classes to include on the card div.}
 }
@@ -78,5 +79,8 @@ shinyApp(
 }
 }
 \seealso{
-\link{grid_card_text, grid_card_plot, grid_place, card_plot_output}
+\code{\link[=grid_card_text]{grid_card_text()}} for a card with just text content,
+\code{\link[=grid_card_plot]{grid_card_plot()}} for a card with just plot content, \code{\link[=grid_place]{grid_place()}} to
+place any tag onto the grid without needing to wrap in a card, and
+\code{\link[=card_plot_output]{card_plot_output()}} for including a smart-sized plot within a card.
 }

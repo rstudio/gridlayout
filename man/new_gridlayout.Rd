@@ -62,11 +62,15 @@ There are three current ways to declare layouts (aka inputs to
 The easiest and cleanest way to declare your layout is to use an array where
 each row is an element and each column is separated by spaces. This allows
 you to easily visually align your layouts that look good even if your code
-is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
+is re-formated.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
  c("header header",
    "plota  plotb")
 )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plota  plotb 
@@ -80,7 +84,7 @@ is re-formated.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_grid
 ##     350px plota 
 ##     350px plotb 
 ##   Gap of 12px. Total height of auto.
-}
+}\if{html}{\out{</div>}}
 }
 
 \subsection{Markdown tables}{
@@ -89,10 +93,14 @@ You can also use a markdown table wrapped in a single character string. In
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
-follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
+follows:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "| header | header |
    | plota  | plotb  |" )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plota  plotb 
@@ -106,7 +114,7 @@ follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
 ##     350px plota 
 ##     350px plotb 
 ##   Gap of 12px. Total height of auto.
-}
+}\if{html}{\out{</div>}}
 
 \emph{An important caveat of this style is it is not currently able to be detected
 using the "edit current layout" grided addin.}
@@ -127,12 +135,16 @@ This is a bit more verbose but allows for greater control. Here you can have
 overlapping elements etc.. Most of the time you will just want to use the
 markdown syntax
 
-The same layout as declared above can be accomplished with the following:\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout( list(
+The same layout as declared above can be accomplished with the following:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout( list(
   list(id = "header", start_row = 1, end_row = 1, start_col = 1, end_col = 2),
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
 ) )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
@@ -146,7 +158,7 @@ The same layout as declared above can be accomplished with the following:\if{htm
 ##     350px plot_a
 ##     350px plot_b
 ##   Gap of 12px. Total height of auto.
-}
+}\if{html}{\out{</div>}}
 }
 
 \subsection{An existing \code{gridlayout}}{
@@ -168,7 +180,9 @@ of the viewport. This is typically used to add a mobile view (or a desktop
 view if your app is mobile first.)
 
 To define an alternate layout you need to pass a list containing \code{layout}
-and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
+and \code{width_bounds} elements.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "|header |header |
    |plot_a |plot_b |",
   alternate_layouts = list(
@@ -179,7 +193,9 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
     width_bounds = c(max = 500)
   )
 )
-}\if{html}{\out{</div>}}\preformatted{## gridlayout of 3 elements: 
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
 ##       1fr    1fr   
 ##   1fr header header
 ##   1fr plot_a plot_b
@@ -193,7 +209,7 @@ and \code{width_bounds} elements.\if{html}{\out{<div class="sourceCode r">}}\pre
 ##     1fr plot_a
 ##     1fr plot_b
 ##   Gap of 12px. Total height of viewport.
-}
+}\if{html}{\out{</div>}}
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.
 
