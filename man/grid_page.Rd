@@ -83,5 +83,7 @@ shinyApp(
 }
 }
 \seealso{
-\link{grid_container}
+See \code{vignette("defining-a-layout", package = "gridlayout")} for more info on defining your layout. \code{\link[=grid_container]{grid_container()}} for using gridlayout without also setting up the
+root page layout. \code{\link[=grid_nested]{grid_nested()}} for placing a grid container within
+another gridlayout. \code{\link[=grid_card]{grid_card()}} for placing content inside your layout.
 }

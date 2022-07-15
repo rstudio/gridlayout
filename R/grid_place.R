@@ -11,6 +11,8 @@
 #' @return The `element` updated with a `gridlayout-area` data-attribute and the
 #'   `grid-area` property added to its styles
 #'
+#' @seealso [grid_card()] to place content on the grid wrapped in a bootstrap
+#'   card.
 #' @example man/examples/grid_place_app.R
 #' @export
 grid_place <- function(area, element) {

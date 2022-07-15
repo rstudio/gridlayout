@@ -53,8 +53,7 @@
 #'  - `start_col/end_col`: The start and end column for your element's span
 #'
 #'  This is a bit more verbose but allows for greater control. Here you can have
-#'  overlapping elements etc.. Most of the time you will just want to use the
-#'  markdown syntax
+#'  overlapping elements etc..
 #'
 #'  The same layout as declared above can be accomplished with the following:
 #'
@@ -104,7 +103,7 @@
 #'
 #'  Multiple layouts can also be added. Simply enclose them as a list of lists.
 #'
-#'  See `vignette("alternate-layouts", package = "gridlayout")` for a more in-depth overview.
+#'  See `vignette("defining-a-layout", package = "gridlayout")` and `vignette("alternate-layouts", package = "gridlayout")` for a more in-depth overview.
 #'
 #'
 #' @param layout_def Either a list of elements with the `id`, `start_row`,

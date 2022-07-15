@@ -50,3 +50,7 @@ if (FALSE) {
 
 }
 }
+\seealso{
+\code{\link[=grid_card]{grid_card()}} to place content on the grid wrapped in a bootstrap
+card.
+}

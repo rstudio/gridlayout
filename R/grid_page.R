@@ -16,7 +16,9 @@
 #'   \code{\link[shiny]{shinyUI}} function.
 #' @export
 #'
-#' @seealso [grid_container]
+#' @seealso See `vignette("defining-a-layout", package = "gridlayout")` for more info on defining your layout. [grid_container()] for using gridlayout without also setting up the
+#'   root page layout. [grid_nested()] for placing a grid container within
+#'   another gridlayout. [grid_card()] for placing content inside your layout.
 #'
 #' @example man/examples/simple_app.R
 #'

@@ -18,7 +18,11 @@
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
 #'
-#' @seealso [grid_page], [grid_card]
+#' @seealso [grid_page()] for using a gridlayout to entirely define the page.
+#'   [grid_nested()] for placing a grid container within another gridlayout.
+#'   [grid_card()] for placing content inside your layout. See
+#'   `vignette("defining-a-layout", package = "gridlayout")` for more info on
+#'   defining your layout.
 #' @export
 #'
 #' @examples

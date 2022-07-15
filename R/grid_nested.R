@@ -9,6 +9,12 @@
 #'
 #' @return A `grid_card` with a nested layout within it
 #'
+#' @seealso  [grid_page()] for using a gridlayout to entirely define the page.
+#'   [grid_container()] for placing a gridlayout in non-gridlayout parent
+#'   elements. [grid_card()] for placing content inside your layout. See
+#'   `vignette("defining-a-layout", package = "gridlayout")` for more info on
+#'   defining your layout.
+#'
 #' @example man/examples/nested_app.R
 #' @export
 grid_nested <- function(area,

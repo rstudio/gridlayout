@@ -11,19 +11,16 @@ navbar:
   title: ~
   type: default
   structure:
-    right: [examples, articles, reference, github]
+    left: [setting-up, examples, articles, reference]
+    # right: [examples, github]
   components:
     home: ~
     examples:
       text: Layout Examples
       href: articles/layout-examples.html
-    articles:
-      text: Articles
-      menu:
-        - text: "Alternate Layouts"
-          href: articles/alternate-layouts.html
-        - text: "Using with Rmds"
-          href: articles/using_with_rmd.html
+    setting-up:
+      text: Defining a layout
+      href: articles/defining-a-layout.html
     reference:
       text: Reference
       href: reference/index.html

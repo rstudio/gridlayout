@@ -2,7 +2,7 @@
 title: "Layout Examples"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{layout-examples}
+  %\VignetteIndexEntry{Layout Examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,37 +21,27 @@ library(gridlayout)
 library(glue)
 layout_tables <- list(
     stack = "
-  |      |         |
-  |------|---------|
   |1rem  |1fr      |
   |80px  |header   |
   |1fr   |chickens |
   |1fr   |treePlot |
   |1fr   |stockTable |",
   scrolling_stack = "
-  |      |           |
-  |------|-----------|
   |1rem  |1fr        |
   |80px  |header     |
   |400px |chickens   |
   |400px |treePlot   |
   |400px |stockTable |",
   four_panel = "
-  |     |           |         |
-  |-----|-----------|---------|
   |1rem |1fr        |1fr      |
-  |1fr  |header   |chickens |
+  |1fr  |header     |chickens |
   |1fr  |stockTable |treePlot |",
   focal_chart_top = "
-  |     |          |         |
-  |-----|----------|---------|
   |1rem |1fr       |1fr      |
   |80px |header    |header   |
   |2fr  |chickens  |chickens |
   |1fr  |treePlot  |stockTable |",
   focal_chart_side = "
-  |     |         |         |
-  |-----|---------|---------|
   |1rem |2fr      |1fr      |
   |80px |header   |header   |
   |1fr  |chickens |treePlot |
@@ -94,10 +84,6 @@ app_w_layout <- function(my_layout) {
         "treePlot",
         plotOutput("treePlot", height = "100%")
       ),
-      # grid_card(
-      #   "yarnPlot",
-      #   plotOutput("yarnPlot", height = "100%")
-      # ),
       grid_card(
          "stockTable",
         gt_output("stockTable"), scrollable = TRUE

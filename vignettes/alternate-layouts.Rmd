@@ -2,7 +2,7 @@
 title: "Alternate Layouts"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{alternate-layouts}
+  %\VignetteIndexEntry{Alternate Layouts}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

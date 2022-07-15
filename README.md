@@ -8,8 +8,8 @@
 [![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
-A package to making building dashboard-style layouts in Shiny and
-RMarkdown easy using CSS-Grid.
+Build dashboard-style layouts for Shiny and RMarkdown easily using
+CSS-Grid.
 
 ## Installation
 
@@ -58,7 +58,7 @@ my_layout
 ```
 
 For more info and alternative ways of defining a layout see
-`vignette("Defining a layout")`.
+`vignette("defining-a-layout", package = "gridlayout")`.
 
 ## Using in a shiny app
 

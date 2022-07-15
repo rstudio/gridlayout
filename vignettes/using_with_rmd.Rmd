@@ -1,8 +1,8 @@
 ---
-title: "Using gridlayout with .Rmds"
+title: "Using with Rmds"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{using_with_rmd}
+  %\VignetteIndexEntry{Using with Rmds}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
