@@ -42,7 +42,7 @@ eachother. Internally uses css flexbox to align items."><meta name="twitter:card
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,7 +58,7 @@ eachother. Internally uses css flexbox to align items."><meta name="twitter:card
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -99,7 +99,7 @@ eachother. Internally uses css flexbox to align items.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">flex_stack</span><span class="op">(</span><span class="va">...</span>, <span class="va">title</span>, <span class="va">collapsible</span>, <span class="va">scrollable</span>, item_gap <span class="op">=</span> <span class="st">"10px"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">flex_stack</span><span class="op">(</span><span class="va">...</span>, <span class="va">title</span>, <span class="va">collapsible</span>, <span class="va">scrollable</span>, item_gap <span class="op">=</span> <span class="st">"10px"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -107,24 +107,35 @@ eachother. Internally uses css flexbox to align items.</p>
     <dl><dt>...</dt>
 <dd><p>Arguments (typically children) passed to the <code><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">htmltools::div()</a></code>
 that contain the card's contents</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Character string to go across top of panel with label. If left
 blank the card contents will take up entire space.</p></dd>
+
+
 <dt>collapsible</dt>
 <dd><p>Should the card be able to be collapsed (<code>TRUE</code> or
 <code>FALSE</code>)? Gridlayout will only show collapser if the layout allows it
 (panel is entirely positioned within "auto" sized rows, and has a title).
 Setting this to <code>FALSE</code> will mean collapsibility of the panel will never be
 enabled, regardless of layout.</p></dd>
+
+
 <dt>scrollable</dt>
 <dd><p>Should scroll-bars be added so content that is larger than
 the panel can be seen?</p></dd>
+
+
 <dt>item_gap</dt>
 <dd><p>How much space should there be between consecutive items?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Elements from <code>...</code> wrapped in a <code><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">shiny::div()</a></code> with styles for
+    
+
+<p>Elements from <code>...</code> wrapped in a <code><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">shiny::div()</a></code> with styles for
 vertical stacking applied.</p>
     </div>
     <div id="see-also">
@@ -144,7 +155,7 @@ vertical stacking applied.</p>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

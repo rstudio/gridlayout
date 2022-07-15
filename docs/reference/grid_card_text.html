@@ -42,7 +42,7 @@ the panel. Useful for app titles or displaying text-based statistics."><meta nam
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,7 +58,7 @@ the panel. Useful for app titles or displaying text-based statistics."><meta nam
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -99,16 +99,16 @@ the panel. Useful for app titles or displaying text-based statistics.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">grid_card_text</span><span class="op">(</span>
-  <span class="va">area</span>,
-  content <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  alignment <span class="op">=</span> <span class="st">"start"</span>,
-  img_height <span class="op">=</span> <span class="st">"55px"</span>,
-  icon <span class="op">=</span> <span class="cn">NULL</span>,
-  wrapping_tag <span class="op">=</span> <span class="st">"h2"</span>,
-  is_title <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">grid_card_text</span><span class="op">(</span></span>
+<span>  <span class="va">area</span>,</span>
+<span>  content <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  alignment <span class="op">=</span> <span class="st">"start"</span>,</span>
+<span>  img_height <span class="op">=</span> <span class="st">"55px"</span>,</span>
+<span>  icon <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  wrapping_tag <span class="op">=</span> <span class="st">"h2"</span>,</span>
+<span>  is_title <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -116,9 +116,13 @@ the panel. Useful for app titles or displaying text-based statistics.</p>
     <dl><dt>area</dt>
 <dd><p>Name of grid area, should match an area defined in the layout
 section of the wrapping <code><a href="grid_page.html">grid_page()</a></code> or <code><a href="grid_container.html">grid_container()</a></code>.</p></dd>
+
+
 <dt>content</dt>
 <dd><p>Whatever you want the title to say. Typically just text but
 any tag or tag-list is possible. All will get wrapped in an <code>h3</code> tag.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="grid_card.html">grid_card</a></code></p><dl><dt><code>title</code></dt>
 <dd><p>Character string to go across top of panel with label. If left
@@ -139,7 +143,8 @@ the panel can be seen?</p></dd>
 <dd><p>Additional CSS classes to include on the card div.</p></dd>
 
     <dt><code>item_gap</code></dt>
-<dd><p>How much vertical space should there be between children of card?</p></dd>
+<dd><p>How much vertical space should there be between children of
+card?</p></dd>
 
     <dt><code>has_border</code></dt>
 <dd><p>Should the card be surrounded by a border? Set to <code>FALSE</code>
@@ -147,125 +152,136 @@ to turn off.</p></dd>
 
   
 </dl></dd>
+
+
 <dt>alignment</dt>
 <dd><p>Horizontal alignment of text. Typical options include
 <code>start", "center", "end"</code>. For full list of options, see the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items" class="external-link">css-spec for <code>align-items</code>.</a></p></dd>
+
+
 <dt>img_height</dt>
 <dd><p>If the passed icon is a path to an image, how tall should
 that image be rendered (preserves aspect ratio.)</p></dd>
+
+
 <dt>icon</dt>
 <dd><p>Optional icon/image for left of text. Supports image locations
 (those ending in <code>.png, .jpg, .jpeg</code> or <code>.svg</code>), ids of font-awesome icons
 (i.e. that works with <code>fontawesome::fa(icon)]</code>, or <code>fontawesome</code> icons as
 returned by <code><a href="https://rdrr.io/pkg/fontawesome/man/fa.html" class="external-link">fontawesome::fa()</a></code> (if customization of icon style is
 desired.)</p></dd>
+
+
 <dt>wrapping_tag</dt>
 <dd><p>What tag should the text be wrapped in. Takes either an
 <code>htmltools</code> tag function or the string of a tag accessible via
 <code>htmltools::tags[[wrapping_tag]]</code>.</p></dd>
+
+
 <dt>is_title</dt>
 <dd><p>Should the text of this panel be passed on as the title of
 the page? This will make the text show up in the browser tab or when you
 bookmark the app etc..</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Typically you'll just pass a character string to the function</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Typically you'll just pass a character string to the function</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;This is my header&lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Icons from `fontawesome` can be used:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Either with just the id</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"Here's my text"</span>, icon <span class="op">=</span> <span class="st">"r-project"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Icons from `fontawesome` can be used:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Either with just the id</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"Here's my text"</span>, icon <span class="op">=</span> <span class="st">"r-project"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Or by directly passing the icon object if you want more customization</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"header"</span>,</span>
-<span class="r-in">  <span class="st">"Here's my text"</span>,</span>
-<span class="r-in">  icon <span class="op">=</span> <span class="fu">fontawesome</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fontawesome/man/fa.html" class="external-link">fa</a></span><span class="op">(</span><span class="st">"r-project"</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Or by directly passing the icon object if you want more customization</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"header"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Here's my text"</span>,</span></span>
+<span class="r-in"><span>  icon <span class="op">=</span> <span class="fu">fontawesome</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fontawesome/man/fa.html" class="external-link">fa</a></span><span class="op">(</span><span class="st">"r-project"</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;svg aria-hidden="true" role="img" viewBox="0 0 581 512" style="height:1em;width:1.13em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:steelblue;overflow:visible;position:relative;"&gt;&lt;path d="M581 226.6C581 119.1 450.9 32 290.5 32S0 119.1 0 226.6C0 322.4 103.3 402 239.4 418.1V480h99.1v-61.5c24.3-2.7 47.6-7.4 69.4-13.9L448 480h112l-67.4-113.7c54.5-35.4 88.4-84.9 88.4-139.7zm-466.8 14.5c0-73.5 98.9-133 220.8-133s211.9 40.7 211.9 133c0 50.1-26.5 85-70.3 106.4-2.4-1.6-4.7-2.9-6.4-3.7-10.2-5.2-27.8-10.5-27.8-10.5s86.6-6.4 86.6-92.7-90.6-87.9-90.6-87.9h-199V361c-74.1-21.5-125.2-67.1-125.2-119.9zm225.1 38.3v-55.6c57.8 0 87.8-6.8 87.8 27.3 0 36.5-38.2 28.3-87.8 28.3zm-.9 72.5H365c10.8 0 18.9 11.7 24 19.2-16.1 1.9-33 2.8-50.6 2.9v-22.1z"/&gt;&lt;/svg&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You can also pass arbitrary image locations for the icon</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"header"</span>,</span>
-<span class="r-in">  <span class="st">"Here's my text"</span>,</span>
-<span class="r-in">  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You can also pass arbitrary image locations for the icon</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"header"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Here's my text"</span>,</span></span>
+<span class="r-in"><span>  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;img src="https://cran.r-project.org/Rlogo.svg" height="55px"/&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># These images can have their size controlled</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"header"</span>,</span>
-<span class="r-in">  <span class="st">"Here's my text"</span>,</span>
-<span class="r-in">  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span>,</span>
-<span class="r-in">  img_height <span class="op">=</span> <span class="st">"20px"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># These images can have their size controlled</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"header"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Here's my text"</span>,</span></span>
+<span class="r-in"><span>  icon <span class="op">=</span> <span class="st">"https://cran.r-project.org/Rlogo.svg"</span>,</span></span>
+<span class="r-in"><span>  img_height <span class="op">=</span> <span class="st">"20px"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;img src="https://cran.r-project.org/Rlogo.svg" height="20px"/&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Here's my text</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Commonly you may want to use the text panel text as the title of your app</span></span>
-<span class="r-in"><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"My App Name"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Commonly you may want to use the text panel text as the title of your app</span></span></span>
+<span class="r-in"><span><span class="fu">grid_card_text</span><span class="op">(</span>area <span class="op">=</span> <span class="st">"header"</span>, <span class="st">"My App Name"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="card grid_card_text" style="align-items:start;grid-area:header;" data-gridlayout-area="header"&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;h2&gt;My App Name&lt;/h2&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span>
-<span class="r-in">    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"header  header"</span>,</span>
-<span class="r-in">      <span class="st">"sidebar distPlot"</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"50px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">    col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"200px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu">grid_card_text</span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="grid_card.html">grid_card</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"sidebar"</span>,</span>
-<span class="r-in">      title <span class="op">=</span> <span class="st">"Settings"</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in">      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"header  header"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"sidebar distPlot"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"50px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"200px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">grid_card_text</span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="grid_card.html">grid_card</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"sidebar"</span>,</span></span>
+<span class="r-in"><span>      title <span class="op">=</span> <span class="st">"Settings"</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -280,7 +296,7 @@ bookmark the app etc..</p></dd>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

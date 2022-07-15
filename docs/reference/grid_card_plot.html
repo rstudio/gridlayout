@@ -43,7 +43,7 @@ card_plot_output()"><meta name="twitter:card" content="summary"><!-- mathjax -->
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -59,7 +59,7 @@ card_plot_output()"><meta name="twitter:card" content="summary"><!-- mathjax -->
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -101,7 +101,7 @@ sizing defaults. For more control look at combining <code><a href="grid_card.htm
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">grid_card_plot</span><span class="op">(</span><span class="va">area</span>, outputId <span class="op">=</span> <span class="va">area</span>, <span class="va">...</span>, has_border <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">grid_card_plot</span><span class="op">(</span><span class="va">area</span>, outputId <span class="op">=</span> <span class="va">area</span>, <span class="va">...</span>, has_border <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -109,12 +109,21 @@ sizing defaults. For more control look at combining <code><a href="grid_card.htm
     <dl><dt>area</dt>
 <dd><p>Name of grid area, should match an area defined in the layout
 section of the wrapping <code><a href="grid_page.html">grid_page()</a></code> or <code><a href="grid_container.html">grid_container()</a></code>.</p></dd>
+
+
 <dt>outputId</dt>
 <dd><p>Output id of the plot output. Used to link to server code
 generating plot. If left unset this will use the same value as the <code>area</code>
 argument.</p></dd>
+
+
 <dt>...</dt>
-<dd><p>Arguments passed on to <code><a href="card_plot_output.html">card_plot_output</a></code></p><dl><dt><code>stretch</code></dt>
+<dd><p>Arguments passed on to <code><a href="card_plot_output.html">card_plot_output</a></code></p><dl><dt><code>height</code></dt>
+<dd><p>height in valid css units (see <code><a href="https://rdrr.io/pkg/htmltools/man/validateCssUnit.html" class="external-link">htmltools::validateCssUnit()</a></code>
+for more details.) Most use-cases will leave this unset and the plot will
+fill the card as best it can.</p></dd>
+
+    <dt><code>stretch</code></dt>
 <dd><p>Set to <code>TRUE</code> if this <code>card_body</code> is eager to use any extra
 vertical space is available in the card.</p></dd>
 
@@ -158,24 +167,20 @@ behavior, use <code><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class
 value; brushing one image or plot will cause any other brushes with the
 same <code>id</code> to disappear.</p></dd>
 
-    <dt><code>height</code></dt>
-<dd><p>Image width/height. Must be a valid CSS unit (like
-<code>"100%"</code>, <code>"400px"</code>, <code>"auto"</code>) or a number, which will be
-coerced to a string and have <code>"px"</code> appended. These two arguments are
-ignored when <code>inline = TRUE</code>, in which case the width/height of a plot
-must be specified in <code><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot()</a></code>. Note that, for height, using
-<code>"auto"</code> or <code>"100%"</code> generally will not work as expected,
-because of how height is computed with HTML/CSS.</p></dd>
-
   
 </dl></dd>
+
+
 <dt>has_border</dt>
 <dd><p>Should the card be surrounded by a border? Set to <code>FALSE</code>
 to turn off.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A grid panel filled with plot output</p>
+    
+
+<p>A grid panel filled with plot output</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -184,36 +189,36 @@ to turn off.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span>
-<span class="r-in">    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"header  header"</span>,</span>
-<span class="r-in">      <span class="st">"sidebar distPlot"</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"50px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">    col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"200px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="grid_card.html">grid_card</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"sidebar"</span>,</span>
-<span class="r-in">      title <span class="op">=</span> <span class="st">"Settings"</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in">      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"header  header"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"sidebar distPlot"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"50px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"200px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="grid_card.html">grid_card</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"sidebar"</span>,</span></span>
+<span class="r-in"><span>      title <span class="op">=</span> <span class="st">"Settings"</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -228,7 +233,7 @@ to turn off.</p></dd>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

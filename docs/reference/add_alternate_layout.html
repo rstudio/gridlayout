@@ -43,7 +43,7 @@ mobile first.)"><meta name="twitter:card" content="summary"><!-- mathjax --><scr
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -59,7 +59,7 @@ mobile first.)"><meta name="twitter:card" content="summary"><!-- mathjax --><scr
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -101,31 +101,38 @@ mobile first.)</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_alternate_layout</span><span class="op">(</span>
-  <span class="va">layout</span>,
-  <span class="va">alternate_layout</span>,
-  width_bounds <span class="op">=</span> <span class="cn">NULL</span>,
-  container_height <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_alternate_layout</span><span class="op">(</span></span>
+<span>  <span class="va">layout</span>,</span>
+<span>  <span class="va">alternate_layout</span>,</span>
+<span>  width_bounds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  container_height <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>layout</dt>
 <dd><p>Main (or default) layout object</p></dd>
+
+
 <dt>alternate_layout</dt>
 <dd><p>A <code>gridlayout</code> object or layout-as-markdown-table
 defining layout.</p></dd>
+
+
 <dt>width_bounds</dt>
 <dd><p>A named vector with at least one element of name <code>min</code>,
 or <code>max</code>. These two values are used to set when the layout occurs. For
 instance, <code>c(max = 600)</code> means the layout will occur up until the page is
 wider than <code>600px</code>.</p></dd>
+
+
 <dt>container_height</dt>
 <dd><p>How tall the layout should be. If left as <code>NULL</code> this
 will simply inherit the main layout's height. Often this should be set to
 <code>"auto"</code> to allow mobile user's to scroll. Beware though, you will want to
 absolutely size any plot outputs in these cases.</p></dd>
+
 </dl></div>
 
   </div>
@@ -140,7 +147,7 @@ absolutely size any plot outputs in these cases.</p></dd>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

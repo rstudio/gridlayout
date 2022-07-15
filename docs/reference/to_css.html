@@ -41,7 +41,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -57,7 +57,7 @@
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -97,13 +97,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">to_css</span><span class="op">(</span><span class="va">layout</span>, <span class="va">container_key</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">to_css</span><span class="op">(</span><span class="va">layout</span>, <span class="va">container_key</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>layout</dt>
 <dd><p>Object of class <code>"gridlayout"</code>.</p></dd>
+
+
 <dt>container_key</dt>
 <dd><p>The unique key used to identify the container to be
 targeted for the layout. If left blank it will default to applying grid
@@ -113,26 +115,29 @@ plain character string is given, then it is assumed to be a
 <code>data-gridlayout-key</code>. If container contains css selector characters such as
 a dot, the selector will not be transformed into an id automatically. E.g.
 <code>container = ".main-content"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Character string of css used to setup grid layout and place elements
+    
+
+<p>Character string of css used to setup grid layout and place elements
 (referenced by id) into correct locations</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">grid_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="md_to_gridlayout.html">md_to_gridlayout</a></span><span class="op">(</span></span>
-<span class="r-in">  layout_table <span class="op">=</span> <span class="st">"</span>
-<span class="r-in">    |      |120px   |1fr    |1fr    |</span>
-<span class="r-in">    |:-----|:-------|:------|:------|</span>
-<span class="r-in">    |100px |header  |header |header |</span>
-<span class="r-in">    |1fr   |sidebar |plot_a |plot_c |</span>
-<span class="r-in">    |1fr   |sidebar |plot_b |plot_b |"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">to_css</span><span class="op">(</span><span class="va">grid_obj</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">grid_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="md_to_gridlayout.html">md_to_gridlayout</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  layout_table <span class="op">=</span> <span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">    |      |120px   |1fr    |1fr    |</span></span></span>
+<span class="r-in"><span><span class="st">    |:-----|:-------|:------|:------|</span></span></span>
+<span class="r-in"><span><span class="st">    |100px |header  |header |header |</span></span></span>
+<span class="r-in"><span><span class="st">    |1fr   |sidebar |plot_a |plot_c |</span></span></span>
+<span class="r-in"><span><span class="st">    |1fr   |sidebar |plot_b |plot_b |"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">to_css</span><span class="op">(</span><span class="va">grid_obj</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   display:grid;</span>
@@ -182,7 +187,7 @@ a dot, the selector will not be transformed into an id automatically. E.g.
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

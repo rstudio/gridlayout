@@ -43,7 +43,7 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -59,7 +59,7 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -101,7 +101,7 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>container_query <span class="op">=</span> <span class="st">".main-container"</span>, selector_prefix <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>container_query <span class="op">=</span> <span class="st">".main-container"</span>, selector_prefix <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -110,11 +110,14 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
 <dd><p>The CSS selector used to access the main grid
 container. This is typically left at the default of <code>'.main-container'</code> as
 that's the parent of each section in the standard rmd template.</p></dd>
+
+
 <dt>selector_prefix</dt>
 <dd><p>CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
 ids (the <code>"#"</code> prefix) with because they are not available or are used for
 other reasons.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -134,7 +137,7 @@ overview.</p>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

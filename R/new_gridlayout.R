@@ -437,14 +437,14 @@ format.gridlayout_template <- function(
 }
 
 #' @export
-format.gridlayout <- function(x, ...) {
+format.gridlayout <- function(x, ..., show_alternates = TRUE) {
 
   lines <- c(
     emph("gridlayout"), " of ", length(get_element_ids(x)), " elements: \n",
     format.gridlayout_template(x$layout, ...)
   )
 
-  if (length(x$alternates) != 0) {
+  if (identical(show_alternates, TRUE) && length(x$alternates) != 0) {
     lines <- c(lines, "\n\nAlternate layouts:")
     for (alternate in x$alternates) {
       alternate_text <- paste(
@@ -467,8 +467,8 @@ print.gridlayout_template <- function(x, ...) {
 }
 
 #' @export
-print.gridlayout <- function(x, ...){
-  cat(format.gridlayout(x))
+print.gridlayout <- function(x, ..., show_alternates = TRUE){
+  cat(format.gridlayout(x, show_alternates = show_alternates))
 }
 
 # A separate function because it is also used in error messages for alternate
