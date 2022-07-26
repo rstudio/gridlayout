@@ -41,13 +41,6 @@ use_gridlayout_rmd <- function(container_query = ".main-container",
           " }",
           collapse = "\n"
         ),
-        # Make sure all the elements have the proper padding they need
-        build_css_rule(
-          paste(container_query, "> div"),
-          prop_list = c(
-            padding = "var(--card-padding)"
-          )
-        ),
         accessory_css,
         # Makes tab panels work properly and gives utility classes for alignment
         get_accessory_css("gridlayout_rmd_styles.css"),

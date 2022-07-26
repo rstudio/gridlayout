@@ -2,7 +2,10 @@
 title: "`gridlayout` in Rmarkdown"
 author: "Nick Strayer"
 date: "3/9/2021"
-output: html_document
+output:
+  html_document:
+    theme:
+      version: 5
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +16,12 @@ knitr::opts_chunk$set(echo = TRUE)
 use_gridlayout_rmd()
 ```
 
+```{css echo=FALSE}
+.section {
+  outline: 2px solid silver;
+  padding: 10px;
+}
+```
 
 
 # main {.no-header}
@@ -22,14 +31,14 @@ Main content!
 ```{gridlayout}
 |      |        |         |
 |------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
+|      |200px   |1fr      |
+|170px |header  |header   |
 |1fr   |sidebar |main     |
 |120px |footer  |footer   |
 ```
 
 
-# Sidebar {.v_center}
+# Sidebar
 
 Here is some content for the sidebar
 

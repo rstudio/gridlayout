@@ -2,6 +2,12 @@
   display: none;
 }
 
+.section > h1,
+.section > h2,
+.section > h3 {
+  margin: 0;
+}
+
 .section.v_start,
 .section.v_center,
 .section.v_end,
