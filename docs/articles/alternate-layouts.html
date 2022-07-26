@@ -135,25 +135,23 @@ is a stack of all of those things, placing what was the “sidebar” now
 just below the header. There’s also a super-wide-screen layout. Perhaps
 for an ultrawide monitor that places all the items side by side.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">|      |        |       |</span></span>
-<span><span class="st">|------|--------|-------|</span></span>
-<span><span class="st">|2rem  |200px   |1fr    |</span></span>
-<span><span class="st">|100px |header  |header |</span></span>
-<span><span class="st">|1fr   |sidebar |plot   |"</span></span>
+<code class="sourceCode R"><span><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"10px 200px   1fr   "</span>,</span>
+<span>  <span class="st">"70px header  header"</span>,</span>
+<span>  <span class="st">"1fr  sidebar plot  "</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mobile_layout</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">|----- |--------|</span></span>
-<span><span class="st">|2rem  |1fr     |</span></span>
-<span><span class="st">|100px |header  |</span></span>
-<span><span class="st">|250px |sidebar |</span></span>
-<span><span class="st">|400px |plot    |"</span></span>
+<span><span class="va">mobile_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"10px  1fr    "</span>,</span>
+<span>  <span class="st">"100px header "</span>,</span>
+<span>  <span class="st">"250px sidebar"</span>,</span>
+<span>  <span class="st">"400px plot   "</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">big_screen_layout</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
-<span><span class="st">|-----|-------|--------|-----|</span></span>
-<span><span class="st">|2rem |250px  | 250px  |1fr  |</span></span>
-<span><span class="st">|1fr  |header |sidebar |plot |</span></span>
-<span><span class="st">"</span></span>
+<span><span class="va">big_screen_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"10px 250px   250px  1fr "</span>,</span>
+<span>  <span class="st">"1fr  header sidebar plot"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
 <span>  <span class="va">main_layout</span>,</span>
@@ -169,10 +167,10 @@ for an ultrawide monitor that places all the items side by side.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
-<span><span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
-<span><span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span>
+<span><span class="co">##   <span style="font-style: italic;">    </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">70px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">1fr </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
+<span><span class="co">## Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Alternate layouts:  </span></span>
 <span><span class="co">##   </span></span>
@@ -181,12 +179,12 @@ for an ultrawide monitor that places all the items side by side.</p>
 <span><span class="co">##     <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">250px</span> <span style="font-weight: bold;">sidebar</span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">400px</span> <span style="font-weight: bold;">plot   </span></span></span>
-<span><span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.  </span></span>
+<span><span class="co">##   Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">auto</span>.  </span></span>
 <span><span class="co">##   </span></span>
 <span><span class="co">##   - Width &gt; 1600px </span></span>
 <span><span class="co">##      <span style="font-style: italic;">   </span> <span style="font-style: italic;">250px </span> <span style="font-style: italic;">250px  </span> <span style="font-style: italic;">1fr </span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot</span></span></span>
-<span><span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span></code></pre></div>
+<span><span class="co">##   Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="syntax">Syntax<a class="anchor" aria-label="anchor" href="#syntax"></a>
@@ -244,11 +242,19 @@ screen sizes using the layouts above.</p>
 <p>If no alternate layouts are specified, a mobile layout is
 automatically generated by simply stacking all the panels in your app at
 <code>300px</code> in height.</p>
-<pre><code><span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
-<span><span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
-<span><span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"10px 200px   1fr   "</span>,</span>
+<span>  <span class="st">"70px header  header"</span>,</span>
+<span>  <span class="st">"1fr  sidebar plot  "</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="va">main_layout</span><span class="op">)</span></span>
+<span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
+<span><span class="co">##   <span style="font-style: italic;">    </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">70px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">1fr </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
+<span><span class="co">## Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Alternate layouts:  </span></span>
 <span><span class="co">##   </span></span>
@@ -257,15 +263,17 @@ automatically generated by simply stacking all the panels in your app at
 <span><span class="co">##     <span style="font-style: italic;">85px </span> <span style="font-weight: bold;">header </span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">sidebar</span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot   </span></span></span>
-<span><span class="co">##   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span></span></code></pre>
+<span><span class="co">##   Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">auto</span>.</span></span></code></pre></div>
 <p>If you don’t want this (say you’re targeting mobile by default
 already) you can set <code>alternate_layouts</code> to
 <code>NULL</code>.</p>
-<pre><code><span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
-<span><span class="co">##   <span style="font-style: italic;">     </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
-<span><span class="co">##   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
-<span><span class="co">## Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="va">main_layout</span>, alternate_layouts <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
+<span><span class="co">##   <span style="font-style: italic;">    </span> <span style="font-style: italic;">200px  </span> <span style="font-style: italic;">1fr   </span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">70px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span></span></span>
+<span><span class="co">##   <span style="font-style: italic;">1fr </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot  </span></span></span>
+<span><span class="co">## Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span></span></code></pre></div>
 </div>
   </div>
 

@@ -3,21 +3,23 @@ library(gridlayout)
 library(shiny)
 library(bslib)
 
-main_layout <- "
-|10px  |200px   |1fr    |
-|70px  |header  |header |
-|1fr   |sidebar |plot   |"
+main_layout <- c(
+  "10px 200px   1fr   ",
+  "70px header  header",
+  "1fr  sidebar plot  "
+)
 
-mobile_layout <- "
-|10px  |1fr     |
-|100px |header  |
-|250px |sidebar |
-|400px |plot    |"
+mobile_layout <- c(
+  "10px  1fr    ",
+  "100px header ",
+  "250px sidebar",
+  "400px plot   "
+)
 
-big_screen_layout <- "
-|10px |250px  | 250px  |1fr  |
-|1fr  |header |sidebar |plot |
-"
+big_screen_layout <- c(
+  "10px 250px   250px  1fr ",
+  "1fr  header sidebar plot"
+)
 
 my_layout <- new_gridlayout(
   main_layout,
