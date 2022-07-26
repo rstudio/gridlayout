@@ -132,8 +132,7 @@ span
 }
 
 This is a bit more verbose but allows for greater control. Here you can have
-overlapping elements etc.. Most of the time you will just want to use the
-markdown syntax
+overlapping elements etc..
 
 The same layout as declared above can be accomplished with the following:
 
@@ -213,7 +212,7 @@ and \code{width_bounds} elements.
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.
 
-See \code{vignette("alternate-layouts", package = "gridlayout")} for a more in-depth overview.
+See \code{vignette("defining-a-layout", package = "gridlayout")} and \code{vignette("alternate-layouts", package = "gridlayout")} for a more in-depth overview.
 }
 
 \examples{

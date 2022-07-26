@@ -86,5 +86,9 @@ shinyApp(
 
 }
 \seealso{
-\link{grid_page}, \link{grid_card}
+\code{\link[=grid_page]{grid_page()}} for using a gridlayout to entirely define the page.
+\code{\link[=grid_nested]{grid_nested()}} for placing a grid container within another gridlayout.
+\code{\link[=grid_card]{grid_card()}} for placing content inside your layout. See
+\code{vignette("defining-a-layout", package = "gridlayout")} for more info on
+defining your layout.
 }

@@ -5,11 +5,10 @@ library(bslib)
 
 ui <- grid_page(
   layout = c(
-    "header  header",
-    "sidebar plots"
+    "     250px   1fr   ",
+    "50px header  header",
+    "1fr  sidebar plots "
   ),
-  row_sizes = c("50px", "1fr"),
-  col_sizes = c("250px", "1fr"),
   grid_card_text("header", "This is my header"),
   grid_card(
     "sidebar",

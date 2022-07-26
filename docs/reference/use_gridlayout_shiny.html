@@ -41,26 +41,13 @@ adding this css though."><meta name="twitter:card" content="summary"><!-- mathja
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right"><li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/defining-a-layout.html">Defining a layout</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
-    </li>
-  </ul></li>
-        <li>
+<li>
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,13 +56,19 @@ adding this css though."><meta name="twitter:card" content="summary"><!-- mathja
       <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
+      <a href="../articles/defining-a-layout.html">Defining a layout</a>
+    </li>
+    <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul></li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
+        <li>
   <a href="https://github.com/rstudio/gridlayout" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
@@ -103,7 +96,7 @@ adding this css though.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">use_gridlayout_shiny</span><span class="op">(</span><span class="va">layout</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">use_gridlayout_shiny</span><span class="op">(</span><span class="va">layout</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -112,6 +105,8 @@ adding this css though.</p>
 <dd><p>Either a markdown table representation (see
 <code><a href="md_to_gridlayout.html">md_to_gridlayout</a></code>) or a <code>gridlayout</code> object defining the
 desired layout for your Shiny app.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="to_css.html">to_css</a></code></p><dl><dt><code>container_key</code></dt>
 <dd><p>The unique key used to identify the container to be
@@ -125,10 +120,13 @@ a dot, the selector will not be transformed into an id automatically. E.g.
 
   
 </dl></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Character string of css used to setup grid layout and place elements
+    
+
+<p>Character string of css used to setup grid layout and place elements
 (referenced by id) into correct locations</p>
     </div>
     <div id="see-also">
@@ -138,48 +136,48 @@ a dot, the selector will not be transformed into an id automatically. E.g.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Only run these examples in interactive R sessions</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="st">"</span>
-<span class="r-in">|      |        |         |</span>
-<span class="r-in">|------|--------|---------|</span>
-<span class="r-in">|2rem  |200px   |1fr      |</span>
-<span class="r-in">|100px |header  |header   |</span>
-<span class="r-in">|500px |sidebar |distPlot |"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The classic Geyser app with grid layout</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu">use_gridlayout_shiny</span><span class="op">(</span><span class="va">my_layout</span>, <span class="st">"#app-container"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span class="r-in">      id <span class="op">=</span> <span class="st">"app-container"</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span class="r-in">        style <span class="op">=</span> <span class="st">"grid-area: header;"</span>,</span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">h2</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"app-title"</span>, <span class="st">"Old Faithful Geyser Data"</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span class="r-in">        style <span class="op">=</span> <span class="st">"grid-area: sidebar;"</span>,</span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>,</span>
-<span class="r-in">                    min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span></span>
-<span class="r-in">        <span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span class="r-in">        style <span class="op">=</span> <span class="st">"grid-area:distPlot"</span>,</span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">      <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in">      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">"darkgray"</span>, border <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Only run these examples in interactive R sessions</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">|      |        |         |</span></span></span>
+<span class="r-in"><span><span class="st">|------|--------|---------|</span></span></span>
+<span class="r-in"><span><span class="st">|2rem  |200px   |1fr      |</span></span></span>
+<span class="r-in"><span><span class="st">|100px |header  |header   |</span></span></span>
+<span class="r-in"><span><span class="st">|500px |sidebar |distPlot |"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The classic Geyser app with grid layout</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">use_gridlayout_shiny</span><span class="op">(</span><span class="va">my_layout</span>, <span class="st">"#app-container"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"app-container"</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="st">"grid-area: header;"</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">h2</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"app-title"</span>, <span class="st">"Old Faithful Geyser Data"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="st">"grid-area: sidebar;"</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>,</span></span>
+<span class="r-in"><span>                    min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">div</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="st">"grid-area:distPlot"</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">"darkgray"</span>, border <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -194,7 +192,7 @@ a dot, the selector will not be transformed into an id automatically. E.g.
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -86,4 +86,10 @@ if(FALSE){
 }
 \seealso{
 \link{grid_card}, \link{grid_container}
+
+\code{\link[=grid_page]{grid_page()}} for using a gridlayout to entirely define the page.
+\code{\link[=grid_container]{grid_container()}} for placing a gridlayout in non-gridlayout parent
+elements. \code{\link[=grid_card]{grid_card()}} for placing content inside your layout. See
+\code{vignette("defining-a-layout", package = "gridlayout")} for more info on
+defining your layout.
 }

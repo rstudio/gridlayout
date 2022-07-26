@@ -53,8 +53,7 @@
 #'  - `start_col/end_col`: The start and end column for your element's span
 #'
 #'  This is a bit more verbose but allows for greater control. Here you can have
-#'  overlapping elements etc.. Most of the time you will just want to use the
-#'  markdown syntax
+#'  overlapping elements etc..
 #'
 #'  The same layout as declared above can be accomplished with the following:
 #'
@@ -104,7 +103,7 @@
 #'
 #'  Multiple layouts can also be added. Simply enclose them as a list of lists.
 #'
-#'  See `vignette("alternate-layouts", package = "gridlayout")` for a more in-depth overview.
+#'  See `vignette("defining-a-layout", package = "gridlayout")` and `vignette("alternate-layouts", package = "gridlayout")` for a more in-depth overview.
 #'
 #'
 #' @param layout_def Either a list of elements with the `id`, `start_row`,
@@ -437,14 +436,14 @@ format.gridlayout_template <- function(
 }
 
 #' @export
-format.gridlayout <- function(x, ...) {
+format.gridlayout <- function(x, ..., show_alternates = TRUE) {
 
   lines <- c(
     emph("gridlayout"), " of ", length(get_element_ids(x)), " elements: \n",
     format.gridlayout_template(x$layout, ...)
   )
 
-  if (length(x$alternates) != 0) {
+  if (identical(show_alternates, TRUE) && length(x$alternates) != 0) {
     lines <- c(lines, "\n\nAlternate layouts:")
     for (alternate in x$alternates) {
       alternate_text <- paste(
@@ -467,8 +466,8 @@ print.gridlayout_template <- function(x, ...) {
 }
 
 #' @export
-print.gridlayout <- function(x, ...){
-  cat(format.gridlayout(x))
+print.gridlayout <- function(x, ..., show_alternates = TRUE){
+  cat(format.gridlayout(x, show_alternates = show_alternates))
 }
 
 # A separate function because it is also used in error messages for alternate

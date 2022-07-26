@@ -11,7 +11,6 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
-
 ```
 
 # gridlayout
@@ -20,7 +19,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/rstudio/gridlayout/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/gridlayout/actions)
 <!-- badges: end -->
 
-A package to making building dashboard-style layouts in Shiny and RMarkdown easy using CSS-Grid.
+Build dashboard-style layouts for Shiny and RMarkdown easily using CSS-Grid.
 
 
 ## Installation
@@ -34,64 +33,26 @@ devtools::install_github("rstudio/gridlayout")
 
 ## Setting up your `gridlayout`
 
-The easiest and most common way to specify a grid layout is using a markdown table syntax. This allows you to use any markdown table editor of your choice to configure your layout. 
+The easiest and most common way to specify a grid layout is using an character vector syntax where the elements in your layout are visually lined up making the general gist of the layout clear at a glance. 
 
 ```{r md_to_gridlayout}
 library(gridlayout)
 
-my_layout <- new_gridlayout("
-  |      |120px   |1fr    |1fr    |
-  |------|--------|-------|-------|
-  |100px |header  |header |header |
-  |1fr   |sidebar |plot_a |plot_c |
-  |1fr   |sidebar |plot_b |plot_b |"
-)
+my_layout <- new_gridlayout(c(
+  "      120px   1fr    1fr   ",
+  "100px header  header header",
+  "1fr   sidebar plot_a plot_c",
+  "1fr   sidebar plot_b plot_b"
+))
 
 my_layout
 ```
 
-
-You can also use the top left cell of your table to specify the gap size.
-
-```{r md_to_gridlayout_w_gap}
-my_layout <- new_gridlayout("
-  | 25px |120px   |1fr    |1fr    |
-  |------|--------|-------|-------|
-  |100px |header  |header |header |
-  |1fr   |sidebar |plot_a |plot_c |
-  |1fr   |sidebar |plot_b |plot_b |"
-)
-
-my_layout
-```
-
-You can also programatically build your layout using `new_gridlayout`. Here you simply pass a list of the elements that make up your layout along with column and row sizes.
-
-```{r new_gridlayout}
-library(gridlayout)
-
-# Assemble list of elements along with their positions
-elements_list <- list(
-  list(id = "header", start_row = 1, end_row = 1,
-       start_col = 1, end_col = 2),
-  list(id = "plot",   start_row = 2, end_row = 2,
-       start_col = 1, end_col = 1),
-  list(id = "table",  start_row = 2, end_row = 2,
-       start_col = 2, end_col = 2),
-  list(id = "footer", start_row = 3, end_row = 3,
-       start_col = 1, end_col = 2)
-)
-
-new_gridlayout(
-  elements_list,
-  col_sizes = c("1fr", "2fr"),
-  row_sizes = c("100px", "1fr", "1fr")
-)
-```
+For more info and alternative ways of defining a layout see `vignette("defining-a-layout", package = "gridlayout")`.
 
 ## Using in a shiny app
 
-Once you've setup your layout you can use it in a Shiny app with the `grid_page()` ui function:
+Once you've setup your layout, the easiest way you can use it in your shiny apps is with the `grid_page()` ui function:
 
 ```{r, eval = FALSE}
 library(shiny)
@@ -130,7 +91,7 @@ knitr::include_graphics("man/figures/geyser_demo.png")
 ```
 _Screenshot of grided geyser app running_
 
-
+## Other ways of using `gridlayout` in your app
 
 `grid_page()` will automatically make your gridlayout fill the entire page. If you are interested in having a finer-grain control over the size and position of your grid layout you can use the `grid_container()` function to place your grid layout wherever you want. The equivalent app to above can be created by replacing the UI definition with a `fluidPage` containing a `grid_container()`:
 
@@ -161,6 +122,41 @@ shinyApp(
 ```
 
 This time, however the grid is constrained to `800px` tall, no-matter how large or small the window viewing it is. 
+
+Alternatively you can use `grid_nested()` to use a `gridlayout` layout within a panel another `gridlayout`. 
+
+
+```{r, eval=FALSE}
+...
+shinyApp(
+  ui = grid_page(
+  layout = c(
+    "     250px   1fr   ",
+    "50px header  header",
+    "1fr  sidebar plots "
+  ),
+  grid_card_text("header", "This is my header"),
+  grid_card(
+    "sidebar",
+    title = "Settings",
+    sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
+  ),
+  grid_nested(
+    "plots",
+    title = "Plots - in technicolor",
+    layout = c(
+      "distPlot distPlot distPlot",
+      "redPlot  bluePlot greenPlot"
+    ),
+    grid_card_plot("distPlot"),
+    grid_card_plot("redPlot"),
+    grid_card_plot("bluePlot"),
+    grid_card_plot("greenPlot")
+  ),
+  server = ...
+)
+```
+
 
 ## Using in RMarkdown
 
@@ -207,22 +203,3 @@ knitr::include_graphics("man/figures/basic_markdown.png")
 ```
 
 _Output of `my_app.rmd`_
-
-## Working with layout object
-
-Once you have your `gridlayout` object, you can convert it to a markdown table spec or to the CSS that generates the given grid.
-
-```{r to_md}
-cat(to_md(my_layout))
-```
-
-```{r to_css}
-cat(to_css(my_layout))
-```
-
-If you want to get at the individual components or "elements" stored in your grid you can use `get_elements()`.
-
-```{r get_elements}
-head(get_elements(my_layout), 2)
-```
-
