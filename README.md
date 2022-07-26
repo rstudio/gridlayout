@@ -71,10 +71,11 @@ library(shiny)
 # The classic Geyser app with grid layout
 shinyApp(
   ui = grid_page(
-    layout = "
-      |2rem  |200px   |1fr    |
-      |85px  |header  |header |
-      |1fr   |sidebar |plot   |",
+    layout = c(
+      "     200px   1fr   ",
+      "85px header  header",
+      "1fr  sidebar plot  "
+    ),
     grid_card_text("header", "Geysers!", is_title = TRUE),
     grid_card(
       "sidebar",
@@ -114,10 +115,11 @@ to above can be created by replacing the UI definition with a
 shinyApp(
   ui = fluidPage(
     grid_container(
-      layout = "
-        |2rem  |200px   |1fr    |
-        |85px  |header  |header |
-        |1fr   |sidebar |plot   |",
+      layout = c(
+        "     200px   1fr   ",
+        "85px header  header",
+        "1fr  sidebar plot  "
+      ),
       grid_card_text("header", "Geysers!"),
       grid_card(
         "sidebar",
