@@ -125,6 +125,10 @@ ui markup at all. The following are all screenshots from the same app
 with different layout definitions.</p>
 <p>This list is inspired by the <a href="https://rmarkdown.rstudio.com/flexdashboard/layouts.html" class="external-link">flexdashboard
 layouts vignette</a>.</p>
+<p><em>Note: The layouts defined are given as the markdown table syntax
+here, although typically you’ll want to use the character-vector syntax.
+See <code><a href="../articles/defining-a-layout.html">vignette('defining-a-layout')</a></code> for more info on the
+pros-and-cons of the different layout definition methods.</em></p>
 <div class="section level3">
 <h3 id="app-ui-code">App UI code:<a class="anchor" aria-label="anchor" href="#app-ui-code"></a>
 </h3>
@@ -138,7 +142,7 @@ The only thing that changes is the layout definition.</p>
 <span>    <span class="st">"chickens"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
@@ -151,7 +155,7 @@ The only thing that changes is the layout definition.</p>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>    <span class="st">"stockTable"</span>,</span>
-<span>    <span class="fu">gt_output</span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="co"># Allows us to use layouts without some elements declared</span></span>
 <span>  flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> </span>
