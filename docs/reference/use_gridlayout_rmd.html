@@ -40,26 +40,13 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right"><li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/defining-a-layout.html">Defining a layout</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
-    </li>
-  </ul></li>
-        <li>
+<li>
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -68,13 +55,19 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
       <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
+      <a href="../articles/defining-a-layout.html">Defining a layout</a>
+    </li>
+    <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul></li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
+        <li>
   <a href="https://github.com/rstudio/gridlayout" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
@@ -89,7 +82,7 @@ the syntax ```{gridlayout} &amp;lt;insert layout table here&amp;gt; ```"><meta n
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Enable gridlayout usage in RMarkdown documents</h1>
+    <h1>Enable <code>gridlayout</code> usage in RMarkdown documents</h1>
     
     <div class="hidden name"><code>use_gridlayout_rmd.Rd</code></div>
     </div>
@@ -101,11 +94,7 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>
-  container_query <span class="op">=</span> <span class="st">".main-container"</span>,
-  is_card_styled <span class="op">=</span> <span class="st">"all"</span>,
-  selector_prefix <span class="op">=</span> <span class="st">"#"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">use_gridlayout_rmd</span><span class="op">(</span>container_query <span class="op">=</span> <span class="st">".main-container"</span>, selector_prefix <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -114,18 +103,14 @@ the syntax <code>```{gridlayout} &lt;insert layout table here&gt; ```</code></p>
 <dd><p>The CSS selector used to access the main grid
 container. This is typically left at the default of <code>'.main-container'</code> as
 that's the parent of each section in the standard rmd template.</p></dd>
-<dt>is_card_styled</dt>
-<dd><p>Should each section of the grid be given a card style
-to make it stand out? Options are <code>"grid_panel"</code>, where only elements with
-<code>"grid_panel"</code> class will get card styling, <code>"all"</code> where all children of
-the grid container will get card styling (useful for RMarkdown or other
-situations where you don't control child rendering) or <code>"none"</code> for no card
-styling.</p></dd>
+
+
 <dt>selector_prefix</dt>
 <dd><p>CSS prefix used to target grid elements. This will
 change if you're integrating grid with a system that you don't want to use
 ids (the <code>"#"</code> prefix) with because they are not available or are used for
 other reasons.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -145,7 +130,7 @@ overview.</p>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

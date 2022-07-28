@@ -7,7 +7,7 @@ test_that("{shinytest2} recording: auto_collapsables", {
   app <- AppDriver$new(variant = platform_variant(), name = "auto_collapsables",
       height = 2024, width = 633)
 
-  app$run_js("var get_panel = area => document.querySelector(\".grid_panel[data-gridlayout-area='\" + area + \"']\")")
+  app$run_js("var get_panel = area => document.querySelector(\".grid_card[data-gridlayout-area='\" + area + \"']\")")
   app$run_js("var get_panel_contents_height = area => get_panel(area).querySelector('.panel-content').offsetHeight")
   app$run_js("var get_collapser_visibility = area => window.getComputedStyle(get_panel(area).querySelector('.collapser-icon')).display")
 

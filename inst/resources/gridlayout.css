@@ -1,29 +1,58 @@
-.grid_panel {
-  --card-padding: 0.8rem;
-  --card-corner-radius: 0.5rem;
-  --card-box-shadow: unset;
-  --card-outline-color: rgb(175, 174, 174);
-  --card-outline-width: 1px;
-  --card-outline: var(--card-outline-width) solid var(--card-outline-color);
-  --card-background: unset;
+/* --- General item sizing  ----------------------------------- */
 
-  background-color: var(--card-background);
-  box-sizing: border-box;
-  overflow: hidden;
+/*
+  This makes sure the grid page container takes up the full width of the page,
+  regardless of any inline padding on its parent element. We're doing this on
+  the grid-container so we're not tied to whatever wrapper we happen to use to
+  put around it
+*/
+#gridlayout-grid-page {
+  margin-inline: calc(50% - 50vw);
   display: grid;
   grid-template-areas:
-    "title"
-    "content";
-  /* The content-height variable gets over-written to enable collapsible cards*/
-  /* When there's no title the column will dissapear */
-  grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
+    "header   header header"
+    "lsidebar body   rsidebar"
+    "footer   footer footer";
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
 }
 
-/* Only set card styles if we're not using the bslib card component */
-.grid_panel:not(.card) {
-  box-shadow: var(--card-box-shadow);
-  border-radius: var(--card-corner-radius);
-  outline: var(--card-outline);
+#gridlayout-grid-page > .grid-container {
+  grid-area: body;
+}
+
+#gridlayout-grid-page > .grid-page-header {
+  grid-area: header;
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+.grid-page-header > * {
+  margin-block: 0;
+}
+
+#gridlayout-grid-page > .grid-page-sidebar-left {
+  width: 250px;
+  grid-area: lsidebar;
+}
+#gridlayout-grid-page > .grid-page-sidebar-right {
+  width: 250px;
+  grid-area: rsidebar;
+}
+
+.grid-page-header,
+.grid-page-sidebar-left,
+.grid-page-sidebar-right {
+  padding: 10px;
+}
+
+.grid-container {
+  --undo-gap: calc(-1 * var(--grid-gap));
+}
+
+.grid-container > * {
+  box-sizing: border-box;
+  margin: 0;
 }
 
 /* If we just use 1fr for the content, then it can
@@ -33,33 +62,25 @@ css-tricks article contained the solution:
 https://css-tricks.com/preventing-a-grid-blowout/ */
 .grid-container * {
   min-width: 0;
-  min-height:0;
+  min-height: 0;
 }
 
-/* --- Optional Title Bar ----------------------------------- */
-.grid_panel .title-bar {
-  grid-area: title;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  border-bottom: 1px solid var(--card-outline-color);
-  padding: calc(var(--card-padding) / 2) var(--card-padding);
+/* Scrollable cards: 
+If the user has allowed scrollable cards then we need to set
+the overflow accordingly. 
+*/
+div[data-scrollable="TRUE"] .panel-content {
+  overflow: scroll;
 }
 
-.grid_panel .title-bar > h3 {
-  margin: 0;
-  height: 100%;
+/* Since we're in the world of flex, the height value is entirely ignored so in
+order to keep the plots sized how we expect them to, we need to not let flex do
+it's shrink magic on them */
+div[data-scrollable="TRUE"] .shiny-plot-output {
+  flex-shrink: 0;
 }
 
-/* --- Panel Content ---------------------------------------- */
-/* This is the div that actually holds the children of the panel */
-
-.panel-content {
-  padding: var(--card-padding);
-  grid-area: content;
-}
-
-.grid-container .shiny-plot-output {
+.grid-container .shiny-plot-output > img {
   /* The way grid sizing works can throw off the plot sizing in shiny. This
      is because the size of the parent grows to its largest child element.
      Shiny's plot output uses fixed pixel sizing. Shiny tries to update
@@ -76,10 +97,47 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
   max-height: 100%;
 }
 
+/* Add ability to turn off padding of the body of card for things like nested
+grids where the padding is already provided by the child element */
+.grid-container div.card.no-pad .card-body {
+  padding: 0;
+}
+
+/* --- Grid Panels ------------------------------------------- */
+
+.grid_card {
+  --card-padding: 0.8rem;
+
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    "title"
+    "content";
+  /* The content-height variable gets over-written to enable collapsible cards*/
+  /* When there's no title the column will dissapear */
+  grid-template-rows: min-content minmax(0, var(--content-height, 1fr));
+}
+
+/* --- Optional Title Bar ----------------------------------- */
+.grid_card .card-header {
+  grid-area: title;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+/* --- Panel Content ---------------------------------------- */
+/* This is the div that actually holds the children of the panel */
+
+.panel-content {
+  padding: var(--card-padding);
+  grid-area: content;
+}
+
 /* --- Collapsing ------------------------------------------ */
 /* Panels that can be collapsed control their size with a toggle switch */
 
-.grid_panel.collapsed {
+.grid_card.collapsed {
   /* If panel is not collapsible this css variable is defined as "block"
      which means that a panel that has been collapsed, and then resized
      to a scenario where it cant be collapsed, it will pop back
@@ -91,20 +149,20 @@ https://css-tricks.com/preventing-a-grid-blowout/ */
 
 /* Make flip arrow point down when collapsed and
    up when expanded to show result of clicking */
-.grid_panel .collapser-icon {
+.grid_card .collapser-icon {
   display: var(--collapsible-visibility, none);
 }
-.grid_panel .collapser-icon svg {
+.grid_card .collapser-icon svg {
   transition: transform 0.2s ease;
 }
-.grid_panel.collapsed .collapser-icon svg {
+.grid_card.collapsed .collapser-icon svg {
   transform: scaleY(-1);
 }
 
 /* --- Vertical Stack Panels -------------------------------- */
 /* These are panels that have a column-flex layout for nicely stacking a bunch
 of children on top of eachother */
-.grid_panel.vertical_stack .panel-content {
+.grid_card.vertical_stack .panel-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,7 +172,7 @@ of children on top of eachother */
   Add a margin to the bottom of each element except the last. This essentially
   replicates the gap property but has better browser support
 */
-.grid_panel.vertical_stack .panel-content > *:not(:last-child) {
+.grid_card.vertical_stack .panel-content > *:not(:last-child) {
   margin-bottom: var(--item-gap, 1rem);
 }
 
@@ -123,32 +181,34 @@ of children on top of eachother */
 aligned easily */
 
 /* Make everything line up nice and cleanly like it should in the middle */
-.grid_panel_text {
+.grid_card_text {
   margin: 0;
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 /* Everything should be inline so lining up works properly */
-.grid_panel_text * {
+.grid_card_text * {
   display: inline;
 }
 /* Make sure logo isn't right up next to the text */
-.grid_panel_text > * {
+.grid_card_text > * {
   margin: 0 5px;
 }
 
 /* --- Tabset Panel work -------------------------------- */
 /* Makes it so tabpanels work in gridpanels */
-.grid_panel .tabbable {
+.grid_card .tabbable {
   height: 100%;
+  width: 100%;
 }
-.grid_panel .tabbable > .nav {
+.grid_card .tabbable > .nav {
   height: 42px;
 }
-.grid_panel .tabbable .tab-content {
+.grid_card .tabbable .tab-content {
   height: calc(100% - 42px);
 }
-.grid_panel .tabbable .tab-pane {
+.grid_card .tabbable .tab-pane {
   height: 100%;
 }

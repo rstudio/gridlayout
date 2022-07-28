@@ -12,8 +12,9 @@
           "header  header header"
           "sidebar plot_a plot_c"
           "sidebar plot_b plot_b";
-        grid-gap:12px;
-        padding:12px;
+        --grid-gap:12px;
+        grid-gap:var(--grid-gap);
+        padding:var(--grid-gap);
         height:100vh;
       }
       
@@ -30,8 +31,9 @@
             "plot_a "
             "plot_b "
             "plot_c ";
-          grid-gap:12px;
-          padding:12px;
+          --grid-gap:12px;
+          grid-gap:var(--grid-gap);
+          padding:var(--grid-gap);
           height:auto;
         }
       }
@@ -51,8 +53,9 @@
           "header "
           "sidebar"
           "plot   ";
-        grid-gap:12px;
-        padding:12px;
+        --grid-gap:12px;
+        grid-gap:var(--grid-gap);
+        padding:var(--grid-gap);
         height:100vh;
       }
       body > div[data-gridlayout-area="sidebar"] {
@@ -72,8 +75,9 @@
             "header "
             "sidebar"
             "plot   ";
-          grid-gap:12px;
-          padding:12px;
+          --grid-gap:12px;
+          grid-gap:var(--grid-gap);
+          padding:var(--grid-gap);
           height:auto;
         }
       }

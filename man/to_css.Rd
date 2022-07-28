@@ -2,9 +2,9 @@
 % Please edit documentation in R/to_css.R
 \name{to_css}
 \alias{to_css}
-\title{Convert grid layout to css string}
+\title{Generate dynamic css for a given \code{gridlayout}}
 \usage{
-to_css(layout, container_key, is_card_styled = "grid_panel")
+to_css(layout, container_key)
 }
 \arguments{
 \item{layout}{Object of class \code{"gridlayout"}.}
@@ -17,20 +17,13 @@ plain character string is given, then it is assumed to be a
 \code{data-gridlayout-key}. If container contains css selector characters such as
 a dot, the selector will not be transformed into an id automatically. E.g.
 \code{container = ".main-content"}.}
-
-\item{is_card_styled}{Should each section of the grid be given a card style
-to make it stand out? Options are \code{"grid_panel"}, where only elements with
-\code{"grid_panel"} class will get card styling, \code{"all"} where all children of
-the grid container will get card styling (useful for RMarkdown or other
-situations where you don't control child rendering) or \code{"none"} for no card
-styling.}
 }
 \value{
 Character string of css used to setup grid layout and place elements
 (referenced by id) into correct locations
 }
 \description{
-Convert grid layout to css string
+Generate dynamic css for a given \code{gridlayout}
 }
 \examples{
 

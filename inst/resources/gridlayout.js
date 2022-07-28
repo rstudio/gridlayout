@@ -3,7 +3,6 @@ function watch_cards() {
   const panel_visibility_map = new Map();
   const resizeObserver = new ResizeObserver((entries) => {
     for (let entry of entries) {
-
       const el = entry.target;
 
       const content_height = getComputedStyle(el)
@@ -28,13 +27,13 @@ function watch_cards() {
             $el.trigger("hidden");
           }
         });
-        panel_visibility_map.set(el, 'seen');
+        panel_visibility_map.set(el, "seen");
       }
     }
   });
 
   document
-    .querySelectorAll(".grid_panel")
+    .querySelectorAll(".grid_card")
     .forEach((el) => resizeObserver.observe(el));
 }
 

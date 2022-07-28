@@ -2,13 +2,12 @@
 % Please edit documentation in R/grid_container.R
 \name{grid_container}
 \alias{grid_container}
-\title{Build gridlayout container for specified layout}
+\title{\code{gridlayout} container for use within other elements}
 \usage{
 grid_container(
   layout,
   ...,
   id = NULL,
-  use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE,
   row_sizes = NULL,
   col_sizes = NULL,
@@ -20,18 +19,11 @@ grid_container(
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
+\item{...}{\code{grid_card()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
-
-\item{use_bslib_card_styles}{Should the elements within the grid be given the
-current bootstrap theme's card styling? Note that this setting will
-override card styling for elements built with \link{grid_panel}. This is so you
-don't have to manually change styles for each card. If you want a mixture
-of card styles, then you'll need to leave this as \code{FALSE} and set styles
-manually on each panel.}
 
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
@@ -70,13 +62,13 @@ shinyApp(
         |2rem  |200px   |1fr    |
         |85px  |header  |header |
         |1fr   |sidebar |plot   |",
-      grid_panel_text("header", "Geysers!"),
-      grid_panel(
+      grid_card_text("header", "Geysers!"),
+      grid_card(
         "sidebar",
         title = "Settings",
         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
       ),
-      grid_panel(
+      grid_card(
         "plot",
         plotOutput("distPlot", height="100\%")
       )
@@ -94,5 +86,9 @@ shinyApp(
 
 }
 \seealso{
-\link{grid_page}, \link{grid_panel}
+\code{\link[=grid_page]{grid_page()}} for using a gridlayout to entirely define the page.
+\code{\link[=grid_nested]{grid_nested()}} for placing a grid container within another gridlayout.
+\code{\link[=grid_card]{grid_card()}} for placing content inside your layout. See
+\code{vignette("defining-a-layout", package = "gridlayout")} for more info on
+defining your layout.
 }

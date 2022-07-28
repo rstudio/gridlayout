@@ -11,14 +11,7 @@ params:
 library(gridlayout)
 
 knitr::opts_chunk$set(echo = TRUE)
-
-switch(
-  params$mode,
-  base = use_gridlayout_rmd(),
-  only_grid_panel = use_gridlayout_rmd(is_card_styled = "grid_panel"),
-  stop("That's not an optional mode!")
-)
-
+use_gridlayout_rmd()
 ```
 
 ## Main
@@ -33,10 +26,10 @@ switch(
 ```
 
 
-## Sidebar {.grid_panel}
+## Sidebar 
 
 Here is some content for the sidebar
 
-## Footer
+## Footer 
 
 Anything you want could go in the footer.

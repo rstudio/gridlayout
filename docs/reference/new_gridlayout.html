@@ -39,26 +39,13 @@ layout."><meta name="twitter:card" content="summary"><!-- mathjax --><script src
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right"><li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/defining-a-layout.html">Defining a layout</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
-    </li>
-    <li>
-      <a href="../articles/using_with_rmd.html">Using with Rmds</a>
-    </li>
-  </ul></li>
-        <li>
+<li>
   <a href="../articles/layout-examples.html">Layout Examples</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -67,13 +54,19 @@ layout."><meta name="twitter:card" content="summary"><!-- mathjax --><script src
       <a href="../articles/alternate-layouts.html">Alternate Layouts</a>
     </li>
     <li>
+      <a href="../articles/defining-a-layout.html">Defining a layout</a>
+    </li>
+    <li>
+      <a href="../articles/layout-examples.html">Layout Examples</a>
+    </li>
+    <li>
       <a href="../articles/using_with_rmd.html">Using with Rmds</a>
     </li>
   </ul></li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
+        <li>
   <a href="https://github.com/rstudio/gridlayout" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
@@ -88,7 +81,7 @@ layout."><meta name="twitter:card" content="summary"><!-- mathjax --><script src
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Construct a gridlayout object</h1>
+    <h1>Construct a <code>gridlayout</code> object</h1>
     
     <div class="hidden name"><code>new_gridlayout.Rd</code></div>
     </div>
@@ -99,14 +92,14 @@ layout.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_gridlayout</span><span class="op">(</span>
-  layout_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,
-  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,
-  gap_size <span class="op">=</span> <span class="cn">NULL</span>,
-  container_height <span class="op">=</span> <span class="cn">NULL</span>,
-  alternate_layouts <span class="op">=</span> <span class="st">"auto"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_gridlayout</span><span class="op">(</span></span>
+<span>  layout_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gap_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  container_height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternate_layouts <span class="op">=</span> <span class="st">"auto"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -115,17 +108,25 @@ layout.</p>
 <dd><p>Either a list of elements with the <code>id</code>, <code>start_row</code>,
 <code>end_row</code>, <code>start_col</code>, and <code>end_col</code> format, or a markdown table defining a
 layout.</p></dd>
+
+
 <dt>row_sizes</dt>
 <dd><p>A character vector of valid css sizes for the height of each
 row in your grid as given by the main layout definition. If a single value
 is passed, it will be repeated for all columns. If sizes are provided both
 here and in the main layout then these sizes will be the ones used.</p></dd>
+
+
 <dt>col_sizes</dt>
 <dd><p>Same as <code>row_sizes</code>, but for column widths</p></dd>
+
+
 <dt>gap_size</dt>
 <dd><p>Valid css sizing for gap to be left between each element in your
 grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
 provided in the main layout table.</p></dd>
+
+
 <dt>container_height</dt>
 <dd><p>Valid css unit determining how tall the containing
 element should be for this layout. Defaults to <code>"viewport"</code> (full page
@@ -134,6 +135,8 @@ height: equivalent to the CSS value of <code>100vh</code>) if any relative units
 as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
 content. This should most likely be avoided when using row heights in
 relative units.</p></dd>
+
+
 <dt>alternate_layouts</dt>
 <dd><p>A list of layouts to be used for different viewport
 widths. This is enables your app to adapt to different screensizes such as a
@@ -144,10 +147,15 @@ when your page appears. See <code><a href="add_alternate_layout.html">add_altern
 alternate layouts are given a single-column layout will be automatically
 applied for mobile screens (viewports less than 600px wide). Set to <code>NULL</code>
 to avoid this.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Object of class <code>"gridlayout"</code></p>
+    
+
+<p>Object of class <code>"gridlayout"</code></p>
+
+
     </div>
     <div id="declaring-your-layout">
     <h2>Declaring your layout</h2>
@@ -159,24 +167,25 @@ to avoid this.</p></dd>
 <p>The easiest and cleanest way to declare your layout is to use an array where
 each row is an element and each column is separated by spaces. This allows
 you to easily visually align your layouts that look good even if your code
-is re-formated.</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
- <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"header header"</span>,
-   <span class="st">"plota  plotb"</span><span class="op">)</span>
-<span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##       1fr    1fr   </span>
-<span class="co">##   1fr header header</span>
-<span class="co">##   1fr plota  plotb </span>
-<span class="co">## Gap of 12px. Total height of viewport.</span>
-<span class="co">## </span>
-<span class="co">## Alternate layouts:  </span>
-<span class="co">##   </span>
-<span class="co">##   - Width &lt; 500px </span>
-<span class="co">##            1fr   </span>
-<span class="co">##     85px  header</span>
-<span class="co">##     350px plota </span>
-<span class="co">##     350px plotb </span>
-<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
-
+is re-formated.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"header header"</span>,</span>
+<span>   <span class="st">"plota  plotb"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr plota  plotb </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##            1fr   </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     85px  header</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plota </span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plotb </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 </div>
 
 <div class="section">
@@ -187,23 +196,24 @@ is re-formated.</p><div class="sourceCode r"><pre><code><span class="fu"><a href
 this format you define a grid using the table and then place your grid
 "elements" within that grid using their grid id. So for a 2x2 layout with a
 header along the top and two plots side-by-side the layout would look as
-follows:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
-  <span class="st">"| header | header |
-   | plota  | plotb  |"</span> <span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##       1fr    1fr   </span>
-<span class="co">##   1fr header header</span>
-<span class="co">##   1fr plota  plotb </span>
-<span class="co">## Gap of 12px. Total height of viewport.</span>
-<span class="co">## </span>
-<span class="co">## Alternate layouts:  </span>
-<span class="co">##   </span>
-<span class="co">##   - Width &lt; 500px </span>
-<span class="co">##            1fr   </span>
-<span class="co">##     85px  header</span>
-<span class="co">##     350px plota </span>
-<span class="co">##     350px plotb </span>
-<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
-
+follows:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
+<span>  <span class="st">"| header | header |</span></span>
+<span><span class="st">   | plota  | plotb  |"</span> <span class="op">)</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr plota  plotb </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##            1fr   </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     85px  header</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plota </span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plotb </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 <p><em>An important caveat of this style is it is not currently able to be detected
 using the "edit current layout" grided addin.</em></p>
 </div>
@@ -218,27 +228,27 @@ information for each:</p><ul><li><p><code>id</code>: Identifying id of the eleme
 span</p></li>
 <li><p><code>start_col/end_col</code>: The start and end column for your element's span</p></li>
 </ul><p>This is a bit more verbose but allows for greater control. Here you can have
-overlapping elements etc.. Most of the time you will just want to use the
-markdown syntax</p>
-<p>The same layout as declared above can be accomplished with the following:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_a"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_b"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="op">)</span> <span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##       1fr    1fr   </span>
-<span class="co">##   1fr header header</span>
-<span class="co">##   1fr plot_a plot_b</span>
-<span class="co">## Gap of 12px. Total height of viewport.</span>
-<span class="co">## </span>
-<span class="co">## Alternate layouts:  </span>
-<span class="co">##   </span>
-<span class="co">##   - Width &lt; 500px </span>
-<span class="co">##            1fr   </span>
-<span class="co">##     85px  header</span>
-<span class="co">##     350px plot_a</span>
-<span class="co">##     350px plot_b</span>
-<span class="co">##   Gap of 12px. Total height of auto.</span></code></pre></div>
-
+overlapping elements etc..</p>
+<p>The same layout as declared above can be accomplished with the following:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_a"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_b"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">)</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr plot_a plot_b</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##            1fr   </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     85px  header</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plot_a</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     350px plot_b</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 </div>
 
 <div class="section">
@@ -261,55 +271,56 @@ layouts screen-sizes other than just a mobile view, you can with the
 of the viewport. This is typically used to add a mobile view (or a desktop
 view if your app is mobile first.)</p>
 <p>To define an alternate layout you need to pass a list containing <code>layout</code>
-and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span>
-  <span class="st">"|header |header |
-   |plot_a |plot_b |"</span>,
-  alternate_layouts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    layout <span class="op">=</span> <span class="st">"
-        |header |
-        |plot_a |
-        |plot_b |"</span>,
-    width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## gridlayout of 3 elements: </span>
-<span class="co">##       1fr    1fr   </span>
-<span class="co">##   1fr header header</span>
-<span class="co">##   1fr plot_a plot_b</span>
-<span class="co">## Gap of 12px. Total height of viewport.</span>
-<span class="co">## </span>
-<span class="co">## Alternate layouts:  </span>
-<span class="co">##   </span>
-<span class="co">##   - Width &lt; 500px </span>
-<span class="co">##          1fr   </span>
-<span class="co">##     1fr header</span>
-<span class="co">##     1fr plot_a</span>
-<span class="co">##     1fr plot_b</span>
-<span class="co">##   Gap of 12px. Total height of viewport.</span></code></pre></div>
-
+and <code>width_bounds</code> elements.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
+<span>  <span class="st">"|header |header |</span></span>
+<span><span class="st">   |plot_a |plot_b |"</span>,</span>
+<span>  alternate_layouts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    layout <span class="op">=</span> <span class="st">"</span></span>
+<span><span class="st">        |header |</span></span>
+<span><span class="st">        |plot_a |</span></span>
+<span><span class="st">        |plot_b |"</span>,</span>
+<span>    width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   1fr plot_a plot_b</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##          1fr   </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     1fr header</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     1fr plot_a</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     1fr plot_b</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of viewport.</span></span></code></pre><p></p></div>
 <p>Multiple layouts can also be added. Simply enclose them as a list of lists.</p>
-<p>See <code><a href="../articles/alternate-layouts.html">vignette("alternate-layouts", package = "gridlayout")</a></code> for a more in-depth overview.</p>
+<p>See <code><a href="../articles/defining-a-layout.html">vignette("defining-a-layout", package = "gridlayout")</a></code> and <code><a href="../articles/alternate-layouts.html">vignette("alternate-layouts", package = "gridlayout")</a></code> for a more in-depth overview.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Assemble list of elements along with their positions</span></span>
-<span class="r-in"><span class="va">elements_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot"</span>,   start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"table"</span>,  start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">       start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"footer"</span>, start_row <span class="op">=</span> <span class="fl">3</span>, end_row <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">new_gridlayout</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">elements_list</span>,</span>
-<span class="r-in">  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,</span>
-<span class="r-in">  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span>, <span class="st">"1fr"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Assemble list of elements along with their positions</span></span></span>
+<span class="r-in"><span><span class="va">elements_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot"</span>,   start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"table"</span>,  start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>       start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"footer"</span>, start_row <span class="op">=</span> <span class="fl">3</span>, end_row <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>       start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">new_gridlayout</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">elements_list</span>,</span></span>
+<span class="r-in"><span>  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span>, <span class="st">"1fr"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">gridlayout</span> of 4 elements: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">2fr   </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
@@ -326,16 +337,16 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">footer</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Can also use a matrix for more visually intuitive laying out</span></span>
-<span class="r-in"><span class="fu">new_gridlayout</span><span class="op">(</span></span>
-<span class="r-in">  layout_def <span class="op">=</span> <span class="st">"</span>
-<span class="r-in">      | header | header |</span>
-<span class="r-in">      | plota  | plotb  |"</span>,</span>
-<span class="r-in">  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,</span>
-<span class="r-in">  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span>
-<span class="r-in">  gap_size <span class="op">=</span> <span class="st">"2rem"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Can also use a matrix for more visually intuitive laying out</span></span></span>
+<span class="r-in"><span><span class="fu">new_gridlayout</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  layout_def <span class="op">=</span> <span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">      | header | header |</span></span></span>
+<span class="r-in"><span><span class="st">      | plota  | plotb  |"</span>,</span></span>
+<span class="r-in"><span>  col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1fr"</span>, <span class="st">"2fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  row_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"100px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  gap_size <span class="op">=</span> <span class="st">"2rem"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">2fr   </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
@@ -350,7 +361,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plota </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plotb </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">auto</span>.</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -365,7 +376,7 @@ and <code>width_bounds</code> elements.</p><div class="sourceCode r"><pre><code>
 </div>
 
 <div class="author">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

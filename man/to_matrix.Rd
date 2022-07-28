@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_md.R
 \name{to_matrix}
 \alias{to_matrix}
-\title{Convert gridlayout to matrix format}
+\title{Convert \code{gridlayout} to matrix format}
 \usage{
 to_matrix(layout)
 }
@@ -14,7 +14,7 @@ A matrix of the layout with each grid cell and its item membership
 corresponding to a cell in the matrix
 }
 \description{
-Convert gridlayout to matrix format
+Convert \code{gridlayout} to matrix format
 }
 \examples{
 

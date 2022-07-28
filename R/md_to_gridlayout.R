@@ -1,4 +1,4 @@
-#' Build grid layout obj from markdown table
+#' Build `gridlayout` object from markdown table
 #'
 #' This is just a wrapper around [new_gridlayout] that is more explicit about
 #' its input format. Also adds the ability to absorb errors for use when parsing

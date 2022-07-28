@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_elements.R
 \name{get_element_ids}
 \alias{get_element_ids}
-\title{Get ids of element in layout}
+\title{Get ids of element in \code{gridlayout} object}
 \usage{
 get_element_ids(x)
 }
@@ -13,7 +13,7 @@ get_element_ids(x)
 Character vector of ids of all elements in layout
 }
 \description{
-Get ids of element in layout
+Get ids of element in \code{gridlayout} object
 }
 \examples{
 

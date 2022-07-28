@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_page.R
 \name{grid_page}
 \alias{grid_page}
-\title{Setup gridlayout UI for shiny app}
+\title{Use \code{gridlayout} for entire app layout}
 \usage{
 grid_page(
   layout,
@@ -10,10 +10,8 @@ grid_page(
   row_sizes = NULL,
   col_sizes = NULL,
   gap_size = NULL,
-  use_bslib_card_styles = FALSE,
-  theme = NULL,
-  flag_mismatches = TRUE,
-  just_container = shiny::isRunning()
+  theme = bslib::bs_theme(version = 5),
+  flag_mismatches = FALSE
 )
 }
 \arguments{
@@ -21,7 +19,7 @@ grid_page(
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{\code{grid_panel()} (or similar) arguments that will fill the grid
+\item{...}{\code{grid_card()} (or similar) arguments that will fill the grid
 layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{row_sizes}{A character vector of valid css sizes for the height of each
@@ -35,24 +33,11 @@ here and in the main layout then these sizes will be the ones used.}
 grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
 provided in the main layout table.}
 
-\item{use_bslib_card_styles}{Should the elements within the grid be given the
-current bootstrap theme's card styling? Note that this setting will
-override card styling for elements built with \link{grid_panel}. This is so you
-don't have to manually change styles for each card. If you want a mixture
-of card styles, then you'll need to leave this as \code{FALSE} and set styles
-manually on each panel.}
-
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}
 
 \item{flag_mismatches}{Should mismatches between the named arguments and
 layout elements trigger an error?}
-
-\item{just_container}{Should the app layout be given as a standalone output
-(like calling \code{\link[=grid_container]{grid_container()}})? Defaults to \code{\link[shiny:isRunning]{shiny::isRunning()}} so
-if app is produced in a \code{\link[shiny:renderUI]{shiny::renderUI()}} type call it knows not to try
-and recreate the whole page. Note that extra arguments and themes will be
-discarded when this is set to \code{TRUE}.}
 }
 \value{
 A UI definition that can be passed to the
@@ -62,34 +47,30 @@ A UI definition that can be passed to the
 This is the typical way to use \code{gridlayout} in your \code{Shiny} app. \code{grid_page}
 will make up the entire \code{ui} declaration of the app. Under the hood it uses
 \code{\link[shiny:fluidPage]{shiny::fluidPage()}} and \link{grid_container}. Elements are placed in the layout
-by wrapping in a \code{grid_panel()} with the \code{area} set to the area in the layout
+by wrapping in a \code{grid_card()} with the \code{area} set to the area in the layout
 the element should be placed in.
 }
 \examples{
-# Only run these examples in interactive R sessions
 if (FALSE) {
-requireNamespace("shiny", quietly = TRUE)
-requireNamespace("bslib", quietly = TRUE)
-
+library(gridlayout)
 library(shiny)
+library(bslib)
+
 shinyApp(
   ui = grid_page(
-    layout = "
-      |2rem |200px   |1fr    |
-      |90px |header  |header |
-      |1fr  |sidebar |plot   |",
-    grid_panel(
-      "header",
-      shiny::h2("My App Header")
+    layout = c(
+      "header  header",
+      "sidebar distPlot"
     ),
-    grid_panel(
+    row_sizes = c("50px", "1fr"),
+    col_sizes = c("200px", "1fr"),
+    grid_card_text("header", "This is my header"),
+    grid_card(
       "sidebar",
-      sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100\%")
+      title = "Settings",
+      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
     ),
-    grid_panel(
-      "plot",
-      plotOutput("distPlot", height = "100\%")
-    )
+    grid_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -102,5 +83,7 @@ shinyApp(
 }
 }
 \seealso{
-\link{grid_container}
+See \code{vignette("defining-a-layout", package = "gridlayout")} for more info on defining your layout. \code{\link[=grid_container]{grid_container()}} for using gridlayout without also setting up the
+root page layout. \code{\link[=grid_nested]{grid_nested()}} for placing a grid container within
+another gridlayout. \code{\link[=grid_card]{grid_card()}} for placing content inside your layout.
 }
