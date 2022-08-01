@@ -7,24 +7,20 @@ development:
 home:
   strip_header: false
 
-
 navbar:
   title: ~
   type: default
   structure:
-    right: [examples, articles, reference, github]
+    left: [setting-up, examples, articles, reference]
+    # right: [examples, github]
   components:
     home: ~
     examples:
       text: Layout Examples
       href: articles/layout-examples.html
-    articles:
-      text: Articles
-      menu:
-        - text: "Alternate Layouts"
-          href: articles/alternate-layouts.html
-        - text: "Using with Rmds"
-          href: articles/using_with_rmd.html
+    setting-up:
+      text: Defining a layout
+      href: articles/defining-a-layout.html
     reference:
       text: Reference
       href: reference/index.html
@@ -35,27 +31,30 @@ navbar:
 destination: docs
 
 reference:
-- title: "Layouts"
-  desc: >
-    Functions relating to creating and using gridlayout objects
-- contents:
-  - new_gridlayout
-  - grid_page
-  - grid_container
-  - starts_with("use_gridlayout")
-- title: "Grid Panels"
-  desc: >
-    Functions that wrap content to be placed in the grid.
-- contents:
-  - starts_with("grid_panel")
-- title: "Helper functions"
-  desc: >
-    Various functions for inspecting layouts or the content they create. For advanced use-cases.
-- contents:
-  - to_md
-  - to_matrix
-  - md_to_gridlayout
-  - get_elements
-  - get_element_ids
-  - to_css
-  - build_css_rule
+  - title: Layouts
+    desc: >
+      Setup `gridlayout` containers
+  - contents:
+      - grid_page
+      - grid_container
+      - use_gridlayout_rmd
+  - title: Content containers
+    desc: >
+      Place content on the grid.
+  - contents:
+      - starts_with("grid_card")
+      - grid_card_plot
+      - grid_nested
+      - card_plot_output
+      - grid_place
+  - title: Working with gridlayout objects
+    desc: >
+      Functions for creating, editing, or generating content with `gridlayout` objects. For advanced use-cases.
+  - contents:
+      - new_gridlayout
+      - md_to_gridlayout
+      - get_elements
+      - get_element_ids
+      - to_md
+      - to_matrix
+      - to_css

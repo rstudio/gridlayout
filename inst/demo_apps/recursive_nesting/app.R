@@ -5,10 +5,10 @@ library(fontawesome)
 max_depth <- 2
 
 emoji_panel <- function(area, emoji){
-  grid_panel_text(
+  grid_card_text(
     area = area,
-    h_align = 'center',
-    content = emoji
+    content = emoji,
+    alignment = "center"
   )
 }
 
@@ -16,7 +16,7 @@ make_nested_panels <- function(level = 0) {
 
   is_nested <- level > 0
 
-  container_fn <- if (is_nested) grid_panel_nested else grid_page
+  container_fn <- if (is_nested) grid_nested else grid_page
 
   container_fn(
     layout = new_gridlayout(

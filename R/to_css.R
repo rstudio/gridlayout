@@ -1,4 +1,4 @@
-#' Convert grid layout to css string
+#' Generate dynamic css for a given `gridlayout`
 #'
 #' @param layout Object of class `"gridlayout"`.
 #' @param container_key The unique key used to identify the container to be
@@ -9,12 +9,6 @@
 #'   `data-gridlayout-key`. If container contains css selector characters such as
 #'   a dot, the selector will not be transformed into an id automatically. E.g.
 #'   `container = ".main-content"`.
-#' @param is_card_styled Should each section of the grid be given a card style
-#'   to make it stand out? Options are `"grid_panel"`, where only elements with
-#'   `"grid_panel"` class will get card styling, `"all"` where all children of
-#'   the grid container will get card styling (useful for RMarkdown or other
-#'   situations where you don't control child rendering) or `"none"` for no card
-#'   styling.
 #'
 #' @return Character string of css used to setup grid layout and place elements
 #'   (referenced by id) into correct locations
@@ -32,9 +26,7 @@
 #'
 #' cat(to_css(grid_obj))
 #' @export
-to_css <- function(layout,
-                   container_key,
-                   is_card_styled = "grid_panel") {
+to_css <- function(layout, container_key) {
 
   container_query <- if (missing(container_key)) {
     "body"
@@ -122,7 +114,7 @@ generate_element_specific_css <- function(layout, container_query){
       build_css_rule(
         selector =  paste0(container_query, " > ", "div[data-gridlayout-area=\"", item$id ,"\"]"),
         prop_list = c(
-          "--collapsible-visibility" = "block" ,
+          "--collapsible-visibility" = "block",
           "--collapsed-content-size" = "0",
           "--collapsed-panel-height" = "min-content",
           "--collapsed-panel-overflow" = "hidden"
@@ -144,8 +136,9 @@ generate_layout_rules <- function(layout,
       "grid-template-rows" = collapse_w_space(get_info(layout, "row_sizes")),
       "grid-template-columns" = collapse_w_space(get_info(layout, "col_sizes")),
       "grid-template-areas" = toTemplateGridAreas(layout),
-      "grid-gap" = get_info(layout, "gap_size"),
-      "padding" = get_info(layout, "gap_size"),
+      "--grid-gap" = get_info(layout, "gap_size"),
+      "grid-gap" = "var(--grid-gap)",
+      "padding" = "var(--grid-gap)",
       "height" = validCssUnit(get_info(layout, "container_height"))
     )
   )
@@ -200,6 +193,9 @@ generate_layout_rules <- function(layout,
 #' @return A concatenated string of property values to be used inside a css
 #'   selector. If the `prop_list` is empty, an empty string (`""`) is returned
 #'   to avoid placing empty css rules on the webpage.
+#'
+#' @keywords internal
+#'
 build_css_rule <- function(selector, prop_list) {
   # Empty css rules are best avoided
   if (length(prop_list) == 0) {

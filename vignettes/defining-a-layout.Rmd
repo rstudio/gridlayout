@@ -1,0 +1,113 @@
+---
+title: "Defining a layout"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Defining a layout}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gridlayout)
+
+# Print the layout without showing mobile layouts
+show_layout <- function(layout) {
+  print(layout, show_alternates = FALSE)
+}
+```
+
+There are multiple ways to define a gridlayout. The following all describe the exact same layout. An app with a 100 pixel tall header spanning the width of the page, a 120 pixel wide sidebar on the left, and three plots in the remaining with `plot_a` being the smallest, `plot_b` being twice as wide as `plot_a`, and `plot_c` sitting below both `plot_a` and `plot_c` spanning the width of both. 
+
+
+## Where to pass your layout to 
+
+All examples are passed to `new_gridlayout()` which generates a `gridlayout` object directly.  However, typically these layouts are passed directly into the `gridlayout` container functions `new_gridlayout()`, `grid_page()`, `grid_container()`, or `grid_nested()`. 
+
+
+### A note sizing
+
+For the first two definition techniques we use inline sizes, however, for both layouts the sizes can be omitted for even sizes rows/columns, or passed as arrays to the`row_sizes` and `col_sizes` arguments in the grid layout container function. Additionally, the size of the gap between elements in your layout can be passed using either the upper-left "cell" of the table layout or the `gap_size` argument. 
+
+
+## The table array
+
+The most common way to define your layout is using an character vector where each element represents a row in your layout. Each column is delineated by one or more spaces between the names of the defined regions. This allows you to line up your layout visually. Sizes can be added for the rows and columns by placing row sizes at the left of the respective row and column sizes at the top of the respective column. 
+
+
+```{r md_to_gridlayout}
+library(gridlayout)
+
+table_array <- new_gridlayout(c(
+  "      120px   1fr    2fr   ",
+  "100px header  header header",
+  "1fr   sidebar plot_a plot_b",
+  "1fr   sidebar plot_c plot_c"
+))
+
+show_layout(table_array)
+```
+
+## The single character table
+
+Similar to the table array definition, a markdown table enclosed in a single string can be used as well. This is the method used to declare a layout in an RMarkdown file but since multi-line strings can be hard to keep formatted properly, the table-array definition is usually prefered for shiny-app usage. 
+
+```{r}
+md_table <- new_gridlayout("
+  |      |120px   |1fr    |2fr    |
+  |------|--------|-------|-------|
+  |100px |header  |header |header |
+  |1fr   |sidebar |plot_a |plot_b |
+  |1fr   |sidebar |plot_c |plot_c |"
+)
+
+show_layout(md_table)
+```
+
+
+## Elements list
+
+The last method is using a list to define the give positions of the items. This method is much more verbose than the previous two but is easier to generate using code. This can be useful in layouts with a large number of rows and columns where writing out the table would be cumbersome.
+
+```{r}
+# Assemble list of elements along with their positions
+layout_elements <- list(
+  list(
+    id = "header", start_row = 1, end_row = 1,
+    start_col = 1, end_col = 3
+  ),
+  list(
+    id = "sidebar", start_row = 2, end_row = 3,
+    start_col = 1, end_col = 1
+  ),
+  list(
+    id = "plot_a", start_row = 2, end_row = 2,
+    start_col = 2, end_col = 2
+  ),
+  list(
+    id = "plot_b", start_row = 2, end_row = 2,
+    start_col = 3, end_col = 3
+  ),
+  list(
+    id = "plot_c", start_row = 3, end_row = 3,
+    start_col = 2, end_col = 3
+  )
+)
+
+elements_list <- new_gridlayout(
+  layout_elements,
+  col_sizes = c("120px", "1fr", "2fr"),
+  row_sizes = c("100px", "1fr", "1fr")
+)
+
+show_layout(elements_list)
+```
+
+
+

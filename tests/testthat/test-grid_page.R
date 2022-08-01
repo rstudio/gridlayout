@@ -9,15 +9,15 @@ test_that("Works when it should", {
     |1fr   |header  |
     |1fr   |plot    |
     |1fr   |footer  |",
-      grid_panel(
+      grid_card(
         "header",
         shiny::h2(id = "header", "This is my header content")
       ),
-      grid_panel(
+      grid_card(
         "footer",
         shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
       ),
-      grid_panel(
+      grid_card(
         "plot",
         shiny::plotOutput("myPlot")
       )
@@ -37,15 +37,15 @@ test_that("Warns about mismatches between layout and passed elements", {
   err_msg <- expect_error(
     grid_container(
       layout = layout_wo_footer,
-      grid_panel(
+      grid_card(
         "header",
         shiny::h2(id = "header", "This is my header content")
       ),
-      grid_panel(
+      grid_card(
         "footer",
         shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
       ),
-      grid_panel(
+      grid_card(
         "plot",
         shiny::plotOutput("myPlot")
       )
@@ -66,15 +66,15 @@ test_that("Warns about both at the same time to help people debug easier", {
     |1fr   |header  |
     |1fr   |plot    |
     |1fr   |footer  |",
-      grid_panel(
+      grid_card(
         "header",
         shiny::h2(id = "header", "This is my header content")
       ),
-      grid_panel(
+      grid_card(
         "footer2",
         shiny::sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30)
       ),
-      grid_panel(
+      grid_card(
         "plot",
         shiny::plotOutput("myPlot")
       )

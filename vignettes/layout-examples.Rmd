@@ -2,7 +2,7 @@
 title: "Layout Examples"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{layout-examples}
+  %\VignetteIndexEntry{Layout Examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,37 +21,27 @@ library(gridlayout)
 library(glue)
 layout_tables <- list(
     stack = "
-  |      |         |
-  |------|---------|
   |1rem  |1fr      |
   |80px  |header   |
   |1fr   |chickens |
   |1fr   |treePlot |
   |1fr   |stockTable |",
   scrolling_stack = "
-  |      |           |
-  |------|-----------|
   |1rem  |1fr        |
   |80px  |header     |
   |400px |chickens   |
   |400px |treePlot   |
   |400px |stockTable |",
   four_panel = "
-  |     |           |         |
-  |-----|-----------|---------|
   |1rem |1fr        |1fr      |
-  |1fr  |header   |chickens |
+  |1fr  |header     |chickens |
   |1fr  |stockTable |treePlot |",
   focal_chart_top = "
-  |     |          |         |
-  |-----|----------|---------|
   |1rem |1fr       |1fr      |
   |80px |header    |header   |
   |2fr  |chickens  |chickens |
   |1fr  |treePlot  |stockTable |",
   focal_chart_side = "
-  |     |         |         |
-  |-----|---------|---------|
   |1rem |2fr      |1fr      |
   |80px |header   |header   |
   |1fr  |chickens |treePlot |
@@ -82,23 +72,19 @@ app_w_layout <- function(my_layout) {
   shinyApp(
     ui = grid_page(
       layout = my_layout,
-      grid_panel_text("header", "My gridlayout app"),
-      grid_panel(
+      grid_card_text("header", "My gridlayout app"),
+      grid_card(
         "chickens",
         tabsetPanel(
           tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
           tabPanel("Fastest growing", gt_output("chickTable"))
         )
       ),
-      grid_panel(
+      grid_card(
         "treePlot",
         plotOutput("treePlot", height = "100%")
       ),
-      # grid_panel(
-      #   "yarnPlot",
-      #   plotOutput("yarnPlot", height = "100%")
-      # ),
-      grid_panel(
+      grid_card(
          "stockTable",
         gt_output("stockTable"), scrollable = TRUE
       ),
@@ -237,6 +223,10 @@ The gridlayout package lets you quickly define a grid-based layout that can dras
 
 This list is inspired by the [flexdashboard layouts vignette](https://rmarkdown.rstudio.com/flexdashboard/layouts.html).
 
+
+_Note: The layouts defined are given as the markdown table syntax here, although typically you'll want to use the character-vector syntax. See `vignette('defining-a-layout')` for more info on the pros-and-cons of the different layout definition methods._
+
+
 ## App UI code:
 
 The following code is the UI definition used for all the screenshots. The only thing that changes is the layout definition.
@@ -244,23 +234,23 @@ The following code is the UI definition used for all the screenshots. The only t
 ```{r, eval = FALSE, echo = TRUE}
 ui <- grid_page(
   layout = my_layout,
-  grid_panel_text("header", "My gridlayout app"),
-  grid_panel(
+  grid_card_text("header", "My gridlayout app"),
+  grid_card(
     "chickens",
     tabsetPanel(
       tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
       tabPanel("Fastest growing", gt_output("chickTable"))
     )
   ),
-  grid_panel(
+  grid_card(
     "treePlot",
     plotOutput("treePlot", height = "100%")
   ),
-  grid_panel(
+  grid_card(
     "yarnPlot",
     plotOutput("yarnPlot", height = "100%")
   ),
-  grid_panel(
+  grid_card(
     "stockTable",
     gt_output("stockTable"), scrollable = TRUE
   ),

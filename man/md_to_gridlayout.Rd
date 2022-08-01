@@ -2,7 +2,7 @@
 % Please edit documentation in R/md_to_gridlayout.R
 \name{md_to_gridlayout}
 \alias{md_to_gridlayout}
-\title{Build grid layout obj from markdown table}
+\title{Build \code{gridlayout} object from markdown table}
 \usage{
 md_to_gridlayout(layout_table, null_instead_of_error = FALSE, ...)
 }

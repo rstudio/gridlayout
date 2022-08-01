@@ -22,12 +22,6 @@ plain character string is given, then it is assumed to be a
 \code{data-gridlayout-key}. If container contains css selector characters such as
 a dot, the selector will not be transformed into an id automatically. E.g.
 \code{container = ".main-content"}.}
-    \item{\code{is_card_styled}}{Should each section of the grid be given a card style
-to make it stand out? Options are \code{"grid_panel"}, where only elements with
-\code{"grid_panel"} class will get card styling, \code{"all"} where all children of
-the grid container will get card styling (useful for RMarkdown or other
-situations where you don't control child rendering) or \code{"none"} for no card
-styling.}
   }}
 }
 \value{
@@ -87,3 +81,4 @@ shinyApp(
 \seealso{
 \code{\link{to_css}}, \code{\link{grid_page}}, \code{\link{grid_container}}
 }
+\keyword{internal}

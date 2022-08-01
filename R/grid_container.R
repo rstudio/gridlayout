@@ -1,4 +1,4 @@
-#' Build gridlayout container for specified layout
+#' `gridlayout` container for use within other elements
 #'
 #' Builds a gridlayout within a div of specified id. Not typically called
 #' directly but can be used to create nested grids
@@ -9,13 +9,7 @@
 #' @param layout Either a markdown table representation (see
 #'   \code{\link{md_to_gridlayout}}) or a `gridlayout` object defining the
 #'   desired layout for your Shiny app.
-#' @param use_bslib_card_styles Should the elements within the grid be given the
-#'   current bootstrap theme's card styling? Note that this setting will
-#'   override card styling for elements built with [grid_panel]. This is so you
-#'   don't have to manually change styles for each card. If you want a mixture
-#'   of card styles, then you'll need to leave this as `FALSE` and set styles
-#'   manually on each panel.
-#' @param ... `grid_panel()` (or similar) arguments that will fill the grid
+#' @param ... `grid_card()` (or similar) arguments that will fill the grid
 #'   layout. Note the areas should match the those provided in `layout`.
 #' @param flag_mismatches Should a mismatch between supplied `elements` ui
 #'   definitions and layout trigger a warning? In advanced cases you may want to
@@ -24,7 +18,11 @@
 #' @return A taglist with grid elements wrapped inside a container div of class
 #'   `id`.
 #'
-#' @seealso [grid_page], [grid_panel]
+#' @seealso [grid_page()] for using a gridlayout to entirely define the page.
+#'   [grid_nested()] for placing a grid container within another gridlayout.
+#'   [grid_card()] for placing content inside your layout. See
+#'   `vignette("defining-a-layout", package = "gridlayout")` for more info on
+#'   defining your layout.
 #' @export
 #'
 #' @examples
@@ -41,13 +39,13 @@
 #'         |2rem  |200px   |1fr    |
 #'         |85px  |header  |header |
 #'         |1fr   |sidebar |plot   |",
-#'       grid_panel_text("header", "Geysers!"),
-#'       grid_panel(
+#'       grid_card_text("header", "Geysers!"),
+#'       grid_card(
 #'         "sidebar",
 #'         title = "Settings",
 #'         sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
 #'       ),
-#'       grid_panel(
+#'       grid_card(
 #'         "plot",
 #'         plotOutput("distPlot", height="100%")
 #'       )
@@ -67,7 +65,6 @@ grid_container <- function(
   layout,
   ...,
   id = NULL,
-  use_bslib_card_styles = FALSE,
   flag_mismatches = TRUE,
   row_sizes = NULL,
   col_sizes = NULL,

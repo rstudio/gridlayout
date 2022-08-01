@@ -1,9 +1,9 @@
-#' Setup gridlayout UI for shiny app
+#' Use `gridlayout` for entire app layout
 #'
 #' This is the typical way to use `gridlayout` in your `Shiny` app. `grid_page`
 #' will make up the entire `ui` declaration of the app. Under the hood it uses
 #' [shiny::fluidPage()] and [grid_container]. Elements are placed in the layout
-#' by wrapping in a `grid_panel()` with the `area` set to the area in the layout
+#' by wrapping in a `grid_card()` with the `area` set to the area in the layout
 #' the element should be placed in.
 #'
 #' @inheritParams grid_container
@@ -11,88 +11,105 @@
 #'   \code{\link[shiny]{fluidPage}}.
 #' @param flag_mismatches Should mismatches between the named arguments and
 #'   layout elements trigger an error?
-#' @param just_container Should the app layout be given as a standalone output
-#'   (like calling [`grid_container()`])? Defaults to [`shiny::isRunning()`] so
-#'   if app is produced in a [`shiny::renderUI()`] type call it knows not to try
-#'   and recreate the whole page. Note that extra arguments and themes will be
-#'   discarded when this is set to `TRUE`.
 #'
 #' @return A UI definition that can be passed to the
 #'   \code{\link[shiny]{shinyUI}} function.
 #' @export
 #'
-#' @seealso [grid_container]
+#' @seealso See `vignette("defining-a-layout", package = "gridlayout")` for more info on defining your layout. [grid_container()] for using gridlayout without also setting up the
+#'   root page layout. [grid_nested()] for placing a grid container within
+#'   another gridlayout. [grid_card()] for placing content inside your layout.
 #'
-#' @examples
-#' # Only run these examples in interactive R sessions
-#' if (FALSE) {
-#' requireNamespace("shiny", quietly = TRUE)
-#' requireNamespace("bslib", quietly = TRUE)
+#' @example man/examples/simple_app.R
 #'
-#' library(shiny)
-#' shinyApp(
-#'   ui = grid_page(
-#'     layout = "
-#'       |2rem |200px   |1fr    |
-#'       |90px |header  |header |
-#'       |1fr  |sidebar |plot   |",
-#'     grid_panel(
-#'       "header",
-#'       shiny::h2("My App Header")
-#'     ),
-#'     grid_panel(
-#'       "sidebar",
-#'       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width="100%")
-#'     ),
-#'     grid_panel(
-#'       "plot",
-#'       plotOutput("distPlot", height = "100%")
-#'     )
-#'   ),
-#'   server = function(input, output) {
-#'     output$distPlot <- renderPlot({
-#'       x    <- faithful[, 2]
-#'       bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#'       hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#'     })
-#'   }
-#' )
-#' }
-grid_page <- function(
-    layout,
-    ...,
-    row_sizes = NULL,
-    col_sizes = NULL,
-    gap_size = NULL,
-    use_bslib_card_styles = FALSE,
-    theme = NULL,
-    flag_mismatches = TRUE,
-    just_container = shiny::isRunning()
-  ){
+grid_page <- function(layout,
+                      ...,
+                      row_sizes = NULL,
+                      col_sizes = NULL,
+                      gap_size = NULL,
+                      theme = bslib::bs_theme(version = 5),
+                      flag_mismatches = FALSE) {
+  dot_args <- list(...)
 
-  requireNamespace("shiny", quietly = TRUE)
-
-  container <- grid_container(
-    id = "grid_page",
-    layout = layout,
-    ...,
-    use_bslib_card_styles = use_bslib_card_styles,
-    flag_mismatches = flag_mismatches,
-    row_sizes = row_sizes,
-    col_sizes = col_sizes,
-    gap_size = gap_size
+  body_elements <- Filter(
+    f = function(x) !(is_grid_page_header(x) || is_grid_page_sidebar(x)),
+    dot_args
   )
 
-  if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
-    warning("Container height for layout is not set at default of viewport.",
-            "This is likely a mistake for grid_page()")
-  }
+  header <- Filter(
+    f = function(x) is_grid_page_header(x),
+    dot_args
+  )
 
-  if (just_container) return(container)
+  sidebar <- Filter(
+    f = function(x) is_grid_page_sidebar(x),
+    dot_args
+  )
+
+  container_args <- c(
+    list(
+      layout = layout,
+      flag_mismatches = flag_mismatches,
+      row_sizes = row_sizes,
+      col_sizes = col_sizes,
+      gap_size = gap_size,
+      # This is used to prevent a randomly generated grid container id data
+      # attribute which stabilizes tests and makes it easier to target with
+      # custom css
+      id = "gridlayout-grid-page-container"
+    ),
+    body_elements
+  )
+
+  container <- do.call(grid_container, container_args)
+
+  if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
+    warning(
+      "Container height for layout is not set at default of viewport.",
+      "This is likely a mistake for grid_page()"
+    )
+  }
 
   shiny::fluidPage(
     theme = theme,
-    container
+    htmltools::tags$div(
+      id = "gridlayout-grid-page",
+      header,
+      sidebar,
+      container
+    )
   )
+}
 
+
+grid_page_header <- function(..., bgColor = "primary", bgGradient = FALSE, height = NULL) {
+  update_el(
+    htmltools::tags$div(...),
+    classes = c(
+      "grid-page-header",
+      make_bg_class(bgColor, bgGradient)
+    ),
+    styles = list(height = height)
+  )
+}
+
+is_grid_page_header <- function(x) {
+  has_class(x, "grid-page-header")
+}
+
+grid_page_sidebar <- function(..., side = "left", bgColor = "light", bgGradient = FALSE, width = NULL) {
+  update_el(
+    htmltools::tags$div(...),
+    classes = c(
+      make_bg_class(bgColor, bgGradient),
+      paste0("grid-page-sidebar-", side)
+    ),
+    styles = list(
+      width = width
+    )
+  )
+}
+
+is_grid_page_sidebar <- function(x) {
+  has_class(x, "grid-page-sidebar")
 }
