@@ -29,5 +29,7 @@ Imports:
     magrittr,
     htmltools,
     rlang
+Config/Needs/website:
+    rstudio/quillt
 Depends: 
     R (>= 2.10)
