@@ -10,9 +10,12 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  out.width = "100%"
+  comment = "",
+  out.width = "100%",
+  eval = FALSE
 )
+
+rmd_loc <- "demo_apps/rmarkdown_demo/grid_markdown.Rmd"
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
@@ -21,7 +24,7 @@ source(here::here("inst/demo_apps/setupScreenshots.R"))
 
 
 screenshot_demo_app(
-  app_path = here::here('inst/demo_apps/rmarkdown_demo/grid_markdown.Rmd'),
+  app_path = here::here('inst/demo_apps/', rmd_loc),
   screenshot_name = "use_gridlayout_rmd.png",
   screenshot_root = "vignettes",
   vwidth = 1100
@@ -43,42 +46,24 @@ The following shows how you can customize the appearance of the elements of your
 
 # The markdown code
 
-The screenshot below is based on an `.Rmd` that looks like this
+The screenshot below is based on the following `.Rmd`.
 
-````
-## Main
 
-```{gridlayout}
-|      |        |         |
-|------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
-|1fr   |sidebar |main     |
-|120px |footer  |footer   |
+```{r, echo=FALSE, eval=TRUE}
+rmd_content <- readLines(
+  system.file(rmd_loc, package = "gridlayout")
+)
+
+cat(paste(rmd_content, collapse = "\n"))
 ```
-
-
-## Sidebar 
-
-Here is some content for the sidebar
-
-## Footer
-
-Anything you want could go in the footer.
-````
 
 
 ## Result
 
 
-```{r, eval = FALSE}
-use_gridlayout_rmd()
-```
 
-
-```{r, echo = FALSE, message=FALSE}
+```{r, echo = FALSE, message=FALSE, eval=TRUE}
 knitr::include_graphics("use_gridlayout_rmd.png")
 ```
-
 
 
