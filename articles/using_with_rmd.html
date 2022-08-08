@@ -123,32 +123,57 @@
 <div class="section level2">
 <h2 id="the-markdown-code">The markdown code<a class="anchor" aria-label="anchor" href="#the-markdown-code"></a>
 </h2>
-<p>The screenshot below is based on an <code>.Rmd</code> that looks like this</p>
-<pre><code>## Main
+<p>The screenshot below is based on the following <code>.Rmd</code>.</p>
+<pre><code>---
+title: "`gridlayout` in Rmarkdown"
+author: "Nick Strayer"
+date: "3/9/2021"
+output:
+  html_document:
+    theme:
+      version: 5
+---
+
+```{r setup, include=FALSE}
+library(gridlayout)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+use_gridlayout_rmd()
+```
+
+```{css echo=FALSE}
+.section {
+  outline: 2px solid silver;
+  padding: 10px;
+}
+```
 
 
-```gridlayout
+# main {.no-header}
+
+Main content!
+
+```{gridlayout}
 |      |        |         |
 |------|--------|---------|
-|2rem  |200px   |1fr      |
-|150px |header  |header   |
+|      |200px   |1fr      |
+|170px |header  |header   |
 |1fr   |sidebar |main     |
 |120px |footer  |footer   |
 ```
 
 
-## Sidebar 
+# Sidebar
 
 Here is some content for the sidebar
 
-## Footer
+# Footer
 
 Anything you want could go in the footer.</code></pre>
 <div class="section level3">
 <h3 id="result">Result<a class="anchor" aria-label="anchor" href="#result"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_gridlayout_rmd.html">use_gridlayout_rmd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="use_gridlayout_rmd.png" width="100%"></p>
 </div>
 </div>
