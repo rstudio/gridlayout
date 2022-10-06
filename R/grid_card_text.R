@@ -93,20 +93,21 @@ grid_card_text <- function(area,
     wrapping_tag <- htmltools::tags[[wrapping_tag]]
   }
 
-  grid_place(
-    area = area,
-    htmltools::tags$div(
-      class = "card grid_card_text",
-      style = htmltools::css(
-        `align-items` = alignment
-      ),
+  update_el(
+    grid_card(
+      area = area,
       wrapping_tag(
         htmltools::tagList(
           icon,
           content
         )
       ),
+      ...,
       if (is_title) htmltools::tags$head(htmltools::tags$title(content))
+    ),
+    classes = c("grid_card_text"),
+    styles = list(
+      `align-items` = alignment
     )
   )
 }
