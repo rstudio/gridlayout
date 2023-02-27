@@ -14,14 +14,11 @@ section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 \code{\link{md_to_gridlayout}}) or a \code{gridlayout} object defining the
 desired layout for your Shiny app.}
 
-\item{...}{Arguments (typically children) passed to the \code{htmltools::div()}
-that contain the card's contents}
+\item{...}{\code{grid_card()} (or similar) arguments that will fill the grid
+layout. Note the areas should match the those provided in \code{layout}.}
 
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
-
-\item{title}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
 
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to

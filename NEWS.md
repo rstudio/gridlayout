@@ -1,3 +1,9 @@
+# gridlayout 0.1.1
+
+### Major new features and improvements
+
+- `grid_card()` now wraps `bslib::card()` directly. This means that there are some api changes. 
+
 # gridlayout 0.1.0
 
 ### Major new features and improvements

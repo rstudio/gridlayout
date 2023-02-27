@@ -6,5 +6,5 @@ library(shiny)
 
 for (demo_app in demo_apps) {
   path_to_app <- system.file(package = "gridlayout", paste0("demo_apps/", demo_app))
-  test_app(path_to_app)
+  test_app(path_to_app, check_setup = FALSE)
 }

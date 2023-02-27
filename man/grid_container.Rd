@@ -65,13 +65,14 @@ shinyApp(
       grid_card_text("header", "Geysers!"),
       grid_card(
         "sidebar",
-        title = "Settings",
-        sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
+         card_header("Settings"),
+        sliderInput("bins", "Number of bins:",
+           min = 1,
+           max = 50,
+           value = 30,
+           width = "100\%")
       ),
-      grid_card(
-        "plot",
-        plotOutput("distPlot", height="100\%")
-      )
+      grid_card_plot("plot", outputId = "distPlot")
     )
   ),
   server = function(input, output) {

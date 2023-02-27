@@ -5,64 +5,38 @@
 #'
 #' @param area Name of grid area, should match an area defined in the layout
 #'   section of the wrapping `grid_page()` or `grid_container()`.
-#' @param ... Arguments (typically children) passed to the `htmltools::div()`
-#'   that contain the card's contents
-#' @param title Character string to go across top of panel with label. If left
-#'   blank the card contents will take up entire space.
-#' @param collapsible Should the card be able to be collapsed (`TRUE` or
-#'   `FALSE`)? Gridlayout will only show collapser if the layout allows it
-#'   (panel is entirely positioned within "auto" sized rows, and has a title).
-#'   Setting this to `FALSE` will mean collapsibility of the panel will never be
-#'   enabled, regardless of layout.
-#' @param scrollable Should scroll-bars be added so content that is larger than
-#'   the panel can be seen?
-#' @param class Additional CSS classes to include on the card div.
-#' @param item_gap How much vertical space should there be between children of
-#'   card?
-#' @param has_border Should the card be surrounded by a border? Set to `FALSE`
-#'   to turn off.
+#' @inheritDotParams bslib::card
 #'
-#' @seealso [grid_card_text()] for a card with just text content,
+#' @seealso [bslib::card] for underlying function. [bslib::card_header], 
+#'   [bslib::card_body], [bslib::card_footer]. 
+#'   [grid_card_text()] for a card with just text content,
 #'   [grid_card_plot()] for a card with just plot content, [grid_place()] to
 #'   place any tag onto the grid without needing to wrap in a card, and
 #'   [card_plot_output()] for including a smart-sized plot within a card.
 #'
 #' @example man/examples/simple_app.R
 #' @export
-grid_card <- function(area, ..., title = NULL, scrollable = FALSE, collapsible = TRUE, has_border = TRUE, item_gap = "10px", class = NULL) {
-  card <- update_el(
-    flex_stack(..., scrollable = scrollable, collapsible = collapsible, title = title, item_gap = item_gap),
-    classes = c("card", class),
-    styles = list(
-      # We use transparent here so that removing the border doesn't confusingly
-      # change the size of the card
-      border = if (identical(has_border, FALSE)) "transparent"
+grid_card <- function(area, ...) {
+  card_args <- list(...)
+  args_names <- names(card_args)
+  ignored_args <- args_names[args_names %in% old_api_args]
+  if (length(ignored_args) > 0) {
+    warning(
+      paste0(
+        "The grid_card() api updated with version 0.1.1 and ",
+        "the following args are no longer supported: ",
+        paste0("\"", ignored_args, "\"", collapse = ","),
+        ". Look at help for bslib::card() to find alternatives!"
+      )
     )
-  )
-
-  # Waiting for the bslib card elements to be merged in
-  # card <- grid_place(area = area, bslib::card(...))
-  grid_place(area = area, card)
+  }
+  grid_place(area = area, bslib::card(...))
 }
 
-
-make_collapser_icon <- function(parent_id = "") {
-  requireNamespace("fontawesome", quietly = TRUE)
-  # Clicking on the collapsing icon will update classes to initiate collapsing
-  # or expanding and also trigger a resize event so Shiny will know to update
-  # plots that may have gotten more space after collapsing etc.
-  shiny::span(
-    fontawesome::fa("chevron-up"),
-    "onclick" = '
-    var card = this.parentElement.parentElement;
-    var card_classes = card.classList;
-    if (card_classes.contains("collapsed")) {
-      card_classes.remove("collapsed");
-    } else {
-      card_classes.add("collapsed");
-    }
-    window.dispatchEvent(new Event("resize"));
-    ',
-    class = "collapser-icon"
-  )
-}
+old_api_args <- c(
+  "title",
+  "scrollable",
+  "collapsible",
+  "has_border",
+  "item_gap"
+)

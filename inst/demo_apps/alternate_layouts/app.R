@@ -37,17 +37,22 @@ my_layout <- new_gridlayout(
 
 
 # The classic Geyser app with grid layout
-app <- shinyApp(
+shinyApp(
   ui = grid_page(
     layout = my_layout,
     theme = bs_theme(),
     grid_card_text("header", "Geysers!"),
     grid_card(
       "sidebar",
-      title = "Settings",
+      card_header("Settings"),
       sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100%")
     ),
-    grid_card_plot("plot", "distPlot")
+    grid_card(
+      "plot",
+      card_body_fill(
+        plotOutput("distPlot")
+      )
+    )
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -57,7 +62,3 @@ app <- shinyApp(
     })
   }
 )
-
-app
-
-

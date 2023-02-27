@@ -64,8 +64,11 @@ vertical space is available in the card.}
 \item{...}{Named arguments become attributes on the div containing the plot.}
 }
 \description{
-A card-aware wrapper of \code{shiny::plotOutput} that has smart defaults for
-sizing. Allows you to place content around a plot within a card.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
+No longer necessary. Use plain \code{shiny::plotOutput()} wrapped with
+\code{bslib::card_body_fill()}.
 }
 \examples{
 library(gridlayout)

@@ -1,40 +1,41 @@
 #' Grid-positioned plot output
 #'
 #' A light wrapper for `shiny::plotOutput()` that uses gridlayout-friendly
-#' sizing defaults. For more control look at combining `grid_card()` with
-#' `card_plot_output()`
+#' sizing defaults.
 #'
 #'
 #' @inheritParams grid_card
 #' @param outputId Output id of the plot output. Used to link to server code
 #'   generating plot. If left unset this will use the same value as the `area`
 #'   argument.
-#' @inheritDotParams card_plot_output
+#' @inheritDotParams shiny::plotOutput
 #'
 #' @return A grid panel filled with plot output
 #'
-#' @seealso [card_plot_output]
+#' @seealso [bslib::card_body_fill], [shiny::plotOutput()]
 #' @example man/examples/simple_app.R
 #'
 #' @export
-grid_card_plot <- function(area,
-                      outputId = area,
-                      ...,
-                      has_border = TRUE) {
+grid_card_plot <- function(area, outputId = area,...) {
   grid_card(
     area = area,
-    card_plot_output(outputId = outputId, ...),
-    has_border = has_border
+    height = "100%",
+    bslib::card_body_fill(
+      shiny::plotOutput(outputId = outputId, ...)
+    )
   )
 }
+
 
 # This will eventually get replaced with the bslib version and right now is just
 # a rough copy-paste job
 
 #' Plot output with smart sizing for use inside a `grid_card`
 #'
-#' A card-aware wrapper of `shiny::plotOutput` that has smart defaults for
-#' sizing. Allows you to place content around a plot within a card.
+#' `r lifecycle::badge('deprecated')`
+#'
+#' No longer necessary. Use plain `shiny::plotOutput()` wrapped with
+#' `bslib::card_body_fill()`.
 #'
 #' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
@@ -56,20 +57,7 @@ card_plot_output <- function(outputId,
                              height = NULL,
                              stretch = TRUE,
                              ...) {
-  plot_div <- shiny::plotOutput(outputId,
-                                height = height, click = click, dblclick = dblclick, hover = hover,
-                                brush = brush
-  )
 
-  # TODO: card-img-* needs to go on the <img> itself, not the containing <div>
-  htmltools::tagAppendAttributes(plot_div,
-                                 style = htmltools::css(
-                                   flex = if (stretch) "1 1",
-                                   `-webkit-flex` = if (stretch) "1 1",
-                                   # May be NULL
-                                   `flex-basis` = htmltools::validateCssUnit(height),
-                                   `-webkit-flex-basis` = htmltools::validateCssUnit(height),
-                                 ),
-                                 !!!rlang::list2(...)
-  )
+  lifecycle::deprecate_stop("card_plot_output() is no longer needed with bslib card api. Simply use regular shiny::plotOutput()")
+
 }

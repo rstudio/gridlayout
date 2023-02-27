@@ -31,19 +31,30 @@ grid_nested <- function(area,
     ...
   )
 
-  grid_place(
+  grid_card(
     area = area,
-    htmltools::div(
-      class = "card no-pad",
-      if (!is.null(title)) {
-        card_header(title)
-      },
-      htmltools::tags$div(
-        class = "card-body",
-        nested_grid
-      )
+    if (!is.null(title)) {
+      bslib::card_header(title)
+    },
+    bslib::card_body_fill(
+      class = "p-0",
+      nested_grid
     )
   )
+
+  # grid_place(
+  #   area = area,
+  #   htmltools::div(
+  #     class = "card no-pad",
+  #     if (!is.null(title)) {
+  #       card_header_internal(title)
+  #     },
+  #     htmltools::tags$div(
+  #       class = "card-body",
+  #       nested_grid
+  #     )
+  #   )
+  # )
 
   # grid_card(
   #   area = area,

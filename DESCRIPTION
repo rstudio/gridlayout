@@ -1,7 +1,7 @@
 Package: gridlayout
 Type: Package
 Title: Build Layouts for R-Webapps Using CSS-Grid
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(person("Nick", "Strayer", role = c("aut", "cre"), email = "nick.strayer@rstudio.com"))
 Description: Makes it easy to layout your Shiny app or other R-derived HTML documents using CSS grid.
 License: MIT + file LICENSE
@@ -28,7 +28,8 @@ VignetteBuilder: knitr
 Imports: 
     magrittr,
     htmltools,
-    rlang
+    rlang,
+    lifecycle
 Config/Needs/website:
     rstudio/quillt
 Depends: 
