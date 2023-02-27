@@ -67,6 +67,7 @@ shiny apps is with the `grid_page()` ui function:
 
 ``` r
 library(shiny)
+library(bslib)
 
 # The classic Geyser app with grid layout
 shinyApp(
@@ -79,13 +80,15 @@ shinyApp(
     grid_card_text("header", "Geysers!", is_title = TRUE),
     grid_card(
       "sidebar",
-      title = "Settings",
+      card_header("Settings"),
       sliderInput("bins","Number of bins:", 
                   min = 1, max = 50, value = 30, width = "100%")
     ),
     grid_card(
       "plot",
-      plotOutput("distPlot", height="100%")
+      card_body_fill(
+        plotOutput("distPlot")
+      )
     )
   ),
   server = function(input, output) {
@@ -123,13 +126,15 @@ shinyApp(
       grid_card_text("header", "Geysers!"),
       grid_card(
         "sidebar",
-        title = "Settings",
+        card_header("Settings"),
         sliderInput("bins", "Number of bins:", 
                     min = 1, max = 50, value = 30, width = "100%")
       ),
       grid_card(
         "plot",
-        plotOutput("distPlot", height="100%")
+        card_body_fill(
+          plotOutput("distPlot")
+        )
       )
     )
   ),
@@ -155,7 +160,7 @@ shinyApp(
   grid_card_text("header", "This is my header"),
   grid_card(
     "sidebar",
-    title = "Settings",
+    card_header("Settings"),
     sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30, width = "100%")
   ),
   grid_nested(

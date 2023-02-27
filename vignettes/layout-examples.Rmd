@@ -66,7 +66,7 @@ library(shiny)
 library(ggplot2)
 library(gt)
 library(dplyr)
-
+library(bslib)
 
 app_w_layout <- function(my_layout) {
   shinyApp(
@@ -75,18 +75,17 @@ app_w_layout <- function(my_layout) {
       grid_card_text("header", "My gridlayout app"),
       grid_card(
         "chickens",
-        tabsetPanel(
-          tabPanel("Plot", plotOutput("chickPlot", height = "100%")),
-          tabPanel("Fastest growing", gt_output("chickTable"))
+        card_body_fill(
+          tabsetPanel(
+            tabPanel("Plot", plotOutput("chickPlot")),
+            tabPanel("Fastest growing", gt_output("chickTable")),
+          )
         )
       ),
-      grid_card(
-        "treePlot",
-        plotOutput("treePlot", height = "100%")
-      ),
+      grid_card_plot("treePlot"),
       grid_card(
          "stockTable",
-        gt_output("stockTable"), scrollable = TRUE
+        gt_output("stockTable")
       ),
       flag_mismatches = FALSE # Allows us to use layouts without some elements declared
     ),
