@@ -13,7 +13,7 @@ ui <- grid_page(
   grid_card_text("header", "This is my header"),
   grid_card(
     "sidebar",
-    title = "Settings",
+    card_header("Settings"),
     sliderInput("bins","Number of bins:", 1, 50, 30, width = "100%")
   ),
   grid_nested(

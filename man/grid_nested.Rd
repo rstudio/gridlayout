@@ -20,6 +20,9 @@ layout. Note the areas should match the those provided in \code{layout}.}
 \item{id}{ID unique to this container (note that the HTML will be prefixed
 with \verb{grid-} to avoid namespace clashes)}
 
+\item{title}{Optional title for the card. Gets wrapped in
+\code{bslib::card_header()}}
+
 \item{flag_mismatches}{Should a mismatch between supplied \code{elements} ui
 definitions and layout trigger a warning? In advanced cases you may want to
 dynamically set your layout and sometimes omit panels.}
@@ -46,7 +49,7 @@ ui <- grid_page(
   grid_card_text("header", "This is my header"),
   grid_card(
     "sidebar",
-    title = "Settings",
+    card_header("Settings"),
     sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
   ),
   grid_nested(

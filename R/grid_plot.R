@@ -47,7 +47,6 @@ grid_card_plot <- function(area, outputId = area,...) {
 #'
 #' @seealso [grid_card_plot()] for a simpler way of placing just a plot on the
 #'   grid
-#' @example man/examples/card_plot_output_app.R
 #' @export
 card_plot_output <- function(outputId,
                              click = NULL,

@@ -72,11 +72,11 @@ shinyApp(
            value = 30,
            width = "100\%")
       ),
-      grid_card_plot("plot", outputId = "distPlot")
+      grid_card_plot("plot")
     )
   ),
   server = function(input, output) {
-    output$distPlot <- renderPlot({
+    output$plot <- renderPlot({
       x    <- faithful[, 2]
       bins <- seq(min(x), max(x), length.out = input$bins + 1)
       hist(x, breaks = bins, col = 'darkgray', border = 'white')

@@ -101,12 +101,12 @@ shinyApp(
     ),
     row_sizes = c("50px", "1fr"),
     col_sizes = c("200px", "1fr"),
-    grid_card("header", card_body(h2("This is my header"))),
+    grid_card_text("header", "This is my header"),
     grid_card(
       area = "sidebar",
       card_header("Settings"),
       card_body(
-        sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+        sliderInput("bins", "Number of bins:", 1, 50, 30, width = "100\%")
       )
     ),
     grid_card_plot("distPlot")

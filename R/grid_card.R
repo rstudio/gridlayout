@@ -17,6 +17,12 @@
 #' @example man/examples/simple_app.R
 #' @export
 grid_card <- function(area, ...) {
+  warn_about_new_api(...)
+  grid_place(area = area, bslib::card(...))
+}
+
+
+warn_about_new_api <- function(...) {
   card_args <- list(...)
   args_names <- names(card_args)
   ignored_args <- args_names[args_names %in% old_api_args]
@@ -26,13 +32,13 @@ grid_card <- function(area, ...) {
         "The grid_card() api updated with version 0.1.1 and ",
         "the following args are no longer supported: ",
         paste0("\"", ignored_args, "\"", collapse = ","),
-        ". Look at help for bslib::card() to find alternatives!"
+        ". Look at help for bslib::card() to find alternatives! Alternatively ",
+        "you can switch to grid_card_old() to keep the same api ",
+        "(although updating to the new bslib version is recomended!)"
       )
     )
   }
-  grid_place(area = area, bslib::card(...))
 }
-
 old_api_args <- c(
   "title",
   "scrollable",
