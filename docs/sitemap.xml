@@ -58,6 +58,9 @@
     <loc>/reference/grid_card.html</loc>
   </url>
   <url>
+    <loc>/reference/grid_card_old.html</loc>
+  </url>
+  <url>
     <loc>/reference/grid_card_plot.html</loc>
   </url>
   <url>
@@ -98,6 +101,9 @@
   </url>
   <url>
     <loc>/reference/grided_edit_existing_layout.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gridlayout-package.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>

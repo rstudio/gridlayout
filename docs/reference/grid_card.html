@@ -25,14 +25,14 @@ container"><meta name="twitter:card" content="summary"><!-- mathjax --><script s
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
         </div>
       </div>-->
     </div>
@@ -92,16 +92,7 @@ container</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">grid_card</span><span class="op">(</span></span>
-<span>  <span class="va">area</span>,</span>
-<span>  <span class="va">...</span>,</span>
-<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scrollable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  collapsible <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  has_border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  item_gap <span class="op">=</span> <span class="st">"10px"</span>,</span>
-<span>  class <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">grid_card</span><span class="op">(</span><span class="va">area</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -112,45 +103,37 @@ section of the wrapping <code><a href="grid_page.html">grid_page()</a></code> or
 
 
 <dt>...</dt>
-<dd><p>Arguments (typically children) passed to the <code><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">htmltools::div()</a></code>
-that contain the card's contents</p></dd>
+<dd><p>Arguments passed on to <code><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">bslib::card</a></code></p><dl><dt><code>full_screen</code></dt>
+<dd><p>If <code>TRUE</code>, an icon will appear when hovering over the card
+body. Clicking the icon expands the card to fit viewport size. Consider
+pairing this feature with <code><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body_fill()</a></code> to get output that responds to
+changes in the size of the card.</p></dd>
 
+    <dt><code>height</code></dt>
+<dd><p>Any valid <a href="https://rstudio.github.io/htmltools/reference/validateCssUnit.html" class="external-link">CSS unit</a> (e.g.,
+<code>height="200px"</code>).</p></dd>
 
-<dt>title</dt>
-<dd><p>Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.</p></dd>
+    <dt><code>class</code></dt>
+<dd><p>Additional CSS classes for the returned UI element.</p></dd>
 
+    <dt><code>wrapper</code></dt>
+<dd><p>A function (which returns a UI element) to call on unnamed
+arguments in <code>...</code> which are not already card item(s) (like
+<code><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header()</a></code>, <code><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body()</a></code>, etc.). Note that non-card items are grouped
+together into one <code>wrapper</code> call (e.g. given <code>card("a", "b", card_body("c"), "d")</code>, <code>wrapper</code> would be called twice, once with <code>"a"</code> and
+<code>"b"</code> and once with <code>"d"</code>). Consider setting <code>wrapper</code> to <a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body_fill</a>
+if the entire card wants responsive sizing or <code>NULL</code> to avoid wrapping
+altogether</p></dd>
 
-<dt>scrollable</dt>
-<dd><p>Should scroll-bars be added so content that is larger than
-the panel can be seen?</p></dd>
-
-
-<dt>collapsible</dt>
-<dd><p>Should the card be able to be collapsed (<code>TRUE</code> or
-<code>FALSE</code>)? Gridlayout will only show collapser if the layout allows it
-(panel is entirely positioned within "auto" sized rows, and has a title).
-Setting this to <code>FALSE</code> will mean collapsibility of the panel will never be
-enabled, regardless of layout.</p></dd>
-
-
-<dt>has_border</dt>
-<dd><p>Should the card be surrounded by a border? Set to <code>FALSE</code>
-to turn off.</p></dd>
-
-
-<dt>item_gap</dt>
-<dd><p>How much vertical space should there be between children of
-card?</p></dd>
-
-
-<dt>class</dt>
-<dd><p>Additional CSS classes to include on the card div.</p></dd>
+  
+</dl></dd>
 
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="grid_card_text.html">grid_card_text()</a></code> for a card with just text content,
+    <div class="dont-index"><p><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">bslib::card</a> for underlying function. <a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_header</a>,
+<a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_body</a>, <a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_footer</a>.
+<code><a href="grid_card_text.html">grid_card_text()</a></code> for a card with just text content,
 <code><a href="grid_card_plot.html">grid_card_plot()</a></code> for a card with just plot content, <code><a href="grid_place.html">grid_place()</a></code> to
 place any tag onto the grid without needing to wrap in a card, and
 <code><a href="card_plot_output.html">card_plot_output()</a></code> for including a smart-sized plot within a card.</p></div>
@@ -163,7 +146,7 @@ place any tag onto the grid without needing to wrap in a card, and
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="st">"header  header"</span>,</span></span>
@@ -173,14 +156,16 @@ place any tag onto the grid without needing to wrap in a card, and
 <span class="r-in"><span>    col_sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"200px"</span>, <span class="st">"1fr"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu">grid_card</span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="st">"sidebar"</span>,</span></span>
-<span class="r-in"><span>      title <span class="op">=</span> <span class="st">"Settings"</span>,</span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      area <span class="op">=</span> <span class="st">"sidebar"</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu">grid_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="grid_card_plot.html">grid_card_plot</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
 <span class="r-in"><span>      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
 <span class="r-in"><span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span></span>

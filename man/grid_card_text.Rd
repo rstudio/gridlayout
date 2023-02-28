@@ -25,20 +25,7 @@ any tag or tag-list is possible. All will get wrapped in an \code{h3} tag.}
 \item{...}{
   Arguments passed on to \code{\link[=grid_card]{grid_card}}
   \describe{
-    \item{\code{title}}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
-    \item{\code{collapsible}}{Should the card be able to be collapsed (\code{TRUE} or
-\code{FALSE})? Gridlayout will only show collapser if the layout allows it
-(panel is entirely positioned within "auto" sized rows, and has a title).
-Setting this to \code{FALSE} will mean collapsibility of the panel will never be
-enabled, regardless of layout.}
-    \item{\code{scrollable}}{Should scroll-bars be added so content that is larger than
-the panel can be seen?}
-    \item{\code{class}}{Additional CSS classes to include on the card div.}
-    \item{\code{item_gap}}{How much vertical space should there be between children of
-card?}
-    \item{\code{has_border}}{Should the card be surrounded by a border? Set to \code{FALSE}
-to turn off.}
+    \item{\code{}}{}
   }}
 
 \item{alignment}{Horizontal alignment of text. Typical options include
@@ -116,11 +103,13 @@ shinyApp(
     col_sizes = c("200px", "1fr"),
     grid_card_text("header", "This is my header"),
     grid_card(
-      "sidebar",
-      title = "Settings",
-      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+      area = "sidebar",
+      card_header("Settings"),
+      card_body(
+        sliderInput("bins", "Number of bins:", 1, 50, 30, width = "100\%")
+      )
     ),
-    grid_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

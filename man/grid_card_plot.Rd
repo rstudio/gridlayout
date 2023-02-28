@@ -4,7 +4,7 @@
 \alias{grid_card_plot}
 \title{Grid-positioned plot output}
 \usage{
-grid_card_plot(area, outputId = area, ..., has_border = TRUE)
+grid_card_plot(area, outputId = area, ...)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
@@ -15,13 +15,15 @@ generating plot. If left unset this will use the same value as the \code{area}
 argument.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=card_plot_output]{card_plot_output}}
+  Arguments passed on to \code{\link[shiny:plotOutput]{shiny::plotOutput}}
   \describe{
-    \item{\code{height}}{height in valid css units (see \code{\link[htmltools:validateCssUnit]{htmltools::validateCssUnit()}}
-for more details.) Most use-cases will leave this unset and the plot will
-fill the card as best it can.}
-    \item{\code{stretch}}{Set to \code{TRUE} if this \code{card_body} is eager to use any extra
-vertical space is available in the card.}
+    \item{\code{width,height}}{Image width/height. Must be a valid CSS unit (like
+\code{"100\%"}, \code{"400px"}, \code{"auto"}) or a number, which will be
+coerced to a string and have \code{"px"} appended. These two arguments are
+ignored when \code{inline = TRUE}, in which case the width/height of a plot
+must be specified in \code{renderPlot()}. Note that, for height, using
+\code{"auto"} or \code{"100\%"} generally will not work as expected,
+because of how height is computed with HTML/CSS.}
     \item{\code{click}}{This can be \code{NULL} (the default), a string, or an object
 created by the \code{\link[shiny:clickOpts]{clickOpts()}} function. If you use a value like
 \code{"plot_click"} (or equivalently, \code{clickOpts(id="plot_click")}),
@@ -54,18 +56,21 @@ behavior, use \code{\link[shiny:brushOpts]{brushOpts()}}. Multiple
 \code{imageOutput}/\code{plotOutput} calls may share the same \code{id}
 value; brushing one image or plot will cause any other brushes with the
 same \code{id} to disappear.}
+    \item{\code{inline}}{use an inline (\code{span()}) or block container (\code{div()})
+for the output}
+    \item{\code{fill}}{Whether or not the returned tag should be treated as a fill item,
+meaning that its \code{height} is allowed to grow/shrink to fit a fill container
+with an opinionated height (see \code{\link[htmltools:bindFillRole]{htmltools::bindFillRole()}}) with an
+opinionated height. Examples of fill containers include \code{bslib::card()} and
+\code{bslib::card_body_fill()}.}
   }}
-
-\item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
-to turn off.}
 }
 \value{
 A grid panel filled with plot output
 }
 \description{
 A light wrapper for \code{shiny::plotOutput()} that uses gridlayout-friendly
-sizing defaults. For more control look at combining \code{grid_card()} with
-\code{card_plot_output()}
+sizing defaults.
 }
 \examples{
 if (FALSE) {
@@ -83,11 +88,13 @@ shinyApp(
     col_sizes = c("200px", "1fr"),
     grid_card_text("header", "This is my header"),
     grid_card(
-      "sidebar",
-      title = "Settings",
-      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+      area = "sidebar",
+      card_header("Settings"),
+      card_body(
+        sliderInput("bins", "Number of bins:", 1, 50, 30, width = "100\%")
+      )
     ),
-    grid_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -100,5 +107,5 @@ shinyApp(
 }
 }
 \seealso{
-\link{card_plot_output}
+\link[bslib:card_body]{bslib::card_body_fill}, \code{\link[shiny:plotOutput]{shiny::plotOutput()}}
 }

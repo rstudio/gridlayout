@@ -9,22 +9,22 @@
       <div class="container-fluid">
         <div id="gridlayout-grid-page">
           <div id="gridlayout-grid-page-container" class="grid-container" data-gridlayout-key="gridlayout-grid-page-container">
-            <div class="grid_card vertical_stack card" data-gridlayout-area="header" data-scrollable="FALSE" style="--item-gap:10px;grid-area:header;">
-              <div class="panel-content">
+            <div class="card bslib-card html-fill-item html-fill-container" data-gridlayout-area="header" data-require-bs-caller="card()" data-require-bs-version="5" style="grid-area:header;">
+              <div class="card-body" style="flex:0 0 auto;">
                 <h2 id="header">This is my header content</h2>
               </div>
             </div>
-            <div class="grid_card vertical_stack card" data-gridlayout-area="footer" data-scrollable="FALSE" style="--item-gap:10px;grid-area:footer;">
-              <div class="panel-content">
+            <div class="card bslib-card html-fill-item html-fill-container" data-gridlayout-area="footer" data-require-bs-caller="card()" data-require-bs-version="5" style="grid-area:footer;">
+              <div class="card-body" style="flex:0 0 auto;">
                 <div class="form-group shiny-input-container">
                   <label class="control-label" id="bins-label" for="bins">Number of bins:</label>
                   <input class="js-range-slider" id="bins" data-skin="shiny" data-min="1" data-max="50" data-from="30" data-step="1" data-grid="true" data-grid-num="9.8" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number"/>
                 </div>
               </div>
             </div>
-            <div class="grid_card vertical_stack card" data-gridlayout-area="plot" data-scrollable="FALSE" style="--item-gap:10px;grid-area:plot;">
-              <div class="panel-content">
-                <div id="myPlot" class="shiny-plot-output" style="width:100%;height:400px;"></div>
+            <div class="card bslib-card html-fill-item html-fill-container" data-gridlayout-area="plot" data-require-bs-caller="card()" data-require-bs-version="5" style="grid-area:plot;">
+              <div class="card-body" style="flex:0 0 auto;">
+                <div class="shiny-plot-output html-fill-item" id="myPlot" style="width:100%;height:400px;"></div>
               </div>
             </div>
           </div>

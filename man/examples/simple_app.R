@@ -13,11 +13,13 @@ shinyApp(
     col_sizes = c("200px", "1fr"),
     grid_card_text("header", "This is my header"),
     grid_card(
-      "sidebar",
-      title = "Settings",
-      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100%")
+      area = "sidebar",
+      card_header("Settings"),
+      card_body(
+        sliderInput("bins", "Number of bins:", 1, 50, 30, width = "100%")
+      )
     ),
-    grid_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({

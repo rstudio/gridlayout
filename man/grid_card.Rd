@@ -4,43 +4,30 @@
 \alias{grid_card}
 \title{Grid-positioned card element}
 \usage{
-grid_card(
-  area,
-  ...,
-  title = NULL,
-  scrollable = FALSE,
-  collapsible = TRUE,
-  has_border = TRUE,
-  item_gap = "10px",
-  class = NULL
-)
+grid_card(area, ...)
 }
 \arguments{
 \item{area}{Name of grid area, should match an area defined in the layout
 section of the wrapping \code{grid_page()} or \code{grid_container()}.}
 
-\item{...}{Arguments (typically children) passed to the \code{htmltools::div()}
-that contain the card's contents}
-
-\item{title}{Character string to go across top of panel with label. If left
-blank the card contents will take up entire space.}
-
-\item{scrollable}{Should scroll-bars be added so content that is larger than
-the panel can be seen?}
-
-\item{collapsible}{Should the card be able to be collapsed (\code{TRUE} or
-\code{FALSE})? Gridlayout will only show collapser if the layout allows it
-(panel is entirely positioned within "auto" sized rows, and has a title).
-Setting this to \code{FALSE} will mean collapsibility of the panel will never be
-enabled, regardless of layout.}
-
-\item{has_border}{Should the card be surrounded by a border? Set to \code{FALSE}
-to turn off.}
-
-\item{item_gap}{How much vertical space should there be between children of
-card?}
-
-\item{class}{Additional CSS classes to include on the card div.}
+\item{...}{
+  Arguments passed on to \code{\link[bslib:card]{bslib::card}}
+  \describe{
+    \item{\code{full_screen}}{If \code{TRUE}, an icon will appear when hovering over the card
+body. Clicking the icon expands the card to fit viewport size. Consider
+pairing this feature with \code{\link[bslib:card_body_fill]{card_body_fill()}} to get output that responds to
+changes in the size of the card.}
+    \item{\code{height}}{Any valid \link[htmltools:validateCssUnit]{CSS unit} (e.g.,
+\code{height="200px"}).}
+    \item{\code{class}}{Additional CSS classes for the returned UI element.}
+    \item{\code{wrapper}}{A function (which returns a UI element) to call on unnamed
+arguments in \code{...} which are not already card item(s) (like
+\code{\link[bslib:card_header]{card_header()}}, \code{\link[bslib:card_body]{card_body()}}, etc.). Note that non-card items are grouped
+together into one \code{wrapper} call (e.g. given \code{card("a", "b", card_body("c"), "d")}, \code{wrapper} would be called twice, once with \code{"a"} and
+\code{"b"} and once with \code{"d"}). Consider setting \code{wrapper} to \link[bslib]{card_body_fill}
+if the entire card wants responsive sizing or \code{NULL} to avoid wrapping
+altogether}
+  }}
 }
 \description{
 The standard element for placing elements on the grid in a simple card
@@ -62,11 +49,13 @@ shinyApp(
     col_sizes = c("200px", "1fr"),
     grid_card_text("header", "This is my header"),
     grid_card(
-      "sidebar",
-      title = "Settings",
-      sliderInput("bins","Number of bins:", 1, 50, 30, width = "100\%")
+      area = "sidebar",
+      card_header("Settings"),
+      card_body(
+        sliderInput("bins", "Number of bins:", 1, 50, 30, width = "100\%")
+      )
     ),
-    grid_plot("distPlot")
+    grid_card_plot("distPlot")
   ),
   server = function(input, output) {
     output$distPlot <- renderPlot({
@@ -79,6 +68,8 @@ shinyApp(
 }
 }
 \seealso{
+\link[bslib:card]{bslib::card} for underlying function. \link[bslib:card_body]{bslib::card_header},
+\link[bslib:card_body]{bslib::card_body}, \link[bslib:card_body]{bslib::card_footer}.
 \code{\link[=grid_card_text]{grid_card_text()}} for a card with just text content,
 \code{\link[=grid_card_plot]{grid_card_plot()}} for a card with just plot content, \code{\link[=grid_place]{grid_place()}} to
 place any tag onto the grid without needing to wrap in a card, and

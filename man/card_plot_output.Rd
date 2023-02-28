@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_plot.R
 \name{card_plot_output}
 \alias{card_plot_output}
-\title{Plot output with smart sizing for use inside a \code{grid_card}}
+\title{Plot output with smart sizing for use inside a \code{grid_card} - Depreciated}
 \usage{
 card_plot_output(
   outputId,
@@ -64,40 +64,11 @@ vertical space is available in the card.}
 \item{...}{Named arguments become attributes on the div containing the plot.}
 }
 \description{
-A card-aware wrapper of \code{shiny::plotOutput} that has smart defaults for
-sizing. Allows you to place content around a plot within a card.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
-\examples{
-library(gridlayout)
-library(shiny)
-library(bslib)
-
-ui <- grid_page(
-  layout = c("A B B"),
-  grid_card(
-    "A",
-    title = "Settings",
-    sliderInput("bins","Number of bins:", min = 1, max = 50, value = 30, width = "100\%")
-  ),
-  grid_card(
-    "B",
-    title="Plot",
-    card_plot_output("distPlot"),
-    div("Here's some insightful commentary on that plot above...")
-  )
-)
-
-server <- function(input, output, session) {
-  output$distPlot <- renderPlot({
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-  })
-}
-
-if (FALSE) {
-  shinyApp(ui, server)
-}
+\details{
+No longer necessary. Use plain \code{shiny::plotOutput()} wrapped with
+\code{bslib::card_body_fill()}.
 }
 \seealso{
 \code{\link[=grid_card_plot]{grid_card_plot()}} for a simpler way of placing just a plot on the

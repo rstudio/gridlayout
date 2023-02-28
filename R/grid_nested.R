@@ -3,6 +3,8 @@
 #' Creates a panel for a layout with its own internal gridlayout
 #'
 #' @inheritParams grid_card
+#' @param title Optional title for the card. Gets wrapped in
+#'   `bslib::card_header()`
 #' @inheritParams grid_container
 #'
 #' @seealso [grid_card], [grid_container]
@@ -31,28 +33,14 @@ grid_nested <- function(area,
     ...
   )
 
-  grid_place(
+  grid_card(
     area = area,
-    htmltools::div(
-      class = "card no-pad",
-      if (!is.null(title)) {
-        card_header(title)
-      },
-      htmltools::tags$div(
-        class = "card-body",
-        nested_grid
-      )
+    if (!is.null(title)) {
+      bslib::card_header(title)
+    },
+    bslib::card_body_fill(
+      class = "p-0",
+      nested_grid
     )
   )
-
-  # grid_card(
-  #   area = area,
-  #   title = title,
-  #   htmltools::tags$div(
-  #     class = "card-body",
-  #     nested_grid
-  #   )
-  # )
 }
-
-
