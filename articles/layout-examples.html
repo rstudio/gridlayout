@@ -43,14 +43,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
         </div>
       </div>-->
     </div>
@@ -132,18 +132,18 @@
 <span>  <span class="fu"><a href="../reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>    <span class="st">"chickens"</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu">gt_output</span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>    <span class="st">"treePlot"</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>    <span class="st">"yarnPlot"</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"yarnPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>    <span class="st">"stockTable"</span>,</span>
@@ -218,33 +218,32 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">app_w_layout</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">my_layout</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span>    ui <span class="op">=</span> <span class="fu"><a href="../reference/grid_page.html">grid_page</a></span><span class="op">(</span></span>
 <span>      layout <span class="op">=</span> <span class="va">my_layout</span>,</span>
 <span>      <span class="fu"><a href="../reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"My gridlayout app"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>        <span class="st">"chickens"</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body_fill</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabsetPanel.html" class="external-link">tabsetPanel</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Plot"</span>, <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"chickPlot"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tabPanel.html" class="external-link">tabPanel</a></span><span class="op">(</span><span class="st">"Fastest growing"</span>, <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"chickTable"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          <span class="op">)</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
-<span>        <span class="st">"treePlot"</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"treePlot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
-<span>      <span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/grid_card_plot.html">grid_card_plot</a></span><span class="op">(</span><span class="st">"treePlot"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="../reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>         <span class="st">"stockTable"</span>,</span>
-<span>        <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span>, scrollable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>        <span class="fu"><a href="https://gt.rstudio.com/reference/gt_output.html" class="external-link">gt_output</a></span><span class="op">(</span><span class="st">"stockTable"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span>,</span>
 <span>      flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># Allows us to use layouts without some elements declared</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      </span>
-<span>      <span class="va">output</span><span class="op">$</span><span class="va">chickPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">output</span><span class="op">$</span><span class="va">chickPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>          <span class="va">ChickWeight</span>,</span>
 <span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
@@ -287,7 +286,7 @@
 <span>      height <span class="op">=</span> <span class="st">"100%"</span>,</span>
 <span>      width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span>      </span>
-<span>      <span class="va">output</span><span class="op">$</span><span class="va">treePlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">output</span><span class="op">$</span><span class="va">treePlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>          <span class="va">trees</span>,</span>
 <span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Height</span>, x <span class="op">=</span> <span class="va">Volume</span>, size <span class="op">=</span> <span class="va">Girth</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span></span>
@@ -300,7 +299,7 @@
 <span>          <span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>      </span>
-<span>      <span class="va">output</span><span class="op">$</span><span class="va">yarnPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">output</span><span class="op">$</span><span class="va">yarnPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>          <span class="va">warpbreaks</span>,</span>
 <span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">breaks</span>, fill <span class="op">=</span> <span class="va">wool</span><span class="op">)</span></span>
@@ -363,7 +362,7 @@
 
 <div class="author">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
