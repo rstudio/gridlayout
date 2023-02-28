@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid_plot.R
 \name{card_plot_output}
 \alias{card_plot_output}
-\title{Plot output with smart sizing for use inside a \code{grid_card}}
+\title{Plot output with smart sizing for use inside a \code{grid_card} - Depreciated}
 \usage{
 card_plot_output(
   outputId,

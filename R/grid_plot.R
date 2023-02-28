@@ -27,10 +27,7 @@ grid_card_plot <- function(area, outputId = area,...) {
 }
 
 
-# This will eventually get replaced with the bslib version and right now is just
-# a rough copy-paste job
-
-#' Plot output with smart sizing for use inside a `grid_card`
+#' Plot output with smart sizing for use inside a `grid_card` - Depreciated
 #'
 #' `r lifecycle::badge('deprecated')`
 #'
@@ -57,6 +54,27 @@ card_plot_output <- function(outputId,
                              stretch = TRUE,
                              ...) {
 
-  lifecycle::deprecate_stop("card_plot_output() is no longer needed with bslib card api. Simply use regular shiny::plotOutput()")
+  lifecycle::deprecate_warn()("card_plot_output() is no longer needed with bslib card api. Simply use regular shiny::plotOutput()")
 
+  plot_div <- shiny::plotOutput(
+    outputId,
+    height = height,
+    click = click, 
+    dblclick = dblclick, 
+    hover = hover,
+    brush = brush
+  )
+
+  # TODO: card-img-* needs to go on the <img> itself, not the containing <div>
+  htmltools::tagAppendAttributes(
+    plot_div,
+    style = htmltools::css(
+      flex = if (stretch) "1 1",
+      `-webkit-flex` = if (stretch) "1 1",
+      # May be NULL
+      `flex-basis` = htmltools::validateCssUnit(height),
+      `-webkit-flex-basis` = htmltools::validateCssUnit(height),
+    ),
+    !!!rlang::list2(...)
+  )
 }
