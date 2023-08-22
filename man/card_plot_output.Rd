@@ -68,7 +68,7 @@ vertical space is available in the card.}
 }
 \details{
 No longer necessary. Use plain \code{shiny::plotOutput()} wrapped with
-\code{bslib::card_body_fill()}.
+\code{bslib::card_body()}.
 }
 \seealso{
 \code{\link[=grid_card_plot]{grid_card_plot()}} for a simpler way of placing just a plot on the

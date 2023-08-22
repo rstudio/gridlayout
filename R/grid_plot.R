@@ -12,7 +12,7 @@
 #'
 #' @return A grid panel filled with plot output
 #'
-#' @seealso [bslib::card_body_fill], [shiny::plotOutput()]
+#' @seealso [bslib::card_body], [shiny::plotOutput()]
 #' @example man/examples/simple_app.R
 #'
 #' @export
@@ -20,7 +20,7 @@ grid_card_plot <- function(area, outputId = area,...) {
   grid_card(
     area = area,
     height = "100%",
-    bslib::card_body_fill(
+    bslib::card_body(
       shiny::plotOutput(outputId = outputId, ...)
     )
   )
@@ -32,7 +32,7 @@ grid_card_plot <- function(area, outputId = area,...) {
 #' `r lifecycle::badge('deprecated')`
 #'
 #' No longer necessary. Use plain `shiny::plotOutput()` wrapped with
-#' `bslib::card_body_fill()`.
+#' `bslib::card_body()`.
 #'
 #' @inheritParams shiny::plotOutput
 #' @param ... Named arguments become attributes on the div containing the plot.
@@ -59,8 +59,8 @@ card_plot_output <- function(outputId,
   plot_div <- shiny::plotOutput(
     outputId,
     height = height,
-    click = click, 
-    dblclick = dblclick, 
+    click = click,
+    dblclick = dblclick,
     hover = hover,
     brush = brush
   )
