@@ -60,7 +60,7 @@ sometimes overflow and cause the cell to be larger
 than it should. Not totally sure why but this
 css-tricks article contained the solution:
 https://css-tricks.com/preventing-a-grid-blowout/ */
-.grid-container * {
+.grid-container > * {
   min-width: 0;
   min-height: 0;
 }
