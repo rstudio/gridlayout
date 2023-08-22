@@ -4,6 +4,9 @@
 
 - Replace internal usage of `bslib::card_body_fill()` with unsufixed `bslib::card_body()` to reflect updates in API. Will fix confusing warning messages about `card_body_fill` being depreciated even though it isn't used in user code.
 
+### Bug fixes
+- Short cards could have squished contents (15c0397483529b34688f8f76bbc57a06ac9d9764)
+
 # gridlayout 0.2.0
 
 ### Major changes
