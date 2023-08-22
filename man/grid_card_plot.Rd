@@ -107,5 +107,5 @@ shinyApp(
 }
 }
 \seealso{
-\link[bslib:card_body]{bslib::card_body_fill}, \code{\link[shiny:plotOutput]{shiny::plotOutput()}}
+\link[bslib:card_body]{bslib::card_body}, \code{\link[shiny:plotOutput]{shiny::plotOutput()}}
 }

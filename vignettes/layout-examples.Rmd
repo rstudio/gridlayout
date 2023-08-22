@@ -75,7 +75,7 @@ app_w_layout <- function(my_layout) {
       grid_card_text("header", "My gridlayout app"),
       grid_card(
         "chickens",
-        card_body_fill(
+        card_body(
           tabsetPanel(
             tabPanel("Plot", plotOutput("chickPlot")),
             tabPanel("Fastest growing", gt_output("chickTable")),

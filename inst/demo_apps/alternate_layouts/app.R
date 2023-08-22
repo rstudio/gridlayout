@@ -49,7 +49,7 @@ shinyApp(
     ),
     grid_card(
       "plot",
-      card_body_fill(
+      card_body(
         plotOutput("distPlot")
       )
     )

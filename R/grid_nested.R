@@ -38,7 +38,7 @@ grid_nested <- function(area,
     if (!is.null(title)) {
       bslib::card_header(title)
     },
-    bslib::card_body_fill(
+    bslib::card_body(
       class = "p-0",
       nested_grid
     )
