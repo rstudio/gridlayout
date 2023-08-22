@@ -1,3 +1,9 @@
+# gridlayout 0.2.1
+
+### Minor new features and improvements
+
+- Replace internal usage of `bslib::card_body_fill()` with unsufixed `bslib::card_body()` to reflect updates in API. Will fix confusing warning messages about `card_body_fill` being depreciated even though it isn't used in user code.
+
 # gridlayout 0.2.0
 
 ### Major changes
