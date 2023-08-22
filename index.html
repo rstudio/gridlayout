@@ -47,14 +47,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -113,6 +113,7 @@
 <div class="page-header"><h1 id="gridlayout">gridlayout<a class="anchor" aria-label="anchor" href="#gridlayout"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p>Build dashboard-style layouts for Shiny and RMarkdown easily using CSS-Grid.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -162,11 +163,11 @@
 </h2>
 <p>Once you’ve setup your layout, the easiest way you can use it in your shiny apps is with the <code><a href="reference/grid_page.html">grid_page()</a></code> ui function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The classic Geyser app with grid layout</span></span>
-<span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
 <span>  ui <span class="op">=</span> <span class="fu"><a href="reference/grid_page.html">grid_page</a></span><span class="op">(</span></span>
 <span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"     200px   1fr   "</span>,</span>
@@ -176,19 +177,19 @@
 <span>    <span class="fu"><a href="reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span>, is_title <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>      <span class="st">"sidebar"</span>,</span>
-<span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, </span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>,<span class="st">"Number of bins:"</span>, </span>
 <span>                  min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>      <span class="st">"plot"</span>,</span>
-<span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body_fill</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_body</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
 <span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
@@ -203,8 +204,8 @@
 <p><code><a href="reference/grid_page.html">grid_page()</a></code> will automatically make your gridlayout fill the entire page. If you are interested in having a finer-grain control over the size and position of your grid layout you can use the <code><a href="reference/grid_container.html">grid_container()</a></code> function to place your grid layout wherever you want. The equivalent app to above can be created by replacing the UI definition with a <code>fluidPage</code> containing a <code><a href="reference/grid_container.html">grid_container()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">...</span></span>
-<span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span>  ui <span class="op">=</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="reference/grid_container.html">grid_container</a></span><span class="op">(</span></span>
 <span>      layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>        <span class="st">"     200px   1fr   "</span>,</span>
@@ -214,14 +215,14 @@
 <span>      <span class="fu"><a href="reference/grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"Geysers!"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>        <span class="st">"sidebar"</span>,</span>
-<span>        <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, </span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, </span>
 <span>                    min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">50</span>, value <span class="op">=</span> <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="reference/grid_card.html">grid_card</a></span><span class="op">(</span></span>
 <span>        <span class="st">"plot"</span>,</span>
-<span>        <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body_fill</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_body</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
@@ -230,69 +231,69 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>This time, however the grid is constrained to <code>800px</code> tall, no-matter how large or small the window viewing it is.</p>
 <p>Alternatively you can use <code><a href="reference/grid_nested.html">grid_nested()</a></code> to use a <code>gridlayout</code> layout within a panel another <code>gridlayout</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>...</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">shinyApp</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">ui =</span> <span class="kw">grid_page</span>(</span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">layout =</span> <span class="kw">c</span>(</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="st">"     250px   1fr   "</span>,</span>
-<span id="cb5-6"><a href="#cb5-6"></a>    <span class="st">"50px header  header"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="st">"1fr  sidebar plots "</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>  ),</span>
-<span id="cb5-9"><a href="#cb5-9"></a>  <span class="kw">grid_card_text</span>(<span class="st">"header"</span>, <span class="st">"This is my header"</span>),</span>
-<span id="cb5-10"><a href="#cb5-10"></a>  <span class="kw">grid_card</span>(</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="st">"sidebar"</span>,</span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="kw">card_header</span>(<span class="st">"Settings"</span>),</span>
-<span id="cb5-13"><a href="#cb5-13"></a>    <span class="kw">sliderInput</span>(<span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">50</span>, <span class="dt">value =</span> <span class="dv">30</span>, <span class="dt">width =</span> <span class="st">"100%"</span>)</span>
-<span id="cb5-14"><a href="#cb5-14"></a>  ),</span>
-<span id="cb5-15"><a href="#cb5-15"></a>  <span class="kw">grid_nested</span>(</span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="st">"plots"</span>,</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    <span class="dt">title =</span> <span class="st">"Plots - in technicolor"</span>,</span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="dt">layout =</span> <span class="kw">c</span>(</span>
-<span id="cb5-19"><a href="#cb5-19"></a>      <span class="st">"distPlot distPlot distPlot"</span>,</span>
-<span id="cb5-20"><a href="#cb5-20"></a>      <span class="st">"redPlot  bluePlot greenPlot"</span></span>
-<span id="cb5-21"><a href="#cb5-21"></a>    ),</span>
-<span id="cb5-22"><a href="#cb5-22"></a>    <span class="kw">grid_card_plot</span>(<span class="st">"distPlot"</span>),</span>
-<span id="cb5-23"><a href="#cb5-23"></a>    <span class="kw">grid_card_plot</span>(<span class="st">"redPlot"</span>),</span>
-<span id="cb5-24"><a href="#cb5-24"></a>    <span class="kw">grid_card_plot</span>(<span class="st">"bluePlot"</span>),</span>
-<span id="cb5-25"><a href="#cb5-25"></a>    <span class="kw">grid_card_plot</span>(<span class="st">"greenPlot"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>  ),</span>
-<span id="cb5-27"><a href="#cb5-27"></a>  <span class="dt">server =</span> ...</span>
-<span id="cb5-28"><a href="#cb5-28"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>...</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">ui =</span> <span class="fu">grid_page</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">layout =</span> <span class="fu">c</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="st">"     250px   1fr   "</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="st">"50px header  header"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="st">"1fr  sidebar plots "</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  ),</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">grid_card_text</span>(<span class="st">"header"</span>, <span class="st">"This is my header"</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">grid_card</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="st">"sidebar"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="fu">card_header</span>(<span class="st">"Settings"</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="fu">sliderInput</span>(<span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> <span class="dv">50</span>, <span class="at">value =</span> <span class="dv">30</span>, <span class="at">width =</span> <span class="st">"100%"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  ),</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="fu">grid_nested</span>(</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    <span class="st">"plots"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Plots - in technicolor"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>      <span class="st">"distPlot distPlot distPlot"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>      <span class="st">"redPlot  bluePlot greenPlot"</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>    ),</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>    <span class="fu">grid_card_plot</span>(<span class="st">"distPlot"</span>),</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>    <span class="fu">grid_card_plot</span>(<span class="st">"redPlot"</span>),</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>    <span class="fu">grid_card_plot</span>(<span class="st">"bluePlot"</span>),</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>    <span class="fu">grid_card_plot</span>(<span class="st">"greenPlot"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>  ),</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>  <span class="at">server =</span> ...</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-in-rmarkdown">Using in RMarkdown<a class="anchor" aria-label="anchor" href="#using-in-rmarkdown"></a>
 </h2>
 <p>The function <code><a href="reference/use_gridlayout_rmd.html">use_gridlayout_rmd()</a></code> called in the <code>setup</code> chunk of an RMarkdown file will enable you to use gridlayout to layout your document. Just match the section headers to the layout element names and place layout md table in a <code>gridlayout</code> chunk…</p>
 <p><strong><code>my_app.rmd</code></strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">---</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>title<span class="op">:</span><span class="st"> "`gridlayout` in Rmarkdown"</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>author<span class="op">:</span><span class="st"> "Nick Strayer"</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>date<span class="op">:</span><span class="st"> "3/9/2021"</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>output<span class="op">:</span><span class="st"> </span>html_document</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="op">---</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="co">## Main</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12"></a></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="st">```</span><span class="dt">gridlayout</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="dt">|      |        |         |</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a><span class="dt">|------|--------|---------|</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="dt">|2rem  |200px   |1fr      |</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="dt">|150px |header  |header   |</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="dt">|1fr   |sidebar |main     |</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="dt">|120px |footer  |footer   |</span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="st">```</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a></span>
-<span id="cb6-22"><a href="#cb6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="co">## Sidebar</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a></span>
-<span id="cb6-25"><a href="#cb6-25"></a>Here is some content <span class="cf">for</span> the sidebar</span>
-<span id="cb6-26"><a href="#cb6-26"></a></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="co">## Footer</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a></span>
-<span id="cb6-29"><a href="#cb6-29"></a>Anything you want could go <span class="cf">in</span> the footer.</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"`gridlayout` in Rmarkdown"</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>author<span class="sc">:</span> <span class="st">"Nick Strayer"</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>date<span class="sc">:</span> <span class="st">"3/9/2021"</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>output<span class="sc">:</span> html_document</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## Main</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="st">```</span><span class="at">gridlayout</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="at">|      |        |         |</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="at">|------|--------|---------|</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="at">|2rem  |200px   |1fr      |</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="at">|150px |header  |header   |</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="at">|1fr   |sidebar |main     |</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="at">|120px |footer  |footer   |</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="do">## Sidebar</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>Here is some content <span class="cf">for</span> the sidebar</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="do">## Footer</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>Anything you want could go <span class="cf">in</span> the footer.</span></code></pre></div>
 <p><img src="reference/figures/basic_markdown.png" width="100%"></p>
 <p><em>Output of <code>my_app.rmd</code></em></p>
 </div>

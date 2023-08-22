@@ -24,14 +24,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -85,11 +85,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.1" id="gridlayout-021">gridlayout 0.2.1<a class="anchor" aria-label="anchor" href="#gridlayout-021"></a></h2>
+<div class="section level4">
+<h4 id="minor-new-features-and-improvements-0-2-1">Minor new features and improvements<a class="anchor" aria-label="anchor" href="#minor-new-features-and-improvements-0-2-1"></a></h4>
+<ul><li>Replace internal usage of <code><a href="https://rdrr.io/pkg/bslib/man/deprecated.html" class="external-link">bslib::card_body_fill()</a></code> with unsufixed <code><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">bslib::card_body()</a></code> to reflect updates in API. Will fix confusing warning messages about <code>card_body_fill</code> being depreciated even though it isn’t used in user code.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="gridlayout-020">gridlayout 0.2.0<a class="anchor" aria-label="anchor" href="#gridlayout-020"></a></h2>
 <div class="section level4">
 <h4 id="major-changes-0-2-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-2-0"></a></h4>
 <ul><li>
-<code><a href="../reference/grid_card.html">grid_card()</a></code> now wraps <code><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">bslib::card()</a></code> directly. This means that there are some api changes such as depreciated the <code>title</code> argument for using <code>bslib::card_header(title)</code> instead. Old <code><a href="../reference/grid_card.html">grid_card()</a></code> arguments that are present in code will get flagged with a warning to allow users to know when/how to update their code with the new version.</li>
+<code><a href="../reference/grid_card.html">grid_card()</a></code> now wraps <code><a href="https://rdrr.io/pkg/bslib/man/card.html" class="external-link">bslib::card()</a></code> directly. This means that there are some api changes such as depreciated the <code>title</code> argument for using <code>bslib::card_header(title)</code> instead. Old <code><a href="../reference/grid_card.html">grid_card()</a></code> arguments that are present in code will get flagged with a warning to allow users to know when/how to update their code with the new version.</li>
 <li>
 <code><a href="../reference/card_plot_output.html">card_plot_output()</a></code> is now depreciated in favor of the new <code>bslib</code> cards smart fill behavior. Simple plots can still be done with <code><a href="../reference/grid_card_plot.html">grid_card_plot()</a></code>.</li>
 <li>The function <code><a href="../reference/grid_card_old.html">grid_card_old()</a></code> has been added to ease transition to the new card api and to keep some features such as collapsibility are not available on the new api.</li>
@@ -102,13 +109,18 @@
 <ul><li>
 <code><a href="../reference/grid_card.html">grid_card()</a></code> is now the main method of placing items onto the grid</li>
 <li>Added ability to add full-bleed header and sidebar with special child functions. These sit outside the main grid and can simplify layouts to not require them to constantly be added.</li>
-<li>General interface for cards is a lighter in favor of outputting most non-layout logic to the coming <code><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">bslib::card()</a></code> and friends.</li>
+<li>General interface for cards is a lighter in favor of outputting most non-layout logic to the coming <code><a href="https://rdrr.io/pkg/bslib/man/card.html" class="external-link">bslib::card()</a></code> and friends.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="minor-new-features-and-improvements-0-1-0">Minor new features and improvements<a class="anchor" aria-label="anchor" href="#minor-new-features-and-improvements-0-1-0"></a></h4>
-<ul><li>Website has been updated with better resources</li></ul></div>
-<div class="section level4"><h4 id="bug-fixes-0-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h4></div>
-<div class="section level4"><h4 id="known-bugs-0-1-0">Known bugs<a class="anchor" aria-label="anchor" href="#known-bugs-0-1-0"></a></h4></div>
+<ul><li>Website has been updated with better resources</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-0-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h4>
+</div>
+<div class="section level4">
+<h4 id="known-bugs-0-1-0">Known bugs<a class="anchor" aria-label="anchor" href="#known-bugs-0-1-0"></a></h4>
+</div>
 </div>
   </div>
 

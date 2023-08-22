@@ -24,14 +24,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -110,7 +110,7 @@
 
 <dt>click</dt>
 <dd><p>This can be <code>NULL</code> (the default), a string, or an object
-created by the <code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">clickOpts()</a></code> function. If you use a value like
+created by the <code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">clickOpts()</a></code> function. If you use a value like
 <code>"plot_click"</code> (or equivalently, <code>clickOpts(id="plot_click")</code>),
 the plot will send coordinates to the server whenever it is clicked, and
 the value will be accessible via <code>input$plot_click</code>. The value will be
@@ -126,19 +126,19 @@ double-click events.</p></dd>
 <dt>hover</dt>
 <dd><p>Similar to the <code>click</code> argument, this can be <code>NULL</code>
 (the default), a string, or an object created by the
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">hoverOpts()</a></code> function. If you use a value like
+<code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">hoverOpts()</a></code> function. If you use a value like
 <code>"plot_hover"</code> (or equivalently, <code>hoverOpts(id="plot_hover")</code>),
 the plot will send coordinates to the server pauses on the plot, and the
 value will be accessible via <code>input$plot_hover</code>. The value will be a
 named list with <code>x</code> and <code>y</code> elements indicating the mouse
 position. To control the hover time or hover delay type, you must use
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">hoverOpts()</a></code>.</p></dd>
+<code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">hoverOpts()</a></code>.</p></dd>
 
 
 <dt>brush</dt>
 <dd><p>Similar to the <code>click</code> argument, this can be <code>NULL</code>
 (the default), a string, or an object created by the
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html" class="external-link">brushOpts()</a></code> function. If you use a value like
+<code><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class="external-link">brushOpts()</a></code> function. If you use a value like
 <code>"plot_brush"</code> (or equivalently, <code>brushOpts(id="plot_brush")</code>),
 the plot will allow the user to "brush" in the plotting area, and will send
 information about the brushed area to the server, and the value will be
@@ -146,7 +146,7 @@ accessible via <code>input$plot_brush</code>. Brushing means that the user will
 be able to draw a rectangle in the plotting area and drag it around. The
 value will be a named list with <code>xmin</code>, <code>xmax</code>, <code>ymin</code>, and
 <code>ymax</code> elements indicating the brush area. To control the brush
-behavior, use <code><a href="https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html" class="external-link">brushOpts()</a></code>. Multiple
+behavior, use <code><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class="external-link">brushOpts()</a></code>. Multiple
 <code>imageOutput</code>/<code>plotOutput</code> calls may share the same <code>id</code>
 value; brushing one image or plot will cause any other brushes with the
 same <code>id</code> to disappear.</p></dd>
@@ -169,8 +169,8 @@ vertical space is available in the card.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>No longer necessary. Use plain <code><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">shiny::plotOutput()</a></code> wrapped with
-<code><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_body_fill()</a></code>.</p>
+    <p>No longer necessary. Use plain <code><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">shiny::plotOutput()</a></code> wrapped with
+<code><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">bslib::card_body()</a></code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>

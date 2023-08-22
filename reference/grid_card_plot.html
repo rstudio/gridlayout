@@ -25,14 +25,14 @@ sizing defaults."><meta name="twitter:card" content="summary"><!-- mathjax --><s
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -87,7 +87,7 @@ sizing defaults."><meta name="twitter:card" content="summary"><!-- mathjax --><s
     </div>
 
     <div class="ref-description">
-    <p>A light wrapper for <code><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">shiny::plotOutput()</a></code> that uses gridlayout-friendly
+    <p>A light wrapper for <code><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">shiny::plotOutput()</a></code> that uses gridlayout-friendly
 sizing defaults.</p>
     </div>
 
@@ -109,18 +109,18 @@ argument.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Arguments passed on to <code><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">shiny::plotOutput</a></code></p><dl><dt><code>width,height</code></dt>
+<dd><p>Arguments passed on to <code><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">shiny::plotOutput</a></code></p><dl><dt><code>width,height</code></dt>
 <dd><p>Image width/height. Must be a valid CSS unit (like
 <code>"100%"</code>, <code>"400px"</code>, <code>"auto"</code>) or a number, which will be
 coerced to a string and have <code>"px"</code> appended. These two arguments are
 ignored when <code>inline = TRUE</code>, in which case the width/height of a plot
-must be specified in <code><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot()</a></code>. Note that, for height, using
+must be specified in <code><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot()</a></code>. Note that, for height, using
 <code>"auto"</code> or <code>"100%"</code> generally will not work as expected,
 because of how height is computed with HTML/CSS.</p></dd>
 
     <dt><code>click</code></dt>
 <dd><p>This can be <code>NULL</code> (the default), a string, or an object
-created by the <code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">clickOpts()</a></code> function. If you use a value like
+created by the <code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">clickOpts()</a></code> function. If you use a value like
 <code>"plot_click"</code> (or equivalently, <code>clickOpts(id="plot_click")</code>),
 the plot will send coordinates to the server whenever it is clicked, and
 the value will be accessible via <code>input$plot_click</code>. The value will be
@@ -134,18 +134,18 @@ double-click events.</p></dd>
     <dt><code>hover</code></dt>
 <dd><p>Similar to the <code>click</code> argument, this can be <code>NULL</code>
 (the default), a string, or an object created by the
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">hoverOpts()</a></code> function. If you use a value like
+<code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">hoverOpts()</a></code> function. If you use a value like
 <code>"plot_hover"</code> (or equivalently, <code>hoverOpts(id="plot_hover")</code>),
 the plot will send coordinates to the server pauses on the plot, and the
 value will be accessible via <code>input$plot_hover</code>. The value will be a
 named list with <code>x</code> and <code>y</code> elements indicating the mouse
 position. To control the hover time or hover delay type, you must use
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/clickOpts.html" class="external-link">hoverOpts()</a></code>.</p></dd>
+<code><a href="https://rdrr.io/pkg/shiny/man/clickOpts.html" class="external-link">hoverOpts()</a></code>.</p></dd>
 
     <dt><code>brush</code></dt>
 <dd><p>Similar to the <code>click</code> argument, this can be <code>NULL</code>
 (the default), a string, or an object created by the
-<code><a href="https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html" class="external-link">brushOpts()</a></code> function. If you use a value like
+<code><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class="external-link">brushOpts()</a></code> function. If you use a value like
 <code>"plot_brush"</code> (or equivalently, <code>brushOpts(id="plot_brush")</code>),
 the plot will allow the user to "brush" in the plotting area, and will send
 information about the brushed area to the server, and the value will be
@@ -153,7 +153,7 @@ accessible via <code>input$plot_brush</code>. Brushing means that the user will
 be able to draw a rectangle in the plotting area and drag it around. The
 value will be a named list with <code>xmin</code>, <code>xmax</code>, <code>ymin</code>, and
 <code>ymax</code> elements indicating the brush area. To control the brush
-behavior, use <code><a href="https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html" class="external-link">brushOpts()</a></code>. Multiple
+behavior, use <code><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class="external-link">brushOpts()</a></code>. Multiple
 <code>imageOutput</code>/<code>plotOutput</code> calls may share the same <code>id</code>
 value; brushing one image or plot will cause any other brushes with the
 same <code>id</code> to disappear.</p></dd>
@@ -166,8 +166,8 @@ for the output</p></dd>
 <dd><p>Whether or not the returned tag should be treated as a fill item,
 meaning that its <code>height</code> is allowed to grow/shrink to fit a fill container
 with an opinionated height (see <code><a href="https://rstudio.github.io/htmltools/reference/bindFillRole.html" class="external-link">htmltools::bindFillRole()</a></code>) with an
-opinionated height. Examples of fill containers include <code><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">bslib::card()</a></code> and
-<code><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_body_fill()</a></code>.</p></dd>
+opinionated height. Examples of fill containers include <code><a href="https://rdrr.io/pkg/bslib/man/card.html" class="external-link">bslib::card()</a></code> and
+<code><a href="https://rdrr.io/pkg/bslib/man/deprecated.html" class="external-link">bslib::card_body_fill()</a></code>.</p></dd>
 
   
 </dl></dd>
@@ -181,17 +181,17 @@ opinionated height. Examples of fill containers include <code><a href="https://r
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">bslib::card_body_fill</a>, <code><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html" class="external-link">shiny::plotOutput()</a></code></p></div>
+    <div class="dont-index"><p><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">bslib::card_body</a>, <code><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">shiny::plotOutput()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  ui <span class="op">=</span> <span class="fu"><a href="grid_page.html">grid_page</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="st">"header  header"</span>,</span></span>
@@ -202,15 +202,15 @@ opinionated height. Examples of fill containers include <code><a href="https://r
 <span class="r-in"><span>    <span class="fu"><a href="grid_card_text.html">grid_card_text</a></span><span class="op">(</span><span class="st">"header"</span>, <span class="st">"This is my header"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="grid_card.html">grid_card</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      area <span class="op">=</span> <span class="st">"sidebar"</span>,</span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_body</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Settings"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/bslib/man/card_body.html" class="external-link">card_body</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"bins"</span>, <span class="st">"Number of bins:"</span>, <span class="fl">1</span>, <span class="fl">50</span>, <span class="fl">30</span>, width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu">grid_card_plot</span><span class="op">(</span><span class="st">"distPlot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">distPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span></span>
 <span class="r-in"><span>      <span class="va">x</span>    <span class="op">&lt;-</span> <span class="va">faithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
 <span class="r-in"><span>      <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">bins</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span>, breaks <span class="op">=</span> <span class="va">bins</span>, col <span class="op">=</span> <span class="st">'darkgray'</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span></span>

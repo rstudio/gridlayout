@@ -43,14 +43,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -103,7 +103,7 @@
 
       
 
-      </header><script src="defining-a-layout_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Defining a layout</h1>
@@ -123,21 +123,44 @@
 <span><span class="va">show_layout</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">layout</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">layout</span>, show_alternates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>There are multiple ways to define a gridlayout. The following all describe the exact same layout. An app with a 100 pixel tall header spanning the width of the page, a 120 pixel wide sidebar on the left, and three plots in the remaining with <code>plot_a</code> being the smallest, <code>plot_b</code> being twice as wide as <code>plot_a</code>, and <code>plot_c</code> sitting below both <code>plot_a</code> and <code>plot_c</code> spanning the width of both.</p>
+<p>There are multiple ways to define a gridlayout. The following all
+describe the exact same layout. An app with a 100 pixel tall header
+spanning the width of the page, a 120 pixel wide sidebar on the left,
+and three plots in the remaining with <code>plot_a</code> being the
+smallest, <code>plot_b</code> being twice as wide as
+<code>plot_a</code>, and <code>plot_c</code> sitting below both
+<code>plot_a</code> and <code>plot_c</code> spanning the width of
+both.</p>
 <div class="section level2">
 <h2 id="where-to-pass-your-layout-to">Where to pass your layout to<a class="anchor" aria-label="anchor" href="#where-to-pass-your-layout-to"></a>
 </h2>
-<p>All examples are passed to <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code> which generates a <code>gridlayout</code> object directly. However, typically these layouts are passed directly into the <code>gridlayout</code> container functions <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>, <code><a href="../reference/grid_page.html">grid_page()</a></code>, <code><a href="../reference/grid_container.html">grid_container()</a></code>, or <code><a href="../reference/grid_nested.html">grid_nested()</a></code>.</p>
+<p>All examples are passed to <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code> which
+generates a <code>gridlayout</code> object directly. However, typically
+these layouts are passed directly into the <code>gridlayout</code>
+container functions <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>,
+<code><a href="../reference/grid_page.html">grid_page()</a></code>, <code><a href="../reference/grid_container.html">grid_container()</a></code>, or
+<code><a href="../reference/grid_nested.html">grid_nested()</a></code>.</p>
 <div class="section level3">
 <h3 id="a-note-sizing">A note sizing<a class="anchor" aria-label="anchor" href="#a-note-sizing"></a>
 </h3>
-<p>For the first two definition techniques we use inline sizes, however, for both layouts the sizes can be omitted for even sizes rows/columns, or passed as arrays to the<code>row_sizes</code> and <code>col_sizes</code> arguments in the grid layout container function. Additionally, the size of the gap between elements in your layout can be passed using either the upper-left “cell” of the table layout or the <code>gap_size</code> argument.</p>
+<p>For the first two definition techniques we use inline sizes, however,
+for both layouts the sizes can be omitted for even sizes rows/columns,
+or passed as arrays to the<code>row_sizes</code> and
+<code>col_sizes</code> arguments in the grid layout container function.
+Additionally, the size of the gap between elements in your layout can be
+passed using either the upper-left “cell” of the table layout or the
+<code>gap_size</code> argument.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="the-table-array">The table array<a class="anchor" aria-label="anchor" href="#the-table-array"></a>
 </h2>
-<p>The most common way to define your layout is using an character vector where each element represents a row in your layout. Each column is delineated by one or more spaces between the names of the defined regions. This allows you to line up your layout visually. Sizes can be added for the rows and columns by placing row sizes at the left of the respective row and column sizes at the top of the respective column.</p>
+<p>The most common way to define your layout is using an character
+vector where each element represents a row in your layout. Each column
+is delineated by one or more spaces between the names of the defined
+regions. This allows you to line up your layout visually. Sizes can be
+added for the rows and columns by placing row sizes at the left of the
+respective row and column sizes at the top of the respective column.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span>
 <span></span>
@@ -159,7 +182,11 @@
 <div class="section level2">
 <h2 id="the-single-character-table">The single character table<a class="anchor" aria-label="anchor" href="#the-single-character-table"></a>
 </h2>
-<p>Similar to the table array definition, a markdown table enclosed in a single string can be used as well. This is the method used to declare a layout in an RMarkdown file but since multi-line strings can be hard to keep formatted properly, the table-array definition is usually prefered for shiny-app usage.</p>
+<p>Similar to the table array definition, a markdown table enclosed in a
+single string can be used as well. This is the method used to declare a
+layout in an RMarkdown file but since multi-line strings can be hard to
+keep formatted properly, the table-array definition is usually prefered
+for shiny-app usage.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">md_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="st">"</span></span>
 <span><span class="st">  |      |120px   |1fr    |2fr    |</span></span>
@@ -180,7 +207,11 @@
 <div class="section level2">
 <h2 id="elements-list">Elements list<a class="anchor" aria-label="anchor" href="#elements-list"></a>
 </h2>
-<p>The last method is using a list to define the give positions of the items. This method is much more verbose than the previous two but is easier to generate using code. This can be useful in layouts with a large number of rows and columns where writing out the table would be cumbersome.</p>
+<p>The last method is using a list to define the give positions of the
+items. This method is much more verbose than the previous two but is
+easier to generate using code. This can be useful in layouts with a
+large number of rows and columns where writing out the table would be
+cumbersome.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Assemble list of elements along with their positions</span></span>
 <span><span class="va">layout_elements</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>

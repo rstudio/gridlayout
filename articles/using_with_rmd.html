@@ -43,14 +43,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -103,7 +103,7 @@
 
       
 
-      </header><script src="using_with_rmd_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using with Rmds</h1>
@@ -118,8 +118,16 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridlayout</span><span class="op">)</span></span></code></pre></div>
-<p>By placing the function <code>use_gridlayout_rmd</code> in the <code>setup</code> chunk of an Rmd you can define a gridlayout table using the a code chunk with the “language” set to <code>gridlayout</code>. Any markdown style table (see <code><a href="../reference/md_to_gridlayout.html">md_to_gridlayout()</a></code>) will be used to setup a grid-layout for your page. Just make sure your sections are given headers corresponding to the respective grid elements (either using their name or by using the <code>#My header text {#custom_id}</code> syntax after the header.)</p>
-<p>The following shows how you can customize the appearance of the elements of your layout using “card styles” and custom css.</p>
+<p>By placing the function <code>use_gridlayout_rmd</code> in the
+<code>setup</code> chunk of an Rmd you can define a gridlayout table
+using the a code chunk with the “language” set to
+<code>gridlayout</code>. Any markdown style table (see
+<code><a href="../reference/md_to_gridlayout.html">md_to_gridlayout()</a></code>) will be used to setup a grid-layout for
+your page. Just make sure your sections are given headers corresponding
+to the respective grid elements (either using their name or by using the
+<code>#My header text {#custom_id}</code> syntax after the header.)</p>
+<p>The following shows how you can customize the appearance of the
+elements of your layout using “card styles” and custom css.</p>
 <div class="section level2">
 <h2 id="the-markdown-code">The markdown code<a class="anchor" aria-label="anchor" href="#the-markdown-code"></a>
 </h2>

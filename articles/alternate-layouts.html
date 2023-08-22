@@ -43,14 +43,14 @@
 
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gridlayout</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
 
       <!--<div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">gridlayout</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of  <a href=""></a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
         </div>
       </div>-->
     </div>
@@ -103,7 +103,7 @@
 
       
 
-      </header><script src="alternate-layouts_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Alternate Layouts</h1>
@@ -116,12 +116,24 @@
 
     
     
-<p>Your app is likely to be viewed in different scenarios on different devices. This means it’s important to make sure it looks good in all of those scenarios. A nice grid layout with lots of side-by-side panels won’t work too well if your viewer is looking at it on a small phone screen.</p>
-<p>To account for these situations <code>gridlayout</code> allows you to specify “alternate” layouts for your app. These are distinct layout’s that determine how your app looks on different screen sizes. Most of the time this is going to be used for making a layout for the afformentioned phone scenario, but they can be defined for any page width range.</p>
+<p>Your app is likely to be viewed in different scenarios on different
+devices. This means it’s important to make sure it looks good in all of
+those scenarios. A nice grid layout with lots of side-by-side panels
+won’t work too well if your viewer is looking at it on a small phone
+screen.</p>
+<p>To account for these situations <code>gridlayout</code> allows you to
+specify “alternate” layouts for your app. These are distinct layout’s
+that determine how your app looks on different screen sizes. Most of the
+time this is going to be used for making a layout for the afformentioned
+phone scenario, but they can be defined for any page width range.</p>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
-<p>Here we define a basic layout for an app with a header on top, a sidebar on the side, and a plot. We also define a layout for mobile that is a stack of all of those things, placing what was the “sidebar” now just below the header. There’s also a super-wide-screen layout. Perhaps for an ultrawide monitor that places all the items side by side.</p>
+<p>Here we define a basic layout for an app with a header on top, a
+sidebar on the side, and a plot. We also define a layout for mobile that
+is a stack of all of those things, placing what was the “sidebar” now
+just below the header. There’s also a super-wide-screen layout. Perhaps
+for an ultrawide monitor that places all the items side by side.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"10px 200px   1fr   "</span>,</span>
@@ -177,18 +189,32 @@
 <div class="section level3">
 <h3 id="syntax">Syntax<a class="anchor" aria-label="anchor" href="#syntax"></a>
 </h3>
-<p>The alternate layouts are provided via the <code>alternate_layouts</code> argument in <code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts containing:</p>
+<p>The alternate layouts are provided via the
+<code>alternate_layouts</code> argument in
+<code><a href="../reference/new_gridlayout.html">new_gridlayout()</a></code>. This takes the form of a list of layouts
+containing:</p>
 <ul>
-<li>A <code>layout</code> table (or existing <code>gridlayout</code> object)</li>
+<li>A <code>layout</code> table (or existing <code>gridlayout</code>
+object)</li>
 <li>
-<code>width_bounds</code> that the layout should occur for. For instance, out <code>mobile_layout</code> is active when the viewing device’s screen is narrower than <code>600</code> pixels and our <code>big_screen_layout</code> is active when the screen is larger than <code>1600</code> pixels. You can also set upper and lower bounds in case you wanted to have intermediate layouts (perhaps a tablet layout for between <code>600</code> and <code>1000</code> pixels in width.)</li>
-<li>An optional <code>container_height</code>. Typically <code>gridlayout</code> is smart enough to figure this one out for you, however.</li>
+<code>width_bounds</code> that the layout should occur for. For
+instance, out <code>mobile_layout</code> is active when the viewing
+device’s screen is narrower than <code>600</code> pixels and our
+<code>big_screen_layout</code> is active when the screen is larger than
+<code>1600</code> pixels. You can also set upper and lower bounds in
+case you wanted to have intermediate layouts (perhaps a tablet layout
+for between <code>600</code> and <code>1000</code> pixels in
+width.)</li>
+<li>An optional <code>container_height</code>. Typically
+<code>gridlayout</code> is smart enough to figure this one out for you,
+however.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
 </h3>
-<p>The following are screenshots of the exact same app at different screen sizes using the layouts above.</p>
+<p>The following are screenshots of the exact same app at different
+screen sizes using the layouts above.</p>
 <div class="section level4">
 <h4 id="screen-width-2000px">Screen width = 2000px<a class="anchor" aria-label="anchor" href="#screen-width-2000px"></a>
 </h4>
@@ -213,7 +239,9 @@
 <div class="section level2">
 <h2 id="default-mobile-layout">Default mobile layout<a class="anchor" aria-label="anchor" href="#default-mobile-layout"></a>
 </h2>
-<p>If no alternate layouts are specified, a mobile layout is automatically generated by simply stacking all the panels in your app at <code>300px</code> in height.</p>
+<p>If no alternate layouts are specified, a mobile layout is
+automatically generated by simply stacking all the panels in your app at
+<code>300px</code> in height.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">main_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"10px 200px   1fr   "</span>,</span>
@@ -236,7 +264,9 @@
 <span><span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">sidebar</span></span></span>
 <span><span class="co">##     <span style="font-style: italic;">350px</span> <span style="font-weight: bold;">plot   </span></span></span>
 <span><span class="co">##   Gap of <span style="font-style: italic;">10px</span>. Total height of <span style="font-style: italic;">auto</span>.</span></span></code></pre></div>
-<p>If you don’t want this (say you’re targeting mobile by default already) you can set <code>alternate_layouts</code> to <code>NULL</code>.</p>
+<p>If you don’t want this (say you’re targeting mobile by default
+already) you can set <code>alternate_layouts</code> to
+<code>NULL</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span><span class="va">main_layout</span>, alternate_layouts <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="co">## <span style="font-weight: bold;">gridlayout</span> of 3 elements: </span></span>
