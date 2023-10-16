@@ -8,7 +8,7 @@
              200px   1fr   
         80px header  header
         1fr  sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 2rem. Total height of 100%.
       
       Alternate layouts:  
         
@@ -28,7 +28,7 @@
              1fr     1fr   
         80px header  header
         1fr  sidebar plot  
-      Gap of 12px. Total height of viewport.
+      Gap of 12px. Total height of 100%.
       
       Alternate layouts:  
         
@@ -45,10 +45,10 @@
       new_gridlayout("\n|200px   |1fr    |\n|header  |header |\n|sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-            200px   1fr   
-        1fr header  header
-        1fr sidebar plot  
-      Gap of 12px. Total height of viewport.
+             200px   1fr   
+        auto header  header
+        auto sidebar plot  
+      Gap of 12px. Total height of 100%.
       
       Alternate layouts:  
         
@@ -69,7 +69,7 @@
              1fr     1fr   
         80px header  header
         1fr  sidebar plot  
-      Gap of 2rem. Total height of viewport.
+      Gap of 2rem. Total height of 100%.
       
       Alternate layouts:  
         
@@ -87,10 +87,10 @@
         "\n|3rem  |        |       |\n|      |header  |header |\n|      |sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-            1fr     1fr   
-        1fr header  header
-        1fr sidebar plot  
-      Gap of 3rem. Total height of viewport.
+             1fr     1fr   
+        auto header  header
+        auto sidebar plot  
+      Gap of 3rem. Total height of 100%.
       
       Alternate layouts:  
         
@@ -148,10 +148,10 @@
       new_gridlayout("\n|header  |header |\n|sidebar |plot   |")
     Output
       gridlayout of 3 elements: 
-            1fr     1fr   
-        1fr header  header
-        1fr sidebar plot  
-      Gap of 12px. Total height of viewport.
+             1fr     1fr   
+        auto header  header
+        auto sidebar plot  
+      Gap of 12px. Total height of 100%.
       
       Alternate layouts:  
         

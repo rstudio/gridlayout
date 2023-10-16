@@ -11,7 +11,8 @@ grid_container(
   flag_mismatches = TRUE,
   row_sizes = NULL,
   col_sizes = NULL,
-  gap_size = NULL
+  gap_size = NULL,
+  container_height = NULL
 )
 }
 \arguments{
@@ -39,6 +40,14 @@ here and in the main layout then these sizes will be the ones used.}
 \item{gap_size}{Valid css sizing for gap to be left between each element in your
 grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
 provided in the main layout table.}
+
+\item{container_height}{Valid css unit determining how tall the containing
+element should be for this layout. Defaults to \verb{100\%}. Special value of
+\code{"viewport"} for full-page height maps to the CSS value of \verb{100vh} if any
+relative units (e.g. \code{fr} or \code{auto}) are included in row sizes and \code{auto}
+otherwise. Values such as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.}
 }
 \value{
 A taglist with grid elements wrapped inside a container div of class

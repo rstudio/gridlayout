@@ -118,10 +118,10 @@
 #'  grid. Like `row_sizes` and `col_sizes`, this will win-out over a gap size
 #'  provided in the main layout table.
 #' @param container_height Valid css unit determining how tall the containing
-#'  element should be for this layout. Defaults to `"viewport"` (full page
-#'  height: equivalent to the CSS value of `100vh`) if any relative units (e.g.
-#'  `fr` or `auto`) are included in row sizes and `auto` otherwise. Values such
-#'  as `"auto"` will let the page grow to as large as it needs to be to fit all
+#'  element should be for this layout. Defaults to `100%`. Special value of
+#'  `"viewport"` for full-page height maps to the CSS value of `100vh` if any
+#'  relative units (e.g. `fr` or `auto`) are included in row sizes and `auto`
+#'   otherwise. Values such as `"auto"` will let the page grow to as large as it needs to be to fit all
 #'  content. This should most likely be avoided when using row heights in
 #'  relative units.
 #' @param alternate_layouts A list of layouts to be used for different viewport
@@ -303,7 +303,7 @@ new_gridlayout_template <- function(
   if (is.null(container_height)) {
     any_relative_row_sizes <- any(str_detect(row_sizes, "fr"))
     no_specified_sizes <- all(row_sizes == DEFAULT_SIZE_CHAR)
-    container_height <- if (any_relative_row_sizes | no_specified_sizes) "viewport" else "auto";
+    container_height <- if (any_relative_row_sizes | no_specified_sizes) "100%" else "auto";
   }
 
 

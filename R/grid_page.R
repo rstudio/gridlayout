@@ -7,6 +7,9 @@
 #' the element should be placed in.
 #'
 #' @inheritParams grid_container
+#' @param container_height Optional parameter to control height of page.
+#'  Defaults to `"viewport"` so app takes up full vertical space of page.
+#'  See argument of same name in `new_gridlayout()` for more options.
 #' @param theme Optional argument to pass to `theme` argument of
 #'   \code{\link[shiny]{fluidPage}}.
 #' @param flag_mismatches Should mismatches between the named arguments and
@@ -27,6 +30,7 @@ grid_page <- function(layout,
                       row_sizes = NULL,
                       col_sizes = NULL,
                       gap_size = NULL,
+                      container_height = "viewport",
                       theme = bslib::bs_theme(version = 5),
                       flag_mismatches = FALSE) {
   dot_args <- list(...)
@@ -53,6 +57,7 @@ grid_page <- function(layout,
       row_sizes = row_sizes,
       col_sizes = col_sizes,
       gap_size = gap_size,
+      container_height=container_height,
       # This is used to prevent a randomly generated grid container id data
       # attribute which stabilizes tests and makes it easier to target with
       # custom css
@@ -62,13 +67,6 @@ grid_page <- function(layout,
   )
 
   container <- do.call(grid_container, container_args)
-
-  if (get_info(as_gridlayout(layout), "container_height") != "viewport") {
-    warning(
-      "Container height for layout is not set at default of viewport.",
-      "This is likely a mistake for grid_page()"
-    )
-  }
 
   shiny::fluidPage(
     theme = theme,

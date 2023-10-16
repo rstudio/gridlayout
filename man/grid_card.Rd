@@ -18,7 +18,7 @@ body. Clicking the icon expands the card to fit viewport size.}
     \item{\code{height}}{Any valid \link[htmltools:validateCssUnit]{CSS unit} (e.g.,
 \code{height="200px"}). Doesn't apply when a card is made \code{full_screen}
 (in this case, consider setting a \code{height} in \code{\link[bslib:card_body]{card_body()}}).}
-    \item{\code{max_height}}{Any valid \link[htmltools:validateCssUnit]{CSS unit} (e.g.,
+    \item{\code{max_height,min_height}}{Any valid \link[htmltools:validateCssUnit]{CSS unit} (e.g.,
 \code{max_height="200px"}). Doesn't apply when a card is made \code{full_screen}
 (in this case, consider setting a \code{max_height} in \code{\link[bslib:card_body]{card_body()}}).}
     \item{\code{fill}}{Whether or not to allow the card to grow/shrink to fit a

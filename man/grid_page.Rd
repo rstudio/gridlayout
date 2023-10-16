@@ -10,6 +10,7 @@ grid_page(
   row_sizes = NULL,
   col_sizes = NULL,
   gap_size = NULL,
+  container_height = "viewport",
   theme = bslib::bs_theme(version = 5),
   flag_mismatches = FALSE
 )
@@ -32,6 +33,10 @@ here and in the main layout then these sizes will be the ones used.}
 \item{gap_size}{Valid css sizing for gap to be left between each element in your
 grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
 provided in the main layout table.}
+
+\item{container_height}{Optional parameter to control height of page.
+Defaults to \code{"viewport"} so app takes up full vertical space of page.
+See argument of same name in \code{new_gridlayout()} for more options.}
 
 \item{theme}{Optional argument to pass to \code{theme} argument of
 \code{\link[shiny]{fluidPage}}.}

@@ -15,7 +15,7 @@
         --grid-gap:12px;
         grid-gap:var(--grid-gap);
         padding:var(--grid-gap);
-        height:100vh;
+        height:100%;
       }
       
       

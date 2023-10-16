@@ -31,10 +31,10 @@ here and in the main layout then these sizes will be the ones used.}
 grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap size
 provided in the main layout table.}
     \item{\code{container_height}}{Valid css unit determining how tall the containing
-element should be for this layout. Defaults to \code{"viewport"} (full page
-height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
-\code{fr} or \code{auto}) are included in row sizes and \code{auto} otherwise. Values such
-as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+element should be for this layout. Defaults to \verb{100\%}. Special value of
+\code{"viewport"} for full-page height maps to the CSS value of \verb{100vh} if any
+relative units (e.g. \code{fr} or \code{auto}) are included in row sizes and \code{auto}
+otherwise. Values such as \code{"auto"} will let the page grow to as large as it needs to be to fit all
 content. This should most likely be avoided when using row heights in
 relative units.}
     \item{\code{alternate_layouts}}{A list of layouts to be used for different viewport

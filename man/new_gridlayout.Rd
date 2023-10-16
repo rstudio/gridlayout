@@ -30,10 +30,10 @@ grid. Like \code{row_sizes} and \code{col_sizes}, this will win-out over a gap s
 provided in the main layout table.}
 
 \item{container_height}{Valid css unit determining how tall the containing
-element should be for this layout. Defaults to \code{"viewport"} (full page
-height: equivalent to the CSS value of \verb{100vh}) if any relative units (e.g.
-\code{fr} or \code{auto}) are included in row sizes and \code{auto} otherwise. Values such
-as \code{"auto"} will let the page grow to as large as it needs to be to fit all
+element should be for this layout. Defaults to \verb{100\%}. Special value of
+\code{"viewport"} for full-page height maps to the CSS value of \verb{100vh} if any
+relative units (e.g. \code{fr} or \code{auto}) are included in row sizes and \code{auto}
+otherwise. Values such as \code{"auto"} will let the page grow to as large as it needs to be to fit all
 content. This should most likely be avoided when using row heights in
 relative units.}
 
@@ -68,22 +68,20 @@ is re-formated.
  c("header header",
    "plota  plotb")
 )
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
-##       1fr    1fr   
-##   1fr header header
-##   1fr plota  plotb 
-## Gap of 12px. Total height of viewport.
-## 
-## Alternate layouts:  
-##   
-##   - Width < 500px 
-##            1fr   
-##     85px  header
-##     350px plota 
-##     350px plotb 
-##   Gap of 12px. Total height of auto.
+#> gridlayout of 3 elements: 
+#>        1fr    1fr   
+#>   auto header header
+#>   auto plota  plotb 
+#> Gap of 12px. Total height of 100\%.
+#> 
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr   
+#>     85px  header
+#>     350px plota 
+#>     350px plotb 
+#>   Gap of 12px. Total height of auto.
 }\if{html}{\out{</div>}}
 }
 
@@ -98,22 +96,20 @@ follows:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{new_gridlayout(
   "| header | header |
    | plota  | plotb  |" )
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
-##       1fr    1fr   
-##   1fr header header
-##   1fr plota  plotb 
-## Gap of 12px. Total height of viewport.
-## 
-## Alternate layouts:  
-##   
-##   - Width < 500px 
-##            1fr   
-##     85px  header
-##     350px plota 
-##     350px plotb 
-##   Gap of 12px. Total height of auto.
+#> gridlayout of 3 elements: 
+#>        1fr    1fr   
+#>   auto header header
+#>   auto plota  plotb 
+#> Gap of 12px. Total height of 100\%.
+#> 
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr   
+#>     85px  header
+#>     350px plota 
+#>     350px plotb 
+#>   Gap of 12px. Total height of auto.
 }\if{html}{\out{</div>}}
 
 \emph{An important caveat of this style is it is not currently able to be detected
@@ -141,22 +137,20 @@ The same layout as declared above can be accomplished with the following:
   list(id = "plot_a", start_row = 2, end_row = 2, start_col = 1, end_col = 1),
   list(id = "plot_b", start_row = 2, end_row = 2, start_col = 2, end_col = 2)
 ) )
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
-##       1fr    1fr   
-##   1fr header header
-##   1fr plot_a plot_b
-## Gap of 12px. Total height of viewport.
-## 
-## Alternate layouts:  
-##   
-##   - Width < 500px 
-##            1fr   
-##     85px  header
-##     350px plot_a
-##     350px plot_b
-##   Gap of 12px. Total height of auto.
+#> gridlayout of 3 elements: 
+#>       1fr    1fr   
+#>   1fr header header
+#>   1fr plot_a plot_b
+#> Gap of 12px. Total height of 100\%.
+#> 
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>            1fr   
+#>     85px  header
+#>     350px plot_a
+#>     350px plot_b
+#>   Gap of 12px. Total height of auto.
 }\if{html}{\out{</div>}}
 }
 
@@ -192,22 +186,20 @@ and \code{width_bounds} elements.
     width_bounds = c(max = 500)
   )
 )
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## gridlayout of 3 elements: 
-##       1fr    1fr   
-##   1fr header header
-##   1fr plot_a plot_b
-## Gap of 12px. Total height of viewport.
-## 
-## Alternate layouts:  
-##   
-##   - Width < 500px 
-##          1fr   
-##     1fr header
-##     1fr plot_a
-##     1fr plot_b
-##   Gap of 12px. Total height of viewport.
+#> gridlayout of 3 elements: 
+#>        1fr    1fr   
+#>   auto header header
+#>   auto plot_a plot_b
+#> Gap of 12px. Total height of 100\%.
+#> 
+#> Alternate layouts:  
+#>   
+#>   - Width < 500px 
+#>           1fr   
+#>     auto header
+#>     auto plot_a
+#>     auto plot_b
+#>   Gap of 12px. Total height of 100\%.
 }\if{html}{\out{</div>}}
 
 Multiple layouts can also be added. Simply enclose them as a list of lists.

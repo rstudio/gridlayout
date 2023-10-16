@@ -69,7 +69,8 @@ grid_container <- function(
   flag_mismatches = TRUE,
   row_sizes = NULL,
   col_sizes = NULL,
-  gap_size = NULL
+  gap_size = NULL,
+  container_height = NULL
 ) {
 
   # Check to make sure we match all the names in the layout to all the names in
@@ -79,13 +80,13 @@ grid_container <- function(
   if(missing(layout)){
     stop("Need a defined layout for page")
   }
-
   # Make sure we're working with a layout
   layout <- if (is_gridlayout(layout) ) layout else new_gridlayout(
     layout_def = layout,
     row_sizes = row_sizes,
     col_sizes = col_sizes,
-    gap_size  = gap_size
+    gap_size  = gap_size,
+    container_height = container_height
   )
 
 

@@ -1,3 +1,8 @@
+# Development
+
+### Minor new features and improvements
+- Now the default container height is 100% for any container other than `grid_page()`. This helps avoid confusing sizing when layout is embedded in other containers like a card. 
+
 # gridlayout 0.2.1
 
 ### Minor new features and improvements
