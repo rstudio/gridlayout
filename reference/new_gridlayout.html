@@ -129,10 +129,10 @@ provided in the main layout table.</p></dd>
 
 <dt>container_height</dt>
 <dd><p>Valid css unit determining how tall the containing
-element should be for this layout. Defaults to <code>"viewport"</code> (full page
-height: equivalent to the CSS value of <code>100vh</code>) if any relative units (e.g.
-<code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code> otherwise. Values such
-as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+element should be for this layout. Defaults to <code>100%</code>. Special value of
+<code>"viewport"</code> for full-page height maps to the CSS value of <code>100vh</code> if any
+relative units (e.g. <code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code>
+otherwise. Values such as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
 content. This should most likely be avoided when using row heights in
 relative units.</p></dd>
 
@@ -171,21 +171,21 @@ is re-formated.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"header header"</span>,</span>
 <span>   <span class="st">"plota  plotb"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre><p></p></div>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##   1fr plota  plotb </span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##   </span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">##            1fr   </span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">##     85px  header</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">##     350px plota </span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">##     350px plotb </span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; gridlayout of 3 elements: </span></span>
+<span><span class="co">#&gt;        1fr    1fr   </span></span>
+<span><span class="co">#&gt;   auto header header</span></span>
+<span><span class="co">#&gt;   auto plota  plotb </span></span>
+<span><span class="co">#&gt; Gap of 12px. Total height of 100%.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Alternate layouts:  </span></span>
+<span><span class="co">#&gt;   </span></span>
+<span><span class="co">#&gt;   - Width &lt; 500px </span></span>
+<span><span class="co">#&gt;            1fr   </span></span>
+<span><span class="co">#&gt;     85px  header</span></span>
+<span><span class="co">#&gt;     350px plota </span></span>
+<span><span class="co">#&gt;     350px plotb </span></span>
+<span><span class="co">#&gt;   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 </div>
 
 <div class="section">
@@ -199,21 +199,21 @@ header along the top and two plots side-by-side the layout would look as
 follows:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/new_gridlayout.html">new_gridlayout</a></span><span class="op">(</span></span>
 <span>  <span class="st">"| header | header |</span></span>
-<span><span class="st">   | plota  | plotb  |"</span> <span class="op">)</span></span></code></pre><p></p></div>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##   1fr plota  plotb </span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##   </span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">##            1fr   </span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">##     85px  header</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">##     350px plota </span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">##     350px plotb </span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
+<span><span class="st">   | plota  | plotb  |"</span> <span class="op">)</span></span>
+<span><span class="co">#&gt; gridlayout of 3 elements: </span></span>
+<span><span class="co">#&gt;        1fr    1fr   </span></span>
+<span><span class="co">#&gt;   auto header header</span></span>
+<span><span class="co">#&gt;   auto plota  plotb </span></span>
+<span><span class="co">#&gt; Gap of 12px. Total height of 100%.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Alternate layouts:  </span></span>
+<span><span class="co">#&gt;   </span></span>
+<span><span class="co">#&gt;   - Width &lt; 500px </span></span>
+<span><span class="co">#&gt;            1fr   </span></span>
+<span><span class="co">#&gt;     85px  header</span></span>
+<span><span class="co">#&gt;     350px plota </span></span>
+<span><span class="co">#&gt;     350px plotb </span></span>
+<span><span class="co">#&gt;   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 <p><em>An important caveat of this style is it is not currently able to be detected
 using the "edit current layout" grided addin.</em></p>
 </div>
@@ -234,21 +234,21 @@ overlapping elements etc..</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"header"</span>, start_row <span class="op">=</span> <span class="fl">1</span>, end_row <span class="op">=</span> <span class="fl">1</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_a"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">1</span>, end_col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_b"</span>, start_row <span class="op">=</span> <span class="fl">2</span>, end_row <span class="op">=</span> <span class="fl">2</span>, start_col <span class="op">=</span> <span class="fl">2</span>, end_col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">)</span></span></code></pre><p></p></div>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##   1fr plot_a plot_b</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##   </span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">##            1fr   </span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">##     85px  header</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">##     350px plot_a</span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">##     350px plot_b</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
+<span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="co">#&gt; gridlayout of 3 elements: </span></span>
+<span><span class="co">#&gt;       1fr    1fr   </span></span>
+<span><span class="co">#&gt;   1fr header header</span></span>
+<span><span class="co">#&gt;   1fr plot_a plot_b</span></span>
+<span><span class="co">#&gt; Gap of 12px. Total height of 100%.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Alternate layouts:  </span></span>
+<span><span class="co">#&gt;   </span></span>
+<span><span class="co">#&gt;   - Width &lt; 500px </span></span>
+<span><span class="co">#&gt;            1fr   </span></span>
+<span><span class="co">#&gt;     85px  header</span></span>
+<span><span class="co">#&gt;     350px plot_a</span></span>
+<span><span class="co">#&gt;     350px plot_b</span></span>
+<span><span class="co">#&gt;   Gap of 12px. Total height of auto.</span></span></code></pre><p></p></div>
 </div>
 
 <div class="section">
@@ -282,21 +282,21 @@ and <code>width_bounds</code> elements.</p>
 <span><span class="st">        |plot_b |"</span>,</span>
 <span>    width_bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>max <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre><p></p></div>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## gridlayout of 3 elements: </span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##       1fr    1fr   </span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##   1fr header header</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##   1fr plot_a plot_b</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## Gap of 12px. Total height of viewport.</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Alternate layouts:  </span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##   </span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##   - Width &lt; 500px </span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">##          1fr   </span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">##     1fr header</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">##     1fr plot_a</span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">##     1fr plot_b</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">##   Gap of 12px. Total height of viewport.</span></span></code></pre><p></p></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; gridlayout of 3 elements: </span></span>
+<span><span class="co">#&gt;        1fr    1fr   </span></span>
+<span><span class="co">#&gt;   auto header header</span></span>
+<span><span class="co">#&gt;   auto plot_a plot_b</span></span>
+<span><span class="co">#&gt; Gap of 12px. Total height of 100%.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Alternate layouts:  </span></span>
+<span><span class="co">#&gt;   </span></span>
+<span><span class="co">#&gt;   - Width &lt; 500px </span></span>
+<span><span class="co">#&gt;           1fr   </span></span>
+<span><span class="co">#&gt;     auto header</span></span>
+<span><span class="co">#&gt;     auto plot_a</span></span>
+<span><span class="co">#&gt;     auto plot_b</span></span>
+<span><span class="co">#&gt;   Gap of 12px. Total height of 100%.</span></span></code></pre><p></p></div>
 <p>Multiple layouts can also be added. Simply enclose them as a list of lists.</p>
 <p>See <code><a href="../articles/defining-a-layout.html">vignette("defining-a-layout", package = "gridlayout")</a></code> and <code><a href="../articles/alternate-layouts.html">vignette("alternate-layouts", package = "gridlayout")</a></code> for a more in-depth overview.</p>
     </div>
@@ -326,7 +326,7 @@ and <code>width_bounds</code> elements.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -351,7 +351,7 @@ and <code>width_bounds</code> elements.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">     </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">2fr   </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">plota </span> <span style="font-weight: bold;">plotb </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">2rem</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>

@@ -99,7 +99,8 @@ directly but can be used to create nested grids</p>
 <span>  flag_mismatches <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  gap_size <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  gap_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  container_height <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -142,6 +143,16 @@ here and in the main layout then these sizes will be the ones used.</p></dd>
 <dd><p>Valid css sizing for gap to be left between each element in your
 grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
 provided in the main layout table.</p></dd>
+
+
+<dt>container_height</dt>
+<dd><p>Valid css unit determining how tall the containing
+element should be for this layout. Defaults to <code>100%</code>. Special value of
+<code>"viewport"</code> for full-page height maps to the CSS value of <code>100vh</code> if any
+relative units (e.g. <code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code>
+otherwise. Values such as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+content. This should most likely be avoided when using row heights in
+relative units.</p></dd>
 
 </dl></div>
     <div id="value">

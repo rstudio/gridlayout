@@ -104,6 +104,7 @@ the element should be placed in.</p>
 <span>  row_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  col_sizes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  container_height <span class="op">=</span> <span class="st">"viewport"</span>,</span>
 <span>  theme <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bslib/man/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  flag_mismatches <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -137,6 +138,12 @@ here and in the main layout then these sizes will be the ones used.</p></dd>
 <dd><p>Valid css sizing for gap to be left between each element in your
 grid. Like <code>row_sizes</code> and <code>col_sizes</code>, this will win-out over a gap size
 provided in the main layout table.</p></dd>
+
+
+<dt>container_height</dt>
+<dd><p>Optional parameter to control height of page.
+Defaults to <code>"viewport"</code> so app takes up full vertical space of page.
+See argument of same name in <code><a href="new_gridlayout.html">new_gridlayout()</a></code> for more options.</p></dd>
 
 
 <dt>theme</dt>

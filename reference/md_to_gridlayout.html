@@ -134,10 +134,10 @@ provided in the main layout table.</p></dd>
 
     <dt><code>container_height</code></dt>
 <dd><p>Valid css unit determining how tall the containing
-element should be for this layout. Defaults to <code>"viewport"</code> (full page
-height: equivalent to the CSS value of <code>100vh</code>) if any relative units (e.g.
-<code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code> otherwise. Values such
-as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
+element should be for this layout. Defaults to <code>100%</code>. Special value of
+<code>"viewport"</code> for full-page height maps to the CSS value of <code>100vh</code> if any
+relative units (e.g. <code>fr</code> or <code>auto</code>) are included in row sizes and <code>auto</code>
+otherwise. Values such as <code>"auto"</code> will let the page grow to as large as it needs to be to fit all
 content. This should most likely be avoided when using row heights in
 relative units.</p></dd>
 
@@ -183,7 +183,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header </span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot_a</span> <span style="font-weight: bold;">plot_c</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">sidebar</span> <span style="font-weight: bold;">plot_b</span> <span style="font-weight: bold;">plot_b</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -211,7 +211,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -237,7 +237,7 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">100px</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr  </span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">25px</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
@@ -257,11 +257,11 @@ matrix. This can be passed to other functions such as <code>layout_to_css()</cod
 <span class="r-in"><span><span class="st">    |footer |footer |"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">gridlayout</span> of 4 elements: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">   </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">1fr   </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">1fr</span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">viewport</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">    </span> <span style="font-style: italic;">1fr   </span> <span style="font-style: italic;">1fr   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">auto</span> <span style="font-weight: bold;">header</span> <span style="font-weight: bold;">header</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">auto</span> <span style="font-weight: bold;">plot  </span> <span style="font-weight: bold;">table </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-style: italic;">auto</span> <span style="font-weight: bold;">footer</span> <span style="font-weight: bold;">footer</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gap of <span style="font-style: italic;">12px</span>. Total height of <span style="font-style: italic;">100%</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alternate layouts:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
